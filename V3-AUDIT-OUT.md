@@ -156,6 +156,8 @@ Any instrument bearing on a computed surface is encoded or pending; none remains
 
 The official Act tabs advertise **437** rows. The PCO bulk replay captured **301** official graph rows. The computed supplement count of **46** decomposes into **22** graph rows with relation `bears_on` plus **24** external search/citation supplements; it is not 46 external instruments. The unresolved official-listing gap remains **136**.
 
+C1 independently rebuilt that reverse index from **11,259** retained official PCO XML files, using only normalized `<pursuant>` text as an empowering edge. It reproduced all **301** existing matches, resolved **0** new rows, and therefore made **0** pending B2 merges. The API requires registration, the documented works endpoint has no empowering-Act reverse filter, and the client-rendered Act tabs were not accessed.
+
 Honest exclusions retain 121 not-in-force, superseded, or out-of-period rows. The 16 current exclusions are the six F1 graph rows with no computed bearing, the post-period Taxation (Budget Measures) Act 2026, and nine citation-scan sources that are downstream, reverse-reference, register-boundary, or outside-surface instruments.
 
 ### Current, honestly non-bearing exclusions
@@ -274,7 +276,7 @@ Citation-source disposition coverage:
 
 ## Part 3 — spine closure position
 
-Pinned corpus release `nz-rulespec-2026-07-18` at `3f7b5d985bce759cb487f1b7fd050f5cbf007d17` contains **11036 provision rows** across the three scopes below. Its release manifest is `manifests/releases/nz-rulespec-2026-07-18.json` at SHA-256 `4b7dee4b23c6e5eb2eafcff80e4fa7bee07af30cdb98c535e635fcd56b872447`.
+The original V3 audit denominator was computed from corpus release `nz-rulespec-2026-07-18` at `3f7b5d985bce759cb487f1b7fd050f5cbf007d17`. That snapshot contains **11036 provision rows** across the three scopes below. Its release manifest is `manifests/releases/nz-rulespec-2026-07-18.json` at SHA-256 `4b7dee4b23c6e5eb2eafcff80e4fa7bee07af30cdb98c535e635fcd56b872447`.
 
 | Pinned corpus scope | Provision rows | JSONL SHA-256 |
 |---|---:|---|
@@ -284,9 +286,11 @@ Pinned corpus release `nz-rulespec-2026-07-18` at `3f7b5d985bce759cb487f1b7fd050
 
 Whole-governing-Act denominators count pinned JSONL rows for the source_document_id only when the body field is non-empty: Accident Compensation Act 2001 535 of 550 raw citation paths; Income Tax Act 2007 3099 of 3138 raw citation paths; Social Security Act 2018 1001 of 1041 raw citation paths. This is why the ITA denominator is 3,099 rather than 3,138.
 
-Precedent: DE scoped spine closure to the attested amount/legal subgraph rather than silently treating every provision in each cited Act as part of the encoded surface. Source: `oracles merge e77c93099 (DE PR #485): closure/de/source.json programs.de/kindergeld root_nodes and evidence_roots resolution=self_and_descendants; certificates/de-kindergeld.json subgraph.scope=amount; docs/de-kindergeld-certification.md`. For NZ: Apply the same dependency-root scoping rule to the transitive program-root union, then add the concrete roots quantified by strict leaf typing and the pinned-corpus citation scan. Subject-search, other off-release, and open-ended roots remain unquantified work and make the resulting count only a lower bound.
+Precedent: DE scoped spine closure to the attested amount/legal subgraph rather than silently treating every provision in each cited Act as part of the encoded surface. Source: `oracles merge e77c93099 (DE PR #485): closure/de/source.json programs.de/kindergeld root_nodes and evidence_roots resolution=self_and_descendants; certificates/de-kindergeld.json subgraph.scope=amount; docs/de-kindergeld-certification.md`. For NZ: Adopted for C1 as the working scope: the exact 174-root dependency subgraph, with every row dispositioned and body-bound. The 4,707-row whole-Act reading remains disclosed as a conservative alternative that a later adjudication can substitute without changing the ledger convention.
 
-The precedent does not unambiguously resolve the 3,099-provision Income Tax Act. All four positions are therefore reported; none is silently selected. The 57 direct paths are demonstrably insufficient under v3. The 174 dependency-root and 200 citation-expanded scopes contain respectively 173 and 199 pinned-corpus paths plus the web-verified 2025 No 9 s 105 root. They remain lower bounds because vague ranges, imported definitions, subject-search results, and other off-release sources remain unquantified. The whole-Act alternative expands the three governing Acts while retaining exact roots—not whole bodies—for subordinate and evidence instruments.
+C1 explicitly adopts the **174-root dependency subgraph** as the working scope. Its ledger records **57 encoded, 0 classified, 0 excluded, and 117 pending** rows—zero silent rows—and has rowset SHA-256 `4a39579f3c8176fa36bc21fa3aa87627cc3598dc3e2febac7fe9fb3e22b86166`. Of those roots, **173** are body-bound to signed release `nz-rulespec-2026-07-25` and **1** is bound to the retained official XML for [nz/statute/act/public/2025/0009/section/105](https://www.legislation.govt.nz/act/public/2025/0009/latest/LMS1000039.html).
+
+This resolves the audit's scope-choice question at precedent scope; it does not claim the spine is complete. The 174 roots remain a lower bound because vague ranges, imported definitions, subject-search results, and other off-release sources remain unquantified. The **4,707-row** whole-Act alternative (**57 encoded, 4,650 pending**) is recorded alongside as the unadopted conservative option, so a later adjudication can widen the scope without changing the row or hash convention.
 
 ### direct encoded program-root subgraph (insufficient alone)
 
@@ -294,7 +298,7 @@ The precedent does not unambiguously resolve the 3,099-provision Income Tax Act.
 |---|---:|---:|---:|---:|---:|
 | Income Tax Act 2007 | 40 | 0 | 0 | 0 | 40 |
 | Social Security Act 2018 | 9 | 0 | 0 | 0 | 9 |
-| Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026 | 2 | 0 | 0 | 0 | 2 |
+| Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 | 2 | 0 | 0 | 0 | 2 |
 | Social Security Regulations 2018 | 3 | 0 | 0 | 0 | 3 |
 | Accident Compensation (Earners' Levy) Regulations 2025 | 2 | 0 | 0 | 0 | 2 |
 | Social Security (Rates of Benefits and Allowances) Order 2026 | 1 | 0 | 0 | 0 | 1 |
@@ -310,7 +314,7 @@ The precedent does not unambiguously resolve the 3,099-provision Income Tax Act.
 | Tax Administration Act 1994 | 0 | 0 | 0 | 1 | 1 |
 | Social Security Act 2018 | 9 | 0 | 0 | 46 | 55 |
 | Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 | 0 | 0 | 0 | 1 | 1 |
-| Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026 | 2 | 0 | 0 | 0 | 2 |
+| Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 | 2 | 0 | 0 | 0 | 2 |
 | Student Allowances Regulations 1998 | 0 | 0 | 0 | 30 | 30 |
 | Social Security Regulations 2018 | 3 | 0 | 0 | 4 | 7 |
 | Accident Compensation (Earners' Levy) Regulations 2025 | 2 | 0 | 0 | 1 | 3 |
@@ -328,7 +332,7 @@ The precedent does not unambiguously resolve the 3,099-provision Income Tax Act.
 | Tax Administration Act 1994 | 0 | 0 | 0 | 24 | 24 |
 | Social Security Act 2018 | 9 | 0 | 0 | 46 | 55 |
 | Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 | 0 | 0 | 0 | 1 | 1 |
-| Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026 | 2 | 0 | 0 | 0 | 2 |
+| Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 | 2 | 0 | 0 | 0 | 2 |
 | Student Allowances Regulations 1998 | 0 | 0 | 0 | 30 | 30 |
 | Social Security Regulations 2018 | 3 | 0 | 0 | 4 | 7 |
 | Accident Compensation (Earners' Levy) Regulations 2025 | 2 | 0 | 0 | 1 | 3 |
@@ -346,14 +350,14 @@ The precedent does not unambiguously resolve the 3,099-provision Income Tax Act.
 | Tax Administration Act 1994 | 0 | 0 | 0 | 24 | 24 |
 | Social Security Act 2018 | 9 | 0 | 0 | 992 | 1001 |
 | Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 | 0 | 0 | 0 | 1 | 1 |
-| Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026 | 2 | 0 | 0 | 0 | 2 |
+| Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 | 2 | 0 | 0 | 0 | 2 |
 | Student Allowances Regulations 1998 | 0 | 0 | 0 | 30 | 30 |
 | Social Security Regulations 2018 | 3 | 0 | 0 | 4 | 7 |
 | Accident Compensation (Earners' Levy) Regulations 2025 | 2 | 0 | 0 | 1 | 3 |
 | Social Security (Rates of Benefits and Allowances) Order 2026 | 1 | 0 | 0 | 0 | 1 |
 | **Total** | **57** | **0** | **0** | **4650** | **4707** |
 
-Spine blockers: `spine_scope_adjudication_pending`, `spine_body_hash_ledger_incomplete`.
+Spine blockers: `spine_pending_provisions`.
 
 ## Part 4 — the typed worklist
 
@@ -613,7 +617,7 @@ One continuous list follows: 229 law-derived inputs, 18 unique bearing instrumen
 245. [DET 26/03](https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03) — **bearing instrument, size S**. Programs: `nz/independent-earner-tax-credit`, `nz/working-for-families`. Defining provision: Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination. Target: `nz/statutes/income_tax/credits/individual_credits.yaml`, `nz/statutes/income_tax/family_scheme/family_scheme_income.yaml`. V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.
 246. [IS 26/12 FS 1](https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1) — **bearing instrument, size S**. Programs: `nz/income-tax`, `nz/independent-earner-tax-credit`, `nz/working-for-families`. Defining provision: IS 26/12 FS 1 summary of Income Tax Act 2007 subpart MB and s LC 13. Target: `nz/statutes/income_tax/credits/individual_credits.yaml`, `nz/statutes/income_tax/family_scheme/family_scheme_income.yaml`. V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.
 247. [IS 26/12](https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12) — **bearing instrument, size L**. Programs: `nz/independent-earner-tax-credit`, `nz/working-for-families`. Defining provision: IS 26/12 interpretation of Income Tax Act 2007 subpart MB family scheme income. Target: `nz/statutes/income_tax/credits/individual_credits.yaml`, `nz/statutes/income_tax/family_scheme/family_scheme_income.yaml`. V3 bearing rule: IS 26/12 interprets family-scheme-income categories. The certified subgraph encodes the statutory arithmetic in nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; taxpayer company, trust, control, payment, and event facts enter through explicit case inputs, and the statement sets no separate numeric parameter claimed by the certificate. The instrument must be encoded; a documented input boundary cannot close it. V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.
-248. **Official instrument-listing capture gap — size L.** 136 unresolved rows (`nz/statute/act/public/2001/0049`=10, `nz/statute/act/public/2007/0097`=93, `nz/statute/act/public/2018/0032`=33). Target: NZ instrument graph capture. Reverse-index the official PCO bulk XML by empowering-Act citations, then reconcile canonical ELIs to the advertised Act-tab totals. Do not scrape the client-rendered tab; respect legislation.govt.nz bot boundaries.
+248. **Official instrument-listing capture gap — size L.** 136 unresolved rows (`nz/statute/act/public/2001/0049`=10, `nz/statute/act/public/2007/0097`=93, `nz/statute/act/public/2018/0032`=33). Target: NZ instrument graph capture. C1 reverse-indexed authoritative PCO XML <pursuant> text and reconciled canonical ELIs: all 301 exact matches were already present, so no rows were merged and 136 remain outside the available PCO-publisher XML. The client-rendered Act tabs and verification walls were not accessed.
 
 ## Part 5 — ledger integration and certificate position
 
@@ -625,6 +629,7 @@ Generated-fact bindings:
 |---|---|---|
 | `dependency_dispositions` | `closure/nz/dependency-dispositions.json` | `0133853d395d49c6c5883dec7de175a40cf738d904234e922f429b1b0aa750f7` |
 | `instrument_dispositions` | `closure/nz/instrument-dispositions.json` | `91d408a70d5d30c43d091c85c75b27241ed6fa8c2586d37a5ccf0e71c34731dd` |
+| `spine_ledger` | `closure/nz/spine-ledger.json` | `afb21ae1b9afd4b18dafe3cf22f86e2a71e79ae0d1e729f650b1edbdffa46bae` |
 
 ### Certificate verdicts after the current refresh
 
@@ -648,20 +653,23 @@ The required battery was run against the implementation commit above.
 |---|---|
 | `certify_check` | `PASS — certificates up to date` |
 | `cross_jurisdiction_byte_identity` | `PASS — non-NZ derived bytes equal origin/main at rebase base` |
-| `producers_check` | `PASS — all seven NZ producer/check modes current` |
+| `producers_check` | `PASS — original seven NZ producer/check modes plus all three C1 producers current` |
 | `simulated_dk_refresh` | `PASS — dk-child-youth-benefit-euromod` |
 | `simulated_nz_refresh` | `PASS — nz-treasury-incomeexplorer` |
 | `whole_mutant_file` | `PASS — 259 passed; guard reversions included` |
 
 **Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source, and verified Ed25519 signatures through OpenSSL because the host CFFI module was unavailable. The temporary local adapters were removed before commit.
 
-## Adjudication questions
+## C1 resolutions of audit questions
 
-1. Spine scope: does the DE PR #485 precedent license the 174-root dependency lower bound (or the 200-root citation-expanded lower bound), or does v3 require the 4,707-row whole-governing-Act alternative? The choice, one official-web-only exact amendment root, unresolved root expansion, and body-hash ledger must be explicit.
-2. Multi-Act graph schema: should NZ retain one extended graph for three empowering Acts, or publish a standardized wrapper of one v1 graph per Act?
-3. Disposition dimension: should a single ELI have one global disposition, or may the same instrument carry different program-scoped decisions?
-4. Multi-owner instruments: how should guidance or precedent that bears on more than one Act/program be owned without losing any dependency edge?
-5. Official capture: which supported PCO reverse-relation endpoint or bulk-XML reverse index becomes the canonical replacement for the inaccessible client-rendered Act tab and closes the 136-row gap?
+- Audit Q1 — resolved at working scope: C1 adopts the DE-precedent 174-root dependency subgraph, binds 173 roots to the pinned corpus and one amendment root to retained official XML, and records all 57 encoded and 117 pending rows. The 4,707-row whole-Act alternative remains disclosed and unadopted.
+- Audit Q5 — reverse-index mechanism resolved, capture remainder open: C1 replays the authoritative PCO XML <pursuant> fields. All 301 matches were already in the graph, so 0 rows were merged and the 136-row publisher/listing gap remains explicit.
+
+## Remaining adjudication questions
+
+1. Multi-Act graph schema: should NZ retain one extended graph for three empowering Acts, or publish a standardized wrapper of one v1 graph per Act?
+2. Disposition dimension: should a single ELI have one global disposition, or may the same instrument carry different program-scoped decisions?
+3. Multi-owner instruments: how should guidance or precedent that bears on more than one Act/program be owned without losing any dependency edge?
 
 ## Final identifiers
 

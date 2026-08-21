@@ -40,6 +40,7 @@ INSTRUMENT_GRAPH_PATH = (
 )
 INSTRUMENT_DISPOSITIONS_PATH = OUT_DIR / "instrument-dispositions.json"
 DEPENDENCY_DISPOSITIONS_PATH = OUT_DIR / "dependency-dispositions.json"
+SPINE_LEDGER_PATH = OUT_DIR / "spine-ledger.json"
 SOURCE_COMPARISON_PATH = (
     REPO_ROOT / "comparisons" / "nz-treasury-incomeexplorer" / "source-comparison.json"
 )
@@ -530,12 +531,16 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
         "retrieval_receipts",
         "instruments",
     }:
-        raise ClosureError("NZ instrument graph has unexpected or missing top-level keys")
+        raise ClosureError(
+            "NZ instrument graph has unexpected or missing top-level keys"
+        )
     if document.get("schema") != INSTRUMENT_GRAPH_SCHEMA:
         raise ClosureError("unexpected NZ instrument graph schema")
     note = document.get("schema_compatibility_note")
     if not isinstance(note, str) or "single-Act" not in note:
-        raise ClosureError("NZ instrument graph must disclose its v1 multi-Act extension")
+        raise ClosureError(
+            "NZ instrument graph must disclose its v1 multi-Act extension"
+        )
     retrieved_at = document.get("retrieved_at")
     if not isinstance(retrieved_at, str) or not re.fullmatch(
         r"\d{4}-\d{2}-\d{2}", retrieved_at
@@ -611,9 +616,10 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
                     raise ClosureError(f"{eli}: invalid corpus guidance citation path")
                 if not re.fullmatch(r"[0-9a-f]{40}", str(row.get("corpus_commit", ""))):
                     raise ClosureError(f"{eli}: corpus guidance commit is not pinned")
-                if not isinstance(row.get("corpus_manifest"), str) or not row[
-                    "corpus_manifest"
-                ].strip():
+                if (
+                    not isinstance(row.get("corpus_manifest"), str)
+                    or not row["corpus_manifest"].strip()
+                ):
                     raise ClosureError(f"{eli}: corpus guidance manifest is missing")
                 if not re.fullmatch(
                     r"[0-9a-f]{64}", str(row.get("corpus_manifest_sha256", ""))
@@ -673,9 +679,7 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
         captured = receipt.get("captured_count")
         unresolved = receipt.get("unresolved_count")
         if not all(
-            isinstance(value, int)
-            and not isinstance(value, bool)
-            and value >= 0
+            isinstance(value, int) and not isinstance(value, bool) and value >= 0
             for value in (reported, captured, unresolved)
         ):
             raise ClosureError(f"{act_path}: invalid instrument receipt counts")
@@ -684,16 +688,19 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
             for row in rows
         )
         if captured != actual or reported != captured + unresolved:
-            raise ClosureError(f"{act_path}: instrument receipt counts do not reconcile")
+            raise ClosureError(
+                f"{act_path}: instrument receipt counts do not reconcile"
+            )
         act = INSTRUMENT_ACTS[act_path]
         if (
             receipt.get("act_eli") != act["eli"]
             or receipt.get("listing_url") != act["eli"]
-            or receipt.get("classic_cross_check_url")
-            != act["classic_listing_url"]
+            or receipt.get("classic_cross_check_url") != act["classic_listing_url"]
             or reported != act["reported_count"]
         ):
-            raise ClosureError(f"{act_path}: authoritative retrieval URLs/count drifted")
+            raise ClosureError(
+                f"{act_path}: authoritative retrieval URLs/count drifted"
+            )
         method = receipt.get("method")
         if not isinstance(method, str) or not method.strip():
             raise ClosureError(f"{act_path}: retrieval receipt method is missing")
@@ -704,9 +711,10 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
         if not re.fullmatch(r"[0-9a-f]{64}", str(receipt.get(digest_field, ""))):
             raise ClosureError(f"{act_path}: retrieval receipt bytes are not SHA-bound")
         if not complete:
-            if not isinstance(receipt.get("manifest_name"), str) or not receipt[
-                "manifest_name"
-            ].strip():
+            if (
+                not isinstance(receipt.get("manifest_name"), str)
+                or not receipt["manifest_name"].strip()
+            ):
                 raise ClosureError(f"{act_path}: offline manifest name is missing")
             manifest_discovered = receipt.get("manifest_discovered_count")
             manifest_downloaded = receipt.get("manifest_downloaded_count")
@@ -733,8 +741,7 @@ def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
                 or failed_work_ids != sorted(set(failed_work_ids))
                 or len(failed_work_ids) != manifest_failed
                 or not all(
-                    isinstance(value, str) and value
-                    for value in failed_work_ids
+                    isinstance(value, str) and value for value in failed_work_ids
                 )
             ):
                 raise ClosureError(
@@ -811,6 +818,17 @@ def _load_dependency_dispositions() -> tuple[dict[str, Any], bytes]:
     return document, raw
 
 
+def _load_spine_ledger() -> tuple[dict[str, Any], bytes]:
+    try:
+        raw = SPINE_LEDGER_PATH.read_bytes()
+        document = json.loads(raw)
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ClosureError(f"cannot read NZ spine ledger: {exc}") from exc
+    if not isinstance(document, dict):
+        raise ClosureError("NZ spine ledger must contain an object")
+    return document, raw
+
+
 def _load_source_comparison_catalog() -> tuple[dict[str, Any], bytes]:
     try:
         raw = SOURCE_COMPARISON_PATH.read_bytes()
@@ -852,9 +870,7 @@ def _reached_compiled_inputs() -> set[str]:
         if isinstance(rule_id, str):
             by_id[rule_id] = row
         by_name[row["name"]] = row
-    anonymous = sorted(
-        row["name"] for row in derived_rows if row.get("id") is None
-    )
+    anonymous = sorted(row["name"] for row in derived_rows if row.get("id") is None)
     if anonymous != [
         "best_start_family_scheme_income_for_relationship_period",
         "wff_family_scheme_income_for_relationship_period",
@@ -891,9 +907,7 @@ def _reached_compiled_inputs() -> set[str]:
         reached_rules.add(rule_id)
         walk_expr(row["expr"], owner=rule_id)
 
-    roots = sorted(
-        {root for spec in PROGRAM_VIEWS.values() for root in spec["roots"]}
-    )
+    roots = sorted({root for spec in PROGRAM_VIEWS.values() for root in spec["roots"]})
     for root in roots:
         row = by_id.get(root)
         if row is None:
@@ -931,8 +945,7 @@ def _expected_dependency_inputs(
         expected[("engine_request", name)] = {
             "canonical_request_name": canonical,
             "observed_state": state,
-            "target_module": canonical.split("#", 1)[0].replace(":", "/")
-            + ".yaml",
+            "target_module": canonical.split("#", 1)[0].replace(":", "/") + ".yaml",
         }
     if state_counts != {"constant": 98, "varied": 52, "not_supplied": 178}:
         raise ClosureError("NZ exercise-input state denominator drifted")
@@ -946,24 +959,25 @@ def _expected_dependency_inputs(
         raise ClosureError(
             "NZ composition/harness input union drifted from 147 reached plus three harness-only slots"
         )
-    latent_law = {
-        name for group in _latent_law_groups() for name in group["names"]
-    }
+    latent_law = {name for group in _latent_law_groups() for name in group["names"]}
     latent_world = set(_latent_world_reasons())
     if latent_law & latent_world or len(latent_law) != 69 or len(latent_world) != 30:
         raise ClosureError("NZ latent eligibility audit must partition 99 inputs")
     for name in sorted(latent_law | latent_world):
         value = catalog.get(name)
         if not isinstance(value, dict) or value.get("state") != "not_supplied":
-            raise ClosureError(f"NZ latent eligibility input {name} is not an omitted compiled slot")
+            raise ClosureError(
+                f"NZ latent eligibility input {name} is not an omitted compiled slot"
+            )
         canonical = value.get("canonical_request_name")
         if not isinstance(canonical, str) or "#input." not in canonical:
-            raise ClosureError(f"NZ latent eligibility input {name} lacks a canonical name")
+            raise ClosureError(
+                f"NZ latent eligibility input {name} lacks a canonical name"
+            )
         expected[("implicit_legal_surface", name)] = {
             "canonical_request_name": canonical,
             "observed_state": "not_supplied",
-            "target_module": canonical.split("#", 1)[0].replace(":", "/")
-            + ".yaml",
+            "target_module": canonical.split("#", 1)[0].replace(":", "/") + ".yaml",
         }
     expected[("host_rule", "ORACLE_IWTC_WEEKLY_THRESHOLD")] = {
         "declared_value": "1226.7 / 52.2",
@@ -1235,9 +1249,9 @@ def _scenario_declared_values(source_comparison: Mapping[str, Any]) -> dict[str,
         for name, value in inputs.items():
             values.setdefault(str(name), {})[_canonical_json(value)] = value
         for value in scenario.get("sampled_weekly_wages") or []:
-            values.setdefault("sampled_weekly_wage1", {})[
-                _canonical_json(value)
-            ] = value
+            values.setdefault("sampled_weekly_wage1", {})[_canonical_json(value)] = (
+                value
+            )
     return {
         name: next(iter(distinct.values()))
         if len(distinct) == 1
@@ -1262,9 +1276,7 @@ def bootstrap_dependency_dispositions(
         "eligibility_closure": _grouped_law_specs(
             _closure_law_groups(), label="eligibility-closure"
         ),
-        "scenario": _grouped_law_specs(
-            _scenario_law_groups(), label="scenario"
-        ),
+        "scenario": _grouped_law_specs(_scenario_law_groups(), label="scenario"),
     }
     world_by_surface = {
         "engine_request": _engine_world_reasons(),
@@ -1301,9 +1313,10 @@ def bootstrap_dependency_dispositions(
                 ),
                 "size_class": "L",
             }
-        if sum(
-            value is not None for value in (law_spec, world_reason, encoded_spec)
-        ) != 1:
+        if (
+            sum(value is not None for value in (law_spec, world_reason, encoded_spec))
+            != 1
+        ):
             raise ClosureError(
                 f"{surface}:{name}: audit must assign exactly one encoded, legal, or world grounding"
             )
@@ -1319,8 +1332,7 @@ def bootstrap_dependency_dispositions(
             if (
                 expected_module is not None
                 and expected_module != law_spec["target_module"]
-                and law_spec["target_module"]
-                != "nz/policies/common/demographics.yaml"
+                and law_spec["target_module"] != "nz/policies/common/demographics.yaml"
             ):
                 raise ClosureError(f"{surface}:{name}: audited target module drifted")
             row.update(
@@ -1430,7 +1442,9 @@ def _canonical_dependency_grounding(
         classification = value.get("classification")
         if classification == "encoded":
             if set(value) & {"leaf_kind", "derivation_instrument", "size_class"}:
-                raise ClosureError(f"{surface}:{name}: encoded input carries leaf fields")
+                raise ClosureError(
+                    f"{surface}:{name}: encoded input carries leaf fields"
+                )
             if (
                 not isinstance(value.get("encoded_by"), str)
                 or value["encoded_by"] not in rulespec_paths
@@ -1438,19 +1452,28 @@ def _canonical_dependency_grounding(
                 raise ClosureError(f"{surface}:{name}: encoded_by is invalid")
         elif classification in {"world_fact", "law_derived"}:
             if value.get("leaf_kind") != classification:
-                raise ClosureError(f"{surface}:{name}: leaf_kind disagrees with classification")
+                raise ClosureError(
+                    f"{surface}:{name}: leaf_kind disagrees with classification"
+                )
             if "encoded_by" in value:
                 raise ClosureError(f"{surface}:{name}: a leaf may not carry encoded_by")
             if classification == "law_derived":
                 for field in ("derivation_instrument", "target_module", "size_class"):
-                    if not isinstance(value.get(field), str) or not value[field].strip():
-                        raise ClosureError(f"{surface}:{name}: law-derived leaf requires {field}")
+                    if (
+                        not isinstance(value.get(field), str)
+                        or not value[field].strip()
+                    ):
+                        raise ClosureError(
+                            f"{surface}:{name}: law-derived leaf requires {field}"
+                        )
                 if value["target_module"] not in rulespec_paths:
                     raise ClosureError(f"{surface}:{name}: target_module is not pinned")
                 if value["size_class"] not in {"S", "M", "L"}:
                     raise ClosureError(f"{surface}:{name}: invalid size_class")
             elif set(value) & {"derivation_instrument", "size_class", "target_module"}:
-                raise ClosureError(f"{surface}:{name}: world fact carries legal work fields")
+                raise ClosureError(
+                    f"{surface}:{name}: world fact carries legal work fields"
+                )
         else:
             raise ClosureError(f"{surface}:{name}: invalid dependency classification")
         by_key[key] = value
@@ -1571,7 +1594,10 @@ def _engine_law_groups() -> list[dict[str, Any]]:
             "size_class": "L",
         },
         {
-            "names": ["family_scheme_activity_deductions", "family_scheme_activity_income"],
+            "names": [
+                "family_scheme_activity_deductions",
+                "family_scheme_activity_income",
+            ],
             "derivation_instrument": "Income Tax Act 2007 s MB 3 activity-income calculation",
             "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
             "size_class": "M",
@@ -1643,7 +1669,9 @@ def _engine_law_groups() -> list[dict[str, Any]]:
             "size_class": "M",
         },
         {
-            "names": ["family_scheme_spouse_or_partner_nonresident_foreign_sourced_income"],
+            "names": [
+                "family_scheme_spouse_or_partner_nonresident_foreign_sourced_income"
+            ],
             "derivation_instrument": "Income Tax Act 2007 s MB 12 non-resident partner income calculation",
             "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
             "size_class": "M",
@@ -1834,9 +1862,7 @@ def _engine_law_groups() -> list[dict[str, Any]]:
             "size_class": "M",
         },
         {
-            "names": [
-                "jobseeker_support_partner_ineligible_due_to_sanction_or_strike"
-            ],
+            "names": ["jobseeker_support_partner_ineligible_due_to_sanction_or_strike"],
             "derivation_instrument": "Social Security Act 2018 Schedule 4 Part 1 cl 3 and ss 225–229, 234–238 partner sanction/strike rate classification",
             "target_module": "nz/statutes/social_security/main_benefits/rates.yaml",
             "size_class": "L",
@@ -2446,21 +2472,17 @@ def _canonical_instrument_decisions(
     expected = _expected_instrument_pairs(graph)
     by_pair: dict[tuple[str, str], dict[str, Any]] = {}
     sort_keys: list[tuple[str, str]] = []
-    for index, value in enumerate(
-        decisions.get("instrument_dispositions") or []
-    ):
+    for index, value in enumerate(decisions.get("instrument_dispositions") or []):
         if not isinstance(value, dict):
             raise ClosureError(f"instrument disposition row {index} is not an object")
         allowed = {"program", "eli", "status"} | _DISPOSITION_OPTIONAL
-        if not {"program", "eli", "status"}.issubset(value) or not set(
-            value
-        ).issubset(allowed):
+        if not {"program", "eli", "status"}.issubset(value) or not set(value).issubset(
+            allowed
+        ):
             raise ClosureError(
                 f"instrument disposition row {index} has unexpected or missing keys"
             )
-        if not isinstance(value["program"], str) or not isinstance(
-            value["eli"], str
-        ):
+        if not isinstance(value["program"], str) or not isinstance(value["eli"], str):
             raise ClosureError(
                 f"instrument disposition row {index} program/eli must be strings"
             )
@@ -2496,14 +2518,15 @@ def _canonical_instrument_decisions(
                     "target_module",
                     "size_class",
                 ):
-                    if not isinstance(value.get(field), str) or not value[field].strip():
+                    if (
+                        not isinstance(value.get(field), str)
+                        or not value[field].strip()
+                    ):
                         raise ClosureError(
                             f"{pair[0]} / {pair[1]}: bearing pending row requires {field}"
                         )
                 if value["size_class"] not in {"S", "M", "L"}:
-                    raise ClosureError(
-                        f"{pair[0]} / {pair[1]}: invalid size_class"
-                    )
+                    raise ClosureError(f"{pair[0]} / {pair[1]}: invalid size_class")
             elif _DISPOSITION_OPTIONAL & set(value):
                 raise ClosureError(
                     f"{pair[0]} / {pair[1]}: ordinary pending row must not carry disposition metadata"
@@ -2626,9 +2649,7 @@ def _canonical_supplemental_instruments(
                 raise ClosureError(f"{eli}: supplemental row requires {field}")
         status = value.get("status")
         if status not in {"encoded", "excluded-with-reason", "pending"}:
-            raise ClosureError(
-                f"{eli}: invalid supplemental disposition"
-            )
+            raise ClosureError(f"{eli}: invalid supplemental disposition")
         if status == "encoded":
             if value.get("bears_on_computed_surface") is not True:
                 raise ClosureError(f"{eli}: encoded supplement must declare bearing")
@@ -2640,7 +2661,12 @@ def _canonical_supplemental_instruments(
                 or not set(encoded_by).issubset(rulespec_paths)
             ):
                 raise ClosureError(f"{eli}: encoded supplement has invalid encoded_by")
-            for field in ("bearing", "defining_provision", "size_class", "target_module"):
+            for field in (
+                "bearing",
+                "defining_provision",
+                "size_class",
+                "target_module",
+            ):
                 if field in value:
                     raise ClosureError(
                         f"{eli}: encoded supplemental row must not carry open-work field {field}"
@@ -2649,10 +2675,14 @@ def _canonical_supplemental_instruments(
             if value.get("bears_on_computed_surface") is not True:
                 raise ClosureError(f"{eli}: pending supplement must declare bearing")
             if "encoded_by" in value:
-                raise ClosureError(f"{eli}: pending supplement may not carry encoded_by")
+                raise ClosureError(
+                    f"{eli}: pending supplement may not carry encoded_by"
+                )
             for field in ("bearing", "defining_provision", "size_class"):
                 if not isinstance(value.get(field), str) or not value[field].strip():
-                    raise ClosureError(f"{eli}: pending bearing supplement requires {field}")
+                    raise ClosureError(
+                        f"{eli}: pending bearing supplement requires {field}"
+                    )
             target_modules = value.get("target_module")
             if (
                 not isinstance(target_modules, list)
@@ -2660,7 +2690,9 @@ def _canonical_supplemental_instruments(
                 or not target_modules
                 or not set(target_modules).issubset(rulespec_paths)
             ):
-                raise ClosureError(f"{eli}: pending supplement has invalid target modules")
+                raise ClosureError(
+                    f"{eli}: pending supplement has invalid target modules"
+                )
             if value["size_class"] not in {"S", "M", "L"}:
                 raise ClosureError(f"{eli}: invalid size_class")
         else:
@@ -2747,7 +2779,8 @@ def _canonical_supplemental_instruments(
         != "2794b5448e81525f0ee351cdac2a49d32327aade"
         or citation_scan.get("pinned_release_commit") != CORPUS_RELEASE_SHA
         or citation_scan.get("implementation_issue") != "axiom-corpus#611"
-        or citation_scan.get("status") != "official-scanner-not-runnable-no-nz-extractor"
+        or citation_scan.get("status")
+        != "official-scanner-not-runnable-no-nz-extractor"
         or not isinstance(citation_scan.get("reason"), str)
         or not citation_scan["reason"].strip()
         or not isinstance(citation_scan.get("scanned_at"), str)
@@ -2783,15 +2816,21 @@ def _canonical_supplemental_instruments(
     }
     if not isinstance(approximation, dict) or approximation != expected_approximation:
         raise ClosureError("NZ citation-scan approximation receipt drifted")
-    if sum(
-        int(row["source_target_match_rows"])
-        for row in approximation["source_dispositions"]
-    ) != approximation["source_target_match_rows"]:
+    if (
+        sum(
+            int(row["source_target_match_rows"])
+            for row in approximation["source_dispositions"]
+        )
+        != approximation["source_target_match_rows"]
+    ):
         raise ClosureError("NZ citation-scan source hit coverage does not reconcile")
-    if sum(
-        int(row["distinct_source_provision_paths"])
-        for row in approximation["source_dispositions"]
-    ) != approximation["distinct_source_provision_paths"]:
+    if (
+        sum(
+            int(row["distinct_source_provision_paths"])
+            for row in approximation["source_dispositions"]
+        )
+        != approximation["distinct_source_provision_paths"]
+    ):
         raise ClosureError("NZ citation-scan distinct path coverage does not reconcile")
     supplemental_refs = {
         str(row["eli"])
@@ -3071,7 +3110,9 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             defining_provision = "ACC earners' levy deduction mechanics in Inland Revenue salary-and-wages guidance"
             size_class = "S"
         else:
-            defining_provision = "2026 main-benefit rate publication and its cited rate provisions"
+            defining_provision = (
+                "2026 main-benefit rate publication and its cited rate provisions"
+            )
             size_class = "S"
         return _decision(
             "pending",
@@ -3209,9 +3250,7 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "Sections 2 and 105 make the 2026–27 IWTC change from NZD 5,070 "
                 "to NZD 7,670; the tax-credit module proof-binds both provisions."
             ),
-            "encoded_by": [
-                "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
-            ],
+            "encoded_by": ["nz/statutes/income_tax/family_scheme/tax_credits.yaml"],
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
@@ -3228,9 +3267,7 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             ),
             "bearing": "IETC WFF-entitlement status gate",
             "defining_provision": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 s 105; Income Tax Act 2007 s LC 13(1)(d)–(e)",
-            "target_module": [
-                "nz/statutes/income_tax/credits/individual_credits.yaml"
-            ],
+            "target_module": ["nz/statutes/income_tax/credits/individual_credits.yaml"],
             "size_class": "S",
         },
         {
@@ -3244,9 +3281,7 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "reason": "Official explanation of the amended LC 13 IETC eligibility test; not source-bound by the current module.",
             "bearing": "IETC WFF-entitlement status gate",
             "defining_provision": "TIB Vol 37 No 5, Clarifying IETC eligibility; Income Tax Act 2007 s LC 13",
-            "target_module": [
-                "nz/statutes/income_tax/credits/individual_credits.yaml"
-            ],
+            "target_module": ["nz/statutes/income_tax/credits/individual_credits.yaml"],
             "size_class": "S",
         },
         {
@@ -3330,9 +3365,7 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "reason": "Current de-facto-relationship precedent bears on WFF caregiver/partner gates and therefore the IETC WFF disqualifier.",
             "bearing": "WFF relationship, principal-caregiver, and partner allocation gates",
             "defining_provision": "TRA 005/21 [2023] NZTRA 1; Income Tax Act 2007 ss CB 32, MC 4, MC 7, MC 8, MC 11, YA 1; Legislation Act 2019 ss 13–14",
-            "target_module": [
-                "nz/statutes/income_tax/family_scheme/eligibility.yaml"
-            ],
+            "target_module": ["nz/statutes/income_tax/family_scheme/eligibility.yaml"],
             "size_class": "M",
         },
         {
@@ -3363,9 +3396,7 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "reason": "Official commentary on the 2026 Act's section 105 IWTC change is not source-bound by the current tax-credit module.",
             "bearing": "2026–27 IWTC amount change",
             "defining_provision": "Official 2026 Act commentary, section 105 IWTC article",
-            "target_module": [
-                "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
-            ],
+            "target_module": ["nz/statutes/income_tax/family_scheme/tax_credits.yaml"],
             "size_class": "S",
         },
         {
@@ -3781,9 +3812,7 @@ def _build_instrument_frontiers(
     for program, act_path in sorted(PROGRAM_INSTRUMENT_ACT.items()):
         selected = [row for row in graph_rows if row["act_citation_path"] == act_path]
         ledger = [
-            _instrument_ledger_row(
-                row, decision_by_pair[(program, str(row["eli"]))]
-            )
+            _instrument_ledger_row(row, decision_by_pair[(program, str(row["eli"]))])
             for row in selected
         ]
         selected_supplements = [
@@ -3793,9 +3822,7 @@ def _build_instrument_frontiers(
         ledger.sort(key=lambda row: str(row["eli"]))
         receipt = receipt_by_act[act_path]
         unresolved = receipt["unresolved_count"]
-        pending = [
-            row["eli"] for row in ledger if row.get("status") == "pending"
-        ]
+        pending = [row["eli"] for row in ledger if row.get("status") == "pending"]
         reasons_complete = all(
             row.get("status") == "pending"
             or (isinstance(row.get("reason"), str) and bool(row["reason"].strip()))
@@ -3874,7 +3901,10 @@ def _build_instrument_frontiers(
             )
         row = _instrument_ledger_row(graph_row, aggregate)
         row["program_dispositions"] = [
-            {"program": program, **decision_by_pair[(str(program), str(graph_row["eli"]))]}
+            {
+                "program": program,
+                **decision_by_pair[(str(program), str(graph_row["eli"]))],
+            }
             for program in programs
         ]
         global_ledger.append(row)
@@ -3901,8 +3931,7 @@ def _build_instrument_frontiers(
             receipt["reported_count"] for receipt in receipt_by_act.values()
         ),
         "supplemental_count": (
-            sum(row["relation"] == "bears_on" for row in graph_rows)
-            + len(supplemental)
+            sum(row["relation"] == "bears_on" for row in graph_rows) + len(supplemental)
         ),
         "counts": _frontier_counts(global_ledger),
         "pending": global_pending,
@@ -4471,9 +4500,8 @@ def build(
         raise ClosureError("known-missing-money-atoms ceiling rose above zero")
     instrument_graph, instrument_graph_raw = _load_instrument_graph()
     instrument_decisions, instrument_decisions_raw = _load_instrument_dispositions()
-    dependency_decisions, dependency_decisions_raw = (
-        _load_dependency_dispositions()
-    )
+    dependency_decisions, dependency_decisions_raw = _load_dependency_dispositions()
+    spine_ledger, spine_ledger_raw = _load_spine_ledger()
     source_comparison, source_comparison_raw = _load_source_comparison_catalog()
     corpus_paths = corpus.get("citation_paths") or []
     if corpus_paths != sorted(set(corpus_paths)):
@@ -4538,7 +4566,7 @@ def build(
         grounding_rows, instrument_decisions
     )
     try:
-        spine_frontier = build_spine_frontier(source)
+        spine_frontier = build_spine_frontier(source, spine_ledger=spine_ledger)
     except NZSpineError as exc:
         raise ClosureError(f"NZ spine frontier is invalid: {exc}") from exc
     nodes_by_id: dict[str, dict] = {}
@@ -4727,16 +4755,17 @@ def build(
                 "document": instrument_graph,
             },
             "instrument_dispositions": {
-                "artifact": str(
-                    INSTRUMENT_DISPOSITIONS_PATH.relative_to(REPO_ROOT)
-                ),
+                "artifact": str(INSTRUMENT_DISPOSITIONS_PATH.relative_to(REPO_ROOT)),
                 "sha256": hashlib.sha256(instrument_decisions_raw).hexdigest(),
             },
             "dependency_dispositions": {
-                "artifact": str(
-                    DEPENDENCY_DISPOSITIONS_PATH.relative_to(REPO_ROOT)
-                ),
+                "artifact": str(DEPENDENCY_DISPOSITIONS_PATH.relative_to(REPO_ROOT)),
                 "sha256": hashlib.sha256(dependency_decisions_raw).hexdigest(),
+            },
+            "spine_ledger": {
+                "artifact": str(SPINE_LEDGER_PATH.relative_to(REPO_ROOT)),
+                "sha256": hashlib.sha256(spine_ledger_raw).hexdigest(),
+                "rowset_sha256": spine_ledger.get("rowset_sha256"),
             },
             "dependency_scope_source": {
                 "artifact": str(SOURCE_COMPARISON_PATH.relative_to(REPO_ROOT)),
@@ -4783,9 +4812,7 @@ def validate_artifact(
     return ClosureValidation(expected)
 
 
-def verify_artifact(
-    *, artifact_path: Path = SUMMARY_PATH
-) -> ClosureVerificationResult:
+def verify_artifact(*, artifact_path: Path = SUMMARY_PATH) -> ClosureVerificationResult:
     """Rebuild an NZ closure artifact for the common d3 producer adapter."""
 
     try:

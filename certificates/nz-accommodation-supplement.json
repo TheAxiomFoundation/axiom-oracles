@@ -48,7 +48,7 @@
       "artifact": "closure/nz/summary.json",
       "claim": "closed:nz/accommodation-supplement",
       "mode": "computed",
-      "sha256": "ba56a09fd93d22f867251effa6346efe34f3a308343ed2c02d2152ac378b58d5",
+      "sha256": "5ce71f48abfb493cfbc086e1903feee907948e1beec49001184d9a3fded22035",
       "verification": "producer_artifact_validation"
     },
     {
@@ -855,7 +855,7 @@
                 "pending": 0
               },
               "citation_prefix": "nz/statute/act/public/2026/0008/",
-              "instrument": "Annual Rates for 2025\u201326, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+              "instrument": "Taxation (Annual Rates for 2025\u201326, Compliance Simplification, and Remedial Measures) Act 2026",
               "key": "annual_rates_act_2026",
               "total": 2
             },
@@ -920,10 +920,9 @@
           "unquantified_roots": "Subject-search provisions, other off-corpus guidance and cases, open-ended provision ranges, imported definitions, implementing regulations, and emergency determinations are retained in the instrument/dependency worklists but are not assigned a false provision denominator here."
         },
         "blockers": [
-          "spine_scope_adjudication_pending",
-          "spine_body_hash_ledger_incomplete"
+          "spine_pending_provisions"
         ],
-        "body_hash_ledger_complete": false,
+        "body_hash_ledger_complete": true,
         "complete": false,
         "direct_encoded_subgraph_scope": {
           "by_status": {
@@ -1026,7 +1025,7 @@
                 "pending": 0
               },
               "citation_prefix": "nz/statute/act/public/2026/0008/",
-              "instrument": "Annual Rates for 2025\u201326, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+              "instrument": "Taxation (Annual Rates for 2025\u201326, Compliance Simplification, and Remedial Measures) Act 2026",
               "key": "annual_rates_act_2026",
               "total": 2
             },
@@ -1071,6 +1070,7 @@
           "total": 57
         },
         "requested_legal_subgraph_scope": {
+          "adopted": true,
           "by_status": {
             "classified": 0,
             "encoded": 57,
@@ -1334,7 +1334,7 @@
                 "pending": 0
               },
               "citation_prefix": "nz/statute/act/public/2026/0008/",
-              "instrument": "Annual Rates for 2025\u201326, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+              "instrument": "Taxation (Annual Rates for 2025\u201326, Compliance Simplification, and Remedial Measures) Act 2026",
               "key": "annual_rates_act_2026",
               "total": 2
             },
@@ -1394,12 +1394,13 @@
             "nz/statute/act/public/2025/0009/section/105"
           ],
           "pinned_corpus_path_count": 173,
-          "provisional": true,
+          "provisional": false,
           "provisional_reason": "The 117 pending roots conservatively expand every concrete provision named by the strict dependency audit. Imported definitions, open-ended ranges, implementing regulations, and determinations still require provision-level expansion.",
           "total": 174
         },
-        "scope_adjudication_pending": true,
+        "scope_adjudication_pending": false,
         "whole_body_scope": {
+          "adopted": false,
           "by_status": {
             "classified": 0,
             "encoded": 57,
@@ -1510,7 +1511,7 @@
                 "pending": 0
               },
               "citation_prefix": "nz/statute/act/public/2026/0008/",
-              "instrument": "Annual Rates for 2025\u201326, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+              "instrument": "Taxation (Annual Rates for 2025\u201326, Compliance Simplification, and Remedial Measures) Act 2026",
               "key": "annual_rates_act_2026",
               "total": 2
             },

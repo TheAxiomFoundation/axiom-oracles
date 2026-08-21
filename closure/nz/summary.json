@@ -12668,6 +12668,16 @@
       "supplemental_count": 46
     },
     "spine_frontier": {
+      "adopted_scope": {
+        "key": "requested_legal_subgraph_scope",
+        "ledger_schema": "axiom_oracles.nz_spine_ledger.v1",
+        "reason": "Adopt the exact transitive program-root and strict law-derived dependency roots. This follows DE's explicit scoped-root shape without treating the whole host Act as silently encoded. Pending rows remain visible, and a later adjudication can widen the set.",
+        "rowset_sha256": "4a39579f3c8176fa36bc21fa3aa87627cc3598dc3e2febac7fe9fb3e22b86166",
+        "source_partition": {
+          "official_web_only": 1,
+          "pinned_corpus_release": 173
+        }
+      },
       "all_channel_legal_subgraph_scope": {
         "by_status": {
           "classified": 0,
@@ -12970,7 +12980,7 @@
               "pending": 0
             },
             "citation_prefix": "nz/statute/act/public/2026/0008/",
-            "instrument": "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+            "instrument": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026",
             "key": "annual_rates_act_2026",
             "total": 2
           },
@@ -13035,14 +13045,13 @@
         "unquantified_roots": "Subject-search provisions, other off-corpus guidance and cases, open-ended provision ranges, imported definitions, implementing regulations, and emergency determinations are retained in the instrument/dependency worklists but are not assigned a false provision denominator here."
       },
       "blockers": [
-        "spine_scope_adjudication_pending",
-        "spine_body_hash_ledger_incomplete"
+        "spine_pending_provisions"
       ],
-      "body_hash_ledger_complete": false,
+      "body_hash_ledger_complete": true,
       "certified_v3_ambiguity": {
-        "effect": "Neither scope is certified closed until that choice is recorded and a complete provision/body-hash ledger binds the chosen scope.",
-        "literal_reading": "CERTIFIED.md v3 can also be read to require disposition of the whole body of every declared legal spine instrument.",
-        "unresolved_question": "Whether the 3,099-provision Income Tax Act 2007 and the other two governing Acts are whole-Act roots or only hosts for the dependency-root legal subgraph requires explicit adjudication."
+        "effect": "Scope selection and body hashing are closed; certification remains open because 117 adopted-scope provisions are pending.",
+        "literal_reading": "The 4,707-row whole-governing-Act reading remains a disclosed, unadopted conservative alternative.",
+        "working_scope_resolution": "C1 records the DE-precedent 174-root dependency subgraph as the working NZ spine scope."
       },
       "complete": false,
       "direct_encoded_subgraph_scope": {
@@ -13146,7 +13155,7 @@
               "pending": 0
             },
             "citation_prefix": "nz/statute/act/public/2026/0008/",
-            "instrument": "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+            "instrument": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026",
             "key": "annual_rates_act_2026",
             "total": 2
           },
@@ -13191,11 +13200,12 @@
         "total": 57
       },
       "precedent": {
-        "nz_candidate_application": "Apply the same dependency-root scoping rule to the transitive program-root union, then add the concrete roots quantified by strict leaf typing and the pinned-corpus citation scan. Subject-search, other off-release, and open-ended roots remain unquantified work and make the resulting count only a lower bound.",
+        "nz_candidate_application": "Adopted for C1 as the working scope: the exact 174-root dependency subgraph, with every row dispositioned and body-bound. The 4,707-row whole-Act reading remains disclosed as a conservative alternative that a later adjudication can substitute without changing the ledger convention.",
         "rule": "DE scoped spine closure to the attested amount/legal subgraph rather than silently treating every provision in each cited Act as part of the encoded surface.",
         "source": "oracles merge e77c93099 (DE PR #485): closure/de/source.json programs.de/kindergeld root_nodes and evidence_roots resolution=self_and_descendants; certificates/de-kindergeld.json subgraph.scope=amount; docs/de-kindergeld-certification.md"
       },
       "requested_legal_subgraph_scope": {
+        "adopted": true,
         "by_status": {
           "classified": 0,
           "encoded": 57,
@@ -13459,7 +13469,7 @@
               "pending": 0
             },
             "citation_prefix": "nz/statute/act/public/2026/0008/",
-            "instrument": "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+            "instrument": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026",
             "key": "annual_rates_act_2026",
             "total": 2
           },
@@ -13519,13 +13529,14 @@
           "nz/statute/act/public/2025/0009/section/105"
         ],
         "pinned_corpus_path_count": 173,
-        "provisional": true,
+        "provisional": false,
         "provisional_reason": "The 117 pending roots conservatively expand every concrete provision named by the strict dependency audit. Imported definitions, open-ended ranges, implementing regulations, and determinations still require provision-level expansion.",
         "total": 174
       },
       "schema": "axiom_oracles.nz_spine_frontier.v2",
-      "scope_adjudication_pending": true,
+      "scope_adjudication_pending": false,
       "whole_body_scope": {
+        "adopted": false,
         "by_status": {
           "classified": 0,
           "encoded": 57,
@@ -13636,7 +13647,7 @@
               "pending": 0
             },
             "citation_prefix": "nz/statute/act/public/2026/0008/",
-            "instrument": "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial Matters Act 2026",
+            "instrument": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026",
             "key": "annual_rates_act_2026",
             "total": 2
           },
@@ -17723,6 +17734,11 @@
     },
     "rulespec": {
       "commit": "89a7d25dc03a4d045348620283332de10b1047da"
+    },
+    "spine_ledger": {
+      "artifact": "closure/nz/spine-ledger.json",
+      "rowset_sha256": "4a39579f3c8176fa36bc21fa3aa87627cc3598dc3e2febac7fe9fb3e22b86166",
+      "sha256": "afb21ae1b9afd4b18dafe3cf22f86e2a71e79ae0d1e729f650b1edbdffa46bae"
     }
   },
   "jurisdiction": "nz",

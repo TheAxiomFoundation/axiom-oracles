@@ -27,6 +27,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEPENDENCY_PATH = REPO_ROOT / "closure" / "nz" / "dependency-dispositions.json"
 INSTRUMENT_PATH = REPO_ROOT / "closure" / "nz" / "instrument-dispositions.json"
 SUMMARY_PATH = REPO_ROOT / "closure" / "nz" / "summary.json"
+SPINE_LEDGER_PATH = REPO_ROOT / "closure" / "nz" / "spine-ledger.json"
+PCO_REVERSE_INDEX_PATH = (
+    REPO_ROOT / "closure" / "nz" / "pco-empowering-act-reverse-index.json"
+)
 DEFAULT_OUTPUT = REPO_ROOT / "V3-AUDIT-OUT.md"
 
 AUDIT_DATE = "2026-08-20"
@@ -80,7 +84,9 @@ def _load_mapping(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise AuditReportError(f"cannot read {path.relative_to(REPO_ROOT)}: {exc}") from exc
+        raise AuditReportError(
+            f"cannot read {path.relative_to(REPO_ROOT)}: {exc}"
+        ) from exc
     if not isinstance(value, dict):
         raise AuditReportError(f"{path.relative_to(REPO_ROOT)} must contain an object")
     return value
@@ -218,12 +224,18 @@ def _bearing_instruments(
     decisions = instrument.get("instrument_dispositions")
     supplements = instrument.get("supplemental_instruments")
     _require(isinstance(decisions, list), "NZ instrument dispositions must be a list")
-    _require(isinstance(supplements, list), "NZ supplemental instruments must be a list")
+    _require(
+        isinstance(supplements, list), "NZ supplemental instruments must be a list"
+    )
     for row in decisions:
-        _require(isinstance(row, dict), "NZ instrument disposition row must be an object")
+        _require(
+            isinstance(row, dict), "NZ instrument disposition row must be an object"
+        )
         add(row, channel="official_link_graph_or_f1_supplement")
     for row in supplements:
-        _require(isinstance(row, dict), "NZ supplemental instrument row must be an object")
+        _require(
+            isinstance(row, dict), "NZ supplemental instrument row must be an object"
+        )
         add(row, channel="subject_matter_search")
 
     frontier = summary["computed"]["instrument_frontier"]
@@ -254,6 +266,8 @@ def build_model() -> dict[str, Any]:
     dependency = _load_mapping(DEPENDENCY_PATH)
     instrument = _load_mapping(INSTRUMENT_PATH)
     summary = _load_mapping(SUMMARY_PATH)
+    spine_ledger = _load_mapping(SPINE_LEDGER_PATH)
+    reverse_index = _load_mapping(PCO_REVERSE_INDEX_PATH)
 
     grounding = dependency.get("input_grounding")
     encoded = dependency.get("encoded_dependencies")
@@ -302,7 +316,11 @@ def build_model() -> dict[str, Any]:
     _require(isinstance(input_grounding, dict), "missing input grounding")
     _require(isinstance(instrument_frontier, dict), "missing instrument frontier")
     _require(isinstance(spine, dict), "missing spine frontier")
-    for scope_key, (total, encoded_count, pending_count) in EXPECTED_SPINE_SCOPES.items():
+    for scope_key, (
+        total,
+        encoded_count,
+        pending_count,
+    ) in EXPECTED_SPINE_SCOPES.items():
         scope = spine.get(scope_key)
         _require(isinstance(scope, dict), f"missing spine scope {scope_key}")
         _require(scope.get("total") == total, f"{scope_key} total drift")
@@ -321,26 +339,85 @@ def build_model() -> dict[str, Any]:
             f"{scope_key} instrument totals drift",
         )
     _require(
-        spine["requested_legal_subgraph_scope"].get("pinned_corpus_path_count")
-        == 173
-        and spine["all_channel_legal_subgraph_scope"].get(
-            "pinned_corpus_path_count"
-        )
+        spine["requested_legal_subgraph_scope"].get("pinned_corpus_path_count") == 173
+        and spine["all_channel_legal_subgraph_scope"].get("pinned_corpus_path_count")
         == 199
         and spine["whole_body_scope"].get("pinned_corpus_row_count") == 4706,
         "spine corpus-membership counts drift",
+    )
+    adopted_scope = spine.get("adopted_scope")
+    _require(
+        spine.get("scope_adjudication_pending") is False
+        and spine.get("body_hash_ledger_complete") is True
+        and spine.get("blockers") == ["spine_pending_provisions"]
+        and isinstance(adopted_scope, dict)
+        and adopted_scope.get("key") == "requested_legal_subgraph_scope"
+        and spine["requested_legal_subgraph_scope"].get("adopted") is True
+        and spine["whole_body_scope"].get("adopted") is False,
+        "adopted spine scope or completion state drift",
+    )
+    _require(
+        spine_ledger.get("schema") == "axiom_oracles.nz_spine_ledger.v1"
+        and spine_ledger.get("scope_choice", {}).get("adopted") is True
+        and spine_ledger.get("counts")
+        == {
+            "total": 174,
+            "encoded": 57,
+            "classified": 0,
+            "excluded": 0,
+            "pending": 117,
+        }
+        and spine_ledger.get("source_partition")
+        == {"pinned_corpus_release": 173, "official_web_only": 1}
+        and isinstance(spine_ledger.get("rows"), list)
+        and len(spine_ledger["rows"]) == 174
+        and spine_ledger.get("body_hash_ledger_complete") is True
+        and spine_ledger.get("scope_adjudication_pending") is False
+        and spine_ledger.get("official_web_only_root", {}).get("citation_path")
+        == "nz/statute/act/public/2025/0009/section/105"
+        and spine_ledger.get("whole_act_conservative_alternative")
+        == {
+            "adopted": False,
+            "counts": {
+                "total": 4707,
+                "encoded": 57,
+                "classified": 0,
+                "excluded": 0,
+                "pending": 4650,
+            },
+            "governing_acts_only": {
+                "total": 4635,
+                "encoded": 49,
+                "pending": 4586,
+            },
+            "reason": (
+                "Disclosed literal whole-governing-Act reading. It can replace "
+                "the working scope without changing row or hash conventions."
+            ),
+        }
+        and spine_ledger.get("rowset_sha256") == adopted_scope.get("rowset_sha256"),
+        "adopted spine ledger drift",
+    )
+    generated_spine = (summary.get("generated_facts") or {}).get("spine_ledger")
+    _require(
+        isinstance(generated_spine, dict)
+        and generated_spine.get("artifact") == "closure/nz/spine-ledger.json"
+        and generated_spine.get("rowset_sha256") == spine_ledger.get("rowset_sha256"),
+        "summary is not bound to the adopted spine ledger",
     )
     _require(
         dependency_closure.get("open_dependency_count") == EXPECTED_OPEN_DEPENDENCIES,
         "open dependency count drift",
     )
-    _require(input_grounding.get("counts") == EXPECTED_GROUNDING, "grounding counts drift")
-    _require(instrument_frontier.get("counts") == EXPECTED_FRONTIER_COUNTS, "frontier count drift")
+    _require(
+        input_grounding.get("counts") == EXPECTED_GROUNDING, "grounding counts drift"
+    )
+    _require(
+        instrument_frontier.get("counts") == EXPECTED_FRONTIER_COUNTS,
+        "frontier count drift",
+    )
 
-    law_names = {
-        f"{row['source_surface']}:{row['name']}"
-        for row in law
-    }
+    law_names = {f"{row['source_surface']}:{row['name']}" for row in law}
     _require(
         law_names == set(map(str, dependency_closure.get("law_derived_inputs") or [])),
         "summary law-derived frontier does not match dependency ledger",
@@ -349,13 +426,60 @@ def build_model() -> dict[str, Any]:
     _require(len(bearing) == EXPECTED_BEARING_INSTRUMENTS, "bearing count drift")
     _require(
         {row["eli"] for row in bearing}
-        == set(map(str, dependency_closure.get("instruments_bearing_on_computed") or [])),
+        == set(
+            map(str, dependency_closure.get("instruments_bearing_on_computed") or [])
+        ),
         "summary bearing frontier does not match instrument ledger",
     )
 
     gaps = instrument_frontier.get("capture_gaps") or []
     capture_gap = sum(int(row["unresolved_listing_rows"]) for row in gaps)
     _require(capture_gap == EXPECTED_CAPTURE_GAP, "NZ listing capture gap drift")
+    _require(
+        reverse_index.get("schema")
+        == "axiom_oracles.nz_pco_empowering_act_reverse_index.v1"
+        and reverse_index.get("counts")
+        == {
+            "xml_files_scanned": 11259,
+            "reported_listing_rows": 437,
+            "bulk_xml_matches": 301,
+            "already_in_instrument_graph": 301,
+            "newly_resolved": 0,
+            "pending_merges": 0,
+            "remaining_capture_gap": 136,
+        },
+        "PCO reverse-index counts drift",
+    )
+    reverse_by_act = {
+        str(row["act_citation_path"]): int(row["remaining_capture_gap"])
+        for row in reverse_index.get("by_act") or []
+    }
+    _require(
+        reverse_by_act
+        == {
+            str(row["act_citation_path"]): int(row["unresolved_listing_rows"])
+            for row in gaps
+        },
+        "PCO reverse index does not reconcile to closure capture gaps",
+    )
+    _require(
+        [
+            (
+                row.get("act_citation_path"),
+                row.get("reported_listing_rows"),
+                row.get("bulk_xml_matches"),
+                row.get("newly_resolved"),
+                row.get("remaining_capture_gap"),
+            )
+            for row in reverse_index.get("by_act") or []
+        ]
+        == [
+            ("nz/statute/act/public/2007/0097", 202, 109, 0, 93),
+            ("nz/statute/act/public/2018/0032", 99, 66, 0, 33),
+            ("nz/statute/act/public/2001/0049", 136, 126, 0, 10),
+        ],
+        "PCO reverse-index per-Act counts drift",
+    )
 
     discovery = instrument.get("discovery_receipts")
     _require(isinstance(discovery, dict), "missing NZ discovery receipts")
@@ -364,11 +488,18 @@ def build_model() -> dict[str, Any]:
     _require(isinstance(subject, dict), "missing subject-search receipt")
     _require(isinstance(citation, dict), "missing citation-scan receipt")
     _require(subject.get("searched_at") == AUDIT_DATE, "subject-search date drift")
-    _require(len(subject.get("queries") or []) == 31, "subject-search query count drift")
-    _require(len(subject.get("result_elis") or []) == 11, "subject-search result count drift")
+    _require(
+        len(subject.get("queries") or []) == 31, "subject-search query count drift"
+    )
+    _require(
+        len(subject.get("result_elis") or []) == 11, "subject-search result count drift"
+    )
     approximation = citation.get("approximation")
     _require(isinstance(approximation, dict), "missing citation-scan approximation")
-    _require(approximation.get("provision_rows_scanned") == 10171, "citation corpus count drift")
+    _require(
+        approximation.get("provision_rows_scanned") == 10171,
+        "citation corpus count drift",
+    )
     _require(
         approximation.get("source_target_match_rows") == 560
         and approximation.get("distinct_source_provision_paths") == 535,
@@ -387,8 +518,7 @@ def build_model() -> dict[str, Any]:
     citation_rows = [
         row
         for row in supplement_rows
-        if "corpus_citation_scan_approximation"
-        in (row.get("discovery_channels") or [])
+        if "corpus_citation_scan_approximation" in (row.get("discovery_channels") or [])
     ]
     _require(
         set(map(str, subject.get("result_elis") or []))
@@ -459,9 +589,10 @@ def build_model() -> dict[str, Any]:
         ),
         "target": "NZ instrument graph capture",
         "method": (
-            "Reverse-index the official PCO bulk XML by empowering-Act citations, "
-            "then reconcile canonical ELIs to the advertised Act-tab totals. Do not "
-            "scrape the client-rendered tab; respect legislation.govt.nz bot boundaries."
+            "C1 reverse-indexed authoritative PCO XML <pursuant> text and reconciled "
+            "canonical ELIs: all 301 exact matches were already present, so no rows "
+            "were merged and 136 remain outside the available PCO-publisher XML. "
+            "The client-rendered Act tabs and verification walls were not accessed."
         ),
     }
 
@@ -480,7 +611,9 @@ def build_model() -> dict[str, Any]:
             }
         )
     for row in bearing:
-        worklist.append({"number": len(worklist) + 1, "kind": "bearing_instrument", **row})
+        worklist.append(
+            {"number": len(worklist) + 1, "kind": "bearing_instrument", **row}
+        )
     worklist.append({"number": len(worklist) + 1, **capture_item})
     _require(len(worklist) == EXPECTED_WORKLIST, "typed worklist count drift")
     _require(worklist[-1]["number"] == 248, "capture gap is not worklist item 248")
@@ -488,7 +621,11 @@ def build_model() -> dict[str, Any]:
     worklist_sizes = Counter(str(row["size_class"]) for row in worklist)
     size_by_kind = {
         kind: dict(
-            sorted(Counter(row["size_class"] for row in worklist if row["kind"] == kind).items())
+            sorted(
+                Counter(
+                    row["size_class"] for row in worklist if row["kind"] == kind
+                ).items()
+            )
         )
         for kind in ("law_derived", "bearing_instrument", "capture_gap")
     }
@@ -502,14 +639,22 @@ def build_model() -> dict[str, Any]:
     corpus_release = str(summary.get("corpus_release"))
     corpus_commit = str(summary.get("corpus_commit"))
 
-    adjudication_questions = [
+    resolved_audit_questions = [
         (
-            "Spine scope: does the DE PR #485 precedent license the 174-root "
-            "dependency lower bound (or the 200-root citation-expanded lower bound), "
-            "or does v3 require the 4,707-row whole-governing-Act alternative? The "
-            "choice, one official-web-only exact amendment root, unresolved root "
-            "expansion, and body-hash ledger must be explicit."
+            "Audit Q1 — resolved at working scope: C1 adopts the DE-precedent "
+            "174-root dependency subgraph, binds 173 roots to the pinned corpus and "
+            "one amendment root to retained official XML, and records all 57 encoded "
+            "and 117 pending rows. The 4,707-row whole-Act alternative remains "
+            "disclosed and unadopted."
         ),
+        (
+            "Audit Q5 — reverse-index mechanism resolved, capture remainder open: "
+            "C1 replays the authoritative PCO XML <pursuant> fields. All 301 matches "
+            "were already in the graph, so 0 rows were merged and the 136-row "
+            "publisher/listing gap remains explicit."
+        ),
+    ]
+    adjudication_questions = [
         (
             "Multi-Act graph schema: should NZ retain one extended graph for three "
             "empowering Acts, or publish a standardized wrapper of one v1 graph per Act?"
@@ -521,11 +666,6 @@ def build_model() -> dict[str, Any]:
         (
             "Multi-owner instruments: how should guidance or precedent that bears on "
             "more than one Act/program be owned without losing any dependency edge?"
-        ),
-        (
-            "Official capture: which supported PCO reverse-relation endpoint or bulk-XML "
-            "reverse index becomes the canonical replacement for the inaccessible "
-            "client-rendered Act tab and closes the 136-row gap?"
         ),
     ]
 
@@ -565,6 +705,7 @@ def build_model() -> dict[str, Any]:
             "graph_bears_on_rows": graph_bears_on_rows,
             "external_supplement_rows": external_supplement_rows,
             "capture_gaps": gaps,
+            "pco_reverse_index": reverse_index,
             "retained_not_in_force_or_superseded": revoked_or_out_of_period,
             "retained_current_nonbearing_exclusions": retained_current_exclusions,
             "bearing_instruments": bearing,
@@ -628,6 +769,7 @@ def build_model() -> dict[str, Any]:
                 },
             ],
             "frontier": spine,
+            "ledger": spine_ledger,
         },
         "part_4_worklist": {
             "open_dependency_count": EXPECTED_OPEN_DEPENDENCIES,
@@ -646,7 +788,12 @@ def build_model() -> dict[str, Any]:
             "generated_fact_receipts": {
                 key: value
                 for key, value in (summary.get("generated_facts") or {}).items()
-                if key in {"dependency_dispositions", "instrument_dispositions"}
+                if key
+                in {
+                    "dependency_dispositions",
+                    "instrument_dispositions",
+                    "spine_ledger",
+                }
             },
             "certificates": _certificate_rows(),
             "certificate_section_status": (
@@ -654,18 +801,13 @@ def build_model() -> dict[str, Any]:
             ),
             "gate_receipts": {
                 "producers_check": (
-                    "PASS — all seven NZ producer/check modes current"
+                    "PASS — original seven NZ producer/check modes plus all three "
+                    "C1 producers current"
                 ),
                 "certify_check": "PASS — certificates up to date",
-                "whole_mutant_file": (
-                    "PASS — 259 passed; guard reversions included"
-                ),
-                "simulated_nz_refresh": (
-                    "PASS — nz-treasury-incomeexplorer"
-                ),
-                "simulated_dk_refresh": (
-                    "PASS — dk-child-youth-benefit-euromod"
-                ),
+                "whole_mutant_file": ("PASS — 259 passed; guard reversions included"),
+                "simulated_nz_refresh": ("PASS — nz-treasury-incomeexplorer"),
+                "simulated_dk_refresh": ("PASS — dk-child-youth-benefit-euromod"),
                 "cross_jurisdiction_byte_identity": (
                     "PASS — non-NZ derived bytes equal origin/main at rebase base"
                 ),
@@ -677,6 +819,7 @@ def build_model() -> dict[str, Any]:
                 "was unavailable. The temporary local adapters were removed before commit."
             ),
         },
+        "resolved_audit_questions": resolved_audit_questions,
         "adjudication_questions": adjudication_questions,
     }
 
@@ -693,7 +836,9 @@ def _md(value: Any) -> str:
     elif isinstance(value, bool):
         text = "true" if value else "false"
     elif isinstance(value, (list, dict)):
-        text = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        text = json.dumps(
+            value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        )
     else:
         text = str(value)
     return text.replace("|", "\\|").replace("\n", "<br>")
@@ -775,7 +920,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
                 f"| `{_md(key)}` | compiled/request census | `{_md(receipt)}` |"
             )
             continue
-        location = receipt.get("path") or receipt.get("artifact") or receipt.get("repository")
+        location = (
+            receipt.get("path") or receipt.get("artifact") or receipt.get("repository")
+        )
         repository = receipt.get("repository")
         if repository and receipt.get("path"):
             location = f"{repository}:{receipt['path']}"
@@ -784,7 +931,11 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             binding = f"{receipt['repository_commit']} / sha256:{receipt['sha256']}"
         lines.append(f"| `{_md(key)}` | `{_md(location)}` | `{_md(binding)}` |")
     lines.append("")
-    lines.extend(_count_table("Law-derived rows by source surface", part1["law_derived_by_surface"]))
+    lines.extend(
+        _count_table(
+            "Law-derived rows by source surface", part1["law_derived_by_surface"]
+        )
+    )
     lines.extend(_count_table("Law-derived rows by size", part1["law_derived_by_size"]))
 
     lines.extend(
@@ -857,6 +1008,18 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             ),
             "",
             (
+                "C1 independently rebuilt that reverse index from "
+                f"**{part2['pco_reverse_index']['counts']['xml_files_scanned']:,}** retained "
+                "official PCO XML files, using only normalized `<pursuant>` text as an "
+                "empowering edge. It reproduced all "
+                f"**{part2['pco_reverse_index']['counts']['bulk_xml_matches']}** existing "
+                "matches, resolved **0** new rows, and therefore made **0** pending "
+                "B2 merges. The API requires registration, the documented works endpoint "
+                "has no empowering-Act reverse filter, and the client-rendered Act tabs "
+                "were not accessed."
+            ),
+            "",
+            (
                 f"Honest exclusions retain {part2['retained_not_in_force_or_superseded']} "
                 "not-in-force, superseded, or out-of-period rows. The 16 current exclusions "
                 "are the six F1 graph rows with no computed bearing, the post-period Taxation "
@@ -880,7 +1043,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "",
             (
                 f"Search date: **{part2['subject_search']['searched_at']}**. Sources: "
-                + ", ".join(f"[{url}]({url})" for url in part2["subject_search"]["sources"])
+                + ", ".join(
+                    f"[{url}]({url})" for url in part2["subject_search"]["sources"]
+                )
                 + "."
             ),
             "",
@@ -928,7 +1093,8 @@ def render_markdown(model: Mapping[str, Any]) -> str:
                 f"across **{approximation['distinct_source_provision_paths']} distinct source "
                 "provision paths**: "
                 + ", ".join(
-                    f"{name} {count}" for name, count in sorted(approximation["target_counts"].items())
+                    f"{name} {count}"
+                    for name, count in sorted(approximation["target_counts"].items())
                 )
                 + ". These are match rows, not 560 unique provisions or instruments, and not "
                 "#611 completeness."
@@ -966,8 +1132,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "## Part 3 — spine closure position",
             "",
             (
-                f"Pinned corpus release `{part3['corpus_release']}` at "
-                f"`{part3['corpus_commit']}` contains "
+                f"The original V3 audit denominator was computed from corpus release "
+                f"`{part3['corpus_release']}` at "
+                f"`{part3['corpus_commit']}`. That snapshot contains "
                 f"**{part3['pinned_corpus_provision_rows']} provision rows** across the "
                 "three scopes below. Its release manifest is "
                 f"`{part3['release_manifest']['path']}` at SHA-256 "
@@ -998,15 +1165,28 @@ def render_markdown(model: Mapping[str, Any]) -> str:
                 f"{part3['frontier']['precedent']['nz_candidate_application']}"
             ),
             "",
-            "The precedent does not unambiguously resolve the 3,099-provision Income Tax Act. "
-            "All four positions are therefore reported; none is silently selected. The 57 "
-            "direct paths are demonstrably insufficient under v3. The 174 dependency-root "
-            "and 200 citation-expanded scopes contain respectively 173 and 199 pinned-corpus "
-            "paths plus the web-verified 2025 No 9 s 105 root. They remain lower bounds because "
-            "vague ranges, imported definitions, subject-search results, and other off-release "
-            "sources remain unquantified. "
-            "The whole-Act alternative expands the three governing Acts while retaining exact "
-            "roots—not whole bodies—for subordinate and evidence instruments.",
+            (
+                "C1 explicitly adopts the **174-root dependency subgraph** as the working "
+                "scope. Its ledger records **57 encoded, 0 classified, 0 excluded, and "
+                "117 pending** rows—zero silent rows—and has rowset SHA-256 "
+                f"`{part3['ledger']['rowset_sha256']}`. Of those roots, "
+                f"**{part3['ledger']['source_partition']['pinned_corpus_release']}** are "
+                "body-bound to signed release "
+                f"`{part3['ledger']['corpus_release']['release']}` and **1** is bound to "
+                "the retained official XML for "
+                f"[{part3['ledger']['official_web_only_root']['citation_path']}]"
+                f"({part3['ledger']['official_web_only_root']['official_url']})."
+            ),
+            "",
+            (
+                "This resolves the audit's scope-choice question at precedent scope; it "
+                "does not claim the spine is complete. The 174 roots remain a lower bound "
+                "because vague ranges, imported definitions, subject-search results, and "
+                "other off-release sources remain unquantified. The **4,707-row** whole-Act "
+                "alternative (**57 encoded, 4,650 pending**) is recorded alongside as the "
+                "unadopted conservative option, so a later adjudication can widen the scope "
+                "without changing the row or hash convention."
+            ),
             "",
         ]
     )
@@ -1082,7 +1262,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
                 f"Grounding: {_md(item['reason'])}"
             )
         elif item["kind"] == "bearing_instrument":
-            provisions = "; ".join(item["defining_provisions"]) or "instrument as a whole"
+            provisions = (
+                "; ".join(item["defining_provisions"]) or "instrument as a whole"
+            )
             reasons = " ".join(item["reasons"])
             lines.append(
                 f"{number}. [{_md(item['title'])}]({item['eli']}) — "
@@ -1164,7 +1346,15 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "",
             f"**Local DE gate compatibility:** {part5['local_gate_note']}",
             "",
-            "## Adjudication questions",
+            "## C1 resolutions of audit questions",
+            "",
+        ]
+    )
+    lines.extend(f"- {_md(item)}" for item in model["resolved_audit_questions"])
+    lines.extend(
+        [
+            "",
+            "## Remaining adjudication questions",
             "",
         ]
     )
@@ -1188,7 +1378,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true", help="fail unless output is current")
+    parser.add_argument(
+        "--check", action="store_true", help="fail unless output is current"
+    )
     parser.add_argument(
         "--format",
         choices=("markdown", "json"),
@@ -1214,7 +1406,9 @@ def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
     try:
         model = build_model()
-        rendered = render_markdown(model) if args.format == "markdown" else render_json(model)
+        rendered = (
+            render_markdown(model) if args.format == "markdown" else render_json(model)
+        )
     except AuditReportError as exc:
         print(f"NZ v3 audit report error: {exc}", file=sys.stderr)
         return 1

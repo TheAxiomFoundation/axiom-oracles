@@ -10,6 +10,8 @@ changed citation cannot silently preserve only the aggregate count.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any
@@ -120,8 +122,8 @@ DIRECT_SCOPE_COUNTS = (
     ),
     _ScopeCount(
         "annual_rates_act_2026",
-        "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial "
-        "Matters Act 2026",
+        "Taxation (Annual Rates for 2025–26, Compliance Simplification, and "
+        "Remedial Measures) Act 2026",
         "nz/statute/act/public/2026/0008/",
         2,
         2,
@@ -344,9 +346,7 @@ EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS = tuple(
     )
 )
 
-EXPECTED_OFF_RELEASE_EXACT_CITATIONS = (
-    "nz/statute/act/public/2025/0009/section/105",
-)
+EXPECTED_OFF_RELEASE_EXACT_CITATIONS = ("nz/statute/act/public/2025/0009/section/105",)
 
 
 DEPENDENCY_ROOT_SCOPE_COUNTS = (
@@ -401,8 +401,8 @@ DEPENDENCY_ROOT_SCOPE_COUNTS = (
     ),
     _ScopeCount(
         "annual_rates_act_2026",
-        "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial "
-        "Matters Act 2026",
+        "Taxation (Annual Rates for 2025–26, Compliance Simplification, and "
+        "Remedial Measures) Act 2026",
         "nz/statute/act/public/2026/0008/",
         2,
         2,
@@ -493,8 +493,8 @@ F1_SEVEN_BODY_SCOPE_COUNTS = (
     ),
     _ScopeCount(
         "annual_rates_act_2026",
-        "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial "
-        "Matters Act 2026",
+        "Taxation (Annual Rates for 2025–26, Compliance Simplification, and "
+        "Remedial Measures) Act 2026",
         "nz/statute/act/public/2026/0008/",
         255,
         2,
@@ -566,8 +566,8 @@ WHOLE_GOVERNING_ACT_SCOPE_COUNTS = (
     ),
     _ScopeCount(
         "annual_rates_act_2026",
-        "Annual Rates for 2025–26, Taxation (KiwiSaver), and Remedial "
-        "Matters Act 2026",
+        "Taxation (Annual Rates for 2025–26, Compliance Simplification, and "
+        "Remedial Measures) Act 2026",
         "nz/statute/act/public/2026/0008/",
         2,
         2,
@@ -670,8 +670,7 @@ def _validate_constants() -> None:
     if set(EXPECTED_CANDIDATE_CITATIONS) & set(EXPECTED_DEPENDENCY_ROOT_CITATIONS):
         raise NZSpineError("NZ direct and dependency-root citations overlap")
     if set(EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS) & (
-        set(EXPECTED_CANDIDATE_CITATIONS)
-        | set(EXPECTED_DEPENDENCY_ROOT_CITATIONS)
+        set(EXPECTED_CANDIDATE_CITATIONS) | set(EXPECTED_DEPENDENCY_ROOT_CITATIONS)
     ):
         raise NZSpineError("NZ all-channel additions are not set additions")
     audited_off_release = tuple(
@@ -699,14 +698,11 @@ def _validate_constants() -> None:
 
     dependency_union = tuple(
         sorted(
-            set(EXPECTED_CANDIDATE_CITATIONS)
-            | set(EXPECTED_DEPENDENCY_ROOT_CITATIONS)
+            set(EXPECTED_CANDIDATE_CITATIONS) | set(EXPECTED_DEPENDENCY_ROOT_CITATIONS)
         )
     )
     all_channel_union = tuple(
-        sorted(
-            set(dependency_union) | set(EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS)
-        )
+        sorted(set(dependency_union) | set(EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS))
     )
     _validate_citation_ownership(EXPECTED_CANDIDATE_CITATIONS, DIRECT_SCOPE_COUNTS)
     _validate_citation_ownership(dependency_union, DEPENDENCY_ROOT_SCOPE_COUNTS)
@@ -846,9 +842,7 @@ def _scope_rows_with_extras(
     unmapped: list[str] = []
     for citation in extra_citations:
         matches = [
-            row
-            for row in rows
-            if citation.startswith(str(row["citation_prefix"]))
+            row for row in rows if citation.startswith(str(row["citation_prefix"]))
         ]
         if len(matches) == 1:
             matches[0]["total"] += 1
@@ -874,12 +868,93 @@ def _scope_rows_with_extras(
     return rows
 
 
+def _canonical_sha256(value: Any) -> str:
+    payload = (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        + "\n"
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _validate_adopted_ledger(ledger: Mapping[str, Any]) -> None:
+    """Bind a committed C1 spine ledger without performing source I/O."""
+
+    if ledger.get("schema") != "axiom_oracles.nz_spine_ledger.v1":
+        raise NZSpineError("NZ adopted spine ledger schema drifted")
+    expected_paths = tuple(
+        sorted(
+            set(EXPECTED_CANDIDATE_CITATIONS) | set(EXPECTED_DEPENDENCY_ROOT_CITATIONS)
+        )
+    )
+    rows = ledger.get("rows")
+    if not isinstance(rows, list) or not all(isinstance(row, Mapping) for row in rows):
+        raise NZSpineError("NZ adopted spine ledger rows are malformed")
+    actual_paths = tuple(str(row.get("citation_path")) for row in rows)
+    if actual_paths != expected_paths:
+        raise NZSpineError("NZ adopted spine ledger lost or added a root")
+    for row in rows:
+        citation = str(row["citation_path"])
+        expected_status = (
+            "encoded" if citation in EXPECTED_CANDIDATE_CITATIONS else "pending"
+        )
+        if row.get("status") != expected_status:
+            raise NZSpineError(f"NZ adopted spine status drifted: {citation}")
+        body_sha = row.get("body_sha256")
+        if citation.endswith("/schedule/5"):
+            descendants = row.get("resolved_descendants")
+            if (
+                body_sha is not None
+                or row.get("resolution") != "self_and_descendants"
+                or not isinstance(descendants, list)
+                or len(descendants) != 3
+            ):
+                raise NZSpineError("NZ structural spine body binding drifted")
+        elif not (
+            isinstance(body_sha, str)
+            and len(body_sha) == 64
+            and all(character in "0123456789abcdef" for character in body_sha)
+        ):
+            raise NZSpineError(f"NZ adopted spine body hash drifted: {citation}")
+    counts = {
+        "total": len(rows),
+        "encoded": sum(row.get("status") == "encoded" for row in rows),
+        "classified": sum(row.get("status") == "classified" for row in rows),
+        "excluded": sum(row.get("status") == "excluded" for row in rows),
+        "pending": sum(row.get("status") == "pending" for row in rows),
+    }
+    if (
+        counts
+        != {
+            "total": 174,
+            "encoded": 57,
+            "classified": 0,
+            "excluded": 0,
+            "pending": 117,
+        }
+        or ledger.get("counts") != counts
+    ):
+        raise NZSpineError("NZ adopted spine counts drifted")
+    scope = ledger.get("scope_choice")
+    alternative = ledger.get("whole_act_conservative_alternative")
+    if not (
+        isinstance(scope, Mapping)
+        and scope.get("adopted") is True
+        and scope.get("key") == "de_precedent_dependency_root_subgraph"
+        and isinstance(alternative, Mapping)
+        and alternative.get("adopted") is False
+        and alternative.get("counts", {}).get("total") == 4707
+        and ledger.get("scope_adjudication_pending") is False
+        and ledger.get("body_hash_ledger_complete") is True
+        and ledger.get("rowset_sha256") == _canonical_sha256(rows)
+    ):
+        raise NZSpineError("NZ adopted spine scope or rowset receipt drifted")
+
+
 def build_spine_frontier(
     candidate_citations: Mapping[str, Any] | Iterable[str],
     *,
-    dependency_root_citations: Iterable[
-        str
-    ] = EXPECTED_DEPENDENCY_ROOT_CITATIONS,
+    spine_ledger: Mapping[str, Any] | None = None,
+    dependency_root_citations: Iterable[str] = EXPECTED_DEPENDENCY_ROOT_CITATIONS,
     all_channel_additional_citations: Iterable[
         str
     ] = EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS,
@@ -894,6 +969,8 @@ def build_spine_frontier(
     """
 
     citations = _coerce_candidate_citations(candidate_citations)
+    if spine_ledger is not None:
+        _validate_adopted_ledger(spine_ledger)
     dependency_citations = _coerce_exact_ratchet(
         dependency_root_citations,
         expected=EXPECTED_DEPENDENCY_ROOT_CITATIONS,
@@ -910,17 +987,24 @@ def build_spine_frontier(
         if citation not in EXPECTED_CANDIDATE_CITATIONS
     )
     direct_paths = tuple(sorted(set(citations)))
-    dependency_paths = tuple(
-        sorted(set(direct_paths) | set(dependency_citations))
-    )
+    dependency_paths = tuple(sorted(set(direct_paths) | set(dependency_citations)))
     all_channel_paths = tuple(
         sorted(set(dependency_paths) | set(all_channel_citations))
     )
-    return {
+    adopted = spine_ledger is not None
+    blockers = (
+        ["spine_pending_provisions"]
+        if adopted
+        else [
+            "spine_scope_adjudication_pending",
+            "spine_body_hash_ledger_incomplete",
+        ]
+    )
+    result = {
         "schema": "axiom_oracles.nz_spine_frontier.v2",
         "complete": False,
-        "scope_adjudication_pending": True,
-        "body_hash_ledger_complete": False,
+        "scope_adjudication_pending": not adopted,
+        "body_hash_ledger_complete": adopted,
         "precedent": {
             "source": (
                 "oracles merge e77c93099 (DE PR #485): closure/de/source.json "
@@ -990,9 +1074,7 @@ def build_spine_frontier(
             "citation_paths": list(dependency_paths),
             "pinned_corpus_path_count": 173 + len(direct_extras),
             "official_web_only_exact_path_count": 1,
-            "official_web_only_exact_paths": list(
-                EXPECTED_OFF_RELEASE_EXACT_CITATIONS
-            ),
+            "official_web_only_exact_paths": list(EXPECTED_OFF_RELEASE_EXACT_CITATIONS),
             "lower_bound": True,
             "provisional": True,
             "provisional_reason": (
@@ -1017,9 +1099,7 @@ def build_spine_frontier(
             "citation_paths": list(all_channel_paths),
             "pinned_corpus_path_count": 199 + len(direct_extras),
             "official_web_only_exact_path_count": 1,
-            "official_web_only_exact_paths": list(
-                EXPECTED_OFF_RELEASE_EXACT_CITATIONS
-            ),
+            "official_web_only_exact_paths": list(EXPECTED_OFF_RELEASE_EXACT_CITATIONS),
             "lower_bound": True,
             "set_union_note": (
                 "TAA s 91AAS appears in both dependency and citation-scan evidence "
@@ -1035,9 +1115,7 @@ def build_spine_frontier(
             ),
         },
         "whole_body_scope": {
-            "label": (
-                "whole governing-Act alternative plus exact other legal roots"
-            ),
+            "label": ("whole governing-Act alternative plus exact other legal roots"),
             "total": 4707,
             "by_status": {
                 "encoded": 57,
@@ -1075,11 +1153,41 @@ def build_spine_frontier(
                 "this denominator."
             ),
         },
-        "blockers": [
-            "spine_scope_adjudication_pending",
-            "spine_body_hash_ledger_incomplete",
-        ],
+        "blockers": blockers,
     }
+    if adopted:
+        result["precedent"]["nz_candidate_application"] = (
+            "Adopted for C1 as the working scope: the exact 174-root "
+            "dependency subgraph, with every row dispositioned and body-bound. "
+            "The 4,707-row whole-Act reading remains disclosed as a conservative "
+            "alternative that a later adjudication can substitute without changing "
+            "the ledger convention."
+        )
+        result["certified_v3_ambiguity"] = {
+            "working_scope_resolution": (
+                "C1 records the DE-precedent 174-root dependency subgraph as the "
+                "working NZ spine scope."
+            ),
+            "literal_reading": (
+                "The 4,707-row whole-governing-Act reading remains a disclosed, "
+                "unadopted conservative alternative."
+            ),
+            "effect": (
+                "Scope selection and body hashing are closed; certification remains "
+                "open because 117 adopted-scope provisions are pending."
+            ),
+        }
+        result["adopted_scope"] = {
+            "key": "requested_legal_subgraph_scope",
+            "ledger_schema": spine_ledger["schema"],
+            "rowset_sha256": spine_ledger["rowset_sha256"],
+            "source_partition": spine_ledger["source_partition"],
+            "reason": spine_ledger["scope_choice"]["reason"],
+        }
+        result["requested_legal_subgraph_scope"]["adopted"] = True
+        result["requested_legal_subgraph_scope"]["provisional"] = False
+        result["whole_body_scope"]["adopted"] = False
+    return result
 
 
 _validate_constants()
