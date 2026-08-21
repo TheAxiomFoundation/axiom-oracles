@@ -68,13 +68,13 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "b83c8bdd7078a65eddcb099b9076d0be596a7eff204b73f06cf866ad7d3a87e7"
+      "sha256": "f291a6fe3fd11e26c04a2e5e8015642cd5c3e9b8e59ce7b31d5c56ee6e494e1f"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "a3db79b35d9103a2eb8e23eb5920137e3f9a41f39d235f1c57f6240cfc3fa07d"
+      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
     }
   ],
   "period": "2025",
@@ -96,6 +96,7 @@
         "encoded": 2,
         "evidence": 0,
         "excluded": 0,
+        "open_dependency": 0,
         "pending": 1
       },
       "citation_paths": [
@@ -161,8 +162,8 @@
       "signature_pending_citations": [
         "de/statute/uhvorschg/2"
       ],
-      "source_closed": false,
-      "source_closed_claim_mode": "computed",
+      "spine_closed": false,
+      "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
       "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",

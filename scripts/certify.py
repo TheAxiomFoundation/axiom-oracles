@@ -1640,63 +1640,35 @@ def _closed_verdict(
     # certified-definition rollout's change, not this lane's.
     frontier_summary = None
     if path_string == "closure/de/summary.json":
-        instrument_frontier = scoped.get("instrument_frontier")
-        if isinstance(instrument_frontier, dict):
-            frontier_summary = {
-                key: instrument_frontier.get(key)
-                for key in (
-                    "instrument_count",
-                    "supplemental_count",
-                    "counts",
-                    "pending",
-                    "complete",
-                )
-            }
-        else:
-            frontier_summary = {
-                "complete": False,
-                "missing": True,
-                "requirement": (
-                    "closure must disposition the act's subordinate "
-                    "instruments (oracles#491); this closure declares none"
-                ),
-            }
-        if frontier_summary.get("complete") is not True:
-            value = False
-            frontier_blockers = [
-                "closed: "
-                + str(
-                    frontier_summary.get("requirement")
-                    or "subordinate-instrument frontier is incomplete"
-                )
-            ]
-        else:
-            frontier_blockers = []
-        # Dependency closure with leaf discipline (CERTIFIED.md v3): the DE
-        # closure declares no typed-leaf ledger yet, so closed fails on the
-        # same requirement the central producer gate enforces. The four
-        # EStG 62-65 boundary inputs are law-derived and case-supplied — an
-        # open dependency until their defining rules are encoded.
-        dependency_summary = scoped.get("dependency_closure")
-        if not (
-            isinstance(dependency_summary, dict)
-            and dependency_summary.get("closed") is True
-        ):
-            value = False
-            frontier_blockers.append(
-                "closed: closure must type every leaf and encode every "
-                "law-derived dependency (CERTIFIED.md v3); this closure "
-                "declares no dependency-closure block"
-            )
-            dependency_summary = {
-                "closed": False,
-                "missing": True,
-                "requirement": (
-                    "closure must type every leaf and encode every "
-                    "law-derived dependency (CERTIFIED.md v3); this "
-                    "closure declares no dependency-closure block"
-                ),
-            }
+        # The DE closure has no central-validated instrument frontier or
+        # typed-leaf dependency ledger. Both requirements therefore fail
+        # closed UNCONDITIONALLY: nothing read from the rederived summary can
+        # satisfy them, so a forged block in the summary (a bare
+        # {"closed": true}, a hand-written "complete" frontier) cannot flip
+        # this verdict. When the real DE ledger lands it must be consumed
+        # through the central producer gate, not through this path.
+        value = False
+        frontier_summary = {
+            "complete": False,
+            "missing": True,
+            "requirement": (
+                "closure must disposition the act's subordinate "
+                "instruments (oracles#491); this closure declares none"
+            ),
+        }
+        dependency_summary = {
+            "closed": False,
+            "missing": True,
+            "requirement": (
+                "closure must type every leaf and encode every "
+                "law-derived dependency (CERTIFIED.md v3); this "
+                "closure declares no dependency-closure block"
+            ),
+        }
+        frontier_blockers = [
+            "closed: " + frontier_summary["requirement"],
+            "closed: " + dependency_summary["requirement"],
+        ]
     else:
         frontier_blockers = []
         dependency_summary = None
@@ -1730,13 +1702,13 @@ def _closed_verdict(
         "subgraph_node_count": scoped.get("subgraph_node_count"),
         "citation_root_count": scoped.get("citation_root_count"),
         "by_status": scoped.get("by_status"),
-        "source_closed": scoped.get("source_closed"),
+        "spine_closed": scoped.get("spine_closed"),
         "subgraph_sha256": scoped.get("subgraph_sha256"),
         "boundaries": scoped.get("boundaries"),
         "by_signature_state": scoped.get("by_signature_state"),
         "signature_blockers": scoped.get("signature_blockers"),
         "closed_claim_mode": scoped.get("closed_claim_mode"),
-        "source_closed_claim_mode": scoped.get("source_closed_claim_mode"),
+        "spine_closed_claim_mode": scoped.get("spine_closed_claim_mode"),
         "citation_paths": scoped.get("citation_paths"),
         "declared_sources": scoped.get("declared_sources"),
         "evidence_roots": scoped.get("evidence_roots"),

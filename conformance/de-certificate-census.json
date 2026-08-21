@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "84fbc0559bacae1128bb992052791e0ecc78b71137dfc4244f2fc7f622d19bd7"
+    "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -15,9 +15,12 @@
   "generated_by": "scripts/de_certificate_census.py",
   "programs": {
     "de/kindergeld": {
-      "blockers": [],
+      "blockers": [
+        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
+        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+      ],
       "certificate_path": "certificates/de-kindergeld.json",
-      "certificate_status": "ready",
+      "certificate_status": "pending",
       "declared_roots": [
         {
           "attestation": {
@@ -44,8 +47,8 @@
           },
           "citation_path": "de/statute/estg/62",
           "claim_mode": "attested",
-          "classification": "excluded-with-reason",
-          "reason": "EStG section 62 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "classification": "open-law-derived-dependency",
+          "reason": "EStG section 62 defines how to compute this boundary input; under CERTIFIED.md v3 it is an open law-derived dependency, not an exclusion, and closed stays false until it is encoded to observable-act leaves",
           "role": "boundary_input",
           "signature_state": "not_applicable"
         },
@@ -56,8 +59,8 @@
           },
           "citation_path": "de/statute/estg/63",
           "claim_mode": "attested",
-          "classification": "excluded-with-reason",
-          "reason": "EStG section 63 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "classification": "open-law-derived-dependency",
+          "reason": "EStG section 63 defines how to compute this boundary input; under CERTIFIED.md v3 it is an open law-derived dependency, not an exclusion, and closed stays false until it is encoded to observable-act leaves",
           "role": "boundary_input",
           "signature_state": "not_applicable"
         },
@@ -68,8 +71,8 @@
           },
           "citation_path": "de/statute/estg/64",
           "claim_mode": "attested",
-          "classification": "excluded-with-reason",
-          "reason": "EStG section 64 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "classification": "open-law-derived-dependency",
+          "reason": "EStG section 64 defines how to compute this boundary input; under CERTIFIED.md v3 it is an open law-derived dependency, not an exclusion, and closed stays false until it is encoded to observable-act leaves",
           "role": "boundary_input",
           "signature_state": "not_applicable"
         },
@@ -80,8 +83,8 @@
           },
           "citation_path": "de/statute/estg/65",
           "claim_mode": "attested",
-          "classification": "excluded-with-reason",
-          "reason": "EStG section 65 supplies eligibility/payee/child membership at the declared cut and is outside the amount subgraph",
+          "classification": "open-law-derived-dependency",
+          "reason": "EStG section 65 defines how to compute this boundary input; under CERTIFIED.md v3 it is an open law-derived dependency, not an exclusion, and closed stays false until it is encoded to observable-act leaves",
           "role": "boundary_input",
           "signature_state": "not_applicable"
         },
@@ -245,6 +248,6 @@
   "unified_record": {
     "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
     "claim_mode": "computed",
-    "sha256": "da4d421f133758d0ad0f2ea1006826efe8a091ddeb8fcf96709a944415e880cc"
+    "sha256": "249baac9cb2a2d868f53b7a2bdc4635a9c14854e1afc11b837edbd01cd0aa8f4"
   }
 }

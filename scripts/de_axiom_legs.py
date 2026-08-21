@@ -154,7 +154,7 @@ def _load_plan() -> dict[str, Any]:
                 raise DEAxiomLegError(f"{view_id}: artifact role is required")
             if not isinstance(artifact.get("nodes"), list):
                 raise DEAxiomLegError(f"{view_id}: artifact nodes must be an array")
-        if not isinstance(output.get("dependency_closure_declared_complete"), bool):
+        if not isinstance(output.get("module_artifact_closure_declared_complete"), bool):
             raise DEAxiomLegError(f"{view_id}: dependency closure flag is required")
         if not isinstance(output.get("missing_dependency_roles"), list):
             raise DEAxiomLegError(f"{view_id}: missing roles must be an array")
@@ -361,7 +361,7 @@ def _view(
                     if observed["presence"] != "on-pinned-ref"
                     else (
                         "required"
-                        if output["dependency_closure_declared_complete"]
+                        if output["module_artifact_closure_declared_complete"]
                         else "available-partial"
                     )
                 ),
@@ -369,7 +369,7 @@ def _view(
         )
         artifacts.append(observed)
     complete_on_ref = bool(artifacts) and bool(
-        output["dependency_closure_declared_complete"]
+        output["module_artifact_closure_declared_complete"]
     ) and all(row["presence"] == "on-pinned-ref" for row in artifacts)
     missing_roles = list(output["missing_dependency_roles"])
     missing_roles.extend(
@@ -385,7 +385,7 @@ def _view(
         "target_root_nodes": copy.deepcopy(output["target_root_nodes"]),
         "oracle_target": copy.deepcopy(output["oracle_targets"][oracle]),
         "dependency_set": {
-            "declared_complete": output["dependency_closure_declared_complete"],
+            "module_artifacts_declared_complete": output["module_artifact_closure_declared_complete"],
             "complete_on_pinned_ref": complete_on_ref,
             "artifacts": artifacts,
             "available_partial_dependencies": [
