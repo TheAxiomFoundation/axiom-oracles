@@ -12,7 +12,7 @@ PASS python scripts/de_closure_ledger.py --check --artifact all
   ok: conformance/closure/de-rv-employee-contribution.yaml (closed=false)
 
 PASS pytest -q tests/test_de_closure_ledger.py
-  41 passed
+  44 passed
 
 PASS pytest -q tests/test_closure_ledger_mutants.py tests/test_closure_mutants.py
   50 passed
@@ -24,9 +24,22 @@ PASS python -m py_compile scripts/refresh_de_instrument_graph.py scripts/de_clos
 
 PASS git diff --check
 
+GLOBAL CORPUS INDEX
+  rows: 3548
+  body rows: 3545
+  acts: 25
+  amendment_targets: 36
+  explicit_cross_reference_body: 2859
+  law_metadata_changed_by: 18
+  law_metadata_fundstelle: 23
+  row_scan_sha256: 7be2da0e6ddce847bdecc31e4fa01e38394e5d000c5f326d90c820b3171c4445
+  canonical_index_sha256: c445fb0c8e806e8e2704ca17d13965ab76285e2564827eaf34095968436b3425
+  per_act_sha256: 999b57534eb543f7126e2dbfb2d58c1043dbced806b3e4e1363459d6f706103c
+  index_receipt_sha256: 5d134602787115a5d8a1341fb79ead2806217544a28f56dfd277ada535cf22db
+
 EXPECTED BASELINE DEBT
   pytest -q tests/test_de_closure_ledger.py tests/test_closure_ledger_mutants.py tests/test_closure_mutants.py tests/test_certification_mutants.py
-  4 failed, 342 passed
+  4 failed, 345 passed
   All failures are in tests/test_certification_mutants.py and share:
     ValueError: DE certificate census does not rederive
   python scripts/de_certificate_census.py --check prints
@@ -35,10 +48,10 @@ EXPECTED BASELINE DEBT
 
 Artifact sha256
   0901c6a737831bb62dfa52340d6306d48653d710fb0c2ef0fa97024cf66c16aa  conformance/closure/de-subject-matter-queries.json
-  488e904053ac8cc394d6d90f7219db4b73c865bca1b8443fed90f9f43fa0c8fc  conformance/closure/de-instrument-graph.json
-  c299c7b83f7adbf48c51b4ba0ebaa0d18f5ef6d5abf20effc464cbef067ad757  conformance/closure/de-kindergeld.yaml
-  38155bcf6ee5d2e6e234cbe21aeb5c541faedb7b957e00873059594cd9d1d0fa  conformance/closure/de-unterhaltsvorschuss.yaml
-  92185ca89b44f91216f86367ba17ca8d1685ae32bf13fb063feb090ad1cfcd5e  conformance/closure/de-rv-employee-contribution.yaml
-  b1a64cce6ceeb329c1e3fccd555543b6d06fe1b155ccd7de2d74891c7ae4270f  scripts/refresh_de_instrument_graph.py
+  32a330bd94530f4722bacfb423e3efa3499e082b109ddd886b436e017e913ac3  conformance/closure/de-instrument-graph.json
+  70ce16dca61d3718d245dac0a8dbffeef65473be1adf44b187584cb7ad7e2d26  conformance/closure/de-kindergeld.yaml
+  ffa9f0cdc2c88770074e1fa5167d813d6de7f1b888e85dc8ff79ccc958e35b70  conformance/closure/de-unterhaltsvorschuss.yaml
+  8028d12b8cae0c6c6636ddf656f42ba18dcfafc1434f1b65e2f8a1590d99d8b1  conformance/closure/de-rv-employee-contribution.yaml
+  b0fbd3e6af1fa5ba6c6a4b701fa0b2b70c0b9662736527c0b0e81e9adb54541f  scripts/refresh_de_instrument_graph.py
   e4da54814bca0f200b16cfeded13005c419afcf22dc9cc25a09b67d37f073386  scripts/de_closure_ledger.py
-  46aa5651a0ba1bd384c4744c6f658e576d6bb480c1faf1b9cbbd8e0f07ce7074  tests/test_de_closure_ledger.py
+  878f7820fa305730d93fe245f7d0367af18b02ef0cc20c604b5f96794c35ec4a  tests/test_de_closure_ledger.py

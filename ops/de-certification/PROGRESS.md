@@ -56,10 +56,13 @@
   against corpus commit `6f064ee6081f16440dc706ae09ac60652bb67570` and
   release content sha256
   `b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574`.
-  Candidate extraction records sha-bound Fundstelle identity and `stand`
-  changed-by analogues for declared documents, outbound references from each
-  preregistered spine and declared source, targeted inbound references from
-  every pinned row, and every amendment-target key.
+  A hermetically rederivable global index covers all 3,548 rows, all 3,545
+  string bodies, and 25 acts. It retains 23 Fundstelle facts, 18 `stand`
+  changed-by analogues, 2,859 resolved-or-verbatim body-reference facts, and
+  36 amendment targets with source/target hashes. Program frontiers are a
+  separately documented relevant-root projection; a grounded UhVorschG §1
+  reference to BEEG found by the expanded scan raised the UhV candidate count
+  by one without dispositioning it.
 - Committed subject-query set `de-subject-matter-2026-08-21-v1`. All 15 URL
   retrieval attempts are recorded as `unretrieved` with the actual
   `URLError: [Errno 8] nodename nor servname provided, or not known` failure;
@@ -73,7 +76,7 @@
   | candidate | spine | candidate instruments | law-derived leaves | depth lower bound | oracle work | executable work |
   | --- | ---: | ---: | ---: | ---: | ---: | ---: |
   | `de/kindergeld` | 18 | 28 | 4 | 1 | 0 | 0 |
-  | `de/unterhaltsvorschuss` | 12 | 20 | 0 | 2 | 2 | 1 |
+  | `de/unterhaltsvorschuss` | 12 | 21 | 0 | 2 | 2 | 1 |
   | `de/rv-employee-contribution` | 3 | 11 | 0 | 1 | 2 | 1 |
 
 - Spine counts are pinned-corpus scope counts. Instrument counts are unique
@@ -91,10 +94,10 @@
 ### Validation and handoff
 
 - Hermetic snapshot and ledger rederivation checks pass. The new DE suite is
-  41/41 green; the existing DK closure mutant suites are 50/50 green; Ruff,
+  44/44 green; the existing DK closure mutant suites are 50/50 green; Ruff,
   bytecode compilation, and `git diff --check` pass. Exact commands and hashes
   are recorded in `ops/de-certification/validation-2026-08-21.txt`.
-- A broader central-gate selection reports 342 passed and four failures, all
+- A broader central-gate selection reports 345 passed and four failures, all
   in pre-existing DE certificate tests because
   `conformance/de-certificate-census.json` does not rederive. The underlying
   `python scripts/de_certificate_census.py --check` failure reproduces at the
