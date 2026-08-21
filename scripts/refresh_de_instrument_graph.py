@@ -35,6 +35,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SOURCE = REPO_ROOT / "closure" / "de" / "source.json"
 DEFAULT_QUERY_SET = REPO_ROOT / "conformance" / "closure" / "de-subject-matter-queries.json"
 DEFAULT_OUTPUT = REPO_ROOT / "conformance" / "closure" / "de-instrument-graph.json"
+DEFAULT_CORPUS_ROOT = Path.home() / "TheAxiomFoundation" / "axiom-corpus-de-wave"
+CORPUS_ROOT_ENV = "AXIOM_CORPUS_DE_ROOT"
 
 SCHEMA = "axiom_oracles.closure.de_instrument_graph.v1"
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
@@ -124,17 +126,30 @@ def _run(argv: list[str], *, cwd: Path | None = None) -> bytes:
     return result.stdout
 
 
-def _discover_corpus_root(source: Mapping[str, Any]) -> Path:
-    release = str(source["corpus"]["release"])
-    raw = _run(["axiom-locate", "release", release, "--json"])
-    try:
-        results = json.loads(raw).get("results", [])
-    except json.JSONDecodeError as exc:
-        raise CaptureError("axiom-locate returned invalid JSON") from exc
-    if not results:
-        raise CaptureError(f"axiom-locate did not find release {release}")
-    root = _run(["git", "-C", str(results[0]), "rev-parse", "--show-toplevel"])
-    return Path(root.decode().strip()).resolve()
+def _configured_corpus_root(corpus_root: str | Path | None = None) -> Path:
+    """Resolve the ops checkout without relying on machine-local helpers."""
+
+    configured = corpus_root
+    if configured is None:
+        configured = os.environ.get(CORPUS_ROOT_ENV) or DEFAULT_CORPUS_ROOT
+    return Path(configured).expanduser().resolve()
+
+
+def _resolve_corpus_root(corpus_root: str | Path | None = None) -> Path:
+    root = _configured_corpus_root(corpus_root)
+    if not root.is_dir():
+        raise CaptureError(
+            f"DE corpus checkout not found at {root}; pass --corpus-root or set "
+            f"{CORPUS_ROOT_ENV}"
+        )
+    actual_root = Path(
+        _run(["git", "-C", str(root), "rev-parse", "--show-toplevel"])
+        .decode()
+        .strip()
+    ).resolve()
+    if actual_root != root:
+        raise CaptureError(f"--corpus-root must be the git top-level: {actual_root}")
+    return root
 
 
 def _git_blob(root: Path, commit: str, path: str) -> bytes:
@@ -1466,10 +1481,7 @@ def build_snapshot(
     query_set, query_raw = _read_json(query_path, QUERY_SCHEMA)
     if set(source.get("programs", {})) != set(PROGRAMS):
         raise CaptureError("source.json program set is not the preregistered DE candidate set")
-    root = Path(corpus_root).resolve() if corpus_root is not None else _discover_corpus_root(source)
-    actual_root = Path(_run(["git", "-C", str(root), "rev-parse", "--show-toplevel"]).decode().strip()).resolve()
-    if actual_root != root:
-        raise CaptureError(f"--corpus-root must be the git top-level: {actual_root}")
+    root = _resolve_corpus_root(corpus_root)
     corpus = _load_corpus(root, source)
     captured_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     global_extraction_index = _global_corpus_extraction_index(corpus)
@@ -1775,7 +1787,7 @@ def main(argv: list[str] | None = None) -> int:
     mode.add_argument(
         "--check-snapshot",
         action="store_true",
-        help="validate the snapshot and hermetically rederive its corpus index",
+        help="validate committed snapshot bytes without corpus or network access",
     )
     parser.add_argument("--offline", action="store_true", help="capture explicit unretrieved attempts without network")
     parser.add_argument("--diff", action="store_true", help="capture, show semantic drift, and write nothing")
@@ -1788,27 +1800,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.check_snapshot:
             payload = json.loads(args.output.read_bytes())
-            source, _source_raw = _read_json(args.source.resolve(), SOURCE_SCHEMA)
-            root = (
-                args.corpus_root.resolve()
-                if args.corpus_root is not None
-                else _discover_corpus_root(source)
-            )
-            actual_root = Path(
-                _run(["git", "-C", str(root), "rev-parse", "--show-toplevel"])
-                .decode()
-                .strip()
-            ).resolve()
-            if actual_root != root:
-                raise CaptureError(
-                    f"--corpus-root must be the git top-level: {actual_root}"
-                )
-            corpus = _load_corpus(root, source)
             validate_snapshot(
                 payload,
                 source_path=args.source,
                 query_set_path=args.query_set,
-                corpus=corpus,
             )
             print(f"valid: {args.output}")
             return 0

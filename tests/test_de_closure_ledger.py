@@ -119,11 +119,17 @@ def _assert_strict_count(value: object) -> None:
 @pytest.fixture(scope="module")
 def refresh_corpus():
     refresh = _load_refresh_script()
+    root = refresh._configured_corpus_root()
+    if not root.is_dir():
+        pytest.skip(
+            f"DE corpus checkout is missing at {root}; set "
+            f"{refresh.CORPUS_ROOT_ENV} or use --corpus-root"
+        )
     source, _source_raw = refresh._read_json(
         refresh.DEFAULT_SOURCE, refresh.SOURCE_SCHEMA
     )
-    root = refresh._discover_corpus_root(source)
-    return refresh, refresh._load_corpus(root, source), root
+    resolved = refresh._resolve_corpus_root(root)
+    return refresh, refresh._load_corpus(resolved, source), resolved
 
 
 def test_public_api_and_three_artifact_paths() -> None:
@@ -288,11 +294,11 @@ def test_global_corpus_index_drift_is_rejected_after_receipts_are_reforged(
         refresh.validate_snapshot(snapshot, corpus=corpus)
 
 
-def test_snapshot_check_rederivation_is_hermetic(
-    refresh_corpus,
+def test_snapshot_check_is_committed_byte_only(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    refresh, _corpus, root = refresh_corpus
+    refresh = _load_refresh_script()
 
     def no_network(*_args, **_kwargs):
         raise AssertionError("DE snapshot --check-snapshot attempted network access")
@@ -300,21 +306,35 @@ def test_snapshot_check_rederivation_is_hermetic(
     monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
     monkeypatch.setattr(socket, "socket", no_network)
     monkeypatch.setattr(socket, "create_connection", no_network)
-    original_run = refresh.subprocess.run
-
-    def local_git_only(argv, *args, **kwargs):
-        assert argv[0] == "git"
-        assert argv[1] == "-C"
-        assert argv[3] in {"cat-file", "rev-parse", "show"}
-        assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
-        assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
-        assert not any(str(value).startswith(("http://", "https://")) for value in argv)
-        return original_run(argv, *args, **kwargs)
-
-    monkeypatch.setattr(refresh.subprocess, "run", local_git_only)
+    monkeypatch.setattr(refresh.subprocess, "run", no_network)
+    monkeypatch.setattr(refresh, "_load_corpus", no_network)
+    missing = tmp_path / "no-corpus-here"
+    monkeypatch.setenv(refresh.CORPUS_ROOT_ENV, str(missing))
     assert refresh.main(
-        ["--check-snapshot", "--corpus-root", str(root)]
+        ["--check-snapshot", "--corpus-root", str(missing)]
     ) == 0
+
+
+def test_corpus_root_resolution_precedence_and_missing_error(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    refresh = _load_refresh_script()
+    from_flag = tmp_path / "from-flag"
+    from_env = tmp_path / "from-env"
+    monkeypatch.setenv(refresh.CORPUS_ROOT_ENV, str(from_env))
+
+    assert refresh._configured_corpus_root(from_flag) == from_flag.resolve()
+    assert refresh._configured_corpus_root() == from_env.resolve()
+    with pytest.raises(refresh.CaptureError) as excinfo:
+        refresh._resolve_corpus_root(from_flag)
+    message = str(excinfo.value)
+    assert "--corpus-root" in message
+    assert refresh.CORPUS_ROOT_ENV in message
+
+
+def test_refresh_script_never_invokes_axiom_locate() -> None:
+    assert "axiom-locate" not in REFRESH_SCRIPT.read_text()
 
 
 @pytest.mark.parametrize(
