@@ -29,10 +29,11 @@ INSTRUMENT_PATH = REPO_ROOT / "closure" / "nz" / "instrument-dispositions.json"
 SUMMARY_PATH = REPO_ROOT / "closure" / "nz" / "summary.json"
 DEFAULT_OUTPUT = REPO_ROOT / "V3-AUDIT-OUT.md"
 
-AUDIT_DATE = "2026-08-20"
+DISCOVERY_DATE = "2026-08-20"
+B2_REVIEW_DATE = "2026-08-21"
 REBASE_BASE_REF = "origin/main"
 REBASE_BASE_SHA = "9a8274b4303b512876b56453622f3cdca3f91725"
-IMPLEMENTATION_SHA = "3c0fa74e86d3f2d43496759ecee24d23ed046220"
+IMPLEMENTATION_SHA = "337820d246491ea23127746d957859dd5b3fe337"
 
 EXPECTED_PROGRAMS = (
     "nz/acc-earners-levy",
@@ -363,7 +364,7 @@ def build_model() -> dict[str, Any]:
     citation = discovery.get("corpus_citation_scan")
     _require(isinstance(subject, dict), "missing subject-search receipt")
     _require(isinstance(citation, dict), "missing citation-scan receipt")
-    _require(subject.get("searched_at") == AUDIT_DATE, "subject-search date drift")
+    _require(subject.get("searched_at") == DISCOVERY_DATE, "subject-search date drift")
     _require(len(subject.get("queries") or []) == 31, "subject-search query count drift")
     _require(len(subject.get("result_elis") or []) == 11, "subject-search result count drift")
     approximation = citation.get("approximation")
@@ -535,16 +536,16 @@ def build_model() -> dict[str, Any]:
     return {
         "schema": "axiom_oracles.nz_v3_audit_report.v1",
         "audit": {
-            "date": AUDIT_DATE,
+            "date": B2_REVIEW_DATE,
             "definition": "CERTIFIED.md v3",
-            "outcome": "aggregation blockers cleared, closed honestly open under v3",
+            "outcome": "197-row B2 frontier adjudicated, closed honestly open under v3",
             "requested_output": "/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md",
             "actual_output": "V3-AUDIT-OUT.md",
             "fallback_reason": "The ops checkout is outside the writable sandbox; no ops file was modified.",
             "rebase_base": {"ref": REBASE_BASE_REF, "sha": REBASE_BASE_SHA},
             "implementation_sha": {
                 "value": IMPLEMENTATION_SHA,
-                "status": "committed implementation audited by this attestation",
+                "status": "committed B2 implementation audited by this attestation",
             },
         },
         "part_1_leaf_typing": {
@@ -568,8 +569,8 @@ def build_model() -> dict[str, Any]:
             "graph_bears_on_rows": graph_bears_on_rows,
             "external_supplement_rows": external_supplement_rows,
             "capture_gaps": gaps,
-            "excluded_not_in_force": revoked_or_out_of_period,
-            "retained_current_exclusions": retained_current_exclusions,
+            "graph_rows_marked_not_in_force": revoked_or_out_of_period,
+            "graph_rows_not_marked_out_of_force": retained_current_exclusions,
             "bearing_instruments": bearing,
             "subject_search": subject,
             "subject_search_results": subject_rows,
@@ -656,28 +657,24 @@ def build_model() -> dict[str, Any]:
                 "final regenerated values read from the committed certificate artifacts"
             ),
             "gate_receipts": {
-                "producers_check": (
-                    "PASS — all seven NZ producer/check modes current"
+                "instrument_producer_check": (
+                    "PASS — checked after each act batch and after final regeneration"
                 ),
                 "certify_check": "PASS — certificates up to date",
-                "whole_mutant_file": (
-                    "PASS — 259 passed; guard reversions included"
-                ),
-                "simulated_nz_refresh": (
-                    "PASS — nz-treasury-incomeexplorer"
-                ),
-                "simulated_dk_refresh": (
-                    "PASS — dk-child-youth-benefit-euromod"
+                "whole_mutant_file": "PASS — 18 passed",
+                "simulated_nz_refresh": "PASS — nz-treasury-incomeexplorer",
+                "encode_queue_reconciliation": (
+                    "PASS — 39 sorted unique items exactly match the bearing frontier"
                 ),
                 "cross_jurisdiction_byte_identity": (
-                    "PASS — non-NZ derived bytes equal origin/main at rebase base"
+                    "PASS — non-NZ derived bytes unchanged after local replay"
                 ),
             },
             "local_gate_note": (
                 "On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, "
-                "replayed with a native engine built from the exact pinned source, and "
-                "verified Ed25519 signatures through OpenSSL because the host CFFI module "
-                "was unavailable. The temporary local adapters were removed before commit."
+                "replayed with a native engine built from the exact pinned source commit, "
+                "and verified Ed25519 signatures with a functioning local cryptography "
+                "environment. The temporary local adapter was removed before commit."
             ),
         },
         "adjudication_questions": adjudication_questions,
@@ -738,7 +735,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
         f"**Outcome:** {audit['outcome']}.",
         "",
         (
-            f"This is the deterministic audit rendered on the fixed discovery date "
+            f"This is the deterministic audit rendered on the B2 review date "
             f"**{audit['date']}** from the committed NZ ledgers. The requested ops "
             f"destination `{audit['requested_output']}` is outside the writable sandbox, "
             f"so the report is emitted as `{audit['actual_output']}`. {audit['fallback_reason']}"
@@ -860,10 +857,12 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             ),
             "",
             (
-                f"Honest exclusions comprise {part2['excluded_not_in_force']} rows marked "
-                f"not in force and {len(part2['retained_current_exclusions'])} rows not marked "
-                "out of force. Their row-level classifications and reasons identify the "
-                "superseded regime, certified-period boundary, or spine-excluded surface."
+                f"The graph metadata marks {part2['graph_rows_marked_not_in_force']} "
+                f"aggregated rows out of force and "
+                f"{len(part2['graph_rows_not_marked_out_of_force'])} rows not out of force. "
+                "That metadata split is distinct from the disposition taxonomy: each "
+                "row-level classification and reason identifies the actual not-in-force, "
+                "superseded-regime, certified-period, or spine-excluded basis."
             ),
             "",
             "### Current or in-force honest exclusions",
@@ -872,7 +871,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "|---|---|",
         ]
     )
-    for row in part2["retained_current_exclusions"]:
+    for row in part2["graph_rows_not_marked_out_of_force"]:
         lines.append(f"| [{_md(row['title'])}]({row['eli']}) | {_md(row['reason'])} |")
     lines.append("")
 
