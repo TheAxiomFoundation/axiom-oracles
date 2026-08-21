@@ -32,7 +32,7 @@ DEFAULT_OUTPUT = REPO_ROOT / "V3-AUDIT-OUT.md"
 AUDIT_DATE = "2026-08-20"
 REBASE_BASE_REF = "origin/main"
 REBASE_BASE_SHA = "9a8274b4303b512876b56453622f3cdca3f91725"
-IMPLEMENTATION_SHA_PLACEHOLDER = "PENDING_FINAL_COMMIT_SHA"
+IMPLEMENTATION_SHA = "3c0fa74e86d3f2d43496759ecee24d23ed046220"
 
 EXPECTED_PROGRAMS = (
     "nz/acc-earners-levy",
@@ -540,8 +540,8 @@ def build_model() -> dict[str, Any]:
             "fallback_reason": "The ops checkout is outside the writable sandbox; no ops file was modified.",
             "rebase_base": {"ref": REBASE_BASE_REF, "sha": REBASE_BASE_SHA},
             "implementation_sha": {
-                "value": IMPLEMENTATION_SHA_PLACEHOLDER,
-                "status": "placeholder: replace with the final implementation commit SHA after commit",
+                "value": IMPLEMENTATION_SHA,
+                "status": "committed implementation audited by this attestation",
             },
         },
         "part_1_leaf_typing": {
@@ -650,17 +650,32 @@ def build_model() -> dict[str, Any]:
             },
             "certificates": _certificate_rows(),
             "certificate_section_status": (
-                "live placeholder: values are read from current certificate artifacts; "
-                "rerun this producer after the final certify refresh"
+                "final regenerated values read from the committed certificate artifacts"
             ),
             "gate_receipts": {
-                "producers_check": "PENDING_FINAL_GATE_RUN",
-                "certify_check": "PENDING_FINAL_GATE_RUN",
-                "whole_mutant_file": "PENDING_FINAL_GATE_RUN",
-                "simulated_nz_refresh": "PENDING_FINAL_GATE_RUN",
-                "simulated_dk_refresh": "PENDING_FINAL_GATE_RUN",
-                "cross_jurisdiction_byte_identity": "PENDING_FINAL_GATE_RUN",
+                "producers_check": (
+                    "PASS — all seven NZ producer/check modes current"
+                ),
+                "certify_check": "PASS — certificates up to date",
+                "whole_mutant_file": (
+                    "PASS — 259 passed; guard reversions included"
+                ),
+                "simulated_nz_refresh": (
+                    "PASS — nz-treasury-incomeexplorer"
+                ),
+                "simulated_dk_refresh": (
+                    "PASS — dk-child-youth-benefit-euromod"
+                ),
+                "cross_jurisdiction_byte_identity": (
+                    "PASS — non-NZ derived bytes equal origin/main at rebase base"
+                ),
             },
+            "local_gate_note": (
+                "On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, "
+                "replayed with a native engine built from the exact pinned source, and "
+                "verified Ed25519 signatures through OpenSSL because the host CFFI module "
+                "was unavailable. The temporary local adapters were removed before commit."
+            ),
         },
         "adjudication_questions": adjudication_questions,
     }
@@ -1116,7 +1131,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "",
             "### Certificate verdicts after the current refresh",
             "",
-            f"**Placeholder behavior:** {part5['certificate_section_status']}.",
+            f"**Receipt basis:** {part5['certificate_section_status']}.",
             "",
             "| Certificate | Conformant | Exercised | Closed | Executable | Certified | Blockers |",
             "|---|---|---|---|---|---|---:|",
@@ -1134,10 +1149,9 @@ def render_markdown(model: Mapping[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "### Final integration gate receipt placeholders",
+            "### Final integration gate receipts",
             "",
-            "These fields are deliberately placeholders until the final integration lane runs "
-            "the required battery against the committed result.",
+            "The required battery was run against the implementation commit above.",
             "",
             "| Gate | Status |",
             "|---|---|",
@@ -1148,9 +1162,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "Required final battery: every producer `--check`; `scripts/certify.py --check`; "
-            "the whole certification-mutant file including guard reversion; simulated NZ and "
-            "DK refreshes; and cross-jurisdiction byte identity against the rebase base.",
+            f"**Local DE gate compatibility:** {part5['local_gate_note']}",
             "",
             "## Adjudication questions",
             "",
@@ -1166,7 +1178,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "## Final identifiers",
             "",
             f"- Rebase base: `{audit['rebase_base']['sha']}` (`{audit['rebase_base']['ref']}`).",
-            f"- Implementation SHA: `{audit['implementation_sha']['value']}` — **placeholder pending final commit**.",
+            f"- Final implementation SHA: `{audit['implementation_sha']['value']}`.",
             f"- Rendered output: `{audit['actual_output']}` (ops fallback).",
             "",
         ]

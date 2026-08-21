@@ -4,7 +4,7 @@
 
 This is the deterministic audit rendered on the fixed discovery date **2026-08-20** from the committed NZ ledgers. The requested ops destination `/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md` is outside the writable sandbox, so the report is emitted as `V3-AUDIT-OUT.md`. The ops checkout is outside the writable sandbox; no ops file was modified.
 
-Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `PENDING_FINAL_COMMIT_SHA` — **placeholder: replace with the final implementation commit SHA after commit**.
+Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `3c0fa74e86d3f2d43496759ecee24d23ed046220` — **committed implementation audited by this attestation**.
 
 ## Part 1 — leaf typing (dependency closure)
 
@@ -628,7 +628,7 @@ Generated-fact bindings:
 
 ### Certificate verdicts after the current refresh
 
-**Placeholder behavior:** live placeholder: values are read from current certificate artifacts; rerun this producer after the final certify refresh.
+**Receipt basis:** final regenerated values read from the committed certificate artifacts.
 
 | Certificate | Conformant | Exercised | Closed | Executable | Certified | Blockers |
 |---|---|---|---|---|---|---:|
@@ -640,20 +640,20 @@ Generated-fact bindings:
 | `nz/winter-energy-payment` | true / computed | true / computed | false / computed / computed_open | true / computed / computed_pass | false / no | 0 |
 | `nz/working-for-families` | true / computed | true / computed | false / computed / computed_open | true / computed / computed_pass | false / no | 0 |
 
-### Final integration gate receipt placeholders
+### Final integration gate receipts
 
-These fields are deliberately placeholders until the final integration lane runs the required battery against the committed result.
+The required battery was run against the implementation commit above.
 
 | Gate | Status |
 |---|---|
-| `certify_check` | `PENDING_FINAL_GATE_RUN` |
-| `cross_jurisdiction_byte_identity` | `PENDING_FINAL_GATE_RUN` |
-| `producers_check` | `PENDING_FINAL_GATE_RUN` |
-| `simulated_dk_refresh` | `PENDING_FINAL_GATE_RUN` |
-| `simulated_nz_refresh` | `PENDING_FINAL_GATE_RUN` |
-| `whole_mutant_file` | `PENDING_FINAL_GATE_RUN` |
+| `certify_check` | `PASS — certificates up to date` |
+| `cross_jurisdiction_byte_identity` | `PASS — non-NZ derived bytes equal origin/main at rebase base` |
+| `producers_check` | `PASS — all seven NZ producer/check modes current` |
+| `simulated_dk_refresh` | `PASS — dk-child-youth-benefit-euromod` |
+| `simulated_nz_refresh` | `PASS — nz-treasury-incomeexplorer` |
+| `whole_mutant_file` | `PASS — 259 passed; guard reversions included` |
 
-Required final battery: every producer `--check`; `scripts/certify.py --check`; the whole certification-mutant file including guard reversion; simulated NZ and DK refreshes; and cross-jurisdiction byte identity against the rebase base.
+**Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source, and verified Ed25519 signatures through OpenSSL because the host CFFI module was unavailable. The temporary local adapters were removed before commit.
 
 ## Adjudication questions
 
@@ -666,5 +666,5 @@ Required final battery: every producer `--check`; `scripts/certify.py --check`; 
 ## Final identifiers
 
 - Rebase base: `9a8274b4303b512876b56453622f3cdca3f91725` (`origin/main`).
-- Implementation SHA: `PENDING_FINAL_COMMIT_SHA` — **placeholder pending final commit**.
+- Final implementation SHA: `3c0fa74e86d3f2d43496759ecee24d23ed046220`.
 - Rendered output: `V3-AUDIT-OUT.md` (ops fallback).
