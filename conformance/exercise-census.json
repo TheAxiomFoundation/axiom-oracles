@@ -964,7 +964,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-capital-income-tax.json",
-      "report_sha256": "429276d856cd4e63be9017273873a34a4ffd80a78f98be65bb3d0dd94ef7b0c4",
+      "report_sha256": "63be2628b95db2c11f123cfb4c6559122533e66d35ac081896806398fe342965",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
@@ -8112,7 +8112,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-child-winter-heating-payment.json",
-      "report_sha256": "ead51497d7de4d0640a66acbf2a058f885b20a32217e355d80adff3a0d06ed01",
+      "report_sha256": "5c1c13bc10c8ef76714ff3108bb66a0e4bd08d2b599936ba5a50b86577d32ddb",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8653,7 +8653,7 @@
       "inline_cases_not_counted": 4,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-scottish-child-payment.json",
-      "report_sha256": "0ba9364d9ed80681e4f65907fdae7c868ca0ad633bcf736a47bc25fe0f3a3828",
+      "report_sha256": "8457983b5269ae836229c59995385325e735815e42810ded48aac1ff81344870",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -9380,7 +9380,7 @@
       "inline_cases_not_counted": 40,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-usitc-us-tariff.json",
-      "report_sha256": "2724187e1e20f03d3b260274a74d741e196c9dfe48b3d73036f245fa16206c19",
+      "report_sha256": "83a6a61e8e64b98ae8069e1c2c151af62a0bdcedcad4c5abc033ff1bde673d1e",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
