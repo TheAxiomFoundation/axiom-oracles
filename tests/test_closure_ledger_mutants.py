@@ -371,17 +371,18 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     summary = module.validate_artifact(document)
 
     # Under definition v3 (CERTIFIED.md), closure requires dependency
-    # closure: the 49 law-derived leaves and 8 bearing instruments are open
+    # closure: the 55 law-derived leaves and 16 bearing instruments are open
     # dependencies, so the artifact honestly computes closed=false with the
-    # encoding worklist enumerated.
+    # encoding worklist enumerated; the instrument frontier itself is
+    # complete again now that all flagged precedents are read.
     assert summary.closed is False
     assert summary.dependency_closed is False
-    assert summary.open_dependency_count == 67
-    assert summary.instrument_frontier_complete is False
-    assert summary.instrument_pending_count == 4
+    assert summary.open_dependency_count == 71
+    assert summary.instrument_frontier_complete is True
+    assert summary.instrument_pending_count == 0
     dep = document["computed"]["dependency_closure"]
     assert len(dep["law_derived_inputs"]) == 55
-    assert len(dep["instruments_bearing_on_computed"]) == 12
+    assert len(dep["instruments_bearing_on_computed"]) == 16
     assert (
         "https://retsinformation.dk/eli/lta/2013/1563"
         in dep["instruments_bearing_on_computed"]
@@ -408,17 +409,17 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
 
     assert summary.instrument_count == 35
     # The launch audit's official-source search found instruments outside
-    # the act's ELI graph; four precedents await their reads, so the
-    # frontier honestly reads incomplete.
-    assert summary.instrument_pending_count == 4
-    assert summary.instrument_frontier_complete is False
+    # the act's ELI graph; all four flagged precedents are now read and
+    # dispositioned, so the frontier is complete again.
+    assert summary.instrument_pending_count == 0
+    assert summary.instrument_frontier_complete is True
     frontier = document["computed"]["instrument_frontier"]
     assert frontier["counts"] == {
         "total": 35,
         "encoded": 0,
-        "classified-with-reason": 20,
+        "classified-with-reason": 24,
         "excluded-with-reason": 11,
-        "pending": 4,
+        "pending": 0,
     }
     bek = next(
         row

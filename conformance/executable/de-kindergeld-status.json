@@ -2,7 +2,7 @@
   "blockers": [],
   "comparison_record": {
     "path": "comparisons/de-worker-dual-oracle/unified-record.json",
-    "sha256": "da4d421f133758d0ad0f2ea1006826efe8a091ddeb8fcf96709a944415e880cc"
+    "sha256": "249baac9cb2a2d868f53b7a2bdc4635a9c14854e1afc11b837edbd01cd0aa8f4"
   },
   "engine": {
     "archive_sha256": "76565685230d64edf33e4205f01f77c57ef341ba2d3cf75dc967fc12c883f1f4",
@@ -41,7 +41,7 @@
       "path": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
       "reason": "exact unified Axiom leg and replay fixture validated",
       "request_sha256": "6294ead2a324cc39f2755ea1b409c81f557e288ae817efe059246b36470ade0e",
-      "sha256": "dca8dd5427db03d7da1fe6f310c35b7b52f6621a2e2ebaab5700d277e20c3b57",
+      "sha256": "bd83fe9c7b00bf73477d46ce0a77eae90004c374cef6a8467e763a50ae2d148b",
       "state": "valid"
     },
     {
@@ -50,7 +50,7 @@
       "path": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
       "reason": "exact unified Axiom leg and replay fixture validated",
       "request_sha256": "6294ead2a324cc39f2755ea1b409c81f557e288ae817efe059246b36470ade0e",
-      "sha256": "1327828a6812cb9f463d5bddbe5864e7812cb5e6d7eae53e98f3f75a80f03107",
+      "sha256": "f6ad14eaffcb93b632a5a0593537ae588fc92814be825f36687ad40f39a0411d",
       "state": "valid"
     },
     {
@@ -76,7 +76,7 @@
       "id": "release-binary-replay-receipt",
       "path": "conformance/executable/de-kindergeld-replay-receipt.json",
       "reason": "verifier freshly reran pinned release bytes and reproduced exact Axiom-leg result rows",
-      "sha256": "911eec5de8c96e30f6fd28801b850a72d9b05ac90b84acaa527b74f6af87ae5f",
+      "sha256": "8f07b388af0a670a180f69d1e1ec1dc9684334e002ee2e6deb31e32cd830f8b4",
       "state": "valid",
       "verification_mode": "fresh_replay_from_embedded_release_archive"
     }
