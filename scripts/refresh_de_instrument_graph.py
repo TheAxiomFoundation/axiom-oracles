@@ -183,7 +183,7 @@ def _release_object(root: Path, corpus: Mapping[str, Any]) -> dict[str, Any]:
     if content.get("selector_sha256") != corpus.get("release_selector_sha256"):
         raise CaptureError("release object selector hash does not match source.json")
     return {
-        "path": str(path),
+        "path": path.relative_to(root).as_posix(),
         "raw_sha256": _sha(raw),
         "content_sha256": content_sha,
         "artifacts": content.get("artifacts", []),
@@ -404,6 +404,7 @@ def _row_fact(row: CorpusRow, corpus: Corpus) -> dict[str, Any]:
     law = metadata.get("law_metadata", {}) if isinstance(metadata, dict) else {}
     fact: dict[str, Any] = {
         "citation_path": row.path,
+        "row_sha256": row.raw_sha256,
         "document_class": row.value.get("document_class"),
         "citation_label": row.value.get("citation_label"),
         "body_sha256": row.body_sha256,
@@ -488,6 +489,7 @@ def _discover_corpus_program(
     candidates: dict[str, Candidate] = {}
     scope = _scope_paths(program, corpus)
     declared = _declared_paths(source_program)
+    outbound_scan_paths = scope | declared
     excluded = scope | declared
     declared_documents = {
         corpus.document_for_path.get(path, path) for path in declared if path in corpus.by_path
@@ -552,7 +554,7 @@ def _discover_corpus_program(
 
     # Outbound references are scanned only in the preregistered spine/exact
     # dependency bodies.  Exact same-act provisions outside the spine remain.
-    for source_path in sorted(scope):
+    for source_path in sorted(outbound_scan_paths):
         row = corpus.by_path.get(source_path)
         if not row:
             raise CaptureError(f"preregistered corpus scope row missing: {source_path}")
@@ -884,6 +886,8 @@ def _merge_subject_candidates(
             continue
         query = queries[str(attempt["id"])]
         seed = query.get("candidate_seed")
+        if isinstance(seed, str) and not seed.startswith(PROGRAM_PREFIX[program] + "-"):
+            seed = None
         path = url_documents.get(str(query["url"]).rstrip("/"))
         if path in declared or path in declared_documents:
             continue
@@ -967,6 +971,12 @@ def build_snapshot(
             "release_object": corpus.release_object,
             "scans": sorted(corpus.scans, key=lambda row: row["document_class"]),
             "scanned_row_count": len(corpus.rows),
+            "extraction_protocol": {
+                "law_metadata": "Fundstelle identity receipts and stand changed_by analogues on every declared-source document",
+                "outbound_cross_references": "provision bodies in each preregistered spine plus every exact declared source",
+                "inbound_cross_references": "all pinned rows, targeted to exact spine and declared-source citations",
+                "amendment_targets": "all pinned rows",
+            },
             "evidence": sorted(evidence.values(), key=lambda row: row["id"]),
         }
     )
@@ -993,6 +1003,44 @@ def build_snapshot(
             "reason": "The corpus citation-scan channel has not landed; no citation-scan candidates are asserted.",
         }
     )
+    rendered_programs = [
+        {"id": program, "instruments": _render_candidates(program, program_candidates[program])}
+        for program in PROGRAMS
+    ]
+    kindergeld = next(row for row in rendered_programs if row["id"] == "de/kindergeld")
+    kindergeld_candidate_ids = {row["id"] for row in kindergeld["instruments"]}
+    for seed in ("de-kg-instr-001", "de-kg-instr-002", "de-kg-instr-003"):
+        if seed not in kindergeld_candidate_ids:
+            raise CaptureError(f"required Kindergeld candidate seed is missing: {seed}")
+    kindergeld["seed_bindings"] = [
+        {
+            "id": seed,
+            "binding_kind": "instrument_candidate",
+            "candidate_id": seed,
+            "status": "pending",
+        }
+        for seed in ("de-kg-instr-001", "de-kg-instr-002", "de-kg-instr-003")
+    ] + [
+        {
+            "id": "de-kg-instr-004",
+            "binding_kind": "spine_scope_receipt",
+            "status": "pending",
+            "scope": "de/statute/estg direct provisions with corpus ordinal 62 through 78 inclusive",
+        },
+        {
+            "id": "de-kg-instr-005",
+            "binding_kind": "discovery_channel_receipts",
+            "status": "pending",
+            "receipts": {
+                name: channel["receipt_sha256"]
+                for name, channel in (
+                    ("corpus_release", corpus_channel),
+                    ("subject_matter_search", subject_channel),
+                    ("citation_scan", citation_channel),
+                )
+            },
+        },
+    ]
     snapshot: dict[str, Any] = {
         "schema": SCHEMA,
         "generated_at": captured_at,
@@ -1003,17 +1051,23 @@ def build_snapshot(
             "subject_matter_search": subject_channel,
             "citation_scan": citation_channel,
         },
-        "programs": [
-            {"id": program, "instruments": _render_candidates(program, program_candidates[program])}
-            for program in PROGRAMS
-        ],
+        "programs": rendered_programs,
     }
     snapshot = _add_receipt(snapshot)
-    validate_snapshot(snapshot)
+    validate_snapshot(
+        snapshot,
+        source_path=source_file,
+        query_set_path=query_path,
+    )
     return snapshot
 
 
-def validate_snapshot(snapshot: Mapping[str, Any]) -> None:
+def validate_snapshot(
+    snapshot: Mapping[str, Any],
+    *,
+    source_path: Path = DEFAULT_SOURCE,
+    query_set_path: Path = DEFAULT_QUERY_SET,
+) -> None:
     """Validate receipts and the all-pending graph invariants."""
     if snapshot.get("schema") != SCHEMA:
         raise CaptureError(f"expected snapshot schema {SCHEMA}")
@@ -1022,6 +1076,17 @@ def validate_snapshot(snapshot: Mapping[str, Any]) -> None:
     }:
         raise CaptureError("snapshot must contain exactly the three DE discovery channels")
     _verify_receipt(snapshot, "snapshot")
+    for key, path in (("source", source_path), ("query_set", query_set_path)):
+        binding = snapshot.get(key)
+        if not isinstance(binding, Mapping):
+            raise CaptureError(f"snapshot {key} binding is missing")
+        try:
+            expected_path = path.resolve().relative_to(REPO_ROOT).as_posix()
+            expected_sha = _sha(path.read_bytes())
+        except (OSError, ValueError) as exc:
+            raise CaptureError(f"cannot verify snapshot {key} binding: {exc}") from exc
+        if binding != {"path": expected_path, "sha256": expected_sha}:
+            raise CaptureError(f"snapshot {key} binding does not match committed bytes")
     channels = snapshot["channels"]
     for name, channel in channels.items():
         if not isinstance(channel, dict):
@@ -1059,11 +1124,39 @@ def validate_snapshot(snapshot: Mapping[str, Any]) -> None:
         if attempt["state"] == "unretrieved" and not isinstance(attempt.get("reason"), str):
             raise CaptureError(f"unretrieved attempt lacks reason: {attempt_id}")
         attempt_ids.add(attempt_id)
+    if [row["id"] for row in attempts] != sorted(attempt_ids):
+        raise CaptureError("subject attempts must be sorted by unique id")
+    attempt_states = {row["state"] for row in attempts}
+    expected_subject_state = (
+        "retrieved"
+        if attempt_states == {"retrieved"}
+        else "unretrieved"
+        if attempt_states == {"unretrieved"}
+        else "partial"
+    )
+    if channels["subject_matter_search"].get("state") != expected_subject_state:
+        raise CaptureError("subject channel state does not derive from attempt states")
+    evidence = channels["corpus_release"].get("evidence")
+    if not isinstance(evidence, list) or any(not isinstance(row, Mapping) for row in evidence):
+        raise CaptureError("corpus evidence must be a list of mappings")
+    evidence_order = [row.get("id") for row in evidence]
+    if (
+        any(not isinstance(value, str) for value in evidence_order)
+        or evidence_order != sorted(evidence_order)
+        or len(evidence_order) != len(set(evidence_order))
+    ):
+        raise CaptureError("corpus evidence ids must be unique and sorted")
     valid_refs = evidence_ids | attempt_ids
     programs = snapshot.get("programs")
-    if not isinstance(programs, list) or [row.get("id") for row in programs] != list(PROGRAMS):
+    if (
+        not isinstance(programs, list)
+        or any(not isinstance(row, Mapping) for row in programs)
+        or [row.get("id") for row in programs] != list(PROGRAMS)
+    ):
         raise CaptureError("snapshot programs must be the sorted preregistered program list")
     for program in programs:
+        if not isinstance(program, Mapping):
+            raise CaptureError("snapshot program rows must be mappings")
         instruments = program.get("instruments")
         if not isinstance(instruments, list):
             raise CaptureError(f"{program['id']}: instruments must be a list")
@@ -1074,6 +1167,8 @@ def validate_snapshot(snapshot: Mapping[str, Any]) -> None:
         if ordered_ids != sorted(ordered_ids):
             raise CaptureError(f"{program['id']}: instruments must be sorted by id")
         for row in instruments:
+            if not isinstance(row, Mapping):
+                raise CaptureError(f"{program['id']}: instrument rows must be mappings")
             candidate_id = row.get("id")
             refs = row.get("discovery_refs")
             if not isinstance(candidate_id, str) or candidate_id in ids:
@@ -1088,6 +1183,26 @@ def validate_snapshot(snapshot: Mapping[str, Any]) -> None:
             ):
                 raise CaptureError(f"{program['id']}/{candidate_id}: invalid discovery_refs")
             ids.add(candidate_id)
+        if program["id"] == "de/kindergeld":
+            bindings = program.get("seed_bindings")
+            if (
+                not isinstance(bindings, list)
+                or any(not isinstance(row, Mapping) for row in bindings)
+                or [row.get("id") for row in bindings] != [
+                    f"de-kg-instr-{number:03d}" for number in range(1, 6)
+                ]
+            ):
+                raise CaptureError("Kindergeld seed bindings 001 through 005 are required")
+            if any(
+                not isinstance(row, Mapping)
+                or row.get("status") != "pending"
+                or (
+                    row.get("binding_kind") == "instrument_candidate"
+                    and row.get("candidate_id") not in ids
+                )
+                for row in bindings
+            ):
+                raise CaptureError("Kindergeld seed binding does not resolve")
 
 
 def serialize(snapshot: Mapping[str, Any]) -> str:
@@ -1138,7 +1253,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.check_snapshot:
             payload = json.loads(args.output.read_bytes())
-            validate_snapshot(payload)
+            validate_snapshot(
+                payload,
+                source_path=args.source,
+                query_set_path=args.query_set,
+            )
             print(f"valid: {args.output}")
             return 0
         if args.timeout <= 0:
