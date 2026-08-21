@@ -1,6 +1,255 @@
 {
+  "discovery_receipts": {
+    "corpus_citation_scan": {
+      "approximation": {
+        "artifact": "conformance/closure/nz-citation-scan-approximation.tsv",
+        "distinct_source_provision_paths": 535,
+        "method": "read-only exact-title inbound scan over every body in the pinned NZ statute and regulation JSONL files; excludes self-act hits; discovery leads only, not axiom-corpus#611 completeness",
+        "new_frontier_count": 13,
+        "provision_rows_scanned": 10171,
+        "sha256": "7ffb680aa7962be6556e7b28291396a57bb04dc7004eb151eb26d3070c9dc988",
+        "source_dispositions": [
+          {
+            "distinct_source_provision_paths": 1,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1973/5/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1973/0005",
+            "source_target_match_rows": 2,
+            "title": "Rates Rebate Act 1973"
+          },
+          {
+            "distinct_source_provision_paths": 23,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1985/0141",
+            "source_target_match_rows": 24,
+            "title": "Goods and Services Tax Act 1985"
+          },
+          {
+            "distinct_source_provision_paths": 6,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1987/129/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1987/0129",
+            "source_target_match_rows": 6,
+            "title": "Parental Leave and Employment Protection Act 1987"
+          },
+          {
+            "distinct_source_provision_paths": 19,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1991/142/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1991/0142",
+            "source_target_match_rows": 21,
+            "title": "Child Support Act 1991"
+          },
+          {
+            "distinct_source_provision_paths": 17,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1992/0076",
+            "source_target_match_rows": 18,
+            "title": "Public and Community Housing Management Act 1992"
+          },
+          {
+            "distinct_source_provision_paths": 267,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/1994/0166",
+            "source_target_match_rows": 274,
+            "title": "Tax Administration Act 1994"
+          },
+          {
+            "distinct_source_provision_paths": 23,
+            "frontier_ref": "nz/statute/act/public/2001/0049",
+            "resolution": "spine_root",
+            "source_id": "act/public/2001/0049",
+            "source_target_match_rows": 23,
+            "title": "Accident Compensation Act 2001"
+          },
+          {
+            "distinct_source_provision_paths": 23,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2001/84/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2001/0084",
+            "source_target_match_rows": 25,
+            "title": "New Zealand Superannuation and Retirement Income Act 2001"
+          },
+          {
+            "distinct_source_provision_paths": 30,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2006/40/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2006/0040",
+            "source_target_match_rows": 31,
+            "title": "KiwiSaver Act 2006"
+          },
+          {
+            "distinct_source_provision_paths": 25,
+            "frontier_ref": "nz/statute/act/public/2007/0097",
+            "resolution": "spine_root",
+            "source_id": "act/public/2007/0097",
+            "source_target_match_rows": 28,
+            "title": "Income Tax Act 2007"
+          },
+          {
+            "distinct_source_provision_paths": 2,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2009/51/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2009/0051",
+            "source_target_match_rows": 2,
+            "title": "Immigration Act 2009"
+          },
+          {
+            "distinct_source_provision_paths": 16,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2011/62/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2011/0062",
+            "source_target_match_rows": 18,
+            "title": "Student Loan Scheme Act 2011"
+          },
+          {
+            "distinct_source_provision_paths": 8,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2018/4/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2018/0004",
+            "source_target_match_rows": 8,
+            "title": "Customs and Excise Act 2018"
+          },
+          {
+            "distinct_source_provision_paths": 25,
+            "frontier_ref": "nz/statute/act/public/2018/0032",
+            "resolution": "spine_root",
+            "source_id": "act/public/2018/0032",
+            "source_target_match_rows": 26,
+            "title": "Social Security Act 2018"
+          },
+          {
+            "distinct_source_provision_paths": 20,
+            "frontier_ref": "https://www.legislation.govt.nz/act/public/2026/8/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "act/public/2026/0008",
+            "source_target_match_rows": 20,
+            "title": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026"
+          },
+          {
+            "distinct_source_provision_paths": 5,
+            "frontier_ref": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1993/169/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "regulation/public/1993/0169",
+            "source_target_match_rows": 7,
+            "title": "Health Entitlement Cards Regulations 1993"
+          },
+          {
+            "distinct_source_provision_paths": 3,
+            "frontier_ref": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+            "resolution": "supplemental",
+            "source_id": "regulation/public/1998/0277",
+            "source_target_match_rows": 5,
+            "title": "Student Allowances Regulations 1998"
+          },
+          {
+            "distinct_source_provision_paths": 17,
+            "frontier_ref": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+            "resolution": "instrument_graph",
+            "source_id": "regulation/public/2018/0202",
+            "source_target_match_rows": 17,
+            "title": "Social Security Regulations 2018"
+          },
+          {
+            "distinct_source_provision_paths": 1,
+            "frontier_ref": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/18/en/latest/",
+            "resolution": "instrument_graph",
+            "source_id": "regulation/public/2025/0018",
+            "source_target_match_rows": 1,
+            "title": "Accident Compensation (Earners’ Levy) Regulations 2025"
+          },
+          {
+            "distinct_source_provision_paths": 4,
+            "frontier_ref": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+            "resolution": "instrument_graph",
+            "source_id": "regulation/public/2026/0036",
+            "source_target_match_rows": 4,
+            "title": "Social Security (Rates of Benefits and Allowances) Order 2026"
+          }
+        ],
+        "source_instrument_count": 20,
+        "source_target_match_rows": 560,
+        "summary_artifact": "conformance/closure/nz-citation-scan-approximation-summary.tsv",
+        "summary_sha256": "1d79f965037584a7c788b64f73db3f53869138b6238ab8d32f7474b27b46191f",
+        "target_counts": {
+          "Accident Compensation Act 2001": 70,
+          "Income Tax Act 2007": 410,
+          "Social Security Act 2018": 80
+        }
+      },
+      "implementation_issue": "axiom-corpus#611",
+      "inspected_clone_commit": "2794b5448e81525f0ee351cdac2a49d32327aade",
+      "pinned_release_commit": "3f7b5d985bce759cb487f1b7fd050f5cbf007d17",
+      "reason": "The local corpus clone has only a US citation extractor; no NZ #611 implementation is present. A separately bound exact-title approximation was run read-only and is not represented as #611.",
+      "scanned_at": "2026-08-20",
+      "status": "official-scanner-not-runnable-no-nz-extractor"
+    },
+    "subject_matter_search": {
+      "excluded_leads": [
+        {
+          "reason": "Abdullah Safi concerns TAA ss 141E/149A evasion-penalty procedure after WFF reassessments were abandoned, not a computed WFF rule.",
+          "url": "https://www.taxtechnical.ird.govt.nz/case-summaries/2026/csum-26-03"
+        }
+      ],
+      "queries": [
+        "site:legislation.govt.nz \"ACC earners' levy\" \"2026\"",
+        "site:legislation.govt.nz \"Clarifying IETC eligibility\" \"LC 13\"",
+        "site:legislation.govt.nz \"Jobseeker Support\" \"1 April 2026\" \"Social Security\"",
+        "site:legislation.govt.nz \"Sole Parent Support\" \"1 April 2026\" \"Social Security\"",
+        "site:legislation.govt.nz \"Working for Families\" \"2026\"",
+        "site:legislation.govt.nz \"accommodation supplement\" \"2026\" \"Social Security Act 2018\"",
+        "site:legislation.govt.nz \"family scheme income\" \"2026\"",
+        "site:legislation.govt.nz \"independent earner tax credit\" \"2026\"",
+        "site:legislation.govt.nz \"independent earner tax credit\" \"30 March 2025\"",
+        "site:legislation.govt.nz \"winter energy payment\" \"2026\" \"Social Security Act 2018\"",
+        "site:legislation.govt.nz/act/public \"Accident Compensation Act 2001\" \"earners' levy\" 2026",
+        "site:legislation.govt.nz/act/public/2025 \"Section LC 13 amended\"",
+        "site:legislation.govt.nz/act/public/2025/26 \"1 April 2026\"",
+        "site:legislation.govt.nz/act/public/2025/26 \"Working for Families\"",
+        "site:legislation.govt.nz/act/public/2025/26 \"family scheme\"",
+        "site:legislation.govt.nz/act/public/2025/26 \"independent earner tax credit\"",
+        "site:taxtechnical.ird.govt.nz \"ACC earners' levy\" 2026",
+        "site:taxtechnical.ird.govt.nz \"Clarifying IETC eligibility\"",
+        "site:taxtechnical.ird.govt.nz \"family scheme income\" 2026",
+        "site:taxtechnical.ird.govt.nz \"independent earner tax credit\" 2026",
+        "site:taxtechnical.ird.govt.nz \"working for families\" 2026 determination",
+        "site:taxtechnical.ird.govt.nz/case-summaries \"WFF tax credit\" entitlement",
+        "site:taxtechnical.ird.govt.nz/case-summaries \"Working for Families\" entitlement",
+        "site:taxtechnical.ird.govt.nz/case-summaries \"family scheme income\"",
+        "site:taxtechnical.ird.govt.nz/case-summaries \"in-work tax credit\"",
+        "site:taxtechnical.ird.govt.nz/case-summaries \"independent earner tax credit\"",
+        "site:taxtechnical.ird.govt.nz/case-summaries WfFTC \"Income Tax Act 2007\"",
+        "site:taxtechnical.ird.govt.nz/new-legislation/act-articles \"Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026\"",
+        "site:taxtechnical.ird.govt.nz/new-legislation/act-articles \"Taxation (Budget Measures) Act 2025\"",
+        "site:taxtechnical.ird.govt.nz/new-legislation/act-articles \"Working for Families\" \"$44,900\"",
+        "site:taxtechnical.ird.govt.nz/new-legislation/act-articles \"in-work tax credit\" \"$7,670\""
+      ],
+      "result_elis": [
+        "https://www.legislation.govt.nz/act/public/2024/19/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2026/25/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+        "https://www.legislation.govt.nz/act/public/2026/8/en/latest/",
+        "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
+        "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
+        "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
+        "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04"
+      ],
+      "searched_at": "2026-08-20",
+      "sources": [
+        "https://www.legislation.govt.nz",
+        "https://www.taxtechnical.ird.govt.nz"
+      ]
+    }
+  },
   "instrument_dispositions": [
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.acc.co.nz/im-injured/financial-support/weekly-compensation",
       "program": "nz/acc-earners-levy",
@@ -8,6 +257,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.acc.co.nz/im-injured/financial-support/weekly-compensation/weekly-compensation-for-employees",
       "program": "nz/acc-earners-levy",
@@ -15,6 +265,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-acc-client-payments-from-1-july-2026",
       "program": "nz/acc-earners-levy",
@@ -22,6 +273,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-client-payments-from-1-april-2025",
       "program": "nz/acc-earners-levy",
@@ -29,6 +281,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.acc.co.nz/newsroom/stories/changes-to-client-payments-from-1-april-2026",
       "program": "nz/acc-earners-levy",
@@ -37,13 +290,17 @@
     },
     {
       "bearing": "ACC levy deduction guidance; no separate encoded parameter",
-      "classification": "corroborating_levy_guidance",
+      "bears_on_computed_surface": true,
+      "defining_provision": "ACC earners' levy deduction mechanics in Inland Revenue salary-and-wages guidance",
       "eli": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
       "program": "nz/acc-earners-levy",
-      "reason": "The corpus inventory records that this PAYE guidance also covers ACC earners' levy deductions. It bears on the certified levy surface but supplies no separate parameter beyond the encoded Earners' Levy Regulations and the separately encoded IRD levy-rate page.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The corpus inventory records that this PAYE guidance also covers ACC earners' levy deductions. It bears on the certified levy surface but supplies no separate parameter beyond the encoded Earners' Levy Regulations and the separately encoded IRD levy-rate page. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/regulations/acc/earners_levy.yaml"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/en/income-tax/income-tax-for-individuals/acc-clients-and-carers/acc-earners-levy-rates",
       "encoded_by": "nz/regulations/acc/earners_levy.yaml",
@@ -67,6 +324,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/21/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -159,6 +417,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/21/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -166,6 +425,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/61/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -173,6 +433,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/62/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -190,6 +451,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/20/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -202,6 +464,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/70/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -209,6 +472,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/71/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -216,6 +480,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/72/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -223,6 +488,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/105/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -235,6 +501,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/338/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -242,6 +509,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/40/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -249,6 +517,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/41/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -256,6 +525,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/42/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -268,6 +538,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/17/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -275,6 +546,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/18/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -282,6 +554,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/19/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -289,6 +562,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/60/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -321,6 +595,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/72/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -328,6 +603,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/73/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -335,6 +611,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/74/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -342,6 +619,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/20/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -349,6 +627,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/21/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -356,6 +635,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/213/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -363,6 +643,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/22/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -370,6 +651,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/10/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -382,6 +664,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/40/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -389,6 +672,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/8/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -396,6 +680,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/9/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -408,6 +693,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/14/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -415,6 +701,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/15/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -422,6 +709,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/16/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -429,6 +717,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/419/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -436,6 +725,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/420/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -448,6 +738,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/161/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -465,6 +756,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/30/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -477,6 +769,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/32/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -484,6 +777,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/73/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -491,6 +785,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/170/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -503,6 +798,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/37/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -510,6 +806,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/38/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -517,6 +814,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/39/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -524,6 +822,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/60/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -541,6 +840,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/27/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -548,6 +848,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/28/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -555,6 +856,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/29/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -562,6 +864,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/80/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -569,6 +872,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/124/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -576,6 +880,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/152/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -583,6 +888,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/18/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -590,6 +896,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/19/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -597,6 +904,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/20/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -604,6 +912,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/71/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -626,6 +935,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/36/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -633,6 +943,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/37/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -640,6 +951,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/38/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -647,6 +959,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/85/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -654,6 +967,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/24/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -671,6 +985,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/115/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -678,6 +993,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/30/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -685,6 +1001,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/31/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -692,6 +1009,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/32/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -699,6 +1017,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/33/en/latest/",
       "program": "nz/acc-earners-levy",
@@ -751,6 +1070,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/18/en/latest/",
       "encoded_by": "nz/regulations/acc/earners_levy.yaml",
@@ -809,6 +1129,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
       "encoded_by": "nz/statutes/social_security/accommodation_supplement/core.yaml",
@@ -842,6 +1163,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -879,6 +1201,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -886,6 +1209,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -893,6 +1217,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -935,6 +1260,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -947,6 +1273,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -964,6 +1291,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1011,6 +1339,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1023,6 +1352,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1055,6 +1385,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1077,6 +1408,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1144,6 +1476,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
       "program": "nz/accommodation-supplement",
@@ -1151,12 +1484,13 @@
       "status": "excluded-with-reason"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
+      "encoded_by": "nz/statutes/social_security/main_benefits/rates.yaml",
       "program": "nz/accommodation-supplement",
-      "reason": "The order supplies the case-provided base-rate input used by the Accommodation Supplement entry-threshold formula.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/",
@@ -1169,6 +1503,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
       "encoded_by": "nz/statutes/social_security/accommodation_supplement/core.yaml",
@@ -1177,6 +1512,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/best-start",
       "program": "nz/income-tax",
@@ -1184,6 +1520,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
       "program": "nz/income-tax",
@@ -1191,6 +1528,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/rwt-rate",
       "program": "nz/income-tax",
@@ -1198,6 +1536,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
       "program": "nz/income-tax",
@@ -1205,6 +1544,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
       "program": "nz/income-tax",
@@ -1212,6 +1552,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
       "program": "nz/income-tax",
@@ -1229,6 +1570,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
       "program": "nz/income-tax",
@@ -1246,6 +1588,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
       "program": "nz/income-tax",
@@ -1253,6 +1596,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
       "program": "nz/income-tax",
@@ -1260,6 +1604,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
       "program": "nz/income-tax",
@@ -1272,6 +1617,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
       "program": "nz/income-tax",
@@ -1279,6 +1625,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
       "program": "nz/income-tax",
@@ -1286,6 +1633,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
       "program": "nz/income-tax",
@@ -1373,6 +1721,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
       "program": "nz/income-tax",
@@ -1380,6 +1729,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
       "program": "nz/income-tax",
@@ -1392,6 +1742,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
       "program": "nz/income-tax",
@@ -1419,6 +1770,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
       "program": "nz/income-tax",
@@ -1426,6 +1778,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
       "program": "nz/income-tax",
@@ -1443,6 +1796,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
       "program": "nz/income-tax",
@@ -1450,6 +1804,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
       "program": "nz/income-tax",
@@ -1457,6 +1812,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
       "program": "nz/income-tax",
@@ -1479,6 +1835,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
       "program": "nz/income-tax",
@@ -1501,6 +1858,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
       "program": "nz/income-tax",
@@ -1513,6 +1871,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
       "program": "nz/income-tax",
@@ -1525,6 +1884,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
       "program": "nz/income-tax",
@@ -1532,6 +1892,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
       "program": "nz/income-tax",
@@ -1539,6 +1900,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
       "program": "nz/income-tax",
@@ -1551,6 +1913,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
       "program": "nz/income-tax",
@@ -1563,6 +1926,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
       "program": "nz/income-tax",
@@ -1570,6 +1934,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
       "program": "nz/income-tax",
@@ -1577,6 +1942,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
       "program": "nz/income-tax",
@@ -1594,6 +1960,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
       "program": "nz/income-tax",
@@ -1601,6 +1968,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
       "program": "nz/income-tax",
@@ -1608,6 +1976,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
       "program": "nz/income-tax",
@@ -1615,6 +1984,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
       "program": "nz/income-tax",
@@ -1632,6 +2002,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
       "program": "nz/income-tax",
@@ -1649,6 +2020,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
       "program": "nz/income-tax",
@@ -1681,6 +2053,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
       "program": "nz/income-tax",
@@ -1688,6 +2061,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
       "program": "nz/income-tax",
@@ -1695,6 +2069,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
       "program": "nz/income-tax",
@@ -1742,6 +2117,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
       "program": "nz/income-tax",
@@ -1749,6 +2125,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
       "program": "nz/income-tax",
@@ -1756,6 +2133,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
       "program": "nz/income-tax",
@@ -1773,6 +2151,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
       "program": "nz/income-tax",
@@ -1780,6 +2159,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
       "program": "nz/income-tax",
@@ -1787,6 +2167,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
       "program": "nz/income-tax",
@@ -1814,6 +2195,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
       "program": "nz/income-tax",
@@ -1821,6 +2203,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
       "program": "nz/income-tax",
@@ -1828,6 +2211,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
       "program": "nz/income-tax",
@@ -1835,6 +2219,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
       "program": "nz/income-tax",
@@ -1847,6 +2232,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
       "program": "nz/income-tax",
@@ -1854,6 +2240,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
       "program": "nz/income-tax",
@@ -1861,6 +2248,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "program": "nz/income-tax",
@@ -1868,6 +2256,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "program": "nz/income-tax",
@@ -1875,6 +2264,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "program": "nz/income-tax",
@@ -1882,6 +2272,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
       "program": "nz/income-tax",
@@ -1889,6 +2280,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
       "program": "nz/income-tax",
@@ -1896,13 +2288,18 @@
       "status": "excluded-with-reason"
     },
     {
-      "classification": "duplicative_summary",
+      "bearing": "summary guidance over family-scheme-income classifications and the IETC WFF gate",
+      "bears_on_computed_surface": true,
+      "defining_provision": "IS 26/12 FS 1 summary of Income Tax Act 2007 subpart MB and s LC 13",
       "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "program": "nz/income-tax",
-      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
-      "status": "excluded-with-reason"
+      "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "program": "nz/income-tax",
@@ -1910,22 +2307,25 @@
       "status": "excluded-with-reason"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.ird.govt.nz/best-start",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/rwt-rate",
       "program": "nz/independent-earner-tax-credit",
@@ -1933,28 +2333,31 @@
       "status": "excluded-with-reason"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "This WFF guidance governs the case-supplied WFF-entitlement disqualifier consumed by IETC; upstream entitlement classification is not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
@@ -1967,6 +2370,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -1984,6 +2388,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -1991,6 +2396,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -1998,6 +2404,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2010,6 +2417,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2017,6 +2425,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2024,6 +2433,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2111,6 +2521,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2118,6 +2529,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2130,6 +2542,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2157,6 +2570,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2164,6 +2578,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2181,6 +2596,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2188,6 +2604,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2195,6 +2612,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2217,6 +2635,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2239,6 +2658,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2251,6 +2671,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2263,6 +2684,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2270,6 +2692,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2277,6 +2700,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2289,6 +2713,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2301,6 +2726,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2308,6 +2734,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2315,6 +2742,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2332,6 +2760,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2339,6 +2768,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2346,6 +2776,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2353,6 +2784,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2370,6 +2802,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2387,6 +2820,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2419,6 +2853,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2426,6 +2861,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2433,6 +2869,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2480,6 +2917,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2487,6 +2925,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2494,6 +2933,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2511,6 +2951,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2518,6 +2959,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2525,6 +2967,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2552,6 +2995,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2559,14 +3003,16 @@
       "status": "excluded-with-reason"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
+      "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "The WFF order affects the case-supplied WFF-entitlement disqualifier consumed by the IETC rule, not the IETC formula itself.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2574,6 +3020,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2586,6 +3033,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
       "program": "nz/independent-earner-tax-credit",
@@ -2593,6 +3041,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
       "program": "nz/independent-earner-tax-credit",
@@ -2601,29 +3050,39 @@
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
       "program": "nz/independent-earner-tax-credit",
@@ -2631,6 +3090,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
       "program": "nz/independent-earner-tax-credit",
@@ -2638,27 +3098,35 @@
       "status": "excluded-with-reason"
     },
     {
-      "classification": "duplicative_summary",
+      "bearing": "summary guidance over family-scheme-income classifications and the IETC WFF gate",
+      "bears_on_computed_surface": true,
+      "defining_provision": "IS 26/12 FS 1 summary of Income Tax Act 2007 subpart MB and s LC 13",
       "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
-      "status": "excluded-with-reason"
+      "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "interpretive_input_boundary",
+      "bears_on_computed_surface": true,
+      "defining_provision": "IS 26/12 interpretation of Income Tax Act 2007 subpart MB family scheme income",
       "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "program": "nz/independent-earner-tax-credit",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
-      "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
+      "encoded_by": "nz/statutes/social_security/accommodation_supplement/core.yaml",
       "program": "nz/main-benefits",
-      "reason": "The regulations govern assessable-income and administration inputs supplied to the claimed rate calculation; those upstream case determinations are not claimed.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/",
@@ -2686,6 +3154,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
       "program": "nz/main-benefits",
@@ -2723,6 +3192,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
       "program": "nz/main-benefits",
@@ -2730,6 +3200,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
       "program": "nz/main-benefits",
@@ -2737,6 +3208,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
       "program": "nz/main-benefits",
@@ -2779,6 +3251,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
       "program": "nz/main-benefits",
@@ -2791,6 +3264,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
       "program": "nz/main-benefits",
@@ -2808,6 +3282,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
       "program": "nz/main-benefits",
@@ -2855,6 +3330,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
       "program": "nz/main-benefits",
@@ -2867,6 +3343,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
       "program": "nz/main-benefits",
@@ -2899,6 +3376,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
       "program": "nz/main-benefits",
@@ -2921,6 +3399,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
       "program": "nz/main-benefits",
@@ -2988,6 +3467,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
       "program": "nz/main-benefits",
@@ -2995,6 +3475,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
       "encoded_by": "nz/statutes/social_security/main_benefits/rates.yaml",
@@ -3013,14 +3494,16 @@
       "status": "pending"
     },
     {
-      "bearing": "independent official rate corroboration; not an encoded source",
-      "classification": "corroborating_rate_guidance",
+      "bears_on_computed_surface": true,
+      "classification": "encoded_in_shared_composition_module",
       "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
+      "encoded_by": "nz/statutes/social_security/main_benefits/rates.yaml",
       "program": "nz/main-benefits",
-      "reason": "The page independently corroborates the 1 April 2026 rates, but the pinned module names and proves the 2026 rates order rather than this guidance page.",
-      "status": "classified-with-reason"
+      "reason": "V3 re-disposition: the instrument is proof-bound by the named shared composition module. Any unencoded cross-module eligibility or input derivation remains separately open in the typed dependency ledger.",
+      "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/202/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3053,6 +3536,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/27/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3090,6 +3574,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/126/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3097,6 +3582,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/13/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3104,6 +3590,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/14/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3146,6 +3633,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/49/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3158,6 +3646,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/120/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3175,6 +3664,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/15/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3222,6 +3712,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/28/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3234,6 +3725,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/67/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3266,6 +3758,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/38/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3288,6 +3781,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/11/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3355,6 +3849,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/9/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3362,6 +3857,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/36/en/latest/",
       "program": "nz/winter-energy-payment",
@@ -3379,6 +3875,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.workandincome.govt.nz/products/benefit-rates/benefit-rates-april-2026.html",
       "program": "nz/winter-energy-payment",
@@ -3386,6 +3883,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/best-start",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -3394,6 +3892,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/in-work-tax-credit-increase",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -3402,6 +3901,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "no_computational_bearing",
       "eli": "https://www.ird.govt.nz/rwt-rate",
       "program": "nz/working-for-families",
@@ -3409,6 +3909,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/working-for-families/types/family-tax-credit",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -3417,6 +3918,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/working-for-families/types/in-work-tax-credit",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -3425,6 +3927,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.ird.govt.nz/working-for-families/types/minimum-family-tax-credit",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -3443,6 +3946,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/284/en/latest/",
       "program": "nz/working-for-families",
@@ -3460,6 +3964,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/384/en/latest/",
       "program": "nz/working-for-families",
@@ -3467,6 +3972,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/182/en/latest/",
       "program": "nz/working-for-families",
@@ -3474,6 +3980,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/320/en/latest/",
       "program": "nz/working-for-families",
@@ -3486,6 +3993,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/366/en/latest/",
       "program": "nz/working-for-families",
@@ -3493,6 +4001,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/367/en/latest/",
       "program": "nz/working-for-families",
@@ -3500,6 +4009,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/8/en/latest/",
       "program": "nz/working-for-families",
@@ -3587,6 +4097,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/242/en/latest/",
       "program": "nz/working-for-families",
@@ -3594,6 +4105,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/300/en/latest/",
       "program": "nz/working-for-families",
@@ -3606,6 +4118,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/418/en/latest/",
       "program": "nz/working-for-families",
@@ -3633,6 +4146,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/133/en/latest/",
       "program": "nz/working-for-families",
@@ -3640,6 +4154,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/192/en/latest/",
       "program": "nz/working-for-families",
@@ -3657,6 +4172,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/404/en/latest/",
       "program": "nz/working-for-families",
@@ -3664,6 +4180,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/154/en/latest/",
       "program": "nz/working-for-families",
@@ -3671,6 +4188,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/325/en/latest/",
       "program": "nz/working-for-families",
@@ -3693,6 +4211,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/338/en/latest/",
       "program": "nz/working-for-families",
@@ -3715,6 +4234,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/438/en/latest/",
       "program": "nz/working-for-families",
@@ -3727,6 +4247,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/183/en/latest/",
       "program": "nz/working-for-families",
@@ -3739,6 +4260,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/210/en/latest/",
       "program": "nz/working-for-families",
@@ -3746,6 +4268,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/284/en/latest/",
       "program": "nz/working-for-families",
@@ -3753,6 +4276,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/350/en/latest/",
       "program": "nz/working-for-families",
@@ -3765,6 +4289,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/200/en/latest/",
       "program": "nz/working-for-families",
@@ -3777,6 +4302,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/265/en/latest/",
       "program": "nz/working-for-families",
@@ -3784,6 +4310,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/293/en/latest/",
       "program": "nz/working-for-families",
@@ -3791,6 +4318,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/294/en/latest/",
       "program": "nz/working-for-families",
@@ -3808,6 +4336,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/190/en/latest/",
       "program": "nz/working-for-families",
@@ -3815,6 +4344,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/282/en/latest/",
       "program": "nz/working-for-families",
@@ -3822,6 +4352,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/31/en/latest/",
       "program": "nz/working-for-families",
@@ -3829,6 +4360,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/178/en/latest/",
       "program": "nz/working-for-families",
@@ -3846,6 +4378,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/241/en/latest/",
       "program": "nz/working-for-families",
@@ -3863,6 +4396,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/239/en/latest/",
       "program": "nz/working-for-families",
@@ -3895,6 +4429,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/290/en/latest/",
       "program": "nz/working-for-families",
@@ -3902,6 +4437,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/291/en/latest/",
       "program": "nz/working-for-families",
@@ -3909,6 +4445,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/129/en/latest/",
       "program": "nz/working-for-families",
@@ -3956,6 +4493,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/296/en/latest/",
       "program": "nz/working-for-families",
@@ -3963,6 +4501,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/306/en/latest/",
       "program": "nz/working-for-families",
@@ -3970,6 +4509,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/98/en/latest/",
       "program": "nz/working-for-families",
@@ -3987,6 +4527,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/184/en/latest/",
       "program": "nz/working-for-families",
@@ -3994,6 +4535,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/22/en/latest/",
       "program": "nz/working-for-families",
@@ -4001,6 +4543,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/288/en/latest/",
       "program": "nz/working-for-families",
@@ -4028,6 +4571,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/151/en/latest/",
       "program": "nz/working-for-families",
@@ -4035,6 +4579,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": true,
       "classification": "parameter_or_rule_source",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/260/en/latest/",
       "encoded_by": "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
@@ -4043,6 +4588,7 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/271/en/latest/",
       "program": "nz/working-for-families",
@@ -4050,6 +4596,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/64/en/latest/",
       "program": "nz/working-for-families",
@@ -4062,6 +4609,7 @@
       "status": "pending"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/25/en/latest/",
       "program": "nz/working-for-families",
@@ -4069,6 +4617,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2023/ee-23-01",
       "program": "nz/working-for-families",
@@ -4077,29 +4626,39 @@
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "program": "nz/working-for-families",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "program": "nz/working-for-families",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bearing": "documented case-input or nonclaimed upstream surface",
-      "classification": "input_derivation_rule",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax Act 2007 s MB 13 emergency-event payment exclusion, as applied by the named determination",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "program": "nz/working-for-families",
-      "reason": "The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1101-declaration-of-the-canterbury-earthquake-of-4-september-2010-as-an-emergency-event-for-t",
       "program": "nz/working-for-families",
@@ -4107,6 +4666,7 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
       "classification": "not_in_force",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/det-ee-1102-declaration-of-the-canterbury-earthquake-of-22-february-2011-as-an-emergency-event-for-t",
       "program": "nz/working-for-families",
@@ -4114,20 +4674,463 @@
       "status": "excluded-with-reason"
     },
     {
-      "classification": "duplicative_summary",
+      "bearing": "summary guidance over family-scheme-income classifications and the IETC WFF gate",
+      "bears_on_computed_surface": true,
+      "defining_provision": "IS 26/12 FS 1 summary of Income Tax Act 2007 subpart MB and s LC 13",
       "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "program": "nz/working-for-families",
-      "reason": "Fact sheet adds no rule beyond IS 26/12, which is separately dispositioned.",
-      "status": "excluded-with-reason"
+      "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bearing": "interpretive guidance over an encoded statutory module and its explicit taxpayer-fact inputs",
-      "classification": "interpretive_input_boundary",
+      "bears_on_computed_surface": true,
+      "defining_provision": "IS 26/12 interpretation of Income Tax Act 2007 subpart MB family scheme income",
       "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "program": "nz/working-for-families",
-      "reason": "IS 26/12 interprets family-scheme-income categories. The certified subgraph encodes the statutory arithmetic in nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; taxpayer company, trust, control, payment, and event facts enter through explicit case inputs, and the statement sets no separate numeric parameter claimed by the certificate.",
-      "status": "classified-with-reason"
+      "reason": "V3 bearing rule: IS 26/12 interprets family-scheme-income categories. The certified subgraph encodes the statutory arithmetic in nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; taxpayer company, trust, control, payment, and event facts enter through explicit case inputs, and the statement sets no separate numeric parameter claimed by the certificate. The instrument must be encoded; a documented input boundary cannot close it.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     }
   ],
-  "schema_compatibility_note": "DK ledger-v2 committed_decisions.instrument_dispositions status and reason fields, repeated per program because instrument_graph.v1 has no multi-program disposition dimension; this decision input does not claim a new standalone schema"
+  "schema": "axiom_oracles.nz_instrument_dispositions.v3",
+  "schema_compatibility_note": "DK ledger-v2 committed_decisions.instrument_dispositions status and reason fields, repeated per program because instrument_graph.v1 has no multi-program disposition dimension; v3 additionally types bearing and binds mandatory discovery-channel supplements",
+  "supplemental_instruments": [
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1973/5/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "The Act consumes rates, income, and benefit facts to compute a separate rates rebate; it is downstream of, not upstream of, the certified outputs.",
+      "status": "excluded-with-reason",
+      "title_short": "Rates Rebate Act 1973"
+    },
+    {
+      "bearing": "GST treatment and factor in the earners' levy calculation",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Goods and Services Tax Act 1985 ss 5(6EC)–(6EE), 8(1), 10",
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+      "programs": [
+        "nz/acc-earners-levy"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
+      "reason": "Sections 5(6EC)–(6EE), 8(1), and 10 make the earners' levy a GST-bearing deemed supply and supply the 15 percent tax factor used by the levy surface.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": [
+        "nz/regulations/acc/earners_levy.yaml"
+      ],
+      "title_short": "Goods and Services Tax Act 1985"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1987/129/en/latest/",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "The composition consumes an actual parental-leave/preterm-payment register entry as an observable act; it does not compute entitlement or payment under this Act.",
+      "status": "excluded-with-reason",
+      "title_short": "Parental Leave and Employment Protection Act 1987"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1991/142/en/latest/",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "Child-support liability and payment are downstream interactions outside the certified tax, credit, levy, and benefit output surface.",
+      "status": "excluded-with-reason",
+      "title_short": "Child Support Act 1991"
+    },
+    {
+      "bearing": "Social-housing additional-resident and contribution inputs",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Public and Community Housing Management Act 1992 s 2; Social Security Act 2018 ss 65AAA–66",
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
+      "reason": "Section 2 defines additional resident, applicable person, contributions, and social housing, which the Social Security Act imports into Accommodation Supplement cost and exclusion mechanics.",
+      "size_class": "M",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title_short": "Public and Community Housing Management Act 1992"
+    },
+    {
+      "bearing": "WFF entitlement/payment administration and MB 13 emergency-event decisions",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Tax Administration Act 1994 ss 80KA–80KW (especially ss 80KF, 80KO, 80KW) and 91AAS; Income Tax Act 2007 ss LC 13, MB 13",
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
+      "reason": "Sections 80KA–80KW govern WFF entitlement, payment, and cadence, while s 91AAS decisions feed the ITA s MB 13 emergency-event exclusion; the IETC gate depends on WFF entitlement and receipt.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title_short": "Tax Administration Act 1994"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2001/84/en/latest/",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/winter-energy-payment"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "The composition consumes actual New Zealand Superannuation receipt as an MSD register fact; it does not compute Superannuation entitlement or amount.",
+      "status": "excluded-with-reason",
+      "title_short": "New Zealand Superannuation and Retirement Income Act 2001"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2006/40/en/latest/",
+      "programs": [
+        "nz/income-tax"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "KiwiSaver contribution, withdrawal, and scheme administration are outside the certified gross-income tax and transfer composition outputs.",
+      "status": "excluded-with-reason",
+      "title_short": "KiwiSaver Act 2006"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2009/51/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement",
+        "nz/independent-earner-tax-credit",
+        "nz/main-benefits",
+        "nz/working-for-families"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "The discovered ss 298–299 references concern information matching and recovery. Issued visa, refugee, and protected-person statuses enter only as immigration-register facts.",
+      "status": "excluded-with-reason",
+      "title_short": "Immigration Act 2009"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2011/62/en/latest/",
+      "programs": [
+        "nz/income-tax"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "Student-loan repayment obligations are a downstream use of income-tax facts and are outside every certified output surface.",
+      "status": "excluded-with-reason",
+      "title_short": "Student Loan Scheme Act 2011"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2018/4/en/latest/",
+      "programs": [
+        "nz/income-tax"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "Customs duties and information-matching provisions do not alter the certified individual income-tax or transfer computations.",
+      "status": "excluded-with-reason",
+      "title_short": "Customs and Excise Act 2018"
+    },
+    {
+      "bears_on_computed_surface": true,
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2024/19/en/latest/",
+      "encoded_by": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "provenance": "Official legislation page and provisions read 2026-08-20.",
+      "reason": "Sections 26–29 and 37 set the IETC ceiling, IWTC/MFTC amounts, and individual tax bands already proof-bound in the named modules.",
+      "status": "encoded",
+      "title_short": "Taxation (Budget Measures) Act 2024"
+    },
+    {
+      "bearing": "WFF abatement, Best Start first-year gate, and annualisation",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Taxation (Budget Measures) Act 2025 ss 2(5), 7, 8, 16; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Official legislation page and provisions read 2026-08-20.",
+      "reason": "Sections 2(5), 7, 8, and 16 amend MD 13, MG 3, and Schedule 31. Numeric values are present, but the first-year Best Start gate and annualisation remain case-derived inputs.",
+      "size_class": "M",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title_short": "Taxation (Budget Measures) Act 2025"
+    },
+    {
+      "bearing": "Accommodation Supplement eligibility, cost, income, and payment surface",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025 ss 2, 4–15",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "provenance": "Official legislation page and provisions read 2026-08-20.",
+      "reason": "Sections 2 and 4–15 change accommodation-cost definitions, entitlement/zero-rate rules, review mechanics, income exclusions, and weekly qualifying-cost/income terms.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title_short": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025"
+    },
+    {
+      "bearing": "IETC WFF-entitlement status gate",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 s 105; Income Tax Act 2007 s LC 13(1)(d)–(e)",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
+      "programs": [
+        "nz/independent-earner-tax-credit"
+      ],
+      "provenance": "Official legislation page and section 105 read 2026-08-20.",
+      "reason": "Section 105 amended LC 13(1)(d)–(e) from 30 March 2025. The current module implements NOT(entitled OR receives), while the amended text requires NOT(entitled AND receives).",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml"
+      ],
+      "title_short": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2026/25/en/latest/",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Official legislation page and commencement provisions read 2026-08-20.",
+      "reason": "The WFF/family-scheme provisions commence 1 April 2027, after the certified period ending 31 March 2027; earlier portions bear only on spine-excluded surfaces.",
+      "status": "excluded-with-reason",
+      "title_short": "Taxation (Budget Measures) Act 2026"
+    },
+    {
+      "bearing": "Main-benefit, WEP, and Accommodation Supplement eligibility and continuation",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Social Security (Modernisation) Amendment Act 2026 ss 4–13, 19, 21, 33–34, 43–65 and schedules",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement",
+        "nz/main-benefits",
+        "nz/winter-energy-payment"
+      ],
+      "provenance": "Official legislation page and in-period provisions read 2026-08-20.",
+      "reason": "In-period sections 4–13, 19, 21, 33–34, 43–65 and schedules change main-benefit eligibility/review, work tests, WEP termination, ACC interaction, end/death rules, and regulation powers.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml",
+        "nz/statutes/social_security/main_benefits/entitlement.yaml",
+        "nz/statutes/social_security/winter_energy_payment/core.yaml"
+      ],
+      "title_short": "Social Security (Modernisation) Amendment Act 2026"
+    },
+    {
+      "bears_on_computed_surface": true,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation",
+        "subject_matter_search"
+      ],
+      "eli": "https://www.legislation.govt.nz/act/public/2026/8/en/latest/",
+      "encoded_by": [
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Official legislation page and provisions read 2026-08-20.",
+      "reason": "Sections 2 and 105 make the 2026–27 IWTC change from NZD 5,070 to NZD 7,670; the tax-credit module proof-binds both provisions.",
+      "status": "encoded",
+      "title_short": "Taxation (Annual Rates for 2025–26, Compliance Simplification, and Remedial Measures) Act 2026"
+    },
+    {
+      "bears_on_computed_surface": false,
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1993/169/en/latest/",
+      "programs": [
+        "nz/main-benefits"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and provision review, 2026-08-20.",
+      "reason": "Community-services and health-card eligibility is downstream of income and benefit status and is outside the certified outputs.",
+      "status": "excluded-with-reason",
+      "title_short": "Health Entitlement Cards Regulations 1993"
+    },
+    {
+      "bearing": "Student-allowance/grant eligibility gate for Accommodation Supplement",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Student Allowances Regulations 1998 regs 2–8, 12, 12A–16, 20, 26, 28–31, 34–35, 40, 44–46, 47B–47E, 48; Social Security Act 2018 s 67",
+      "discovery_channels": [
+        "corpus_citation_scan_approximation"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
+      "reason": "Regulations 2–8 and 12 define interpretation, continued allowances, basic and independent-circumstances grants, and general eligibility; the operative gate is expressly subject to regs 4–6, 12, 12A–16, 20, 26, 28–31, 34–35, 40, 44–46, 47B–47E, and 48 and is consumed by the Accommodation Supplement exclusion.",
+      "size_class": "L",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title_short": "Student Allowances Regulations 1998"
+    },
+    {
+      "bearing": "2026–27 IWTC amount change",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Official 2026 Act commentary, section 105 IWTC article",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Official Inland Revenue Act commentary PDF read 2026-08-20.",
+      "reason": "Official commentary on the 2026 Act's section 105 IWTC change is not source-bound by the current tax-credit module.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title_short": "Taxation (Annual Rates 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 commentary"
+    },
+    {
+      "bearing": "IETC WFF-entitlement status gate",
+      "bears_on_computed_surface": true,
+      "defining_provision": "TIB Vol 37 No 5, Clarifying IETC eligibility; Income Tax Act 2007 s LC 13",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
+      "programs": [
+        "nz/independent-earner-tax-credit"
+      ],
+      "provenance": "Official Inland Revenue TIB PDF read 2026-08-20.",
+      "reason": "Official explanation of the amended LC 13 IETC eligibility test; not source-bound by the current module.",
+      "size_class": "S",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml"
+      ],
+      "title_short": "Tax Information Bulletin Vol 37 No 5 — Clarifying IETC eligibility"
+    },
+    {
+      "bearing": "WFF abatement, Best Start first-year gate, and annualisation",
+      "bears_on_computed_surface": true,
+      "defining_provision": "TIB Vol 37 No 7 Budget 2025 WFF commentary; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "provenance": "Official Inland Revenue TIB PDF read 2026-08-20.",
+      "reason": "Official Budget 2025 commentary bears on MD 13, MG 3, and Schedule 31 but is not source-bound by the current modules.",
+      "size_class": "M",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title_short": "Tax Information Bulletin Vol 37 No 7 — Budget 2025 WFF commentary"
+    },
+    {
+      "bearing": "WFF relationship, principal-caregiver, and partner allocation gates",
+      "bears_on_computed_surface": true,
+      "defining_provision": "TRA 005/21 [2023] NZTRA 1; Income Tax Act 2007 ss CB 32, MC 4, MC 7, MC 8, MC 11, YA 1; Legislation Act 2019 ss 13–14",
+      "discovery_channels": [
+        "subject_matter_search"
+      ],
+      "eli": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "provenance": "Official Inland Revenue case summary read 2026-08-20.",
+      "reason": "Current de-facto-relationship precedent bears on WFF caregiver/partner gates and therefore the IETC WFF disqualifier.",
+      "size_class": "M",
+      "status": "pending",
+      "target_module": [
+        "nz/statutes/income_tax/family_scheme/eligibility.yaml"
+      ],
+      "title_short": "TRA 005/21 [2023] NZTRA 1 (CSUM 23/04)"
+    }
+  ]
 }

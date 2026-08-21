@@ -613,8 +613,8 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_certificates_compute_open_on_incomplete_instrument_frontier():
-    """Aggregation is cleared, but an incomplete frontier still gates NZ."""
+def test_nz_certificates_compute_open_on_v3_closure_frontiers():
+    """Aggregation is clear, while each rederived v3 frontier keeps NZ open."""
 
     certify = _load("certify")
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
@@ -638,10 +638,114 @@ def test_nz_certificates_compute_open_on_incomplete_instrument_frontier():
         )
         assert certificate["verdicts"]["closed"]["mode"] == "computed"
         assert certificate["verdicts"]["closed"]["value"] is False
-        closed_frontier = certificate["verdicts"]["closed"]["instrument_frontier"]
-        assert closed_frontier["complete"] is False
+        closed = certificate["verdicts"]["closed"]
+
+        instrument_frontier = closed["instrument_frontier"]
+        assert instrument_frontier["complete"] is False
+
+        dependency_closure = closed["dependency_closure"]
+        assert dependency_closure["closed"] is False
+        assert dependency_closure["open_dependency_count"] == 247
+        assert len(dependency_closure["law_derived_inputs"]) == 229
+        assert len(dependency_closure["instruments_bearing_on_computed"]) == 18
+        assert dependency_closure["open_dependency_count"] == (
+            len(dependency_closure["law_derived_inputs"])
+            + len(dependency_closure["instruments_bearing_on_computed"])
+        )
+
+        spine_frontier = closed["spine_frontier"]
+        assert spine_frontier["complete"] is False
+        assert spine_frontier["scope_adjudication_pending"] is True
+        assert spine_frontier["body_hash_ledger_complete"] is False
+        assert spine_frontier["blockers"] == [
+            "spine_scope_adjudication_pending",
+            "spine_body_hash_ledger_incomplete",
+        ]
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
+
+
+@pytest.mark.parametrize("mutation", ["forge_complete", "remove"])
+def test_nz_certificates_reject_forged_spine_frontier(
+    tmp_path, monkeypatch, mutation
+):
+    """MUTANT: the committed spine frontier is producer-derived, not a claim."""
+
+    certify = _load("certify")
+    summary = json.loads((REPO / "closure/nz/summary.json").read_text())
+    if mutation == "forge_complete":
+        summary["computed"]["spine_frontier"]["complete"] = True
+    else:
+        del summary["computed"]["spine_frontier"]
+    artifact = tmp_path / f"nz-closure-{mutation}.json"
+    artifact.write_text(json.dumps(summary))
+
+    resolve_artifact = certify._repo_artifact_path
+    monkeypatch.setattr(
+        certify,
+        "_repo_artifact_path",
+        lambda relative, label: (
+            artifact
+            if relative == "closure/nz/summary.json"
+            else resolve_artifact(relative, label=label)
+        ),
+    )
+    with pytest.raises(
+        ValueError, match="NZ closure artifact does not rederive from committed inputs"
+    ):
+        certify._producer_closed_verdict(
+            "nz/income-tax", certify.PROGRAMS["nz/income-tax"], []
+        )
+
+
+def test_central_spine_gate_rejects_incomplete_and_restores_complete_guard():
+    """MUTANT: an otherwise closed claim cannot omit v3 spine completion."""
+
+    certify = _load("certify")
+    complete = {
+        "complete": True,
+        "scope_adjudication_pending": False,
+        "body_hash_ledger_complete": True,
+        "blockers": [],
+        "requested_legal_subgraph_scope": {
+            "total": 1,
+            "by_status": {
+                "encoded": 1,
+                "classified": 0,
+                "excluded": 0,
+                "pending": 0,
+            },
+            "instrument_counts": [
+                {
+                    "total": 1,
+                    "by_status": {
+                        "encoded": 1,
+                        "classified": 0,
+                        "excluded": 0,
+                        "pending": 0,
+                    },
+                }
+            ],
+        },
+    }
+    baseline, passes = certify._central_spine_frontier(complete)
+    assert passes is True
+    assert baseline is not None and baseline["complete"] is True
+
+    mutant = copy.deepcopy(complete)
+    mutant.update(
+        complete=False,
+        scope_adjudication_pending=True,
+        body_hash_ledger_complete=False,
+        blockers=["scope_pending", "body_hash_pending"],
+    )
+    normalized, passes = certify._central_spine_frontier(mutant)
+    assert passes is False
+    assert normalized is not None and normalized["complete"] is False
+
+    restored, passes = certify._central_spine_frontier(complete)
+    assert passes is True
+    assert restored == baseline
 
 
 def test_nz_injected_blocker_still_gates_certified(monkeypatch):

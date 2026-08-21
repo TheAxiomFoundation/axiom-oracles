@@ -77,6 +77,8 @@ jobs:
       - name: NZ computed closure and executable evidence is current
         run: |
           uv run python scripts/nz_executable_reproduction.py --check
+          uv run python scripts/nz_closure.py --bootstrap-instrument-dispositions --check
+          uv run python scripts/nz_closure.py --bootstrap-dependency-dispositions --check
           uv run python scripts/nz_closure.py --check
           uv run python scripts/nz_exercise_denominator.py --check
 
@@ -123,6 +125,9 @@ jobs:
 
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
+
+      - name: NZ v3 audit report recomputes clean
+        run: uv run python scripts/nz_v3_audit_report.py --check
 
       - name: Validate served SNAP case-explorer parity
         run: |

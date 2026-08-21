@@ -1137,6 +1137,104 @@ def _attested_verdict(spec: dict, name: str) -> dict:
     return {**block, "mode": "attested"}
 
 
+_SPINE_SCOPE_KEYS = (
+    "direct_encoded_subgraph_scope",
+    "requested_legal_subgraph_scope",
+    "all_channel_legal_subgraph_scope",
+    "whole_body_scope",
+)
+_SPINE_STATUS_KEYS = {"encoded", "classified", "excluded", "pending"}
+
+
+def _is_nonnegative_int(value: object) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def _spine_scope_well_formed(scope: object) -> bool:
+    if not isinstance(scope, dict):
+        return False
+    total = scope.get("total")
+    statuses = scope.get("by_status")
+    rows = scope.get("instrument_counts")
+    if (
+        not _is_nonnegative_int(total)
+        or not isinstance(statuses, dict)
+        or set(statuses) != _SPINE_STATUS_KEYS
+        or not all(_is_nonnegative_int(value) for value in statuses.values())
+        or sum(statuses.values()) != total
+        or not isinstance(rows, list)
+        or not rows
+    ):
+        return False
+    row_totals = 0
+    row_statuses = {key: 0 for key in _SPINE_STATUS_KEYS}
+    for row in rows:
+        if not isinstance(row, dict):
+            return False
+        row_total = row.get("total")
+        status = row.get("by_status")
+        if (
+            not _is_nonnegative_int(row_total)
+            or not isinstance(status, dict)
+            or set(status) != _SPINE_STATUS_KEYS
+            or not all(_is_nonnegative_int(value) for value in status.values())
+            or sum(status.values()) != row_total
+        ):
+            return False
+        row_totals += row_total
+        for key in _SPINE_STATUS_KEYS:
+            row_statuses[key] += status[key]
+    return row_totals == total and row_statuses == statuses
+
+
+def _central_spine_frontier(
+    block: object,
+) -> tuple[dict | None, bool]:
+    """Normalize an optional v3 spine block and fail malformed claims closed."""
+
+    if block is None:
+        return None, True
+    if not isinstance(block, dict):
+        return {
+            "complete": False,
+            "malformed": True,
+            "requirement": "spine_frontier must be an object when declared",
+        }, False
+    complete = block.get("complete")
+    adjudication = block.get("scope_adjudication_pending")
+    body_hash = block.get("body_hash_ledger_complete")
+    blockers = block.get("blockers")
+    present_scopes = [key for key in _SPINE_SCOPE_KEYS if key in block]
+    well_formed = (
+        isinstance(complete, bool)
+        and isinstance(adjudication, bool)
+        and isinstance(body_hash, bool)
+        and isinstance(blockers, list)
+        and blockers == list(dict.fromkeys(blockers))
+        and all(isinstance(item, str) and item for item in blockers)
+        and bool(present_scopes)
+        and all(_spine_scope_well_formed(block[key]) for key in present_scopes)
+        and complete == (not adjudication and body_hash and not blockers)
+    )
+    if not well_formed:
+        return {
+            "complete": False,
+            "malformed": True,
+            "requirement": (
+                "a declared spine frontier must have reconciled provision/status "
+                "counts, boolean scope/body-hash flags, unique blockers, and a "
+                "complete flag consistent with those fields"
+            ),
+        }, False
+    return {
+        "complete": complete,
+        "scope_adjudication_pending": adjudication,
+        "body_hash_ledger_complete": body_hash,
+        **{key: block[key] for key in present_scopes},
+        "blockers": blockers,
+    }, complete
+
+
 def _producer_closed_verdict(
     program: str,
     spec: dict,
@@ -1362,6 +1460,14 @@ def _producer_closed_verdict(
         }
     if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
         value = False
+    _spine_block = (
+        _computed_block.get("spine_frontier")
+        if isinstance(_computed_block, dict)
+        else None
+    )
+    _spine_summary, _spine_passes = _central_spine_frontier(_spine_block)
+    if not _spine_passes:
+        value = False
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1379,6 +1485,11 @@ def _producer_closed_verdict(
             "value": value,
             "instrument_frontier": _instrument_frontier_summary,
             "dependency_closure": _dependency_summary,
+            **(
+                {"spine_frontier": _spine_summary}
+                if _spine_summary is not None
+                else {}
+            ),
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),

@@ -1,4 +1,4 @@
-"""Mutants proving the NZ subordinate-instrument frontier is rederived.
+"""Mutants proving the NZ v3 closure frontiers are rederived.
 
 Each mutant is followed by restoration of the exact guarded input.  That
 second assertion distinguishes a live guard from an unrelated test failure.
@@ -23,6 +23,8 @@ import pytest
 REPO = Path(__file__).resolve().parent.parent
 SUMMARY = REPO / "closure" / "nz" / "summary.json"
 INSTRUMENT_GRAPH = REPO / "conformance" / "closure" / "nz-instrument-graph.json"
+INSTRUMENT_DISPOSITIONS = REPO / "closure" / "nz" / "instrument-dispositions.json"
+DEPENDENCY_DISPOSITIONS = REPO / "closure" / "nz" / "dependency-dispositions.json"
 
 
 def _load_nz_closure():
@@ -40,6 +42,28 @@ def _load_nz_refresh():
     spec = importlib.util.spec_from_file_location(
         "refresh_nz_instrument_graph_test",
         REPO / "scripts" / "refresh_nz_instrument_graph.py",
+    )
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_nz_spine():
+    spec = importlib.util.spec_from_file_location(
+        "nz_spine_mutants", REPO / "scripts" / "nz_spine.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_nz_audit_report():
+    spec = importlib.util.spec_from_file_location(
+        "nz_v3_audit_report_mutants", REPO / "scripts" / "nz_v3_audit_report.py"
     )
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
@@ -68,6 +92,32 @@ def _repo_local_graph_copy(module, monkeypatch) -> Iterator[tuple[Path, bytes, d
         yield graph_path, original, artifact
 
 
+@contextmanager
+def _repo_local_decision_copy(
+    module,
+    monkeypatch,
+    *,
+    source_path: Path,
+    module_attribute: str,
+    prefix: str,
+) -> Iterator[tuple[Path, bytes, dict]]:
+    """Yield a byte-exact decision copy and its locally rederived baseline."""
+
+    original = source_path.read_bytes()
+    with tempfile.TemporaryDirectory(prefix=prefix, dir=REPO) as raw:
+        local_path = Path(raw) / source_path.name
+        local_path.write_bytes(original)
+        monkeypatch.setattr(module, module_attribute, local_path)
+        baseline = module.build(module.load_source())
+        yield local_path, original, baseline
+
+
+def _write_json(path: Path, document: dict) -> None:
+    path.write_text(
+        json.dumps(document, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    )
+
+
 def test_committed_nz_instrument_frontier_rederives():
     module = _load_nz_closure()
     document = _summary()
@@ -84,13 +134,331 @@ def test_committed_nz_instrument_frontier_rederives():
         "instrument_frontier" in program
         for program in document["programs"].values()
     )
+    global_frontier = document["computed"]["instrument_frontier"]
+    assert global_frontier["instrument_count"] == 301
+    assert global_frontier["reported_instrument_count"] == 437
+    assert global_frontier["supplemental_count"] == 46
+    assert global_frontier["counts"] == {
+        "total": 347,
+        "encoded": 13,
+        "classified-with-reason": 0,
+        "excluded-with-reason": 137,
+        "pending": 197,
+    }
+    assert sum(
+        row["unresolved_listing_rows"]
+        for row in global_frontier["capture_gaps"]
+    ) == 136
+
+    dependency = document["computed"]["dependency_closure"]
+    assert dependency["closed"] is False
+    assert dependency["open_dependency_count"] == 247
+    assert len(dependency["law_derived_inputs"]) == 229
+    assert len(dependency["instruments_bearing_on_computed"]) == 18
+    grounding = document["computed"]["input_grounding"]
+    assert grounding["input_count"] == 288
+    assert grounding["counts"] == {
+        "encoded": 2,
+        "law_derived": 229,
+        "world_fact": 57,
+    }
+
+    expected_program_counts = {
+        "nz/acc-earners-levy": (134, 2, 0, 67, 65),
+        "nz/accommodation-supplement": (73, 3, 0, 14, 56),
+        "nz/income-tax": (127, 1, 0, 61, 65),
+        "nz/independent-earner-tax-credit": (130, 7, 0, 50, 73),
+        "nz/main-benefits": (70, 3, 0, 14, 53),
+        "nz/winter-energy-payment": (69, 0, 0, 16, 53),
+        "nz/working-for-families": (134, 8, 0, 52, 74),
+    }
+    for program, expected in expected_program_counts.items():
+        counts = document["programs"][program]["instrument_frontier"]["counts"]
+        assert (
+            counts["total"],
+            counts["encoded"],
+            counts["classified-with-reason"],
+            counts["excluded-with-reason"],
+            counts["pending"],
+        ) == expected
+
     frontiers = [
-        document["computed"]["instrument_frontier"],
+        global_frontier,
         *(program["instrument_frontier"] for program in document["programs"].values()),
     ]
     for frontier in frontiers:
         assert frontier["counts"]["total"] == len(frontier["ledger"])
         assert frontier["counts"]["pending"] == len(frontier["pending"])
+
+
+def test_audit_report_byte_drift_is_rejected_and_exact_bytes_restore_guard():
+    module = _load_nz_audit_report()
+    baseline = module.render_markdown(module.build_model()).encode()
+    with tempfile.TemporaryDirectory(prefix=".nz-v3-report-mutant-", dir=REPO) as raw:
+        output = Path(raw) / "audit.md"
+        output.write_bytes(baseline)
+        arguments = ["--check", "--output", str(output)]
+        assert module.main(arguments) == 0
+
+        output.write_bytes(baseline + b" ")
+        assert module.main(arguments) == 1
+
+        output.write_bytes(baseline)
+        assert output.read_bytes() == baseline
+        assert module.main(arguments) == 0
+
+
+def test_spine_citation_drop_is_rejected_and_exact_denominator_restores_guard():
+    module = _load_nz_spine()
+    original = list(module.EXPECTED_CANDIDATE_CITATIONS)
+    baseline = module.build_spine_frontier(original)
+    assert baseline["direct_encoded_subgraph_scope"]["total"] == 57
+    assert baseline["requested_legal_subgraph_scope"]["total"] == 174
+    assert baseline["all_channel_legal_subgraph_scope"]["total"] == 200
+    assert baseline["whole_body_scope"]["total"] == 4707
+    mutant = original[:-1]
+    with pytest.raises(module.NZSpineError, match="57-path ratchet"):
+        module.build_spine_frontier(mutant)
+    assert module.build_spine_frontier(original) == baseline
+
+
+@pytest.mark.parametrize(
+    ("argument", "constant", "count"),
+    (
+        (
+            "dependency_root_citations",
+            "EXPECTED_DEPENDENCY_ROOT_CITATIONS",
+            117,
+        ),
+        (
+            "all_channel_additional_citations",
+            "EXPECTED_ALL_CHANNEL_ADDITIONAL_CITATIONS",
+            26,
+        ),
+    ),
+)
+def test_spine_supplement_drop_is_rejected_and_exact_ratchet_restores_guard(
+    argument, constant, count
+):
+    module = _load_nz_spine()
+    direct = list(module.EXPECTED_CANDIDATE_CITATIONS)
+    original = list(getattr(module, constant))
+    assert len(original) == count
+    baseline = module.build_spine_frontier(direct)
+    with pytest.raises(module.NZSpineError, match=f"{count}-path ratchet"):
+        module.build_spine_frontier(direct, **{argument: original[:-1]})
+    assert module.build_spine_frontier(direct, **{argument: original}) == baseline
+
+
+def test_dependency_row_removal_is_rejected_and_exact_bytes_restore_guard(
+    monkeypatch,
+):
+    module = _load_nz_closure()
+    with _repo_local_decision_copy(
+        module,
+        monkeypatch,
+        source_path=DEPENDENCY_DISPOSITIONS,
+        module_attribute="DEPENDENCY_DISPOSITIONS_PATH",
+        prefix=".nz-dependency-removal-mutant-",
+    ) as (path, original, baseline):
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+        mutant = json.loads(original)
+        removed = mutant["input_grounding"].pop()
+        try:
+            _write_json(path, mutant)
+            with pytest.raises(
+                module.ClosureError,
+                match=(
+                    "missing NZ dependency grounding "
+                    f"{removed['source_surface']}:{removed['name']}"
+                ),
+            ):
+                module.build(module.load_source())
+        finally:
+            path.write_bytes(original)
+        assert path.read_bytes() == original
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+
+
+def test_law_derived_residence_cannot_be_laundered_to_world_fact(
+    monkeypatch,
+):
+    module = _load_nz_closure()
+    with _repo_local_decision_copy(
+        module,
+        monkeypatch,
+        source_path=DEPENDENCY_DISPOSITIONS,
+        module_attribute="DEPENDENCY_DISPOSITIONS_PATH",
+        prefix=".nz-dependency-kind-mutant-",
+    ) as (path, original, baseline):
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+        mutant = json.loads(original)
+        row = next(
+            value
+            for value in mutant["input_grounding"]
+            if value["source_surface"] == "eligibility_closure"
+            and value["name"]
+            == "residence.iwtc_person_resident_under_yd1_on_credit_days"
+        )
+        row.update(
+            classification="world_fact",
+            leaf_kind="world_fact",
+            reason="The scenario reports this as an observed residence fact.",
+        )
+        for field in ("derivation_instrument", "size_class", "target_module"):
+            row.pop(field)
+        try:
+            _write_json(path, mutant)
+            with pytest.raises(
+                module.ClosureError,
+                match="classifications or legal bindings drifted",
+            ):
+                module.build(module.load_source())
+        finally:
+            path.write_bytes(original)
+        assert path.read_bytes() == original
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+
+
+def test_law_derived_target_cannot_swap_to_another_valid_module(
+    monkeypatch,
+):
+    module = _load_nz_closure()
+    with _repo_local_decision_copy(
+        module,
+        monkeypatch,
+        source_path=DEPENDENCY_DISPOSITIONS,
+        module_attribute="DEPENDENCY_DISPOSITIONS_PATH",
+        prefix=".nz-dependency-module-mutant-",
+    ) as (path, original, baseline):
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+        mutant = json.loads(original)
+        row = next(
+            value
+            for value in mutant["input_grounding"]
+            if value["source_surface"] == "engine_request"
+            and value["name"]
+            == "independent_earner_tax_credit_resident_in_new_zealand"
+        )
+        assert row["target_module"] == (
+            "nz/statutes/income_tax/credits/individual_credits.yaml"
+        )
+        row["target_module"] = (
+            "nz/statutes/income_tax/family_scheme/eligibility.yaml"
+        )
+        try:
+            _write_json(path, mutant)
+            with pytest.raises(
+                module.ClosureError,
+                match="classifications or legal bindings drifted",
+            ):
+                module.build(module.load_source())
+        finally:
+            path.write_bytes(original)
+        assert path.read_bytes() == original
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+
+
+def test_known_bearing_instrument_cannot_evade_worklist_as_nonbearing_exclusion(
+    monkeypatch,
+):
+    module = _load_nz_closure()
+    with _repo_local_decision_copy(
+        module,
+        monkeypatch,
+        source_path=INSTRUMENT_DISPOSITIONS,
+        module_attribute="INSTRUMENT_DISPOSITIONS_PATH",
+        prefix=".nz-instrument-bearing-mutant-",
+    ) as (path, original, baseline):
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+        mutant = json.loads(original)
+        row = next(
+            value
+            for value in mutant["instrument_dispositions"]
+            if value["program"] == "nz/acc-earners-levy"
+            and value["eli"]
+            == "https://www.ird.govt.nz/deductions-from-salary-and-wages"
+        )
+        assert row["status"] == "pending"
+        assert row["bears_on_computed_surface"] is True
+        row.update(
+            status="excluded-with-reason",
+            classification="no_computational_bearing",
+            bears_on_computed_surface=False,
+            reason="The guidance is outside the computed surface.",
+        )
+        for field in ("bearing", "defining_provision", "size_class", "target_module"):
+            row.pop(field)
+        try:
+            _write_json(path, mutant)
+            with pytest.raises(
+                module.ClosureError,
+                match=(
+                    "instrument dispositions drifted from the audited "
+                    "bearing-rule producer"
+                ),
+            ):
+                module.validate_artifact(baseline, repo_root=REPO)
+        finally:
+            path.write_bytes(original)
+        assert path.read_bytes() == original
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+
+
+@pytest.mark.parametrize("channel", ("subject_matter_search", "corpus_citation_scan"))
+def test_instrument_discovery_receipt_drift_is_rejected_and_exact_bytes_restore(
+    channel,
+    monkeypatch,
+):
+    module = _load_nz_closure()
+    with _repo_local_decision_copy(
+        module,
+        monkeypatch,
+        source_path=INSTRUMENT_DISPOSITIONS,
+        module_attribute="INSTRUMENT_DISPOSITIONS_PATH",
+        prefix=f".nz-{channel}-receipt-mutant-",
+    ) as (path, original, baseline):
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+        mutant = json.loads(original)
+        if channel == "subject_matter_search":
+            queries = mutant["discovery_receipts"][channel]["queries"]
+            assert len(queries) > 1
+            queries.pop()
+            error = (
+                "instrument dispositions drifted from the audited bearing-rule producer"
+            )
+        else:
+            mutant["discovery_receipts"][channel]["inspected_clone_commit"] = (
+                "0" * 40
+            )
+            error = "citation-scan receipt is malformed"
+        try:
+            _write_json(path, mutant)
+            with pytest.raises(module.ClosureError, match=error):
+                module.validate_artifact(baseline, repo_root=REPO)
+        finally:
+            path.write_bytes(original)
+        assert path.read_bytes() == original
+        assert module.validate_artifact(baseline, repo_root=REPO) == baseline
+
+
+def test_citation_source_coverage_drop_is_rejected_and_exact_guard_restores(
+    monkeypatch,
+):
+    """MUTANT: every distinct citation-scan source needs a disposition."""
+
+    module = _load_nz_closure()
+    source = module.load_source()
+    original = module.CITATION_SCAN_SOURCE_DISPOSITIONS
+    assert len(original) == 20
+    baseline = module.build(source)
+    monkeypatch.setattr(module, "CITATION_SCAN_SOURCE_DISPOSITIONS", original[:-1])
+    with pytest.raises(
+        module.ClosureError, match="distinct-path source coverage drifted"
+    ):
+        module.build(source)
+    monkeypatch.setattr(module, "CITATION_SCAN_SOURCE_DISPOSITIONS", original)
+    assert module.build(source) == baseline
 
 
 def test_live_capture_derives_exact_metadata_from_instrument_xml():

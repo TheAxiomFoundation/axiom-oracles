@@ -25,6 +25,7 @@
 #   dashboard/public/data/cases/*/index.json         generate_chunk_indexes.py
 #   conformance/exercise-census.json               exercise_census.py
 #   certificates/*.json                            certify.py
+#   V3-AUDIT-OUT.md                                nz_v3_audit_report.py
 #   dashboard/public/data/freshness.json             check_vacuous_gate.py
 #
 # Pushing a refreshed report without regenerating these turns main red at CI's
@@ -101,6 +102,7 @@ derived_paths=(
   comparisons/affected_map.json
   comparisons/nz-treasury-incomeexplorer/single-person-attestations.json
   axiom_oracles/data/euromod_be_coverage.json
+  V3-AUDIT-OUT.md
 )
 manifest="dashboard/public/data/manifest.json"
 
@@ -215,6 +217,9 @@ regenerate_derived() {
   # main. Census runs first — certify consumes it.
   "$PYTHON" scripts/exercise_census.py
   "$PYTHON" scripts/certify.py
+  if [ -f scripts/nz_v3_audit_report.py ]; then
+    "$PYTHON" scripts/nz_v3_audit_report.py
+  fi
 }
 
 verify_derived() {
@@ -240,6 +245,10 @@ verify_derived() {
     "$PYTHON" scripts/nz_exercise_denominator.py --check || return
   fi
   if [ -f closure/nz/source.json ]; then
+    "$PYTHON" scripts/nz_closure.py \
+      --bootstrap-instrument-dispositions --check || return
+    "$PYTHON" scripts/nz_closure.py \
+      --bootstrap-dependency-dispositions --check || return
     "$PYTHON" scripts/nz_closure.py --check || return
   fi
   "$PYTHON" scripts/apply_dispositions.py --check || return
@@ -278,7 +287,9 @@ verify_derived() {
     "$PYTHON" scripts/conformance_burndown.py --check &&
     "$PYTHON" scripts/generate_dashboard_overview.py --check &&
     "$PYTHON" scripts/exercise_census.py --check &&
-    "$PYTHON" scripts/certify.py --check
+    "$PYTHON" scripts/certify.py --check &&
+    { [ ! -f scripts/nz_v3_audit_report.py ] ||
+      "$PYTHON" scripts/nz_v3_audit_report.py --check; }
 }
 
 # Safe proof of the exact regeneration path. It exits before collecting
