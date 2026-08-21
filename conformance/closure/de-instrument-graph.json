@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-08-21T19:46:05Z",
+  "generated_at": "2026-08-21T19:53:08Z",
   "source": {
     "path": "closure/de/source.json",
     "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
@@ -25766,7 +25766,7 @@
       "receipt_sha256": "21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c"
     },
     "subject_matter_search": {
-      "state": "unretrieved",
+      "state": "partial",
       "version": "de-subject-matter-2026-08-21-v1",
       "date": "2026-08-21",
       "target_period": "2025",
@@ -25779,10 +25779,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-08-21T19:46:05Z",
+          "captured_at": "2026-08-21T19:53:08Z",
           "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "758ab6ffb45ac576482c1dfa22f5709bdc5ac099ad3f9b388c03f24be1c886df"
+          "reason": "HTTPError: 404 Not Found",
+          "receipt_sha256": "a14e81e8858b725c31749d844fcd7a97db4c2fe11a2c7eb44d073ca309619067"
         },
         {
           "id": "de-subject-002",
@@ -25792,10 +25792,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "1db37d476668bab63acc94d143852d57d3359a563ba3cc4ce6704a5b1a7c0cc0"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+          "http_status": 200,
+          "content_type": "application/pdf",
+          "byte_count": 1304209,
+          "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
+          "receipt_sha256": "3bf78133883cadd6e448dfe526fcaa90c9826275eec63b7bc6f8ee9c4ab1d635"
         },
         {
           "id": "de-subject-003",
@@ -25805,10 +25809,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "fc6730664cdfad73f1840dd711a3e0edeb7beca9e360e20f784fe4ed323335b8"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
+          "http_status": 200,
+          "content_type": "application/pdf",
+          "byte_count": 690720,
+          "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
+          "receipt_sha256": "acd529c3754516020ec37c202eec2d53c78b73137e90f4c01fc5655b242042a0"
         },
         {
           "id": "de-subject-004",
@@ -25818,10 +25826,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "d853967636ddc567f6155c43039894dc3d1d8937c476a4eaceaf2955a12c0488"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
+          "http_status": 200,
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 215322,
+          "content_sha256": "28bd5c749d1b2df80c99679e80198344777131e41e60f5f4bda339dd8073ba98",
+          "receipt_sha256": "0aa0aabced940a6a5407edf0c00da9f8afa9430f0dd0bfbc687a1fda53516a3e"
         },
         {
           "id": "de-subject-005",
@@ -25832,10 +25844,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "8303f552ad77fe6ee2d2f2dc0f9b0922a4d045c5cf5c25468126cff9cfe3e533"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
+          "http_status": 200,
+          "content_type": "text/html",
+          "byte_count": 10163,
+          "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
+          "receipt_sha256": "bf553f01a693e33a1f3b33a16e5f79abb6c8a6fc16f38a88c8507217002454ec"
         },
         {
           "id": "de-subject-006",
@@ -25845,10 +25861,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "c87802608b0e8e497d3cc3238edea5db2d7de7de5266ef4c03e85ba46d860f84"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.gesetze-im-internet.de/beeg/",
+          "http_status": 200,
+          "content_type": "text/html",
+          "byte_count": 12174,
+          "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
+          "receipt_sha256": "f00e51bbe7fe4649aecc8892f9b97a570b8cb2b07045f247916a5de0eb1ddbc5"
         },
         {
           "id": "de-subject-007",
@@ -25858,10 +25878,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "a5ba1a11af69f07eb7284bddac59028598c139b53c19934402594fed56659428"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
+          "http_status": 200,
+          "content_type": "text/html",
+          "byte_count": 7086,
+          "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
+          "receipt_sha256": "14a67a227ce378c87aa293cf07bdae42cbacc2732c8ea9e02ecda76e38ea69e5"
         },
         {
           "id": "de-subject-008",
@@ -25871,10 +25895,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-08-21T19:46:05Z",
+          "captured_at": "2026-08-21T19:53:08Z",
           "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "9eb2b09379e6afc3bce89a7fb426aa0c594fc60c68d8604bc987b74d7f64a238"
+          "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)",
+          "receipt_sha256": "f00e5afdf1b4c2c98ad9c7233ce648ae52029a98a7fb96dec03b2e3565794a5e"
         },
         {
           "id": "de-subject-009",
@@ -25884,10 +25908,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "8c59373d03a1d67e1be215b13cffab94a7d849a9adeda621a94d22d4e54e9a26"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
+          "http_status": 200,
+          "content_type": "text/html",
+          "byte_count": 4381,
+          "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
+          "receipt_sha256": "36dd3f18877ebf577940dea655de6d78b4a7570ed485c4bd26253ed1048bffbd"
         },
         {
           "id": "de-subject-010",
@@ -25897,10 +25925,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "95ea0e80b7996c9fec289df438631a21cf6445645858f7f468aeda461700e55f"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
+          "http_status": 200,
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 534631,
+          "content_sha256": "0d82074a30cc694ac960f9e33bc4ca5b0573ad7df118d209a8ef75c8173fc264",
+          "receipt_sha256": "321b88bfd9f16a040e6ad99deb53b88e388622b3b3aeec1a30a70def915a2a55"
         },
         {
           "id": "de-subject-011",
@@ -25910,10 +25942,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "b702118053cee635a48aabd432bd49f62758ceccf0d21aff627733dbb1eb4d31"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
+          "http_status": 200,
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 516458,
+          "content_sha256": "10e87ee912455a84bbda9c1fc353bfe62a61464c1131109e176d7d8b845cbc70",
+          "receipt_sha256": "f9e0a97d838f99acb366175ef966e8879739209843c6ba46e628604d84d44665"
         },
         {
           "id": "de-subject-012",
@@ -25923,10 +25959,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-08-21T19:46:05Z",
+          "captured_at": "2026-08-21T19:53:08Z",
           "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "1d2adef0a2d2237c09ff8e403d916eb56f9277b48bec21fb4899fb88822f37fa"
+          "reason": "HTTPError: 404 Not Found",
+          "receipt_sha256": "37f366aab52c3e3beb6532b212a8f42469c11f3a453bd0aa8ceecd95c9cdb7dd"
         },
         {
           "id": "de-subject-013",
@@ -25936,10 +25972,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "2a1a1bfd96fff2c2b5298023c76964df5c07c756f0d493c7724afba45f19ab20"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
+          "http_status": 200,
+          "content_type": "text/html;charset=UTF-8",
+          "byte_count": 50035,
+          "content_sha256": "e3b28e3414b573461c3f353dc6a6ea686362b1b7b3f2eb87d34eaf5a4be51af7",
+          "receipt_sha256": "6c69dcb754470f3b9246bcb79c5d38529d79e72f05119a12da5b86867bd41318"
         },
         {
           "id": "de-subject-014",
@@ -25949,10 +25989,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-08-21T19:46:05Z",
-          "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "d8ed7807981b018f360b5d51d03658f93a6280cbaa8e3f504e92a9c7a061dff2"
+          "captured_at": "2026-08-21T19:53:08Z",
+          "state": "retrieved",
+          "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
+          "http_status": 200,
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 532905,
+          "content_sha256": "6305ffb7a4e66382950aabbbf77f97d930a89d625b2ca1aea731e3855db0b138",
+          "receipt_sha256": "3a1936f6455b6ab88576cf4f00079415dd07290fd653b3bdb595faab092eeec7"
         },
         {
           "id": "de-subject-015",
@@ -25962,13 +26006,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-08-21T19:46:05Z",
+          "captured_at": "2026-08-21T19:53:08Z",
           "state": "unretrieved",
-          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
-          "receipt_sha256": "cc05a4ba52ecc683d38a70200e71685a0f0e84f5ef78fe16bec137d8a3e78faf"
+          "reason": "HTTPError: 404 Not Found",
+          "receipt_sha256": "1f09c76c89363a3ff06f48dd538ef09d499d6b713046ca045861a4325c1f863a"
         }
       ],
-      "receipt_sha256": "9dabae8de2ab416bb693417424b85da7fa8456ac3e848a3660002a6009b1f2ec"
+      "receipt_sha256": "bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -26425,7 +26469,7 @@
           "status": "pending",
           "receipts": {
             "corpus_release": "21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c",
-            "subject_matter_search": "9dabae8de2ab416bb693417424b85da7fa8456ac3e848a3660002a6009b1f2ec",
+            "subject_matter_search": "bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -26869,5 +26913,5 @@
       ]
     }
   ],
-  "receipt_sha256": "096f393b365a6d660045316be290b3cbe1a29fb4770c7eeff4dc3f1c97446a41"
+  "receipt_sha256": "9da30ff87904c7ecbc708ffdea8fe5da550974d6afa0234752372c7377010aa7"
 }

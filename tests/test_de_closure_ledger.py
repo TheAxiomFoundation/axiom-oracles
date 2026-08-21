@@ -141,11 +141,29 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
     assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 3548
-    assert snapshot["channels"]["subject_matter_search"]["state"] == "unretrieved"
-    assert all(
-        row["state"] == "unretrieved"
-        for row in snapshot["channels"]["subject_matter_search"]["attempts"]
+    subject = snapshot["channels"]["subject_matter_search"]
+    row_states = {row["state"] for row in subject["attempts"]}
+    # The channel aggregate must be derived from its rows, never pinned:
+    # retrieved rows carry a sha256 receipt, unretrieved rows carry the
+    # actual error, and nothing else is a legal row state.
+    assert row_states <= {"retrieved", "unretrieved"}
+    expected_state = (
+        "retrieved"
+        if row_states == {"retrieved"}
+        else "unretrieved"
+        if row_states == {"unretrieved"}
+        else "partial"
     )
+    assert subject["state"] == expected_state
+    for row in subject["attempts"]:
+        if row["state"] == "retrieved":
+            assert (
+                isinstance(row.get("content_sha256"), str)
+                and len(row["content_sha256"]) == 64
+            )
+            assert isinstance(row.get("byte_count"), int) and row["byte_count"] > 0
+        else:
+            assert row.get("reason")
     assert snapshot["channels"]["citation_scan"]["state"] == "not_yet_available"
     assert snapshot["channels"]["citation_scan"]["issue"] == "axiom-corpus#611"
     assert all(

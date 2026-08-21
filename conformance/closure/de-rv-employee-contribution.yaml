@@ -116,11 +116,14 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 32a330bd94530f4722bacfb423e3efa3499e082b109ddd886b436e017e913ac3
+    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
     channel_receipts:
       corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: 9dabae8de2ab416bb693417424b85da7fa8456ac3e848a3660002a6009b1f2ec
+      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
+    subject_search_state:
+      total: 15
+      unretrieved: 4
     candidate_count: 11
     candidates:
     - id: de-rv-instr-22c390264093bed6
@@ -461,6 +464,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because every network query was unretrieved and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 15 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

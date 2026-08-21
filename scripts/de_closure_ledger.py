@@ -200,6 +200,33 @@ def _git_blob(root: Path, commit: str, path: str) -> bytes:
     return _git(root, "show", f"{commit}:{path}")
 
 
+def _measurement_uncertainty(graph: Mapping[str, Any]) -> str:
+    """Derive the uncertainty sentence from the actual channel states."""
+
+    state = graph["subject_search_state"]
+    unretrieved = state["unretrieved"]
+    total = state["total"]
+    if unretrieved == total:
+        subject_clause = "every subject-matter query was unretrieved"
+    elif unretrieved:
+        subject_clause = (
+            f"{unretrieved} of {total} subject-matter queries remain "
+            "unretrieved and retrieved documents are captured but not yet "
+            "parsed into frontier rows"
+        )
+    else:
+        subject_clause = (
+            "subject-matter documents are captured but not yet parsed into "
+            "frontier rows"
+        )
+    return (
+        "instrument count and depth are lower bounds because "
+        f"{subject_clause} and corpus citation scan #611 is unavailable; "
+        "work counts can increase when the claim surface is stabilized or "
+        "pending candidates are reviewed"
+    )
+
+
 def _load_json_bytes(data: bytes, label: str) -> Any:
     try:
         return json.loads(data)
@@ -515,10 +542,19 @@ def _snapshot_facts(
         name: value["receipt_sha256"]
         for name, value in channels.items()
     }
+    subject_attempts = channels["subject_matter_search"].get("attempts") or []
     facts = {
         "snapshot_path": snapshot_path.relative_to(REPO_ROOT).as_posix(),
         "snapshot_sha256": _sha256(raw),
         "channel_receipts": receipts,
+        "subject_search_state": {
+            "total": len(subject_attempts),
+            "unretrieved": sum(
+                1
+                for row in subject_attempts
+                if row.get("state") == "unretrieved"
+            ),
+        },
         "candidate_count": len(match["instruments"]),
         "candidates": copy.deepcopy(match["instruments"]),
     }
@@ -776,7 +812,7 @@ def _computed(
             "max_depth_estimate": "maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned",
             "remaining_oracle_work": "oracle_target minus complete oracle rows in the sha-bound current certificate work inventory",
             "remaining_executable_work": "executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory",
-            "uncertainty": "instrument count and depth are lower bounds because every network query was unretrieved and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed",
+            "uncertainty": _measurement_uncertainty(graph),
         },
         "non_encoded_reasons_complete": True,
         "closed": False,
