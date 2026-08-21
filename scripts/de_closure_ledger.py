@@ -19,6 +19,7 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -42,6 +43,12 @@ PROGRAM_IDS = (
     "de/unterhaltsvorschuss",
     "de/rv-employee-contribution",
 )
+CERTIFICATE_PATHS = {
+    program_id: REPO_ROOT
+    / "certificates"
+    / f"de-{program_id.removeprefix('de/').replace('/', '-')}.json"
+    for program_id in PROGRAM_IDS
+}
 ARTIFACT_PATHS = {
     program_id: REPO_ROOT
     / "conformance"
@@ -101,11 +108,6 @@ _SPINE_SCOPES = {
     },
 }
 
-_WORK_ESTIMATES = {
-    "de/kindergeld": (0, 0),
-    "de/unterhaltsvorschuss": (2, 1),
-    "de/rv-employee-contribution": (2, 1),
-}
 _CAPTURED_MAX_DEPTH = {
     "de/kindergeld": 1,
     "de/unterhaltsvorschuss": 2,
@@ -175,8 +177,18 @@ def _canonical_sha(value: Any) -> str:
 
 
 def _git(root: Path, *args: str) -> bytes:
+    environment = os.environ.copy()
+    environment.update(
+        {
+            "GIT_NO_LAZY_FETCH": "1",
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+    )
     result = subprocess.run(
-        ["git", "-C", str(root), *args], capture_output=True, check=False
+        ["git", "-C", str(root), *args],
+        capture_output=True,
+        check=False,
+        env=environment,
     )
     if result.returncode:
         detail = result.stderr.decode(errors="replace").strip()
@@ -438,8 +450,7 @@ def _leaf_frontier(
     # Source-boundary rows are part of the declared program frontier even when
     # the current amount-only module does not read them yet.
     for name in boundary_by_name:
-        row = grouped.setdefault(name, {"slots": [], "read_by": set()})
-        row["slots"].append(f"{program['root_nodes'][0]}#input.{name}")
+        grouped.setdefault(name, {"slots": [], "read_by": set()})
 
     out: list[dict[str, Any]] = []
     for name, grouped_row in sorted(grouped.items()):
@@ -472,10 +483,29 @@ def _leaf_frontier(
     return out
 
 
-def _snapshot_facts(program_id: str, snapshot_path: Path) -> dict[str, Any]:
+def _snapshot_facts(
+    program_id: str, snapshot_path: Path, source_path: Path
+) -> dict[str, Any]:
     raw = snapshot_path.read_bytes()
     snapshot = _load_json_bytes(raw, str(snapshot_path))
     validate_snapshot(snapshot)
+    for key, bound_path in (
+        ("source", source_path),
+        (
+            "query_set",
+            REPO_ROOT / str(snapshot.get("query_set", {}).get("path", "")),
+        ),
+    ):
+        binding = snapshot.get(key)
+        if not isinstance(binding, Mapping):
+            raise _SourceError(f"snapshot {key} binding is missing")
+        try:
+            relative = bound_path.resolve().relative_to(REPO_ROOT).as_posix()
+            digest = _sha256(bound_path.read_bytes())
+        except (OSError, ValueError) as exc:
+            raise _SourceError(f"could not verify snapshot {key} binding: {exc}") from exc
+        if binding != {"path": relative, "sha256": digest}:
+            raise _SourceError(f"snapshot {key} binding does not match committed bytes")
     programs = snapshot["programs"]
     match = next((row for row in programs if row.get("id") == program_id), None)
     if match is None:
@@ -485,12 +515,93 @@ def _snapshot_facts(program_id: str, snapshot_path: Path) -> dict[str, Any]:
         name: value["receipt_sha256"]
         for name, value in channels.items()
     }
-    return {
+    facts = {
         "snapshot_path": snapshot_path.relative_to(REPO_ROOT).as_posix(),
         "snapshot_sha256": _sha256(raw),
         "channel_receipts": receipts,
         "candidate_count": len(match["instruments"]),
         "candidates": copy.deepcopy(match["instruments"]),
+    }
+    if "seed_bindings" in match:
+        facts["seed_bindings"] = copy.deepcopy(match["seed_bindings"])
+    return facts
+
+
+def _measurement_basis(
+    program_id: str,
+    program: Mapping[str, Any],
+    modules: Sequence[Mapping[str, Any]],
+    leaves: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Bind the two work counts and label the depth figure as an estimate."""
+
+    certificate_path = CERTIFICATE_PATHS[program_id]
+    raw = certificate_path.read_bytes()
+    certificate = _load_json_bytes(raw, str(certificate_path))
+    if not isinstance(certificate, Mapping) or certificate.get("program") != program_id:
+        raise _SourceError(f"certificate program mismatch: {certificate_path}")
+    verdicts = certificate.get("verdicts")
+    if not isinstance(verdicts, Mapping):
+        raise _SourceError(f"certificate verdicts are missing: {certificate_path}")
+
+    captured_oracle: dict[str, dict[str, Any]] = {}
+    conformant = verdicts.get("conformant")
+    if isinstance(conformant, Mapping):
+        for group in conformant.get("reference_legs", []):
+            if not isinstance(group, Mapping):
+                continue
+            for leg in group.get("required_axiom_legs", []):
+                if (
+                    isinstance(leg, Mapping)
+                    and isinstance(leg.get("id"), str)
+                    and leg.get("state") == "complete"
+                ):
+                    captured_oracle[leg["id"]] = {
+                        key: leg[key]
+                        for key in ("id", "artifact", "artifact_sha256", "state")
+                        if key in leg
+                    }
+
+    executable = verdicts.get("executable")
+    captured_executable: list[dict[str, Any]] = []
+    if isinstance(executable, Mapping) and executable.get("value") is True:
+        manifest = executable.get("manifest")
+        if isinstance(manifest, Mapping):
+            captured_executable.append(
+                {
+                    "id": "released-engine-reproduction-contract",
+                    **{
+                        key: manifest[key]
+                        for key in ("path", "sha256")
+                        if key in manifest
+                    },
+                    "state": "complete",
+                }
+            )
+
+    captured_module_ids = sorted(
+        row["module_id"]
+        for row in modules
+        if row.get("state") == "captured" and isinstance(row.get("module_id"), str)
+    )
+    return {
+        "work_inventory": {
+            "certificate_path": certificate_path.relative_to(REPO_ROOT).as_posix(),
+            "certificate_sha256": _sha256(raw),
+            "oracle_target": 2,
+            "captured_oracle_legs": [captured_oracle[key] for key in sorted(captured_oracle)],
+            "executable_target": 1,
+            "captured_executable_contracts": captured_executable,
+            "target_method": "two independent oracle comparison legs and one released-engine reproduction contract, matching the existing DE Kindergeld premise shape",
+        },
+        "depth_estimate": {
+            "value": _CAPTURED_MAX_DEPTH[program_id],
+            "mode": "manual_lower_bound_from_captured_declared-module layers",
+            "root_nodes": copy.deepcopy(program["root_nodes"]),
+            "captured_module_ids": captured_module_ids,
+            "frontier_input_ids": [row["id"] for row in leaves],
+            "uncertainty": "whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question",
+        },
     }
 
 
@@ -500,6 +611,16 @@ def validate_snapshot(snapshot: Any) -> None:
         raise ClosureLedgerError(("instrument snapshot must be a mapping",))
     if snapshot.get("schema") != SNAPSHOT_SCHEMA:
         errors.append("instrument snapshot schema mismatch")
+    snapshot_receipt = snapshot.get("receipt_sha256")
+    if (
+        not isinstance(snapshot_receipt, str)
+        or not _HEX_SHA256.fullmatch(snapshot_receipt)
+        or _canonical_sha(
+            {key: value for key, value in snapshot.items() if key != "receipt_sha256"}
+        )
+        != snapshot_receipt
+    ):
+        errors.append("instrument snapshot receipt does not bind its content")
     channels = snapshot.get("channels")
     if not isinstance(channels, Mapping) or set(channels) != {
         "corpus_release",
@@ -561,6 +682,16 @@ def validate_snapshot(snapshot: Any) -> None:
                     errors.append(f"snapshot instrument {instrument.get('id')} has invalid discovery refs")
                 elif known_refs and any(ref not in known_refs for ref in refs):
                     errors.append(f"snapshot instrument {instrument.get('id')} has an unknown discovery ref")
+            if program.get("id") == "de/kindergeld":
+                bindings = program.get("seed_bindings")
+                if (
+                    not isinstance(bindings, list)
+                    or any(not isinstance(row, Mapping) for row in bindings)
+                    or [row.get("id") for row in bindings]
+                    != [f"de-kg-instr-{number:03d}" for number in range(1, 6)]
+                    or any(row.get("status") != "pending" for row in bindings)
+                ):
+                    errors.append("snapshot lacks Kindergeld seed bindings 001 through 005")
     if errors:
         raise ClosureLedgerError(errors)
 
@@ -569,7 +700,7 @@ def _computed(
     spine: Sequence[Mapping[str, Any]],
     leaves: Sequence[Mapping[str, Any]],
     graph: Mapping[str, Any],
-    program_id: str,
+    measurement_basis: Mapping[str, Any],
 ) -> dict[str, Any]:
     ledger = [
         {**copy.deepcopy(row), "status": "pending"}
@@ -580,7 +711,12 @@ def _computed(
     pending_instruments = [row["id"] for row in candidates]
     law_derived = [row["input"] for row in leaves if row["leaf_kind"] == "law_derived"]
     unclassified = [row["input"] for row in leaves if row["leaf_kind"] == "unclassified"]
-    oracle_work, executable_work = _WORK_ESTIMATES[program_id]
+    work = measurement_basis["work_inventory"]
+    depth = measurement_basis["depth_estimate"]
+    oracle_work = work["oracle_target"] - len(work["captured_oracle_legs"])
+    executable_work = work["executable_target"] - len(
+        work["captured_executable_contracts"]
+    )
     return {
         "ledger": ledger,
         "provision_counts": {
@@ -629,7 +765,7 @@ def _computed(
             "spine_rows": len(spine),
             "bearing_candidate_instruments": len(candidates),
             "law_derived_leaf_nodes": len(law_derived),
-            "max_depth_estimate": _CAPTURED_MAX_DEPTH[program_id],
+            "max_depth_estimate": depth["value"],
             "remaining_oracle_work": oracle_work,
             "remaining_executable_work": executable_work,
         },
@@ -638,8 +774,8 @@ def _computed(
             "bearing_candidate_instruments": "unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition",
             "law_derived_leaf_nodes": "unique typed frontier inputs that closure/de/source.json already commits as law_derived",
             "max_depth_estimate": "maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned",
-            "remaining_oracle_work": "count of additional independent comparison legs needed for the currently declared output surface (target two)",
-            "remaining_executable_work": "count of additional executable reproduction contracts needed for the currently declared output surface (target one)",
+            "remaining_oracle_work": "oracle_target minus complete oracle rows in the sha-bound current certificate work inventory",
+            "remaining_executable_work": "executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory",
             "uncertainty": "instrument count and depth are lower bounds because every network query was unretrieved and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed",
         },
         "non_encoded_reasons_complete": True,
@@ -662,8 +798,9 @@ def generate_document(
     spine = _spine(program_id, index)
     modules, module_inputs = _rulespec_facts(source, program_id, rulespec_root)
     leaves = _leaf_frontier(source, program_id, module_inputs)
-    graph = _snapshot_facts(program_id, snapshot_path)
+    graph = _snapshot_facts(program_id, snapshot_path, source_path)
     program = source["programs"][program_id]
+    measurement_basis = _measurement_basis(program_id, program, modules, leaves)
     corpus = source["corpus"]
     generated = {
         "source_manifest": {
@@ -682,9 +819,15 @@ def generate_document(
         "rulespec_modules": modules,
         "module_inputs": module_inputs,
         "leaf_frontier": leaves,
+        "dependency_enumeration": {
+            "method": "all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows",
+            "scope": "whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure",
+            "imports": "captured per module; selected DE modules currently declare none",
+        },
         "instrument_graph": graph,
+        "measurement_basis": measurement_basis,
     }
-    computed = _computed(spine, leaves, graph, program_id)
+    computed = _computed(spine, leaves, graph, measurement_basis)
     return {
         "schema": SCHEMA,
         "program": {
@@ -741,14 +884,126 @@ def validate_artifact(document: Any) -> ClosureSummary:
     spine = generated.get("provision_spine")
     leaves = generated.get("leaf_frontier")
     graph = generated.get("instrument_graph")
-    if not isinstance(spine, list) or not isinstance(leaves, list) or not isinstance(graph, Mapping):
+    measurement_basis = generated.get("measurement_basis")
+    if (
+        not isinstance(spine, list)
+        or not isinstance(leaves, list)
+        or not isinstance(graph, Mapping)
+        or not isinstance(measurement_basis, Mapping)
+    ):
         raise ClosureLedgerError(("generated spine, leaf frontier, or instrument graph is malformed",))
     candidates = graph.get("candidates")
     if not isinstance(candidates, list):
         raise ClosureLedgerError(("generated instrument candidates must be a list",))
 
+    expected_generated_keys = {
+        "source_manifest",
+        "corpus_release",
+        "provision_spine",
+        "rulespec_modules",
+        "module_inputs",
+        "leaf_frontier",
+        "dependency_enumeration",
+        "instrument_graph",
+        "measurement_basis",
+    }
+    if set(generated) != expected_generated_keys:
+        errors.append("generated_facts keys are not canonical")
+    source_binding = generated.get("source_manifest")
+    if (
+        not isinstance(source_binding, Mapping)
+        or set(source_binding) != {"path", "sha256"}
+        or not isinstance(source_binding.get("path"), str)
+        or not isinstance(source_binding.get("sha256"), str)
+        or not _HEX_SHA256.fullmatch(source_binding["sha256"])
+    ):
+        errors.append("source_manifest binding is malformed")
+    if (
+        not isinstance(graph.get("snapshot_sha256"), str)
+        or not _HEX_SHA256.fullmatch(graph["snapshot_sha256"])
+        or not _is_int(graph.get("candidate_count"))
+        or graph.get("candidate_count") != len(candidates)
+    ):
+        errors.append("instrument graph hash/count binding is malformed")
+    channel_receipts = graph.get("channel_receipts")
+    if (
+        not isinstance(channel_receipts, Mapping)
+        or set(channel_receipts)
+        != {"corpus_release", "subject_matter_search", "citation_scan"}
+        or any(
+            not isinstance(value, str) or not _HEX_SHA256.fullmatch(value)
+            for value in channel_receipts.values()
+        )
+    ):
+        errors.append("instrument channel receipt bindings are malformed")
+
+    spine_citations = [
+        row.get("citation_path") for row in spine if isinstance(row, Mapping)
+    ]
+    if (
+        len(spine_citations) != len(spine)
+        or len(spine_citations) != len(set(spine_citations))
+        or [row.get("ordinal") for row in spine if isinstance(row, Mapping)]
+        != list(range(1, len(spine) + 1))
+        or any(
+            not isinstance(row.get("body_sha256"), str)
+            or not _HEX_SHA256.fullmatch(row["body_sha256"])
+            or not isinstance(row.get("row_sha256"), str)
+            or not _HEX_SHA256.fullmatch(row["row_sha256"])
+            for row in spine
+            if isinstance(row, Mapping)
+        )
+    ):
+        errors.append("provision spine identities, ordering, or hashes are malformed")
+
+    leaf_ids = [row.get("id") for row in leaves if isinstance(row, Mapping)]
+    leaf_inputs = [row.get("input") for row in leaves if isinstance(row, Mapping)]
+    if (
+        len(leaf_ids) != len(leaves)
+        or any(not isinstance(value, str) for value in leaf_ids + leaf_inputs)
+        or len(leaf_ids) != len(set(leaf_ids))
+        or len(leaf_inputs) != len(set(leaf_inputs))
+        or leaf_inputs != sorted(leaf_inputs)
+        or any(
+            not isinstance(row.get("slots"), list)
+            or row["slots"] != sorted(set(row["slots"]))
+            or not isinstance(row.get("read_by"), list)
+            or row["read_by"] != sorted(set(row["read_by"]))
+            for row in leaves
+            if isinstance(row, Mapping)
+        )
+    ):
+        errors.append("leaf frontier ids, inputs, slots, or ordering are malformed")
+
+    candidate_ids = [row.get("id") for row in candidates if isinstance(row, Mapping)]
+    if (
+        len(candidate_ids) != len(candidates)
+        or any(not isinstance(value, str) for value in candidate_ids)
+        or len(candidate_ids) != len(set(candidate_ids))
+        or candidate_ids != sorted(candidate_ids)
+    ):
+        errors.append("instrument candidate ids are missing, duplicated, or noncanonical")
+
+    work_basis = measurement_basis.get("work_inventory")
+    depth_basis = measurement_basis.get("depth_estimate")
+    if (
+        not isinstance(work_basis, Mapping)
+        or not isinstance(depth_basis, Mapping)
+        or not _is_int(work_basis.get("oracle_target"))
+        or not isinstance(work_basis.get("captured_oracle_legs"), list)
+        or not _is_int(work_basis.get("executable_target"))
+        or not isinstance(work_basis.get("captured_executable_contracts"), list)
+        or not _is_int(depth_basis.get("value"))
+        or len(work_basis["captured_oracle_legs"]) > work_basis["oracle_target"]
+        or len(work_basis["captured_executable_contracts"])
+        > work_basis["executable_target"]
+    ):
+        errors.append("measurement basis is malformed")
+    if errors:
+        raise ClosureLedgerError(errors)
+
     try:
-        expected = _computed(spine, leaves, graph, program["id"])
+        expected = _computed(spine, leaves, graph, measurement_basis)
     except (KeyError, TypeError) as exc:
         raise ClosureLedgerError((f"generated all-pending facts are malformed: {exc}",)) from exc
     # Exact equality is deliberate: it rejects coordinated count/list/complete

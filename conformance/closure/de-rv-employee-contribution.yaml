@@ -110,12 +110,16 @@ generated_facts:
     - employee_pension_insurance_contribution_share
     leaf_kind: unclassified
     status: pending
+  dependency_enumeration:
+    method: all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows
+    scope: whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure
+    imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 0e37d7cae8c1b77c111abde0bd0df0e6c343e0b8761327191fffda98e24ad0b3
+    snapshot_sha256: 488e904053ac8cc394d6d90f7219db4b73c865bca1b8443fed90f9f43fa0c8fc
     channel_receipts:
-      corpus_release: 92f0a363bf0b3b07be98806d3bd2f46af14da2a4b8c522718cd123ae88da21aa
-      subject_matter_search: da8427f55151510c7f3d9d42565632fd6cce3f86feedc35a800e096063e57c22
+      corpus_release: c64ae4a8cfbe8b7a724c69fd97811b76275d4cafee587a82153233b8db69f439
+      subject_matter_search: ac41ecc30ce768ee2065443b01a3e323d39cb956dd36489ddcef5113fe3251ca
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     candidate_count: 11
     candidates:
@@ -125,6 +129,7 @@ generated_facts:
       - de-corpus-d86ed2cbef8616230759
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-6/163
+      row_sha256: 9257016165cb73131deb2fb9851533cf0bc380eabff10445f372a6989599897f
       document_class: statute
       citation_label: SGB 6 § 163
       body_sha256: 0b444597cfe29b45286bf8ca3a0fdb3da22f1b38b113ea69e910759bdd9fee17
@@ -136,6 +141,7 @@ generated_facts:
       - de-corpus-7bd10338303e55be1c0b
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-4
+      row_sha256: 46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Viertes Buch (IV) - Gemeinsame Vorschriften für die Sozialversicherung - (Artikel I des Gesetzes vom 23. Dezember 1976, BGBl. I S. 3845)
       body_sha256: 460d9db1e458ca39922190a33de9f524f2c94948f534d3f0579c0972c88edcd3
@@ -155,6 +161,7 @@ generated_facts:
       - de-corpus-262a6432328a23e9d801
       identity_kind: corpus_citation
       citation_path: de/statute/estg
+      row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee
       document_class: statute
       citation_label: Einkommensteuergesetz
       body_sha256: 78f6436e1bcf2d5941d793b40606a2a494c0019734c5ab418ac09907bd081ca9
@@ -219,6 +226,27 @@ generated_facts:
       raw_reference: Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025
       subject_urls:
       - https://www.bundesanzeiger.de/pub/de/suche?0
+  measurement_basis:
+    work_inventory:
+      certificate_path: certificates/de-rv-employee-contribution.json
+      certificate_sha256: 2e0b629f80b76f62de8639cb0611f2eb3b5629feb73b5792a997b86c8e2f7760
+      oracle_target: 2
+      captured_oracle_legs: []
+      executable_target: 1
+      captured_executable_contracts: []
+      target_method: two independent oracle comparison legs and one released-engine reproduction contract, matching the existing DE Kindergeld premise shape
+    depth_estimate:
+      value: 1
+      mode: manual_lower_bound_from_captured_declared-module layers
+      root_nodes:
+      - de:statutes/sgb-6/168#employee_pension_insurance_contribution_share
+      - de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling
+      captured_module_ids:
+      - de:regulations/svbezgrv-2025/4
+      - de:statutes/sgb-6/168
+      frontier_input_ids:
+      - de-rv-leaf-3df430088fbe0431
+      uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
   provisions: []
   instrument_dispositions: []
@@ -312,6 +340,7 @@ computed:
       - de-corpus-d86ed2cbef8616230759
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-6/163
+      row_sha256: 9257016165cb73131deb2fb9851533cf0bc380eabff10445f372a6989599897f
       document_class: statute
       citation_label: SGB 6 § 163
       body_sha256: 0b444597cfe29b45286bf8ca3a0fdb3da22f1b38b113ea69e910759bdd9fee17
@@ -323,6 +352,7 @@ computed:
       - de-corpus-7bd10338303e55be1c0b
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-4
+      row_sha256: 46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Viertes Buch (IV) - Gemeinsame Vorschriften für die Sozialversicherung - (Artikel I des Gesetzes vom 23. Dezember 1976, BGBl. I S. 3845)
       body_sha256: 460d9db1e458ca39922190a33de9f524f2c94948f534d3f0579c0972c88edcd3
@@ -342,6 +372,7 @@ computed:
       - de-corpus-262a6432328a23e9d801
       identity_kind: corpus_citation
       citation_path: de/statute/estg
+      row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee
       document_class: statute
       citation_label: Einkommensteuergesetz
       body_sha256: 78f6436e1bcf2d5941d793b40606a2a494c0019734c5ab418ac09907bd081ca9
@@ -428,8 +459,8 @@ computed:
     bearing_candidate_instruments: unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition
     law_derived_leaf_nodes: unique typed frontier inputs that closure/de/source.json already commits as law_derived
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
-    remaining_oracle_work: count of additional independent comparison legs needed for the currently declared output surface (target two)
-    remaining_executable_work: count of additional executable reproduction contracts needed for the currently declared output surface (target one)
+    remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
+    remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
     uncertainty: 'instrument count and depth are lower bounds because every network query was unretrieved and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

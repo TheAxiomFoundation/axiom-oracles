@@ -300,22 +300,27 @@ generated_facts:
     - kindergeld_payable_for_month
     leaf_kind: unclassified
     status: pending
+  dependency_enumeration:
+    method: all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows
+    scope: whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure
+    imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 0e37d7cae8c1b77c111abde0bd0df0e6c343e0b8761327191fffda98e24ad0b3
+    snapshot_sha256: 488e904053ac8cc394d6d90f7219db4b73c865bca1b8443fed90f9f43fa0c8fc
     channel_receipts:
-      corpus_release: 92f0a363bf0b3b07be98806d3bd2f46af14da2a4b8c522718cd123ae88da21aa
-      subject_matter_search: da8427f55151510c7f3d9d42565632fd6cce3f86feedc35a800e096063e57c22
+      corpus_release: c64ae4a8cfbe8b7a724c69fd97811b76275d4cafee587a82153233b8db69f439
+      subject_matter_search: ac41ecc30ce768ee2065443b01a3e323d39cb956dd36489ddcef5113fe3251ca
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
-    candidate_count: 18
+    candidate_count: 20
     candidates:
-    - id: de-kg-instr-002
+    - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
       - de-corpus-3969d462857249ee5505
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
+      row_sha256: e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236
       document_class: statute
       citation_label: Bundeskindergeldgesetz
       body_sha256: cf33f6972a5fb2182e0c0e8d37160ae15fbf61c41fdae663886004dd3e36565b
@@ -330,6 +335,7 @@ generated_facts:
       - de-corpus-80ca528e0ed2cceb764a
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
+      row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
       document_class: statute
       citation_label: Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)
       document_citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
@@ -365,6 +371,18 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)
+    - id: de-uhv-instr-333ba26c32e038d3
+      status: pending
+      discovery_refs:
+      - de-corpus-9b7206bcbc57f11125c4
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/31
+      row_sha256: 13837e89fd5ea734c03c9f68bdb83cca750fc518ef3fb596cd156ce1a94077aa
+      document_class: statute
+      citation_label: EStG § 31
+      body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
+      document_citation_path: de/statute/estg
+      legal_authority_url: https://www.gesetze-im-internet.de/estg/
     - id: de-uhv-instr-3875634198c25414
       status: pending
       discovery_refs:
@@ -382,6 +400,18 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Abgabenordnung
+    - id: de-uhv-instr-703d3b12aaab39f8
+      status: pending
+      discovery_refs:
+      - de-corpus-6cfe20544c79114bedad
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/32
+      row_sha256: b423d370b2816d7a5012cd27fdc0de5939d4db3ce89ea4be02b64b16ac403a0d
+      document_class: statute
+      citation_label: EStG § 32
+      body_sha256: a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416
+      document_citation_path: de/statute/estg
+      legal_authority_url: https://www.gesetze-im-internet.de/estg/
     - id: de-uhv-instr-73cb585362978769
       status: pending
       discovery_refs:
@@ -393,6 +423,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-5f705aae8523970f1a25
+      - de-corpus-6df13af136332e8c23b6
       - de-corpus-caf0f56af53ffc8164d1
       - de-corpus-e0b2258a581a1bcb29a4
       identity_kind: unresolved_reference
@@ -441,6 +472,7 @@ generated_facts:
       - de-corpus-8b8889a0b2d2e5f82791
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
+      row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Drittes Buch (III) - Arbeitsförderung - (Artikel 1 des Gesetzes vom 24. März 1997, BGBl. I S. 594)
       body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
@@ -456,6 +488,7 @@ generated_facts:
       - de-corpus-bf0631b273ba225e34e0
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-2
+      row_sha256: f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Zweites Buch (II) - Grundsicherung für Arbeitsuchende
       body_sha256: b9f3061e4404328c68116fbf1c9fa5ae69a66715e748466312ab9ee22c37711e
@@ -472,6 +505,35 @@ generated_facts:
       subject_urls:
       - https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558
       - https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html
+  measurement_basis:
+    work_inventory:
+      certificate_path: certificates/de-unterhaltsvorschuss.json
+      certificate_sha256: 587a639ba5d6aa7392be26a5df07ea3a7d0df257f64b81190ad968a8be22fc59
+      oracle_target: 2
+      captured_oracle_legs: []
+      executable_target: 1
+      captured_executable_contracts: []
+      target_method: two independent oracle comparison legs and one released-engine reproduction contract, matching the existing DE Kindergeld premise shape
+    depth_estimate:
+      value: 2
+      mode: manual_lower_bound_from_captured_declared-module layers
+      root_nodes:
+      - de:statutes/uhvorschg/2#advance_maintenance_amount
+      captured_module_ids:
+      - de:regulations/minuhv/1
+      - de:statutes/estg/66
+      - de:statutes/uhvorschg/2
+      frontier_input_ids:
+      - de-uhv-leaf-b329e1f74fcb6509
+      - de-uhv-leaf-33186f8d485351af
+      - de-uhv-leaf-02d260d2633b6285
+      - de-uhv-leaf-b14840d10f0c7741
+      - de-uhv-leaf-9795bf040172cda9
+      - de-uhv-leaf-746953df348f3e70
+      - de-uhv-leaf-8c5debf5377085b9
+      - de-uhv-leaf-28c8b07ec06f361f
+      - de-uhv-leaf-9dcc1cbc40e7ed0b
+      uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
   provisions: []
   instrument_dispositions: []
@@ -709,22 +771,24 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 18
+    instrument_count: 20
     counts:
-      total: 18
+      total: 20
       encoded: 0
       classified-with-reason: 0
       excluded-with-reason: 0
-      pending: 18
+      pending: 20
     pending:
-    - de-kg-instr-002
+    - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-1808736a82828a59
     - de-uhv-instr-1a53a8fa58131ff1
     - de-uhv-instr-2079e2162cee1404
     - de-uhv-instr-2a29967484296d20
     - de-uhv-instr-2b0a8f983f861591
+    - de-uhv-instr-333ba26c32e038d3
     - de-uhv-instr-3875634198c25414
     - de-uhv-instr-4e1f544ea66cccdf
+    - de-uhv-instr-703d3b12aaab39f8
     - de-uhv-instr-73cb585362978769
     - de-uhv-instr-7aa5943b5f0a6e6c
     - de-uhv-instr-8939b62ab3b44a39
@@ -737,13 +801,14 @@ computed:
     - de-uhv-instr-guidance
     complete: false
     ledger:
-    - id: de-kg-instr-002
+    - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
       - de-corpus-3969d462857249ee5505
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
+      row_sha256: e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236
       document_class: statute
       citation_label: Bundeskindergeldgesetz
       body_sha256: cf33f6972a5fb2182e0c0e8d37160ae15fbf61c41fdae663886004dd3e36565b
@@ -758,6 +823,7 @@ computed:
       - de-corpus-80ca528e0ed2cceb764a
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
+      row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
       document_class: statute
       citation_label: Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)
       document_citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
@@ -793,6 +859,18 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)
+    - id: de-uhv-instr-333ba26c32e038d3
+      status: pending
+      discovery_refs:
+      - de-corpus-9b7206bcbc57f11125c4
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/31
+      row_sha256: 13837e89fd5ea734c03c9f68bdb83cca750fc518ef3fb596cd156ce1a94077aa
+      document_class: statute
+      citation_label: EStG § 31
+      body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
+      document_citation_path: de/statute/estg
+      legal_authority_url: https://www.gesetze-im-internet.de/estg/
     - id: de-uhv-instr-3875634198c25414
       status: pending
       discovery_refs:
@@ -810,6 +888,18 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Abgabenordnung
+    - id: de-uhv-instr-703d3b12aaab39f8
+      status: pending
+      discovery_refs:
+      - de-corpus-6cfe20544c79114bedad
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/32
+      row_sha256: b423d370b2816d7a5012cd27fdc0de5939d4db3ce89ea4be02b64b16ac403a0d
+      document_class: statute
+      citation_label: EStG § 32
+      body_sha256: a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416
+      document_citation_path: de/statute/estg
+      legal_authority_url: https://www.gesetze-im-internet.de/estg/
     - id: de-uhv-instr-73cb585362978769
       status: pending
       discovery_refs:
@@ -821,6 +911,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-5f705aae8523970f1a25
+      - de-corpus-6df13af136332e8c23b6
       - de-corpus-caf0f56af53ffc8164d1
       - de-corpus-e0b2258a581a1bcb29a4
       identity_kind: unresolved_reference
@@ -869,6 +960,7 @@ computed:
       - de-corpus-8b8889a0b2d2e5f82791
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
+      row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Drittes Buch (III) - Arbeitsförderung - (Artikel 1 des Gesetzes vom 24. März 1997, BGBl. I S. 594)
       body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
@@ -884,6 +976,7 @@ computed:
       - de-corpus-bf0631b273ba225e34e0
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-2
+      row_sha256: f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09
       document_class: statute
       citation_label: Sozialgesetzbuch (SGB) Zweites Buch (II) - Grundsicherung für Arbeitsuchende
       body_sha256: b9f3061e4404328c68116fbf1c9fa5ae69a66715e748466312ab9ee22c37711e
@@ -920,7 +1013,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 18
+    bearing_candidate_instruments: 20
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2
@@ -930,8 +1023,8 @@ computed:
     bearing_candidate_instruments: unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition
     law_derived_leaf_nodes: unique typed frontier inputs that closure/de/source.json already commits as law_derived
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
-    remaining_oracle_work: count of additional independent comparison legs needed for the currently declared output surface (target two)
-    remaining_executable_work: count of additional executable reproduction contracts needed for the currently declared output surface (target one)
+    remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
+    remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
     uncertainty: 'instrument count and depth are lower bounds because every network query was unretrieved and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false
