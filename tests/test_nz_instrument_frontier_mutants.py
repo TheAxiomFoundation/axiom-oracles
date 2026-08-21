@@ -24,6 +24,7 @@ REPO = Path(__file__).resolve().parent.parent
 SUMMARY = REPO / "closure" / "nz" / "summary.json"
 INSTRUMENT_GRAPH = REPO / "conformance" / "closure" / "nz-instrument-graph.json"
 INSTRUMENT_DISPOSITIONS = REPO / "closure" / "nz" / "instrument-dispositions.json"
+INSTRUMENT_ENCODE_QUEUE = REPO / "closure" / "nz" / "instrument-encode-queue.json"
 DEPENDENCY_DISPOSITIONS = REPO / "closure" / "nz" / "dependency-dispositions.json"
 
 
@@ -142,8 +143,8 @@ def test_committed_nz_instrument_frontier_rederives():
         "total": 347,
         "encoded": 13,
         "classified-with-reason": 0,
-        "excluded-with-reason": 137,
-        "pending": 197,
+        "excluded-with-reason": 295,
+        "pending": 39,
     }
     assert sum(
         row["unresolved_listing_rows"]
@@ -152,9 +153,9 @@ def test_committed_nz_instrument_frontier_rederives():
 
     dependency = document["computed"]["dependency_closure"]
     assert dependency["closed"] is False
-    assert dependency["open_dependency_count"] == 247
+    assert dependency["open_dependency_count"] == 268
     assert len(dependency["law_derived_inputs"]) == 229
-    assert len(dependency["instruments_bearing_on_computed"]) == 18
+    assert len(dependency["instruments_bearing_on_computed"]) == 39
     grounding = document["computed"]["input_grounding"]
     assert grounding["input_count"] == 288
     assert grounding["counts"] == {
@@ -164,13 +165,13 @@ def test_committed_nz_instrument_frontier_rederives():
     }
 
     expected_program_counts = {
-        "nz/acc-earners-levy": (134, 2, 0, 67, 65),
-        "nz/accommodation-supplement": (73, 3, 0, 14, 56),
-        "nz/income-tax": (127, 1, 0, 61, 65),
-        "nz/independent-earner-tax-credit": (130, 7, 0, 50, 73),
-        "nz/main-benefits": (70, 3, 0, 14, 53),
-        "nz/winter-energy-payment": (69, 0, 0, 16, 53),
-        "nz/working-for-families": (134, 8, 0, 52, 74),
+        "nz/acc-earners-levy": (134, 2, 0, 130, 2),
+        "nz/accommodation-supplement": (73, 3, 0, 67, 3),
+        "nz/income-tax": (127, 1, 0, 101, 25),
+        "nz/independent-earner-tax-credit": (130, 7, 0, 91, 32),
+        "nz/main-benefits": (70, 3, 0, 66, 1),
+        "nz/winter-energy-payment": (69, 0, 0, 68, 1),
+        "nz/working-for-families": (134, 8, 0, 93, 33),
     }
     for program, expected in expected_program_counts.items():
         counts = document["programs"][program]["instrument_frontier"]["counts"]
@@ -189,6 +190,73 @@ def test_committed_nz_instrument_frontier_rederives():
     for frontier in frontiers:
         assert frontier["counts"]["total"] == len(frontier["ledger"])
         assert frontier["counts"]["pending"] == len(frontier["pending"])
+
+
+def test_encode_queue_exactly_tracks_unique_bearing_frontier():
+    document = _summary()
+    queue = json.loads(INSTRUMENT_ENCODE_QUEUE.read_text())
+    assert queue["schema"] == "axiom_oracles.nz_instrument_encode_queue.v1"
+    assert queue["certified_period"] == {
+        "start": "2026-04-01",
+        "end": "2027-03-31",
+    }
+    assert queue["reviewed_acts"] == [
+        "Accident Compensation Act 2001",
+        "Income Tax Act 2007",
+        "Social Security Act 2018",
+    ]
+    assert queue["source_dispositions"] == (
+        "closure/nz/instrument-dispositions.json"
+    )
+
+    pending_by_eli: dict[str, dict[str, set[str]]] = {}
+    for program, program_document in document["programs"].items():
+        for row in program_document["instrument_frontier"]["ledger"]:
+            if row["status"] != "pending":
+                continue
+            pending = pending_by_eli.setdefault(
+                row["eli"], {"programs": set(), "target_modules": set(), "sizes": set()}
+            )
+            pending["programs"].add(program)
+            target = row["target_module"]
+            pending["target_modules"].update(
+                target if isinstance(target, list) else [target]
+            )
+            pending["sizes"].add(row["size_class"])
+
+    items = queue["items"]
+    assert len(items) == 39
+    assert [row["eli"] for row in items] == sorted(pending_by_eli)
+    assert set(pending_by_eli) == set(
+        document["computed"]["dependency_closure"][
+            "instruments_bearing_on_computed"
+        ]
+    )
+    for row in items:
+        assert set(row) == {
+            "bearing_surface",
+            "defining_provision",
+            "eli",
+            "programs",
+            "reason",
+            "size_class",
+            "source_checked_at",
+            "source_url",
+            "target_modules",
+            "title",
+        }
+        expected = pending_by_eli[row["eli"]]
+        assert row["programs"] == sorted(expected["programs"])
+        assert row["target_modules"] == sorted(expected["target_modules"])
+        assert expected["sizes"] == {row["size_class"]}
+        assert row["source_checked_at"] == "2026-08-21"
+        assert row["source_url"].startswith("https://")
+        assert all(row[field].strip() for field in (
+            "bearing_surface",
+            "defining_provision",
+            "reason",
+            "title",
+        ))
 
 
 def test_audit_report_byte_drift_is_rejected_and_exact_bytes_restore_guard():

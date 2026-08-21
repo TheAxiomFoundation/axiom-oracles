@@ -46,15 +46,15 @@ EXPECTED_PROGRAMS = (
 EXPECTED_GROUNDING = {"encoded": 2, "law_derived": 229, "world_fact": 57}
 EXPECTED_ENCODED_INVENTORY = 35
 EXPECTED_ENCODED_DEPENDENCIES = 37
-EXPECTED_BEARING_INSTRUMENTS = 18
-EXPECTED_OPEN_DEPENDENCIES = 247
+EXPECTED_BEARING_INSTRUMENTS = 39
+EXPECTED_OPEN_DEPENDENCIES = 268
 EXPECTED_CAPTURE_GAP = 136
-EXPECTED_WORKLIST = 248
+EXPECTED_WORKLIST = 269
 EXPECTED_FRONTIER_COUNTS = {
     "classified-with-reason": 0,
     "encoded": 13,
-    "excluded-with-reason": 137,
-    "pending": 197,
+    "excluded-with-reason": 295,
+    "pending": 39,
     "total": 347,
 }
 EXPECTED_SPINE_SCOPES = {
@@ -434,7 +434,7 @@ def build_model() -> dict[str, Any]:
         and row.get("status") == "excluded-with-reason"
         and row.get("in_force") is False
     )
-    _require(len(retained_current_exclusions) == 16, "current exclusion count drift")
+    _require(len(retained_current_exclusions) == 174, "current exclusion count drift")
     _require(revoked_or_out_of_period == 121, "not-in-force exclusion count drift")
     graph_bears_on_rows = sum(
         1
@@ -483,7 +483,10 @@ def build_model() -> dict[str, Any]:
         worklist.append({"number": len(worklist) + 1, "kind": "bearing_instrument", **row})
     worklist.append({"number": len(worklist) + 1, **capture_item})
     _require(len(worklist) == EXPECTED_WORKLIST, "typed worklist count drift")
-    _require(worklist[-1]["number"] == 248, "capture gap is not worklist item 248")
+    _require(
+        worklist[-1]["number"] == EXPECTED_WORKLIST,
+        f"capture gap is not worklist item {EXPECTED_WORKLIST}",
+    )
 
     worklist_sizes = Counter(str(row["size_class"]) for row in worklist)
     size_by_kind = {
@@ -493,7 +496,7 @@ def build_model() -> dict[str, Any]:
         for kind in ("law_derived", "bearing_instrument", "capture_gap")
     }
     _require(
-        dict(sorted(worklist_sizes.items())) == {"L": 141, "M": 78, "S": 29},
+        dict(sorted(worklist_sizes.items())) == {"L": 154, "M": 87, "S": 28},
         "size totals drift",
     )
 
@@ -565,8 +568,8 @@ def build_model() -> dict[str, Any]:
             "graph_bears_on_rows": graph_bears_on_rows,
             "external_supplement_rows": external_supplement_rows,
             "capture_gaps": gaps,
-            "retained_not_in_force_or_superseded": revoked_or_out_of_period,
-            "retained_current_nonbearing_exclusions": retained_current_exclusions,
+            "excluded_not_in_force": revoked_or_out_of_period,
+            "retained_current_exclusions": retained_current_exclusions,
             "bearing_instruments": bearing,
             "subject_search": subject,
             "subject_search_results": subject_rows,
@@ -857,20 +860,19 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             ),
             "",
             (
-                f"Honest exclusions retain {part2['retained_not_in_force_or_superseded']} "
-                "not-in-force, superseded, or out-of-period rows. The 16 current exclusions "
-                "are the six F1 graph rows with no computed bearing, the post-period Taxation "
-                "(Budget Measures) Act 2026, and nine citation-scan sources that are downstream, "
-                "reverse-reference, register-boundary, or outside-surface instruments."
+                f"Honest exclusions comprise {part2['excluded_not_in_force']} rows marked "
+                f"not in force and {len(part2['retained_current_exclusions'])} rows not marked "
+                "out of force. Their row-level classifications and reasons identify the "
+                "superseded regime, certified-period boundary, or spine-excluded surface."
             ),
             "",
-            "### Current, honestly non-bearing exclusions",
+            "### Current or in-force honest exclusions",
             "",
             "| Instrument | Reason |",
             "|---|---|",
         ]
     )
-    for row in part2["retained_current_nonbearing_exclusions"]:
+    for row in part2["retained_current_exclusions"]:
         lines.append(f"| [{_md(row['title'])}]({row['eli']}) | {_md(row['reason'])} |")
     lines.append("")
 
