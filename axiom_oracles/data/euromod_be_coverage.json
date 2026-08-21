@@ -832,8 +832,8 @@
       "be-worker-tax-income-list"
     ],
     "comparison_count": 132,
-    "match_count": 94,
-    "raw_match_rate": 71.212121,
+    "match_count": 97,
+    "raw_match_rate": 73.484848,
     "explained_rate": 100,
     "unexplained_count": 0,
     "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."
