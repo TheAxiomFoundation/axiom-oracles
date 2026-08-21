@@ -1877,14 +1877,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Czech Republic) Order 2008, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Czech Republic) Order 2008 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (United Kingdom) Amendment Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -1895,14 +1908,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current CW 12 exempt-income treatment for qualifying foreign equity investors resident in Austria or Mexico",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 cl 3; Income Tax Act 2007 s CW 12",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order designates territories for a current individual income-tax exemption on qualifying share-disposal gains. That changes legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations, and no current module proof-binds the order.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Tax Information Exchange (Netherlands Antilles) Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -1929,9 +1955,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (United States of America) Amendment Order 2009, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (United States of America) Amendment Order 2009 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -1958,84 +1992,188 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Singapore) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Singapore) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Australia) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Australia) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Anguilla) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (The Bahamas) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (British Virgin Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (British Virgin Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cayman Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cayman Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cook Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cook Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Dominica) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Gibraltar) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Guernsey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Guernsey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Isle of Man) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Isle of Man) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Jersey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Jersey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the St Christopher and Nevis agreements implemented by this order as not yet in force, so they cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (St. Vincent and the Grenadines) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Turks and Caicos Islands) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the Belgian second protocol implemented by this order as signed but not yet in force, so it cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2054,9 +2192,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Turkey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Turkey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2067,24 +2213,44 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "Inland Revenue records only the Marshall Islands tax-information-exchange agreement as in force; the order's supplementary individual-income allocation agreement is not yet in force. The operative portion therefore bears solely on spine-excluded tax administration.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The limited 2010 Samoa arrangements were superseded for the certified period by the comprehensive Double Tax Agreements (Samoa) Order 2015, which is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Vanuatu) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "This amendment order's effect is consolidated into the Income Tax (Social Assistance Suspensory Loans) Order 1995 and the current Income Tax Act treatment. Its KiwiSaver first-home subsidy classification also lies outside the certified individual tax, IETC, and WFF spines.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2103,14 +2269,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Hong Kong) Order 2011, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Hong Kong) Order 2011 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The order's 2012 family-tax-credit amounts were replaced. For 2026–27 the operative amounts are in the Income Tax (Tax Credit) Order 2025 and consolidated Income Tax Act text, which the WFF module proof-binds.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2137,19 +2316,40 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order applies only to specified Niue development companies and income years ending no later than 7 April 2011, before the certified period; company loss grouping is also outside the personal-tax spine.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Papua New Guinea) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Papua New Guinea) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Japan) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Japan) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2160,19 +2360,34 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (Malaysia) Amendment Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Niue) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Mutual Administrative Assistance) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2183,9 +2398,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Viet Nam) Order 2014, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Viet Nam) Order 2014 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2196,9 +2419,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (United States of America—FATCA) Order 2014 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2225,9 +2453,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current $5,000 maximum depreciable-property pooling value and the resulting depreciation deduction in net and taxable income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Maximum Pooling Value) Order 2015 cl 3; Income Tax Act 2007 s EE 65",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order sets the current maximum value for pooling depreciable property. That rule changes depreciation deductions and therefore the legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations; it is not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2238,9 +2474,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Samoa) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Samoa) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2267,14 +2511,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Canada) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Canada) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "This revocation order removed the former Japan double-tax regime after the Double Tax Agreements (Japan) Order 2013 took effect. The current 2013 agreement is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2309,14 +2566,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (India) Amendment Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (San Marino) Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2327,14 +2594,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The second protocol is fully incorporated as Schedule 2 of the current official reprint of the Double Tax Agreements (Hong Kong) Order 2011. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2345,29 +2622,60 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "multilateral modifications to current double-tax agreements that alter income inclusion, source, residence, exemptions, and taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Income Tax (New Zealand Green Investment Finance Limited) Order 2019 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The Income Tax (Crown Regional Holdings Limited) Order 2021 repealed this order's Provincial Growth Fund Limited Schedule 35 entry. The superseded company exemption has no independent 2026–27 operation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (China) Order 2019, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (China) Order 2019 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2394,44 +2702,87 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The protocol's substantive principal-purpose test is fully incorporated into Schedule 2 of the current official reprint of the Double Tax Agreements (Guernsey) Order 2010. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Switzerland) Order 2020, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Switzerland) Order 2020 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Ngāpuhi Investment Fund Limited) Order 2020 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Crown Regional Holdings Limited) Order 2021 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "Regulation 4 applies only to COVID-19 isolation accommodation provided from 22 April 2021 through 30 June 2022. Its application ended before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2458,14 +2809,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order extends its accommodation-expenditure concession only through 1 April 2024, before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2492,24 +2853,50 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Austria) Amendment Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Austria) Amendment Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Slovak Republic) Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Slovak Republic) Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2544,9 +2931,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
       "program": "nz/income-tax",
-      "status": "pending"
+      "reason": "The official text of Income Tax (SafetyNet Critical Communications Limited) Order 2026 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2566,26 +2958,32 @@
     },
     {
       "bears_on_computed_surface": false,
-      "classification": "no_computational_bearing",
+      "classification": "spine_excluded_surface",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "program": "nz/income-tax",
       "reason": "Declaration that the January 2026 severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
-      "classification": "no_computational_bearing",
+      "classification": "spine_excluded_surface",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "program": "nz/income-tax",
       "reason": "Declaration that the February 2026 severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
-      "classification": "no_computational_bearing",
+      "classification": "spine_excluded_surface",
       "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "program": "nz/income-tax",
       "reason": "Declaration that the April 2026 Wellington severe weather event is an emergency event for the purposes of family scheme income does not alter this certified program's claimed output surface.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "status": "excluded-with-reason"
     },
     {
@@ -2612,15 +3010,19 @@
       "program": "nz/income-tax",
       "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
-      "classification": "no_computational_bearing",
+      "classification": "spine_excluded_surface",
       "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "program": "nz/income-tax",
       "reason": "Working for Families tax credits and family scheme income does not alter this certified program's claimed output surface.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "status": "excluded-with-reason"
     },
     {
@@ -2677,14 +3079,27 @@
       "status": "encoded"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Czech Republic) Order 2008, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Czech Republic) Order 2008 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (United Kingdom) Amendment Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2695,14 +3110,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current CW 12 exempt-income treatment for qualifying foreign equity investors resident in Austria or Mexico",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 cl 3; Income Tax Act 2007 s CW 12",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order designates territories for a current individual income-tax exemption on qualifying share-disposal gains. That changes legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations, and no current module proof-binds the order.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Tax Information Exchange (Netherlands Antilles) Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2729,9 +3157,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (United States of America) Amendment Order 2009, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (United States of America) Amendment Order 2009 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2758,84 +3194,188 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Singapore) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Singapore) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Australia) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Australia) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Anguilla) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (The Bahamas) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (British Virgin Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (British Virgin Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cayman Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cayman Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cook Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cook Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Dominica) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Gibraltar) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Guernsey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Guernsey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Isle of Man) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Isle of Man) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Jersey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Jersey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the St Christopher and Nevis agreements implemented by this order as not yet in force, so they cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (St. Vincent and the Grenadines) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Turks and Caicos Islands) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the Belgian second protocol implemented by this order as signed but not yet in force, so it cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2854,9 +3394,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Turkey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Turkey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2867,24 +3415,44 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "Inland Revenue records only the Marshall Islands tax-information-exchange agreement as in force; the order's supplementary individual-income allocation agreement is not yet in force. The operative portion therefore bears solely on spine-excluded tax administration.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The limited 2010 Samoa arrangements were superseded for the certified period by the comprehensive Double Tax Agreements (Samoa) Order 2015, which is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Vanuatu) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "This amendment order's effect is consolidated into the Income Tax (Social Assistance Suspensory Loans) Order 1995 and the current Income Tax Act treatment. Its KiwiSaver first-home subsidy classification also lies outside the certified individual tax, IETC, and WFF spines.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2903,14 +3471,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Hong Kong) Order 2011, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Hong Kong) Order 2011 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The order's 2012 family-tax-credit amounts were replaced. For 2026–27 the operative amounts are in the Income Tax (Tax Credit) Order 2025 and consolidated Income Tax Act text, which the WFF module proof-binds.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2937,19 +3518,40 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order applies only to specified Niue development companies and income years ending no later than 7 April 2011, before the certified period; company loss grouping is also outside the personal-tax spine.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Papua New Guinea) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Papua New Guinea) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Japan) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Japan) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2960,19 +3562,34 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (Malaysia) Amendment Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Niue) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Mutual Administrative Assistance) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -2983,9 +3600,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Viet Nam) Order 2014, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Viet Nam) Order 2014 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -2996,9 +3621,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (United States of America—FATCA) Order 2014 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3025,9 +3655,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current $5,000 maximum depreciable-property pooling value and the resulting depreciation deduction in net and taxable income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Maximum Pooling Value) Order 2015 cl 3; Income Tax Act 2007 s EE 65",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order sets the current maximum value for pooling depreciable property. That rule changes depreciation deductions and therefore the legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations; it is not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -3038,9 +3676,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Samoa) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Samoa) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -3067,14 +3713,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Canada) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Canada) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "This revocation order removed the former Japan double-tax regime after the Double Tax Agreements (Japan) Order 2013 took effect. The current 2013 agreement is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3109,14 +3768,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (India) Amendment Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (San Marino) Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3127,14 +3796,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The second protocol is fully incorporated as Schedule 2 of the current official reprint of the Double Tax Agreements (Hong Kong) Order 2011. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3145,29 +3824,60 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "multilateral modifications to current double-tax agreements that alter income inclusion, source, residence, exemptions, and taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Income Tax (New Zealand Green Investment Finance Limited) Order 2019 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The Income Tax (Crown Regional Holdings Limited) Order 2021 repealed this order's Provincial Growth Fund Limited Schedule 35 entry. The superseded company exemption has no independent 2026–27 operation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (China) Order 2019, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (China) Order 2019 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -3194,44 +3904,87 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The protocol's substantive principal-purpose test is fully incorporated into Schedule 2 of the current official reprint of the Double Tax Agreements (Guernsey) Order 2010. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Switzerland) Order 2020, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Switzerland) Order 2020 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Ngāpuhi Investment Fund Limited) Order 2020 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Crown Regional Holdings Limited) Order 2021 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "Regulation 4 applies only to COVID-19 isolation accommodation provided from 22 April 2021 through 30 June 2022. Its application ended before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3258,14 +4011,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order extends its accommodation-expenditure concession only through 1 April 2024, before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3292,24 +4055,50 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Austria) Amendment Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Austria) Amendment Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Slovak Republic) Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Slovak Republic) Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3345,9 +4134,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
       "program": "nz/independent-earner-tax-credit",
-      "status": "pending"
+      "reason": "The official text of Income Tax (SafetyNet Critical Communications Limited) Order 2026 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -3373,6 +4167,8 @@
       "program": "nz/independent-earner-tax-credit",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
@@ -3384,6 +4180,8 @@
       "program": "nz/independent-earner-tax-credit",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
@@ -3395,6 +4193,8 @@
       "program": "nz/independent-earner-tax-credit",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
@@ -3422,6 +4222,8 @@
       "program": "nz/independent-earner-tax-credit",
       "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
@@ -3433,6 +4235,8 @@
       "program": "nz/independent-earner-tax-credit",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/credits/individual_credits.yaml"
     },
@@ -4253,14 +5057,27 @@
       "status": "encoded"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Czech Republic) Order 2008, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Czech Republic) Order 2008 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (United Kingdom) Amendment Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4271,14 +5088,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current CW 12 exempt-income treatment for qualifying foreign equity investors resident in Austria or Mexico",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 cl 3; Income Tax Act 2007 s CW 12",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order designates territories for a current individual income-tax exemption on qualifying share-disposal gains. That changes legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations, and no current module proof-binds the order.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Tax Information Exchange (Netherlands Antilles) Order 2008 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4305,9 +5135,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (United States of America) Amendment Order 2009, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (United States of America) Amendment Order 2009 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4334,84 +5172,188 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Singapore) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Singapore) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Australia) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Australia) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Anguilla) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (The Bahamas) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (British Virgin Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (British Virgin Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cayman Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cayman Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Cook Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Cook Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Dominica) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Gibraltar) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Guernsey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Guernsey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Isle of Man) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Isle of Man) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Jersey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Jersey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the St Christopher and Nevis agreements implemented by this order as not yet in force, so they cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (St. Vincent and the Grenadines) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Turks and Caicos Islands) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "not_in_force",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "Inland Revenue's current treaty-status page records the Belgian second protocol implemented by this order as signed but not yet in force, so it cannot alter a 2026–27 computation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4430,9 +5372,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Turkey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Turkey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4443,24 +5393,44 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "Inland Revenue records only the Marshall Islands tax-information-exchange agreement as in force; the order's supplementary individual-income allocation agreement is not yet in force. The operative portion therefore bears solely on spine-excluded tax administration.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The limited 2010 Samoa arrangements were superseded for the certified period by the comprehensive Double Tax Agreements (Samoa) Order 2015, which is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Vanuatu) Order 2010 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "This amendment order's effect is consolidated into the Income Tax (Social Assistance Suspensory Loans) Order 1995 and the current Income Tax Act treatment. Its KiwiSaver first-home subsidy classification also lies outside the certified individual tax, IETC, and WFF spines.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4479,14 +5449,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Hong Kong) Order 2011, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Hong Kong) Order 2011 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The order's 2012 family-tax-credit amounts were replaced. For 2026–27 the operative amounts are in the Income Tax (Tax Credit) Order 2025 and consolidated Income Tax Act text, which the WFF module proof-binds.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4513,19 +5496,40 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order applies only to specified Niue development companies and income years ending no later than 7 April 2011, before the certified period; company loss grouping is also outside the personal-tax spine.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/410/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Papua New Guinea) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Papua New Guinea) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Japan) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Japan) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4536,19 +5540,34 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (Malaysia) Amendment Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Niue) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (Mutual Administrative Assistance) Order 2013 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4559,9 +5578,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Viet Nam) Order 2014, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Viet Nam) Order 2014 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4572,9 +5599,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (United States of America—FATCA) Order 2014 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4601,9 +5633,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "current $5,000 maximum depreciable-property pooling value and the resulting depreciation deduction in net and taxable income",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Income Tax (Maximum Pooling Value) Order 2015 cl 3; Income Tax Act 2007 s EE 65",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: The order sets the current maximum value for pooling depreciable property. That rule changes depreciation deductions and therefore the legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations; it is not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4614,9 +5654,17 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Samoa) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Samoa) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4643,14 +5691,27 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Canada) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Canada) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "This revocation order removed the former Japan double-tax regime after the Double Tax Agreements (Japan) Order 2013 took effect. The current 2013 agreement is separately pending for encoding.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4685,14 +5746,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Taxation Relief (India) Amendment Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Double Tax Agreements (San Marino) Order 2017 operates only on tax-information exchange, collection assistance, reporting, or treaty administration. It does not allocate taxing rights, exempt or include income, or change a value in the certified individual-tax, IETC, or WFF computations, so it bears solely on spine-excluded administration surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4703,14 +5774,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/100/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The second protocol is fully incorporated as Schedule 2 of the current official reprint of the Double Tax Agreements (Hong Kong) Order 2011. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4721,29 +5802,60 @@
       "status": "excluded-with-reason"
     },
     {
+      "bearing": "multilateral modifications to current double-tax agreements that alter income inclusion, source, residence, exemptions, and taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Income Tax (New Zealand Green Investment Finance Limited) Order 2019 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/204/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The Income Tax (Crown Regional Holdings Limited) Order 2021 repealed this order's Provincial Growth Fund Limited Schedule 35 entry. The superseded company exemption has no independent 2026–27 operation.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (China) Order 2019, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (China) Order 2019 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
       "bears_on_computed_surface": false,
@@ -4770,44 +5882,87 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The protocol's substantive principal-purpose test is fully incorporated into Schedule 2 of the current official reprint of the Double Tax Agreements (Guernsey) Order 2010. That consolidated principal order is separately pending for encoding, so this amending instrument retains no independent 2026–27 rule.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Switzerland) Order 2020, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Switzerland) Order 2020 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Ngāpuhi Investment Fund Limited) Order 2020 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/308/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/154/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Income Tax (Crown Regional Holdings Limited) Order 2021 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/178/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "Regulation 4 applies only to COVID-19 isolation accommodation provided from 22 April 2021 through 30 June 2022. Its application ended before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/151/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4834,14 +5989,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order extends its accommodation-expenditure concession only through 1 April 2024, before the certified period beginning 1 April 2026.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/134/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4868,24 +6033,50 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/119/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bearing": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Taxation Relief (Austria) Amendment Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Taxation Relief (Austria) Amendment Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bearing": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "bears_on_computed_surface": true,
+      "defining_provision": "Double Tax Agreements (Slovak Republic) Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "V3 bearing rule: Double Tax Agreements (Slovak Republic) Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "status": "pending",
+      "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "outside_certified_period",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official order sets a deemed foreign-investment-fund return rate only for the the income year named in its title. That income year ends before the certified period 1 April 2026 to 31 March 2027.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/150/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4921,9 +6112,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
       "program": "nz/working-for-families",
-      "status": "pending"
+      "reason": "The official text of Income Tax (SafetyNet Critical Communications Limited) Order 2026 regulates an entity-specific Schedule 35 corporate exemption. It does not alter the certified basic individual-rate, IETC, or WFF calculation, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/138/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -4949,6 +6145,8 @@
       "program": "nz/working-for-families",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
@@ -4960,6 +6158,8 @@
       "program": "nz/working-for-families",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
@@ -4971,6 +6171,8 @@
       "program": "nz/working-for-families",
       "reason": "V3 bearing rule: The instrument governs classification of amounts supplied through the explicit family_scheme_other_payments_not_excluded and related case-input boundary; the certificate does not claim event, payment, trust, or company adjudication upstream of those inputs. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
@@ -4998,6 +6200,8 @@
       "program": "nz/working-for-families",
       "reason": "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     },
@@ -5009,6 +6213,8 @@
       "program": "nz/working-for-families",
       "reason": "V3 bearing rule: IS 26/12 interprets family-scheme-income categories. The certified subgraph encodes the statutory arithmetic in nz/statutes/income_tax/family_scheme/family_scheme_income.yaml; taxpayer company, trust, control, payment, and event facts enter through explicit case inputs, and the statement sets no separate numeric parameter claimed by the certificate. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
       "status": "pending",
       "target_module": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
     }
@@ -5115,6 +6321,8 @@
       "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
       "reason": "Sections 80KA–80KW govern WFF entitlement, payment, and cadence, while s 91AAS decisions feed the ITA s MB 13 emergency-event exclusion; the IETC gate depends on WFF entitlement and receipt.",
       "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
       "status": "pending",
       "target_module": [
         "nz/statutes/income_tax/credits/individual_credits.yaml",
@@ -5219,9 +6427,8 @@
       "title_short": "Taxation (Budget Measures) Act 2024"
     },
     {
-      "bearing": "WFF abatement, Best Start first-year gate, and annualisation",
-      "bears_on_computed_surface": true,
-      "defining_provision": "Taxation (Budget Measures) Act 2025 ss 2(5), 7, 8, 16; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31",
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "discovery_channels": [
         "subject_matter_search"
       ],
@@ -5229,14 +6436,11 @@
       "programs": [
         "nz/working-for-families"
       ],
-      "provenance": "Official legislation page and provisions read 2026-08-20.",
-      "reason": "Sections 2(5), 7, 8, and 16 amend MD 13, MG 3, and Schedule 31. Numeric values are present, but the first-year Best Start gate and annualisation remain case-derived inputs.",
-      "size_class": "M",
-      "status": "pending",
-      "target_module": [
-        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
-        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
-      ],
+      "provenance": "Official legislation page, provisions, and consolidated principal text read 2026-08-21.",
+      "reason": "Sections 7, 8, and 16 are amendment machinery whose complete in-period effect is incorporated into the pinned 16 June 2026 Income Tax Act 2007 principal text (version date 7 May 2026): MD 13 contains the $44,900 and 27.5% rule, MG 3 the first-year Best Start gate, and Schedule 31 the annualisation table. The unencoded substance is separately represented by that principal text and the official Budget 2025 bulletin.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
+      "status": "excluded-with-reason",
       "title_short": "Taxation (Budget Measures) Act 2025"
     },
     {
@@ -5260,9 +6464,8 @@
       "title_short": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025"
     },
     {
-      "bearing": "IETC WFF-entitlement status gate",
-      "bears_on_computed_surface": true,
-      "defining_provision": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 s 105; Income Tax Act 2007 s LC 13(1)(d)–(e)",
+      "bears_on_computed_surface": false,
+      "classification": "superseded_regime",
       "discovery_channels": [
         "subject_matter_search"
       ],
@@ -5270,13 +6473,11 @@
       "programs": [
         "nz/independent-earner-tax-credit"
       ],
-      "provenance": "Official legislation page and section 105 read 2026-08-20.",
-      "reason": "Section 105 amended LC 13(1)(d)–(e) from 30 March 2025. The current module implements NOT(entitled OR receives), while the amended text requires NOT(entitled AND receives).",
-      "size_class": "S",
-      "status": "pending",
-      "target_module": [
-        "nz/statutes/income_tax/credits/individual_credits.yaml"
-      ],
+      "provenance": "Official legislation page, section 105, and consolidated principal text read 2026-08-21.",
+      "reason": "Section 105 is amendment machinery whose complete effect is incorporated into the pinned 16 June 2026 Income Tax Act 2007 principal text (version date 7 May 2026), including the amended LC 13(1)(d)–(e). The Act retains no independent 2026–27 rule; the still-unencoded substance is separately represented by the principal text and official IETC bulletin.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
+      "status": "excluded-with-reason",
       "title_short": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025"
     },
     {
@@ -5383,6 +6584,8 @@
       "provenance": "Official Inland Revenue Act commentary PDF read 2026-08-20.",
       "reason": "Official commentary on the 2026 Act's section 105 IWTC change is not source-bound by the current tax-credit module.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
       "status": "pending",
       "target_module": [
         "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
@@ -5403,6 +6606,8 @@
       "provenance": "Official Inland Revenue TIB PDF read 2026-08-20.",
       "reason": "Official explanation of the amended LC 13 IETC eligibility test; not source-bound by the current module.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
       "status": "pending",
       "target_module": [
         "nz/statutes/income_tax/credits/individual_credits.yaml"
@@ -5423,6 +6628,8 @@
       "provenance": "Official Inland Revenue TIB PDF read 2026-08-20.",
       "reason": "Official Budget 2025 commentary bears on MD 13, MG 3, and Schedule 31 but is not source-bound by the current modules.",
       "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
       "status": "pending",
       "target_module": [
         "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
@@ -5445,6 +6652,8 @@
       "provenance": "Official Inland Revenue case summary read 2026-08-20.",
       "reason": "Current de-facto-relationship precedent bears on WFF caregiver/partner gates and therefore the IETC WFF disqualifier.",
       "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
       "status": "pending",
       "target_module": [
         "nz/statutes/income_tax/family_scheme/eligibility.yaml"
