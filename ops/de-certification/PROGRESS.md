@@ -1,4 +1,56 @@
-# DE axiom legs and executable replay progress
+# DE measured-discovery ledger progress
+
+## Current lane (2026-08-21)
+
+- Worktree: `oracles-de-discovery`, branch `feat/de-discovery-ledgers`, starting
+  at `56f4e93f3` (`origin/main`).
+- Objective: produce all-pending `axiom_oracles.closure.ledger.v3` discovery
+  ledgers for `de/kindergeld`, `de/unterhaltsvorschuss`, and
+  `de/rv-employee-contribution`; no RuleSpec encoding and no certification or
+  refresh-chain wiring is in scope.
+- Read first, in the requested order: `CERTIFIED.md`; the issue #502 brief;
+  the DK capture/generator/snapshot/ledger/mutant reference files. Also read
+  the mandated path-discovery rules and the cross-family strategy review.
+- The repository-root `PROGRESS.md` is dispositions evidence and remains
+  untouched.
+
+### Preregistered discovery scopes
+
+- `de/kindergeld`: the spine is EStG sections 62 through 78 inclusive. This
+  selects the conservative branch of the preregistered §§62–66 versus §§62–78
+  decision before the automated discovery snapshot is generated. The broad
+  program name and its entitlement/payment surface do not justify silently
+  omitting application, award-change, payment, and special-payment provisions.
+  EStG §31, BKGG, DA-KG, and other discovered dependencies stay in the pending
+  instrument frontier; this is not a legal disposition.
+- `de/unterhaltsvorschuss`: the spine is every direct provision of the compact
+  UhVorschG governing act (sections 1 through 12). The declared MinUhV §1 and
+  EStG §66 dependencies are roots/candidates outside that governing-act spine.
+- `de/rv-employee-contribution`: the spine is the three exact, already-declared
+  source provisions in `closure/de/source.json`: BSV 2018 §1, SGB VI §168, and
+  SVBezGrV 2025 §4. This program name is an expressly narrow contribution-share
+  calculation rather than a claim over every provision of SGB VI.
+
+### Open decision points and constraints
+
+- The DK v3 producer requires committed classifications for every input and
+  instrument. This no-disposition sprint instead derives `pending` from empty
+  decision lists. `leaf_kind` is a separate axis: the four Kindergeld rows
+  already classified by `closure/de/source.json` remain `law_derived`; every
+  other discovered boundary input is `unclassified` pending human review.
+- The current central dependency gate has no `unclassified_inputs` field. The
+  DE producer will count those inputs honestly, which is intentionally
+  fail-closed under today's central shape. Reconciliation belongs to the #502
+  stabilization sprint; this lane will not edit `scripts/certify.py`.
+- Direct network probes from this sandbox currently fail at DNS resolution.
+  The subject-search capture will record each attempted URL as `unretrieved`
+  with the actual failure and will not infer titles, dates, page counts, or
+  byte hashes.
+- The requested `-o` report target is
+  `/Users/maxghenis/TheAxiomFoundation/ops/de-lane/de-discovery-ledgers-report.md`;
+  the Codex CLI captures the final response there.
+
+## Prior lane: DE axiom legs and executable replay
 
 ## State
 
