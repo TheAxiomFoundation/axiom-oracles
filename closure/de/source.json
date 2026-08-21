@@ -295,31 +295,35 @@
       "boundaries": [
         {
           "input": "claimant_entitlement",
-          "classification": "excluded-with-reason",
+          "classification": "open-law-derived-dependency",
           "assignment_required": true,
           "citation_path": "de/statute/estg/62",
-          "reason": "Claimant entitlement is a required supplied input at the amount-subgraph cut; the eligibility rule is outside this certificate view."
+          "reason": "claimant_entitlement is a law-derived quantity (62 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
         },
         {
           "input": "qualifying_child_count",
-          "classification": "excluded-with-reason",
+          "classification": "open-law-derived-dependency",
           "assignment_required": true,
           "citation_path": "de/statute/estg/63",
-          "reason": "Qualifying-child membership is a required supplied input at the amount-subgraph cut; child eligibility is outside this certificate view."
+          "reason": "qualifying_child_count is a law-derived quantity (63 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
         },
         {
           "input": "recipient_priority",
-          "classification": "excluded-with-reason",
+          "classification": "open-law-derived-dependency",
           "assignment_required": true,
           "citation_path": "de/statute/estg/64",
-          "reason": "Recipient priority is a required supplied input at the amount-subgraph cut; resolution of competing claims is outside this certificate view."
+          "reason": "recipient_priority is a law-derived quantity (64 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
         },
         {
           "input": "substitute_child_benefit_exclusion",
-          "classification": "excluded-with-reason",
+          "classification": "open-law-derived-dependency",
           "assignment_required": true,
           "citation_path": "de/statute/estg/65",
-          "reason": "Other child-benefit exclusions are a required supplied input at the amount-subgraph cut; eligibility interactions are outside this certificate view."
+          "reason": "substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
         }
       ]
     },

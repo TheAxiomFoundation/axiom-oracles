@@ -19,7 +19,16 @@ SUMMARY_PATH = OUT_DIR / "summary.json"
 
 # Review pin for the committed denominator. Changing any corpus row,
 # classification, boundary, or program root requires an explicit re-review.
-SOURCE_SHA256 = "84fbc0559bacae1128bb992052791e0ecc78b71137dfc4244f2fc7f622d19bd7"
+_REQUIREMENT_FRONTIER = (
+    "closed: closure must disposition the act's subordinate instruments "
+    "(oracles#491); this closure declares none"
+)
+_REQUIREMENT_DEPENDENCY = (
+    "closed: closure must type every leaf and encode every law-derived "
+    "dependency (CERTIFIED.md v3); this closure declares no "
+    "dependency-closure block"
+)
+SOURCE_SHA256 = "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -374,8 +383,22 @@ def _validate_boundaries(
     for boundary in raw_boundaries:
         if not isinstance(boundary, dict):
             raise ClosureError(f"{program}: boundary contains a non-object entry")
-        if boundary.get("classification") != "excluded-with-reason":
-            raise ClosureError(f"{program}: boundary must be excluded-with-reason")
+        classification = boundary.get("classification")
+        if classification not in {
+            "excluded-with-reason",
+            "open-law-derived-dependency",
+        }:
+            raise ClosureError(
+                f"{program}: boundary classification must be "
+                "excluded-with-reason or open-law-derived-dependency"
+            )
+        if classification == "open-law-derived-dependency" and boundary.get(
+            "leaf_kind"
+        ) != "law_derived":
+            raise ClosureError(
+                f"{program}: an open law-derived dependency must carry "
+                "leaf_kind: law_derived (CERTIFIED.md v3)"
+            )
         if boundary.get("assignment_required") is not True:
             raise ClosureError(
                 f"{program}: every boundary input must require assignment"
@@ -395,7 +418,12 @@ def _validate_boundaries(
                 "basis": boundary.get("basis"),
                 "citation_path": citation,
                 "claim_mode": "attested",
-                "classification": "excluded-with-reason",
+                "classification": classification,
+                **(
+                    {"leaf_kind": boundary["leaf_kind"]}
+                    if classification == "open-law-derived-dependency"
+                    else {}
+                ),
                 "input": boundary["input"],
                 "reason": boundary["reason"],
             }
@@ -517,7 +545,13 @@ def build(source: dict) -> dict:
         all_pending.update(pending)
         all_signature_pending.update(signature_pending)
         status_counts = Counter(row["classification"] for row in source_rows)
-        status_counts["excluded"] += len(boundaries)
+        open_dependencies = [
+            row
+            for row in boundaries
+            if row["classification"] == "open-law-derived-dependency"
+        ]
+        status_counts["excluded"] += len(boundaries) - len(open_dependencies)
+        status_counts["open_dependency"] += len(open_dependencies)
         status_counts["evidence"] += len(evidence_rows)
         signature_counts = Counter(row["signature_state"] for row in source_rows)
         source_closed = not pending
@@ -545,11 +579,26 @@ def build(source: dict) -> dict:
                 if boundary["citation_path"] is not None
             ),
         }
+        # CERTIFIED.md v3: exact-path spine resolution is necessary, never
+        # sufficient. The DE closure declares no subordinate-instrument
+        # frontier and no typed-leaf dependency ledger, so the v3 word
+        # ``closed`` is false for every program until a central-validated
+        # ledger exists; the exact-path result survives as ``spine_closed``.
+        v3_requirements = [
+            _REQUIREMENT_FRONTIER,
+            _REQUIREMENT_DEPENDENCY,
+        ]
         programs[program] = {
             "blockers": [
                 f"{row['citation_path']}: {row['reason']}"
                 for row in source_rows
                 if row["classification"] == "pending"
+            ]
+            + v3_requirements
+            + [
+                f"{row['citation_path']}: {row['input']} is an open "
+                "law-derived dependency (CERTIFIED.md v3)"
+                for row in open_dependencies
             ],
             "boundaries": boundaries,
             "boundary_count": len(boundaries),
@@ -559,13 +608,22 @@ def build(source: dict) -> dict:
             },
             "by_status": {
                 name: status_counts[name]
-                for name in ("encoded", "excluded", "evidence", "pending")
+                for name in (
+                    "encoded",
+                    "excluded",
+                    "evidence",
+                    "pending",
+                    "open_dependency",
+                )
             },
             "citation_root_count": len(citation_roots),
             "citation_paths": citation_paths,
-            "closed": source_closed,
+            "closed": False,
             "closed_claim_mode": "computed",
-            "closure_status": "closed" if source_closed else "open",
+            "closed_requirements": v3_requirements,
+            "closure_status": "open",
+            "spine_closed": source_closed,
+            "spine_closed_claim_mode": "computed",
             "declared_sources": source_rows,
             "evidence_roots": evidence_rows,
             "pending_citations": pending,
@@ -576,8 +634,7 @@ def build(source: dict) -> dict:
                 for citation in signature_pending
             ],
             "signature_pending_citations": signature_pending,
-            "source_closed": source_closed,
-            "source_closed_claim_mode": "computed",
+
             "subgraph_sha256": _canonical_sha256(
                 {
                     "boundaries": boundaries,
@@ -595,8 +652,9 @@ def build(source: dict) -> dict:
         "schema": SUMMARY_SCHEMA,
         "jurisdiction": "de",
         "period": "2025",
-        "closed": all(row["source_closed"] for row in programs.values()),
+        "closed": False,
         "closed_claim_mode": "computed",
+        "spine_closed": all(row["spine_closed"] for row in programs.values()),
         "claim_modes": {
             "attested": (
                 "corpus and RuleSpec pins, module observations, and declared "

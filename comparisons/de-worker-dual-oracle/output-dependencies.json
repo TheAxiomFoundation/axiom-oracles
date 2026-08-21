@@ -29,7 +29,7 @@
           "nodes": []
         }
       ],
-      "dependency_closure_declared_complete": false,
+      "module_artifact_closure_declared_complete": false,
       "missing_dependency_roles": [
         "contribution-liability-income",
         "employee-share",
@@ -48,7 +48,7 @@
         "de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly"
       ],
       "required_artifacts": [],
-      "dependency_closure_declared_complete": false,
+      "module_artifact_closure_declared_complete": false,
       "missing_dependency_roles": [
         "pension-contribution-rate-and-employee-amount-output-closure"
       ]
@@ -64,7 +64,7 @@
         "de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly"
       ],
       "required_artifacts": [],
-      "dependency_closure_declared_complete": false,
+      "module_artifact_closure_declared_complete": false,
       "missing_dependency_roles": [
         "unemployment-contribution-rate-and-employee-amount-output-closure"
       ]
@@ -80,7 +80,7 @@
         "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly"
       ],
       "required_artifacts": [],
-      "dependency_closure_declared_complete": false,
+      "module_artifact_closure_declared_complete": false,
       "missing_dependency_roles": [
         "care-rate-child-status-region-and-employee-amount-output-closure"
       ]
@@ -99,7 +99,7 @@
         "de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual"
       ],
       "required_artifacts": [],
-      "dependency_closure_declared_complete": false,
+      "module_artifact_closure_declared_complete": false,
       "missing_dependency_roles": [
         "income-tax-base-tariff-and-solidarity-surcharge-output-closure"
       ]
@@ -130,8 +130,9 @@
           "nodes": []
         }
       ],
-      "dependency_closure_declared_complete": true,
+      "module_artifact_closure_declared_complete": true,
       "missing_dependency_roles": []
     }
-  ]
+  ],
+  "scope_note": "Module-artifact closure only: declares the RuleSpec artifacts required to execute each declared root on the pinned ref. Legal dependency closure (CERTIFIED.md v3 — instrument frontier, typed leaves) is tracked in closure/de/ and is OPEN for every DE program."
 }

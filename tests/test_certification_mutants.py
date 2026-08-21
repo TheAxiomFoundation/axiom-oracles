@@ -3725,8 +3725,10 @@ def test_de_census_recomputes_ready_state_when_exact_inputs_land(monkeypatch):
 
     result = census.build()
     kindergeld = result["programs"]["de/kindergeld"]
-    assert kindergeld["certificate_status"] == "ready"
-    assert kindergeld["blockers"] == []
+    # Even with a forged all-clear executable status, the census must keep
+    # the certificate pending on the open v3 closure requirements.
+    assert kindergeld["certificate_status"] == "pending"
+    assert kindergeld["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
     amount_root = next(
         row
         for row in kindergeld["declared_roots"]
@@ -4031,7 +4033,10 @@ def test_de_certificate_rederives_closure_instead_of_trusting_summary(
     repo = tmp_path / "repo"
     (repo / "closure/de").mkdir(parents=True)
     summary = json.loads((REPO / "closure/de/summary.json").read_text())
-    summary["programs"]["de/kindergeld"]["closed"] = False
+    # MUTANT: hand-edit the committed summary to claim v3 closure. The
+    # committed truth is closed=false; any edit must fail the rederive
+    # equality, so a forged closed=true can never reach the verdict.
+    summary["programs"]["de/kindergeld"]["closed"] = True
     (repo / "closure/de/summary.json").write_text(json.dumps(summary))
     monkeypatch.setattr(certify, "REPO_ROOT", repo)
     real_spec_from_file_location = importlib.util.spec_from_file_location

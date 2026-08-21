@@ -435,13 +435,13 @@
         ],
         "claim_mode": "computed",
         "complete_on_pinned_ref": false,
-        "declared_complete": false,
         "missing_dependency_roles": [
           "contribution-liability-income",
           "employee-share",
           "average-additional-contribution-rate",
           "assessment-ceiling-and-midijob-output-closure"
-        ]
+        ],
+        "module_artifacts_declared_complete": false
       },
       "kind": "subgraph",
       "leg_id": "axiom-euromod",
@@ -463,10 +463,10 @@
         "available_partial_dependencies": [],
         "claim_mode": "computed",
         "complete_on_pinned_ref": false,
-        "declared_complete": false,
         "missing_dependency_roles": [
           "income-tax-base-tariff-and-solidarity-surcharge-output-closure"
-        ]
+        ],
+        "module_artifacts_declared_complete": false
       },
       "kind": "subgraph",
       "leg_id": "axiom-euromod",
@@ -509,8 +509,8 @@
         "available_partial_dependencies": [],
         "claim_mode": "computed",
         "complete_on_pinned_ref": true,
-        "declared_complete": true,
-        "missing_dependency_roles": []
+        "missing_dependency_roles": [],
+        "module_artifacts_declared_complete": true
       },
       "executable_replay": {
         "case_ids": [
@@ -1008,10 +1008,10 @@
         "available_partial_dependencies": [],
         "claim_mode": "computed",
         "complete_on_pinned_ref": false,
-        "declared_complete": false,
         "missing_dependency_roles": [
           "care-rate-child-status-region-and-employee-amount-output-closure"
-        ]
+        ],
+        "module_artifacts_declared_complete": false
       },
       "kind": "subgraph",
       "leg_id": "axiom-euromod",
@@ -1033,10 +1033,10 @@
         "available_partial_dependencies": [],
         "claim_mode": "computed",
         "complete_on_pinned_ref": false,
-        "declared_complete": false,
         "missing_dependency_roles": [
           "pension-contribution-rate-and-employee-amount-output-closure"
-        ]
+        ],
+        "module_artifacts_declared_complete": false
       },
       "kind": "subgraph",
       "leg_id": "axiom-euromod",
@@ -1058,10 +1058,10 @@
         "available_partial_dependencies": [],
         "claim_mode": "computed",
         "complete_on_pinned_ref": false,
-        "declared_complete": false,
         "missing_dependency_roles": [
           "unemployment-contribution-rate-and-employee-amount-output-closure"
-        ]
+        ],
+        "module_artifacts_declared_complete": false
       },
       "kind": "subgraph",
       "leg_id": "axiom-euromod",

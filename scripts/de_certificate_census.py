@@ -62,7 +62,7 @@ EXPECTED_ROOT_SHAPES = {
         **{
             f"de/statute/estg/{section}": (
                 "boundary_input",
-                "excluded-with-reason",
+                "open-law-derived-dependency",
                 {"not_applicable"},
             )
             for section in (62, 63, 64, 65)
@@ -158,12 +158,14 @@ PROGRAM_DECLARATIONS = {
                 _root(
                     f"de/statute/estg/{section}",
                     role="boundary_input",
-                    classification="excluded-with-reason",
+                    classification="open-law-derived-dependency",
                     signature_state="not_applicable",
                     reason=(
-                        f"EStG section {section} supplies eligibility/payee/child "
-                        "membership at the declared cut and is outside the amount "
-                        "subgraph"
+                        f"EStG section {section} defines how to compute this "
+                        "boundary input; under CERTIFIED.md v3 it is an open "
+                        "law-derived dependency, not an exclusion, and closed "
+                        "stays false until it is encoded to observable-act "
+                        "leaves"
                     ),
                 )
                 for section in (62, 63, 64, 65)
@@ -450,10 +452,12 @@ def validate_declarations(
         row = kindergeld[f"de/statute/estg/{section}"]
         if (
             row.get("role") != "boundary_input"
-            or row.get("classification") != "excluded-with-reason"
+            or row.get("classification") != "open-law-derived-dependency"
         ):
             raise DECensusError(
-                f"de/kindergeld: EStG {section} must remain an excluded boundary"
+                f"de/kindergeld: EStG {section} must remain an open "
+                "law-derived dependency (CERTIFIED.md v3), never a silent "
+                "exclusion"
             )
     evidence = kindergeld["de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz"]
     if (
@@ -558,7 +562,17 @@ def build(declarations: dict | None = None) -> dict:
     for program, declaration in declarations.items():
         blockers: list[str]
         if program == "de/kindergeld":
-            blockers = list(executable.get("blockers") or [])
+            # The executable premise computes, but CERTIFIED.md v3 closure
+            # does not: no instrument frontier, no typed-leaf ledger. The
+            # census must never call this certificate ready while the
+            # certificate itself computes certified=no.
+            blockers = list(executable.get("blockers") or []) + [
+                "closed: closure must disposition the act's subordinate "
+                "instruments (oracles#491); this closure declares none",
+                "closed: closure must type every leaf and encode every "
+                "law-derived dependency (CERTIFIED.md v3); this closure "
+                "declares no dependency-closure block",
+            ]
         elif program == "de/rv-employee-contribution":
             blockers = [
                 "no comparison record has been declared",
