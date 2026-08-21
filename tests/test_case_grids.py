@@ -249,6 +249,29 @@ def test_shared_outputs_are_lifted_to_set_level() -> None:
         assert grid_case_from_spec(spec, case_set) == case_skeleton(live)
 
 
+def test_axiom_relation_records_do_not_leak_into_neutral_grid_parameters() -> None:
+    from axiom_oracles.core.case import Case
+
+    case = Case(
+        case_id="related-records",
+        period="2025",
+        metadata={
+            "scenario": "related-person-records",
+            "yearly_earned_income": 30_000,
+            "axiom_relations": {
+                "be:example#relation.person_of_tax_unit": [
+                    ["head", "taxunit"],
+                    ["spouse", "taxunit"],
+                ]
+            },
+        },
+    )
+
+    skeleton = case_skeleton(case)
+
+    assert skeleton["parameters"] == {"yearly_earned_income": 30_000}
+
+
 def test_mixed_locale_case_set_is_rejected() -> None:
     # A case set is single-jurisdiction; a mixed-locale set would lose per-case
     # locale silently, so extraction must reject it loudly.

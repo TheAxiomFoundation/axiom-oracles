@@ -13,6 +13,9 @@ BE_METADATA = {
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
 COUPLE_PIT_MODULE = "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
 JOINT_ASSESSMENT_MODULE = "be:statutes/income_tax/individual/joint_assessment"
+TAX_FREE_AMOUNT_TAX_MODULE = (
+    "be:statutes/income_tax/individual/tax_free_amount_tax"
+)
 SSC_MODULE = "be:regulations/social_security/workers/employee_contributions"
 EMPLOYER_SSC_MODULE = "be:regulations/social_security/workers/employer_contributions"
 WORK_BONUS_MODULE = "be:regulations/social_security/workers/work_bonus"
@@ -23,6 +26,9 @@ EUROMOD_TO_AXIOM_INPUT_BRIDGE = "euromod_to_axiom_input_bridge"
 WORK_BONUS_REFERENCE_INPUT = (
     f"{WORK_BONUS_MODULE}#input."
     "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+)
+COUPLE_SPOUSE_RELATION = (
+    f"{COUPLE_PIT_MODULE}#relation.belgium_pit_couple_spouse_of_tax_unit"
 )
 
 
@@ -46,9 +52,10 @@ def be_marital_quotient_cases() -> list[Case]:
     their own tax-free amount. The composed
     ``couple_pit_oracle_pipeline`` output is compared to the EUROMOD ``tin_s``
     household aggregate (the runner sums both members' tax). Because the whole
-    household income belongs to spouse A, the ``yem`` bridge feeds the engine's
-    post-uprating gross into spouse A's Article 89 post-exclusion professional
-    income; spouse B's income boundary is pinned at 0.
+    household income belongs to spouse A, the ``yem`` and ``yemeq_s`` bridges
+    feed the engine's post-uprating gross and work-bonus reference remuneration
+    into the related ``head`` Person record. The ``spouse`` Person record is
+    pinned at zero for both worker inputs.
     """
 
     return [
@@ -451,17 +458,22 @@ def _single_worker_case(
 def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
     """One married couple; only spouse A has professional income.
 
-    Spouse A's Article 89 post-exclusion professional income is the bridged
-    boundary (fed the engine's post-uprating gross ``yem``); spouse B is pinned
-    at 0. The Article 126 joint-assessment flags select an ordinary joint
-    assessment, and the Article 87/88 no-tax-increase guard is satisfied, so the
-    Article 87 one-earner marital quotient applies. Local additions are supplied
-    at 0 so the composed federal-plus-local output is comparable to EUROMOD
-    ``tin_s``.
+    The related ``head`` Person is spouse A and runs the imported worker pilot
+    from EUROMOD's post-uprating gross ``yem`` and work-bonus reference
+    ``yemeq_s``. The related ``spouse`` Person is spouse B and is pinned at zero
+    for both worker inputs. The Article 126 joint-assessment flags select an
+    ordinary joint assessment, and the Article 87/88 no-tax-increase guard is
+    satisfied, so the Article 87 one-earner marital quotient applies. Local
+    additions are supplied at 0 so the composed federal-plus-local output is
+    comparable to EUROMOD ``tin_s``.
     """
 
-    spouse_a_income_input = _joint_assessment_input(
-        "belgium_pit_spouse_a_professional_income_after_article_89_exclusions"
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    spouse_a_role_input = _couple_pit_input(
+        "belgium_pit_couple_worker_is_spouse_a"
+    )
+    spouse_b_role_input = _couple_pit_input(
+        "belgium_pit_couple_worker_is_spouse_b"
     )
     return Case(
         case_id=case_id,
@@ -473,10 +485,6 @@ def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
             "scenario": "single-earner-married-couple-marital-quotient",
             "yearly_earned_income": annual_income,
             "axiom_inputs": {
-                spouse_a_income_input: annual_income,
-                _joint_assessment_input(
-                    "belgium_pit_spouse_b_professional_income_after_article_89_exclusions"
-                ): 0,
                 _joint_assessment_input(
                     "belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax"
                 ): 0,
@@ -507,14 +515,90 @@ def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
                 _joint_assessment_input(
                     "belgium_pit_article_87_88_no_tax_increase_condition_met"
                 ): True,
+                _tax_free_amount_tax_input(
+                    "belgium_pit_article_134_joint_lower_income_spouse_supplement_assignment_reduces_joint_state_tax"
+                ): False,
                 _couple_pit_input("belgium_pit_couple_communal_additional_tax_rate"): 0,
                 _couple_pit_input(
                     "belgium_pit_couple_agglomeration_additional_tax_rate"
                 ): 0,
             },
+            "axiom_input_records": [
+                {
+                    "name": remuneration_input,
+                    "entity": "Person",
+                    "entity_id": "head",
+                    "value": annual_income,
+                },
+                {
+                    "name": WORK_BONUS_REFERENCE_INPUT,
+                    "entity": "Person",
+                    "entity_id": "head",
+                    "value": 0,
+                },
+                {
+                    "name": spouse_a_role_input,
+                    "entity": "Person",
+                    "entity_id": "head",
+                    "value": True,
+                },
+                {
+                    "name": spouse_b_role_input,
+                    "entity": "Person",
+                    "entity_id": "head",
+                    "value": False,
+                },
+                {
+                    "name": remuneration_input,
+                    "entity": "Person",
+                    "entity_id": "spouse",
+                    "value": 0,
+                },
+                {
+                    "name": WORK_BONUS_REFERENCE_INPUT,
+                    "entity": "Person",
+                    "entity_id": "spouse",
+                    "value": 0,
+                },
+                {
+                    "name": spouse_a_role_input,
+                    "entity": "Person",
+                    "entity_id": "spouse",
+                    "value": False,
+                },
+                {
+                    "name": spouse_b_role_input,
+                    "entity": "Person",
+                    "entity_id": "spouse",
+                    "value": True,
+                },
+            ],
+            "axiom_relations": {
+                COUPLE_SPOUSE_RELATION: [
+                    ["head", "taxunit"],
+                    ["spouse", "taxunit"],
+                ]
+            },
             "euromod_inputs": _single_earner_couple_euromod_rows(annual_income),
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
-                "yem": [spouse_a_income_input],
+                "yem": {
+                    "records": [
+                        {
+                            "name": remuneration_input,
+                            "entity": "Person",
+                            "entity_id": "head",
+                        }
+                    ]
+                },
+                "yemeq_s": {
+                    "records": [
+                        {
+                            "name": WORK_BONUS_REFERENCE_INPUT,
+                            "entity": "Person",
+                            "entity_id": "head",
+                        }
+                    ]
+                },
             },
         },
         entities=(
@@ -551,6 +635,10 @@ def _joint_assessment_input(name: str) -> str:
 
 def _couple_pit_input(name: str) -> str:
     return f"{COUPLE_PIT_MODULE}#input.{name}"
+
+
+def _tax_free_amount_tax_input(name: str) -> str:
+    return f"{TAX_FREE_AMOUNT_TAX_MODULE}#input.{name}"
 
 
 def _ssc_input(name: str) -> str:

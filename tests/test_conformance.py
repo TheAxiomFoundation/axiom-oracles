@@ -1931,6 +1931,7 @@ def test_burndown_check_fails_on_mutated_commit():
 
 from axiom_oracles.conformance.compositions import (  # noqa: E402
     AXIOM_RULESPEC_ROOT_ENV,
+    SuiteComposition,
     build_compositions_document,
     composition_for_suite,
     compositions_path,
@@ -1995,13 +1996,14 @@ def test_recorded_paths_are_repo_relative_to_the_imports():
             assert path.endswith(".yaml")
 
 
-def test_marital_quotient_is_the_lone_couple_module_not_front_chained():
-    """The archaeology finding, pinned: be-marital-quotient runs the single
-    ``couple_pit_oracle_pipeline`` module as a TaxUnit — it is NOT front-chained
-    with the SSC/forfait/work-bonus stages. Its EUROMOD residual is carried by
-    dispositions (dispositions/be-marital-quotient.yaml), not by a wider
-    program. This guards against a future edit that silently widens the slice
-    and quietly changes what "covered" means for this policy.
+def test_marital_quotient_records_the_related_person_worker_pipeline():
+    """The suite keeps one top-level couple module but supplies its repaired
+    Person worker stages and spouse relation explicitly.
+
+    The old archaeology assertion pinned ``yem`` to a TaxUnit Article-89
+    boundary. rulespec-be#118 moved that boundary behind two related Person
+    worker records, so the composition must preserve those record identities,
+    their relation tuples, and both record-targeted bridges.
     """
     composition = load_composition("be-marital-quotient")
     assert composition is not None
@@ -2009,18 +2011,129 @@ def test_marital_quotient_is_the_lone_couple_module_not_front_chained():
     assert composition.imports == (
         "be:statutes/income_tax/individual/couple_pit_oracle_pipeline",
     )
-    # No employee-SSC / forfait / work-bonus module is chained in front.
+    # The composition records output-derived top-level imports only; the
+    # repaired couple module owns its worker-stage dependencies transitively.
     joined = " ".join(composition.imports)
     assert "employee_contributions" not in joined
     assert "work_bonus" not in joined
-    # The engine post-uprating gross is bridged onto the Article 89 boundary —
-    # the supplied default beyond the suite's own axiom_inputs.
-    assert composition.input_bridge == {
-        "yem": (
-            "be:statutes/income_tax/individual/joint_assessment"
-            "#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions",
-        )
+
+    old_article_89_inputs = {
+        "be:statutes/income_tax/individual/joint_assessment#input."
+        "belgium_pit_spouse_a_professional_income_after_article_89_exclusions",
+        "be:statutes/income_tax/individual/joint_assessment#input."
+        "belgium_pit_spouse_b_professional_income_after_article_89_exclusions",
     }
+    assert old_article_89_inputs.isdisjoint(composition.supplied_input_boundaries)
+    article_134_selector = (
+        "be:statutes/income_tax/individual/tax_free_amount_tax#input."
+        "belgium_pit_article_134_joint_lower_income_spouse_supplement_"
+        "assignment_reduces_joint_state_tax"
+    )
+    assert article_134_selector in composition.supplied_input_boundaries
+
+    gross_input = (
+        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
+        "belgium_pit_article_23_worker_remuneration"
+    )
+    reference_input = (
+        "be:regulations/social_security/workers/work_bonus#input."
+        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+    )
+    record_targets = {
+        (record["entity_id"], record["name"])
+        for record in composition.axiom_input_records
+    }
+    assert len(record_targets) == 8
+    assert record_targets >= {
+        ("head", gross_input),
+        ("head", reference_input),
+        ("spouse", gross_input),
+        ("spouse", reference_input),
+    }
+    relation_name = (
+        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#relation."
+        "belgium_pit_couple_spouse_of_tax_unit"
+    )
+    assert composition.axiom_relations == (
+        {"name": relation_name, "tuple": ("head", "taxunit")},
+        {"name": relation_name, "tuple": ("spouse", "taxunit")},
+    )
+    assert composition.input_bridge == {
+        "yem": {
+            "records": (
+                {
+                    "name": gross_input,
+                    "entity": "Person",
+                    "entity_id": "head",
+                },
+            )
+        },
+        "yemeq_s": {
+            "records": (
+                {
+                    "name": reference_input,
+                    "entity": "Person",
+                    "entity_id": "head",
+                },
+            )
+        },
+    }
+
+
+def test_composition_generically_records_dk_person_targets_and_record_bridge():
+    composition = composition_for_suite("dk-child-youth-benefit-couple")
+
+    assert len(composition.axiom_input_records) == 18
+    assert {record["entity"] for record in composition.axiom_input_records} == {
+        "Person"
+    }
+    assert {record["entity_id"] for record in composition.axiom_input_records} == {
+        "earner",
+        "non_earner",
+    }
+    bridge = composition.input_bridge["tintbto_s"]
+    assert "inputs" not in bridge
+    assert {
+        (record["entity"], record["entity_id"], record["name"])
+        for record in bridge["records"]
+    } == {
+        (
+            "Person",
+            "earner",
+            "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+            "paragraf-1-a#input.personskatteloven_section_7_income_basis",
+        ),
+        (
+            "Person",
+            "earner",
+            "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+            "paragraf-1-a#input."
+            "personskatteloven_section_7_income_basis_after_section_14_recalculation",
+        ),
+    }
+
+
+def test_composition_preserves_transformed_flat_bridge_specs():
+    composition = composition_for_suite("be-birth-leave")
+
+    assert composition.input_bridge == {
+        "yem": {
+            "inputs": (
+                "be:regulations/health_insurance/birth_leave/indemnity_rates#input."
+                "belgium_birth_leave_lost_daily_remuneration_after_article_87_cap",
+                "be:regulations/health_insurance/birth_leave/indemnity_rates#input."
+                "belgium_birth_leave_uncapped_lost_daily_remuneration",
+            ),
+            "divide_by": 312,
+        }
+    }
+    assert SuiteComposition.from_row(composition.to_row()) == composition
+
+
+def test_composition_row_round_trip_preserves_structural_targets():
+    live = composition_for_suite("be-marital-quotient")
+
+    assert SuiteComposition.from_row(live.to_row()) == live
 
 
 def test_worker_ssc_composition_spans_two_modules():

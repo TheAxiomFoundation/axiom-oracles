@@ -47,7 +47,7 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
 | `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open` may only fall. | `scripts/conformance_ratchet.py` |
-| `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
+| `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v2`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), query entity, flat and record-targeted supplied inputs, relation tuples, and engine→input bridges — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
 snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
@@ -251,11 +251,10 @@ re-deriving it.
 
 `conformance/compositions/<jur>.yaml` records it. For every covered suite it
 captures the exact program the harness composes — the same import-set the CLI
-builds, its repo-relative files in the rulespec checkout, the query entity, the
-supplied-input boundaries, and the engine→input **bridge** (the supplied
-defaults *beyond* the suite's own `axiom_inputs`; e.g. EUROMOD `yem` overriding
-the Article-89 professional-income boundary). It is generated from the suites,
-never hand-authored:
+builds, its repo-relative files in the rulespec checkout, the query entity, flat
+supplied-input boundaries, record-targeted supplied inputs, relation tuples, and
+the engine→input **bridge**, including record targets and numeric transforms.
+It is generated from the suites, never hand-authored:
 
 ```bash
 uv run scripts/generate_conformance_compositions.py be          # write
@@ -269,15 +268,15 @@ path — it cannot describe a program the harness would not compile.
 
 **Most BE compositions are a single top-level module** (it transitively imports
 its own stages); only `be-worker-ssc` spans two (`employee_contributions` +
-`work_bonus`, its three outputs). One caveat the record makes explicit and
-honest: **`be-marital-quotient` is *not* front-chained** with the SSC / Article-51
-forfait / work-bonus stages. It runs the lone `couple_pit_oracle_pipeline`
-module as a `TaxUnit`, and its 3/3 residual against EUROMOD `tin_s` (raw match 0)
-is carried entirely by dispositions (`dispositions/be-marital-quotient.yaml`,
-each classed `explained_residual` — the omitted SSC + forfait base reduction, and
-at 30k the refundable work-bonus credit), **not** by a wider program. The
-record therefore describes what actually runs, not an idealised composition that
-would make the raw numbers match.
+`work_bonus`, its three outputs). `be-marital-quotient` likewise imports the
+single top-level `couple_pit_oracle_pipeline`, but its suite now supplies two
+related `Person` records beneath the queried `TaxUnit`: EUROMOD `yem` and
+`yemeq_s` bridge to spouse A's worker inputs, spouse B carries zero worker
+amounts, and the composition records both role facts and spouse→tax-unit
+relations. Its published dispositions predate the repaired rulespec-be#118
+pipeline and remain attached to the current committed 0/3 publication until a
+canonical comparison refresh replaces those observed mismatch rows; a
+supervised worktree validation is not itself a disposition-retirement event.
 
 ### CLI convenience
 
