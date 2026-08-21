@@ -50,6 +50,62 @@
   `/Users/maxghenis/TheAxiomFoundation/ops/de-lane/de-discovery-ledgers-report.md`;
   the Codex CLI captures the final response there.
 
+### Completed measured-discovery artifacts
+
+- Captured all 3,548 pinned corpus rows (3,376 statute and 172 regulation)
+  against corpus commit `6f064ee6081f16440dc706ae09ac60652bb67570` and
+  release content sha256
+  `b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574`.
+  Candidate extraction records sha-bound Fundstelle identity and `stand`
+  changed-by analogues for declared documents, outbound references from each
+  preregistered spine and declared source, targeted inbound references from
+  every pinned row, and every amendment-target key.
+- Committed subject-query set `de-subject-matter-2026-08-21-v1`. All 15 URL
+  retrieval attempts are recorded as `unretrieved` with the actual
+  `URLError: [Errno 8] nodename nor servname provided, or not known` failure;
+  no response metadata or byte hash is asserted. The citation-scan channel is
+  a sha-bound `not_yet_available` receipt for `axiom-corpus#611`.
+- Generated the three schema-v3 all-pending ledgers from empty committed
+  decision lists. Every provision, instrument candidate, and typed frontier
+  input is pending; all three ledgers compute `closed: false`.
+- Measured denominators:
+
+  | candidate | spine | candidate instruments | law-derived leaves | depth lower bound | oracle work | executable work |
+  | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+  | `de/kindergeld` | 18 | 28 | 4 | 1 | 0 | 0 |
+  | `de/unterhaltsvorschuss` | 12 | 20 | 0 | 2 | 2 | 1 |
+  | `de/rv-employee-contribution` | 3 | 11 | 0 | 1 | 2 | 1 |
+
+- Spine counts are pinned-corpus scope counts. Instrument counts are unique
+  candidates found by any captured channel and mean *potentially bearing*,
+  not a legal classification. Law-derived counts include only classifications
+  already committed in `closure/de/source.json`. Depth is the maximum captured
+  declared-module-to-frontier chain and is a lower bound. Remaining work is a
+  target-minus-complete count from the sha-bound current certificate inventory.
+- The instrument and depth figures remain lower bounds because every network
+  row is unretrieved, citation scan #611 is unavailable, and root-reachable
+  transitive RuleSpec import traversal belongs to the stabilization sprint.
+  Work counts can grow when that sprint fixes the claim surface or reviewers
+  disposition the pending frontier.
+
+### Validation and handoff
+
+- Hermetic snapshot and ledger rederivation checks pass. The new DE suite is
+  41/41 green; the existing DK closure mutant suites are 50/50 green; Ruff,
+  bytecode compilation, and `git diff --check` pass. Exact commands and hashes
+  are recorded in `ops/de-certification/validation-2026-08-21.txt`.
+- A broader central-gate selection reports 342 passed and four failures, all
+  in pre-existing DE certificate tests because
+  `conformance/de-certificate-census.json` does not rederive. The underlying
+  `python scripts/de_certificate_census.py --check` failure reproduces at the
+  untouched starting commit `56f4e93f3`; this lane does not refresh or wire
+  that unrelated central artifact.
+- Stabilization must still settle the jurisdiction-neutral v3 shape for
+  unclassified leaves, bind one claim surface across all premises, traverse
+  imports/root-reachable dependency edges, implement successful-query result
+  capture and pagination, consume citation scan #611, and centrally validate
+  without program-name conditionals.
+
 ## Prior lane: DE axiom legs and executable replay
 
 ## State

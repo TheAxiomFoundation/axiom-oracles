@@ -1,0 +1,44 @@
+DE measured-discovery validation checkpoint
+Date: 2026-08-21
+Branch: feat/de-discovery-ledgers
+Starting commit: 56f4e93f3
+
+PASS python scripts/refresh_de_instrument_graph.py --check-snapshot
+  valid: conformance/closure/de-instrument-graph.json
+
+PASS python scripts/de_closure_ledger.py --check --artifact all
+  ok: conformance/closure/de-kindergeld.yaml (closed=false)
+  ok: conformance/closure/de-unterhaltsvorschuss.yaml (closed=false)
+  ok: conformance/closure/de-rv-employee-contribution.yaml (closed=false)
+
+PASS pytest -q tests/test_de_closure_ledger.py
+  41 passed
+
+PASS pytest -q tests/test_closure_ledger_mutants.py tests/test_closure_mutants.py
+  50 passed
+
+PASS ruff check scripts/refresh_de_instrument_graph.py scripts/de_closure_ledger.py tests/test_de_closure_ledger.py
+  All checks passed!
+
+PASS python -m py_compile scripts/refresh_de_instrument_graph.py scripts/de_closure_ledger.py tests/test_de_closure_ledger.py
+
+PASS git diff --check
+
+EXPECTED BASELINE DEBT
+  pytest -q tests/test_de_closure_ledger.py tests/test_closure_ledger_mutants.py tests/test_closure_mutants.py tests/test_certification_mutants.py
+  4 failed, 342 passed
+  All failures are in tests/test_certification_mutants.py and share:
+    ValueError: DE certificate census does not rederive
+  python scripts/de_certificate_census.py --check prints
+    DE certificate census drifted
+  The same census check fails at untouched starting commit 56f4e93f3.
+
+Artifact sha256
+  0901c6a737831bb62dfa52340d6306d48653d710fb0c2ef0fa97024cf66c16aa  conformance/closure/de-subject-matter-queries.json
+  488e904053ac8cc394d6d90f7219db4b73c865bca1b8443fed90f9f43fa0c8fc  conformance/closure/de-instrument-graph.json
+  c299c7b83f7adbf48c51b4ba0ebaa0d18f5ef6d5abf20effc464cbef067ad757  conformance/closure/de-kindergeld.yaml
+  38155bcf6ee5d2e6e234cbe21aeb5c541faedb7b957e00873059594cd9d1d0fa  conformance/closure/de-unterhaltsvorschuss.yaml
+  92185ca89b44f91216f86367ba17ca8d1685ae32bf13fb063feb090ad1cfcd5e  conformance/closure/de-rv-employee-contribution.yaml
+  b1a64cce6ceeb329c1e3fccd555543b6d06fe1b155ccd7de2d74891c7ae4270f  scripts/refresh_de_instrument_graph.py
+  e4da54814bca0f200b16cfeded13005c419afcf22dc9cc25a09b67d37f073386  scripts/de_closure_ledger.py
+  46aa5651a0ba1bd384c4744c6f658e576d6bb480c1faf1b9cbbd8e0f07ce7074  tests/test_de_closure_ledger.py
