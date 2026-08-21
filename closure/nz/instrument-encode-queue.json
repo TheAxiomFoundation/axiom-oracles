@@ -1,0 +1,45 @@
+{
+  "certified_period": {
+    "end": "2027-03-31",
+    "start": "2026-04-01"
+  },
+  "items": [
+    {
+      "bearing_surface": "PAYE deduction timing and mechanics for the standard ACC earners' levy",
+      "defining_provision": "ACC earners' levy deduction and pay-date guidance on Inland Revenue's salary-and-wages deductions page",
+      "eli": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+      "programs": [
+        "nz/acc-earners-levy"
+      ],
+      "reason": "The guidance bears on collection of the certified earners' levy output, but the pinned RuleSpec module names the separate IRD levy-rate page and the 2025 regulations, not this deduction guidance.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+      "target_modules": [
+        "nz/regulations/acc/earners_levy.yaml"
+      ],
+      "title": "Inland Revenue — Deductions from salary and wages"
+    },
+    {
+      "bearing_surface": "GST treatment and GST-inclusive factor in the standard ACC earners' levy calculation",
+      "defining_provision": "Goods and Services Tax Act 1985 ss 5(6EC)–(6EE), 8(1), and 10",
+      "eli": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+      "programs": [
+        "nz/acc-earners-levy"
+      ],
+      "reason": "The Act makes the earners' levy a GST-bearing deemed supply and supplies the 15 percent tax factor; the current RuleSpec computes a GST-inclusive rate without proof-binding these provisions.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+      "target_modules": [
+        "nz/regulations/acc/earners_levy.yaml"
+      ],
+      "title": "Goods and Services Tax Act 1985"
+    }
+  ],
+  "reviewed_acts": [
+    "Accident Compensation Act 2001"
+  ],
+  "schema": "axiom_oracles.nz_instrument_encode_queue.v1",
+  "source_dispositions": "closure/nz/instrument-dispositions.json"
+}

@@ -296,6 +296,8 @@
       "program": "nz/acc-earners-levy",
       "reason": "V3 bearing rule: The corpus inventory records that this PAYE guidance also covers ACC earners' levy deductions. It bears on the certified levy surface but supplies no separate parameter beyond the encoded Earners' Levy Regulations and the separately encoded IRD levy-rate page. The instrument must be encoded; a documented input boundary cannot close it.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
       "status": "pending",
       "target_module": "nz/regulations/acc/earners_levy.yaml"
     },
@@ -309,19 +311,34 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/127/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Indexation) Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/127/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/13/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Ancillary Services) Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/13/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/186/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Insurance (Insurer's Liability to Pay Cost of Treatment) Amendment Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/186/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -332,89 +349,174 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/22/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Lump Sum and Independence Allowance) Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/22/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/390/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Code of ACC Claimants' Rights) Notice 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/390/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/40/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Interest Rates for Payment of Levies) Regulations 2002 regulates post-assessment interest on late levy payments. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/40/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/71/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Public Health Acute Services) Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/71/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/81/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Review Costs and Appeals) Regulations 2002 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2002/81/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/213/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Refund of Fuel Levy) Regulations 2003 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/213/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/273/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Review Costs and Appeals) Amendment Regulations 2003 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/273/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/291/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Applications to Determine Previous and Subsequent Injury Entitlements) Regulations 2003 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/291/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/388/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Regulations 2003 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2003/388/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/186/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Indexation) Amendment Regulations 2004 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/186/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/187/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Indexation of Maximum Weekly Compensation) Regulations 2004 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/187/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/318/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2004 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/318/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/424/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations (No 2) 2004 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2004/424/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/29/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2005 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/29/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/74/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Accredited Employers Framework) Amendment Notice 2005 regulates the accredited-employer claims-management framework. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2005/74/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/116/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Minimum Weekly Earnings) Regulations Revocation Order 2006 regulates an ACC surface outside the standard earners' levy calculation. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/116/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/18/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2006 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2006/18/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -441,14 +543,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/15/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Accredited Employers Framework) Amendment Notice 2007 regulates the accredited-employer claims-management framework. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/15/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/19/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2007 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/19/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -459,9 +571,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/402/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Occupational Diseases) Order 2007 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2007/402/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -496,9 +613,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/303/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Review Costs and Appeals) Amendment Regulations 2008 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/303/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -533,9 +655,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/58/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Accredited Employers Framework) Amendment Notice 2008 regulates the accredited-employer claims-management framework. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/58/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -570,29 +697,54 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/328/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Ancillary Services) Amendment Regulations 2010 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/328/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/329/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2010 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/329/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/330/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Review Costs and Appeals) Amendment Regulations 2010 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/330/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/424/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Apportioning Entitlements for Hearing Loss) Regulations 2010 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/424/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/425/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Insurance (Occupational Hearing Assessment Procedures) Amendment Regulations 2010 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/425/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -659,9 +811,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/11/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2012 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2012/11/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -688,9 +845,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/138/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2013 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/138/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -733,9 +895,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/153/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Apportioning Entitlements for Hearing Loss) Amendment Regulations 2014 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/153/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -746,14 +913,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/162/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Injury Prevention, Rehabilitation, and Compensation (Review Costs and Appeals) Amendment Regulations 2014 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/162/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/29/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Ancillary Services) Amendment Regulations 2014 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/29/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -764,9 +941,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/31/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2014 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/31/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -793,9 +975,14 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/221/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Effective Date for Repeal of Residual Levies Provisions) Notice 2015 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/221/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -830,14 +1017,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/81/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2015 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/81/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/236/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2016 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2016/236/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -920,19 +1117,34 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/72/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Review Costs and Appeals) Amendment Regulations 2017 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/72/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/215/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2018 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/215/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/194/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Definitions) Regulations 2019 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/194/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -975,14 +1187,24 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/41/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2021 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/41/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/42/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Apportioning Entitlements for Hearing Loss) Amendment Regulations 2021 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/42/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": false,
@@ -1025,49 +1247,94 @@
       "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/23/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2023 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/23/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/22/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Framework for the Accredited Employers Programme Amendment 2024 regulates the accredited-employer claims-management framework. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/22/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/230/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Definitions) Amendment Regulations 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/230/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/231/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations (No 3) 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/231/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/232/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Apportioning Entitlements for Hearing Loss) Amendment Regulations (No 2) 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/232/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/36/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/36/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/37/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Apportioning Entitlements for Hearing Loss) Amendment Regulations 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/37/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/82/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Liability to Pay or Contribute to Cost of Treatment) Amendment Regulations (No 2) 2024 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/82/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/17/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Work Account Levies) Regulations 2025 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/17/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": true,
@@ -1079,54 +1346,104 @@
       "status": "encoded"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/19/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Experience Rating) Regulations 2025 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/19/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/20/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Motor Vehicle Account Levies) Regulations 2025 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/20/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/238/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Occupational Diseases) Order 2025 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/238/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/239/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Ancillary Services) Amendment Regulations 2025 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/239/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/240/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Review Costs and Appeals) Amendment Regulations 2025 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/240/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/241/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Occupational Hearing Assessment Procedures) Amendment Regulations 2025 regulates ACC cover, treatment, compensation, claimant, or review entitlements. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/241/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/149/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Interest Rates for Payment of Levies) Amendment Regulations (No 2) 2026 regulates post-assessment interest on late levy payments. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/149/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/29/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Motor Vehicle Account Levies) Amendment Regulations 2026 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/29/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/30/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Work Account Levies) Amendment Regulations 2026 regulates a levy account or adjustment other than the earners' levy. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/30/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
+      "bears_on_computed_surface": false,
+      "classification": "spine_excluded_surface",
       "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/31/en/latest/",
       "program": "nz/acc-earners-levy",
-      "status": "pending"
+      "reason": "The official text of Accident Compensation (Interest Rates for Payment of Levies) Amendment Regulations 2026 regulates post-assessment interest on late levy payments. It does not alter the rate, maximum liable earnings, GST-inclusive factor, or rounding used to compute the certified standard earners' levy under the Accident Compensation (Earners’ Levy) Regulations 2025, so it bears only on spine-excluded surfaces.",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/31/en/latest/",
+      "status": "excluded-with-reason"
     },
     {
       "bears_on_computed_surface": true,
@@ -4727,6 +5044,8 @@
       "provenance": "Pinned-corpus exact-title citation scan and official provision review, 2026-08-20.",
       "reason": "Sections 5(6EC)–(6EE), 8(1), and 10 make the earners' levy a GST-bearing deemed supply and supply the 15 percent tax factor used by the levy surface.",
       "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
       "status": "pending",
       "target_module": [
         "nz/regulations/acc/earners_levy.yaml"

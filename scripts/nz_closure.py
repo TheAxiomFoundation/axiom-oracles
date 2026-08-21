@@ -509,7 +509,11 @@ _DISPOSITION_OPTIONAL = {
     "defining_provision",
     "size_class",
     "target_module",
+    "source_url",
+    "source_checked_at",
 }
+
+B2_INSTRUMENT_REVIEW_DATE = "2026-08-21"
 
 
 def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
@@ -2476,6 +2480,21 @@ def _canonical_instrument_decisions(
         status = value.get("status")
         if status not in INSTRUMENT_STATUSES:
             raise ClosureError(f"{pair[0]} / {pair[1]}: invalid disposition status")
+        source_fields = {"source_url", "source_checked_at"} & set(value)
+        if source_fields:
+            if source_fields != {"source_url", "source_checked_at"}:
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: source review requires URL and date"
+                )
+            if (
+                not isinstance(value["source_url"], str)
+                or not value["source_url"].startswith("https://")
+                or not isinstance(value["source_checked_at"], str)
+                or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value["source_checked_at"])
+            ):
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: invalid source review metadata"
+                )
         if status == "pending":
             unexpected = {"classification", "encoded_by"} & set(value)
             if unexpected:
@@ -2585,6 +2604,8 @@ def _canonical_supplemental_instruments(
         "encoded_by",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     }
     rows: list[dict[str, Any]] = []
     keys: list[str] = []
@@ -2629,6 +2650,17 @@ def _canonical_supplemental_instruments(
             raise ClosureError(
                 f"{eli}: invalid supplemental disposition"
             )
+        source_fields = {"source_url", "source_checked_at"} & set(value)
+        if source_fields:
+            if source_fields != {"source_url", "source_checked_at"}:
+                raise ClosureError(f"{eli}: source review requires URL and date")
+            if (
+                not isinstance(value["source_url"], str)
+                or not value["source_url"].startswith("https://")
+                or not isinstance(value["source_checked_at"], str)
+                or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value["source_checked_at"])
+            ):
+                raise ClosureError(f"{eli}: invalid source review metadata")
         if status == "encoded":
             if value.get("bears_on_computed_surface") is not True:
                 raise ClosureError(f"{eli}: encoded supplement must declare bearing")
@@ -2846,6 +2878,8 @@ def _decision(
     defining_provision: str | None = None,
     size_class: str | None = None,
     target_module: str | None = None,
+    source_url: str | None = None,
+    source_checked_at: str | None = None,
 ) -> dict[str, Any]:
     row: dict[str, Any] = {"status": status}
     for key, value in (
@@ -2857,10 +2891,77 @@ def _decision(
         ("defining_provision", defining_provision),
         ("size_class", size_class),
         ("target_module", target_module),
+        ("source_url", source_url),
+        ("source_checked_at", source_checked_at),
     ):
         if value is not None:
             row[key] = value
     return row
+
+
+def _reviewed_decision(
+    eli: str,
+    status: str,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Bind a B2 disposition to the official source review that supports it."""
+
+    return _decision(
+        status,
+        source_url=eli,
+        source_checked_at=B2_INSTRUMENT_REVIEW_DATE,
+        **kwargs,
+    )
+
+
+def _acc_spine_exclusion_reason(title: str) -> str:
+    """Explain why a live ACC instrument misses the earners'-levy cone."""
+
+    lower = title.lower()
+    if "interest rates for payment of levies" in lower:
+        subject = "post-assessment interest on late levy payments"
+    elif any(
+        phrase in lower
+        for phrase in (
+            "work account levies",
+            "motor vehicle account levies",
+            "experience rating",
+            "fuel levy",
+            "residual levies",
+        )
+    ):
+        subject = "a levy account or adjustment other than the earners' levy"
+    elif "accredited employer" in lower:
+        subject = "the accredited-employer claims-management framework"
+    elif any(
+        phrase in lower
+        for phrase in (
+            "weekly compensation",
+            "indexation",
+            "lump sum",
+            "independence allowance",
+            "cost of treatment",
+            "ancillary services",
+            "hearing",
+            "occupational disease",
+            "claimants' rights",
+            "review costs",
+            "appeals",
+            "previous and subsequent injury entitlements",
+            "public health acute services",
+            "definitions",
+        )
+    ):
+        subject = "ACC cover, treatment, compensation, claimant, or review entitlements"
+    else:
+        subject = "an ACC surface outside the standard earners' levy calculation"
+    return (
+        f"The official text of {title} regulates {subject}. It does not alter "
+        "the rate, maximum liable earnings, GST-inclusive factor, or rounding "
+        "used to compute the certified standard earners' levy under the Accident "
+        "Compensation (Earners’ Levy) Regulations 2025, so it bears only on "
+        "spine-excluded surfaces."
+    )
 
 
 def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str, Any]:
@@ -3073,6 +3174,14 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
         else:
             defining_provision = "2026 main-benefit rate publication and its cited rate provisions"
             size_class = "S"
+        source_review = (
+            {
+                "source_url": eli,
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
+            }
+            if program == "nz/acc-earners-levy"
+            else {}
+        )
         return _decision(
             "pending",
             reason=(
@@ -3083,6 +3192,7 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             defining_provision=defining_provision,
             target_module=target_module,
             size_class=size_class,
+            **source_review,
         )
 
     weekly_compensation = row.get("corpus_citation_path", "").startswith(
@@ -3168,6 +3278,14 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             "excluded-with-reason",
             classification="not_in_force",
             reason=reason,
+            bears_on_computed_surface=False,
+        )
+    if row.get("act_citation_path") == "nz/statute/act/public/2001/0049":
+        return _reviewed_decision(
+            eli,
+            "excluded-with-reason",
+            classification="spine_excluded_surface",
+            reason=_acc_spine_exclusion_reason(title),
             bears_on_computed_surface=False,
         )
     return _decision("pending")
@@ -3408,6 +3526,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "defining_provision": "Goods and Services Tax Act 1985 ss 5(6EC)–(6EE), 8(1), 10",
                 "target_module": ["nz/regulations/acc/earners_levy.yaml"],
                 "size_class": "S",
+                "source_url": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
             {
                 "eli": "https://www.legislation.govt.nz/act/public/1987/129/en/latest/",
@@ -3709,6 +3829,8 @@ def _instrument_ledger_row(
         "defining_provision",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     ):
         if decision.get(key) is not None:
             row[key] = decision[key]
@@ -3735,6 +3857,8 @@ def _supplemental_ledger_row(decision: Mapping[str, Any]) -> dict[str, Any]:
         "defining_provision",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     ):
         if decision.get(key) is not None:
             row[key] = decision[key]
