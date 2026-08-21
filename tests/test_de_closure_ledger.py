@@ -68,7 +68,7 @@ EXPECTED_LEAVES = {
 }
 EXPECTED_MEASURED = {
     "de/kindergeld": (18, 28, 4, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 20, 0, 2, 2, 1),
+    "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -116,6 +116,16 @@ def _assert_strict_count(value: object) -> None:
     assert value >= 0
 
 
+@pytest.fixture(scope="module")
+def refresh_corpus():
+    refresh = _load_refresh_script()
+    source, _source_raw = refresh._read_json(
+        refresh.DEFAULT_SOURCE, refresh.SOURCE_SCHEMA
+    )
+    root = refresh._discover_corpus_root(source)
+    return refresh, refresh._load_corpus(root, source), root
+
+
 def test_public_api_and_three_artifact_paths() -> None:
     module = _load_script()
     assert callable(module.load_document)
@@ -150,6 +160,143 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
         f"de-kg-instr-{number:03d}" for number in range(1, 6)
     ]
     assert all(row["status"] == "pending" for row in kindergeld["seed_bindings"])
+
+
+def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
+
+    refresh._validate_global_extraction_index(index, scanned_row_count=3548)
+    assert index["row_count"] == index["mapped_row_count"] == 3548
+    assert index["body_row_count"] == 3545
+    assert index["unmapped_row_count"] == 0
+    assert index["act_count"] == len(index["acts"]) == 25
+    assert index["mechanism_counts"] == {
+        "amendment_targets": 36,
+        "explicit_cross_reference_body": 2859,
+        "law_metadata_changed_by": 18,
+        "law_metadata_fundstelle": 23,
+    }
+    assert all(
+        fact.get("target_citation_path") != act["document_citation_path"]
+        for act in index["acts"]
+        for fact in act["findings"]
+    )
+    estg = next(
+        row
+        for row in index["acts"]
+        if row["document_citation_path"] == "de/statute/estg"
+    )
+    assert not any(
+        fact.get("source_citation_path") == "de/statute/estg"
+        and fact.get("matched_text") == "Einkommensteuergesetz"
+        for fact in estg["findings"]
+    )
+    self_name_pairs = {
+        (
+            "de/regulation/bgbl-2024-i-312/rbsfv-2025/document-1",
+            "Regelbedarfsstufen-Fortschreibungsverordnung",
+        ),
+        (
+            "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+            "Steuerfortentwicklungsgesetz",
+        ),
+    }
+    assert not any(
+        (fact.get("source_citation_path"), fact.get("matched_text"))
+        in self_name_pairs
+        for act in index["acts"]
+        for fact in act["findings"]
+    )
+    alg_ii = next(
+        row
+        for row in index["acts"]
+        if row["document_citation_path"] == "de/regulation/algiiv-2008"
+    )
+    infection_protection = next(
+        fact
+        for fact in alg_ii["findings"]
+        if fact.get("matched_text") == "Infektionsschutzgesetzes"
+    )
+    assert infection_protection["source_citation_path"] == (
+        "de/regulation/algiiv-2008/1"
+    )
+    assert infection_protection["unresolved_identity"] == (
+        "named-instrument:infektionsschutzgesetzes"
+    )
+
+
+def test_global_corpus_index_drift_is_rejected_after_receipts_are_reforged(
+    refresh_corpus,
+) -> None:
+    refresh, corpus, _root = refresh_corpus
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    channel = snapshot["channels"]["corpus_release"]
+    index = channel["global_extraction_index"]
+    act = next(row for row in index["acts"] if row["findings"])
+    removed = act["findings"].pop()
+    mechanism = removed["mechanism"]
+    act["mechanism_counts"][mechanism] -= 1
+    act["findings_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"findings": act["findings"]})
+    )
+    index["mechanism_counts"][mechanism] -= 1
+    stored_findings = sorted(
+        [fact for row in index["acts"] for fact in row["findings"]],
+        key=lambda fact: refresh._canonical_bytes(fact),
+    )
+    index["canonical_index_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"findings": stored_findings})
+    )
+    index["per_act_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"acts": index["acts"]})
+    )
+    channel["global_extraction_index"] = refresh._add_receipt(index)
+    snapshot["channels"]["corpus_release"] = refresh._add_receipt(channel)
+    kindergeld = next(
+        row for row in snapshot["programs"] if row["id"] == "de/kindergeld"
+    )
+    seed = next(row for row in kindergeld["seed_bindings"] if row["id"] == "de-kg-instr-005")
+    seed["receipts"]["corpus_release"] = snapshot["channels"]["corpus_release"][
+        "receipt_sha256"
+    ]
+    snapshot = refresh._add_receipt(snapshot)
+
+    refresh.validate_snapshot(snapshot)
+    with pytest.raises(
+        refresh.CaptureError, match="global corpus extraction index does not rederive"
+    ):
+        refresh.validate_snapshot(snapshot, corpus=corpus)
+
+
+def test_snapshot_check_rederivation_is_hermetic(
+    refresh_corpus,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    refresh, _corpus, root = refresh_corpus
+
+    def no_network(*_args, **_kwargs):
+        raise AssertionError("DE snapshot --check-snapshot attempted network access")
+
+    monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
+    monkeypatch.setattr(socket, "socket", no_network)
+    monkeypatch.setattr(socket, "create_connection", no_network)
+    original_run = refresh.subprocess.run
+
+    def local_git_only(argv, *args, **kwargs):
+        assert argv[0] == "git"
+        assert argv[1] == "-C"
+        assert argv[3] in {"cat-file", "rev-parse", "show"}
+        assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
+        assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
+        assert not any(str(value).startswith(("http://", "https://")) for value in argv)
+        return original_run(argv, *args, **kwargs)
+
+    monkeypatch.setattr(refresh.subprocess, "run", local_git_only)
+    assert refresh.main(
+        ["--check-snapshot", "--corpus-root", str(root)]
+    ) == 0
 
 
 @pytest.mark.parametrize(

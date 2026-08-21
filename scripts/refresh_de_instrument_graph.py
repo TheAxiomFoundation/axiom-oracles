@@ -102,6 +102,11 @@ def _read_json(path: Path, expected_schema: str) -> tuple[dict[str, Any], bytes]
 
 
 def _run(argv: list[str], *, cwd: Path | None = None) -> bytes:
+    env = None
+    if argv and Path(argv[0]).name == "git":
+        env = os.environ.copy()
+        env["GIT_NO_LAZY_FETCH"] = "1"
+        env["GIT_TERMINAL_PROMPT"] = "0"
     try:
         result = subprocess.run(
             argv,
@@ -109,6 +114,7 @@ def _run(argv: list[str], *, cwd: Path | None = None) -> bytes:
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
+            env=env,
         )
     except (OSError, subprocess.CalledProcessError) as exc:
         detail = ""
@@ -325,16 +331,25 @@ def _document_aliases(document: CorpusRow) -> list[str]:
         number = int(match.group(1))
         roman = {1:"I",2:"II",3:"III",4:"IV",5:"V",6:"VI",7:"VII",8:"VIII",9:"IX",10:"X",11:"XI",12:"XII"}[number]
         ordinal = {1:"Ersten",2:"Zweiten",3:"Dritten",4:"Vierten",5:"Fünften",6:"Sechsten",7:"Siebten",8:"Achten",9:"Neunten",10:"Zehnten",11:"Elften",12:"Zwölften"}[number]
-        aliases.update(
-            {
-                f"SGB {roman}",
-                f"SGB {number}",
-                f"{ordinal} Buch",
-                f"{ordinal} Buches",
-                f"{ordinal} Buch Sozialgesetzbuch",
-                f"{ordinal} Buches Sozialgesetzbuch",
-            }
-        )
+        title_ordinal = {1:"Erstes",2:"Zweites",3:"Drittes",4:"Viertes",5:"Fünftes",6:"Sechstes",7:"Siebtes",8:"Achtes",9:"Neuntes",10:"Zehntes",11:"Elftes",12:"Zwölftes"}[number]
+        grounding = " ".join(aliases)
+        if re.search(
+            rf"\b(?:{re.escape(title_ordinal)}|{re.escape(ordinal)})\b"
+            rf"[^\n]{{0,40}}\bBuch",
+            grounding,
+        ):
+            aliases.update(
+                {
+                    f"{ordinal} Buch",
+                    f"{ordinal} Buches",
+                    f"{ordinal} Buch Sozialgesetzbuch",
+                    f"{ordinal} Buches Sozialgesetzbuch",
+                }
+            )
+        if re.search(rf"(?:\({roman}\)|\bSGB\s*{roman}\b)", grounding):
+            aliases.add(f"SGB {roman}")
+        if re.search(rf"\bSGB\s*{number}\b", grounding):
+            aliases.add(f"SGB {number}")
     return sorted(aliases, key=lambda text: (-len(text), text.casefold()))
 
 
@@ -369,6 +384,463 @@ _HISTORICAL_ACT = re.compile(
 )
 _SECTION = re.compile(r"§{1,2}\s*([0-9]+[a-z]?)", re.IGNORECASE)
 _ANLAGE = re.compile(r"\bAnlage\s+([0-9]+[a-z]?)\b", re.IGNORECASE)
+_NAMED_INSTRUMENT = re.compile(
+    r"(?<![\w])"
+    r"[A-ZÄÖÜ][A-Za-zÄÖÜäöüß0-9/-]*?"
+    r"(?:gesetz(?:es)?|verordnung(?:en|s)?)"
+    r"(?![\w])"
+)
+_NONSPECIFIC_INSTRUMENT_TERMS = {
+    "bundesgesetz",
+    "bundesgesetzes",
+    "einführungsgesetz",
+    "einführungsgesetzes",
+    "ersatzverordnung",
+    "ersatzverordnungen",
+    "landesgesetz",
+    "landesgesetzes",
+    "rechtsverordnung",
+    "rechtsverordnungen",
+    "steuergesetz",
+    "steuergesetzes",
+    "änderungsgesetz",
+    "änderungsgesetzes",
+}
+
+_GLOBAL_INDEX_SCHEMA = "axiom_oracles.closure.de_corpus_extraction_index.v1"
+_GLOBAL_MECHANISMS = (
+    "amendment_targets",
+    "explicit_cross_reference_body",
+    "law_metadata_changed_by",
+    "law_metadata_fundstelle",
+)
+
+
+def _normalized_instrument_name(value: str) -> str:
+    return re.sub(r"[^a-z0-9äöüß]", "", value.casefold())
+
+
+def _generic_reference_matches_aliases(
+    matched_text: str, target_aliases: Iterable[str]
+) -> bool:
+    matched = _normalized_instrument_name(matched_text)
+    for alias in target_aliases:
+        for token_match in _NAMED_INSTRUMENT.finditer(alias):
+            normalized = _normalized_instrument_name(token_match.group(0))
+            if matched in {normalized, f"{normalized}s", f"{normalized}es"}:
+                return True
+    return False
+
+
+def _generic_reference_target(
+    matched_text: str,
+    aliases: Mapping[str, list[str]],
+    source_document: str | None,
+) -> str | None:
+    candidates: set[str] = set()
+    for target_document, target_aliases in aliases.items():
+        if target_document == source_document:
+            continue
+        if _generic_reference_matches_aliases(matched_text, target_aliases):
+            candidates.add(target_document)
+    if len(candidates) == 1:
+        return next(iter(candidates))
+    return None
+
+
+def _span_overlaps(span: tuple[int, int], occupied: Iterable[tuple[int, int]]) -> bool:
+    return any(start < span[1] and span[0] < end for start, end in occupied)
+
+
+def _global_row_findings(
+    row: CorpusRow,
+    corpus: Corpus,
+    aliases: Mapping[str, list[str]],
+) -> list[dict[str, Any]]:
+    """Extract corpus-only discovery facts from one row without disposition."""
+
+    findings: dict[bytes, dict[str, Any]] = {}
+
+    def add(fact: dict[str, Any]) -> None:
+        findings.setdefault(_canonical_bytes(fact), fact)
+
+    metadata = row.value.get("metadata", {})
+    if not isinstance(metadata, Mapping):
+        metadata = {}
+    law = metadata.get("law_metadata", {})
+    if not isinstance(law, Mapping):
+        law = {}
+    for key, mechanism in (
+        ("fundstelle", "law_metadata_fundstelle"),
+        ("stand", "law_metadata_changed_by"),
+    ):
+        raw_reference = law.get(key)
+        if isinstance(raw_reference, str) and raw_reference.strip():
+            add(
+                {
+                    "mechanism": mechanism,
+                    "source_citation_path": row.path,
+                    "source_row_sha256": row.raw_sha256,
+                    "raw_reference": raw_reference,
+                }
+            )
+
+    targets = row.value.get("amendment_targets")
+    if not isinstance(targets, list):
+        targets = metadata.get("amendment_targets")
+    if isinstance(targets, list):
+        for target in sorted({item for item in targets if isinstance(item, str)}):
+            add(
+                {
+                    "mechanism": "amendment_targets",
+                    "source_citation_path": row.path,
+                    "source_row_sha256": row.raw_sha256,
+                    "target_citation_path": target,
+                }
+            )
+
+    body = row.value.get("body")
+    source_document = corpus.document_for_path.get(row.path)
+    if not isinstance(body, str):
+        return [findings[key] for key in sorted(findings)]
+
+    named_spans: list[tuple[int, int]] = []
+    for target_document, target_aliases in aliases.items():
+        for alias in target_aliases:
+            for match in re.finditer(_alias_pattern(alias), body, flags=re.IGNORECASE):
+                named_spans.append(match.span())
+                if target_document == source_document:
+                    continue
+                add(
+                    {
+                        "mechanism": "explicit_cross_reference_body",
+                        "source_citation_path": row.path,
+                        "source_body_sha256": row.body_sha256,
+                        "source_row_sha256": row.raw_sha256,
+                        "matched_text": match.group(0),
+                        "target_citation_path": target_document,
+                        "target_row_sha256": corpus.documents[
+                            target_document
+                        ].raw_sha256,
+                    }
+                )
+
+    corpus_hints = {
+        "sgb-1": "de/statute/sgb-1",
+        "sgb-4": "de/statute/sgb-4",
+        "sgb-7": "de/statute/sgb-7",
+        "sgb-8": "de/statute/sgb-8",
+        "sgb-9": "de/statute/sgb-9",
+        "sgb-10": "de/statute/sgb-10",
+    }
+    for key, pattern in _RAW_REFERENCE_RULES:
+        for match in re.finditer(pattern, body, flags=re.IGNORECASE):
+            if any(start <= match.start() and match.end() <= end for start, end in named_spans):
+                continue
+            named_spans.append(match.span())
+            target = corpus_hints.get(key)
+            fact = {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": row.path,
+                "source_body_sha256": row.body_sha256,
+                "source_row_sha256": row.raw_sha256,
+                "matched_text": match.group(0),
+            }
+            if target in corpus.documents:
+                fact["target_citation_path"] = target
+                fact["target_row_sha256"] = corpus.documents[target].raw_sha256
+            else:
+                fact["unresolved_identity"] = f"law:{key}"
+            add(fact)
+
+    for regex, prefix in (
+        (_EU_REGULATION, "eu-regulation"),
+        (_HISTORICAL_ACT, "bgbl-act"),
+    ):
+        for match in regex.finditer(body):
+            if _span_overlaps(match.span(), named_spans):
+                continue
+            named_spans.append(match.span())
+            normalized = re.sub(r"\s+", " ", match.group(0)).casefold()
+            add(
+                {
+                    "mechanism": "explicit_cross_reference_body",
+                    "source_citation_path": row.path,
+                    "source_body_sha256": row.body_sha256,
+                    "source_row_sha256": row.raw_sha256,
+                    "matched_text": match.group(0),
+                    "unresolved_identity": f"{prefix}:{normalized}",
+                }
+            )
+    for match in _NAMED_INSTRUMENT.finditer(body):
+        if _span_overlaps(match.span(), named_spans):
+            continue
+        if source_document is not None and _generic_reference_matches_aliases(
+            match.group(0), aliases[source_document]
+        ):
+            named_spans.append(match.span())
+            continue
+        if _normalized_instrument_name(match.group(0)) in _NONSPECIFIC_INSTRUMENT_TERMS:
+            named_spans.append(match.span())
+            continue
+        target = _generic_reference_target(match.group(0), aliases, source_document)
+        fact = {
+            "mechanism": "explicit_cross_reference_body",
+            "source_citation_path": row.path,
+            "source_body_sha256": row.body_sha256,
+            "source_row_sha256": row.raw_sha256,
+            "matched_text": match.group(0),
+        }
+        if target is not None:
+            fact["target_citation_path"] = target
+            fact["target_row_sha256"] = corpus.documents[target].raw_sha256
+        else:
+            normalized = re.sub(r"\s+", " ", match.group(0)).casefold()
+            fact["unresolved_identity"] = f"named-instrument:{normalized}"
+        add(fact)
+        named_spans.append(match.span())
+    return [findings[key] for key in sorted(findings)]
+
+
+def _global_corpus_extraction_index(corpus: Corpus) -> dict[str, Any]:
+    """Return a compact, rederivable receipt proving all corpus rows were scanned."""
+
+    aliases = {
+        path: _document_aliases(document)
+        for path, document in sorted(corpus.documents.items())
+    }
+    mechanism_counts = {key: 0 for key in _GLOBAL_MECHANISMS}
+    row_receipts: list[dict[str, Any]] = []
+    all_findings: list[dict[str, Any]] = []
+    act_rows = {path: [] for path in corpus.documents}
+    act_findings = {path: [] for path in corpus.documents}
+    unmapped_row_count = 0
+    body_row_count = 0
+
+    for row in sorted(corpus.rows, key=lambda item: item.path):
+        if isinstance(row.value.get("body"), str):
+            body_row_count += 1
+        findings = _global_row_findings(row, corpus, aliases)
+        all_findings.extend(findings)
+        for fact in findings:
+            mechanism_counts[fact["mechanism"]] += 1
+        source_document = corpus.document_for_path.get(row.path)
+        if source_document in act_rows:
+            act_rows[source_document].append(row)
+            act_findings[source_document].extend(findings)
+        else:
+            unmapped_row_count += 1
+        row_receipts.append(
+            {
+                "citation_path": row.path,
+                "row_sha256": row.raw_sha256,
+                "body_sha256": row.body_sha256,
+                "source_document": source_document,
+                "finding_count": len(findings),
+                "findings_sha256": _sha(_canonical_bytes({"findings": findings})),
+            }
+        )
+
+    acts: list[dict[str, Any]] = []
+    for document_path in sorted(corpus.documents):
+        findings = sorted(
+            act_findings[document_path], key=lambda row: _canonical_bytes(row)
+        )
+        counts = {key: 0 for key in _GLOBAL_MECHANISMS}
+        for fact in findings:
+            counts[fact["mechanism"]] += 1
+        acts.append(
+            {
+                "document_citation_path": document_path,
+                "document_row_sha256": corpus.documents[document_path].raw_sha256,
+                "row_count": len(act_rows[document_path]),
+                "mechanism_counts": counts,
+                "findings_sha256": _sha(_canonical_bytes({"findings": findings})),
+                "findings": findings,
+            }
+        )
+
+    all_findings.sort(key=lambda row: _canonical_bytes(row))
+    index: dict[str, Any] = {
+        "schema": _GLOBAL_INDEX_SCHEMA,
+        "row_count": len(row_receipts),
+        "body_row_count": body_row_count,
+        "mapped_row_count": len(row_receipts) - unmapped_row_count,
+        "unmapped_row_count": unmapped_row_count,
+        "act_count": len(acts),
+        "mechanism_counts": mechanism_counts,
+        "row_scan_sha256": _sha(_canonical_bytes({"rows": row_receipts})),
+        "canonical_index_sha256": _sha(
+            _canonical_bytes({"findings": all_findings})
+        ),
+        "per_act_sha256": _sha(_canonical_bytes({"acts": acts})),
+        "acts": acts,
+        "method": {
+            "row_participation": "one canonical row receipt for every pinned statute and regulation row, including rows with zero findings",
+            "law_metadata": "Fundstelle and stand values read from law_metadata on every row; values remain verbatim corpus facts",
+            "body_references": "every string body scanned; counts are canonical unique source-row/matched-text/target facts from corpus-grounded cross-act aliases, versioned known-reference patterns, and an unmatched specific compound-law/regulation fallback retained verbatim; the committed nonspecific-term stoplist does not assert generic classes as instruments",
+            "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
+            "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts",
+        },
+    }
+    return _add_receipt(index)
+
+
+def _strict_nonnegative_int(value: Any) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
+def _validate_global_extraction_index(
+    index: Mapping[str, Any], *, scanned_row_count: Any
+) -> None:
+    expected_keys = {
+        "schema",
+        "row_count",
+        "body_row_count",
+        "mapped_row_count",
+        "unmapped_row_count",
+        "act_count",
+        "mechanism_counts",
+        "row_scan_sha256",
+        "canonical_index_sha256",
+        "per_act_sha256",
+        "acts",
+        "method",
+        "receipt_sha256",
+    }
+    if set(index) != expected_keys or index.get("schema") != _GLOBAL_INDEX_SCHEMA:
+        raise CaptureError("global corpus extraction index shape is invalid")
+    _verify_receipt(index, "global corpus extraction index")
+    counts = (
+        index.get("row_count"),
+        index.get("body_row_count"),
+        index.get("mapped_row_count"),
+        index.get("unmapped_row_count"),
+        index.get("act_count"),
+    )
+    if not all(_strict_nonnegative_int(value) for value in counts):
+        raise CaptureError("global corpus extraction counts must be nonnegative integers")
+    if (
+        index["row_count"] != scanned_row_count
+        or index["body_row_count"] > index["row_count"]
+        or index["mapped_row_count"] + index["unmapped_row_count"]
+        != index["row_count"]
+    ):
+        raise CaptureError("global corpus extraction row counts do not agree")
+    mechanism_counts = index.get("mechanism_counts")
+    if (
+        not isinstance(mechanism_counts, Mapping)
+        or set(mechanism_counts) != set(_GLOBAL_MECHANISMS)
+        or not all(_strict_nonnegative_int(value) for value in mechanism_counts.values())
+    ):
+        raise CaptureError("global corpus extraction mechanism counts are invalid")
+    for key in ("row_scan_sha256", "canonical_index_sha256", "per_act_sha256"):
+        if not re.fullmatch(r"[0-9a-f]{64}", str(index.get(key, ""))):
+            raise CaptureError(f"global corpus extraction {key} is malformed")
+    acts = index.get("acts")
+    if not isinstance(acts, list) or any(not isinstance(row, Mapping) for row in acts):
+        raise CaptureError("global corpus extraction acts must be a list of mappings")
+    act_paths = [row.get("document_citation_path") for row in acts]
+    if (
+        len(acts) != index["act_count"]
+        or any(not isinstance(value, str) for value in act_paths)
+        or act_paths != sorted(set(act_paths))
+        or sum(
+            row.get("row_count", -1)
+            for row in acts
+            if _strict_nonnegative_int(row.get("row_count"))
+        )
+        != index["mapped_row_count"]
+    ):
+        raise CaptureError("global corpus extraction act rows or counts are invalid")
+    summed = {key: 0 for key in _GLOBAL_MECHANISMS}
+    stored_findings: list[dict[str, Any]] = []
+    for row in acts:
+        if set(row) != {
+            "document_citation_path",
+            "document_row_sha256",
+            "row_count",
+            "mechanism_counts",
+            "findings_sha256",
+            "findings",
+        }:
+            raise CaptureError("global corpus extraction act shape is invalid")
+        if not _strict_nonnegative_int(row.get("row_count")):
+            raise CaptureError("global corpus extraction act row_count is invalid")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(row.get("document_row_sha256", ""))):
+            raise CaptureError("global corpus extraction document hash is malformed")
+        if not re.fullmatch(r"[0-9a-f]{64}", str(row.get("findings_sha256", ""))):
+            raise CaptureError("global corpus extraction act findings hash is malformed")
+        act_counts = row.get("mechanism_counts")
+        if (
+            not isinstance(act_counts, Mapping)
+            or set(act_counts) != set(_GLOBAL_MECHANISMS)
+            or not all(_strict_nonnegative_int(value) for value in act_counts.values())
+        ):
+            raise CaptureError("global corpus extraction act mechanism counts are invalid")
+        findings = row.get("findings")
+        if (
+            not isinstance(findings, list)
+            or any(not isinstance(fact, Mapping) for fact in findings)
+            or findings != sorted(findings, key=lambda fact: _canonical_bytes(fact))
+            or len({_canonical_bytes(fact) for fact in findings}) != len(findings)
+        ):
+            raise CaptureError("global corpus extraction act findings are noncanonical")
+        if row["findings_sha256"] != _sha(
+            _canonical_bytes({"findings": findings})
+        ):
+            raise CaptureError("global corpus extraction act findings digest does not agree")
+        derived_act_counts = {key: 0 for key in _GLOBAL_MECHANISMS}
+        for fact in findings:
+            mechanism = fact.get("mechanism")
+            if mechanism not in derived_act_counts:
+                raise CaptureError("global corpus extraction finding mechanism is invalid")
+            if (
+                not isinstance(fact.get("source_citation_path"), str)
+                or not re.fullmatch(
+                    r"[0-9a-f]{64}", str(fact.get("source_row_sha256", ""))
+                )
+            ):
+                raise CaptureError("global corpus extraction finding source is invalid")
+            if mechanism == "explicit_cross_reference_body":
+                resolved = isinstance(fact.get("target_citation_path"), str) and bool(
+                    re.fullmatch(
+                        r"[0-9a-f]{64}", str(fact.get("target_row_sha256", ""))
+                    )
+                )
+                unresolved = isinstance(fact.get("unresolved_identity"), str)
+                if (
+                    not isinstance(fact.get("matched_text"), str)
+                    or not re.fullmatch(
+                        r"[0-9a-f]{64}", str(fact.get("source_body_sha256", ""))
+                    )
+                    or resolved == unresolved
+                ):
+                    raise CaptureError("global corpus body-reference finding is invalid")
+            derived_act_counts[mechanism] += 1
+            stored_findings.append(dict(fact))
+        if derived_act_counts != act_counts:
+            raise CaptureError("global corpus extraction act findings/counts disagree")
+        for key in _GLOBAL_MECHANISMS:
+            summed[key] += act_counts[key]
+    if summed != mechanism_counts:
+        raise CaptureError("global corpus extraction mechanism counts do not agree by act")
+    stored_findings.sort(key=lambda fact: _canonical_bytes(fact))
+    if index["canonical_index_sha256"] != _sha(
+        _canonical_bytes({"findings": stored_findings})
+    ):
+        raise CaptureError("global corpus extraction canonical digest does not agree")
+    if index["per_act_sha256"] != _sha(_canonical_bytes({"acts": acts})):
+        raise CaptureError("global corpus extraction per-act digest does not agree")
+    method = index.get("method")
+    if not isinstance(method, Mapping) or set(method) != {
+        "row_participation",
+        "law_metadata",
+        "body_references",
+        "amendment_targets",
+        "projection",
+    }:
+        raise CaptureError("global corpus extraction method is invalid")
 
 
 def _scope_paths(program: str, corpus: Corpus) -> set[str]:
@@ -567,11 +1039,11 @@ def _discover_corpus_program(
 
         named_spans: list[tuple[int, int]] = []
         for target_document, target_aliases in aliases.items():
-            if target_document == source_document:
-                continue
             for alias in target_aliases:
                 for match in re.finditer(_alias_pattern(alias), body, flags=re.IGNORECASE):
                     named_spans.append(match.span())
+                    if target_document == source_document:
+                        continue
                     # The corpus body is unstructured prose.  A neighbouring
                     # number can be a paragraph, Absatz, Nummer, amount or
                     # year, so cross-act matches resolve only to the named
@@ -640,6 +1112,50 @@ def _discover_corpus_program(
                         "matched_text": match.group(0),
                     },
                 )
+
+        for match in _NAMED_INSTRUMENT.finditer(body):
+            if _span_overlaps(match.span(), named_spans):
+                continue
+            if _generic_reference_matches_aliases(
+                match.group(0), aliases[source_document]
+            ):
+                named_spans.append(match.span())
+                continue
+            if (
+                _normalized_instrument_name(match.group(0))
+                in _NONSPECIFIC_INSTRUMENT_TERMS
+            ):
+                named_spans.append(match.span())
+                continue
+            target_document = _generic_reference_target(
+                match.group(0), aliases, source_document
+            )
+            if target_document is not None:
+                add_path(
+                    target_document,
+                    {
+                        "mechanism": "explicit_cross_reference_outbound",
+                        "source_citation_path": source_path,
+                        "source_body_sha256": row.body_sha256,
+                        "source_row_sha256": row.raw_sha256,
+                        "matched_text": match.group(0),
+                        "resolved_citation_path": target_document,
+                    },
+                )
+            else:
+                normalized = re.sub(r"\s+", " ", match.group(0)).casefold()
+                add_raw(
+                    f"named-instrument:{normalized}",
+                    match.group(0),
+                    {
+                        "mechanism": "explicit_cross_reference_outbound",
+                        "source_citation_path": source_path,
+                        "source_body_sha256": row.body_sha256,
+                        "source_row_sha256": row.raw_sha256,
+                        "matched_text": match.group(0),
+                    },
+                )
+            named_spans.append(match.span())
 
         # Bare section/Anlage references resolve to the current act.  A named
         # other-law phrase in the immediate suffix suppresses false self-links.
@@ -956,6 +1472,7 @@ def build_snapshot(
         raise CaptureError(f"--corpus-root must be the git top-level: {actual_root}")
     corpus = _load_corpus(root, source)
     captured_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    global_extraction_index = _global_corpus_extraction_index(corpus)
     evidence: dict[str, dict[str, Any]] = {}
     program_candidates = {
         program: _discover_corpus_program(program, source["programs"][program], corpus, evidence)
@@ -971,11 +1488,14 @@ def build_snapshot(
             "release_object": corpus.release_object,
             "scans": sorted(corpus.scans, key=lambda row: row["document_class"]),
             "scanned_row_count": len(corpus.rows),
+            "global_extraction_index": global_extraction_index,
             "extraction_protocol": {
-                "law_metadata": "Fundstelle identity receipts and stand changed_by analogues on every declared-source document",
-                "outbound_cross_references": "provision bodies in each preregistered spine plus every exact declared source",
+                "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
+                "law_metadata": "global index scans every row; program evidence projects Fundstelle identity and stand changed_by analogues from declared-source documents",
+                "outbound_cross_references": "global index scans every body; program evidence projects provision bodies in each preregistered spine plus every exact declared source",
                 "inbound_cross_references": "all pinned rows, targeted to exact spine and declared-source citations",
-                "amendment_targets": "all pinned rows",
+                "amendment_targets": "global index and program projection both scan all pinned rows",
+                "program_projection": "candidate frontiers are the relevant-root projection and do not import unrelated global-index acts",
             },
             "evidence": sorted(evidence.values(), key=lambda row: row["id"]),
         }
@@ -1058,6 +1578,7 @@ def build_snapshot(
         snapshot,
         source_path=source_file,
         query_set_path=query_path,
+        corpus=corpus,
     )
     return snapshot
 
@@ -1067,6 +1588,7 @@ def validate_snapshot(
     *,
     source_path: Path = DEFAULT_SOURCE,
     query_set_path: Path = DEFAULT_QUERY_SET,
+    corpus: Corpus | None = None,
 ) -> None:
     """Validate receipts and the all-pending graph invariants."""
     if snapshot.get("schema") != SCHEMA:
@@ -1094,6 +1616,15 @@ def validate_snapshot(
         _verify_receipt(channel, f"channel {name}")
     if channels["corpus_release"].get("state") != "retrieved":
         raise CaptureError("corpus-release channel must be retrieved")
+    global_index = channels["corpus_release"].get("global_extraction_index")
+    if not isinstance(global_index, Mapping):
+        raise CaptureError("corpus-release channel lacks the global extraction index")
+    _validate_global_extraction_index(
+        global_index,
+        scanned_row_count=channels["corpus_release"].get("scanned_row_count"),
+    )
+    if corpus is not None and global_index != _global_corpus_extraction_index(corpus):
+        raise CaptureError("global corpus extraction index does not rederive")
     citation = channels["citation_scan"]
     if (
         citation.get("state") != "not_yet_available"
@@ -1241,7 +1772,11 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--capture", action="store_true", help="capture and write the snapshot (default)")
-    mode.add_argument("--check-snapshot", action="store_true", help="validate the existing snapshot only")
+    mode.add_argument(
+        "--check-snapshot",
+        action="store_true",
+        help="validate the snapshot and hermetically rederive its corpus index",
+    )
     parser.add_argument("--offline", action="store_true", help="capture explicit unretrieved attempts without network")
     parser.add_argument("--diff", action="store_true", help="capture, show semantic drift, and write nothing")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -1253,10 +1788,27 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.check_snapshot:
             payload = json.loads(args.output.read_bytes())
+            source, _source_raw = _read_json(args.source.resolve(), SOURCE_SCHEMA)
+            root = (
+                args.corpus_root.resolve()
+                if args.corpus_root is not None
+                else _discover_corpus_root(source)
+            )
+            actual_root = Path(
+                _run(["git", "-C", str(root), "rev-parse", "--show-toplevel"])
+                .decode()
+                .strip()
+            ).resolve()
+            if actual_root != root:
+                raise CaptureError(
+                    f"--corpus-root must be the git top-level: {actual_root}"
+                )
+            corpus = _load_corpus(root, source)
             validate_snapshot(
                 payload,
                 source_path=args.source,
                 query_set_path=args.query_set,
+                corpus=corpus,
             )
             print(f"valid: {args.output}")
             return 0

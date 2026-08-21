@@ -306,17 +306,18 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 488e904053ac8cc394d6d90f7219db4b73c865bca1b8443fed90f9f43fa0c8fc
+    snapshot_sha256: 32a330bd94530f4722bacfb423e3efa3499e082b109ddd886b436e017e913ac3
     channel_receipts:
-      corpus_release: c64ae4a8cfbe8b7a724c69fd97811b76275d4cafee587a82153233b8db69f439
-      subject_matter_search: ac41ecc30ce768ee2065443b01a3e323d39cb956dd36489ddcef5113fe3251ca
+      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
+      subject_matter_search: 9dabae8de2ab416bb693417424b85da7fa8456ac3e848a3660002a6009b1f2ec
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
-    candidate_count: 20
+    candidate_count: 21
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
       - de-corpus-3969d462857249ee5505
+      - de-corpus-4ee998583657193d78b4
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
@@ -495,6 +496,19 @@ generated_facts:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-uhv-instr-db7693cd9f018ff4
+      status: pending
+      discovery_refs:
+      - de-corpus-ddd3f4e95580682e4e31
+      identity_kind: corpus_citation
+      citation_path: de/statute/beeg
+      row_sha256: 743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4
+      document_class: statute
+      citation_label: Gesetz zum Elterngeld und zur Elternzeit
+      body_sha256: a8adb00ead8b612cd2acf62607433f9b6f77423a9e56ce7eccbd9deef8bf18af
+      document_citation_path: de/statute/beeg
+      legal_authority_url: https://www.gesetze-im-internet.de/beeg/
+      fundstelle: BGBl I 2006, 2748
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:
@@ -771,13 +785,13 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 20
+    instrument_count: 21
     counts:
-      total: 20
+      total: 21
       encoded: 0
       classified-with-reason: 0
       excluded-with-reason: 0
-      pending: 20
+      pending: 21
     pending:
     - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-1808736a82828a59
@@ -798,6 +812,7 @@ computed:
     - de-uhv-instr-a9efdae38748dd9f
     - de-uhv-instr-b96e03076e143e8e
     - de-uhv-instr-c795a7af57079afc
+    - de-uhv-instr-db7693cd9f018ff4
     - de-uhv-instr-guidance
     complete: false
     ledger:
@@ -805,6 +820,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-3969d462857249ee5505
+      - de-corpus-4ee998583657193d78b4
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
@@ -983,6 +999,19 @@ computed:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-uhv-instr-db7693cd9f018ff4
+      status: pending
+      discovery_refs:
+      - de-corpus-ddd3f4e95580682e4e31
+      identity_kind: corpus_citation
+      citation_path: de/statute/beeg
+      row_sha256: 743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4
+      document_class: statute
+      citation_label: Gesetz zum Elterngeld und zur Elternzeit
+      body_sha256: a8adb00ead8b612cd2acf62607433f9b6f77423a9e56ce7eccbd9deef8bf18af
+      document_citation_path: de/statute/beeg
+      legal_authority_url: https://www.gesetze-im-internet.de/beeg/
+      fundstelle: BGBl I 2006, 2748
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:
@@ -1013,7 +1042,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 20
+    bearing_candidate_instruments: 21
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2
