@@ -9,8 +9,11 @@ The trust split mirrors ``scripts/closure_ledger.py``:
 * ``computed`` is a pure, fail-closed join.  Every provision, instrument and
   typed leaf remains pending.
 
-``--check`` is hermetic.  It reads local git objects and committed files and
-never imports or calls a network client.
+``--check`` is hermetic when the corpus checkout is absent: committed source,
+snapshot, certificate, and ledger bytes are the binding.  When the configured
+corpus checkout exists (or ``--verify-corpus`` is requested), it additionally
+audits the pinned corpus git blobs.  Neither path imports or calls a network
+client.
 """
 
 from __future__ import annotations
@@ -34,6 +37,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_PATH = REPO_ROOT / "closure" / "de" / "source.json"
 SNAPSHOT_PATH = REPO_ROOT / "conformance" / "closure" / "de-instrument-graph.json"
 CORPUS_ROOT = Path.home() / "TheAxiomFoundation" / "axiom-corpus-de-wave"
+CORPUS_ROOT_ENV = "AXIOM_CORPUS_DE_ROOT"
 RULESPEC_ROOT = Path.home() / "TheAxiomFoundation" / "rulespec-de"
 
 SCHEMA = "axiom_oracles.closure.ledger.v3"
@@ -49,11 +53,15 @@ CERTIFICATE_PATHS = {
     / f"de-{program_id.removeprefix('de/').replace('/', '-')}.json"
     for program_id in PROGRAM_IDS
 }
+_ARTIFACT_FILENAMES = {
+    program_id: f"de-{program_id.removeprefix('de/').replace('/', '-')}.yaml"
+    for program_id in PROGRAM_IDS
+}
 ARTIFACT_PATHS = {
     program_id: REPO_ROOT
     / "conformance"
     / "closure"
-    / f"de-{program_id.removeprefix('de/').replace('/', '-')}.yaml"
+    / _ARTIFACT_FILENAMES[program_id]
     for program_id in PROGRAM_IDS
 }
 
@@ -112,6 +120,12 @@ _CAPTURED_MAX_DEPTH = {
     "de/kindergeld": 1,
     "de/unterhaltsvorschuss": 2,
     "de/rv-employee-contribution": 1,
+}
+
+_EXPECTED_SPINE_COUNTS = {
+    "de/kindergeld": 18,
+    "de/unterhaltsvorschuss": 12,
+    "de/rv-employee-contribution": 3,
 }
 
 _KINDERGELD_LEAF_SEEDS = {
@@ -173,6 +187,26 @@ def _sha256(data: bytes) -> str:
 def _canonical_sha(value: Any) -> str:
     return _sha256(
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    )
+
+
+def _canonical_artifact_path(program_id: str) -> Path:
+    return REPO_ROOT / "conformance" / "closure" / _ARTIFACT_FILENAMES[program_id]
+
+
+def _configured_corpus_root(corpus_root: str | Path | None = None) -> Path:
+    configured = corpus_root
+    if configured is None:
+        configured = os.environ.get(CORPUS_ROOT_ENV) or CORPUS_ROOT
+    return Path(configured).expanduser().resolve()
+
+
+def _corpus_skip_note(corpus_root: Path) -> None:
+    print(
+        f"DE closure NOTE: corpus checkout absent at {corpus_root}; committed "
+        "bytes remain binding and corpus blob re-verification was skipped "
+        "(no-op clean)",
+        file=sys.stderr,
     )
 
 
@@ -241,6 +275,19 @@ def load_document(path: Path) -> dict[str, Any]:
         raise ClosureLedgerError((f"could not read {path}: {exc}",)) from exc
     if not isinstance(value, dict):
         raise ClosureLedgerError(("ledger must be a mapping",))
+    return value
+
+
+def _load_committed_document(program_id: str) -> dict[str, Any]:
+    path = _canonical_artifact_path(program_id)
+    relative = path.relative_to(REPO_ROOT).as_posix()
+    data = _git(REPO_ROOT, "show", f"HEAD:{relative}")
+    try:
+        value = yaml.safe_load(data)
+    except yaml.YAMLError as exc:
+        raise _SourceError(f"could not parse committed ledger {relative}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise _SourceError(f"committed ledger must be a mapping: {relative}")
     return value
 
 
@@ -326,7 +373,7 @@ def _spine(program_id: str, index: Mapping[str, Mapping[str, Any]]) -> list[dict
                 raise _SourceError(f"declared spine citation is absent: {citation}")
             selected.append(item)
 
-    expected = 18 if program_id == "de/kindergeld" else 12 if program_id == "de/unterhaltsvorschuss" else 3
+    expected = _EXPECTED_SPINE_COUNTS[program_id]
     if len(selected) != expected:
         raise _SourceError(f"{program_id} spine has {len(selected)} rows, expected {expected}")
 
@@ -885,6 +932,407 @@ def generate_document(
     }
 
 
+def _source_corpus_facts(source: Mapping[str, Any]) -> dict[str, Any]:
+    corpus = source.get("corpus")
+    resolution = source.get("resolution")
+    if not isinstance(corpus, Mapping) or not isinstance(resolution, Mapping):
+        raise _SourceError("source corpus/resolution blocks are missing")
+    provision_sources = corpus.get("provision_sources")
+    if not isinstance(provision_sources, list) or not provision_sources:
+        raise _SourceError("source corpus provision_sources is empty")
+    receipts: list[dict[str, Any]] = []
+    for item in provision_sources:
+        if not isinstance(item, Mapping):
+            raise _SourceError("corpus provision source must be an object")
+        path = item.get("path")
+        sha256 = item.get("sha256")
+        row_count = item.get("row_count")
+        if (
+            not isinstance(path, str)
+            or not isinstance(sha256, str)
+            or not _HEX_SHA256.fullmatch(sha256)
+            or not _is_int(row_count)
+            or row_count < 0
+        ):
+            raise _SourceError("corpus provision source binding is malformed")
+        receipts.append(
+            {"path": path, "sha256": sha256, "row_count": row_count}
+        )
+    for field in ("repository", "commit", "release", "release_content_sha256"):
+        if not isinstance(corpus.get(field), str):
+            raise _SourceError(f"source corpus {field} is malformed")
+    if not _HEX_GIT_SHA.fullmatch(corpus["commit"]):
+        raise _SourceError("source corpus commit is not a full SHA")
+    if not _HEX_SHA256.fullmatch(corpus["release_content_sha256"]):
+        raise _SourceError("source corpus release content hash is malformed")
+    return {
+        "repository": corpus["repository"],
+        "commit": corpus["commit"],
+        "release": corpus["release"],
+        "release_content_sha256": corpus["release_content_sha256"],
+        "resolution": copy.deepcopy(dict(resolution)),
+        "provision_sources": sorted(receipts, key=lambda row: row["path"]),
+    }
+
+
+def _source_program_facts(
+    source: Mapping[str, Any], program_id: str
+) -> dict[str, Any]:
+    programs = source.get("programs")
+    program = programs.get(program_id) if isinstance(programs, Mapping) else None
+    if not isinstance(program, Mapping):
+        raise _SourceError(f"source program is missing: {program_id}")
+    period = source.get("period")
+    if not isinstance(period, str):
+        raise _SourceError("source period is malformed")
+    for field in ("claim_mode", "root_nodes", "declared_sources"):
+        if field not in program:
+            raise _SourceError(f"source program {program_id} lacks {field}")
+    return {
+        "id": program_id,
+        "jurisdiction": "de",
+        "period": period,
+        "claim_mode": program["claim_mode"],
+        "root_nodes": copy.deepcopy(program["root_nodes"]),
+        "declared_sources": copy.deepcopy(program["declared_sources"]),
+        "spine_scope": copy.deepcopy(_SPINE_SCOPES[program_id]),
+    }
+
+
+def _committed_rulespec_facts(
+    source: Mapping[str, Any],
+    program_id: str,
+    committed_modules: Any,
+) -> list[dict[str, Any]]:
+    """Rebind external module identities while trusting committed parsed facts."""
+
+    rulespec = source.get("rulespec")
+    programs = source.get("programs")
+    program = programs.get(program_id) if isinstance(programs, Mapping) else None
+    if (
+        not isinstance(rulespec, Mapping)
+        or not isinstance(program, Mapping)
+        or not isinstance(committed_modules, list)
+        or any(not isinstance(row, Mapping) for row in committed_modules)
+    ):
+        raise _SourceError("committed RuleSpec facts are malformed")
+    module_index = {
+        row.get("citation_path"): row
+        for row in rulespec.get("modules", [])
+        if isinstance(row, Mapping) and isinstance(row.get("citation_path"), str)
+    }
+    committed_by_citation = {
+        row.get("citation_path"): row
+        for row in committed_modules
+        if isinstance(row.get("citation_path"), str)
+    }
+    if len(committed_by_citation) != len(committed_modules):
+        raise _SourceError("committed RuleSpec module citations are duplicated")
+
+    expected: list[dict[str, Any]] = []
+    declared_sources = program.get("declared_sources")
+    if not isinstance(declared_sources, list):
+        raise _SourceError(f"source declared sources are malformed: {program_id}")
+    for declared in declared_sources:
+        citation = declared.get("citation_path") if isinstance(declared, Mapping) else None
+        if not isinstance(citation, str):
+            raise _SourceError(f"malformed declared source for {program_id}")
+        source_module = module_index.get(citation)
+        artifact = source_module.get("artifact") if isinstance(source_module, Mapping) else None
+        if not isinstance(artifact, Mapping):
+            expected.append({"citation_path": citation, "state": "no_artifact"})
+            continue
+        ref = artifact.get("commit", artifact.get("ref"))
+        path = artifact.get("path")
+        sha256 = artifact.get("sha256")
+        if (
+            not isinstance(ref, str)
+            or not _HEX_GIT_SHA.fullmatch(ref)
+            or not isinstance(path, str)
+            or not isinstance(sha256, str)
+            or not _HEX_SHA256.fullmatch(sha256)
+        ):
+            raise _SourceError(f"malformed RuleSpec artifact for {citation}")
+        committed = committed_by_citation.get(citation)
+        if not isinstance(committed, Mapping):
+            raise _SourceError(f"committed ledger lacks RuleSpec module {citation}")
+        rule_count = committed.get("rule_count")
+        declared_imports = committed.get("declared_imports")
+        if (
+            not _is_int(rule_count)
+            or rule_count < 0
+            or not isinstance(declared_imports, list)
+        ):
+            raise _SourceError(f"committed parsed RuleSpec facts are malformed: {citation}")
+        expected.append(
+            {
+                "citation_path": citation,
+                "state": "captured",
+                "ref": ref,
+                "commit": ref,
+                "path": path,
+                "sha256": sha256,
+                "module_id": _module_id(path),
+                "rule_count": rule_count,
+                "declared_imports": copy.deepcopy(declared_imports),
+            }
+        )
+    expected.sort(key=lambda row: row["citation_path"])
+    if set(committed_by_citation) != {row["citation_path"] for row in expected}:
+        raise _SourceError("committed RuleSpec module set differs from declared sources")
+    return expected
+
+
+def _validated_committed_module_inputs(
+    module_inputs: Any, modules: Sequence[Mapping[str, Any]]
+) -> list[dict[str, Any]]:
+    if not isinstance(module_inputs, list):
+        raise _SourceError("committed module_inputs must be a list")
+    known_modules = {
+        row.get("module_id")
+        for row in modules
+        if row.get("state") == "captured" and isinstance(row.get("module_id"), str)
+    }
+    copied: list[dict[str, Any]] = []
+    for row in module_inputs:
+        if not isinstance(row, Mapping) or set(row) != {
+            "slot",
+            "name",
+            "module",
+            "read_by",
+        }:
+            raise _SourceError("committed module input row is malformed")
+        slot = row.get("slot")
+        name = row.get("name")
+        module = row.get("module")
+        read_by = row.get("read_by")
+        if (
+            not isinstance(slot, str)
+            or not isinstance(name, str)
+            or module not in known_modules
+            or slot != f"{module}#input.{name}"
+            or not isinstance(read_by, list)
+            or any(not isinstance(value, str) for value in read_by)
+            or read_by != sorted(set(read_by))
+        ):
+            raise _SourceError(f"committed module input is malformed: {slot!r}")
+        copied.append(copy.deepcopy(dict(row)))
+    slots = [row["slot"] for row in copied]
+    if slots != sorted(slots) or len(slots) != len(set(slots)):
+        raise _SourceError("committed module inputs are duplicated or noncanonical")
+    return copied
+
+
+def _committed_spine(
+    source: Mapping[str, Any],
+    program_id: str,
+    committed_spine: Any,
+    corpus_facts: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    """Validate the committed spine and apply independent source-row receipts."""
+
+    if (
+        not isinstance(committed_spine, list)
+        or len(committed_spine) != _EXPECTED_SPINE_COUNTS[program_id]
+        or any(not isinstance(row, Mapping) for row in committed_spine)
+    ):
+        raise _SourceError(f"{program_id} committed spine count/shape is invalid")
+    provision_sources = {
+        row["path"]: row for row in corpus_facts["provision_sources"]
+    }
+    copied = [copy.deepcopy(dict(row)) for row in committed_spine]
+    identities: list[tuple[int, str]] = []
+    for ordinal, row in enumerate(copied, 1):
+        corpus_ordinal = row.get("corpus_ordinal")
+        citation = row.get("citation_path")
+        receipt = row.get("citation_receipt")
+        if (
+            row.get("ordinal") != ordinal
+            or not _is_int(corpus_ordinal)
+            or not isinstance(citation, str)
+            or not isinstance(row.get("heading"), (str, type(None)))
+            or not isinstance(row.get("body_sha256"), str)
+            or not _HEX_SHA256.fullmatch(row["body_sha256"])
+            or not isinstance(row.get("row_sha256"), str)
+            or not _HEX_SHA256.fullmatch(row["row_sha256"])
+            or not isinstance(receipt, Mapping)
+            or set(receipt) != {"path", "line"}
+        ):
+            raise _SourceError(f"{program_id} committed spine row {ordinal} is malformed")
+        pin = provision_sources.get(receipt.get("path"))
+        line = receipt.get("line")
+        if (
+            not isinstance(pin, Mapping)
+            or not _is_int(line)
+            or line < 1
+            or line > pin["row_count"]
+        ):
+            raise _SourceError(f"{program_id} spine receipt is outside pinned sources")
+        identities.append((corpus_ordinal, citation))
+
+    scope = _SPINE_SCOPES[program_id]
+    if scope["kind"] == "exact_citations":
+        if [citation for _, citation in identities] != scope["citations"]:
+            raise _SourceError(f"{program_id} exact-citation spine scope drifted")
+    else:
+        parent = scope["corpus_root"]
+        if (
+            identities != sorted(identities)
+            or any(
+                corpus_ordinal < scope["first_ordinal"]
+                or corpus_ordinal > scope["last_ordinal"]
+                or not citation.startswith(f"{parent}/")
+                for corpus_ordinal, citation in identities
+            )
+            or identities[0][0] != scope["first_ordinal"]
+            or identities[-1][0] != scope["last_ordinal"]
+        ):
+            raise _SourceError(f"{program_id} ordinal-range spine scope drifted")
+
+    by_citation = {row["citation_path"]: row for row in copied}
+    corpus = source.get("corpus")
+    source_rows = corpus.get("rows", []) if isinstance(corpus, Mapping) else []
+    if not isinstance(source_rows, list):
+        raise _SourceError("source corpus rows must be a list")
+    for source_row in source_rows:
+        if not isinstance(source_row, Mapping):
+            raise _SourceError("source corpus row receipt is malformed")
+        citation = source_row.get("citation_path")
+        target = by_citation.get(citation)
+        if target is None:
+            continue
+        provision_file = source_row.get("provision_file")
+        provision_sha = source_row.get("provision_file_sha256")
+        line_number = source_row.get("line_number")
+        row_sha = source_row.get("row_sha256")
+        body_sha = source_row.get("body_sha256")
+        pin = provision_sources.get(provision_file)
+        if (
+            not isinstance(pin, Mapping)
+            or provision_sha != pin["sha256"]
+            or not _is_int(line_number)
+            or not isinstance(row_sha, str)
+            or not _HEX_SHA256.fullmatch(row_sha)
+            or not isinstance(body_sha, str)
+            or not _HEX_SHA256.fullmatch(body_sha)
+        ):
+            raise _SourceError(f"source corpus row receipt is malformed: {citation}")
+        target["row_sha256"] = row_sha
+        target["body_sha256"] = body_sha
+        target["citation_receipt"] = {
+            "path": provision_file,
+            "line": line_number,
+        }
+    return copied
+
+
+def _hermetic_rederivation(
+    document: Mapping[str, Any],
+    *,
+    source_path: Path,
+    snapshot_path: Path,
+) -> dict[str, Any]:
+    """Rebuild repository-bound projections without any external checkout."""
+
+    program = document.get("program")
+    program_id = program.get("id") if isinstance(program, Mapping) else None
+    if program_id not in PROGRAM_IDS:
+        raise _SourceError("cannot rederive ledger with an unknown program")
+    committed = _load_committed_document(program_id)
+    validate_artifact(committed)
+    if committed.get("program", {}).get("id") != program_id:
+        raise _SourceError(f"committed artifact program mismatch: {program_id}")
+
+    source, source_raw = _source_manifest(source_path)
+    corpus_facts = _source_corpus_facts(source)
+    expected = copy.deepcopy(committed)
+    expected["schema"] = SCHEMA
+    expected["program"] = _source_program_facts(source, program_id)
+    generated = expected["generated_facts"]
+    try:
+        source_relative = source_path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError as exc:
+        raise _SourceError(f"source path is outside the repository: {source_path}") from exc
+    generated["source_manifest"] = {
+        "path": source_relative,
+        "sha256": _sha256(source_raw),
+    }
+    generated["corpus_release"] = corpus_facts
+    generated["provision_spine"] = _committed_spine(
+        source,
+        program_id,
+        generated["provision_spine"],
+        corpus_facts,
+    )
+    generated["rulespec_modules"] = _committed_rulespec_facts(
+        source,
+        program_id,
+        generated["rulespec_modules"],
+    )
+    generated["module_inputs"] = _validated_committed_module_inputs(
+        generated["module_inputs"], generated["rulespec_modules"]
+    )
+    generated["leaf_frontier"] = _leaf_frontier(
+        source,
+        program_id,
+        generated["module_inputs"],
+    )
+    generated["dependency_enumeration"] = {
+        "method": "all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows",
+        "scope": "whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure",
+        "imports": "captured per module; selected DE modules currently declare none",
+    }
+    generated["instrument_graph"] = _snapshot_facts(
+        program_id, snapshot_path, source_path
+    )
+    source_programs = source.get("programs")
+    source_program = (
+        source_programs.get(program_id)
+        if isinstance(source_programs, Mapping)
+        else None
+    )
+    if not isinstance(source_program, Mapping):
+        raise _SourceError(f"source program is missing: {program_id}")
+    generated["measurement_basis"] = _measurement_basis(
+        program_id,
+        source_program,
+        generated["rulespec_modules"],
+        generated["leaf_frontier"],
+    )
+    expected["computed"] = _computed(
+        generated["provision_spine"],
+        generated["leaf_frontier"],
+        generated["instrument_graph"],
+        generated["measurement_basis"],
+    )
+    return expected
+
+
+def _verify_corpus_bindings(
+    document: Mapping[str, Any],
+    *,
+    source_path: Path,
+    corpus_root: Path,
+) -> None:
+    """Optionally re-read pinned corpus blobs, without touching RuleSpec."""
+
+    source, _source_raw = _source_manifest(source_path)
+    program = document.get("program")
+    generated = document.get("generated_facts")
+    program_id = program.get("id") if isinstance(program, Mapping) else None
+    if program_id not in PROGRAM_IDS or not isinstance(generated, Mapping):
+        raise _SourceError("cannot verify corpus bindings for malformed ledger")
+    index, receipts = _corpus_rows(source, corpus_root)
+    live_spine = _spine(program_id, index)
+    corpus_release = generated.get("corpus_release")
+    if (
+        not isinstance(corpus_release, Mapping)
+        or corpus_release.get("provision_sources") != receipts
+        or generated.get("provision_spine") != live_spine
+    ):
+        raise _SourceError("corpus blob re-verification differs from committed facts")
+
+
 def _is_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
@@ -1128,9 +1576,18 @@ def verify_artifact(
     *,
     source_path: Path = SOURCE_PATH,
     snapshot_path: Path = SNAPSHOT_PATH,
-    corpus_root: Path = CORPUS_ROOT,
-    rulespec_root: Path = RULESPEC_ROOT,
+    corpus_root: Path | None = None,
+    rulespec_root: Path | None = None,
+    verify_corpus: bool = False,
 ) -> VerificationResult:
+    """Verify committed projections, optionally auditing their corpus blobs.
+
+    ``rulespec_root`` remains accepted for API compatibility, but check mode
+    intentionally never reads it: RuleSpec paths and hashes are bound by the
+    committed source manifest and parsed facts are bound by the canonical
+    ledger bytes.
+    """
+
     document: dict[str, Any] | None = None
     expected: dict[str, Any] | None = None
     errors: list[str] = []
@@ -1140,15 +1597,26 @@ def verify_artifact(
         program_id = document["program"]["id"]
         if ARTIFACT_PATHS.get(program_id) != artifact_path:
             errors.append(f"artifact path does not match program id {program_id}")
-        expected = generate_document(
-            program_id,
+        expected = _hermetic_rederivation(
+            document,
             source_path=source_path,
             snapshot_path=snapshot_path,
-            corpus_root=corpus_root,
-            rulespec_root=rulespec_root,
         )
         if document != expected:
             errors.append("committed artifact differs from hermetic rederivation")
+        if verify_corpus:
+            resolved_corpus_root = _configured_corpus_root(corpus_root)
+            if not resolved_corpus_root.is_dir():
+                raise _SourceError(
+                    f"--verify-corpus requires the DE corpus checkout at "
+                    f"{resolved_corpus_root}; pass --corpus-root or set "
+                    f"{CORPUS_ROOT_ENV}"
+                )
+            _verify_corpus_bindings(
+                document,
+                source_path=source_path,
+                corpus_root=resolved_corpus_root,
+            )
     except (ClosureLedgerError, _SourceError, OSError, yaml.YAMLError) as exc:
         if isinstance(exc, ClosureLedgerError):
             errors.extend(exc.errors)
@@ -1186,18 +1654,33 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--artifact", help="program id, artifact filename/path, or 'all' (default)")
     parser.add_argument("--source", type=Path, default=SOURCE_PATH)
     parser.add_argument("--snapshot", type=Path, default=SNAPSHOT_PATH)
-    parser.add_argument("--corpus-root", type=Path, default=CORPUS_ROOT)
+    parser.add_argument(
+        "--corpus-root",
+        type=Path,
+        help=f"DE corpus checkout (overrides {CORPUS_ROOT_ENV} and {CORPUS_ROOT})",
+    )
     parser.add_argument("--rulespec-root", type=Path, default=RULESPEC_ROOT)
+    parser.add_argument(
+        "--verify-corpus",
+        action="store_true",
+        help="require re-verification of committed corpus facts against pinned git blobs",
+    )
     args = parser.parse_args(argv)
     try:
         programs = _selected_programs(args.artifact)
         if args.generate:
+            corpus_root = _configured_corpus_root(args.corpus_root)
+            if not corpus_root.is_dir():
+                raise _SourceError(
+                    f"--generate requires the DE corpus checkout at {corpus_root}; "
+                    f"pass --corpus-root or set {CORPUS_ROOT_ENV}"
+                )
             for program_id in programs:
                 document = generate_document(
                     program_id,
                     source_path=args.source,
                     snapshot_path=args.snapshot,
-                    corpus_root=args.corpus_root,
+                    corpus_root=corpus_root,
                     rulespec_root=args.rulespec_root,
                 )
                 validate_artifact(document)
@@ -1205,6 +1688,15 @@ def main(argv: list[str] | None = None) -> int:
                 path.write_text(serialize(document))
                 print(f"wrote {path.relative_to(REPO_ROOT)}")
             return 0
+        corpus_root = _configured_corpus_root(args.corpus_root)
+        verify_corpus = args.verify_corpus or corpus_root.is_dir()
+        if args.verify_corpus and not corpus_root.is_dir():
+            raise _SourceError(
+                f"--verify-corpus requires the DE corpus checkout at {corpus_root}; "
+                f"pass --corpus-root or set {CORPUS_ROOT_ENV}"
+            )
+        if not verify_corpus:
+            _corpus_skip_note(corpus_root)
         failed = False
         for program_id in programs:
             path = ARTIFACT_PATHS[program_id]
@@ -1212,8 +1704,8 @@ def main(argv: list[str] | None = None) -> int:
                 path,
                 source_path=args.source,
                 snapshot_path=args.snapshot,
-                corpus_root=args.corpus_root,
-                rulespec_root=args.rulespec_root,
+                corpus_root=corpus_root,
+                verify_corpus=verify_corpus,
             )
             if result.valid:
                 print(f"ok: {path.relative_to(REPO_ROOT)} (closed=false)")

@@ -13,7 +13,6 @@ import copy
 import importlib.util
 import json
 import socket
-import subprocess
 import sys
 import urllib.request
 from pathlib import Path
@@ -116,14 +115,34 @@ def _assert_strict_count(value: object) -> None:
     assert value >= 0
 
 
+def _committed_ledger_git_only(module):
+    original_run = module.subprocess.run
+    allowed_specs = {
+        f"HEAD:conformance/closure/de-{program.removeprefix('de/').replace('/', '-')}.yaml"
+        for program in PROGRAMS
+    }
+
+    def run(argv, *args, **kwargs):
+        assert argv[:4] == ["git", "-C", str(REPO_ROOT), "show"]
+        assert len(argv) == 5 and argv[4] in allowed_specs
+        assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
+        assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
+        assert not any(
+            str(value).startswith(("http://", "https://")) for value in argv
+        )
+        return original_run(argv, *args, **kwargs)
+
+    return run
+
+
 @pytest.fixture(scope="module")
 def refresh_corpus():
     refresh = _load_refresh_script()
     root = refresh._configured_corpus_root()
     if not root.is_dir():
         pytest.skip(
-            f"DE corpus checkout is missing at {root}; set "
-            f"{refresh.CORPUS_ROOT_ENV} or use --corpus-root"
+            f"DE corpus re-verification skipped: missing corpus root {root}; "
+            f"set {refresh.CORPUS_ROOT_ENV} or use --corpus-root"
         )
     source, _source_raw = refresh._read_json(
         refresh.DEFAULT_SOURCE, refresh.SOURCE_SCHEMA
@@ -627,6 +646,7 @@ def test_hand_flipped_top_level_closed_true_is_rejected() -> None:
 )
 def test_full_verifier_rejects_coordinated_generated_fact_mutation(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
     generated_mutation: str,
 ) -> None:
     """Purely well-shaped generated facts still have to reproduce from sources."""
@@ -653,22 +673,89 @@ def test_full_verifier_rejects_coordinated_generated_fact_mutation(
     _write_document(mutant, document)
     module.ARTIFACT_PATHS["de/kindergeld"] = mutant
 
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
+
     result = module.verify_artifact(artifact_path=mutant)
     assert result.valid is False
     assert result.errors == ("committed artifact differs from hermetic rederivation",)
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
-def test_full_verifier_accepts_each_committed_artifact(program: str) -> None:
+def test_full_verifier_accepts_each_committed_artifact(
+    program: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     module = _load_script()
+
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
     result = module.verify_artifact(
         artifact_path=Path(module.ARTIFACT_PATHS[program])
     )
     assert result.valid is True, result.errors
 
 
+def test_live_corpus_reverification_rejects_a_forged_spine_receipt(
+    tmp_path: Path,
+    refresh_corpus,
+) -> None:
+    _refresh, _corpus, corpus_root = refresh_corpus
+    module = _load_script()
+    original_path = Path(module.ARTIFACT_PATHS["de/kindergeld"])
+    document = copy.deepcopy(_document(module, original_path))
+    document["generated_facts"]["provision_spine"][-1]["body_sha256"] = "0" * 64
+    generated = document["generated_facts"]
+    document["computed"] = module._computed(
+        generated["provision_spine"],
+        generated["leaf_frontier"],
+        generated["instrument_graph"],
+        generated["measurement_basis"],
+    )
+    mutant = tmp_path / "live-corpus-spine.yaml"
+    _write_document(mutant, document)
+    module.ARTIFACT_PATHS["de/kindergeld"] = mutant
+
+    result = module.verify_artifact(
+        artifact_path=mutant,
+        corpus_root=corpus_root,
+        verify_corpus=True,
+    )
+    assert result.valid is False
+    assert any(
+        "corpus blob re-verification differs" in error for error in result.errors
+    )
+
+
+def test_verify_corpus_flag_requires_a_present_checkout(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = _load_script()
+    missing_root = tmp_path / "missing-required-corpus"
+
+    assert module.main(
+        [
+            "--check",
+            "--artifact",
+            "de/kindergeld",
+            "--verify-corpus",
+            "--corpus-root",
+            str(missing_root),
+        ]
+    ) == 1
+    error = capsys.readouterr().err
+    assert "--verify-corpus requires" in error
+    assert "--corpus-root" in error
+    assert module.CORPUS_ROOT_ENV in error
+
+
 def test_check_is_hermetic_for_all_and_each_artifact(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
 ) -> None:
     module = _load_script()
 
@@ -679,19 +766,17 @@ def test_check_is_hermetic_for_all_and_each_artifact(
     monkeypatch.setattr(socket, "create_connection", no_network)
     monkeypatch.setattr(socket, "socket", no_network)
 
-    original_run = subprocess.run
-
-    def local_git_only(argv, *args, **kwargs):
-        assert argv[0] == "git"
-        assert argv[1] == "-C"
-        assert argv[3] in {"rev-parse", "show"}
-        assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
-        assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
-        assert not any(str(value).startswith(("http://", "https://")) for value in argv)
-        return original_run(argv, *args, **kwargs)
-
-    monkeypatch.setattr(module.subprocess, "run", local_git_only)
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
+    missing_root = tmp_path / "missing-de-corpus"
+    monkeypatch.setenv(module.CORPUS_ROOT_ENV, str(missing_root))
 
     assert module.main(["--check", "--artifact", "all"]) == 0
     for _, path in _artifact_items(module):
         assert module.main(["--check", "--artifact", str(path)]) == 0
+    note = capsys.readouterr().err
+    assert "DE closure NOTE:" in note
+    assert str(missing_root) in note
+    assert "committed bytes remain binding" in note
+    assert "no-op clean" in note
