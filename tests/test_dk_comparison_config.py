@@ -181,8 +181,8 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     # Under definition v3 (CERTIFIED.md), closed additionally requires
     # dependency closure: no law-derived leaf may be case-supplied, and no
     # classified instrument may bear on a computed surface. The dk ledger
-    # honestly declares 49 law-derived leaves and 8 bearing instruments, so
-    # closed computes false and certified reads no with the encoding
+    # honestly declares 55 law-derived leaves and 16 bearing instruments,
+    # so closed computes false and certified reads no with the encoding
     # worklist in the verdict.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
