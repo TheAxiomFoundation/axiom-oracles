@@ -68,7 +68,7 @@
         "de/kindergeld"
       ],
       "source_id": "bzst",
-      "query": "DA-KG Stand 2025 PDF linked from the BZSt Kindergeld listing",
+      "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
       "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
       "candidate_seed": "de-kg-instr-001"
     },

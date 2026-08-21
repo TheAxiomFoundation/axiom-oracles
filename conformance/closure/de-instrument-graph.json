@@ -1,0 +1,1891 @@
+{
+  "schema": "axiom_oracles.closure.de_instrument_graph.v1",
+  "generated_at": "2026-08-21T18:51:54Z",
+  "source": {
+    "path": "closure/de/source.json",
+    "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
+  },
+  "query_set": {
+    "path": "conformance/closure/de-subject-matter-queries.json",
+    "sha256": "0901c6a737831bb62dfa52340d6306d48653d710fb0c2ef0fa97024cf66c16aa"
+  },
+  "channels": {
+    "corpus_release": {
+      "state": "retrieved",
+      "repository": "TheAxiomFoundation/axiom-corpus",
+      "release": "de-rulespec-2026-07-21",
+      "commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
+      "release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+      "release_object": {
+        "path": "/Users/maxghenis/TheAxiomFoundation/axiom-corpus-de-wave/releases/de-rulespec-2026-07-21/b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574.json",
+        "raw_sha256": "9fe9d488465280bf5828df9580ec4ee7bee6341ff71991f1b32e5f3d7dbb6070",
+        "content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574"
+      },
+      "scans": [
+        {
+          "document_class": "regulation",
+          "inventory": {
+            "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
+            "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
+            "row_count": 172
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+            "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+            "row_count": 172
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
+            "sha256": "0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974",
+            "row_count": 3376
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+            "sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+            "row_count": 3376
+          }
+        }
+      ],
+      "scanned_row_count": 3548,
+      "evidence": [
+        {
+          "id": "de-corpus-02c3e286a3632391d014",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "amendment_targets_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_targets": [
+            "de/statute/estg/66"
+          ]
+        },
+        {
+          "id": "de-corpus-043880c8a12aa41c518e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/77",
+          "source_body_sha256": "a1426884fadc630dbb48c1e526de8f19f0a0dbce6b09b05e6f68b2353be18e1b",
+          "source_row_sha256": "48175755021b683b4e9b8ed87f197ce25be516b5caa04d61faf4fbf17738b538",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-0594f54efd79932c7613",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Zweiten Buch",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-05a43bd8718a27d94769",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-0968fed57876c5e3f015",
+          "program": "de/kindergeld",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "RGBl I 1934, 1005"
+        },
+        {
+          "id": "de-corpus-111c2e5574197a8e8017",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "Neunten Buches"
+        },
+        {
+          "id": "de-corpus-16b40f8ab12eac3755ff",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/70",
+          "source_body_sha256": "6f131d87cc89b61e1c10f817c3781bcc1c6b5a1fac4aa2776f827adb8ddb7c52",
+          "source_row_sha256": "29bc4f386201ba3bd1420ab42c3b34e8f38880476bd591be4925c133acaaf263",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-1b65ac76074a9e4d0fd1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Dritten Buch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-1da0e4fc2277d5705f97",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/statute/sgb-6",
+          "source_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56",
+          "raw_reference": "BGBl I 1989, 2261 (1990 I 1337)"
+        },
+        {
+          "id": "de-corpus-262a6432328a23e9d801",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/estg/3",
+          "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
+          "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
+          "matched_text": "Sechsten Buches Sozialgesetzbuch erbrachte Leistungen zufließen und der Arbeitgeber für diese Leistungen Beiträge nach § 168",
+          "resolved_citation_path": "de/statute/sgb-6/168"
+        },
+        {
+          "id": "de-corpus-27b3386012358a3cd94f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/77",
+          "source_body_sha256": "a1426884fadc630dbb48c1e526de8f19f0a0dbce6b09b05e6f68b2353be18e1b",
+          "source_row_sha256": "48175755021b683b4e9b8ed87f197ce25be516b5caa04d61faf4fbf17738b538",
+          "matched_text": "Steuerberatungsgesetzes"
+        },
+        {
+          "id": "de-corpus-2f102ab8134aa0f24d44",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Gesetzes vom 23. Mai 2022 (BGBl. I S. 760)"
+        },
+        {
+          "id": "de-corpus-31f4641c5fcedc0d42b9",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Dritten Buch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-334b97469237730f3b68",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/63",
+          "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
+          "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
+          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
+        },
+        {
+          "id": "de-corpus-3472b2f7643e1b771a3a",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/6",
+          "source_body_sha256": "3cb54e150504edefb540fb32559e4044d69031e3b74ec8631cc990c1307af4e2",
+          "source_row_sha256": "16c3780e5f0f82a4f8561bfb66e2cb378e78fa343e4455be37e9eb01f66c5daa",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-3829f704c28eb570310c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
+        },
+        {
+          "id": "de-corpus-3969d462857249ee5505",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/2",
+          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+          "matched_text": "Bundeskindergeldgesetz",
+          "resolved_citation_path": "de/statute/bkgg-1996"
+        },
+        {
+          "id": "de-corpus-3b7b161daf8fe143921a",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/sgb-6",
+          "source_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56",
+          "raw_reference": "zuletzt geändert durch Art. 2 Abs. 10 G v. 12.5.2026 I Nr. 143"
+        },
+        {
+          "id": "de-corpus-406eda822701b301f22a",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/uhvorschg",
+          "source_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1",
+          "raw_reference": "zuletzt geändert durch Art. 44 G v. 2.12.2024 I Nr. 387"
+        },
+        {
+          "id": "de-corpus-42cb174d59c13ca15840",
+          "program": "de/kindergeld",
+          "mechanism": "amendment_targets_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_targets": [
+            "de/statute/estg/66"
+          ]
+        },
+        {
+          "id": "de-corpus-435c693f7d95c84c73a0",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "RGBl I 1934, 1005"
+        },
+        {
+          "id": "de-corpus-443ad0c2567894367d0f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Dritten Buch Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-4557bdb1577aa4d1661e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/63",
+          "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
+          "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
+          "matched_text": "§ 32",
+          "resolved_citation_path": "de/statute/estg/32"
+        },
+        {
+          "id": "de-corpus-4b0837db61b89b31ba27",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Freizügigkeitsgesetzes/EU"
+        },
+        {
+          "id": "de-corpus-4fd223b074792f0bf060",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Achten Buch Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-5016e64524a26332b65e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/65",
+          "source_body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+          "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+          "matched_text": "Sechsten Buches Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-6"
+        },
+        {
+          "id": "de-corpus-54424a966f565cf32a11",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-57c5b247ffc94f0f1f01",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Ausländergesetz"
+        },
+        {
+          "id": "de-corpus-5f705aae8523970f1a25",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/2",
+          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+          "matched_text": "Bürgerlichen Gesetzbuchs"
+        },
+        {
+          "id": "de-corpus-60d4295a9edb13e2c1c3",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/65",
+          "source_body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+          "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+          "matched_text": "Dritten Buches Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-62426bac3f50a2b0ae6f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/wogg/17",
+          "source_body_sha256": "e79e6989f48911c3aaaf644df4b89475b8b5386d8a24366cc7bacc8f3a4b3976",
+          "source_row_sha256": "94c7bccced2e1e13f3c6439de925f02848d7eb4bc2eaa08238f648c150b8e712",
+          "matched_text": "Einkommensteuergesetz oder dem Bundeskindergeldgesetz oder eine in § 65",
+          "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
+          "id": "de-corpus-62e92e01e49ba1d80a17",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/74",
+          "source_body_sha256": "28449f93643c4726739d44693ba2e14a6f05923c518ccf0740098941ee75434f",
+          "source_row_sha256": "86468814e390258150f0b2dfca3a7b94affc42d7b8551b6e6b68c3f03f352694",
+          "matched_text": "Zehnten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-6325e3cfc763b223aeaa",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)"
+        },
+        {
+          "id": "de-corpus-65740a9c68e8a6636d75",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/65",
+          "source_body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+          "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+          "matched_text": "Sechsten Buches",
+          "resolved_citation_path": "de/statute/sgb-6"
+        },
+        {
+          "id": "de-corpus-65ec17810d7bb50cadf7",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/69",
+          "source_body_sha256": "93f80e3daec0e47864f22d981345b4120b425e722da59cac589b739294cbc79b",
+          "source_row_sha256": "1d9e6909303278d1c7f8533774e4ffa05ff49de197fd6a081d45947df97366a6",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-6d4c3e36d18b468a9b05",
+          "program": "de/kindergeld",
+          "mechanism": "amendment_targets_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "source_row_sha256": "1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840",
+          "matched_targets": [
+            "de/statute/estg/66"
+          ]
+        },
+        {
+          "id": "de-corpus-6f9020d3778b517e3e2a",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/65",
+          "source_body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+          "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+          "matched_text": "Dritten Buches",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-71149390efb48e142347",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "§ 19",
+          "resolved_citation_path": "de/statute/estg/19"
+        },
+        {
+          "id": "de-corpus-76f0ac1f8c887e222870",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "§ 2",
+          "resolved_citation_path": "de/statute/estg/2"
+        },
+        {
+          "id": "de-corpus-7bd10338303e55be1c0b",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "Vierten Buches",
+          "resolved_citation_path": "de/statute/sgb-4"
+        },
+        {
+          "id": "de-corpus-7ca2ebb4684aaf979da8",
+          "program": "de/kindergeld",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
+        },
+        {
+          "id": "de-corpus-7dd34add44b01ccd165a",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/75",
+          "source_body_sha256": "912edd85878e84da861a0cf5864f0fd1a3b669ad32018a82370c6547464b6141",
+          "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
+          "matched_text": "Zwölften Buches Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-12"
+        },
+        {
+          "id": "de-corpus-7e859fe4d0b37195ca71",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "Neunten Buch"
+        },
+        {
+          "id": "de-corpus-80ca528e0ed2cceb764a",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "amendment_targets_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "source_row_sha256": "1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840",
+          "matched_targets": [
+            "de/statute/estg/66"
+          ]
+        },
+        {
+          "id": "de-corpus-8147c0d164d863cdebe4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/63",
+          "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
+          "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-86534602aca6487afa11",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Dritten Buch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-8b8889a0b2d2e5f82791",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Dritten Buch Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-8bba30603b49eb761e1d",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Dritten Buch Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-8dea5815916d5548e053",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Zweiten Buches Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-8fbae7ccbaf5d47aaa5d",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Ersten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-90a23c3ab93d95bf6dd8",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/regulation/bsv-2018",
+          "source_row_sha256": "76b10c8ff0cb0d5d01528107048aa7ab4a723421c66c4653b622444c20d61ba1",
+          "raw_reference": "BGBl I 2017, 3976"
+        },
+        {
+          "id": "de-corpus-9140eb4c223a509ac378",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "§ 1",
+          "resolved_citation_path": "de/statute/estg/1"
+        },
+        {
+          "id": "de-corpus-91a13bc056d2f6555939",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "Altersteilzeitgesetz"
+        },
+        {
+          "id": "de-corpus-96ed78a0f8293d733120",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "§ 19",
+          "resolved_citation_path": "de/statute/estg/19"
+        },
+        {
+          "id": "de-corpus-987aa38335eab2d641d5",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/regulation/minuhv",
+          "source_row_sha256": "b970791c02918f4ff304f6b17adc2f4667a4b9d726732e8e665f030667e1187c",
+          "raw_reference": "BGBl I 2015, 2188"
+        },
+        {
+          "id": "de-corpus-995170ff8fc2b96f7c5b",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Verordnung (EU) 2017/492"
+        },
+        {
+          "id": "de-corpus-9d8abcec25586f6b71be",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/statute/uhvorschg",
+          "source_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1",
+          "raw_reference": "BGBl I 1979, 1184"
+        },
+        {
+          "id": "de-corpus-9e5086c125d97f01587d",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "Altersteilzeitgesetzes"
+        },
+        {
+          "id": "de-corpus-a12d2b6db22397cc343b",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Zehnten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-a49ede988cd5dd032b48",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "law_metadata_fundstelle",
+          "source_citation_path": "de/regulation/svbezgrv-2025",
+          "source_row_sha256": "87b929359bc598a30132deed477ec45586e44c9bc203c61bc07016eea10aef2b",
+          "raw_reference": "BGBl. I 2024, Nr. 365"
+        },
+        {
+          "id": "de-corpus-a908aed35b7d1ceeda30",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/66",
+          "source_body_sha256": "2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e",
+          "source_row_sha256": "2a4472648ac2a7678a43fff5b0c683eb040caff25d644d324302cdac6d737272",
+          "matched_text": "§ 32",
+          "resolved_citation_path": "de/statute/estg/32"
+        },
+        {
+          "id": "de-corpus-afcb95a25eb1fc7228ae",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/69",
+          "source_body_sha256": "93f80e3daec0e47864f22d981345b4120b425e722da59cac589b739294cbc79b",
+          "source_row_sha256": "1d9e6909303278d1c7f8533774e4ffa05ff49de197fd6a081d45947df97366a6",
+          "matched_text": "§ 32",
+          "resolved_citation_path": "de/statute/estg/32"
+        },
+        {
+          "id": "de-corpus-b0eeca04259f7ddeb7ff",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/65",
+          "source_body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+          "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+          "matched_text": "Siebten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-b148bd4938a47c1c2719",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Zweiten Buches",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-b55b0cb5e19d73524db2",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/66",
+          "source_body_sha256": "2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e",
+          "source_row_sha256": "2a4472648ac2a7678a43fff5b0c683eb040caff25d644d324302cdac6d737272",
+          "matched_text": "§ 31",
+          "resolved_citation_path": "de/statute/estg/31"
+        },
+        {
+          "id": "de-corpus-b7ca49921d36915d52ed",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "§ 19a",
+          "resolved_citation_path": "de/statute/estg/19a"
+        },
+        {
+          "id": "de-corpus-ba21485fd75ad89b02e1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/uhvorschg/2",
+          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+          "matched_text": "Einkommensteuergesetz oder nach dem Bundeskindergeldgesetz in der jeweils geltenden Fassung oder auf eine der in § 65",
+          "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
+          "id": "de-corpus-bb0bea162872670bb36e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/75",
+          "source_body_sha256": "912edd85878e84da861a0cf5864f0fd1a3b669ad32018a82370c6547464b6141",
+          "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
+          "matched_text": "Zweiten Buches Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-bf0631b273ba225e34e0",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Zweiten Buch Sozialgesetzbuch",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-bf6f5d15cdf37cb277f4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/sgb-3/26",
+          "source_body_sha256": "5d4aaf46595de37ce42b063c87d6086661cb3a70f8a0719d9203d36e940c5145",
+          "source_row_sha256": "81b52ea3d8382a6c9e8ddd5a4d2c7908b0404eed0a43dee82369f54ddc6379c0",
+          "matched_text": "Einkommensteuergesetz oder Bundeskindergeldgesetz haben oder ohne die Anwendung des § 64",
+          "resolved_citation_path": "de/statute/estg/64"
+        },
+        {
+          "id": "de-corpus-bff0604ab434028f691b",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/75",
+          "source_body_sha256": "912edd85878e84da861a0cf5864f0fd1a3b669ad32018a82370c6547464b6141",
+          "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
+          "matched_text": "Zweiten Buches",
+          "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-c30ae063c5bb2bbca5c6",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/69",
+          "source_body_sha256": "93f80e3daec0e47864f22d981345b4120b425e722da59cac589b739294cbc79b",
+          "source_row_sha256": "1d9e6909303278d1c7f8533774e4ffa05ff49de197fd6a081d45947df97366a6",
+          "matched_text": "§ 39e",
+          "resolved_citation_path": "de/statute/estg/39e"
+        },
+        {
+          "id": "de-corpus-c6487482f9862ba1d50e",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/6",
+          "source_body_sha256": "3cb54e150504edefb540fb32559e4044d69031e3b74ec8631cc990c1307af4e2",
+          "source_row_sha256": "16c3780e5f0f82a4f8561bfb66e2cb378e78fa343e4455be37e9eb01f66c5daa",
+          "matched_text": "Zivilprozessordnung"
+        },
+        {
+          "id": "de-corpus-caf0f56af53ffc8164d1",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Bürgerlichen Gesetzbuchs"
+        },
+        {
+          "id": "de-corpus-d4040ccf15ddd057ae22",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Aufenthaltsgesetzes"
+        },
+        {
+          "id": "de-corpus-d6536f114ca5cb12800d",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/6",
+          "source_body_sha256": "3cb54e150504edefb540fb32559e4044d69031e3b74ec8631cc990c1307af4e2",
+          "source_row_sha256": "16c3780e5f0f82a4f8561bfb66e2cb378e78fa343e4455be37e9eb01f66c5daa",
+          "matched_text": "Zehnten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-d86ed2cbef8616230759",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/sgb-6/168",
+          "source_body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+          "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+          "matched_text": "§ 163",
+          "resolved_citation_path": "de/statute/sgb-6/163"
+        },
+        {
+          "id": "de-corpus-db8f3aca1ba2a76048cb",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/75",
+          "source_body_sha256": "912edd85878e84da861a0cf5864f0fd1a3b669ad32018a82370c6547464b6141",
+          "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
+          "matched_text": "Zwölften Buches",
+          "resolved_citation_path": "de/statute/sgb-12"
+        },
+        {
+          "id": "de-corpus-dfec9d09628cdf1ac901",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/67",
+          "source_body_sha256": "b10adfa9101cd1af9e27d0cba61f1b8774bf6d1b5943c84d44c36daeeb634540",
+          "source_row_sha256": "e82730863ec268a47fc54afc6bfc4c6e5077b343f23cb206d3571839e7e10d7e",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-e0b2258a581a1bcb29a4",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/7",
+          "source_body_sha256": "ec27df3e950a5c8c01ceda457a11dc8dc20bcb153302437395352fb89bd5cdde",
+          "source_row_sha256": "fe53ea4cb37156d4a5fc7110a07d13ac5efa2814c7d07a1cba74781a8202274e",
+          "matched_text": "Bürgerlichen Gesetzbuchs"
+        },
+        {
+          "id": "de-corpus-e5939ec18630d1b88fda",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/7",
+          "source_body_sha256": "ec27df3e950a5c8c01ceda457a11dc8dc20bcb153302437395352fb89bd5cdde",
+          "source_row_sha256": "fe53ea4cb37156d4a5fc7110a07d13ac5efa2814c7d07a1cba74781a8202274e",
+          "matched_text": "Zehnten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-e92cecd8d59a1d6a94f5",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Aufenthaltsgesetzes"
+        },
+        {
+          "id": "de-corpus-ea9a43c8df78b3a1c389",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Verordnung (EG) Nr. 883/2004"
+        },
+        {
+          "id": "de-corpus-ec6d533e58b5fe321b1b",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/10",
+          "source_body_sha256": "fd3cac29b5d63273ab4ffa05b31d5f622e9283e7f49f8e305fb8b4afcfc69a41",
+          "source_row_sha256": "1d4a869fae6db5d7e6fec26056028b5564426a13ffb4f3804f8438665bde3e72",
+          "matched_text": "Gesetzes über Ordnungswidrigkeiten"
+        },
+        {
+          "id": "de-corpus-f1d16fb6c3d26e8d4286",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Aufenthaltsgesetz"
+        },
+        {
+          "id": "de-corpus-f1fb74119d4f695df860",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-f45fc2be2eafde486fd7",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/regulation/minuhv",
+          "source_row_sha256": "b970791c02918f4ff304f6b17adc2f4667a4b9d726732e8e665f030667e1187c",
+          "raw_reference": "Zuletzt geändert durch Art. 1 V v. 15.11.2024 I Nr. 359"
+        },
+        {
+          "id": "de-corpus-f83148ffc269677da9ed",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
+        },
+        {
+          "id": "de-corpus-fe5fb03c77c15f5c5c97",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/68",
+          "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
+          "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
+          "matched_text": "Abgabenordnung"
+        },
+        {
+          "id": "de-corpus-ffd851e9123ab32ab5fd",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Aufenthaltsgesetzes"
+        }
+      ],
+      "receipt_sha256": "92f0a363bf0b3b07be98806d3bd2f46af14da2a4b8c522718cd123ae88da21aa"
+    },
+    "subject_matter_search": {
+      "state": "unretrieved",
+      "version": "de-subject-matter-2026-08-21-v1",
+      "date": "2026-08-21",
+      "target_period": "2025",
+      "attempts": [
+        {
+          "id": "de-subject-001",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "bzst",
+          "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
+          "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "e4e610bc1f2bfa8521961a50963b45e83b1efd55ae38a9cc7745ae76e8c89fe7"
+        },
+        {
+          "id": "de-subject-002",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "bzst",
+          "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
+          "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "c80f554d35ad6566dbe1a16378d292a6b679d23a5433968add54588df85e5503"
+        },
+        {
+          "id": "de-subject-003",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "tacheles-mirror",
+          "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
+          "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "57b90f85fa5b2c1fa99daeed35e796a339e00fae4faa8253b989b7459e646641"
+        },
+        {
+          "id": "de-subject-004",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "bmf",
+          "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
+          "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "8f39c34f0e7495dee362bb6d19facc17919479cd525929af61e4e3f11ee68359"
+        },
+        {
+          "id": "de-subject-005",
+          "programs": [
+            "de/kindergeld",
+            "de/unterhaltsvorschuss"
+          ],
+          "source_id": "gesetze-im-internet",
+          "query": "Bundeskindergeldgesetz BKGG",
+          "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "16d1d533b8a9700394c00ea082663d66a7531c89fb25a13c69935669e2b3686c"
+        },
+        {
+          "id": "de-subject-006",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "gesetze-im-internet",
+          "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
+          "url": "https://www.gesetze-im-internet.de/beeg/",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "1c3aca17e85049a3c68b623dc685d6d571a92bf921ea5466f6e950fbdd0be31d"
+        },
+        {
+          "id": "de-subject-007",
+          "programs": [
+            "de/unterhaltsvorschuss"
+          ],
+          "source_id": "gesetze-im-internet",
+          "query": "Unterhaltsvorschussgesetz UhVorschG",
+          "url": "https://www.gesetze-im-internet.de/uhvorschg/",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "879bf3d14366c07aeaf29ffe455688750a78e08e492f3c062d05dd620cb2c065"
+        },
+        {
+          "id": "de-subject-008",
+          "programs": [
+            "de/unterhaltsvorschuss"
+          ],
+          "source_id": "bmfsfj",
+          "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
+          "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "3952e8323d8f61ca23bdf81cf4cdbc7865dec7f8ccc8dfeff7545fbcbea0161c"
+        },
+        {
+          "id": "de-subject-009",
+          "programs": [
+            "de/unterhaltsvorschuss"
+          ],
+          "source_id": "behoerden-vwv",
+          "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
+          "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "75299953cbd2f9569c9847fb7cfeec1ea105cc762ecf593a3a6d43d1880a3487"
+        },
+        {
+          "id": "de-subject-010",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "bmas",
+          "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
+          "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "39b17460c8d45365353368935a72f66f0c30724afa18725dd8f5c2b2fefa5c49"
+        },
+        {
+          "id": "de-subject-011",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "bmas",
+          "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
+          "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "c01511cfd12c555eefd608ca3bebe78d4226ac6c933fcad3476eaef4fe02f6be"
+        },
+        {
+          "id": "de-subject-012",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "bmas",
+          "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
+          "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "c0041ede38a6bda67523b4d47f4c9c9246c4ade79190d1d952c1ee3b8e47ebde"
+        },
+        {
+          "id": "de-subject-013",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "bundesanzeiger",
+          "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
+          "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "a710cd080546fba4bbfea64f0564d4d6583140dc46e0928c6e5785ba3a290461"
+        },
+        {
+          "id": "de-subject-014",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "bmas",
+          "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
+          "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "04b3383017f795a29236d18d4a786ca035097de4641ee653b6e3bca8ce3944f6"
+        },
+        {
+          "id": "de-subject-015",
+          "programs": [
+            "de/rv-employee-contribution"
+          ],
+          "source_id": "gesetze-im-internet",
+          "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
+          "url": "https://www.gesetze-im-internet.de/bvv/",
+          "captured_at": "2026-08-21T18:51:54Z",
+          "state": "unretrieved",
+          "reason": "URLError: [Errno 8] nodename nor servname provided, or not known",
+          "receipt_sha256": "54e9e4bf7c433a06bd98193d621f35056c18a0137040050ff9569537475c09db"
+        }
+      ],
+      "receipt_sha256": "da8427f55151510c7f3d9d42565632fd6cce3f86feedc35a800e096063e57c22"
+    },
+    "citation_scan": {
+      "state": "not_yet_available",
+      "issue": "axiom-corpus#611",
+      "reason": "The corpus citation-scan channel has not landed; no citation-scan candidates are asserted.",
+      "receipt_sha256": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
+    }
+  },
+  "programs": [
+    {
+      "id": "de/kindergeld",
+      "instruments": [
+        {
+          "id": "de-kg-instr-001",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-001",
+            "de-subject-002",
+            "de-subject-003"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
+          "subject_urls": [
+            "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
+            "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+            "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf"
+          ]
+        },
+        {
+          "id": "de-kg-instr-002",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-005"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bkgg-1996",
+          "document_class": "statute",
+          "citation_label": "Bundeskindergeldgesetz",
+          "body_sha256": "cf33f6972a5fb2182e0c0e8d37160ae15fbf61c41fdae663886004dd3e36565b",
+          "document_citation_path": "de/statute/bkgg-1996",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
+          "fundstelle": "BGBl I 1995, 1250, 1378 (1996 I 714)"
+        },
+        {
+          "id": "de-kg-instr-003",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-b55b0cb5e19d73524db2"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/31",
+          "document_class": "statute",
+          "citation_label": "EStG § 31",
+          "body_sha256": "8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-1808736a82828a59",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-42cb174d59c13ca15840",
+            "de-corpus-6d4c3e36d18b468a9b05",
+            "de-corpus-f1fb74119d4f695df860"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)",
+          "document_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "title": "Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)",
+          "title_short": "SteFeG (BGBl. 2024 I Nr. 449)",
+          "date_document": "2024-12-23",
+          "document_type": "Änderungsgesetz (amendment act)"
+        },
+        {
+          "id": "de-kg-instr-1c8fd922bf6e3662",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-ea9a43c8df78b3a1c389"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Verordnung (EG) Nr. 883/2004"
+          ]
+        },
+        {
+          "id": "de-kg-instr-32a81be6d35e33be",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-4b0837db61b89b31ba27"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Freizügigkeitsgesetzes/EU"
+          ]
+        },
+        {
+          "id": "de-kg-instr-3841260753e31d86",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-5016e64524a26332b65e",
+            "de-corpus-65740a9c68e8a6636d75"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-6",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Sechstes Buch (VI) - Gesetzliche Rentenversicherung - (Artikel 1 des Gesetzes v. 18. Dezember 1989, BGBl. I S. 2261, 1990 I S. 1337)",
+          "body_sha256": "c11d89ee6b4d2dfd607f4fccb1ed272c72035aae7b7b7d5e58b7d50324dc7a03",
+          "document_citation_path": "de/statute/sgb-6",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_6/",
+          "fundstelle": "BGBl I 1989, 2261 (1990 I 1337)"
+        },
+        {
+          "id": "de-kg-instr-3875634198c25414",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-d4040ccf15ddd057ae22"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Aufenthaltsgesetzes"
+          ]
+        },
+        {
+          "id": "de-kg-instr-43b69c0fdc7079aa",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-76f0ac1f8c887e222870"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/2",
+          "document_class": "statute",
+          "citation_label": "EStG § 2",
+          "body_sha256": "fb916ad7151c1e2440e28f2b117f74ebd73b325f48b6d54e98108fffd697012d",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-4692150bbe1f7849",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-995170ff8fc2b96f7c5b"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Verordnung (EU) 2017/492"
+          ]
+        },
+        {
+          "id": "de-kg-instr-4e1f544ea66cccdf",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-043880c8a12aa41c518e",
+            "de-corpus-05a43bd8718a27d94769",
+            "de-corpus-16b40f8ab12eac3755ff",
+            "de-corpus-65ec17810d7bb50cadf7",
+            "de-corpus-8147c0d164d863cdebe4",
+            "de-corpus-dfec9d09628cdf1ac901",
+            "de-corpus-fe5fb03c77c15f5c5c97"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Abgabenordnung"
+          ]
+        },
+        {
+          "id": "de-kg-instr-57142250c1d7c52f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-b0eeca04259f7ddeb7ff"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Siebten Buches Sozialgesetzbuch"
+          ]
+        },
+        {
+          "id": "de-kg-instr-5fbc4ffc01cca130",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-7dd34add44b01ccd165a",
+            "de-corpus-db8f3aca1ba2a76048cb"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-12",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Zwölftes Buch (XII) - Sozialhilfe - (Artikel 1 des Gesetzes vom 27. Dezember 2003, BGBl. I S. 3022)",
+          "body_sha256": "91cefe81ddf95a56756f6e05c89a32ef60a4d268f8f97b583912eea3d96785a6",
+          "document_citation_path": "de/statute/sgb-12",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_12/",
+          "fundstelle": "BGBl I 2003, 3022, 3023"
+        },
+        {
+          "id": "de-kg-instr-6b0cd760b62eaed2",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-27b3386012358a3cd94f"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Steuerberatungsgesetzes"
+          ]
+        },
+        {
+          "id": "de-kg-instr-6e0720e53a02234e",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-62426bac3f50a2b0ae6f"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/wogg",
+          "document_class": "statute",
+          "citation_label": "Wohngeldgesetz",
+          "body_sha256": "8bc9d521ed936f4be196ec6bb5f1234a4f1a270be8cb67b6441ba4d23764660c",
+          "document_citation_path": "de/statute/wogg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/wogg/",
+          "fundstelle": "BGBl I 2008, 1856"
+        },
+        {
+          "id": "de-kg-instr-703d3b12aaab39f8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-4557bdb1577aa4d1661e",
+            "de-corpus-a908aed35b7d1ceeda30",
+            "de-corpus-afcb95a25eb1fc7228ae"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/32",
+          "document_class": "statute",
+          "citation_label": "EStG § 32",
+          "body_sha256": "a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-70e222e42c3fbd52",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-c30ae063c5bb2bbca5c6"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/39e",
+          "document_class": "statute",
+          "citation_label": "EStG § 39e",
+          "body_sha256": "ab6442cd2f52fc33c4f72ca19a8d879e20f48e7cff58e44c095808a3d922db22",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-7b88fe63abf1deb1",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-71149390efb48e142347",
+            "de-corpus-96ed78a0f8293d733120"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/19",
+          "document_class": "statute",
+          "citation_label": "EStG § 19",
+          "body_sha256": "626f7bb866fc0a1c6e7a2ccc96dac66ba7131eb8ee87ca981d2578d7a3f97366",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-87d3e50373adabc2",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-334b97469237730f3b68",
+            "de-corpus-3829f704c28eb570310c"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Abkommen über den Europäischen Wirtschaftsraum"
+          ]
+        },
+        {
+          "id": "de-kg-instr-8939b62ab3b44a39",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-7ca2ebb4684aaf979da8"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
+          ]
+        },
+        {
+          "id": "de-kg-instr-995400ec8f736a51",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-b7ca49921d36915d52ed"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/19a",
+          "document_class": "statute",
+          "citation_label": "EStG § 19a",
+          "body_sha256": "96106a6ca5a4a81da21e1522e43c2e633af31f8b1f88470b6715675750de2cca",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-a365b83505706342",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-ba21485fd75ad89b02e1"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/uhvorschg",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Sicherung des Unterhalts von Kindern alleinstehender Mütter und Väter durch Unterhaltsvorschüsse oder -ausfallleistungen",
+          "body_sha256": "c99788b126259e0f376231245bf47d0354ef30252d33cb4fc534800c11401118",
+          "document_citation_path": "de/statute/uhvorschg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/uhvorschg/",
+          "fundstelle": "BGBl I 1979, 1184"
+        },
+        {
+          "id": "de-kg-instr-a66a4cb13aaf0599",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-62e92e01e49ba1d80a17",
+            "de-corpus-a12d2b6db22397cc343b"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Zehnten Buches Sozialgesetzbuch"
+          ]
+        },
+        {
+          "id": "de-kg-instr-b96e03076e143e8e",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1b65ac76074a9e4d0fd1",
+            "de-corpus-443ad0c2567894367d0f",
+            "de-corpus-60d4295a9edb13e2c1c3",
+            "de-corpus-6f9020d3778b517e3e2a",
+            "de-corpus-86534602aca6487afa11",
+            "de-corpus-8bba30603b49eb761e1d",
+            "de-corpus-bf6f5d15cdf37cb277f4"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-3",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Drittes Buch (III) - Arbeitsförderung - (Artikel 1 des Gesetzes vom 24. März 1997, BGBl. I S. 594)",
+          "body_sha256": "f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8",
+          "document_citation_path": "de/statute/sgb-3",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_3/",
+          "fundstelle": "BGBl I 1997, 594, 595"
+        },
+        {
+          "id": "de-kg-instr-c795a7af57079afc",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-bb0bea162872670bb36e",
+            "de-corpus-bff0604ab434028f691b"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-2",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Zweites Buch (II) - Grundsicherung für Arbeitsuchende",
+          "body_sha256": "b9f3061e4404328c68116fbf1c9fa5ae69a66715e748466312ab9ee22c37711e",
+          "document_citation_path": "de/statute/sgb-2",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_2/",
+          "fundstelle": "BGBl I 2003, 2954, 2955"
+        },
+        {
+          "id": "de-kg-instr-ce168756ed1a28cb",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-9140eb4c223a509ac378"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg/1",
+          "document_class": "statute",
+          "citation_label": "EStG § 1",
+          "body_sha256": "039de9931d61ee11b13fe82082115c085a24f84017c78fd2779dbad4118fde6b",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
+        },
+        {
+          "id": "de-kg-instr-db7693cd9f018ff4",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-006"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/beeg",
+          "document_class": "statute",
+          "citation_label": "Gesetz zum Elterngeld und zur Elternzeit",
+          "body_sha256": "a8adb00ead8b612cd2acf62607433f9b6f77423a9e56ce7eccbd9deef8bf18af",
+          "document_citation_path": "de/statute/beeg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/beeg/",
+          "fundstelle": "BGBl I 2006, 2748"
+        },
+        {
+          "id": "de-kg-instr-f480bf90ee72ae1d",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-8fbae7ccbaf5d47aaa5d"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Ersten Buches Sozialgesetzbuch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "de/rv-employee-contribution",
+      "instruments": [
+        {
+          "id": "de-rv-instr-22c390264093bed6",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-d86ed2cbef8616230759"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-6/163",
+          "document_class": "statute",
+          "citation_label": "SGB 6 § 163",
+          "body_sha256": "0b444597cfe29b45286bf8ca3a0fdb3da22f1b38b113ea69e910759bdd9fee17",
+          "document_citation_path": "de/statute/sgb-6",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_6/"
+        },
+        {
+          "id": "de-rv-instr-39594b16de842cc6",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-7bd10338303e55be1c0b"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-4",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Viertes Buch (IV) - Gemeinsame Vorschriften für die Sozialversicherung - (Artikel I des Gesetzes vom 23. Dezember 1976, BGBl. I S. 3845)",
+          "body_sha256": "460d9db1e458ca39922190a33de9f524f2c94948f534d3f0579c0972c88edcd3",
+          "document_citation_path": "de/statute/sgb-4",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_4/",
+          "fundstelle": "BGBl I 1976, 3845"
+        },
+        {
+          "id": "de-rv-instr-3bf6a9afce351d7a",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-3b7b161daf8fe143921a"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "zuletzt geändert durch Art. 2 Abs. 10 G v. 12.5.2026 I Nr. 143"
+          ]
+        },
+        {
+          "id": "de-rv-instr-45a23bb6aa1843b8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-262a6432328a23e9d801"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/estg",
+          "document_class": "statute",
+          "citation_label": "Einkommensteuergesetz",
+          "body_sha256": "78f6436e1bcf2d5941d793b40606a2a494c0019734c5ab418ac09907bd081ca9",
+          "document_citation_path": "de/statute/estg",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/estg/",
+          "fundstelle": "RGBl I 1934, 1005"
+        },
+        {
+          "id": "de-rv-instr-b66d3dc850465244",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-111c2e5574197a8e8017",
+            "de-corpus-7e859fe4d0b37195ca71"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Neunten Buch",
+            "Neunten Buches"
+          ]
+        },
+        {
+          "id": "de-rv-instr-bvv",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-015"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Beitragsverfahrensverordnung Beschäftigte 2025",
+          "subject_urls": [
+            "https://www.gesetze-im-internet.de/bvv/"
+          ]
+        },
+        {
+          "id": "de-rv-instr-contribution-rate-2025",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-012"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
+          "subject_urls": [
+            "https://www.bmas.de/DE/Service/Service-Suche/suche.html"
+          ]
+        },
+        {
+          "id": "de-rv-instr-f60d1fbcb6b28d3a",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-91a13bc056d2f6555939",
+            "de-corpus-9e5086c125d97f01587d"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Altersteilzeitgesetz",
+            "Altersteilzeitgesetzes"
+          ]
+        },
+        {
+          "id": "de-rv-instr-faktor-f-2025",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-014"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
+          "subject_urls": [
+            "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html"
+          ]
+        },
+        {
+          "id": "de-rv-instr-geringfuegigkeitsgrenze",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-011"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
+          "subject_urls": [
+            "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html"
+          ]
+        },
+        {
+          "id": "de-rv-instr-zusatzbeitrag-2025",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-013"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
+          "subject_urls": [
+            "https://www.bundesanzeiger.de/pub/de/suche?0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "de/unterhaltsvorschuss",
+      "instruments": [
+        {
+          "id": "de-kg-instr-002",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-3969d462857249ee5505",
+            "de-subject-005"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bkgg-1996",
+          "document_class": "statute",
+          "citation_label": "Bundeskindergeldgesetz",
+          "body_sha256": "cf33f6972a5fb2182e0c0e8d37160ae15fbf61c41fdae663886004dd3e36565b",
+          "document_citation_path": "de/statute/bkgg-1996",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
+          "fundstelle": "BGBl I 1995, 1250, 1378 (1996 I 714)"
+        },
+        {
+          "id": "de-uhv-instr-1808736a82828a59",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-02c3e286a3632391d014",
+            "de-corpus-54424a966f565cf32a11",
+            "de-corpus-80ca528e0ed2cceb764a"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)",
+          "document_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "title": "Gesetz zur Fortentwicklung des Steuerrechts und zur Anpassung des Einkommensteuertarifs (Steuerfortentwicklungsgesetz – SteFeG) (BGBl. 2024 I Nr. 449)",
+          "title_short": "SteFeG (BGBl. 2024 I Nr. 449)",
+          "date_document": "2024-12-23",
+          "document_type": "Änderungsgesetz (amendment act)"
+        },
+        {
+          "id": "de-uhv-instr-1a53a8fa58131ff1",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-c6487482f9862ba1d50e"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Zivilprozessordnung"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-2079e2162cee1404",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-57c5b247ffc94f0f1f01"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Ausländergesetz"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-2a29967484296d20",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-406eda822701b301f22a"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "zuletzt geändert durch Art. 44 G v. 2.12.2024 I Nr. 387"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-2b0a8f983f861591",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-6325e3cfc763b223aeaa"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-3875634198c25414",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-e92cecd8d59a1d6a94f5",
+            "de-corpus-f1d16fb6c3d26e8d4286",
+            "de-corpus-ffd851e9123ab32ab5fd"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Aufenthaltsgesetz",
+            "Aufenthaltsgesetzes"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-4e1f544ea66cccdf",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-3472b2f7643e1b771a3a"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Abgabenordnung"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-73cb585362978769",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-4fd223b074792f0bf060"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Achten Buch Sozialgesetzbuch"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-7aa5943b5f0a6e6c",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-5f705aae8523970f1a25",
+            "de-corpus-caf0f56af53ffc8164d1",
+            "de-corpus-e0b2258a581a1bcb29a4"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Bürgerlichen Gesetzbuchs"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-8939b62ab3b44a39",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-f83148ffc269677da9ed"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-906e7387d896596c",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-f45fc2be2eafde486fd7"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Zuletzt geändert durch Art. 1 V v. 15.11.2024 I Nr. 359"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-a303758d3667d729",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-ec6d533e58b5fe321b1b"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Gesetzes über Ordnungswidrigkeiten"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-a66a4cb13aaf0599",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-d6536f114ca5cb12800d",
+            "de-corpus-e5939ec18630d1b88fda"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Zehnten Buches Sozialgesetzbuch"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-a9efdae38748dd9f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-2f102ab8134aa0f24d44"
+          ],
+          "identity_kind": "unresolved_reference",
+          "raw_references": [
+            "Gesetzes vom 23. Mai 2022 (BGBl. I S. 760)"
+          ]
+        },
+        {
+          "id": "de-uhv-instr-b96e03076e143e8e",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-31f4641c5fcedc0d42b9",
+            "de-corpus-8b8889a0b2d2e5f82791"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-3",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Drittes Buch (III) - Arbeitsförderung - (Artikel 1 des Gesetzes vom 24. März 1997, BGBl. I S. 594)",
+          "body_sha256": "f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8",
+          "document_citation_path": "de/statute/sgb-3",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_3/",
+          "fundstelle": "BGBl I 1997, 594, 595"
+        },
+        {
+          "id": "de-uhv-instr-c795a7af57079afc",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-0594f54efd79932c7613",
+            "de-corpus-8dea5815916d5548e053",
+            "de-corpus-b148bd4938a47c1c2719",
+            "de-corpus-bf0631b273ba225e34e0"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-2",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch (SGB) Zweites Buch (II) - Grundsicherung für Arbeitsuchende",
+          "body_sha256": "b9f3061e4404328c68116fbf1c9fa5ae69a66715e748466312ab9ee22c37711e",
+          "document_citation_path": "de/statute/sgb-2",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_2/",
+          "fundstelle": "BGBl I 2003, 2954, 2955"
+        },
+        {
+          "id": "de-uhv-instr-guidance",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-008",
+            "de-subject-009"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
+          "subject_urls": [
+            "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
+            "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html"
+          ]
+        }
+      ]
+    }
+  ],
+  "receipt_sha256": "e318215683ba10700aa36531569beba783c062ffa3fbabc905c117e5b9a99907"
+}
