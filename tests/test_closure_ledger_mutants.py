@@ -371,18 +371,28 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     summary = module.validate_artifact(document)
 
     # Under definition v3 (CERTIFIED.md), closure requires dependency
-    # closure: the 55 law-derived leaves and 16 bearing instruments are open
-    # dependencies, so the artifact honestly computes closed=false with the
-    # encoding worklist enumerated; the instrument frontier itself is
-    # complete again now that all flagged precedents are read.
+    # closure: the 55 law-derived leaves and the bearing instruments are
+    # open dependencies, so the artifact honestly computes closed=false
+    # with the encoding worklist enumerated. The 2026-08-22 citation scan
+    # over the full retsinformation national mirror (axiom-corpus#611
+    # channel 2) discovered fifteen further in-force instruments — among
+    # them the Nordic social-security convention, the Brexit withdrawal
+    # agreement order, and Ankestyrelsen precedents on the residence and
+    # school-absence surfaces — all read and dispositioned the same day,
+    # ten of them bearing (16 → 26; BEK 297/2026 commences after the
+    # certified period and is excluded), so the worklist grows to 81.
     assert summary.closed is False
     assert summary.dependency_closed is False
-    assert summary.open_dependency_count == 71
+    assert summary.open_dependency_count == 81
     assert summary.instrument_frontier_complete is True
     assert summary.instrument_pending_count == 0
     dep = document["computed"]["dependency_closure"]
     assert len(dep["law_derived_inputs"]) == 55
-    assert len(dep["instruments_bearing_on_computed"]) == 16
+    assert len(dep["instruments_bearing_on_computed"]) == 26
+    assert (
+        "https://retsinformation.dk/eli/ltc/2014/12"
+        in dep["instruments_bearing_on_computed"]
+    )
     assert (
         "https://retsinformation.dk/eli/lta/2013/1563"
         in dep["instruments_bearing_on_computed"]
@@ -407,18 +417,19 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert former_partial["status"] == "encoded"
     assert former_partial["encoded_by"].endswith("/paragraf-5.yaml")
 
-    assert summary.instrument_count == 35
+    assert summary.instrument_count == 50
     # The launch audit's official-source search found instruments outside
-    # the act's ELI graph; all four flagged precedents are now read and
-    # dispositioned, so the frontier is complete again.
+    # the act's ELI graph, and the 2026-08-22 citation scan found fifteen
+    # more; every one is read and dispositioned, so the frontier is
+    # complete.
     assert summary.instrument_pending_count == 0
     assert summary.instrument_frontier_complete is True
     frontier = document["computed"]["instrument_frontier"]
     assert frontier["counts"] == {
-        "total": 35,
+        "total": 50,
         "encoded": 0,
-        "classified-with-reason": 24,
-        "excluded-with-reason": 11,
+        "classified-with-reason": 34,
+        "excluded-with-reason": 16,
         "pending": 0,
     }
     bek = next(
@@ -429,8 +440,31 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert bek["status"] == "classified-with-reason"
     assert bek["classification"] == "input_derivation_rule"
     supplemental = [row for row in frontier["ledger"] if row.get("provenance")]
-    assert len(supplemental) == 8
+    assert len(supplemental) == 23
     assert {row["relation"] for row in supplemental} == {"bears_on"}
+    scanned = [
+        row
+        for row in supplemental
+        if "citation-scan channel 2026-08-22" in row["provenance"]
+    ]
+    assert len(scanned) == 15
+    assert not any(row["status"] == "pending" for row in scanned)
+    convention = next(
+        row
+        for row in scanned
+        if row["eli"] == "https://retsinformation.dk/eli/ltc/2014/12"
+    )
+    assert convention["status"] == "classified-with-reason"
+    assert convention["classification"] == "coordination_instrument"
+    assert convention["bears_on_computed_surface"] is True
+    familieretshus = next(
+        row
+        for row in scanned
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2026/297"
+    )
+    assert familieretshus["status"] == "excluded-with-reason"
+    assert familieretshus["classification"] == "out_of_certified_period"
+    assert familieretshus["bears_on_computed_surface"] is False
 
 
 def test_validator_rejects_an_instrument_without_a_disposition() -> None:
