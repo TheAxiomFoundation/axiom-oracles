@@ -11,7 +11,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "d2941e6878429e2c24095045eaabca842c676d2af80d46dd6e70d87cdee97fc7"
+      "sha256": "ee3e2a5f2e764fcb8166557404bff54689dbd0a3b53e6f1ab52040cf835e0766"
     },
     {
       "artifact": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "0480ef16e7a3295fbeacf35f9928bca5252eca8d6a80de55f7c70188952fc288",
+      "sha256": "7a45c521cfc05b7923379de9b0cea4b826ee055ee37c9ad449c0ba86f5d829f7",
       "verification": "producer_artifact_validation"
     },
     {
@@ -302,17 +302,27 @@
         "instruments_bearing_on_computed": [
           "https://retsinformation.dk/eli/lta/2013/1563",
           "https://retsinformation.dk/eli/lta/2019/1063",
+          "https://retsinformation.dk/eli/lta/2020/1700",
+          "https://retsinformation.dk/eli/ltc/2014/12",
+          "https://retsinformation.dk/eli/ltc/2025/3",
           "https://retsinformation.dk/eli/mt/1986/148",
+          "https://retsinformation.dk/eli/retsinfo/1988/18075",
+          "https://retsinformation.dk/eli/retsinfo/1995/9206",
           "https://retsinformation.dk/eli/retsinfo/1996/9256",
           "https://retsinformation.dk/eli/retsinfo/1996/9261",
           "https://retsinformation.dk/eli/retsinfo/1997/9246",
           "https://retsinformation.dk/eli/retsinfo/1998/9196",
+          "https://retsinformation.dk/eli/retsinfo/2006/10864",
+          "https://retsinformation.dk/eli/retsinfo/2007/11114",
           "https://retsinformation.dk/eli/retsinfo/2007/11117",
           "https://retsinformation.dk/eli/retsinfo/2008/10901",
+          "https://retsinformation.dk/eli/retsinfo/2009/10575",
+          "https://retsinformation.dk/eli/retsinfo/2009/10577",
           "https://retsinformation.dk/eli/retsinfo/2013/9724",
           "https://retsinformation.dk/eli/retsinfo/2014/9267",
           "https://retsinformation.dk/eli/retsinfo/2014/9268",
           "https://retsinformation.dk/eli/retsinfo/2014/9269",
+          "https://retsinformation.dk/eli/retsinfo/2021/9457",
           "https://retsinformation.dk/eli/retsinfo/2023/9456",
           "https://retsinformation.dk/eli/retsinfo/2024/9493",
           "https://retsinformation.dk/eli/retsinfo/2025/9372"
@@ -374,20 +384,20 @@
           "total_contributions_to_qualifying_pension_accounts",
           "youth_benefit_is_payable_for_young_person"
         ],
-        "open_dependency_count": 71
+        "open_dependency_count": 81
       },
       "instrument_frontier": {
         "complete": true,
         "counts": {
-          "classified-with-reason": 24,
+          "classified-with-reason": 34,
           "encoded": 0,
-          "excluded-with-reason": 11,
+          "excluded-with-reason": 16,
           "pending": 0,
-          "total": 35
+          "total": 50
         },
         "instrument_count": 27,
         "pending": [],
-        "supplemental_count": 8
+        "supplemental_count": 23
       },
       "mode": "computed",
       "non_encoded_reasons_complete": true,
