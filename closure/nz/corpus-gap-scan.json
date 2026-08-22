@@ -40,35 +40,6 @@
     },
     {
       "defining_provisions": [
-        "Taxation (Budget Measures) Act 2025 ss 2(5), 7, 8, 16; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31"
-      ],
-      "eli": "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
-      "instrument_groups": [
-        "taxation_budget_measures_act_2025",
-        "income_tax_act_2007"
-      ]
-    },
-    {
-      "defining_provisions": [
-        "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025 ss 2, 4–15"
-      ],
-      "eli": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
-      "instrument_groups": [
-        "social_assistance_amendment_act_2025"
-      ]
-    },
-    {
-      "defining_provisions": [
-        "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 s 105; Income Tax Act 2007 s LC 13(1)(d)–(e)"
-      ],
-      "eli": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
-      "instrument_groups": [
-        "taxation_annual_rates_2024_25_act_2025",
-        "income_tax_act_2007"
-      ]
-    },
-    {
-      "defining_provisions": [
         "Social Security (Modernisation) Amendment Act 2026 ss 4–13, 19, 21, 33–34, 43–65 and schedules"
       ],
       "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
@@ -84,6 +55,246 @@
       "instrument_groups": [
         "student_allowances_regulations_1998",
         "social_security_act_2018"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Taxation Relief (Czech Republic) Order 2008, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "instrument_groups": [
+        "double_taxation_relief_czech_republic_order_2008",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 cl 3; Income Tax Act 2007 s CW 12"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "instrument_groups": [
+        "approved_territories_qfei_order_2008",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Taxation Relief (United States of America) Amendment Order 2009, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "instrument_groups": [
+        "double_taxation_relief_usa_amendment_order_2009",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Singapore) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_singapore_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Taxation Relief (Australia) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "instrument_groups": [
+        "double_taxation_relief_australia_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (British Virgin Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_british_virgin_islands_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Cayman Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_cayman_islands_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Cook Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_cook_islands_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Guernsey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_guernsey_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Isle of Man) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_isle_of_man_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Jersey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_jersey_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Turkey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_turkey_order_2010",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Hong Kong) Order 2011, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_hong_kong_order_2011",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Papua New Guinea) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_papua_new_guinea_order_2013",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Japan) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_japan_order_2013",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Viet Nam) Order 2014, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_viet_nam_order_2014",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Income Tax (Maximum Pooling Value) Order 2015 cl 3; Income Tax Act 2007 s EE 65"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "instrument_groups": [
+        "income_tax_maximum_pooling_value_order_2015",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Samoa) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_samoa_order_2015",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Canada) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_canada_order_2015",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_multilateral_convention_order_2018",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (China) Order 2019, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_china_order_2019",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Switzerland) Order 2020, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_switzerland_order_2020",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Taxation Relief (Austria) Amendment Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "instrument_groups": [
+        "double_taxation_relief_austria_amendment_order_2024",
+        "income_tax_act_2007"
+      ]
+    },
+    {
+      "defining_provisions": [
+        "Double Tax Agreements (Slovak Republic) Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)"
+      ],
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "instrument_groups": [
+        "double_tax_agreements_slovak_republic_order_2024",
+        "income_tax_act_2007"
       ]
     },
     {
@@ -178,13 +389,13 @@
     }
   ],
   "counts": {
-    "bearing_instruments": 18,
-    "in_release": 233,
-    "instruments": 26,
-    "instruments_with_missing": 13,
+    "bearing_instruments": 39,
+    "in_release": 236,
+    "instruments": 50,
+    "instruments_with_missing": 37,
     "law_derived_rows": 229,
-    "missing": 54,
-    "provisions": 287,
+    "missing": 78,
+    "provisions": 314,
     "unique_derivation_expressions": 77
   },
   "coverage_rule": "in_release is true only when the pinned release has a non-empty body at the normalized citation path or official URL, or a non-empty body below an exact structural path",
@@ -358,6 +569,270 @@
       "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/"
     },
     {
+      "instrument": "Double Tax Agreements (British Virgin Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_british_virgin_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (British Virgin Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Canada) Order 2015",
+      "instrument_key": "double_tax_agreements_canada_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Canada) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Cayman Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cayman_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Cayman Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (China) Order 2019",
+      "instrument_key": "double_tax_agreements_china_order_2019",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (China) Order 2019 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Cook Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cook_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Cook Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Guernsey) Order 2010",
+      "instrument_key": "double_tax_agreements_guernsey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Guernsey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Hong Kong) Order 2011",
+      "instrument_key": "double_tax_agreements_hong_kong_order_2011",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Hong Kong) Order 2011 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Isle of Man) Order 2010",
+      "instrument_key": "double_tax_agreements_isle_of_man_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Isle of Man) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Japan) Order 2013",
+      "instrument_key": "double_tax_agreements_japan_order_2013",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Japan) Order 2013 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Jersey) Order 2010",
+      "instrument_key": "double_tax_agreements_jersey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Jersey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018",
+      "instrument_key": "double_tax_agreements_multilateral_convention_order_2018",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Papua New Guinea) Order 2013",
+      "instrument_key": "double_tax_agreements_papua_new_guinea_order_2013",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Papua New Guinea) Order 2013 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Samoa) Order 2015",
+      "instrument_key": "double_tax_agreements_samoa_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Samoa) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Singapore) Order 2010",
+      "instrument_key": "double_tax_agreements_singapore_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Singapore) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Slovak Republic) Order 2024",
+      "instrument_key": "double_tax_agreements_slovak_republic_order_2024",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Slovak Republic) Order 2024 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Switzerland) Order 2020",
+      "instrument_key": "double_tax_agreements_switzerland_order_2020",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Switzerland) Order 2020 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Turkey) Order 2010",
+      "instrument_key": "double_tax_agreements_turkey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Turkey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Viet Nam) Order 2014",
+      "instrument_key": "double_tax_agreements_viet_nam_order_2014",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Viet Nam) Order 2014 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Australia) Order 2010",
+      "instrument_key": "double_taxation_relief_australia_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Australia) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Austria) Amendment Order 2024",
+      "instrument_key": "double_taxation_relief_austria_amendment_order_2024",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Austria) Amendment Order 2024 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Czech Republic) Order 2008",
+      "instrument_key": "double_taxation_relief_czech_republic_order_2008",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Czech Republic) Order 2008 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (United States of America) Amendment Order 2009",
+      "instrument_key": "double_taxation_relief_usa_amendment_order_2009",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (United States of America) Amendment Order 2009 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/"
+    },
+    {
+      "instrument": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008",
+      "instrument_key": "approved_territories_qfei_order_2008",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/"
+    },
+    {
+      "instrument": "Income Tax (Maximum Pooling Value) Order 2015",
+      "instrument_key": "income_tax_maximum_pooling_value_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Income Tax (Maximum Pooling Value) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/"
+    },
+    {
       "instrument": "Income Tax Act 2007",
       "instrument_key": "income_tax_act_2007",
       "missing_count": 1,
@@ -428,6 +903,160 @@
       "total": 1
     },
     {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (British Virgin Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_british_virgin_islands_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Canada) Order 2015",
+      "instrument_key": "double_tax_agreements_canada_order_2015",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Cayman Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cayman_islands_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (China) Order 2019",
+      "instrument_key": "double_tax_agreements_china_order_2019",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Cook Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cook_islands_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Guernsey) Order 2010",
+      "instrument_key": "double_tax_agreements_guernsey_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Hong Kong) Order 2011",
+      "instrument_key": "double_tax_agreements_hong_kong_order_2011",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Isle of Man) Order 2010",
+      "instrument_key": "double_tax_agreements_isle_of_man_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Japan) Order 2013",
+      "instrument_key": "double_tax_agreements_japan_order_2013",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Jersey) Order 2010",
+      "instrument_key": "double_tax_agreements_jersey_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018",
+      "instrument_key": "double_tax_agreements_multilateral_convention_order_2018",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Papua New Guinea) Order 2013",
+      "instrument_key": "double_tax_agreements_papua_new_guinea_order_2013",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Samoa) Order 2015",
+      "instrument_key": "double_tax_agreements_samoa_order_2015",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Singapore) Order 2010",
+      "instrument_key": "double_tax_agreements_singapore_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Slovak Republic) Order 2024",
+      "instrument_key": "double_tax_agreements_slovak_republic_order_2024",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Switzerland) Order 2020",
+      "instrument_key": "double_tax_agreements_switzerland_order_2020",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Turkey) Order 2010",
+      "instrument_key": "double_tax_agreements_turkey_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Tax Agreements (Viet Nam) Order 2014",
+      "instrument_key": "double_tax_agreements_viet_nam_order_2014",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Taxation Relief (Australia) Order 2010",
+      "instrument_key": "double_taxation_relief_australia_order_2010",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Taxation Relief (Austria) Amendment Order 2024",
+      "instrument_key": "double_taxation_relief_austria_amendment_order_2024",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Taxation Relief (Czech Republic) Order 2008",
+      "instrument_key": "double_taxation_relief_czech_republic_order_2008",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Double Taxation Relief (United States of America) Amendment Order 2009",
+      "instrument_key": "double_taxation_relief_usa_amendment_order_2009",
+      "missing": 1,
+      "total": 1
+    },
+    {
       "in_release": 3,
       "instrument": "Goods and Services Tax Act 1985",
       "instrument_key": "goods_and_services_tax_act_1985",
@@ -449,11 +1078,25 @@
       "total": 1
     },
     {
-      "in_release": 71,
+      "in_release": 0,
+      "instrument": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008",
+      "instrument_key": "approved_territories_qfei_order_2008",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 0,
+      "instrument": "Income Tax (Maximum Pooling Value) Order 2015",
+      "instrument_key": "income_tax_maximum_pooling_value_order_2015",
+      "missing": 1,
+      "total": 1
+    },
+    {
+      "in_release": 74,
       "instrument": "Income Tax Act 2007",
       "instrument_key": "income_tax_act_2007",
       "missing": 1,
-      "total": 72
+      "total": 75
     },
     {
       "in_release": 1,
@@ -728,6 +1371,270 @@
       "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/"
     },
     {
+      "instrument": "Double Tax Agreements (British Virgin Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_british_virgin_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (British Virgin Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Canada) Order 2015",
+      "instrument_key": "double_tax_agreements_canada_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Canada) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Cayman Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cayman_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Cayman Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (China) Order 2019",
+      "instrument_key": "double_tax_agreements_china_order_2019",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (China) Order 2019 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Cook Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cook_islands_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Cook Islands) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Guernsey) Order 2010",
+      "instrument_key": "double_tax_agreements_guernsey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Guernsey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Hong Kong) Order 2011",
+      "instrument_key": "double_tax_agreements_hong_kong_order_2011",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Hong Kong) Order 2011 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Isle of Man) Order 2010",
+      "instrument_key": "double_tax_agreements_isle_of_man_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Isle of Man) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Japan) Order 2013",
+      "instrument_key": "double_tax_agreements_japan_order_2013",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Japan) Order 2013 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Jersey) Order 2010",
+      "instrument_key": "double_tax_agreements_jersey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Jersey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018",
+      "instrument_key": "double_tax_agreements_multilateral_convention_order_2018",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Papua New Guinea) Order 2013",
+      "instrument_key": "double_tax_agreements_papua_new_guinea_order_2013",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Papua New Guinea) Order 2013 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Samoa) Order 2015",
+      "instrument_key": "double_tax_agreements_samoa_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Samoa) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Singapore) Order 2010",
+      "instrument_key": "double_tax_agreements_singapore_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Singapore) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Slovak Republic) Order 2024",
+      "instrument_key": "double_tax_agreements_slovak_republic_order_2024",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Slovak Republic) Order 2024 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Switzerland) Order 2020",
+      "instrument_key": "double_tax_agreements_switzerland_order_2020",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Switzerland) Order 2020 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Turkey) Order 2010",
+      "instrument_key": "double_tax_agreements_turkey_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Turkey) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/"
+    },
+    {
+      "instrument": "Double Tax Agreements (Viet Nam) Order 2014",
+      "instrument_key": "double_tax_agreements_viet_nam_order_2014",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Tax Agreements (Viet Nam) Order 2014 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Australia) Order 2010",
+      "instrument_key": "double_taxation_relief_australia_order_2010",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Australia) Order 2010 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Austria) Amendment Order 2024",
+      "instrument_key": "double_taxation_relief_austria_amendment_order_2024",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Austria) Amendment Order 2024 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (Czech Republic) Order 2008",
+      "instrument_key": "double_taxation_relief_czech_republic_order_2008",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (Czech Republic) Order 2008 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/"
+    },
+    {
+      "instrument": "Double Taxation Relief (United States of America) Amendment Order 2009",
+      "instrument_key": "double_taxation_relief_usa_amendment_order_2009",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Double Taxation Relief (United States of America) Amendment Order 2009 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/"
+    },
+    {
+      "instrument": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008",
+      "instrument_key": "approved_territories_qfei_order_2008",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/"
+    },
+    {
+      "instrument": "Income Tax (Maximum Pooling Value) Order 2015",
+      "instrument_key": "income_tax_maximum_pooling_value_order_2015",
+      "missing_count": 1,
+      "priority": 6,
+      "priority_reason": "remaining corpus-ingest work after the five named small-cone priorities",
+      "provisions": [
+        "Income Tax (Maximum Pooling Value) Order 2015 — operative document and schedules"
+      ],
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/"
+    },
+    {
       "instrument": "Income Tax Act 2007",
       "instrument_key": "income_tax_act_2007",
       "missing_count": 1,
@@ -820,7 +1727,7 @@
       ],
       "notes": [],
       "priority": 3,
-      "priority_reason": "Third small-cone priority named by Brief C1: IETC LC 13, YD 1, HR 8, and every pending bearing source assigned to individual credits.",
+      "priority_reason": "Third small-cone priority named by Brief C1: IETC LC 13, YD 1, HR 8, and the non-order bearing sources selected by C1 for individual credits. B2's later secondary-instrument additions remain explicit in the global ingest worklist.",
       "provision_count": 47,
       "status": "ingest_required",
       "target_modules": [
@@ -1035,6 +1942,160 @@
       "provision": "DET 26/03 emergency-event determination"
     },
     {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (British Virgin Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_british_virgin_islands_order_2010",
+      "provision": "Double Tax Agreements (British Virgin Islands) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Canada) Order 2015",
+      "instrument_key": "double_tax_agreements_canada_order_2015",
+      "provision": "Double Tax Agreements (Canada) Order 2015 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Cayman Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cayman_islands_order_2010",
+      "provision": "Double Tax Agreements (Cayman Islands) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (China) Order 2019",
+      "instrument_key": "double_tax_agreements_china_order_2019",
+      "provision": "Double Tax Agreements (China) Order 2019 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Cook Islands) Order 2010",
+      "instrument_key": "double_tax_agreements_cook_islands_order_2010",
+      "provision": "Double Tax Agreements (Cook Islands) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Guernsey) Order 2010",
+      "instrument_key": "double_tax_agreements_guernsey_order_2010",
+      "provision": "Double Tax Agreements (Guernsey) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Hong Kong) Order 2011",
+      "instrument_key": "double_tax_agreements_hong_kong_order_2011",
+      "provision": "Double Tax Agreements (Hong Kong) Order 2011 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Isle of Man) Order 2010",
+      "instrument_key": "double_tax_agreements_isle_of_man_order_2010",
+      "provision": "Double Tax Agreements (Isle of Man) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Japan) Order 2013",
+      "instrument_key": "double_tax_agreements_japan_order_2013",
+      "provision": "Double Tax Agreements (Japan) Order 2013 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Jersey) Order 2010",
+      "instrument_key": "double_tax_agreements_jersey_order_2010",
+      "provision": "Double Tax Agreements (Jersey) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018",
+      "instrument_key": "double_tax_agreements_multilateral_convention_order_2018",
+      "provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Papua New Guinea) Order 2013",
+      "instrument_key": "double_tax_agreements_papua_new_guinea_order_2013",
+      "provision": "Double Tax Agreements (Papua New Guinea) Order 2013 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Samoa) Order 2015",
+      "instrument_key": "double_tax_agreements_samoa_order_2015",
+      "provision": "Double Tax Agreements (Samoa) Order 2015 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Singapore) Order 2010",
+      "instrument_key": "double_tax_agreements_singapore_order_2010",
+      "provision": "Double Tax Agreements (Singapore) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Slovak Republic) Order 2024",
+      "instrument_key": "double_tax_agreements_slovak_republic_order_2024",
+      "provision": "Double Tax Agreements (Slovak Republic) Order 2024 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Switzerland) Order 2020",
+      "instrument_key": "double_tax_agreements_switzerland_order_2020",
+      "provision": "Double Tax Agreements (Switzerland) Order 2020 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Turkey) Order 2010",
+      "instrument_key": "double_tax_agreements_turkey_order_2010",
+      "provision": "Double Tax Agreements (Turkey) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Tax Agreements (Viet Nam) Order 2014",
+      "instrument_key": "double_tax_agreements_viet_nam_order_2014",
+      "provision": "Double Tax Agreements (Viet Nam) Order 2014 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Taxation Relief (Australia) Order 2010",
+      "instrument_key": "double_taxation_relief_australia_order_2010",
+      "provision": "Double Taxation Relief (Australia) Order 2010 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Taxation Relief (Austria) Amendment Order 2024",
+      "instrument_key": "double_taxation_relief_austria_amendment_order_2024",
+      "provision": "Double Taxation Relief (Austria) Amendment Order 2024 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Taxation Relief (Czech Republic) Order 2008",
+      "instrument_key": "double_taxation_relief_czech_republic_order_2008",
+      "provision": "Double Taxation Relief (Czech Republic) Order 2008 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Double Taxation Relief (United States of America) Amendment Order 2009",
+      "instrument_key": "double_taxation_relief_usa_amendment_order_2009",
+      "provision": "Double Taxation Relief (United States of America) Amendment Order 2009 — operative document and schedules"
+    },
+    {
       "citation_path": "nz/statute/act/public/1985/0141/section/10",
       "coverage_basis": "exact_nonempty_body",
       "instrument": "Goods and Services Tax Act 1985",
@@ -1068,6 +2129,20 @@
       "instrument": "IS 26/12 FS 1",
       "instrument_key": "ird_is_26_12_fact_sheet",
       "provision": "IS 26/12 FS 1 — family-scheme-income fact sheet"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008",
+      "instrument_key": "approved_territories_qfei_order_2008",
+      "provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 — operative document and schedules"
+    },
+    {
+      "citation_path": null,
+      "coverage_basis": "absent",
+      "instrument": "Income Tax (Maximum Pooling Value) Order 2015",
+      "instrument_key": "income_tax_maximum_pooling_value_order_2015",
+      "provision": "Income Tax (Maximum Pooling Value) Order 2015 — operative document and schedules"
     },
     {
       "citation_path": "nz/statute/act/public/2007/0097/schedule/1/part/a/clause/1",
@@ -1175,11 +2250,32 @@
       "provision": "Income Tax Act 2007 s BD 4"
     },
     {
+      "citation_path": "nz/statute/act/public/2007/0097/section/bh-1",
+      "coverage_basis": "exact_nonempty_body",
+      "instrument": "Income Tax Act 2007",
+      "instrument_key": "income_tax_act_2007",
+      "provision": "Income Tax Act 2007 s BH 1"
+    },
+    {
       "citation_path": "nz/statute/act/public/2007/0097/section/cb-32",
       "coverage_basis": "exact_nonempty_body",
       "instrument": "Income Tax Act 2007",
       "instrument_key": "income_tax_act_2007",
       "provision": "Income Tax Act 2007 s CB 32"
+    },
+    {
+      "citation_path": "nz/statute/act/public/2007/0097/section/cw-12",
+      "coverage_basis": "exact_nonempty_body",
+      "instrument": "Income Tax Act 2007",
+      "instrument_key": "income_tax_act_2007",
+      "provision": "Income Tax Act 2007 s CW 12"
+    },
+    {
+      "citation_path": "nz/statute/act/public/2007/0097/section/ee-65",
+      "coverage_basis": "exact_nonempty_body",
+      "instrument": "Income Tax Act 2007",
+      "instrument_key": "income_tax_act_2007",
+      "provision": "Income Tax Act 2007 s EE 65"
     },
     {
       "citation_path": "nz/statute/act/public/2007/0097/section/hr-8",
@@ -3008,6 +4104,116 @@
       "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03"
     },
     {
+      "in_release": false,
+      "provision": "Double Tax Agreements (British Virgin Islands) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Canada) Order 2015 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Cayman Islands) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (China) Order 2019 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Cook Islands) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Guernsey) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Hong Kong) Order 2011 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Isle of Man) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Japan) Order 2013 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Jersey) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Papua New Guinea) Order 2013 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Samoa) Order 2015 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Singapore) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Slovak Republic) Order 2024 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Switzerland) Order 2020 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Turkey) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Tax Agreements (Viet Nam) Order 2014 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Taxation Relief (Australia) Order 2010 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Taxation Relief (Austria) Amendment Order 2024 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Taxation Relief (Czech Republic) Order 2008 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Double Taxation Relief (United States of America) Amendment Order 2009 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/"
+    },
+    {
       "in_release": true,
       "provision": "Goods and Services Tax Act 1985 s 10",
       "source_url": "https://www.legislation.govt.nz/act/public/1985/0141/latest/DLM82442.html"
@@ -3031,6 +4237,16 @@
       "in_release": false,
       "provision": "IS 26/12 FS 1 — family-scheme-income fact sheet",
       "source_url": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1"
+    },
+    {
+      "in_release": false,
+      "provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/"
+    },
+    {
+      "in_release": false,
+      "provision": "Income Tax (Maximum Pooling Value) Order 2015 — operative document and schedules",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/"
     },
     {
       "in_release": true,
@@ -3109,8 +4325,23 @@
     },
     {
       "in_release": true,
+      "provision": "Income Tax Act 2007 s BH 1",
+      "source_url": "https://www.legislation.govt.nz/act/public/2007/0097/latest/DLM1512385.html"
+    },
+    {
+      "in_release": true,
       "provision": "Income Tax Act 2007 s CB 32",
       "source_url": "https://www.legislation.govt.nz/act/public/2007/0097/latest/DLM1512498.html"
+    },
+    {
+      "in_release": true,
+      "provision": "Income Tax Act 2007 s CW 12",
+      "source_url": "https://www.legislation.govt.nz/act/public/2007/0097/latest/DLM1513154.html"
+    },
+    {
+      "in_release": true,
+      "provision": "Income Tax Act 2007 s EE 65",
+      "source_url": "https://www.legislation.govt.nz/act/public/2007/0097/latest/DLM1514735.html"
     },
     {
       "in_release": true,

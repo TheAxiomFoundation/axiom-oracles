@@ -1235,6 +1235,249 @@ def _central_spine_frontier(
     }, complete
 
 
+_DEPENDENCY_KEYS = (
+    "open_dependency_count",
+    "law_derived_inputs",
+    "instruments_bearing_on_computed",
+    "closed",
+)
+
+
+def _dependency_block_well_formed(block: object) -> bool:
+    """Return whether a v3 dependency block is complete and self-consistent."""
+
+    return (
+        isinstance(block, dict)
+        and isinstance(block.get("open_dependency_count"), int)
+        # bool is an int subclass: open_dependency_count=false must read
+        # malformed, not as a zero count (launch-audit delta r2 finding).
+        and not isinstance(block.get("open_dependency_count"), bool)
+        and isinstance(block.get("law_derived_inputs"), list)
+        and isinstance(block.get("instruments_bearing_on_computed"), list)
+        and isinstance(block.get("closed"), bool)
+        and block["open_dependency_count"]
+        == len(block["law_derived_inputs"])
+        + len(block["instruments_bearing_on_computed"])
+        and block["closed"] == (block["open_dependency_count"] == 0)
+    )
+
+
+def _dependency_programs_well_formed(value: object) -> bool:
+    return (
+        isinstance(value, list)
+        and all(isinstance(item, str) and item for item in value)
+        and value == sorted(set(value))
+    )
+
+
+def _central_dependency_closure(
+    program: str,
+    computed: object,
+    scoped: object,
+) -> tuple[dict, bool, bool]:
+    """Normalize dependency closure and derive an attributed program cone.
+
+    The legacy contract has no row-level ``programs`` attribution.  Its global
+    dependency block and four-field certificate output remain byte-for-byte the
+    old path.  Attributed mode activates only from the input-grounding ledger;
+    a producer's program summary is never an authority for reachability.
+
+    Returns ``(certificate_summary, passes, attributed)``.
+    """
+
+    computed_block = computed if isinstance(computed, dict) else {}
+    dependency_block = computed_block.get("dependency_closure")
+    input_grounding = computed_block.get("input_grounding")
+    grounding_ledger = (
+        input_grounding.get("ledger") if isinstance(input_grounding, dict) else None
+    )
+    attributed = isinstance(grounding_ledger, list) and any(
+        isinstance(row, dict) and "programs" in row for row in grounding_ledger
+    )
+
+    # First validate the jurisdiction block exactly as the pre-P3 gate did.
+    # This remains the source of the unfiltered jurisdiction count, including
+    # open rows explicitly attributed to no certificate view.
+    if not _dependency_block_well_formed(dependency_block):
+        if isinstance(dependency_block, dict):
+            return (
+                {
+                    "closed": False,
+                    "malformed": True,
+                    "requirement": (
+                        "the dependency-closure block must carry a well-typed "
+                        "open_dependency_count, law_derived_inputs, and "
+                        "instruments_bearing_on_computed that agree with its closed "
+                        "flag (CERTIFIED.md v3); this artifact's block is incomplete "
+                        "or inconsistent"
+                    ),
+                },
+                False,
+                attributed,
+            )
+        return (
+            {
+                "closed": False,
+                "missing": True,
+                "requirement": (
+                    "closure must type every leaf and encode every law-derived "
+                    "dependency (CERTIFIED.md v3); this artifact declares no "
+                    "dependency-closure block"
+                ),
+            },
+            False,
+            attributed,
+        )
+
+    global_summary = {key: dependency_block[key] for key in _DEPENDENCY_KEYS}
+    if not attributed:
+        return global_summary, global_summary["closed"] is True, False
+
+    jurisdiction_count = dependency_block["open_dependency_count"]
+
+    def malformed(detail: str) -> tuple[dict, bool, bool]:
+        return (
+            {
+                "closed": False,
+                "malformed": True,
+                "jurisdiction_open_dependency_count": jurisdiction_count,
+                "requirement": (
+                    "program-attributed dependency closure must completely and "
+                    f"consistently attribute every open row: {detail}"
+                ),
+            },
+            False,
+            True,
+        )
+
+    law_ids = dependency_block["law_derived_inputs"]
+    bearing_elis = dependency_block["instruments_bearing_on_computed"]
+    if (
+        not all(isinstance(item, str) and item for item in law_ids)
+        or law_ids != sorted(set(law_ids))
+        or not all(isinstance(item, str) and item for item in bearing_elis)
+        or bearing_elis != sorted(set(bearing_elis))
+    ):
+        return malformed("the jurisdiction worklists must be sorted unique strings")
+    declared_jurisdiction_count = dependency_block.get(
+        "jurisdiction_open_dependency_count"
+    )
+    if (
+        declared_jurisdiction_count is not None
+        and declared_jurisdiction_count != jurisdiction_count
+    ):
+        return malformed("the declared jurisdiction count disagrees with its worklists")
+
+    grounding_by_id: dict[str, dict] = {}
+    # ``attributed`` implies this is a list.  Once any row opts in, every row
+    # must participate: otherwise deleting one program list could silently
+    # shrink every certificate cone.
+    for row in grounding_ledger:
+        if not isinstance(row, dict):
+            return malformed("input-grounding ledger contains a non-object row")
+        programs = row.get("programs")
+        if not _dependency_programs_well_formed(programs):
+            return malformed("input-grounding programs attribution is partial or malformed")
+        if not programs and not (
+            isinstance(row.get("attribution_reason"), str)
+            and bool(row["attribution_reason"].strip())
+        ):
+            return malformed(
+                "an input attributed to no program must retain an attribution reason"
+            )
+        source_surface = row.get("source_surface")
+        name = row.get("name")
+        if not (
+            isinstance(source_surface, str)
+            and source_surface
+            and isinstance(name, str)
+            and name
+        ):
+            return malformed("input-grounding row lacks source_surface or name")
+        row_id = f"{source_surface}:{name}"
+        if row_id in grounding_by_id:
+            return malformed(f"duplicate input-grounding row {row_id}")
+        grounding_by_id[row_id] = row
+
+    scoped_law: list[str] = []
+    for row_id in law_ids:
+        row = grounding_by_id.get(row_id)
+        if row is None or row.get("leaf_kind") != "law_derived":
+            return malformed(f"law-derived input {row_id} lacks its attributed row")
+        if program in row["programs"]:
+            scoped_law.append(row_id)
+
+    instrument_frontier = computed_block.get("instrument_frontier")
+    instrument_ledger = (
+        instrument_frontier.get("ledger")
+        if isinstance(instrument_frontier, dict)
+        else None
+    )
+    if bearing_elis and not isinstance(instrument_ledger, list):
+        return malformed("bearing-instrument ledger is missing")
+    instrument_rows: dict[str, list[dict]] = {}
+    for row in instrument_ledger or []:
+        if isinstance(row, dict) and row.get("eli") in bearing_elis:
+            instrument_rows.setdefault(str(row["eli"]), []).append(row)
+
+    scoped_bearing: list[str] = []
+    for eli in bearing_elis:
+        matches = instrument_rows.get(eli) or []
+        if len(matches) != 1:
+            return malformed(
+                f"bearing instrument {eli} must have exactly one frontier row"
+            )
+        programs = matches[0].get("programs")
+        if not _dependency_programs_well_formed(programs):
+            return malformed(
+                f"bearing instrument {eli} has missing or malformed programs attribution"
+            )
+        if program in programs:
+            scoped_bearing.append(eli)
+
+    scoped_count = len(scoped_law) + len(scoped_bearing)
+    derived_summary = {
+        "open_dependency_count": scoped_count,
+        "jurisdiction_open_dependency_count": jurisdiction_count,
+        "law_derived_inputs": scoped_law,
+        "instruments_bearing_on_computed": scoped_bearing,
+        "closed": scoped_count == 0,
+    }
+
+    # A producer may publish the same convenience block, but the central gate
+    # does not depend on it.  When present it must agree with the row-derived
+    # cone so a stale or hand-narrowed scoped count cannot survive --check.
+    scoped_dependency = (
+        scoped.get("dependency_closure") if isinstance(scoped, dict) else None
+    )
+    if scoped_dependency is not None:
+        if not _dependency_block_well_formed(scoped_dependency):
+            return malformed("the producer's scoped dependency block is malformed")
+        expected_scoped = {
+            key: derived_summary[key]
+            for key in (
+                "open_dependency_count",
+                "law_derived_inputs",
+                "instruments_bearing_on_computed",
+                "closed",
+            )
+        }
+        if any(scoped_dependency[key] != value for key, value in expected_scoped.items()):
+            return malformed("the producer's scoped dependency block disagrees with rows")
+        scoped_jurisdiction_count = scoped_dependency.get(
+            "jurisdiction_open_dependency_count"
+        )
+        if (
+            scoped_jurisdiction_count is not None
+            and scoped_jurisdiction_count != jurisdiction_count
+        ):
+            return malformed(
+                "the producer's scoped jurisdiction count disagrees with the global count"
+            )
+
+    return derived_summary, derived_summary["closed"] is True, True
+
+
 def _producer_closed_verdict(
     program: str,
     spec: dict,
@@ -1349,6 +1592,7 @@ def _producer_closed_verdict(
                 f"{artifact_ref} failed full closure verification: {detail}"
             )
     scoped: dict | None = None
+    summary_programs: dict | None = None
     if isinstance(summary, dict):
         if "programs" in summary:
             programs = summary["programs"]
@@ -1356,6 +1600,7 @@ def _producer_closed_verdict(
                 programs.get(program), dict
             ):
                 raise ValueError(f"{artifact_ref} has no closure scope for {program}")
+            summary_programs = programs
             scoped = programs[program]
         else:
             scoped = summary
@@ -1364,15 +1609,22 @@ def _producer_closed_verdict(
         value = getattr(summary, "closed", None)
     if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
+    _computed_block = document.get("computed")
+    _dependency_summary, _dependency_passes, _dependency_attributed = (
+        _central_dependency_closure(program, _computed_block, scoped)
+    )
+    if not _dependency_passes:
+        value = False
+
     # Central completeness requirement (oracles#491): a closure claim must
     # disposition the act's subordinate instruments (regulations, guidance,
-    # rate publications), not just the act's own provisions. A closure
-    # artifact whose computed block carries no complete instrument frontier
-    # cannot compute closed=true, whatever its producer says — in the US,
-    # certifying statute-only closure would be very wrong.
-    _computed_block = document.get("computed")
+    # rate publications), not just the act's own provisions. In attributed
+    # mode this is the program's frontier; legacy producers retain the exact
+    # jurisdiction/global path they used before P3.
     _instrument_frontier = (
-        _computed_block.get("instrument_frontier")
+        scoped.get("instrument_frontier")
+        if _dependency_attributed and isinstance(scoped, dict)
+        else _computed_block.get("instrument_frontier")
         if isinstance(_computed_block, dict)
         else None
     )
@@ -1399,73 +1651,30 @@ def _producer_closed_verdict(
     )
     if _instrument_frontier_summary.get("complete") is not True:
         value = False
-    _dependency_block = (
-        _computed_block.get("dependency_closure")
-        if isinstance(_computed_block, dict)
-        else None
-    )
-    # A dependency-closure block only satisfies the gate when it is
-    # COMPLETE and internally consistent: all four fields present and
-    # well-typed, closed=true, and the enumerations actually empty. A bare
-    # {"closed": true} — or any block whose count and lists disagree — is
-    # treated as malformed and fails closed (launch-audit delta finding).
-    _dependency_well_formed = (
-        isinstance(_dependency_block, dict)
-        and isinstance(_dependency_block.get("open_dependency_count"), int)
-        # bool is an int subclass: open_dependency_count=false must read
-        # malformed, not as a zero count (launch-audit delta r2 finding).
-        and not isinstance(_dependency_block.get("open_dependency_count"), bool)
-        and isinstance(_dependency_block.get("law_derived_inputs"), list)
-        and isinstance(
-            _dependency_block.get("instruments_bearing_on_computed"), list
-        )
-        and isinstance(_dependency_block.get("closed"), bool)
-        and _dependency_block["open_dependency_count"]
-        == len(_dependency_block["law_derived_inputs"])
-        + len(_dependency_block["instruments_bearing_on_computed"])
-        and _dependency_block["closed"]
-        == (_dependency_block["open_dependency_count"] == 0)
-    )
-    if _dependency_well_formed:
-        _dependency_summary = {
-            key: _dependency_block[key]
-            for key in (
-                "open_dependency_count",
-                "law_derived_inputs",
-                "instruments_bearing_on_computed",
-                "closed",
+    if _dependency_attributed:
+        if isinstance(scoped, dict) and "spine_frontier" in scoped:
+            _spine_summary, _spine_passes = _central_spine_frontier(
+                scoped["spine_frontier"]
             )
-        }
-    elif isinstance(_dependency_block, dict):
-        _dependency_summary = {
-            "closed": False,
-            "malformed": True,
-            "requirement": (
-                "the dependency-closure block must carry a well-typed "
-                "open_dependency_count, law_derived_inputs, and "
-                "instruments_bearing_on_computed that agree with its closed "
-                "flag (CERTIFIED.md v3); this artifact's block is incomplete "
-                "or inconsistent"
-            ),
-        }
+        else:
+            _spine_summary, _spine_passes = (
+                {
+                    "complete": False,
+                    "missing": True,
+                    "requirement": (
+                        "program-attributed closure must declare the spine rows "
+                        "reached by this program"
+                    ),
+                },
+                False,
+            )
     else:
-        _dependency_summary = {
-            "closed": False,
-            "missing": True,
-            "requirement": (
-                "closure must type every leaf and encode every law-derived "
-                "dependency (CERTIFIED.md v3); this artifact declares no "
-                "dependency-closure block"
-            ),
-        }
-    if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
-        value = False
-    _spine_block = (
-        _computed_block.get("spine_frontier")
-        if isinstance(_computed_block, dict)
-        else None
-    )
-    _spine_summary, _spine_passes = _central_spine_frontier(_spine_block)
+        _spine_block = (
+            _computed_block.get("spine_frontier")
+            if isinstance(_computed_block, dict)
+            else None
+        )
+        _spine_summary, _spine_passes = _central_spine_frontier(_spine_block)
     if not _spine_passes:
         value = False
     evidence.append(
@@ -1478,7 +1687,7 @@ def _producer_closed_verdict(
         }
     )
 
-    if scoped is not None and isinstance(summary.get("programs"), dict):
+    if scoped is not None and summary_programs is not None:
         return {
             "mode": "computed",
             "status": "computed_pass" if value else "computed_open",

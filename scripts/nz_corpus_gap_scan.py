@@ -54,9 +54,9 @@ EXPECTED_UNIQUE_DERIVATION_EXPRESSIONS = 77
 EXPECTED_DERIVATION_EXPRESSION_SHA256 = (
     "4269491a0c3fb6b259731c31c9424321c0b31e02ad95cc65cf716c1ccb6ee02c"
 )
-EXPECTED_BEARING_INSTRUMENTS = 18
+EXPECTED_BEARING_INSTRUMENTS = 39
 EXPECTED_BEARING_SOURCE_SHA256 = (
-    "46934a517a678734b5261cbac7299b530fc3eb920dd853bff0927a605781529f"
+    "31baeda69fc0ce360b10d0d7103f68a44adecb039802e2d9b20a4322e7530c48"
 )
 EXACT_SOURCE_URLS = {
     "nz/statute/act/public/2025/0009/section/105": (
@@ -94,6 +94,180 @@ class PriorityCone:
     citation_paths: tuple[str, ...]
     document_instrument_keys: tuple[str, ...] = ()
     notes: tuple[str, ...] = ()
+
+
+ADDITIONAL_BEARING_SECONDARY_INSTRUMENTS = (
+    Instrument(
+        "double_taxation_relief_czech_republic_order_2008",
+        "Double Taxation Relief (Czech Republic) Order 2008",
+        "nz/regulation/regulation/public/2008/0227/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2008/227/en/latest/",
+    ),
+    Instrument(
+        "approved_territories_qfei_order_2008",
+        "Income Tax (Approved Territories for Qualifying Foreign Equity "
+        "Investor Definition) Order 2008",
+        "nz/regulation/regulation/public/2008/0290/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2008/290/en/latest/",
+    ),
+    Instrument(
+        "double_taxation_relief_usa_amendment_order_2009",
+        "Double Taxation Relief (United States of America) Amendment Order 2009",
+        "nz/regulation/regulation/public/2009/0365/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2009/365/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_singapore_order_2010",
+        "Double Tax Agreements (Singapore) Order 2010",
+        "nz/regulation/regulation/public/2010/0115/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/115/en/latest/",
+    ),
+    Instrument(
+        "double_taxation_relief_australia_order_2010",
+        "Double Taxation Relief (Australia) Order 2010",
+        "nz/regulation/regulation/public/2010/0013/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/13/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_british_virgin_islands_order_2010",
+        "Double Tax Agreements (British Virgin Islands) Order 2010",
+        "nz/regulation/regulation/public/2010/0146/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/146/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_cayman_islands_order_2010",
+        "Double Tax Agreements (Cayman Islands) Order 2010",
+        "nz/regulation/regulation/public/2010/0147/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/147/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_cook_islands_order_2010",
+        "Double Tax Agreements (Cook Islands) Order 2010",
+        "nz/regulation/regulation/public/2010/0148/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/148/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_guernsey_order_2010",
+        "Double Tax Agreements (Guernsey) Order 2010",
+        "nz/regulation/regulation/public/2010/0151/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/151/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_isle_of_man_order_2010",
+        "Double Tax Agreements (Isle of Man) Order 2010",
+        "nz/regulation/regulation/public/2010/0152/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/152/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_jersey_order_2010",
+        "Double Tax Agreements (Jersey) Order 2010",
+        "nz/regulation/regulation/public/2010/0153/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/153/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_turkey_order_2010",
+        "Double Tax Agreements (Turkey) Order 2010",
+        "nz/regulation/regulation/public/2010/0311/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2010/311/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_hong_kong_order_2011",
+        "Double Tax Agreements (Hong Kong) Order 2011",
+        "nz/regulation/regulation/public/2011/0354/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2011/354/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_papua_new_guinea_order_2013",
+        "Double Tax Agreements (Papua New Guinea) Order 2013",
+        "nz/regulation/regulation/public/2013/0276/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2013/276/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_japan_order_2013",
+        "Double Tax Agreements (Japan) Order 2013",
+        "nz/regulation/regulation/public/2013/0316/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2013/316/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_viet_nam_order_2014",
+        "Double Tax Agreements (Viet Nam) Order 2014",
+        "nz/regulation/regulation/public/2014/0112/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2014/112/en/latest/",
+    ),
+    Instrument(
+        "income_tax_maximum_pooling_value_order_2015",
+        "Income Tax (Maximum Pooling Value) Order 2015",
+        "nz/regulation/regulation/public/2015/0141/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2015/141/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_samoa_order_2015",
+        "Double Tax Agreements (Samoa) Order 2015",
+        "nz/regulation/regulation/public/2015/0261/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2015/261/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_canada_order_2015",
+        "Double Tax Agreements (Canada) Order 2015",
+        "nz/regulation/regulation/public/2015/0074/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2015/74/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_multilateral_convention_order_2018",
+        "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty "
+        "Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018",
+        "nz/regulation/regulation/public/2018/0072/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2018/72/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_china_order_2019",
+        "Double Tax Agreements (China) Order 2019",
+        "nz/regulation/regulation/public/2019/0241/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2019/241/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_switzerland_order_2020",
+        "Double Tax Agreements (Switzerland) Order 2020",
+        "nz/regulation/regulation/public/2020/0022/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2020/22/en/latest/",
+    ),
+    Instrument(
+        "double_taxation_relief_austria_amendment_order_2024",
+        "Double Taxation Relief (Austria) Amendment Order 2024",
+        "nz/regulation/regulation/public/2024/0153/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2024/153/en/latest/",
+    ),
+    Instrument(
+        "double_tax_agreements_slovak_republic_order_2024",
+        "Double Tax Agreements (Slovak Republic) Order 2024",
+        "nz/regulation/regulation/public/2024/0154/",
+        "https://www.legislation.govt.nz/secondary-legislation/"
+        "pco-drafted/2024/154/en/latest/",
+    ),
+)
 
 
 INSTRUMENTS = (
@@ -179,6 +353,7 @@ INSTRUMENTS = (
         "https://www.legislation.govt.nz/secondary-legislation/"
         "pco-drafted/1998/277/en/latest/",
     ),
+    *ADDITIONAL_BEARING_SECONDARY_INSTRUMENTS,
     Instrument(
         "social_security_regulations_2018",
         "Social Security Regulations 2018",
@@ -275,8 +450,10 @@ INSTRUMENT_BY_KEY = {row.key: row for row in INSTRUMENTS}
 # These supplement the 200 exact roots already ratcheted by nz_spine.  Four
 # Schedule 2 definitions are named by the dependency ledger but were disclosed
 # as unquantified root expansion by the V3 audit.  The remaining paths expand
-# the 18 bearing-instrument defining provisions conservatively: whole cited
-# subparts, every current section in a cited range, and every named schedule.
+# the statutory defining provisions from C1's original bearing set
+# conservatively: whole cited subparts, every current section in a cited range,
+# and every named schedule.  B2's additional secondary instruments are tracked
+# as whole-document provisions below because none is in the pinned release.
 ADDITIONAL_PATH_PROVISIONS = (
     # Explicit dependency roots outside the audit's 174-root lower bound.
     Provision(
@@ -308,7 +485,10 @@ ADDITIONAL_PATH_PROVISIONS = (
             "bc-8",
             "bd-3",
             "bd-4",
+            "bh-1",
             "cb-32",
+            "cw-12",
+            "ee-65",
             "mb-5",
             "mb-6",
             "mb-14",
@@ -372,6 +552,13 @@ ADDITIONAL_PATH_PROVISIONS = (
 
 
 DOCUMENT_PROVISIONS = (
+    *(
+        Provision(
+            row.key,
+            label=f"{row.title} — operative document and schedules",
+        )
+        for row in ADDITIONAL_BEARING_SECONDARY_INSTRUMENTS
+    ),
     Provision(
         "ird_paye_deduction_guidance",
         "nz/guidance/ird/paye-deduction-tables",
@@ -409,6 +596,10 @@ DOCUMENT_PROVISIONS = (
 
 
 BEARING_ELI_TO_INSTRUMENT_KEYS = {
+    **{
+        row.source_url: (row.key, "income_tax_act_2007")
+        for row in ADDITIONAL_BEARING_SECONDARY_INSTRUMENTS
+    },
     "https://www.ird.govt.nz/deductions-from-salary-and-wages": (
         "ird_paye_deduction_guidance",
     ),
@@ -421,17 +612,6 @@ BEARING_ELI_TO_INSTRUMENT_KEYS = {
     ),
     "https://www.legislation.govt.nz/act/public/1994/166/en/latest/": (
         "tax_administration_act_1994",
-        "income_tax_act_2007",
-    ),
-    "https://www.legislation.govt.nz/act/public/2025/26/en/latest/": (
-        "taxation_budget_measures_act_2025",
-        "income_tax_act_2007",
-    ),
-    "https://www.legislation.govt.nz/act/public/2025/27/en/latest/": (
-        "social_assistance_amendment_act_2025",
-    ),
-    "https://www.legislation.govt.nz/act/public/2025/9/en/latest/": (
-        "taxation_annual_rates_2024_25_act_2025",
         "income_tax_act_2007",
     ),
     "https://www.legislation.govt.nz/act/public/2026/27/en/latest/": (
@@ -549,7 +729,9 @@ PRIORITY_CONES = (
         "independent_earner_tax_credit",
         ("nz/statutes/income_tax/credits/individual_credits.yaml",),
         "Third small-cone priority named by Brief C1: IETC LC 13, YD 1, "
-        "HR 8, and every pending bearing source assigned to individual credits.",
+        "HR 8, and the non-order bearing sources selected by C1 for individual "
+        "credits. B2's later secondary-instrument additions remain explicit in "
+        "the global ingest worklist.",
         (
             *_paths(
                 "nz/statute/act/public/2007/0097/section",
@@ -897,7 +1079,7 @@ def _normalized_provisions() -> list[Provision]:
         len(identity) == len(set(identity)), "normalized provision ledger repeats a row"
     )
     _require(
-        len(provisions) == 287, "normalized provision denominator drifted from 287"
+        len(provisions) == 314, "normalized provision denominator drifted from 314"
     )
     return provisions
 
@@ -1200,19 +1382,19 @@ def build_document(*, rulespec_root: Path, corpus_root: Path) -> dict[str, Any]:
     )
 
     present_count = sum(bool(row["in_release"]) for row in ledger)
-    _require(len(ledger) == 287, "rendered provision denominator drifted")
+    _require(len(ledger) == 314, "rendered provision denominator drifted")
     _require(
-        present_count == 233,
-        f"in-release provision count drifted from 233 (actual {present_count})",
+        present_count == 236,
+        f"in-release provision count drifted from 236 (actual {present_count})",
     )
     _require(
-        len(ledger) - present_count == 54,
-        "missing provision count drifted from 54 "
+        len(ledger) - present_count == 78,
+        "missing provision count drifted from 78 "
         f"(actual {len(ledger) - present_count})",
     )
     _require(
-        len(missing_by_instrument) == 13,
-        "missing instrument count drifted from 13 "
+        len(missing_by_instrument) == 37,
+        "missing instrument count drifted from 37 "
         f"(actual {len(missing_by_instrument)})",
     )
 

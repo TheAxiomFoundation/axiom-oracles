@@ -36,13 +36,13 @@ def test_committed_gap_scan_has_three_column_ledger_and_priority_receipts():
     document = _document()
 
     assert document["counts"] == {
-        "bearing_instruments": 18,
-        "in_release": 233,
-        "instruments": 26,
-        "instruments_with_missing": 13,
+        "bearing_instruments": 39,
+        "in_release": 236,
+        "instruments": 50,
+        "instruments_with_missing": 37,
         "law_derived_rows": 229,
-        "missing": 54,
-        "provisions": 287,
+        "missing": 78,
+        "provisions": 314,
         "unique_derivation_expressions": 77,
     }
     assert all(
@@ -80,6 +80,45 @@ def test_committed_gap_scan_has_three_column_ledger_and_priority_receipts():
     ]
     assert len(wep_74) == 1
     assert wep_74[0]["coverage_basis"] == "exact_nonempty_body"
+
+
+def test_b2_secondary_instruments_are_explicit_pinned_corpus_gaps():
+    """The 24 B2 additions must not be hidden inside their linked ITA roots."""
+
+    producer = _load_producer()
+    document = _document()
+    additions = producer.ADDITIONAL_BEARING_SECONDARY_INSTRUMENTS
+    assert len(additions) == 24
+
+    metadata = {
+        row["instrument_key"]: row
+        for row in document["provision_metadata"]
+        if row["instrument_key"] in {instrument.key for instrument in additions}
+    }
+    assert set(metadata) == {instrument.key for instrument in additions}
+    assert all(
+        row["citation_path"] is None and row["coverage_basis"] == "absent"
+        for row in metadata.values()
+    )
+
+    mappings = {
+        row["eli"]: row["instrument_groups"]
+        for row in document["bearing_instrument_mappings"]
+    }
+    for instrument in additions:
+        assert mappings[instrument.source_url] == [
+            instrument.key,
+            "income_tax_act_2007",
+        ]
+
+    exact_ita_roots = {
+        "nz/statute/act/public/2007/0097/section/bh-1",
+        "nz/statute/act/public/2007/0097/section/cw-12",
+        "nz/statute/act/public/2007/0097/section/ee-65",
+    }
+    assert exact_ita_roots <= {
+        row["citation_path"] for row in document["provision_metadata"]
+    }
 
 
 def test_dropped_small_cone_root_reds_priority_receipt():

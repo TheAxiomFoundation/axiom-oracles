@@ -811,7 +811,7 @@ def _load_dependency_dispositions() -> tuple[dict[str, Any], bytes]:
         raise ClosureError(
             "NZ dependency dispositions have unexpected or missing top-level keys"
         )
-    if document.get("schema") != "axiom_oracles.nz_dependency_dispositions.v1":
+    if document.get("schema") != "axiom_oracles.nz_dependency_dispositions.v2":
         raise ClosureError("unexpected NZ dependency disposition schema")
     if not isinstance(document.get("scope_receipts"), dict):
         raise ClosureError("NZ dependency dispositions lack scope receipts")
@@ -846,7 +846,17 @@ def _load_source_comparison_catalog() -> tuple[dict[str, Any], bytes]:
     return document, raw
 
 
-def _reached_compiled_inputs() -> set[str]:
+def _program_reached_compiled_inputs(
+    requested_output_roots: Mapping[str, list[str]] | None = None,
+) -> dict[str, set[str]]:
+    """Return each trace-owned view's transitive compiled input cone.
+
+    The execution trace is the ownership authority for requested roots.  The
+    compiled artifact is the dependency authority below those roots.  Keeping
+    those roles separate prevents a declaration-side program label from
+    shrinking another program's cone.
+    """
+
     try:
         raw = COMPILED_PROGRAM_PATH.read_bytes()
         document = json.loads(raw)
@@ -855,6 +865,7 @@ def _reached_compiled_inputs() -> set[str]:
     if hashlib.sha256(raw).hexdigest() != COMPILED_PROGRAM_SHA256:
         raise ClosureError("NZ compiled-program dependency receipt drifted")
     program = document.get("program") if isinstance(document, dict) else None
+    metadata = document.get("metadata") if isinstance(document, dict) else None
     derived_rows = program.get("derived") if isinstance(program, dict) else None
     if not isinstance(derived_rows, list) or len(derived_rows) != 176:
         raise ClosureError("NZ compiled program must contain 176 derived rules")
@@ -874,6 +885,48 @@ def _reached_compiled_inputs() -> set[str]:
         if isinstance(rule_id, str):
             by_id[rule_id] = row
         by_name[row["name"]] = row
+    evaluation_order = (
+        metadata.get("evaluation_order") if isinstance(metadata, dict) else None
+    )
+    if (
+        not isinstance(evaluation_order, list)
+        or len(evaluation_order) != 176
+        or not all(isinstance(name, str) and name for name in evaluation_order)
+        or len(set(evaluation_order)) != len(evaluation_order)
+        or set(evaluation_order) != set(by_name)
+    ):
+        raise ClosureError(
+            "NZ compiled evaluation_order must be an exact unique 176-rule permutation"
+        )
+    evaluation_position = {
+        name: index for index, name in enumerate(evaluation_order)
+    }
+    for row in derived_rows:
+        dependencies: set[str] = set()
+
+        def collect_derived(value: Any) -> None:
+            if isinstance(value, dict):
+                if value.get("kind") == "derived":
+                    name = value.get("name")
+                    if not isinstance(name, str) or name not in by_name:
+                        raise ClosureError(
+                            f"{row['name']}: missing compiled derived dependency"
+                        )
+                    dependencies.add(name)
+                for child in value.values():
+                    collect_derived(child)
+            elif isinstance(value, list):
+                for child in value:
+                    collect_derived(child)
+
+        collect_derived(row["expr"])
+        if any(
+            evaluation_position[dependency] >= evaluation_position[row["name"]]
+            for dependency in dependencies
+        ):
+            raise ClosureError(
+                f"{row['name']}: compiled evaluation_order is not topological"
+            )
     anonymous = sorted(row["name"] for row in derived_rows if row.get("id") is None)
     if anonymous != [
         "best_start_family_scheme_income_for_relationship_period",
@@ -881,47 +934,71 @@ def _reached_compiled_inputs() -> set[str]:
     ]:
         raise ClosureError("NZ compiled composition-output inventory drifted")
 
-    reached_rules: set[str] = set()
-    reached_inputs: set[str] = set()
+    if requested_output_roots is None:
+        requested_output_roots = load_requested_output_roots()
+    if tuple(sorted(requested_output_roots)) != tuple(sorted(PROGRAM_VIEWS)):
+        raise ClosureError("NZ compiled cone program set drifted")
 
-    def walk_expr(value: Any, *, owner: str) -> None:
-        if isinstance(value, dict):
-            kind = value.get("kind")
-            if kind == "input":
-                name = value.get("name")
-                if not isinstance(name, str) or not name:
-                    raise ClosureError(f"{owner}: malformed compiled input reference")
-                reached_inputs.add(name)
-            elif kind == "derived":
-                name = value.get("name")
-                target = by_name.get(name) if isinstance(name, str) else None
-                if target is None:
-                    raise ClosureError(f"{owner}: missing compiled derived dependency")
-                visit_rule(target)
-            for child in value.values():
-                walk_expr(child, owner=owner)
-        elif isinstance(value, list):
-            for child in value:
-                walk_expr(child, owner=owner)
+    rules_by_program: dict[str, set[str]] = {}
+    inputs_by_program: dict[str, set[str]] = {}
+    for view, roots in sorted(requested_output_roots.items()):
+        if roots != sorted(set(roots)) or not roots:
+            raise ClosureError(f"{view}: requested roots must be unique and sorted")
+        reached_rules: set[str] = set()
+        reached_inputs: set[str] = set()
 
-    def visit_rule(row: dict[str, Any]) -> None:
-        rule_id = row.get("id") or f"composition:{row['name']}"
-        if rule_id in reached_rules:
-            return
-        reached_rules.add(rule_id)
-        walk_expr(row["expr"], owner=rule_id)
+        def walk_expr(value: Any, *, owner: str) -> None:
+            if isinstance(value, dict):
+                kind = value.get("kind")
+                if kind == "input":
+                    name = value.get("name")
+                    if not isinstance(name, str) or not name:
+                        raise ClosureError(
+                            f"{owner}: malformed compiled input reference"
+                        )
+                    reached_inputs.add(name)
+                elif kind == "derived":
+                    name = value.get("name")
+                    target = by_name.get(name) if isinstance(name, str) else None
+                    if target is None:
+                        raise ClosureError(
+                            f"{owner}: missing compiled derived dependency"
+                        )
+                    visit_rule(target)
+                for child in value.values():
+                    walk_expr(child, owner=owner)
+            elif isinstance(value, list):
+                for child in value:
+                    walk_expr(child, owner=owner)
 
-    roots = sorted({root for spec in PROGRAM_VIEWS.values() for root in spec["roots"]})
-    for root in roots:
-        row = by_id.get(root)
-        if row is None:
-            raise ClosureError(f"NZ compiled program lacks requested root {root}")
-        visit_rule(row)
-    if len(reached_rules) != 77 or len(reached_inputs) != 147:
+        def visit_rule(row: dict[str, Any]) -> None:
+            rule_id = row.get("id") or f"composition:{row['name']}"
+            if rule_id in reached_rules:
+                return
+            reached_rules.add(rule_id)
+            walk_expr(row["expr"], owner=rule_id)
+
+        for root in roots:
+            row = by_id.get(root)
+            if row is None:
+                raise ClosureError(f"NZ compiled program lacks requested root {root}")
+            visit_rule(row)
+        rules_by_program[view] = reached_rules
+        inputs_by_program[view] = reached_inputs
+
+    reached_rule_union = set().union(*rules_by_program.values())
+    reached_input_union = set().union(*inputs_by_program.values())
+    if len(reached_rule_union) != 77 or len(reached_input_union) != 147:
         raise ClosureError(
             "NZ compiled requested-root reachability denominator drifted from 77 derived rules / 147 inputs"
         )
-    return reached_inputs
+    return inputs_by_program
+
+
+def _reached_compiled_inputs() -> set[str]:
+    """Compatibility helper for the jurisdiction-wide reached-input union."""
+
+    return set().union(*_program_reached_compiled_inputs().values())
 
 
 def _expected_dependency_inputs(
@@ -953,7 +1030,8 @@ def _expected_dependency_inputs(
         }
     if state_counts != {"constant": 98, "varied": 52, "not_supplied": 178}:
         raise ClosureError("NZ exercise-input state denominator drifted")
-    reached = _reached_compiled_inputs()
+    reached_by_program = _program_reached_compiled_inputs()
+    reached = set().union(*reached_by_program.values())
     harness_only = sorted(supplied - reached)
     if not reached.issubset(supplied) or harness_only != [
         "child_tax_credit_for_entitlement_period",
@@ -1028,6 +1106,12 @@ def _expected_dependency_inputs(
         raise ClosureError("NZ omitted legal-gate denominator is not 99")
     if len(expected) != 288:
         raise ClosureError("NZ typed dependency denominator is not 288")
+    for (_surface, name), fields in expected.items():
+        fields["programs"] = sorted(
+            program
+            for program, reached_inputs in reached_by_program.items()
+            if name in reached_inputs
+        )
     return expected
 
 
@@ -1042,6 +1126,10 @@ def _dependency_scope_receipts() -> dict[str, Any]:
         "compiled_program": {
             "path": str(COMPILED_PROGRAM_PATH.relative_to(REPO_ROOT)),
             "sha256": COMPILED_PROGRAM_SHA256,
+        },
+        "evaluation_trace": {
+            "path": str(EVALUATION_TRACE_PATH.relative_to(REPO_ROOT)),
+            "sha256": EVALUATION_TRACE_SHA256,
         },
         "denominator": {
             "compiled_input_slots": 328,
@@ -1060,6 +1148,17 @@ def _dependency_scope_receipts() -> dict[str, Any]:
             "scenario_inputs": 11,
             "host_rule_shortcuts": 1,
             "typed_grounding_rows": 288,
+            "attributed_grounding_rows": 147,
+            "unattributed_grounding_rows": 141,
+            "program_reached_inputs": {
+                "nz/acc-earners-levy": 1,
+                "nz/accommodation-supplement": 28,
+                "nz/income-tax": 1,
+                "nz/independent-earner-tax-credit": 11,
+                "nz/main-benefits": 13,
+                "nz/winter-energy-payment": 2,
+                "nz/working-for-families": 91,
+            },
         },
         "eligibility_closures": {
             "path": "nz-lane/emtr_reproduction/eligibility-closures.json",
@@ -1376,6 +1475,12 @@ def bootstrap_dependency_dispositions(
             )
         if surface == "scenario":
             row["declared_value"] = scenario_values[name]
+        if not row["programs"]:
+            row["attribution_reason"] = (
+                "No certified view's requested-output formula cone reaches this "
+                "host, scenario, closure, harness-only, or omitted legal surface; "
+                "the row remains in the jurisdiction ledger."
+            )
         rows.append(row)
     law_count = sum(row["classification"] == "law_derived" for row in rows)
     world_count = sum(row["classification"] == "world_fact" for row in rows)
@@ -1383,7 +1488,7 @@ def bootstrap_dependency_dispositions(
     if (len(rows), law_count, world_count, encoded_count) != (288, 229, 57, 2):
         raise ClosureError("NZ dependency audit drifted from 288 / 229 / 57 / 2")
     return {
-        "schema": "axiom_oracles.nz_dependency_dispositions.v1",
+        "schema": "axiom_oracles.nz_dependency_dispositions.v2",
         "scope_receipts": _dependency_scope_receipts(),
         "encoded_dependencies": _encoded_dependency_inventory(),
         "input_grounding": rows,
@@ -1407,8 +1512,9 @@ def _canonical_dependency_grounding(
     rows = dispositions.get("input_grounding") or []
     by_key: dict[tuple[str, str], dict[str, Any]] = {}
     sort_keys: list[tuple[str, str]] = []
-    common = {"source_surface", "name", "classification", "reason"}
+    common = {"source_surface", "name", "classification", "reason", "programs"}
     optional = {
+        "attribution_reason",
         "canonical_request_name",
         "declared_value",
         "derivation_instrument",
@@ -1437,6 +1543,27 @@ def _canonical_dependency_grounding(
             raise ClosureError(f"duplicate NZ dependency input {surface}:{name}")
         if not isinstance(value.get("reason"), str) or not value["reason"].strip():
             raise ClosureError(f"{surface}:{name}: grounding reason is empty")
+        programs = value.get("programs")
+        if (
+            not isinstance(programs, list)
+            or not all(isinstance(program, str) for program in programs)
+            or programs != sorted(set(programs))
+            or not set(programs).issubset(PROGRAM_VIEWS)
+        ):
+            raise ClosureError(f"{surface}:{name}: invalid program attribution")
+        attribution_reason = value.get("attribution_reason")
+        if not programs:
+            if (
+                not isinstance(attribution_reason, str)
+                or not attribution_reason.strip()
+            ):
+                raise ClosureError(
+                    f"{surface}:{name}: unattributed row requires a reason"
+                )
+        elif attribution_reason is not None:
+            raise ClosureError(
+                f"{surface}:{name}: reached row carries an attribution reason"
+            )
         expected_fields = expected[key]
         for field, expected_value in expected_fields.items():
             if field == "target_module":
@@ -2396,7 +2523,7 @@ def _scenario_world_reasons() -> dict[str, str]:
 def _build_dependency_closure(
     grounding_rows: list[dict[str, Any]],
     instrument_decisions: Mapping[str, Any],
-) -> tuple[dict[str, Any], dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]], dict[str, Any]]:
     law_derived_inputs = sorted(
         f"{row['source_surface']}:{row['name']}"
         for row in grounding_rows
@@ -2412,24 +2539,66 @@ def _build_dependency_closure(
         for row in grounding_rows
         if row.get("classification") == "encoded"
     )
-    instruments_bearing = {
-        str(row["eli"])
-        for row in instrument_decisions.get("instrument_dispositions") or []
-        if isinstance(row, Mapping)
-        and row.get("status") == "pending"
-        and row.get("bears_on_computed_surface") is True
-        and isinstance(row.get("eli"), str)
+    programs = tuple(sorted(PROGRAM_VIEWS))
+    law_by_program = {
+        program: sorted(
+            f"{row['source_surface']}:{row['name']}"
+            for row in grounding_rows
+            if row.get("leaf_kind") == "law_derived"
+            and program in (row.get("programs") or [])
+        )
+        for program in programs
     }
-    instruments_bearing.update(
-        str(row["eli"])
-        for row in instrument_decisions.get("supplemental_instruments") or []
-        if isinstance(row, Mapping)
-        and row.get("status") == "pending"
-        and row.get("bears_on_computed_surface") is True
-        and isinstance(row.get("eli"), str)
-    )
+    bearing_by_program: dict[str, set[str]] = {
+        program: set() for program in programs
+    }
+    instruments_bearing: set[str] = set()
+    for row in instrument_decisions.get("instrument_dispositions") or []:
+        if not (
+            isinstance(row, Mapping)
+            and row.get("status") == "pending"
+            and row.get("bears_on_computed_surface") is True
+            and isinstance(row.get("eli"), str)
+        ):
+            continue
+        program = row.get("program")
+        if not isinstance(program, str) or program not in bearing_by_program:
+            raise ClosureError("pending NZ bearing instrument lacks program ownership")
+        eli = str(row["eli"])
+        instruments_bearing.add(eli)
+        bearing_by_program[program].add(eli)
+    for row in instrument_decisions.get("supplemental_instruments") or []:
+        if not (
+            isinstance(row, Mapping)
+            and row.get("status") == "pending"
+            and row.get("bears_on_computed_surface") is True
+            and isinstance(row.get("eli"), str)
+        ):
+            continue
+        row_programs = row.get("programs")
+        if not isinstance(row_programs, list) or not row_programs:
+            raise ClosureError("pending NZ bearing supplement lacks program ownership")
+        eli = str(row["eli"])
+        instruments_bearing.add(eli)
+        for program in row_programs:
+            if not isinstance(program, str) or program not in bearing_by_program:
+                raise ClosureError(
+                    "pending NZ bearing supplement has invalid program ownership"
+                )
+            bearing_by_program[program].add(eli)
     bearing = sorted(instruments_bearing)
     open_count = len(law_derived_inputs) + len(bearing)
+    program_dependency_closures: dict[str, dict[str, Any]] = {}
+    for program in programs:
+        program_bearing = sorted(bearing_by_program[program])
+        program_open_count = len(law_by_program[program]) + len(program_bearing)
+        program_dependency_closures[program] = {
+            "law_derived_inputs": law_by_program[program],
+            "instruments_bearing_on_computed": program_bearing,
+            "open_dependency_count": program_open_count,
+            "jurisdiction_open_dependency_count": open_count,
+            "closed": program_open_count == 0,
+        }
     return (
         {
             "law_derived_inputs": law_derived_inputs,
@@ -2437,8 +2606,15 @@ def _build_dependency_closure(
             "open_dependency_count": open_count,
             "closed": open_count == 0,
         },
+        program_dependency_closures,
         {
             "input_count": len(grounding_rows),
+            "attributed_input_count": sum(
+                bool(row["programs"]) for row in grounding_rows
+            ),
+            "unattributed_input_count": sum(
+                not row["programs"] for row in grounding_rows
+            ),
             "counts": {
                 "encoded": len(encoded_inputs),
                 "world_fact": len(world_facts),
@@ -4593,8 +4769,22 @@ def bootstrap_instrument_dispositions(graph: Mapping[str, Any]) -> dict[str, Any
 
 
 def _instrument_ledger_row(
-    graph_row: Mapping[str, Any], decision: Mapping[str, Any]
+    graph_row: Mapping[str, Any],
+    decision: Mapping[str, Any],
+    *,
+    programs: list[str] | tuple[str, ...] | None = None,
 ) -> dict[str, Any]:
+    if programs is None:
+        declared_programs = decision.get("programs")
+        declared_program = decision.get("program")
+        if isinstance(declared_programs, (list, tuple)):
+            programs = list(declared_programs)
+        elif isinstance(declared_program, str):
+            programs = [declared_program]
+        else:
+            programs = []
+    if not all(isinstance(program, str) for program in programs):
+        raise ClosureError("NZ instrument frontier has invalid program ownership")
     row = {
         "eli": graph_row.get("eli"),
         "relation": graph_row.get("relation"),
@@ -4602,6 +4792,7 @@ def _instrument_ledger_row(
         "type_document": graph_row.get("type_document"),
         "in_force": graph_row.get("in_force"),
         "status": decision.get("status"),
+        "programs": sorted(set(programs)),
     }
     for key in (
         "classification",
@@ -4689,7 +4880,11 @@ def _build_instrument_frontiers(
     for program, act_path in sorted(PROGRAM_INSTRUMENT_ACT.items()):
         selected = [row for row in graph_rows if row["act_citation_path"] == act_path]
         ledger = [
-            _instrument_ledger_row(row, decision_by_pair[(program, str(row["eli"]))])
+            _instrument_ledger_row(
+                row,
+                decision_by_pair[(program, str(row["eli"]))],
+                programs=[program],
+            )
             for row in selected
         ]
         selected_supplements = [
@@ -4776,7 +4971,22 @@ def _build_instrument_frontiers(
                     "reason": "Every certified program empowered by this Act excludes this instrument with a reason; see program_dispositions.",
                 }
             )
-        row = _instrument_ledger_row(graph_row, aggregate)
+        if status == "pending":
+            aggregate_programs = sorted(
+                str(program)
+                for program, program_row in zip(programs, program_rows, strict=True)
+                if program_row.get("status") == "pending"
+                and program_row.get("bears_on_computed_surface") is True
+            )
+        else:
+            aggregate_programs = sorted(
+                str(program)
+                for program, program_row in zip(programs, program_rows, strict=True)
+                if program_row.get("status") == status
+            )
+        row = _instrument_ledger_row(
+            graph_row, aggregate, programs=aggregate_programs
+        )
         row["program_dispositions"] = [
             {
                 "program": program,
@@ -5439,13 +5649,26 @@ def build(
         source_comparison,
         rulespec_paths=set(paths),
     )
-    dependency_closure, input_grounding = _build_dependency_closure(
-        grounding_rows, instrument_decisions
-    )
+    (
+        dependency_closure,
+        program_dependency_closures,
+        input_grounding,
+    ) = _build_dependency_closure(grounding_rows, instrument_decisions)
     try:
         spine_frontier = build_spine_frontier(source, spine_ledger=spine_ledger)
     except NZSpineError as exc:
         raise ClosureError(f"NZ spine frontier is invalid: {exc}") from exc
+    spine_rows = spine_ledger.get("rows")
+    if not isinstance(spine_rows, list):
+        raise ClosureError("NZ spine ledger lacks rows")
+    spine_rows_by_citation: dict[str, Mapping[str, Any]] = {}
+    for index, row in enumerate(spine_rows):
+        citation = row.get("citation_path") if isinstance(row, Mapping) else None
+        if not isinstance(citation, str) or citation in spine_rows_by_citation:
+            raise ClosureError(
+                f"NZ spine ledger row {index} has invalid or duplicate citation"
+            )
+        spine_rows_by_citation[citation] = row
     nodes_by_id: dict[str, dict] = {}
     nodes_by_name: dict[str, dict] = {}
     for row in files:
@@ -5579,12 +5802,81 @@ def build(
                 f"from floor {citation_floor} to {len(citation_rows)}"
             )
         instrument_frontier = program_instrument_frontiers[program]
+        program_spine_rows = []
+        for citation in citations:
+            spine_row = spine_rows_by_citation.get(citation)
+            if spine_row is None:
+                raise ClosureError(
+                    f"{program}: reached citation is absent from the spine ledger: "
+                    f"{citation}"
+                )
+            status = spine_row.get("status")
+            reason = spine_row.get("reason")
+            instrument = spine_row.get("instrument")
+            if status not in {"encoded", "classified", "excluded", "pending"}:
+                raise ClosureError(f"{program}: invalid reached spine status")
+            if not isinstance(reason, str) or not reason.strip():
+                raise ClosureError(f"{program}: reached spine row lacks a reason")
+            if not isinstance(instrument, str) or not instrument.strip():
+                raise ClosureError(f"{program}: reached spine row lacks an instrument")
+            program_spine_rows.append(
+                {
+                    "citation_path": citation,
+                    "instrument": instrument,
+                    "status": status,
+                    "reason": reason,
+                }
+            )
+        program_spine_pending = [
+            row["citation_path"]
+            for row in program_spine_rows
+            if row["status"] == "pending"
+        ]
+        program_spine_statuses = {
+            status: sum(row["status"] == status for row in program_spine_rows)
+            for status in ("encoded", "classified", "excluded", "pending")
+        }
+        program_spine_instrument_counts = []
+        for instrument in sorted({row["instrument"] for row in program_spine_rows}):
+            instrument_rows = [
+                row for row in program_spine_rows if row["instrument"] == instrument
+            ]
+            instrument_statuses = {
+                status: sum(row["status"] == status for row in instrument_rows)
+                for status in ("encoded", "classified", "excluded", "pending")
+            }
+            program_spine_instrument_counts.append(
+                {
+                    "instrument": instrument,
+                    "total": len(instrument_rows),
+                    "by_status": instrument_statuses,
+                }
+            )
+        program_spine_complete = not program_spine_pending
+        program_spine_frontier = {
+            "complete": program_spine_complete,
+            "scope_adjudication_pending": False,
+            "body_hash_ledger_complete": True,
+            "blockers": (
+                [] if program_spine_complete else ["spine_pending_provisions"]
+            ),
+            "requested_legal_subgraph_scope": {
+                "total": len(program_spine_rows),
+                "by_status": program_spine_statuses,
+                "instrument_counts": program_spine_instrument_counts,
+            },
+            "citation_count": len(program_spine_rows),
+            "by_status": program_spine_statuses,
+            "pending": program_spine_pending,
+            "rows": program_spine_rows,
+        }
+        program_dependency_closure = program_dependency_closures[program]
         program_summaries[program] = {
             "closed": (
                 not pending
                 and instrument_frontier["complete"]
-                and dependency_closure["closed"]
-                and spine_frontier["complete"]
+                and program_dependency_closure["closed"]
+                and program_spine_frontier["complete"]
             ),
             "root_nodes": root_nodes,
             "root_node_count": len(root_nodes),
@@ -5599,6 +5891,8 @@ def build(
             "pending_citations": pending,
             "pending_money_atoms": 0,
             "instrument_frontier": instrument_frontier,
+            "dependency_closure": program_dependency_closure,
+            "spine_frontier": program_spine_frontier,
             "denominator_ratchet": {
                 "requested_output_count_min": denominator_ratchet[program][
                     "requested_output_count_min"
@@ -5607,7 +5901,7 @@ def build(
             },
         }
     return {
-        "schema": "axiom_oracles.nz_closure_summary.v2",
+        "schema": "axiom_oracles.nz_closure_summary.v3",
         "jurisdiction": "nz",
         "rulespec_commit": RULESPEC_SHA,
         "corpus_release": "nz-rulespec-2026-07-18",

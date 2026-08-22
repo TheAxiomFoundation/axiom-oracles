@@ -617,6 +617,15 @@ def test_nz_certificates_compute_open_on_v3_closure_frontiers():
     """Aggregation is clear, while each rederived v3 frontier keeps NZ open."""
 
     certify = _load("certify")
+    expected_cones = {
+        "nz/acc-earners-levy": (1, 2, 3),
+        "nz/accommodation-supplement": (26, 3, 29),
+        "nz/income-tax": (1, 25, 26),
+        "nz/independent-earner-tax-credit": (7, 32, 39),
+        "nz/main-benefits": (11, 1, 12),
+        "nz/winter-energy-payment": (2, 1, 3),
+        "nz/working-for-families": (80, 33, 113),
+    }
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
         assert certificate["blockers"] == []
@@ -645,21 +654,28 @@ def test_nz_certificates_compute_open_on_v3_closure_frontiers():
 
         dependency_closure = closed["dependency_closure"]
         assert dependency_closure["closed"] is False
-        # 229 law-derived inputs + 39 bearing instruments after the B2 frontier
-        # review (the V3A audit had found 18 bearing; the burn-down found 21 more).
-        assert dependency_closure["open_dependency_count"] == 268
-        assert len(dependency_closure["law_derived_inputs"]) == 229
-        assert len(dependency_closure["instruments_bearing_on_computed"]) == 39
+        law_count, bearing_count, open_count = expected_cones[program]
+        assert dependency_closure["open_dependency_count"] == open_count
+        assert dependency_closure["jurisdiction_open_dependency_count"] == 268
+        assert len(dependency_closure["law_derived_inputs"]) == law_count
+        assert (
+            len(dependency_closure["instruments_bearing_on_computed"])
+            == bearing_count
+        )
         assert dependency_closure["open_dependency_count"] == (
             len(dependency_closure["law_derived_inputs"])
             + len(dependency_closure["instruments_bearing_on_computed"])
         )
 
         spine_frontier = closed["spine_frontier"]
-        assert spine_frontier["complete"] is False
+        assert spine_frontier["complete"] is True
         assert spine_frontier["scope_adjudication_pending"] is False
         assert spine_frontier["body_hash_ledger_complete"] is True
-        assert spine_frontier["blockers"] == ["spine_pending_provisions"]
+        assert spine_frontier["blockers"] == []
+        assert (
+            spine_frontier["requested_legal_subgraph_scope"]["by_status"]["pending"]
+            == 0
+        )
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
 

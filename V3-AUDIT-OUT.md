@@ -1,14 +1,16 @@
 # NZ audit under CERTIFIED.md definition v3
 
-**Outcome:** 197-row B2 frontier adjudicated, closed honestly open under v3.
+**Outcome:** NZ dependency closure attributed to trace-derived program cones; all seven certificates remain honestly open.
 
-This is the deterministic audit rendered on the B2 review date **2026-08-21** from the committed NZ ledgers. The requested ops destination `/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md` is outside the writable sandbox, so the report is emitted as `V3-AUDIT-OUT.md`. The ops checkout is outside the writable sandbox; no ops file was modified.
+This is the deterministic audit rendered on the P3 review date **2026-08-22** from the committed NZ ledgers. The requested ops destination `/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md` is outside the writable sandbox, so the report is emitted as `V3-AUDIT-OUT.md`. The ops checkout is outside the writable sandbox; no ops file was modified.
 
-Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `c0c3ffcbb1e3b1510c93a160a2e3b6e5932c7d46` — **committed B2 implementation audited by this attestation**.
+Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `P3_IMPLEMENTATION_PENDING` — **committed P3 implementation audited by this attestation**.
 
 ## Part 1 — leaf typing (dependency closure)
 
 The committed boundary ledger types all **288** inputs consumed by the NZ comparison composition, harness request surface, declared eligibility closures, and semantically upstream omitted legal surface: **229 law-derived** and **57 world facts**, with **2 request inputs encoded by cross-module wiring**. It separately inventories **35** compiled parameters, engine outputs, and composition outputs, so the table below contains **37 encoded dependencies** in all. Case supply, a constant, or a documented closure never converts a legally computed quantity into a world fact. Every law-derived row appears exactly once in worklist items 1–229.
+
+Requested-root reachability attributes **147** rows to one certificate view and leaves **141** host, scenario, closure, harness-only, or omitted-surface rows outside every view. Those rows remain explicit in the jurisdiction ledger and global count.
 
 ### Hermetic scope receipts
 
@@ -16,8 +18,9 @@ The committed boundary ledger types all **288** inputs consumed by the NZ compar
 |---|---|---|
 | `compiled_program` | `conformance/executable/nz-treasury-incomeexplorer/compiled-program.json` | `b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33` |
 | `composition` | `TheAxiomFoundation/ops:nz-lane/emtr_reproduction/composition.yaml` | `bcf631b59968be4907e679b4704f5e029e2188ab / sha256:af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0` |
-| `denominator` | compiled/request census | `{"compiled_input_slots":328,"compiled_requested_subgraph_derived_rules":77,"declared_output_subgraph_reached_inputs":147,"eligibility_closure_choices":27,"harness_only_inputs":["child_tax_credit_for_entitlement_period","parental_tax_credit_additional_abatement","parental_tax_credit_for_entitlement_period"],"harness_supplied_inputs":150,"host_rule_shortcuts":1,"not_supplied_outside_declared_output_subgraph":178,"remaining_compiled_slots_outside_claim":79,"scenario_inputs":11,"semantically_upstream_omitted_legal_surface":99,"typed_grounding_rows":288}` |
+| `denominator` | compiled/request census | `{"attributed_grounding_rows":147,"compiled_input_slots":328,"compiled_requested_subgraph_derived_rules":77,"declared_output_subgraph_reached_inputs":147,"eligibility_closure_choices":27,"harness_only_inputs":["child_tax_credit_for_entitlement_period","parental_tax_credit_additional_abatement","parental_tax_credit_for_entitlement_period"],"harness_supplied_inputs":150,"host_rule_shortcuts":1,"not_supplied_outside_declared_output_subgraph":178,"program_reached_inputs":{"nz/acc-earners-levy":1,"nz/accommodation-supplement":28,"nz/income-tax":1,"nz/independent-earner-tax-credit":11,"nz/main-benefits":13,"nz/winter-energy-payment":2,"nz/working-for-families":91},"remaining_compiled_slots_outside_claim":79,"scenario_inputs":11,"semantically_upstream_omitted_legal_surface":99,"typed_grounding_rows":288,"unattributed_grounding_rows":141}` |
 | `eligibility_closures` | `TheAxiomFoundation/ops:nz-lane/emtr_reproduction/eligibility-closures.json` | `bcf631b59968be4907e679b4704f5e029e2188ab / sha256:a13881f452031d2875becb5a44d008da1dff5db0c001c5f3df959cfb69ed0324` |
+| `evaluation_trace` | `comparisons/nz-treasury-incomeexplorer/evaluation-traces.json` | `43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da` |
 | `harness` | `TheAxiomFoundation/ops:nz-lane/emtr_reproduction/run.py` | `bcf631b59968be4907e679b4704f5e029e2188ab / sha256:9aa0fc64af8dca4a8f7574e98923fe0022561679027c2ed5325bf381e9c6ab27` |
 | `source_comparison` | `comparisons/nz-treasury-incomeexplorer/source-comparison.json` | `abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b` |
 
@@ -800,13 +803,27 @@ One continuous list follows: 229 law-derived inputs, 39 unique bearing instrumen
 
 ## Part 5 — ledger integration and certificate position
 
-The v3 ledgers use `axiom_oracles.nz_dependency_dispositions.v1` and `axiom_oracles.nz_instrument_dispositions.v3`; the derived summary uses `axiom_oracles.nz_closure_summary.v2`. `closed` is **false**. The central block exposes 229 law-derived inputs plus 39 bearing instruments (`open_dependency_count=268`) rather than relying on the stale pre-v3 path.
+The v3 ledgers use `axiom_oracles.nz_dependency_dispositions.v2` and `axiom_oracles.nz_instrument_dispositions.v3`; the derived summary uses `axiom_oracles.nz_closure_summary.v3`. `closed` is **false**. The jurisdiction block exposes 229 law-derived inputs plus 39 bearing instruments (`open_dependency_count=268`). Each certificate now gates only the rows attributed to its trace-derived cone while also publishing that jurisdiction count.
+
+### Program dependency cones (smallest to largest)
+
+| Program | Reached inputs | Law-derived open | Bearing open | Scoped open | Jurisdiction open | Spine reached | Spine pending |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| `nz/acc-earners-levy` | 1 | 1 | 2 | 3 | 268 | 2 | 0 |
+| `nz/winter-energy-payment` | 2 | 2 | 1 | 3 | 268 | 1 | 0 |
+| `nz/main-benefits` | 13 | 11 | 1 | 12 | 268 | 7 | 0 |
+| `nz/income-tax` | 1 | 1 | 25 | 26 | 268 | 8 | 0 |
+| `nz/accommodation-supplement` | 28 | 26 | 3 | 29 | 268 | 5 | 0 |
+| `nz/independent-earner-tax-credit` | 11 | 7 | 32 | 39 | 268 | 1 | 0 |
+| `nz/working-for-families` | 91 | 80 | 33 | 113 | 268 | 33 | 0 |
+
+ACC's actual cone is one reached input, `engine_request:acc_earnings_for_earners_levy`, plus two bearing instruments: [https://www.ird.govt.nz/deductions-from-salary-and-wages](https://www.ird.govt.nz/deductions-from-salary-and-wages), [https://www.legislation.govt.nz/act/public/1985/141/en/latest/](https://www.legislation.govt.nz/act/public/1985/141/en/latest/). Its scoped open count is **3**; the same certificate retains the jurisdiction count **268**.
 
 Generated-fact bindings:
 
 | Fact | Artifact | SHA-256 |
 |---|---|---|
-| `dependency_dispositions` | `closure/nz/dependency-dispositions.json` | `0133853d395d49c6c5883dec7de175a40cf738d904234e922f429b1b0aa750f7` |
+| `dependency_dispositions` | `closure/nz/dependency-dispositions.json` | `752b3cea69f59551116364188930bb99f1106374e781648beab150d255522a5b` |
 | `instrument_dispositions` | `closure/nz/instrument-dispositions.json` | `0edc1fd27d24cd570088273356c119859c8b567a446af54d2f70fac082912b33` |
 | `spine_ledger` | `closure/nz/spine-ledger.json` | `afb21ae1b9afd4b18dafe3cf22f86e2a71e79ae0d1e729f650b1edbdffa46bae` |
 
@@ -830,33 +847,30 @@ The required battery was run against the implementation commit above.
 
 | Gate | Status |
 |---|---|
-| `certify_check` | `PASS — certificates up to date` |
-| `certify_check_b2` | `PASS — certificates up to date` |
-| `cross_jurisdiction_byte_identity` | `PASS — non-NZ derived bytes unchanged after local replay` |
-| `encode_queue_reconciliation` | `PASS — 39 sorted unique items exactly match the bearing frontier` |
-| `instrument_producer_check` | `PASS — checked after each act batch and after final regeneration` |
-| `producers_check` | `PASS — original seven NZ producer/check modes plus all three C1 producers current` |
-| `simulated_dk_refresh` | `PASS — dk-child-youth-benefit-euromod` |
-| `simulated_nz_refresh` | `PASS — nz-treasury-incomeexplorer` |
-| `simulated_nz_refresh_b2` | `PASS — nz-treasury-incomeexplorer` |
-| `whole_mutant_file` | `PASS — 259 passed; guard reversions included` |
-| `whole_mutant_file_b2` | `PASS — 18 passed` |
+| `legacy_no_attribution` | `PASS — DK retains the global four-field dependency block; fresh DK and US certificate bytes match the P3 baseline` |
+| `non_nz_p3_byte_identity` | `PASS — all six present non-NZ certificates are unchanged from 04118a08b and merge-base 9a8274b430` |
+| `nz_certificates` | `PASS — seven certificates rebuilt through certify.build_certificate and byte-current` |
+| `nz_mutant_subset` | `PASS — 174 passed, 2,870 deselected` |
+| `nz_producers` | `PASS — all ten NZ producer/check modes current, including the B2-reconciled corpus scan and this audit report` |
+| `origin_main_byte_identity` | `PRE-EXISTING FAIL — all six present files differed from current origin/main before P3; neither tree contains UK/BE certificates` |
+| `p3_guard_mutants` | `PASS — 22 passed, including reachability, shrink, empty-owner, jurisdiction-count, and legacy-path reversions` |
+| `ruff` | `PASS — uv run ruff check .` |
+| `simulated_nz_refresh` | `EXPECTED PLATFORM STOP — isolated guarded refresh completed NZ regeneration, then stopped at the x86_64-linux DE replay before fetch, reset, commit, or push` |
 
-**Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source commit, and verified Ed25519 signatures with a functioning local cryptography environment. The temporary local adapter was removed before commit.
+**Local DE gate compatibility:** On Darwin arm64, the whole certify check and guarded refresh reach the DE Kindergeld replay and stop because its committed engine is an x86_64-linux binary. NZ certificates were regenerated directly through certify.build_certificate; Linux CI remains the global arbiter.
 
 ## C1 resolutions of audit questions
 
 - Audit Q1 — resolved at working scope: C1 adopts the DE-precedent 174-root dependency subgraph, binds 173 roots to the pinned corpus and one amendment root to retained official XML, and records all 57 encoded and 117 pending rows. The 4,707-row whole-Act alternative remains disclosed and unadopted.
 - Audit Q5 — reverse-index mechanism resolved, capture remainder open: C1 replays the authoritative PCO XML <pursuant> fields. All 301 matches were already in the graph, so 0 rows were merged and the 136-row publisher/listing gap remains explicit.
+- Audit Q2/Q3 — resolved by program cones: dependency rows and bearing instrument rows use the same sorted programs list. Multi-owner rows retain every owner, while rows reached by no certificate view remain visible and counted in the 268-row jurisdiction total with an attribution reason.
 
 ## Remaining adjudication questions
 
 1. Multi-Act graph schema: should NZ retain one extended graph for three empowering Acts, or publish a standardized wrapper of one v1 graph per Act?
-2. Disposition dimension: should a single ELI have one global disposition, or may the same instrument carry different program-scoped decisions?
-3. Multi-owner instruments: how should guidance or precedent that bears on more than one Act/program be owned without losing any dependency edge?
 
 ## Final identifiers
 
 - Rebase base: `9a8274b4303b512876b56453622f3cdca3f91725` (`origin/main`).
-- Final implementation SHA: `c0c3ffcbb1e3b1510c93a160a2e3b6e5932c7d46`.
+- Final implementation SHA: `P3_IMPLEMENTATION_PENDING`.
 - Rendered output: `V3-AUDIT-OUT.md` (ops fallback).

@@ -34,10 +34,10 @@ PCO_REVERSE_INDEX_PATH = (
 DEFAULT_OUTPUT = REPO_ROOT / "V3-AUDIT-OUT.md"
 
 DISCOVERY_DATE = "2026-08-20"
-B2_REVIEW_DATE = "2026-08-21"
+P3_REVIEW_DATE = "2026-08-22"
 REBASE_BASE_REF = "origin/main"
 REBASE_BASE_SHA = "9a8274b4303b512876b56453622f3cdca3f91725"
-IMPLEMENTATION_SHA = "c0c3ffcbb1e3b1510c93a160a2e3b6e5932c7d46"
+IMPLEMENTATION_SHA = "P3_IMPLEMENTATION_PENDING"
 
 EXPECTED_PROGRAMS = (
     "nz/acc-earners-levy",
@@ -53,6 +53,31 @@ EXPECTED_ENCODED_INVENTORY = 35
 EXPECTED_ENCODED_DEPENDENCIES = 37
 EXPECTED_BEARING_INSTRUMENTS = 39
 EXPECTED_OPEN_DEPENDENCIES = 268
+EXPECTED_PROGRAM_CONES = {
+    "nz/acc-earners-levy": (1, 2, 3),
+    "nz/accommodation-supplement": (26, 3, 29),
+    "nz/income-tax": (1, 25, 26),
+    "nz/independent-earner-tax-credit": (7, 32, 39),
+    "nz/main-benefits": (11, 1, 12),
+    "nz/winter-energy-payment": (2, 1, 3),
+    "nz/working-for-families": (80, 33, 113),
+}
+EXPECTED_REACHED_INPUTS = {
+    "nz/acc-earners-levy": 1,
+    "nz/accommodation-supplement": 28,
+    "nz/income-tax": 1,
+    "nz/independent-earner-tax-credit": 11,
+    "nz/main-benefits": 13,
+    "nz/winter-energy-payment": 2,
+    "nz/working-for-families": 91,
+}
+EXPECTED_UNATTRIBUTED_BY_SURFACE = {
+    "eligibility_closure": 27,
+    "engine_request": 3,
+    "host_rule": 1,
+    "implicit_legal_surface": 99,
+    "scenario": 11,
+}
 EXPECTED_CAPTURE_GAP = 136
 EXPECTED_WORKLIST = 269
 EXPECTED_FRONTIER_COUNTS = {
@@ -136,6 +161,12 @@ def _certificate_rows() -> list[dict[str, Any]]:
         verdicts = document.get("verdicts")
         if not isinstance(verdicts, dict):
             verdicts = {}
+        closed_verdict = verdicts.get("closed")
+        certificate_dependency = (
+            closed_verdict.get("dependency_closure")
+            if isinstance(closed_verdict, dict)
+            else None
+        )
         certified = document.get("certified")
         if isinstance(certified, dict):
             certified_value = certified.get("value")
@@ -152,6 +183,7 @@ def _certificate_rows() -> list[dict[str, Any]]:
             "executable": _certificate_premise(verdicts.get("executable")),
             "certified": {"value": certified_value, "state": certified_state},
             "blocker_count": len(document.get("blockers") or []),
+            "dependency_closure": certificate_dependency,
         }
     return [
         found.get(
@@ -165,6 +197,7 @@ def _certificate_rows() -> list[dict[str, Any]]:
                 "executable": _certificate_premise(None),
                 "certified": {"value": None, "state": "missing"},
                 "blocker_count": None,
+                "dependency_closure": None,
             },
         )
         for program in EXPECTED_PROGRAMS
@@ -306,6 +339,38 @@ def build_model() -> dict[str, Any]:
         len({str(row.get("name")) for row in grounding}) == len(grounding),
         "duplicate NZ grounding name",
     )
+    for row in grounding:
+        programs = row.get("programs")
+        _require(
+            isinstance(programs, list)
+            and programs == sorted(set(programs))
+            and all(program in EXPECTED_PROGRAMS for program in programs),
+            f"invalid program attribution for {row.get('source_surface')}:{row.get('name')}",
+        )
+        if programs:
+            _require(
+                "attribution_reason" not in row,
+                f"reached input carries an attribution reason: {row.get('name')}",
+            )
+        else:
+            _require(
+                isinstance(row.get("attribution_reason"), str)
+                and bool(row["attribution_reason"].strip()),
+                f"unattributed input lacks an attribution reason: {row.get('name')}",
+            )
+    attributed_input_count = sum(bool(row["programs"]) for row in grounding)
+    unattributed_input_count = len(grounding) - attributed_input_count
+    _require(
+        (attributed_input_count, unattributed_input_count) == (147, 141),
+        "program-attributed input denominator drift",
+    )
+    unattributed_by_surface = _counter(
+        (row for row in grounding if not row["programs"]), "source_surface"
+    )
+    _require(
+        unattributed_by_surface == EXPECTED_UNATTRIBUTED_BY_SURFACE,
+        "unattributed host/scenario surface counts drift",
+    )
 
     computed = summary.get("computed")
     _require(isinstance(computed, dict), "NZ summary lacks computed block")
@@ -414,6 +479,12 @@ def build_model() -> dict[str, Any]:
         input_grounding.get("counts") == EXPECTED_GROUNDING, "grounding counts drift"
     )
     _require(
+        input_grounding.get("attributed_input_count") == attributed_input_count
+        and input_grounding.get("unattributed_input_count")
+        == unattributed_input_count,
+        "summary attribution counts drift",
+    )
+    _require(
         instrument_frontier.get("counts") == EXPECTED_FRONTIER_COUNTS,
         "frontier count drift",
     )
@@ -431,6 +502,128 @@ def build_model() -> dict[str, Any]:
             map(str, dependency_closure.get("instruments_bearing_on_computed") or [])
         ),
         "summary bearing frontier does not match instrument ledger",
+    )
+    global_bearing_rows = {
+        str(row["eli"]): row
+        for row in instrument_frontier.get("ledger") or []
+        if isinstance(row, dict)
+        and row.get("status") == "pending"
+        and row.get("eli")
+    }
+    _require(
+        set(global_bearing_rows) == {row["eli"] for row in bearing},
+        "global bearing frontier rowset drift",
+    )
+    bearing_programs = {row["eli"]: row["programs"] for row in bearing}
+    for eli, row in global_bearing_rows.items():
+        programs = row.get("programs")
+        _require(
+            isinstance(programs, list)
+            and programs == sorted(set(programs))
+            and bool(programs)
+            and programs == bearing_programs[eli],
+            f"bearing instrument attribution drift for {eli}",
+        )
+
+    program_summaries = summary.get("programs")
+    _require(isinstance(program_summaries, dict), "NZ summary lacks program scopes")
+    _require(
+        set(program_summaries) == set(EXPECTED_PROGRAMS),
+        "NZ program scope set drift",
+    )
+    certificate_rows = _certificate_rows()
+    certificates_by_program = {row["program"]: row for row in certificate_rows}
+    program_dependency_cones: list[dict[str, Any]] = []
+    for program in EXPECTED_PROGRAMS:
+        scoped = program_summaries[program]
+        _require(isinstance(scoped, dict), f"{program}: invalid program scope")
+        scoped_dependency = scoped.get("dependency_closure")
+        scoped_spine = scoped.get("spine_frontier")
+        _require(
+            isinstance(scoped_dependency, dict),
+            f"{program}: missing scoped dependency closure",
+        )
+        _require(
+            isinstance(scoped_spine, dict), f"{program}: missing scoped spine frontier"
+        )
+        expected_law = sorted(
+            f"{row['source_surface']}:{row['name']}"
+            for row in law
+            if program in row["programs"]
+        )
+        expected_bearing = sorted(
+            eli for eli, programs in bearing_programs.items() if program in programs
+        )
+        scoped_law = scoped_dependency.get("law_derived_inputs")
+        scoped_bearing = scoped_dependency.get("instruments_bearing_on_computed")
+        law_count, bearing_count, open_count = EXPECTED_PROGRAM_CONES[program]
+        _require(
+            scoped_law == expected_law and len(expected_law) == law_count,
+            f"{program}: scoped law-derived cone drift",
+        )
+        _require(
+            scoped_bearing == expected_bearing and len(expected_bearing) == bearing_count,
+            f"{program}: scoped bearing-instrument cone drift",
+        )
+        _require(
+            scoped_dependency.get("open_dependency_count") == open_count
+            and scoped_dependency.get("jurisdiction_open_dependency_count")
+            == EXPECTED_OPEN_DEPENDENCIES
+            and scoped_dependency.get("closed") is (open_count == 0),
+            f"{program}: scoped dependency counts drift",
+        )
+        reached_input_count = sum(program in row["programs"] for row in grounding)
+        _require(
+            reached_input_count == EXPECTED_REACHED_INPUTS[program],
+            f"{program}: reached-input count drift",
+        )
+        spine_scope = scoped_spine.get("requested_legal_subgraph_scope")
+        _require(
+            isinstance(spine_scope, dict), f"{program}: missing scoped spine rows"
+        )
+        spine_statuses = spine_scope.get("by_status")
+        _require(
+            isinstance(spine_statuses, dict)
+            and spine_statuses.get("pending") == 0
+            and scoped_spine.get("complete") is True
+            and scoped_spine.get("blockers") == [],
+            f"{program}: reached spine is not complete",
+        )
+        certificate_dependency = certificates_by_program[program]["dependency_closure"]
+        _require(
+            certificate_dependency == scoped_dependency,
+            f"{program}: certificate dependency cone is stale",
+        )
+        program_dependency_cones.append(
+            {
+                "program": program,
+                "reached_input_count": reached_input_count,
+                "law_derived_open_count": law_count,
+                "bearing_instrument_open_count": bearing_count,
+                "open_dependency_count": open_count,
+                "jurisdiction_open_dependency_count": EXPECTED_OPEN_DEPENDENCIES,
+                "spine_reached_count": spine_scope.get("total"),
+                "spine_pending_count": spine_statuses.get("pending"),
+                "closed": scoped.get("closed"),
+                "law_derived_inputs": scoped_law,
+                "instruments_bearing_on_computed": scoped_bearing,
+            }
+        )
+    program_dependency_cones.sort(
+        key=lambda row: (row["open_dependency_count"], row["program"])
+    )
+    _require(
+        [row["program"] for row in program_dependency_cones]
+        == [
+            "nz/acc-earners-levy",
+            "nz/winter-energy-payment",
+            "nz/main-benefits",
+            "nz/income-tax",
+            "nz/accommodation-supplement",
+            "nz/independent-earner-tax-credit",
+            "nz/working-for-families",
+        ],
+        "program cone ranking drift",
     )
 
     gaps = instrument_frontier.get("capture_gaps") or []
@@ -653,35 +846,36 @@ def build_model() -> dict[str, Any]:
             "were already in the graph, so 0 rows were merged and the 136-row "
             "publisher/listing gap remains explicit."
         ),
+        (
+            "Audit Q2/Q3 — resolved by program cones: dependency rows and bearing "
+            "instrument rows use the same sorted programs list. Multi-owner rows retain "
+            "every owner, while rows reached by no certificate view remain visible and "
+            "counted in the 268-row jurisdiction total with an attribution reason."
+        ),
     ]
     adjudication_questions = [
         (
             "Multi-Act graph schema: should NZ retain one extended graph for three "
             "empowering Acts, or publish a standardized wrapper of one v1 graph per Act?"
         ),
-        (
-            "Disposition dimension: should a single ELI have one global disposition, "
-            "or may the same instrument carry different program-scoped decisions?"
-        ),
-        (
-            "Multi-owner instruments: how should guidance or precedent that bears on "
-            "more than one Act/program be owned without losing any dependency edge?"
-        ),
     ]
 
     return {
-        "schema": "axiom_oracles.nz_v3_audit_report.v1",
+        "schema": "axiom_oracles.nz_v3_audit_report.v2",
         "audit": {
-            "date": B2_REVIEW_DATE,
+            "date": P3_REVIEW_DATE,
             "definition": "CERTIFIED.md v3",
-            "outcome": "197-row B2 frontier adjudicated, closed honestly open under v3",
+            "outcome": (
+                "NZ dependency closure attributed to trace-derived program cones; "
+                "all seven certificates remain honestly open"
+            ),
             "requested_output": "/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md",
             "actual_output": "V3-AUDIT-OUT.md",
             "fallback_reason": "The ops checkout is outside the writable sandbox; no ops file was modified.",
             "rebase_base": {"ref": REBASE_BASE_REF, "sha": REBASE_BASE_SHA},
             "implementation_sha": {
                 "value": IMPLEMENTATION_SHA,
-                "status": "committed B2 implementation audited by this attestation",
+                "status": "committed P3 implementation audited by this attestation",
             },
         },
         "part_1_leaf_typing": {
@@ -689,6 +883,9 @@ def build_model() -> dict[str, Any]:
             "typed_input_count": len(grounding),
             "counts": EXPECTED_GROUNDING,
             "additional_encoded_inventory_count": EXPECTED_ENCODED_INVENTORY,
+            "attributed_input_count": attributed_input_count,
+            "unattributed_input_count": unattributed_input_count,
+            "unattributed_by_surface": unattributed_by_surface,
             "law_derived_by_surface": _counter(law, "source_surface"),
             "law_derived_by_size": _counter(law, "size_class"),
             "world_facts_by_surface": _counter(world, "source_surface"),
@@ -797,37 +994,49 @@ def build_model() -> dict[str, Any]:
                     "spine_ledger",
                 }
             },
-            "certificates": _certificate_rows(),
+            "program_dependency_cones": program_dependency_cones,
+            "certificates": certificate_rows,
             "certificate_section_status": (
                 "final regenerated values read from the committed certificate artifacts"
             ),
             "gate_receipts": {
-                "producers_check": (
-                    "PASS — original seven NZ producer/check modes plus all three "
-                    "C1 producers current"
+                "nz_producers": (
+                    "PASS — all ten NZ producer/check modes current, including the "
+                    "B2-reconciled corpus scan and this audit report"
                 ),
-                "certify_check": "PASS — certificates up to date",
-                "whole_mutant_file": ("PASS — 259 passed; guard reversions included"),
-                "simulated_nz_refresh": ("PASS — nz-treasury-incomeexplorer"),
-                "simulated_dk_refresh": ("PASS — dk-child-youth-benefit-euromod"),
-                "instrument_producer_check": (
-                    "PASS — checked after each act batch and after final regeneration"
+                "nz_certificates": (
+                    "PASS — seven certificates rebuilt through "
+                    "certify.build_certificate and byte-current"
                 ),
-                "certify_check_b2": "PASS — certificates up to date",
-                "whole_mutant_file_b2": "PASS — 18 passed",
-                "simulated_nz_refresh_b2": "PASS — nz-treasury-incomeexplorer",
-                "encode_queue_reconciliation": (
-                    "PASS — 39 sorted unique items exactly match the bearing frontier"
+                "nz_mutant_subset": "PASS — 174 passed, 2,870 deselected",
+                "p3_guard_mutants": (
+                    "PASS — 22 passed, including reachability, shrink, empty-owner, "
+                    "jurisdiction-count, and legacy-path reversions"
                 ),
-                "cross_jurisdiction_byte_identity": (
-                    "PASS — non-NZ derived bytes unchanged after local replay"
+                "ruff": "PASS — uv run ruff check .",
+                "simulated_nz_refresh": (
+                    "EXPECTED PLATFORM STOP — isolated guarded refresh completed NZ "
+                    "regeneration, then stopped at the x86_64-linux DE replay before "
+                    "fetch, reset, commit, or push"
+                ),
+                "legacy_no_attribution": (
+                    "PASS — DK retains the global four-field dependency block; fresh "
+                    "DK and US certificate bytes match the P3 baseline"
+                ),
+                "non_nz_p3_byte_identity": (
+                    "PASS — all six present non-NZ certificates are unchanged from "
+                    "04118a08b and merge-base 9a8274b430"
+                ),
+                "origin_main_byte_identity": (
+                    "PRE-EXISTING FAIL — all six present files differed from current "
+                    "origin/main before P3; neither tree contains UK/BE certificates"
                 ),
             },
             "local_gate_note": (
-                "On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, "
-                "replayed with a native engine built from the exact pinned source commit, "
-                "and verified Ed25519 signatures with a functioning local cryptography "
-                "environment. The temporary local adapter was removed before commit."
+                "On Darwin arm64, the whole certify check and guarded refresh reach the "
+                "DE Kindergeld replay and stop because its committed engine is an "
+                "x86_64-linux binary. NZ certificates were regenerated directly through "
+                "certify.build_certificate; Linux CI remains the global arbiter."
             ),
         },
         "resolved_audit_questions": resolved_audit_questions,
@@ -891,7 +1100,7 @@ def render_markdown(model: Mapping[str, Any]) -> str:
         f"**Outcome:** {audit['outcome']}.",
         "",
         (
-            f"This is the deterministic audit rendered on the B2 review date "
+            f"This is the deterministic audit rendered on the P3 review date "
             f"**{audit['date']}** from the committed NZ ledgers. The requested ops "
             f"destination `{audit['requested_output']}` is outside the writable sandbox, "
             f"so the report is emitted as `{audit['actual_output']}`. {audit['fallback_reason']}"
@@ -918,6 +1127,13 @@ def render_markdown(model: Mapping[str, Any]) -> str:
             "a constant, or a documented closure never converts a legally computed quantity "
             f"into a world fact. Every law-derived row appears exactly once in worklist items "
             f"1–{part1['counts']['law_derived']}."
+        ),
+        "",
+        (
+            f"Requested-root reachability attributes **{part1['attributed_input_count']}** "
+            f"rows to one certificate view and leaves **{part1['unattributed_input_count']}** "
+            "host, scenario, closure, harness-only, or omitted-surface rows outside every "
+            "view. Those rows remain explicit in the jurisdiction ledger and global count."
         ),
         "",
         "### Hermetic scope receipts",
@@ -1309,10 +1525,46 @@ def render_markdown(model: Mapping[str, Any]) -> str:
                 f"The v3 ledgers use `{part5['dependency_schema']}` and "
                 f"`{part5['instrument_schema']}`; the derived summary uses "
                 f"`{part5['summary_schema']}`. `closed` is **{_md(part5['closed'])}**. The "
-                f"central block exposes {part1['counts']['law_derived']} law-derived inputs "
-                f"plus {len(part2['bearing_instruments'])} bearing instruments "
-                f"(`open_dependency_count={part4['open_dependency_count']}`) rather than "
-                "relying on the stale pre-v3 path."
+                f"jurisdiction block exposes {part1['counts']['law_derived']} law-derived "
+                f"inputs plus {len(part2['bearing_instruments'])} bearing instruments "
+                f"(`open_dependency_count={part4['open_dependency_count']}`). Each "
+                "certificate now gates only the rows attributed to its trace-derived cone "
+                "while also publishing that jurisdiction count."
+            ),
+            "",
+            "### Program dependency cones (smallest to largest)",
+            "",
+            "| Program | Reached inputs | Law-derived open | Bearing open | Scoped open | Jurisdiction open | Spine reached | Spine pending |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|",
+        ]
+    )
+    for row in part5["program_dependency_cones"]:
+        lines.append(
+            f"| `{row['program']}` | {row['reached_input_count']} | "
+            f"{row['law_derived_open_count']} | "
+            f"{row['bearing_instrument_open_count']} | "
+            f"{row['open_dependency_count']} | "
+            f"{row['jurisdiction_open_dependency_count']} | "
+            f"{row['spine_reached_count']} | {row['spine_pending_count']} |"
+        )
+    acc_cone = next(
+        row
+        for row in part5["program_dependency_cones"]
+        if row["program"] == "nz/acc-earners-levy"
+    )
+    lines.extend(
+        [
+            "",
+            (
+                "ACC's actual cone is one reached input, "
+                f"`{acc_cone['law_derived_inputs'][0]}`, plus two bearing instruments: "
+                + ", ".join(
+                    f"[{eli}]({eli})"
+                    for eli in acc_cone["instruments_bearing_on_computed"]
+                )
+                + f". Its scoped open count is **{acc_cone['open_dependency_count']}**; "
+                f"the same certificate retains the jurisdiction count "
+                f"**{acc_cone['jurisdiction_open_dependency_count']}**."
             ),
             "",
             "Generated-fact bindings:",
