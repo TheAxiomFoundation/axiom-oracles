@@ -659,7 +659,27 @@ def compare(
             )
 
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
-        cases = [replace(case, outputs=concept_ids) for case in cases]
+        suite_declares_outputs = any(case.outputs for case in cases)
+        if concepts or categories or include_components or not suite_declares_outputs:
+            # An explicit CLI selection intentionally overrides the suite's
+            # declared surfaces for every case. Suites with no declarations
+            # retain the historical all-comparable-concepts fallback.
+            cases = [replace(case, outputs=concept_ids) for case in cases]
+        else:
+            # Registered suites may expose different diagnostic surfaces on
+            # different cases (for example a negative-income semantics probe
+            # alongside final-liability cases). Keep that declaration while
+            # trimming any output that is not comparable for this engine pair.
+            selected = set(concept_ids)
+            cases = [
+                replace(
+                    case,
+                    outputs=tuple(
+                        output for output in case.outputs if output in selected
+                    ),
+                )
+                for case in cases
+            ]
 
         if case_shard:
             try:
@@ -790,7 +810,10 @@ def compare(
                     )
                 accumulator.add_batch(
                     accumulator_cases,
-                    comparator.compare(left_results, right_results),
+                    _filter_comparisons_for_case_outputs(
+                        accumulator_cases,
+                        comparator.compare(left_results, right_results),
+                    ),
                 )
 
             if not accumulator.case_count:
@@ -915,6 +938,40 @@ def _case_output_concepts(cases: list[Case]) -> set[str]:
         for output in case.outputs
         if isinstance(output, str) and output
     }
+
+
+def _filter_comparisons_for_case_outputs(
+    cases: list[Case],
+    comparisons: list[HouseholdComparison],
+) -> list[HouseholdComparison]:
+    """Keep only the concepts each registered case declares.
+
+    Runners still receive the union of suite outputs so shared engine/model
+    setup happens once. This final projection prevents that union from turning
+    a case-specific diagnostic into unintended missing/zero comparisons on
+    every other case. Explicit ``--concept``/``--category`` selections replace
+    ``Case.outputs`` earlier and therefore retain their historical all-case
+    behavior.
+    """
+
+    outputs_by_id = {case.case_id: set(case.outputs) for case in cases}
+    filtered: list[HouseholdComparison] = []
+    for comparison in comparisons:
+        declared = outputs_by_id.get(comparison.household_id)
+        if declared is None:
+            filtered.append(comparison)
+            continue
+        filtered.append(
+            replace(
+                comparison,
+                comparisons=[
+                    item
+                    for item in comparison.comparisons
+                    if item.variable in declared
+                ],
+            )
+        )
+    return filtered
 
 
 def _run_comparison_batch(
@@ -1388,6 +1445,9 @@ def _build_runner(
             constant_overrides=_parse_euromod_constant_overrides(
                 os.environ.get("EUROMOD_CONSTANT_OVERRIDES"),
             ),
+            extra_columns=_parse_euromod_extra_columns(
+                os.environ.get("EUROMOD_EXTRA_COLUMNS"),
+            ),
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
 
@@ -1419,6 +1479,14 @@ def _parse_euromod_constant_overrides(
             )
         overrides.append((name, group.strip(), value.strip()))
     return tuple(overrides)
+
+
+def _parse_euromod_extra_columns(raw: str | None) -> tuple[str, ...]:
+    """Parse a comma-separated list of input columns absent from the template."""
+
+    if not raw:
+        return ()
+    return tuple(dict.fromkeys(part.strip() for part in raw.split(",") if part.strip()))
 
 
 def _parse_euromod_switches(

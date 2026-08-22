@@ -1,0 +1,35 @@
+name: be-pensioner-pit
+title: Belgium pensioner PIT — Axiom vs EUROMOD
+description: >-
+  Compares the merged rulespec-be pensioner PIT pipeline against EUROMOD
+  BE_2025. The 15k, 25k, and 40k pension-only fixtures expose annual pension
+  health/solidarity withholding (tscpe_s), the Articles 147--153 reduction
+  (tintcri_s), and final PIT (tin_s). A 30k pension plus 15k wage fixture
+  isolates the documented pension-withholding/worker-forfait and work-bonus
+  mechanisms. Every RuleSpec input is a Person record; post-uprating poa, yem,
+  and yemeq_s outputs bridge back to that Person. The supplied Article 153 tax
+  shares are the population-side values pinned by the merged b105e2b3 fixtures.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-pensioner-pit
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    euromod_extra_columns: [drgn1]
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-pensioner-pit.json
+
+artifacts:
+  report_basename: axiom-euromod-be-pensioner-pit
+
+dashboard:
+  filename: axiom-euromod-be-pensioner-pit.json
+  suite: be-pensioner-pit

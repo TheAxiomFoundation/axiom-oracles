@@ -168,6 +168,15 @@
       "source": "comparisons/be-pensioner-contributions.yaml"
     },
     {
+      "suite": "be-pensioner-pit",
+      "name": "be-pensioner-pit",
+      "report": "axiom-euromod-be-pensioner-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-pensioner-pit.yaml"
+    },
+    {
       "suite": "be-regional-pit-surcharge",
       "name": "be-regional-pit-surcharge",
       "report": "axiom-euromod-be-regional-pit-surcharge.json",
@@ -175,6 +184,24 @@
         "TheAxiomFoundation/rulespec-be"
       ],
       "source": "comparisons/be-regional-pit-surcharge.yaml"
+    },
+    {
+      "suite": "be-replacement-income-pit",
+      "name": "be-replacement-income-pit",
+      "report": "axiom-euromod-be-replacement-income-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-replacement-income-pit.yaml"
+    },
+    {
+      "suite": "be-self-employment-pit",
+      "name": "be-self-employment-pit",
+      "report": "axiom-euromod-be-self-employment-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-self-employment-pit.yaml"
     },
     {
       "suite": "be-study-allowance",

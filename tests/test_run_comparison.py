@@ -1532,6 +1532,40 @@ def test_be_elderly_income_support_registry_config_shape():
     )
 
 
+def test_euromod_synthetic_runner_forwards_extra_template_columns(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    model_root = tmp_path / "model"
+    model_root.mkdir()
+    engine_repo = tmp_path / "engine"
+    engine_binary = engine_repo / "target" / "release" / "axiom-rules-engine"
+    engine_binary.parent.mkdir(parents=True)
+    engine_binary.write_text("")
+    monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
+    captured = {}
+
+    def fake_run(command, *, check, cwd, env):
+        captured.update({"command": command, "check": check, "cwd": cwd, "env": env})
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison._run_euromod_synthetic_compare(
+        {
+            "axiom_rules_repo": str(engine_repo),
+            "parameters": {
+                "suite": "be-replacement-income-pit",
+                "period": 2025,
+                "sample_size": 0,
+                "euromod_model_root": str(model_root),
+                "euromod_extra_columns": ["drgn1", "bhl"],
+            },
+        },
+        tmp_path / "report.json",
+    )
+
+    assert captured["env"]["EUROMOD_EXTRA_COLUMNS"] == "drgn1,bhl"
+
+
 # ---------------------------------------------------------------------------
 # UK fiscal-year eval-date invariant
 #

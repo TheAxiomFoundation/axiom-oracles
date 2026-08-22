@@ -2137,6 +2137,11 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     constant_overrides = params.get("euromod_constant_overrides")
     if constant_overrides:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
+    extra_columns = params.get("euromod_extra_columns")
+    if extra_columns:
+        if not isinstance(extra_columns, list):
+            raise SystemExit("euromod_extra_columns must be a list")
+        env["EUROMOD_EXTRA_COLUMNS"] = ",".join(str(name) for name in extra_columns)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
