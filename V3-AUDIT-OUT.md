@@ -4,7 +4,7 @@
 
 This is the deterministic audit rendered on the B2 review date **2026-08-21** from the committed NZ ledgers. The requested ops destination `/Users/maxghenis/TheAxiomFoundation/ops/nz-lane/_cert/sol-v3-nz-audit.md` is outside the writable sandbox, so the report is emitted as `V3-AUDIT-OUT.md`. The ops checkout is outside the writable sandbox; no ops file was modified.
 
-Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `05546c578fcd633c15cbe4d442c517f6c595108b` — **committed B2 implementation audited by this attestation**.
+Rebase base: `origin/main` at `9a8274b4303b512876b56453622f3cdca3f91725`. Implementation SHA: `c0c3ffcbb1e3b1510c93a160a2e3b6e5932c7d46` — **committed B2 implementation audited by this attestation**.
 
 ## Part 1 — leaf typing (dependency closure)
 
@@ -855,5 +855,5 @@ The required battery was run against the implementation commit above.
 ## Final identifiers
 
 - Rebase base: `9a8274b4303b512876b56453622f3cdca3f91725` (`origin/main`).
-- Final implementation SHA: `05546c578fcd633c15cbe4d442c517f6c595108b`.
+- Final implementation SHA: `c0c3ffcbb1e3b1510c93a160a2e3b6e5932c7d46`.
 - Rendered output: `V3-AUDIT-OUT.md` (ops fallback).
