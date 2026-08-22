@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.euromod_issues.v1",
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-08-22",
   "purpose": "Track EUROMOD-platform issues and workarounds that affect household-level Axiom oracle comparisons. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger.",
   "entries": [
     {
@@ -1227,6 +1227,69 @@
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-credit-before-communal-addition-order",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24",
+      "summary": "BE_2025 subtracts the refundable Article 289ter/1 work-bonus credit and the Article 134 §3 child credit from tin_s inside tinfe_be (order 45) before tinmu_be (order 46) computes the communal addition on the post-credit amount; SFL art. 5/3 and CIR 92 arts. 290/304/466/468 calculate the additions on the pre-credit impot total and impute refundable credits afterwards. Understatement = credit x communal rate (63.096 on the yse 25k Flanders case).",
+      "workaround": {
+        "description": "Dispositioned per case as an EUROMOD-side engine-order divergence (rulespec-be self_employed_oracle_pipeline yse 25k fixture pins the statutory order; residual -63.096 decomposed). The merged worker/couple pipelines still mirror EUROMOD's order (rulespec-be#121)."
+      }
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-additional-unemployment-reduction-not-prorated",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/25",
+      "summary": "BE_2025 tinna_be prorates the base unemployment reduction (2,219.27) by the unemployment share of net income (function order 48) but applies the additional 457.23 reduction (function orders 62-64) in full; CIR 92 art. 147, 8 prorates 'les montants vises au 7' - both amounts. Mixed bun 15k + yem 15k: 163.903 vs prorated 96.414; 50.646 of tax after the autonomy factor.",
+      "workaround": {
+        "description": "Dispositioned per case (rulespec-be pensioner_pit_oracle_pipeline unemployment_15k_plus_wage_15k fixture); pure-unemployment cases unaffected and cent-exact."
+      }
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-forfait-base-nets-pension-withholding",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/26",
+      "summary": "BE_2025 tintace_be computes the Article 51 lump-sum professional expenses on il_netYem, which subtracts the pensioner health-insurance withholding tscpe_s from employment income; Article 51 with Article 23 §2, 1 nets each category by the contributions that burden that category. Working pensioner 30k + 15k: forfait 4,180.50 vs statutory 4,500; +124.26 of tax after the autonomy factor.",
+      "workaround": {
+        "description": "Dispositioned per case (rulespec-be pensioner_pit_oracle_pipeline mixed_30k_pension_15k_wage fixture; residual decomposed with the work-bonus credit-base mechanism)."
+      }
     }
   ]
 }
