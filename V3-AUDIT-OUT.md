@@ -831,13 +831,16 @@ The required battery was run against the implementation commit above.
 | Gate | Status |
 |---|---|
 | `certify_check` | `PASS — certificates up to date` |
+| `certify_check_b2` | `PASS — certificates up to date` |
 | `cross_jurisdiction_byte_identity` | `PASS — non-NZ derived bytes unchanged after local replay` |
 | `encode_queue_reconciliation` | `PASS — 39 sorted unique items exactly match the bearing frontier` |
 | `instrument_producer_check` | `PASS — checked after each act batch and after final regeneration` |
 | `producers_check` | `PASS — original seven NZ producer/check modes plus all three C1 producers current` |
 | `simulated_dk_refresh` | `PASS — dk-child-youth-benefit-euromod` |
 | `simulated_nz_refresh` | `PASS — nz-treasury-incomeexplorer` |
-| `whole_mutant_file` | `PASS — 18 passed` |
+| `simulated_nz_refresh_b2` | `PASS — nz-treasury-incomeexplorer` |
+| `whole_mutant_file` | `PASS — 259 passed; guard reversions included` |
+| `whole_mutant_file_b2` | `PASS — 18 passed` |
 
 **Local DE gate compatibility:** On Darwin arm64, the DE-only checks verified the pinned Linux ELF hash, replayed with a native engine built from the exact pinned source commit, and verified Ed25519 signatures with a functioning local cryptography environment. The temporary local adapter was removed before commit.
 

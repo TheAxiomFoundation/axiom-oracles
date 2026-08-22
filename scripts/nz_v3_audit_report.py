@@ -813,9 +813,9 @@ def build_model() -> dict[str, Any]:
                 "instrument_producer_check": (
                     "PASS — checked after each act batch and after final regeneration"
                 ),
-                "certify_check": "PASS — certificates up to date",
-                "whole_mutant_file": "PASS — 18 passed",
-                "simulated_nz_refresh": "PASS — nz-treasury-incomeexplorer",
+                "certify_check_b2": "PASS — certificates up to date",
+                "whole_mutant_file_b2": "PASS — 18 passed",
+                "simulated_nz_refresh_b2": "PASS — nz-treasury-incomeexplorer",
                 "encode_queue_reconciliation": (
                     "PASS — 39 sorted unique items exactly match the bearing frontier"
                 ),
