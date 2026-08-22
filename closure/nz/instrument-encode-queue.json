@@ -1,0 +1,755 @@
+{
+  "certified_period": {
+    "end": "2027-03-31",
+    "start": "2026-04-01"
+  },
+  "items": [
+    {
+      "bearing_surface": "PAYE deduction timing and mechanics for the standard ACC earners' levy",
+      "defining_provision": "ACC earners' levy deduction and pay-date guidance on Inland Revenue's salary-and-wages deductions page",
+      "eli": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+      "programs": [
+        "nz/acc-earners-levy"
+      ],
+      "reason": "The guidance bears on collection of the certified earners' levy output, but the pinned RuleSpec module names the separate IRD levy-rate page and the 2025 regulations, not this deduction guidance.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.ird.govt.nz/deductions-from-salary-and-wages",
+      "target_modules": [
+        "nz/regulations/acc/earners_levy.yaml"
+      ],
+      "title": "Inland Revenue — Deductions from salary and wages"
+    },
+    {
+      "bearing_surface": "GST treatment and GST-inclusive factor in the standard ACC earners' levy calculation",
+      "defining_provision": "Goods and Services Tax Act 1985 ss 5(6EC)–(6EE), 8(1), and 10",
+      "eli": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+      "programs": [
+        "nz/acc-earners-levy"
+      ],
+      "reason": "The Act makes the earners' levy a GST-bearing deemed supply and supplies the 15 percent tax factor; the current RuleSpec computes a GST-inclusive rate without proof-binding these provisions.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+      "target_modules": [
+        "nz/regulations/acc/earners_levy.yaml"
+      ],
+      "title": "Goods and Services Tax Act 1985"
+    },
+    {
+      "bearing_surface": "Social-housing additional-resident and contribution inputs",
+      "defining_provision": "Public and Community Housing Management Act 1992 s 2; Social Security Act 2018 ss 65AAA–66",
+      "eli": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "reason": "The Accommodation Supplement RuleSpec consumes the resulting social-housing facts but has no proof binding to this Act's imported definitions.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title": "Public and Community Housing Management Act 1992"
+    },
+    {
+      "bearing_surface": "WFF entitlement, payment administration and cadence, and MB 13 emergency-event determinations, with the downstream IETC gate",
+      "defining_provision": "Tax Administration Act 1994 ss 80KA–80KW (especially ss 80KF, 80KO, 80KW) and 91AAS; Income Tax Act 2007 ss LC 13, MB 13",
+      "eli": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The administration provisions prescribe WFF entitlement, payment, and instalment mechanics, and s 91AAS is the legal source of the emergency-event decisions consumed by MB 13. They genuinely bear on certified WFF and IETC surfaces and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title": "Tax Administration Act 1994"
+    },
+    {
+      "bearing_surface": "Main-benefit, WEP, and Accommodation Supplement eligibility and continuation",
+      "defining_provision": "Social Security (Modernisation) Amendment Act 2026 ss 4–13, 19, 21, 33–34, 43–65 and schedules",
+      "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement",
+        "nz/main-benefits",
+        "nz/winter-energy-payment"
+      ],
+      "reason": "These changes occur after the pinned principal Act's 1 April 2026 version and during the certified period; no existing Accommodation Supplement, main-benefit, or WEP module proof-binds and implements them.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml",
+        "nz/statutes/social_security/main_benefits/entitlement.yaml",
+        "nz/statutes/social_security/winter_energy_payment/core.yaml"
+      ],
+      "title": "Social Security (Modernisation) Amendment Act 2026"
+    },
+    {
+      "bearing_surface": "Student-allowance/grant eligibility gate for Accommodation Supplement",
+      "defining_provision": "Student Allowances Regulations 1998 regs 2–8, 12, 12A–16, 20, 26, 28–31, 34–35, 40, 44–46, 47B–47E, 48; Social Security Act 2018 s 67",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+      "programs": [
+        "nz/accommodation-supplement"
+      ],
+      "reason": "The Accommodation Supplement RuleSpec accepts receiving-or-eligible-for-student-allowance/grant as a case-derived input but does not proof-bind or compute the eligibility defined by these regulations.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+      "target_modules": [
+        "nz/statutes/social_security/accommodation_supplement/core.yaml"
+      ],
+      "title": "Student Allowances Regulations 1998"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Taxation Relief (Czech Republic) Order 2008, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Taxation Relief (Czech Republic) Order 2008 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Taxation Relief (Czech Republic) Order 2008"
+    },
+    {
+      "bearing_surface": "current CW 12 exempt-income treatment for qualifying foreign equity investors resident in Austria or Mexico",
+      "defining_provision": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008 cl 3; Income Tax Act 2007 s CW 12",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: The order designates territories for a current individual income-tax exemption on qualifying share-disposal gains. That changes legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations, and no current module proof-binds the order.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Income Tax (Approved Territories for Qualifying Foreign Equity Investor Definition) Order 2008"
+    },
+    {
+      "bearing_surface": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "defining_provision": "Double Taxation Relief (United States of America) Amendment Order 2009, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Taxation Relief (United States of America) Amendment Order 2009 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Taxation Relief (United States of America) Amendment Order 2009"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Singapore) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Singapore) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Singapore) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Taxation Relief (Australia) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Taxation Relief (Australia) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Taxation Relief (Australia) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (British Virgin Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (British Virgin Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (British Virgin Islands) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (Cayman Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Cayman Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Cayman Islands) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (Cook Islands) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Cook Islands) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Cook Islands) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (Guernsey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Guernsey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Guernsey) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (Isle of Man) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Isle of Man) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Isle of Man) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force supplementary agreement allocating taxing rights over pensions, government service, students, and other individual income",
+      "defining_provision": "Double Tax Agreements (Jersey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Jersey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Jersey) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Turkey) Order 2010, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Turkey) Order 2010 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Turkey) Order 2010"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Hong Kong) Order 2011, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Hong Kong) Order 2011 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Hong Kong) Order 2011"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Papua New Guinea) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Papua New Guinea) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Papua New Guinea) Order 2013"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Japan) Order 2013, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Japan) Order 2013 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Japan) Order 2013"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Viet Nam) Order 2014, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Viet Nam) Order 2014 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Viet Nam) Order 2014"
+    },
+    {
+      "bearing_surface": "current $5,000 maximum depreciable-property pooling value and the resulting depreciation deduction in net and taxable income",
+      "defining_provision": "Income Tax (Maximum Pooling Value) Order 2015 cl 3; Income Tax Act 2007 s EE 65",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: The order sets the current maximum value for pooling depreciable property. That rule changes depreciation deductions and therefore the legally derived net and taxable income consumed by the certified tax, IETC, and WFF computations; it is not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Income Tax (Maximum Pooling Value) Order 2015"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Samoa) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Samoa) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Samoa) Order 2015"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Canada) Order 2015, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Canada) Order 2015 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Canada) Order 2015"
+    },
+    {
+      "bearing_surface": "multilateral modifications to current double-tax agreements that alter income inclusion, source, residence, exemptions, and taxing rights",
+      "defining_provision": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting) Order 2018"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (China) Order 2019, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (China) Order 2019 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (China) Order 2019"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Switzerland) Order 2020, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Switzerland) Order 2020 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Switzerland) Order 2020"
+    },
+    {
+      "bearing_surface": "an in-force protocol modifying a current double-tax agreement and its allocation of New Zealand taxing rights",
+      "defining_provision": "Double Taxation Relief (Austria) Amendment Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Taxation Relief (Austria) Amendment Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Taxation Relief (Austria) Amendment Order 2024"
+    },
+    {
+      "bearing_surface": "an in-force double-tax agreement governing residence, source, income exemptions, credits, and New Zealand taxing rights",
+      "defining_provision": "Double Tax Agreements (Slovak Republic) Order 2024, its operative schedules or protocol, and Income Tax Act 2007 s BH 1(4)",
+      "eli": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "V3 bearing rule: Double Tax Agreements (Slovak Republic) Order 2024 gives an international arrangement overriding effect under Income Tax Act 2007 s BH 1. Its operative rules can change the legally derived income consumed by this certified computation and are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml"
+      ],
+      "title": "Double Tax Agreements (Slovak Republic) Order 2024"
+    },
+    {
+      "bearing_surface": "temporary 2026–27 in-work tax credit amount and possible early end date",
+      "defining_provision": "Official 2026 Act commentary, section 105 IWTC article; Income Tax Act 2007 ss MD 10 and MF 4L",
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "reason": "The official commentary bears on the in-period IWTC amount and its possible early termination. Although the Act's numeric amount is encoded, this official source itself is not proof-bound and therefore remains pending under the bearing rule.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
+      "target_modules": [
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title": "Taxation (Annual Rates 2025–26, Compliance Simplification, and Remedial Measures) Act 2026 commentary"
+    },
+    {
+      "bearing_surface": "IETC Working for Families entitlement-and-receipt disqualifier",
+      "defining_provision": "TIB Vol 37 No 5, Clarifying IETC eligibility; Income Tax Act 2007 s LC 13",
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
+      "programs": [
+        "nz/independent-earner-tax-credit"
+      ],
+      "reason": "The official explanation bears on the amended LC 13 eligibility test and is not source-bound by the current module, so it must remain pending.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml"
+      ],
+      "title": "Tax Information Bulletin Vol 37 No 5 — Clarifying IETC eligibility"
+    },
+    {
+      "bearing_surface": "2026–27 WFF abatement, Best Start first-year gate, and annualisation",
+      "defining_provision": "TIB Vol 37 No 7 Budget 2025 WFF commentary; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31",
+      "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
+      "programs": [
+        "nz/working-for-families"
+      ],
+      "reason": "The official Budget 2025 commentary bears on MD 13, MG 3, and Schedule 31 and is not proof-bound by the current modules, so it must remain pending.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
+      "target_modules": [
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+        "nz/statutes/income_tax/family_scheme/tax_credits.yaml"
+      ],
+      "title": "Tax Information Bulletin Vol 37 No 7 — Budget 2025 WFF commentary"
+    },
+    {
+      "bearing_surface": "WFF relationship, principal-caregiver, and partner-income allocation gates, with the downstream IETC gate",
+      "defining_provision": "TRA 005/21 [2023] NZTRA 1; Income Tax Act 2007 ss CB 32, MC 4, MC 7, MC 8, MC 11, YA 1; Legislation Act 2019 ss 13–14",
+      "eli": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The published TRA decision bears on relationship, caregiver, and partner-allocation questions that determine WFF entitlement and therefore the IETC WFF disqualifier. It is not proof-bound and remains pending; the official page records the appeal status as pending.",
+      "size_class": "M",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
+      "target_modules": [
+        "nz/statutes/income_tax/family_scheme/eligibility.yaml"
+      ],
+      "title": "TRA 005/21 [2023] NZTRA 1 (CSUM 23/04)"
+    },
+    {
+      "bearing_surface": "January 2026 emergency-event payment exclusion from family scheme income, with the downstream IETC WFF gate",
+      "defining_provision": "Tax Administration Act 1994 s 91AAS; Income Tax Act 2007 s MB 13(2)(r)",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The determination excludes qualifying relief payments received in its named event window from family scheme income under s MB 13, and WFF status feeds the IETC gate. It is not proof-bound and must remain pending.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-01",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
+      ],
+      "title": "Declaration that the January 2026 severe weather event is an emergency event for the purposes of family scheme income"
+    },
+    {
+      "bearing_surface": "February 2026 emergency-event payment exclusion from family scheme income, with the downstream IETC WFF gate",
+      "defining_provision": "Tax Administration Act 1994 s 91AAS; Income Tax Act 2007 s MB 13(2)(r)",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The determination excludes qualifying relief payments received in its named event window from family scheme income under s MB 13, and WFF status feeds the IETC gate. It is not proof-bound and must remain pending.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-02",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
+      ],
+      "title": "Declaration that the February 2026 severe weather event is an emergency event for the purposes of family scheme income"
+    },
+    {
+      "bearing_surface": "April 2026 Wellington emergency-event payment exclusion from family scheme income, with the downstream IETC WFF gate",
+      "defining_provision": "Tax Administration Act 1994 s 91AAS; Income Tax Act 2007 s MB 13(2)(r)",
+      "eli": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The determination excludes qualifying relief payments received in its named event window from family scheme income under s MB 13, and WFF status feeds the IETC gate. It is not proof-bound and must remain pending.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/determinations/emergency-events/2026/det-26-03",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
+      ],
+      "title": "Declaration that the April 2026 Wellington severe weather event is an emergency event for the purposes of family scheme income"
+    },
+    {
+      "bearing_surface": "summary guidance over current-period WFF eligibility, family-scheme-income adjustments, and the downstream IETC WFF gate",
+      "defining_provision": "IS 26/12 FS 1 summary of Income Tax Act 2007 subpart MB and s LC 13",
+      "eli": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
+      "programs": [
+        "nz/income-tax",
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "The fact sheet summarizes legal classifications that bear on family scheme income and WFF eligibility; duplication of the full interpretation statement is not an honest exclusion under the bearing rule. It is not proof-bound and must remain pending.",
+      "size_class": "S",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/fact-sheets/2026/is-26-12-fs-1",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
+      ],
+      "title": "Working for Families tax credits and family scheme income fact sheet"
+    },
+    {
+      "bearing_surface": "current-period WFF eligibility and family-scheme-income classifications, with the downstream IETC WFF gate",
+      "defining_provision": "IS 26/12 interpretation of Income Tax Act 2007 subpart MB family scheme income",
+      "eli": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
+      "programs": [
+        "nz/independent-earner-tax-credit",
+        "nz/working-for-families"
+      ],
+      "reason": "IS 26/12 interprets current legal categories that feed family scheme income and WFF eligibility, including associated trusts and companies, dependent-child passive income, trust payments, and other support payments. These classifications are not proof-bound by the current modules.",
+      "size_class": "L",
+      "source_checked_at": "2026-08-21",
+      "source_url": "https://www.taxtechnical.ird.govt.nz/interpretation-statements/2026/is-26-12",
+      "target_modules": [
+        "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml"
+      ],
+      "title": "Working for Families tax credits and family scheme income"
+    }
+  ],
+  "reviewed_acts": [
+    "Accident Compensation Act 2001",
+    "Income Tax Act 2007",
+    "Social Security Act 2018"
+  ],
+  "schema": "axiom_oracles.nz_instrument_encode_queue.v1",
+  "source_dispositions": "closure/nz/instrument-dispositions.json"
+}

@@ -510,7 +510,11 @@ _DISPOSITION_OPTIONAL = {
     "defining_provision",
     "size_class",
     "target_module",
+    "source_url",
+    "source_checked_at",
 }
+
+B2_INSTRUMENT_REVIEW_DATE = "2026-08-21"
 
 
 def _load_instrument_graph() -> tuple[dict[str, Any], bytes]:
@@ -2498,6 +2502,21 @@ def _canonical_instrument_decisions(
         status = value.get("status")
         if status not in INSTRUMENT_STATUSES:
             raise ClosureError(f"{pair[0]} / {pair[1]}: invalid disposition status")
+        source_fields = {"source_url", "source_checked_at"} & set(value)
+        if source_fields:
+            if source_fields != {"source_url", "source_checked_at"}:
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: source review requires URL and date"
+                )
+            if (
+                not isinstance(value["source_url"], str)
+                or not value["source_url"].startswith("https://")
+                or not isinstance(value["source_checked_at"], str)
+                or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value["source_checked_at"])
+            ):
+                raise ClosureError(
+                    f"{pair[0]} / {pair[1]}: invalid source review metadata"
+                )
         if status == "pending":
             unexpected = {"classification", "encoded_by"} & set(value)
             if unexpected:
@@ -2604,10 +2623,13 @@ def _canonical_supplemental_instruments(
     }
     optional = {
         "bearing",
+        "classification",
         "defining_provision",
         "encoded_by",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     }
     rows: list[dict[str, Any]] = []
     keys: list[str] = []
@@ -2649,7 +2671,31 @@ def _canonical_supplemental_instruments(
                 raise ClosureError(f"{eli}: supplemental row requires {field}")
         status = value.get("status")
         if status not in {"encoded", "excluded-with-reason", "pending"}:
-            raise ClosureError(f"{eli}: invalid supplemental disposition")
+            raise ClosureError(
+                f"{eli}: invalid supplemental disposition"
+            )
+        if "classification" in value and (
+            status != "excluded-with-reason"
+            or value["classification"]
+            not in {
+                "not_in_force",
+                "outside_certified_period",
+                "spine_excluded_surface",
+                "superseded_regime",
+            }
+        ):
+            raise ClosureError(f"{eli}: invalid supplemental exclusion classification")
+        source_fields = {"source_url", "source_checked_at"} & set(value)
+        if source_fields:
+            if source_fields != {"source_url", "source_checked_at"}:
+                raise ClosureError(f"{eli}: source review requires URL and date")
+            if (
+                not isinstance(value["source_url"], str)
+                or not value["source_url"].startswith("https://")
+                or not isinstance(value["source_checked_at"], str)
+                or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value["source_checked_at"])
+            ):
+                raise ClosureError(f"{eli}: invalid source review metadata")
         if status == "encoded":
             if value.get("bears_on_computed_surface") is not True:
                 raise ClosureError(f"{eli}: encoded supplement must declare bearing")
@@ -2885,6 +2931,8 @@ def _decision(
     defining_provision: str | None = None,
     size_class: str | None = None,
     target_module: str | None = None,
+    source_url: str | None = None,
+    source_checked_at: str | None = None,
 ) -> dict[str, Any]:
     row: dict[str, Any] = {"status": status}
     for key, value in (
@@ -2896,10 +2944,744 @@ def _decision(
         ("defining_provision", defining_provision),
         ("size_class", size_class),
         ("target_module", target_module),
+        ("source_url", source_url),
+        ("source_checked_at", source_checked_at),
     ):
         if value is not None:
             row[key] = value
     return row
+
+
+def _reviewed_decision(
+    eli: str,
+    status: str,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Bind a B2 disposition to the official source review that supports it."""
+
+    return _decision(
+        status,
+        source_url=eli,
+        source_checked_at=B2_INSTRUMENT_REVIEW_DATE,
+        **kwargs,
+    )
+
+
+def _acc_spine_exclusion_reason(title: str) -> str:
+    """Explain why a live ACC instrument misses the earners'-levy cone."""
+
+    lower = title.lower()
+    if "interest rates for payment of levies" in lower:
+        subject = "post-assessment interest on late levy payments"
+    elif any(
+        phrase in lower
+        for phrase in (
+            "work account levies",
+            "motor vehicle account levies",
+            "experience rating",
+            "fuel levy",
+            "residual levies",
+        )
+    ):
+        subject = "a levy account or adjustment other than the earners' levy"
+    elif "accredited employer" in lower:
+        subject = "the accredited-employer claims-management framework"
+    elif any(
+        phrase in lower
+        for phrase in (
+            "weekly compensation",
+            "indexation",
+            "lump sum",
+            "independence allowance",
+            "cost of treatment",
+            "ancillary services",
+            "hearing",
+            "occupational disease",
+            "claimants' rights",
+            "review costs",
+            "appeals",
+            "previous and subsequent injury entitlements",
+            "public health acute services",
+            "definitions",
+        )
+    ):
+        subject = "ACC cover, treatment, compensation, claimant, or review entitlements"
+    else:
+        subject = "an ACC surface outside the standard earners' levy calculation"
+    return (
+        f"The official text of {title} regulates {subject}. It does not alter "
+        "the rate, maximum liable earnings, GST-inclusive factor, or rounding "
+        "used to compute the certified standard earners' levy under the Accident "
+        "Compensation (Earners’ Levy) Regulations 2025, so it bears only on "
+        "spine-excluded surfaces."
+    )
+
+
+_INCOME_TAX_BEARING_TREATY_ELIS = {
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/227/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2009/365/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/13/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/115/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/146/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/147/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/148/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/151/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/152/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/153/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/311/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/354/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/276/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/316/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/112/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/74/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/261/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/72/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/241/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/22/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/153/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/154/en/latest/",
+}
+
+_INCOME_TAX_BEARING_OTHER_ELIS = {
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/290/en/latest/",
+    "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/141/en/latest/",
+}
+
+
+def _income_tax_open_target_module(program: str) -> str:
+    return {
+        "nz/income-tax": "nz/statutes/income_tax/schedule_1/individual_income_tax.yaml",
+        "nz/independent-earner-tax-credit": "nz/statutes/income_tax/credits/individual_credits.yaml",
+        "nz/working-for-families": "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
+    }[program]
+
+
+def _income_tax_treaty_pending_decision(
+    program: str, eli: str, title: str
+) -> dict[str, Any]:
+    lower = title.lower()
+    if "multilateral convention" in lower:
+        bearing = (
+            "multilateral modifications to current double-tax agreements that alter "
+            "income inclusion, source, residence, exemptions, and taxing rights"
+        )
+        size_class = "L"
+    elif "amendment order" in lower:
+        bearing = (
+            "an in-force protocol modifying a current double-tax agreement and its "
+            "allocation of New Zealand taxing rights"
+        )
+        size_class = "M"
+    elif any(
+        jurisdiction in lower
+        for jurisdiction in (
+            "british virgin islands",
+            "cayman islands",
+            "cook islands",
+            "guernsey",
+            "isle of man",
+            "jersey",
+        )
+    ):
+        bearing = (
+            "an in-force supplementary agreement allocating taxing rights over "
+            "pensions, government service, students, and other individual income"
+        )
+        size_class = "M"
+    else:
+        bearing = (
+            "an in-force double-tax agreement governing residence, source, income "
+            "exemptions, credits, and New Zealand taxing rights"
+        )
+        size_class = "L"
+    return _reviewed_decision(
+        eli,
+        "pending",
+        reason=(
+            f"V3 bearing rule: {title} gives an international arrangement overriding "
+            "effect under Income Tax Act 2007 s BH 1. Its operative rules can change "
+            "the legally derived income consumed by this certified computation and "
+            "are not proof-bound by the current modules."
+        ),
+        bearing=bearing,
+        bears_on_computed_surface=True,
+        defining_provision=(
+            f"{title}, its operative schedules or protocol, and Income Tax Act 2007 "
+            "s BH 1(4)"
+        ),
+        target_module=_income_tax_open_target_module(program),
+        size_class=size_class,
+    )
+
+
+def _income_tax_other_pending_decision(
+    program: str, eli: str, title: str
+) -> dict[str, Any]:
+    if "Approved Territories" in title:
+        bearing = (
+            "current CW 12 exempt-income treatment for qualifying foreign equity "
+            "investors resident in Austria or Mexico"
+        )
+        defining_provision = f"{title} cl 3; Income Tax Act 2007 s CW 12"
+        reason = (
+            "The order designates territories for a current individual income-tax "
+            "exemption on qualifying share-disposal gains. That changes legally "
+            "derived net and taxable income consumed by the certified tax, IETC, "
+            "and WFF computations, and no current module proof-binds the order."
+        )
+    else:
+        bearing = (
+            "current $5,000 maximum depreciable-property pooling value and the "
+            "resulting depreciation deduction in net and taxable income"
+        )
+        defining_provision = f"{title} cl 3; Income Tax Act 2007 s EE 65"
+        reason = (
+            "The order sets the current maximum value for pooling depreciable "
+            "property. That rule changes depreciation deductions and therefore the "
+            "legally derived net and taxable income consumed by the certified tax, "
+            "IETC, and WFF computations; it is not proof-bound by the current modules."
+        )
+    return _reviewed_decision(
+        eli,
+        "pending",
+        reason=f"V3 bearing rule: {reason}",
+        bearing=bearing,
+        bears_on_computed_surface=True,
+        defining_provision=defining_provision,
+        target_module=_income_tax_open_target_module(program),
+        size_class="M",
+    )
+
+
+def _income_tax_graph_exclusion(eli: str, title: str) -> tuple[str, str]:
+    """Classify a reviewed ITA instrument outside the certified tax-credit cone."""
+
+    lower = title.lower()
+    superseded = {
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/99/en/latest/": (
+            "This amendment order's effect is consolidated into the Income Tax "
+            "(Social Assistance Suspensory Loans) Order 1995 and the current Income "
+            "Tax Act treatment. Its KiwiSaver first-home subsidy classification "
+            "also lies outside the certified individual tax, IETC, and WFF spines."
+        ),
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2011/403/en/latest/": (
+            "The order's 2012 family-tax-credit amounts were replaced. For 2026–27 "
+            "the operative amounts are in the Income Tax (Tax Credit) Order 2025 "
+            "and consolidated Income Tax Act text, which the WFF module proof-binds."
+        ),
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/240/en/latest/": (
+            "The Income Tax (Crown Regional Holdings Limited) Order 2021 repealed "
+            "this order's Provincial Growth Fund Limited Schedule 35 entry. The "
+            "superseded company exemption has no independent 2026–27 operation."
+        ),
+    }
+    if eli in superseded:
+        return "superseded_regime", superseded[eli]
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/470/en/latest/"
+    ):
+        return (
+            "superseded_regime",
+            "The limited 2010 Samoa arrangements were superseded for the certified "
+            "period by the comprehensive Double Tax Agreements (Samoa) Order 2015, "
+            "which is separately pending for encoding.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2015/75/en/latest/"
+    ):
+        return (
+            "superseded_regime",
+            "This revocation order removed the former Japan double-tax regime after "
+            "the Double Tax Agreements (Japan) Order 2013 took effect. The current "
+            "2013 agreement is separately pending for encoding.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/21/en/latest/"
+    ):
+        return (
+            "superseded_regime",
+            "The protocol's substantive principal-purpose test is fully incorporated "
+            "into Schedule 2 of the current official reprint of the Double Tax "
+            "Agreements (Guernsey) Order 2010. That consolidated principal order is "
+            "separately pending for encoding, so this amending instrument retains no "
+            "independent 2026–27 rule.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/118/en/latest/"
+    ):
+        return (
+            "superseded_regime",
+            "The second protocol is fully incorporated as Schedule 2 of the current "
+            "official reprint of the Double Tax Agreements (Hong Kong) Order 2011. "
+            "That consolidated principal order is separately pending for encoding, "
+            "so this amending instrument retains no independent 2026–27 rule.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/195/en/latest/"
+    ):
+        return (
+            "not_in_force",
+            "Inland Revenue's current treaty-status page records the Belgian second "
+            "protocol implemented by this order as signed but not yet in force, so it "
+            "cannot alter a 2026–27 computation.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/154/en/latest/"
+    ):
+        return (
+            "not_in_force",
+            "Inland Revenue's current treaty-status page records the St Christopher "
+            "and Nevis agreements implemented by this order as not yet in force, so "
+            "they cannot alter a 2026–27 computation.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/78/en/latest/"
+    ):
+        return (
+            "outside_certified_period",
+            "Regulation 4 applies only to COVID-19 isolation accommodation provided "
+            "from 22 April 2021 through 30 June 2022. Its application ended before "
+            "the certified period beginning 1 April 2026.",
+        )
+    if "deemed rate of return" in lower:
+        match = re.search(r"(\d{4})[–-](\d{2}) income year", title)
+        income_year = match.group(0) if match else "the income year named in its title"
+        return (
+            "outside_certified_period",
+            f"The official order sets a deemed foreign-investment-fund return rate "
+            f"only for the {income_year}. That income year ends before the certified "
+            "period 1 April 2026 to 31 March 2027.",
+        )
+    if "development companies in niue" in lower:
+        return (
+            "outside_certified_period",
+            "The official order applies only to specified Niue development companies "
+            "and income years ending no later than 7 April 2011, before the certified "
+            "period; company loss grouping is also outside the personal-tax spine.",
+        )
+    if "north island flooding events" in lower:
+        return (
+            "outside_certified_period",
+            "The official order extends its accommodation-expenditure concession only "
+            "through 1 April 2024, before the certified period beginning 1 April 2026.",
+        )
+    administration_only = {
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/228/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2008/291/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/144/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/145/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/149/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/150/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/155/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/156/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/471/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/426/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/427/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2013/437/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2014/209/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/208/en/latest/",
+        "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2017/209/en/latest/",
+    }
+    if eli in administration_only:
+        return (
+            "spine_excluded_surface",
+            f"The official text of {title} operates only on tax-information exchange, "
+            "collection assistance, reporting, or treaty administration. It does not "
+            "allocate taxing rights, exempt or include income, or change a value in "
+            "the certified individual-tax, IETC, or WFF computations, so it bears "
+            "solely on spine-excluded administration surfaces.",
+        )
+    if (
+        eli
+        == "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2010/469/en/latest/"
+    ):
+        return (
+            "spine_excluded_surface",
+            "Inland Revenue records only the Marshall Islands tax-information-exchange "
+            "agreement as in force; the order's supplementary individual-income "
+            "allocation agreement is not yet in force. The operative portion therefore "
+            "bears solely on spine-excluded tax administration.",
+        )
+    if "double tax" in lower or "double taxation" in lower:
+        subject = (
+            "a tax-administration arrangement without a current income-allocation rule"
+        )
+    elif "maximum pooling value" in lower:
+        subject = "the maximum pooling value for depreciable property"
+    elif "meaning of accommodation" in lower:
+        subject = "a special employment-accommodation valuation or exemption"
+    elif "limited" in lower:
+        subject = "an entity-specific Schedule 35 corporate exemption"
+    else:
+        subject = "an Income Tax Act surface outside the certified computation spines"
+    return (
+        "spine_excluded_surface",
+        f"The official text of {title} regulates {subject}. It does not alter the "
+        "certified basic individual-rate, IETC, or WFF calculation, so it bears only "
+        "on spine-excluded surfaces.",
+    )
+
+
+_SOCIAL_SECURITY_GRAPH_EXCLUSIONS: dict[str, tuple[str, str]] = {
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2018/236/en/latest/': (
+        'superseded_regime',
+        'Inserted Social Security Regulations 2018 Schedule 8 Part 28, exempting '
+        'Housing New Zealand methamphetamine tenancy-termination reimbursement from '
+        'cash assets and income. Its operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05; this '
+        'amending instrument is not a separate current rule source.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/115/en/latest/': (
+        'superseded_regime',
+        'Inserted regulations 5 and 7A so specified Christchurch response visa '
+        'holders satisfy specified residential requirements. The operative '
+        'residential rule is consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/128/en/latest/': (
+        'superseded_regime',
+        'Amended Schedule 8 cash-asset and income exemptions for specified ex '
+        'gratia and compensation payments, including payments by specified other '
+        'entities. The operative exemptions are consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/215/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 31 to exempt specified MSD lump-sum payments from '
+        'cash assets and income for the first 12 months. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/264/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 30 and 38 and Schedule 1 for cohort-entry policy '
+        'effects on childcare subsidy and OSCAR assistance. The operative childcare '
+        'rules are consolidated into the pinned Social Security Regulations 2018 '
+        'version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/28/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 55 and 71 and Schedules 2 and 8 for funeral grants, '
+        'temporary additional support, childcare rates, and '
+        'accommodation-supplement arrears exemptions. These historical parameters '
+        'and rules are superseded by the pinned consolidated 2026-04-05 '
+        'regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/31/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 income thresholds for '
+        'community services cards. It bears only on the '
+        'health-card/community-services-card output, which is outside the AS, '
+        'main-benefit, and WEP certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/68/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 29 cash-asset and income exemptions for '
+        'Christchurch mosques attack support payments. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/76/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 30 exemptions for refunds of specified debt '
+        'repayments related to Housing New Zealand methamphetamine contamination. '
+        'The operative exemption is consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2019/99/en/latest/': (
+        'superseded_regime',
+        "Amended regulation 3's family-violence definition to align with the Family "
+        'Violence Act 2018. The operative definition is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/111/en/latest/': (
+        'superseded_regime',
+        'Inserted temporary regulation 179A exempting specified COVID-19 cases from '
+        'stand down; the provision was revoked on 23 November 2020. The temporary '
+        'rule was revoked years before the certified period and is absent as an '
+        'operative rule from the pinned consolidated regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/15/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55, 69, and 71 and Schedules 2 and '
+        '8, including funeral, TAS, childcare, and transitional-assistance values. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/179/en/latest/': (
+        'superseded_regime',
+        'Inserted time-limited regulation 179B COVID-19 recovery stand-down '
+        'exemptions and amended regulation 189 expiry-and-regrant rules. The '
+        'temporary COVID-19 provisions ended before the certified period; any '
+        'surviving operative text is reflected in the pinned consolidated '
+        'regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/18/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/20/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 71, 209, 210, and 227 and a schedule for '
+        'emergency/transitional housing, TAS, and debt treatment. The operative '
+        'housing and debt rules are consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/223/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 28 for COVID-19-related childcare absence. The '
+        'temporary historical rule is superseded; the pinned consolidated '
+        'regulations contain the operative certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/32/en/latest/': (
+        'superseded_regime',
+        'Amended Schedule 8 to make the Christchurch mosques attack support-payment '
+        'exemptions permanent. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/34/en/latest/': (
+        'superseded_regime',
+        'Inserted a temporary COVID-19 stand-down exemption through regulation '
+        '179A. The temporary provision was revoked before the certified period and '
+        'has no operative certified-period effect.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2020/53/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 67 and 189 for temporary COVID-19 TAS and '
+        'expiry-and-regrant treatment. The temporary historical rules are '
+        'superseded; the pinned consolidated regulations contain the operative '
+        'certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/121/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 20, 64, 66, and 69 concerning disability allowance, '
+        'TAS, and childcare-income treatment. The operative rules are consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/138/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 32 exemptions for lump-sum '
+        'residential-care-subsidy refunds. The operative exemption is consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/16/en/latest/': (
+        'superseded_regime',
+        'Amended Social Security Act 2018 Schedule 2 Income Test 1 through Income '
+        'Test 4 thresholds from 1 April 2021. Those historical thresholds are '
+        'superseded by later updates and the pinned Social Security Act version '
+        'dated 2026-04-01.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/17/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55, 69, and 71 and Schedules 2 and '
+        '8. These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/20/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2021/351/en/latest/': (
+        'spine_excluded_surface',
+        "The incorporated agreement's Article 1(f) limits New Zealand benefits to "
+        "New Zealand superannuation and veteran's pension, and Articles 6 to 11 "
+        'regulate those benefits. Those pension entitlement and amount surfaces are '
+        'outside AS, main benefits, and WEP; any pension receipt used by WEP is an '
+        'input fact rather than a value this order makes the module compute.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/185/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 33 cash-asset and income exemptions for the '
+        'cost-of-living payment. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/250/en/latest/': (
+        'spine_excluded_surface',
+        'Amended health-entitlement-card use, including transport-card treatment. '
+        'It bears only on card use and health-card administration, outside the '
+        'three certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/251/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 290, and 291 for SuperGold and '
+        'community-services-card public-transport use. The operative provisions are '
+        'consolidated into the pinned regulations and bear only on '
+        'card-administration outputs excluded from these certified surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/27/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2022/34/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/188/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 263 and inserted regulations 294A and 294B for '
+        'classification of child-support payments. The operative '
+        'child-support-payment rules are consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/208/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 69, and 71 for the North Island Weather Events '
+        'temporary-accommodation-assistance programme. The programme-specific '
+        'historical rule is superseded; the pinned consolidated regulations contain '
+        'the operative certified-period text.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/255/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 69, and 71 to replace the North Island programme '
+        'with the Severe Weather Events TAA programme. The operative programme rule '
+        'is consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/274/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 38 cash-asset and income exemptions for specified '
+        'severe-weather-event payments. The operative exemption is consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/37/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/41/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds. It bears only on a health-card output outside the three '
+        'certified computed surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2023/63/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 34 to exempt the Kāinga Ora energy subsidy from '
+        'income. The operative exemption is consolidated into the pinned Social '
+        'Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/10/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/12/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 regulation 8 thresholds. '
+        'It bears only on a health-card output outside the three certified computed '
+        'surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/137/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3 and 209 and Schedule 1 for emergency-housing '
+        'assistance and debt treatment. The operative emergency-housing rules are '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/163/en/latest/': (
+        'superseded_regime',
+        'Inserted Schedule 8 Part 39 cash-asset and income exemptions for '
+        'FamilyBoost payments. The operative exemption is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/26/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 57 and related provisions for the Severe Weather Events '
+        'TAA programme. The operative programme rule is consolidated into the '
+        'pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2024/50/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 20 and 23 for childcare-subsidy fees and hours. The '
+        'operative childcare rules are consolidated into the pinned Social Security '
+        'Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/10/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8. '
+        'These historical parameters and rules are superseded by the pinned '
+        'consolidated 2026-04-05 regulations.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/121/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 282, 290, and 291 for SuperGold and rates-rebate '
+        'evidence and card administration. The operative provisions are '
+        'consolidated into the pinned regulations and bear only on excluded '
+        'card/rates-rebate administration surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/13/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 regulation 8 thresholds. '
+        'It bears only on a health-card output outside the three certified computed '
+        'surfaces.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/157/en/latest/': (
+        'superseded_regime',
+        'Inserted a Schedule 8 exemption, without a time limit, for specified Lake '
+        'Alice compensation or ex gratia payments. The operative exemption is '
+        'consolidated into the pinned Social Security Regulations 2018 version '
+        'dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/223/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 3, 69, 194, and 195 and Schedule 8 for youth money '
+        'management and programme references. The operative rules are consolidated '
+        'into the pinned Social Security Regulations 2018 version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/250/en/latest/': (
+        'superseded_regime',
+        'Amended regulation 165 and inserted subpart 1A from regulation 176A for '
+        'mandatory reviews; commenced 2 March 2026. Its pre-certified-period '
+        'commencement and operative review rules are included in the pinned Social '
+        'Security Regulations version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2025/306/en/latest/': (
+        'superseded_regime',
+        'Amended regulations 57, 66, 71, and 173 and Schedule 1 to align with the '
+        'Accommodation Supplement and income-related-rent reforms; commenced 2 '
+        'March 2026. Its operative rules are included in the pinned Social Security '
+        'Regulations version dated 2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/37/en/latest/': (
+        'superseded_regime',
+        'Made annual amendments to regulations 55 and 71 and Schedules 2 and 8 from '
+        "1 April 2026. The instrument's in-period operative changes are included in "
+        'the pinned consolidated Social Security Regulations version dated '
+        '2026-04-05.'
+    ),
+    'https://www.legislation.govt.nz/secondary-legislation/pco-drafted/2026/38/en/latest/': (
+        'spine_excluded_surface',
+        'Changed Health Entitlement Cards Regulations 1993 community-services-card '
+        'thresholds from 1 April 2026. It bears only on the in-period health-card '
+        'threshold/output, outside the three certified computed surfaces.'
+    ),
+}
+
+
+def _social_security_graph_exclusion(eli: str, title: str) -> tuple[str, str]:
+    """Return the source-reviewed B2 disposition for an SSA graph row."""
+
+    decision = _SOCIAL_SECURITY_GRAPH_EXCLUSIONS.get(eli)
+    if decision is None:
+        raise ClosureError(f"unreviewed Social Security instrument: {title} ({eli})")
+    return decision
 
 
 def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str, Any]:
@@ -3114,6 +3896,23 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
                 "2026 main-benefit rate publication and its cited rate provisions"
             )
             size_class = "S"
+        source_review = (
+            {
+                "source_url": eli,
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
+            }
+            if program == "nz/acc-earners-levy"
+            or (
+                program
+                in {
+                    "nz/income-tax",
+                    "nz/independent-earner-tax-credit",
+                    "nz/working-for-families",
+                }
+                and (is_statement or is_determination)
+            )
+            else {}
+        )
         return _decision(
             "pending",
             reason=(
@@ -3124,7 +3923,19 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             defining_provision=defining_provision,
             target_module=target_module,
             size_class=size_class,
+            **source_review,
         )
+
+    if (
+        row.get("act_citation_path") == "nz/statute/act/public/2007/0097"
+        and eli in _INCOME_TAX_BEARING_TREATY_ELIS
+    ):
+        return _income_tax_treaty_pending_decision(program, eli, title)
+    if (
+        row.get("act_citation_path") == "nz/statute/act/public/2007/0097"
+        and eli in _INCOME_TAX_BEARING_OTHER_ELIS
+    ):
+        return _income_tax_other_pending_decision(program, eli, title)
 
     weekly_compensation = row.get("corpus_citation_path", "").startswith(
         "nz/guidance/acc/"
@@ -3166,7 +3977,8 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             "nz/independent-earner-tax-credit",
             "nz/working-for-families",
         }:
-            return _decision(
+            return _reviewed_decision(
+                eli,
                 "pending",
                 reason=(
                     "V3 bearing rule: the IS 26/12 fact sheet summarizes an interpretation that bears on family-scheme-income and the IETC WFF gate; duplication does not permit classification around it."
@@ -3188,9 +4000,22 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
             bears_on_computed_surface=False,
         )
     if manifest_nonbearing or program_specific_nonbearing:
-        return _decision(
-            "excluded-with-reason",
-            classification="no_computational_bearing",
+        reviewed_income_row = row.get(
+            "act_citation_path"
+        ) == "nz/statute/act/public/2007/0097" and (is_statement or is_determination)
+        decision = _reviewed_decision if reviewed_income_row else _decision
+        args = (
+            (eli, "excluded-with-reason")
+            if reviewed_income_row
+            else ("excluded-with-reason",)
+        )
+        return decision(
+            *args,
+            classification=(
+                "spine_excluded_surface"
+                if reviewed_income_row
+                else "no_computational_bearing"
+            ),
             reason=f"{title} does not alter this certified program's claimed output surface.",
             bears_on_computed_surface=False,
         )
@@ -3208,6 +4033,32 @@ def _seed_instrument_decision(program: str, row: Mapping[str, Any]) -> dict[str,
         return _decision(
             "excluded-with-reason",
             classification="not_in_force",
+            reason=reason,
+            bears_on_computed_surface=False,
+        )
+    if row.get("act_citation_path") == "nz/statute/act/public/2001/0049":
+        return _reviewed_decision(
+            eli,
+            "excluded-with-reason",
+            classification="spine_excluded_surface",
+            reason=_acc_spine_exclusion_reason(title),
+            bears_on_computed_surface=False,
+        )
+    if row.get("act_citation_path") == "nz/statute/act/public/2007/0097":
+        classification, reason = _income_tax_graph_exclusion(eli, title)
+        return _reviewed_decision(
+            eli,
+            "excluded-with-reason",
+            classification=classification,
+            reason=reason,
+            bears_on_computed_surface=False,
+        )
+    if row.get("act_citation_path") == "nz/statute/act/public/2018/0032":
+        classification, reason = _social_security_graph_exclusion(eli, title)
+        return _reviewed_decision(
+            eli,
+            "excluded-with-reason",
+            classification=classification,
             reason=reason,
             bears_on_computed_surface=False,
         )
@@ -3256,19 +4107,21 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "eli": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
             "title_short": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025",
             "programs": ["nz/independent-earner-tax-credit"],
-            "status": "pending",
-            "provenance": "Official legislation page and section 105 read 2026-08-20.",
+            "status": "excluded-with-reason",
+            "classification": "superseded_regime",
+            "provenance": "Official legislation page, section 105, and consolidated principal text read 2026-08-21.",
             "discovery_channels": ["subject_matter_search"],
-            "bears_on_computed_surface": True,
+            "bears_on_computed_surface": False,
             "reason": (
-                "Section 105 amended LC 13(1)(d)–(e) from 30 March 2025. The "
-                "current module implements NOT(entitled OR receives), while the "
-                "amended text requires NOT(entitled AND receives)."
+                "Section 105 is amendment machinery whose complete effect is "
+                "incorporated into the pinned 16 June 2026 Income Tax Act 2007 "
+                "principal text (version date 7 May 2026), including the amended "
+                "LC 13(1)(d)–(e). The Act retains no independent 2026–27 rule; the "
+                "still-unencoded substance is separately represented by the principal "
+                "text and official IETC bulletin."
             ),
-            "bearing": "IETC WFF-entitlement status gate",
-            "defining_provision": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025 s 105; Income Tax Act 2007 s LC 13(1)(d)–(e)",
-            "target_module": ["nz/statutes/income_tax/credits/individual_credits.yaml"],
-            "size_class": "S",
+            "source_url": "https://www.legislation.govt.nz/act/public/2025/9/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
@@ -3283,47 +4136,50 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "defining_provision": "TIB Vol 37 No 5, Clarifying IETC eligibility; Income Tax Act 2007 s LC 13",
             "target_module": ["nz/statutes/income_tax/credits/individual_credits.yaml"],
             "size_class": "S",
+            "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no5.pdf",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
             "title_short": "Taxation (Budget Measures) Act 2025",
             "programs": ["nz/working-for-families"],
-            "status": "pending",
-            "provenance": "Official legislation page and provisions read 2026-08-20.",
+            "status": "excluded-with-reason",
+            "classification": "superseded_regime",
+            "provenance": "Official legislation page, provisions, and consolidated principal text read 2026-08-21.",
             "discovery_channels": ["subject_matter_search"],
-            "bears_on_computed_surface": True,
+            "bears_on_computed_surface": False,
             "reason": (
-                "Sections 2(5), 7, 8, and 16 amend MD 13, MG 3, and Schedule "
-                "31. Numeric values are present, but the first-year Best Start "
-                "gate and annualisation remain case-derived inputs."
+                "Sections 7, 8, and 16 are amendment machinery whose complete "
+                "in-period effect is incorporated into the pinned 16 June 2026 "
+                "Income Tax Act 2007 principal text (version date 7 May 2026): "
+                "MD 13 contains the $44,900 and 27.5% rule, MG 3 the first-year "
+                "Best Start gate, and Schedule 31 the annualisation table. The "
+                "unencoded substance is separately represented by that principal "
+                "text and the official Budget 2025 bulletin."
             ),
-            "bearing": "WFF abatement, Best Start first-year gate, and annualisation",
-            "defining_provision": "Taxation (Budget Measures) Act 2025 ss 2(5), 7, 8, 16; Income Tax Act 2007 ss MD 13, MG 3 and Schedule 31",
-            "target_module": [
-                "nz/statutes/income_tax/family_scheme/family_scheme_income.yaml",
-                "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
-            ],
-            "size_class": "M",
+            "source_url": "https://www.legislation.govt.nz/act/public/2025/26/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
             "title_short": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025",
             "programs": ["nz/accommodation-supplement"],
-            "status": "pending",
-            "provenance": "Official legislation page and provisions read 2026-08-20.",
+            "status": "excluded-with-reason",
+            "classification": "superseded_regime",
+            "provenance": "Official legislation page, provisions, and consolidated principal text read 2026-08-21.",
             "discovery_channels": ["subject_matter_search"],
-            "bears_on_computed_surface": True,
+            "bears_on_computed_surface": False,
             "reason": (
-                "Sections 2 and 4–15 change accommodation-cost definitions, "
-                "entitlement/zero-rate rules, review mechanics, income exclusions, "
-                "and weekly qualifying-cost/income terms."
+                "Sections 4–15 amend Accommodation Supplement cost definitions, "
+                "entitlement and zero-rate rules, review mechanics, income "
+                "exclusions, and weekly qualifying-cost/income terms; section 2 "
+                "brought the Act into force on 2 March 2026. Every operative change "
+                "commenced before the certified period and is consolidated into the "
+                "pinned Social Security Act version dated 2026-04-01, to which the "
+                "Accommodation Supplement RuleSpec is proof-bound."
             ),
-            "bearing": "Accommodation Supplement eligibility, cost, income, and payment surface",
-            "defining_provision": "Social Assistance Legislation (Accommodation Supplement and Income-related Rent) Amendment Act 2025 ss 2, 4–15",
-            "target_module": [
-                "nz/statutes/social_security/accommodation_supplement/core.yaml"
-            ],
-            "size_class": "L",
+            "source_url": "https://www.legislation.govt.nz/act/public/2025/27/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
@@ -3350,6 +4206,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "nz/statutes/social_security/winter_energy_payment/core.yaml",
             ],
             "size_class": "L",
+            "source_url": "https://www.legislation.govt.nz/act/public/2026/27/en/latest/",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
@@ -3367,6 +4225,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "defining_provision": "TRA 005/21 [2023] NZTRA 1; Income Tax Act 2007 ss CB 32, MC 4, MC 7, MC 8, MC 11, YA 1; Legislation Act 2019 ss 13–14",
             "target_module": ["nz/statutes/income_tax/family_scheme/eligibility.yaml"],
             "size_class": "M",
+            "source_url": "https://www.taxtechnical.ird.govt.nz/case-summaries/2023/csum-23-04",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
@@ -3384,6 +4244,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
             ],
             "size_class": "M",
+            "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tt/pdfs/tib/volume-37---2025/tib-vol37-no7.pdf",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
@@ -3398,6 +4260,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
             "defining_provision": "Official 2026 Act commentary, section 105 IWTC article",
             "target_module": ["nz/statutes/income_tax/family_scheme/tax_credits.yaml"],
             "size_class": "S",
+            "source_url": "https://www.taxtechnical.ird.govt.nz/-/media/project/ir/tp/publications/2026/compliance-simplification-bill-act-commentary.pdf",
+            "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
         },
         {
             "eli": "https://www.legislation.govt.nz/act/public/2026/25/en/latest/",
@@ -3439,6 +4303,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                 "defining_provision": "Goods and Services Tax Act 1985 ss 5(6EC)–(6EE), 8(1), 10",
                 "target_module": ["nz/regulations/acc/earners_levy.yaml"],
                 "size_class": "S",
+                "source_url": "https://www.legislation.govt.nz/act/public/1985/141/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
             {
                 "eli": "https://www.legislation.govt.nz/act/public/1987/129/en/latest/",
@@ -3475,6 +4341,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                     "nz/statutes/social_security/accommodation_supplement/core.yaml"
                 ],
                 "size_class": "M",
+                "source_url": "https://www.legislation.govt.nz/act/public/1992/76/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
             {
                 "eli": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
@@ -3496,6 +4364,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                     "nz/statutes/income_tax/family_scheme/tax_credits.yaml",
                 ],
                 "size_class": "L",
+                "source_url": "https://www.legislation.govt.nz/act/public/1994/166/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
             {
                 "eli": "https://www.legislation.govt.nz/act/public/2001/84/en/latest/",
@@ -3580,6 +4450,8 @@ def _subject_search_supplements() -> list[dict[str, Any]]:
                     "nz/statutes/social_security/accommodation_supplement/core.yaml"
                 ],
                 "size_class": "L",
+                "source_url": "https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1998/277/en/latest/",
+                "source_checked_at": B2_INSTRUMENT_REVIEW_DATE,
             },
         ]
     )
@@ -3740,6 +4612,8 @@ def _instrument_ledger_row(
         "defining_provision",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     ):
         if decision.get(key) is not None:
             row[key] = decision[key]
@@ -3759,6 +4633,7 @@ def _supplemental_ledger_row(decision: Mapping[str, Any]) -> dict[str, Any]:
         "programs": decision.get("programs"),
     }
     for key in (
+        "classification",
         "reason",
         "bearing",
         "encoded_by",
@@ -3766,6 +4641,8 @@ def _supplemental_ledger_row(decision: Mapping[str, Any]) -> dict[str, Any]:
         "defining_provision",
         "size_class",
         "target_module",
+        "source_url",
+        "source_checked_at",
     ):
         if decision.get(key) is not None:
             row[key] = decision[key]

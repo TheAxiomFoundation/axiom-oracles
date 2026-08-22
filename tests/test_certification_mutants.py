@@ -645,9 +645,11 @@ def test_nz_certificates_compute_open_on_v3_closure_frontiers():
 
         dependency_closure = closed["dependency_closure"]
         assert dependency_closure["closed"] is False
-        assert dependency_closure["open_dependency_count"] == 247
+        # 229 law-derived inputs + 39 bearing instruments after the B2 frontier
+        # review (the V3A audit had found 18 bearing; the burn-down found 21 more).
+        assert dependency_closure["open_dependency_count"] == 268
         assert len(dependency_closure["law_derived_inputs"]) == 229
-        assert len(dependency_closure["instruments_bearing_on_computed"]) == 18
+        assert len(dependency_closure["instruments_bearing_on_computed"]) == 39
         assert dependency_closure["open_dependency_count"] == (
             len(dependency_closure["law_derived_inputs"])
             + len(dependency_closure["instruments_bearing_on_computed"])
