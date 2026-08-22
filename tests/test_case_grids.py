@@ -67,7 +67,7 @@ def test_expected_jurisdictions_present() -> None:
     "jurisdiction,expected_sets,expected_cases",
     [
         ("us", 3, 84),
-        ("be", 30, 128),
+        ("be", 33, 142),
         ("de", 1, 13),
         ("uk", 26, 143),
         ("dk", 3, 10),

@@ -381,6 +381,34 @@ class Concepts:
         "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
         "#belgium_pit_couple_federal_and_local_tax_before_withholding"
     )
+    BE_PENSIONER_PIT_BEFORE_WITHHOLDING = (
+        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+        "#belgium_pit_pensioner_federal_and_local_tax_before_withholding"
+    )
+    BE_PENSIONER_ANNUAL_SOCIAL_WITHHOLDING = (
+        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+        "#belgium_pit_pensioner_annual_social_withholding"
+    )
+    BE_PENSIONER_REPLACEMENT_REDUCTION = (
+        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+        "#belgium_pit_pensioner_replacement_reduction_after_limits"
+    )
+    BE_REPLACEMENT_UNEMPLOYMENT_REDUCTION = (
+        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+        "#belgium_pit_replacement_unemployment_reduction_after_limits"
+    )
+    BE_REPLACEMENT_SICKNESS_INVALIDITY_REDUCTION = (
+        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+        "#belgium_pit_replacement_sickness_invalidity_reduction_after_limits"
+    )
+    BE_SELF_EMPLOYMENT_PIT_BEFORE_WITHHOLDING = (
+        "be:statutes/income_tax/individual/self_employed_oracle_pipeline"
+        "#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding"
+    )
+    BE_SELF_EMPLOYMENT_COMBINED_TAXABLE_INCOME = (
+        "be:statutes/income_tax/individual/self_employed_oracle_pipeline"
+        "#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income"
+    )
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
         "be:regulations/social_security/workers/employee_contributions"
         "#belgium_employee_social_security_ordinary_worker_contribution"

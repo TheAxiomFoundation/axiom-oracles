@@ -12,6 +12,11 @@ BE_METADATA = {
 }
 PIT_MODULE = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
 COUPLE_PIT_MODULE = "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
+PENSIONER_PIT_MODULE = "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
+SELF_EMPLOYMENT_PIT_MODULE = (
+    "be:statutes/income_tax/individual/self_employed_oracle_pipeline"
+)
+SELF_EMPLOYED_SSC_MODULE = "be:regulations/social_security/self_employed/contributions"
 JOINT_ASSESSMENT_MODULE = "be:statutes/income_tax/individual/joint_assessment"
 TAX_FREE_AMOUNT_TAX_MODULE = (
     "be:statutes/income_tax/individual/tax_free_amount_tax"
@@ -30,6 +35,17 @@ WORK_BONUS_REFERENCE_INPUT = (
 COUPLE_SPOUSE_RELATION = (
     f"{COUPLE_PIT_MODULE}#relation.belgium_pit_couple_spouse_of_tax_unit"
 )
+
+# Live-probed against EUROMOD_RELEASES_J2.0+, BE_2025,
+# BE_2024_c1_2015_03_e2 on 2026-08-22. EUROMOD uprates these monthly inputs
+# before exposing them as output columns; each synthetic row pre-divides by
+# its own factor so the post-uprating bridge supplies the fixture's annual
+# amount to RuleSpec. ``poa`` is not uprated in this model vintage.
+EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR = 1.055022392834293
+EUROMOD_BE_2025_BUN_UPRATING_FACTOR = 1.0793082886106142
+EUROMOD_BE_2025_BHL_UPRATING_FACTOR = 1.1096513390601312
+EUROMOD_BE_2025_POA_UPRATING_FACTOR = 1.0
+MERGED_BELGIUM_PIPELINES_FIXTURE_COMMIT = "b105e2b3a3086ddd2de447d58a9b951346870dd1"
 
 
 def be_worker_pit_cases() -> list[Case]:
@@ -62,6 +78,141 @@ def be_marital_quotient_cases() -> list[Case]:
         _single_earner_couple_pit_case("be-marital-quotient-30k", 30_000.0),
         _single_earner_couple_pit_case("be-marital-quotient-45k", 45_000.0),
         _single_earner_couple_pit_case("be-marital-quotient-60k", 60_000.0),
+    ]
+
+
+def be_pensioner_pit_cases() -> list[Case]:
+    """Merged Belgian pensioner-PIT fixtures against EUROMOD BE_2025.
+
+    The three pension-only rows compare final PIT, pension social withholding,
+    and the Articles 147--153 pension reduction to ``tin_s``, ``tscpe_s``, and
+    ``tintcri_s``. The mixed pension-and-wage row carries the two named
+    EUROMOD mechanisms documented in JRC issues #26 and #12.
+    """
+
+    return [
+        _pensioner_pit_case(
+            "be-pensioner-pit-pension-15k",
+            fixture_name="pension_15k_reduction_consumes_all_remaining_tax",
+            pension=15_000.0,
+            article_153_pension_tax_share=1_022.5,
+        ),
+        _pensioner_pit_case(
+            "be-pensioner-pit-pension-25k",
+            fixture_name=(
+                "pension_25k_article_191_band_and_partial_additional_reduction"
+            ),
+            pension=25_000.0,
+            article_153_pension_tax_share=4_605.604,
+        ),
+        _pensioner_pit_case(
+            "be-pensioner-pit-pension-40k",
+            fixture_name="pension_40k_solidarity_band_and_article_152_phaseout",
+            pension=40_000.0,
+            article_153_pension_tax_share=10_475.5,
+        ),
+        _pensioner_pit_case(
+            "be-pensioner-pit-pension-30k-wage-15k",
+            fixture_name="mixed_30k_pension_15k_wage_prorates_reductions",
+            pension=30_000.0,
+            wage=15_000.0,
+            work_bonus_reference=12_931.034482758621,
+            article_153_pension_tax_share=8_166.699220235831,
+        ),
+    ]
+
+
+def be_self_employment_pit_cases() -> list[Case]:
+    """Merged self-employment-PIT fixtures against EUROMOD BE_2025.
+
+    Four rows compare final PIT. The fifth deliberately feeds EUROMOD a
+    negative net ``yse`` while retaining the source-backed RuleSpec gross and
+    justified-expense inputs, exposing EUROMOD's ``max(yse, 0)`` convention on
+    the shared taxable-income surface.
+    """
+
+    return [
+        _self_employment_pit_case(
+            "be-self-employment-pit-yse-25k",
+            fixture_name=(
+                "euromod_exact_gross_yse_25000_exposes_credit_before_local_tax_engine_order"
+            ),
+            self_employment_income=25_000.0,
+            low_activity_credit=880.0,
+        ),
+        _self_employment_pit_case(
+            "be-self-employment-pit-yse-45k",
+            fixture_name="euromod_exact_gross_yse_45000_matches_to_machine_precision",
+            self_employment_income=45_000.0,
+        ),
+        _self_employment_pit_case(
+            "be-self-employment-pit-yse-70k",
+            fixture_name="euromod_exact_gross_yse_70000_matches_to_machine_precision",
+            self_employment_income=70_000.0,
+        ),
+        _self_employment_pit_case(
+            "be-self-employment-pit-yem-30k-yse-20k",
+            fixture_name="mixed_yem_30000_yse_20000_exposes_imported_semantics",
+            self_employment_income=20_000.0,
+            wage=30_000.0,
+            work_bonus_reference=30_000.0,
+            work_bonus_reference_bridge="yem",
+            secondary_activity=True,
+        ),
+        _self_employment_pit_case(
+            "be-self-employment-pit-negative-yse-1k-yem-10k",
+            fixture_name=(
+                "article_23_current_self_employment_loss_nets_across_worker_activity"
+            ),
+            self_employment_income=1_000.0,
+            euromod_net_self_employment_income=-1_000.0,
+            justified_professional_expenses=2_000.0,
+            wage=10_000.0,
+            work_bonus_reference=8_620.689655172413,
+            secondary_activity=True,
+            regional_additional_tax_rate=0.0,
+            communal_additional_tax_rate=0.0,
+            output=Concepts.BE_SELF_EMPLOYMENT_COMBINED_TAXABLE_INCOME,
+        ),
+    ]
+
+
+def be_replacement_income_pit_cases() -> list[Case]:
+    """Merged unemployment/sickness replacement-income PIT fixtures."""
+
+    return [
+        _replacement_income_pit_case(
+            "be-replacement-income-pit-bun-12k",
+            fixture_name="unemployment_12k_euromod_input_bun_zero_tax",
+            unemployment_benefit=12_000.0,
+            article_153_unemployment_tax_share=272.5,
+        ),
+        _replacement_income_pit_case(
+            "be-replacement-income-pit-bun-18k",
+            fixture_name="unemployment_18k_euromod_input_bun_zero_tax",
+            unemployment_benefit=18_000.0,
+            article_153_unemployment_tax_share=2_024.5,
+        ),
+        _replacement_income_pit_case(
+            "be-replacement-income-pit-bun-24k",
+            fixture_name="unemployment_24k_euromod_articles_147_to_153",
+            unemployment_benefit=24_000.0,
+            article_153_unemployment_tax_share=4_424.5,
+        ),
+        _replacement_income_pit_case(
+            "be-replacement-income-pit-bhl-18k",
+            fixture_name="sickness_18k_euromod_bhl_article_153_cap",
+            sickness_benefit=18_000.0,
+            article_153_sickness_tax_share=2_024.5,
+        ),
+        _replacement_income_pit_case(
+            "be-replacement-income-pit-bun-15k-yem-15k",
+            fixture_name="unemployment_15k_plus_wage_15k_no_activity_exclusion",
+            unemployment_benefit=15_000.0,
+            article_153_unemployment_tax_share=2_955.5882352941176,
+            wage=15_000.0,
+            work_bonus_reference=12_931.034482758621,
+        ),
     ]
 
 
@@ -165,6 +316,401 @@ def be_employer_ssc_cases() -> list[Case]:
     ]
 
 
+def _pensioner_pit_case(
+    case_id: str,
+    *,
+    fixture_name: str,
+    pension: float,
+    article_153_pension_tax_share: float,
+    wage: float = 0.0,
+    work_bonus_reference: float = 0.0,
+) -> Case:
+    gross_pension_input = _pensioner_pit_input(
+        "belgium_pit_pensioner_annual_gross_pension"
+    )
+    legal_pension_input = _pensioner_pit_input(
+        "belgium_pit_pensioner_annual_legal_pension"
+    )
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    inputs: dict[str, float | bool] = {
+        gross_pension_input: pension,
+        legal_pension_input: pension,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_article_153_tax_share_attributable_to_pension_income"
+        ): article_153_pension_tax_share,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_153_tax_share_attributable_to_unemployment_benefits"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_153_tax_share_attributable_to_sickness_invalidity_indemnities"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_gross_unemployment_benefit"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_gross_sickness_benefit"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_gross_invalidity_benefit"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_invalidity_social_withholding"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_151_older_unemployed_with_seniority_supplement"
+        ): False,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_154_first_twelve_month_maximum_unemployment_benefit"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_154_mixed_replacement_excess_rate"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_beneficiary_has_family_charge"
+        ): False,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_has_reached_legal_retirement_age"
+        ): True,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_receives_survivor_pension_or_transition_allowance"
+        ): False,
+        _pensioner_pit_input("belgium_pit_pensioner_communal_additional_tax_rate"): 0,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_agglomeration_additional_tax_rate"
+        ): 0,
+        remuneration_input: wage,
+        WORK_BONUS_REFERENCE_INPUT: work_bonus_reference,
+    }
+    bridge = {
+        "poa": _person_record_bridge(gross_pension_input, legal_pension_input),
+        "yem": _person_record_bridge(remuneration_input),
+        "yemeq_s": _person_record_bridge(WORK_BONUS_REFERENCE_INPUT),
+    }
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "scenario": "single-pensioner-pit"
+            if wage == 0
+            else "mixed-pension-wage-pit",
+            "yearly_pension_income": pension,
+            "yearly_earned_income": wage,
+            "rulespec_fixture_commit": MERGED_BELGIUM_PIPELINES_FIXTURE_COMMIT,
+            "rulespec_fixture": (
+                "be/statutes/income_tax/individual/"
+                f"pensioner_pit_oracle_pipeline.test.yaml#{fixture_name}"
+            ),
+            "euromod_input_uprating_factors": {
+                "poa": EUROMOD_BE_2025_POA_UPRATING_FACTOR,
+                "yem": EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+            },
+            "axiom_input_records": _person_input_records(inputs),
+            "euromod_inputs": [_euromod_pensioner_pit_input(pension, wage)],
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: bridge,
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PENSION_INCOME: pension,
+                    Concepts.YEARLY_EARNED_INCOME: wage,
+                },
+            ),
+        ),
+        outputs=(
+            (Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,)
+            if wage
+            else (
+                Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,
+                Concepts.BE_PENSIONER_ANNUAL_SOCIAL_WITHHOLDING,
+                Concepts.BE_PENSIONER_REPLACEMENT_REDUCTION,
+            )
+        ),
+    )
+
+
+def _self_employment_pit_case(
+    case_id: str,
+    *,
+    fixture_name: str,
+    self_employment_income: float,
+    wage: float = 0.0,
+    work_bonus_reference: float = 0.0,
+    work_bonus_reference_bridge: str = "yemeq_s",
+    low_activity_credit: float = 0.0,
+    secondary_activity: bool = False,
+    justified_professional_expenses: float = 0.0,
+    euromod_net_self_employment_income: float | None = None,
+    regional_additional_tax_rate: float = 0.33257,
+    communal_additional_tax_rate: float = 0.0717,
+    output: str = Concepts.BE_SELF_EMPLOYMENT_PIT_BEFORE_WITHHOLDING,
+) -> Case:
+    gross_self_employment_input = _self_employed_ssc_input(
+        "belgium_self_employed_gross_professional_income"
+    )
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    inputs: dict[str, float | bool] = {
+        _self_employed_ssc_input("belgium_self_employed_article_14_index_factor"): (
+            4.639439281617473
+        ),
+        gross_self_employment_input: self_employment_income,
+        _self_employed_ssc_input("belgium_self_employed_professional_expenses"): 0,
+        _self_employed_ssc_input("belgium_self_employed_professional_losses"): 0,
+        _self_employed_ssc_input(
+            "belgium_self_employed_prior_activity_income_taxed_current_year"
+        ): 0,
+        _self_employed_ssc_input(
+            "belgium_self_employed_article_28_cessation_income"
+        ): 0,
+        _self_employed_ssc_input(
+            "belgium_self_employed_article_28_exclusion_condition_met"
+        ): False,
+        _self_employed_ssc_input(
+            "belgium_self_employed_early_retirement_pension_suspended_for_income_ceiling"
+        ): False,
+        _self_employed_ssc_input(
+            "belgium_self_employed_has_reached_pension_age"
+        ): False,
+        _self_employed_ssc_input("belgium_self_employed_is_secondary_activity"): (
+            secondary_activity
+        ),
+        _self_employed_ssc_input("belgium_self_employed_is_spouse_helper"): False,
+        _self_employed_ssc_input(
+            "belgium_self_employed_is_starter_main_activity"
+        ): False,
+        _self_employed_ssc_input("belgium_self_employed_is_student"): False,
+        _self_employed_ssc_input(
+            "belgium_self_employed_receives_retirement_or_survivor_pension"
+        ): False,
+        _self_employed_ssc_input(
+            "belgium_spouse_helper_fiscally_attributed_professional_income"
+        ): 0,
+        _self_employed_ssc_input("belgium_spouse_helper_only_indemnity_sector"): False,
+        remuneration_input: wage,
+        WORK_BONUS_REFERENCE_INPUT: work_bonus_reference,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_actual_professional_expenses_are_justified"
+        ): True,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_agglomeration_additional_tax_rate"
+        ): 0,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_article_466_separately_taxed_income_tax_included_in_total"
+        ): 0,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_article_466_tax_share_on_nonprofessional_movable_income"
+        ): 0,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_article_51_business_purchase_costs"
+        ): 0,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_communal_additional_tax_rate"
+        ): communal_additional_tax_rate,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_is_business_profit_category"
+        ): False,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_justified_professional_expenses_excluding_social_contribution_and_purchase_costs"
+        ): justified_professional_expenses,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_prior_period_professional_losses"
+        ): 0,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_regional_additional_tax_rate"
+        ): regional_additional_tax_rate,
+        _self_employment_pit_input(
+            "belgium_pit_self_employment_supplied_low_activity_income_refundable_credit"
+        ): low_activity_credit,
+    }
+    bridge: dict[str, object] = {
+        "yem": _person_record_bridge(remuneration_input),
+    }
+    if work_bonus_reference_bridge == "yem":
+        bridge["yem"] = _person_record_bridge(
+            remuneration_input,
+            WORK_BONUS_REFERENCE_INPUT,
+        )
+    else:
+        bridge["yemeq_s"] = _person_record_bridge(WORK_BONUS_REFERENCE_INPUT)
+    if euromod_net_self_employment_income is None:
+        bridge["yse"] = _person_record_bridge(gross_self_employment_input)
+    euromod_yse = (
+        self_employment_income
+        if euromod_net_self_employment_income is None
+        else euromod_net_self_employment_income
+    )
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "scenario": (
+                "negative-self-employment-netting"
+                if euromod_net_self_employment_income is not None
+                else "self-employment-pit"
+            ),
+            "yearly_self_employment_income": self_employment_income,
+            "yearly_euromod_yse": euromod_yse,
+            "yearly_earned_income": wage,
+            "rulespec_fixture_commit": MERGED_BELGIUM_PIPELINES_FIXTURE_COMMIT,
+            "rulespec_fixture": (
+                "be/statutes/income_tax/individual/"
+                f"self_employed_oracle_pipeline.test.yaml#{fixture_name}"
+            ),
+            "euromod_input_uprating_factors": {
+                "yem": EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+                "yse": EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+            },
+            "axiom_input_records": _person_input_records(inputs),
+            "euromod_inputs": [_euromod_self_employment_pit_input(euromod_yse, wage)],
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: bridge,
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 35,
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.SELF_EMPLOYMENT_INCOME: self_employment_income,
+                    Concepts.YEARLY_EARNED_INCOME: wage,
+                },
+            ),
+        ),
+        outputs=(output,),
+    )
+
+
+def _replacement_income_pit_case(
+    case_id: str,
+    *,
+    fixture_name: str,
+    unemployment_benefit: float = 0.0,
+    sickness_benefit: float = 0.0,
+    article_153_unemployment_tax_share: float = 0.0,
+    article_153_sickness_tax_share: float = 0.0,
+    wage: float = 0.0,
+    work_bonus_reference: float = 0.0,
+) -> Case:
+    unemployment_input = _pensioner_pit_input(
+        "belgium_pit_replacement_annual_gross_unemployment_benefit"
+    )
+    sickness_input = _pensioner_pit_input(
+        "belgium_pit_replacement_annual_gross_sickness_benefit"
+    )
+    remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
+    inputs: dict[str, float | bool] = {
+        _pensioner_pit_input("belgium_pit_pensioner_annual_gross_pension"): 0,
+        _pensioner_pit_input("belgium_pit_pensioner_annual_legal_pension"): 0,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_article_153_tax_share_attributable_to_pension_income"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_153_tax_share_attributable_to_unemployment_benefits"
+        ): article_153_unemployment_tax_share,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_153_tax_share_attributable_to_sickness_invalidity_indemnities"
+        ): article_153_sickness_tax_share,
+        unemployment_input: unemployment_benefit,
+        sickness_input: sickness_benefit,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_gross_invalidity_benefit"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_annual_invalidity_social_withholding"
+        ): 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_151_older_unemployed_with_seniority_supplement"
+        ): False,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_154_first_twelve_month_maximum_unemployment_benefit"
+        ): 20_000 if unemployment_benefit else 0,
+        _pensioner_pit_input(
+            "belgium_pit_replacement_article_154_mixed_replacement_excess_rate"
+        ): 0.9,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_beneficiary_has_family_charge"
+        ): False,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_has_reached_legal_retirement_age"
+        ): False,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_receives_survivor_pension_or_transition_allowance"
+        ): False,
+        _pensioner_pit_input("belgium_pit_pensioner_communal_additional_tax_rate"): 0,
+        _pensioner_pit_input(
+            "belgium_pit_pensioner_agglomeration_additional_tax_rate"
+        ): 0,
+        remuneration_input: wage,
+        WORK_BONUS_REFERENCE_INPUT: work_bonus_reference,
+    }
+    bridge: dict[str, object] = {
+        "yem": _person_record_bridge(remuneration_input),
+        "yemeq_s": _person_record_bridge(WORK_BONUS_REFERENCE_INPUT),
+    }
+    if unemployment_benefit:
+        bridge["bun"] = _person_record_bridge(unemployment_input)
+        reduction_output = Concepts.BE_REPLACEMENT_UNEMPLOYMENT_REDUCTION
+    else:
+        bridge["bhl"] = _person_record_bridge(sickness_input)
+        reduction_output = Concepts.BE_REPLACEMENT_SICKNESS_INVALIDITY_REDUCTION
+    return Case(
+        case_id=case_id,
+        period="2025",
+        metadata={
+            **BE_METADATA,
+            "scenario": (
+                "unemployment-replacement-income-pit"
+                if unemployment_benefit
+                else "sickness-replacement-income-pit"
+            ),
+            "yearly_unemployment_income": unemployment_benefit,
+            "yearly_sickness_income": sickness_benefit,
+            "yearly_earned_income": wage,
+            "rulespec_fixture_commit": MERGED_BELGIUM_PIPELINES_FIXTURE_COMMIT,
+            "rulespec_fixture": (
+                "be/statutes/income_tax/individual/"
+                f"pensioner_pit_oracle_pipeline.test.yaml#{fixture_name}"
+            ),
+            "euromod_input_uprating_factors": {
+                "bun": EUROMOD_BE_2025_BUN_UPRATING_FACTOR,
+                "bhl": EUROMOD_BE_2025_BHL_UPRATING_FACTOR,
+                "yem": EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+            },
+            "axiom_input_records": _person_input_records(inputs),
+            "euromod_inputs": [
+                _euromod_replacement_income_pit_input(
+                    unemployment_benefit=unemployment_benefit,
+                    sickness_benefit=sickness_benefit,
+                    wage=wage,
+                )
+            ],
+            EUROMOD_TO_AXIOM_INPUT_BRIDGE: bridge,
+        },
+        entities=(
+            Entity(
+                entity_id="head",
+                kind="person",
+                facts={
+                    Concepts.PERSON_AGE: 45,
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.UNEMPLOYMENT_INSURANCE_INCOME: unemployment_benefit,
+                    Concepts.YEARLY_EARNED_INCOME: wage,
+                },
+            ),
+        ),
+        outputs=(
+            (Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,)
+            if wage
+            else (Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING, reduction_output)
+        ),
+    )
+
+
 def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
     remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
     return _single_worker_case(
@@ -174,7 +720,9 @@ def _single_worker_pit_case(case_id: str, annual_income: float) -> Case:
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -204,7 +752,9 @@ def _single_worker_forfait_case(case_id: str, annual_income: float) -> Case:
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -234,7 +784,9 @@ def _single_worker_work_bonus_credit_case(case_id: str, annual_income: float) ->
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -264,7 +816,9 @@ def _single_worker_tax_income_list_case(case_id: str, annual_income: float) -> C
         axiom_inputs={
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -273,7 +827,9 @@ def _single_worker_tax_income_list_case(case_id: str, annual_income: float) -> C
             ): False,
             _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
             _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
-            _tax_income_list_input("belgium_euromod_ils_tax_include_pit_component"): True,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_include_pit_component"
+            ): True,
             _tax_income_list_input(
                 "belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount"
             ): 0,
@@ -319,7 +875,9 @@ def _single_worker_disposable_income_list_case(
             ): 0,
             remuneration_input: annual_income,
             WORK_BONUS_REFERENCE_INPUT: 0,
-            _pit_input("belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"): 0,
+            _pit_input(
+                "belgium_pit_article_466_tax_share_on_nonprofessional_movable_income"
+            ): 0,
             _pit_input(
                 "belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian"
             ): 0,
@@ -328,7 +886,9 @@ def _single_worker_disposable_income_list_case(
             ): False,
             _pit_input("belgium_pit_communal_additional_tax_rate"): 0,
             _pit_input("belgium_pit_agglomeration_additional_tax_rate"): 0,
-            _tax_income_list_input("belgium_euromod_ils_tax_include_pit_component"): True,
+            _tax_income_list_input(
+                "belgium_euromod_ils_tax_include_pit_component"
+            ): True,
             _tax_income_list_input(
                 "belgium_euromod_ils_tax_supplied_capital_income_tax_annual_amount"
             ): 0,
@@ -469,12 +1029,8 @@ def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
     """
 
     remuneration_input = _pit_input("belgium_pit_article_23_worker_remuneration")
-    spouse_a_role_input = _couple_pit_input(
-        "belgium_pit_couple_worker_is_spouse_a"
-    )
-    spouse_b_role_input = _couple_pit_input(
-        "belgium_pit_couple_worker_is_spouse_b"
-    )
+    spouse_a_role_input = _couple_pit_input("belgium_pit_couple_worker_is_spouse_a")
+    spouse_b_role_input = _couple_pit_input("belgium_pit_couple_worker_is_spouse_b")
     return Case(
         case_id=case_id,
         period="2025",
@@ -629,6 +1185,18 @@ def _pit_input(name: str) -> str:
     return f"{PIT_MODULE}#input.{name}"
 
 
+def _pensioner_pit_input(name: str) -> str:
+    return f"{PENSIONER_PIT_MODULE}#input.{name}"
+
+
+def _self_employment_pit_input(name: str) -> str:
+    return f"{SELF_EMPLOYMENT_PIT_MODULE}#input.{name}"
+
+
+def _self_employed_ssc_input(name: str) -> str:
+    return f"{SELF_EMPLOYED_SSC_MODULE}#input.{name}"
+
+
 def _joint_assessment_input(name: str) -> str:
     return f"{JOINT_ASSESSMENT_MODULE}#input.{name}"
 
@@ -659,6 +1227,132 @@ def _disposable_income_list_input(name: str) -> str:
 
 def _special_contribution_input(name: str) -> str:
     return f"{SPECIAL_CONTRIBUTION_MODULE}#input.{name}"
+
+
+def _person_input_records(
+    inputs: dict[str, float | bool],
+) -> list[dict[str, str | float | bool]]:
+    return [
+        {
+            "name": name,
+            "entity": "Person",
+            "entity_id": "head",
+            "value": value,
+        }
+        for name, value in inputs.items()
+    ]
+
+
+def _person_record_bridge(*input_names: str) -> dict[str, list[dict[str, str]]]:
+    return {
+        "records": [
+            {
+                "name": name,
+                "entity": "Person",
+                "entity_id": "head",
+            }
+            for name in input_names
+        ]
+    }
+
+
+def _euromod_pensioner_pit_input(
+    annual_pension: float,
+    annual_wage: float,
+) -> dict[str, float | int]:
+    employed = annual_wage > 0
+    return {
+        "idperson": 101,
+        "idpartner": 0,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 70,
+        "dgn": 1,
+        "dms": 1,
+        "drgn1": 0,
+        "dwt": 1,
+        "les": 4,
+        "lfs": 15,
+        "lhw": 38 if employed else 0,
+        "liwmy": 12 if employed else 0,
+        "liwwh": 540,
+        "loc": 5,
+        "poa": (annual_pension / 12.0 / EUROMOD_BE_2025_POA_UPRATING_FACTOR),
+        "yem": annual_wage / 12.0 / EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+        "yemmy": 12 if employed else 0,
+        "yse": 0,
+        "yiy": 0,
+    }
+
+
+def _euromod_self_employment_pit_input(
+    annual_self_employment_income: float,
+    annual_wage: float,
+) -> dict[str, float | int]:
+    employed = annual_wage > 0
+    return {
+        "idperson": 101,
+        "idpartner": 0,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 35,
+        "dgn": 1,
+        "dms": 1,
+        "drgn1": 2,
+        "dwt": 1,
+        "les": 3 if employed else 0,
+        "lfs": 15 if employed else 0,
+        "lhw": 38 if employed else 0,
+        "liwmy": 12 if employed else 0,
+        "liwwh": 120 if employed else 0,
+        "loc": 5,
+        "poa": 0,
+        "yem": annual_wage / 12.0 / EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+        "yemmy": 12 if employed else 0,
+        "yse": (
+            annual_self_employment_income
+            / 12.0
+            / EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR
+        ),
+        "yiy": 0,
+    }
+
+
+def _euromod_replacement_income_pit_input(
+    *,
+    unemployment_benefit: float,
+    sickness_benefit: float,
+    wage: float,
+) -> dict[str, float | int]:
+    is_unemployment = unemployment_benefit > 0
+    employed = wage > 0
+    return {
+        "idperson": 101,
+        "idpartner": 0,
+        "idmother": 0,
+        "idfather": 0,
+        "dag": 45,
+        "dgn": 1,
+        "ddi": 0,
+        "dms": 1,
+        "drgn1": 0,
+        "dwt": 1,
+        "les": 5 if is_unemployment else 6,
+        "lfs": 15 if employed else 0,
+        "lhw": 38 if employed else 0,
+        "liwmy": 12 if employed else 0,
+        "liwwh": 120 if employed else 0,
+        "loc": 5,
+        "lunmy": 12 if is_unemployment else 0,
+        "bun": (unemployment_benefit / 12.0 / EUROMOD_BE_2025_BUN_UPRATING_FACTOR),
+        "bunmy": 12 if is_unemployment else 0,
+        "bhl": sickness_benefit / 12.0 / EUROMOD_BE_2025_BHL_UPRATING_FACTOR,
+        "poa": 0,
+        "yem": wage / 12.0 / EUROMOD_BE_2025_YEM_YSE_UPRATING_FACTOR,
+        "yemmy": 12 if employed else 0,
+        "yse": 0,
+        "yiy": 0,
+    }
 
 
 def _euromod_worker_input(annual_income: float) -> dict[str, float | int]:

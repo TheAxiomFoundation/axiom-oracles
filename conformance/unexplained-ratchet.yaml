@@ -58,11 +58,17 @@ ratchets:
   unexplained_max: 0
 - suite: be-pensioner-contributions
   unexplained_max: 0
+- suite: be-pensioner-pit
+  unexplained_max: 0
 - suite: be-property-tax
   unexplained_max: 0
 - suite: be-regional-pit-surcharge
   unexplained_max: 0
+- suite: be-replacement-income-pit
+  unexplained_max: 0
 - suite: be-self-employed-ssc
+  unexplained_max: 0
+- suite: be-self-employment-pit
   unexplained_max: 0
 - suite: be-social-assistance
   unexplained_max: 0
