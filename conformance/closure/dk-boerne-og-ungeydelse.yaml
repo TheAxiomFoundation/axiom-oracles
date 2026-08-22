@@ -9,8 +9,8 @@ program:
 generated_facts:
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    ref: a2e713913fb7250b28b55407c850c3c9ae3c69a3
-    commit: a2e713913fb7250b28b55407c850c3c9ae3c69a3
+    ref: 96ec9369e2080f09c75edca1597edb466fe1d629
+    commit: 96ec9369e2080f09c75edca1597edb466fe1d629
     path: data/corpus/provisions/dk/statute/2026-08-04-dk-full-parity-tier1-current.jsonl
     sha256: c906f1b6b709d3602bfd1ece96404462cbe53b4f9049056eff997aac037bdf44
     version: 2026-08-04-dk-full-parity-tier1-current
@@ -1922,6 +1922,42 @@ committed_decisions:
       — a cross-act bearing the act''s own ELI graph cannot express): defines registration and classification
       of the unlawful-absence fact the § 2, stk. 3 exception consumes.'
     bears_on_computed_surface: true
+  - eli: https://retsinformation.dk/eli/lta/2020/1700
+    status: classified-with-reason
+    title_short: BEK nr 1700 af 2020 (gennemførelse af visse bestemmelser i udtrædelsesaftalen mellem
+      UK og EU)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 1afb9aed4569...;
+      in force per the phase-A ELI graph facts'
+    classification: coordination_instrument
+    reason: BEK 1700/2020 implementing provisions of the UK withdrawal agreement, read 2026-08-22 (hjemmel
+      and the family-benefit passages). Issued under udlændingeloven § 2, stk. 5 and annexing the agreement;
+      its article 32(1)(a) keeps regulation 883/2004 articles 67-69 applying to family benefits already
+      awarded at the end of the transition period for the covered cohort (article 33 extends this to Icelandic,
+      Liechtenstein, Norwegian and Swiss nationals). Carries no Danish operative family-benefit provision;
+      the continued coordination enters the encoded program only through the case-supplied § 2 inputs,
+      and convention entitlement is non-claimed.
+    bears_on_computed_surface: true
+    bearing: § 2 case-supplied inputs for convention-covered persons
+  - eli: https://retsinformation.dk/eli/lta/2026/297
+    status: classified-with-reason
+    title_short: BEK nr 297 af 2026 (behandlingen af sager om udstedelse af erklæringer vedrørende børne-
+      og ungeydelse)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 01b1047b1ac6...; in
+      force per the phase-A ELI graph facts'
+    classification: nonclaimed_routing_surface
+    reason: BEK 297/2026 (in force 2026-07-01), read in full 2026-08-22. Issued under § 42, nr. 1 of forældreansvarsloven
+      as amended by LOV 1642/2025; governs Familieretshuset's handling of requests for a § 44 b declaration
+      that the child currently stays at least 9 of 14 days with the applicant (hearing of the other custody
+      holder, renewed hearing with a notice of intended issue, rekommanderet fallback, minimum 10-day
+      deadlines, reopening). That declaration is documentation for the § 4 payment-split surface, which
+      the spine classifies entity_not_supported and the certificate expressly non-claims; it supplies
+      no entitlement or amount rule.
+    bears_on_computed_surface: true
+    bearing: § 4 payment-split documentation (non-claimed)
   - eli: https://retsinformation.dk/eli/lta/2026/357
     status: excluded-with-reason
     title_short: LOV nr 357 af 03/03/2026
@@ -1932,6 +1968,104 @@ committed_decisions:
     reason: March 2026 act granting one-off amounts to recipients of support benefits; outside benefit
       year 2025, which the certificate expressly non-claims.
     bears_on_computed_surface: false
+  - eli: https://retsinformation.dk/eli/ltc/2014/12
+    status: classified-with-reason
+    title_short: BKI nr 12 af 2014 (nordisk konvention af 12. juni 2012 om social sikring)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 ca145404ef6b...;
+      in force per the phase-A ELI graph facts'
+    classification: coordination_instrument
+    reason: Nordic convention on social security of 12 June 2012 with administrative agreement (BKI 12/2014),
+      articles 3, 4 and 11 and the Danish notes read 2026-08-22. Article 3(3) applies the regulation's
+      family-benefit chapter under the convention to Nordic citizens only, so third-country nationals
+      cannot aggregate Nordic residence or employment periods toward the Danish karenstid nor export the
+      benefit; article 11 prescribes the per-child differential-supplement computation under regulation
+      article 68(2). Such effects enter the encoded program only through the case-supplied § 2 optjening
+      and condition inputs (the boundary BEK 1563 governs); coordination law itself is not encoded and
+      the certificate non-claims convention entitlement.
+    bears_on_computed_surface: true
+    bearing: § 2 case-supplied inputs for convention-covered persons
+  - eli: https://retsinformation.dk/eli/ltc/2025/3
+    status: classified-with-reason
+    title_short: BKI nr 3 af 2025 (ændring af den administrative aftale til nordisk konvention om social
+      sikring)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 8f9bcf600b41...;
+      in force per the phase-A ELI graph facts'
+    classification: coordination_instrument
+    reason: 'Amendment of the administrative agreement to the Nordic convention (BKI 3/2025), read 2026-08-22.
+      Restates the article 3(3) consequences for Denmark, the Faroe Islands and Greenland: third-country
+      nationals cannot use regulation article 6 to aggregate Nordic residence or employment periods toward
+      the karenstid for Danish family benefits, nor export them. Operative text of the aggregation bar
+      that BKI 12/2014 establishes; same boundary as that row.'
+    bears_on_computed_surface: true
+    bearing: § 2 case-supplied inputs for convention-covered persons
+  - eli: https://retsinformation.dk/eli/mt/2003/140
+    status: excluded-with-reason
+    title_short: CIR nr 140 af 2003 (ændring af cirkulære om lov om en børnefamilieydelse)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 efa5865ab0f4...;
+      in force per the phase-A ELI graph facts'
+    classification: administrative_notification
+    reason: 'CIR 140/2003, body captured from the rendered official page 2026-08-22 (the XML manifestation
+      is a metadata-only shell). Amends CIR 148/1986 pkt. 11, 2. afsnit, 1. pkt. only: the annual January
+      notification letter is replaced from 2004 by press notice of the rates, and the first-entitlement
+      notice of payment wording is substituted; it also records the intent to replace CIR 148 with an
+      updated vejledning, which never issued (CIR 148 remains gældende). Notification form only; supplies
+      no entitlement, amount, or condition rule and leaves CIR 148''s excluded-with-live-pkt.-7 disposition
+      unchanged.'
+    bears_on_computed_surface: false
+  - eli: https://retsinformation.dk/eli/retsinfo/1986/9052
+    status: excluded-with-reason
+    title_short: KEN B-9-86 (børnetilskud, fast bopæl her i landet, barnets hjemsted)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 d6533af72c31...;
+      in force per the phase-A ELI graph facts'
+    classification: other_program_precedent
+    reason: Ankestyrelsen principafgørelse B-9-86, read in full 2026-08-22. Decided under børnetilskudsloven
+      § 11, stk. 1 (fast bopæl og hjemsted retained during a six-month study stay abroad while the home
+      and address in Denmark were kept); the citation scan matched it only through the 1978 circular's
+      title covering other family benefits. It governs the residence condition of a different act and
+      no fact on this program's surface.
+    bears_on_computed_surface: false
+  - eli: https://retsinformation.dk/eli/retsinfo/1988/18075
+    status: classified-with-reason
+    title_short: Meddelelse, Børnefamilieydelse (udland) (retsinfo 1988/18075)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 ba33213f883e...;
+      in force per the phase-A ELI graph facts'
+    classification: coordination_instrument
+    reason: Skattedepartementet decision AFG 18075/1988 (Børnefamilieydelse (udland)), body captured from
+      the rendered official page 2026-08-22 (the XML manifestation is a metadata-only shell). A worker
+      employed in Denmark and resident in West Germany had no Danish entitlement by employment while the
+      spouse was employed in the child's residence state (574/72 article 10(1)(b)(i)); the BEK 968/1986
+      § 3 differential reduction applied only where child and parents resided in Denmark and the right
+      existed under Danish law alone. A 1408/71-era priority precedent whose operative rules now sit in
+      regulation 883/2004 article 68; coordination effects enter the encoded program only through the
+      case-supplied § 2 inputs.
+    bears_on_computed_surface: true
+    bearing: § 2 case-supplied inputs for convention-covered persons
+  - eli: https://retsinformation.dk/eli/retsinfo/1995/9206
+    status: classified-with-reason
+    title_short: KEN B-7-95 (børnefamilieydelse, fælles forældremyndighed, udbetaling)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 1dee6eb3f6e3...;
+      in force per the phase-A ELI graph facts'
+    classification: nonclaimed_routing_surface
+    reason: Ankestyrelsen principafgørelse B-7-95, read in full 2026-08-22. Where parents with joint custody
+      and separate homes dispute the folkeregister address of children who stay equally with both, the
+      registration is taken as frozen at the pre-dispute address, and an annulled registration shifts
+      the right to the benefit to the other parent; repayment from the earlier recipient requires receipt
+      mod bedre vidende under § 7, stk. 1. Governs the recipient-determination documentation of the §
+      4 payment surface, which the spine classifies entity_not_supported and the certificate non-claims.
+    bears_on_computed_surface: true
+    bearing: § 4 recipient determination (non-claimed)
   - eli: https://retsinformation.dk/eli/retsinfo/1996/9256
     status: classified-with-reason
     title_short: KEN nr 9256 af 15/01/1996 (B-1-96)
@@ -1977,6 +2111,37 @@ committed_decisions:
       is maintained by public funds (benefit refusal upheld; no repayment of amounts already paid). Governs
       the § 2, stk. 1, nr. 4 predicate for detention arrangements.'
     bears_on_computed_surface: true
+  - eli: https://retsinformation.dk/eli/retsinfo/2006/10864
+    status: classified-with-reason
+    title_short: KEN B-4-06 (børnefamilieydelse, korterevarende ophold uden for EU)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 767c70c05d29...;
+      in force per the phase-A ELI graph facts'
+    classification: input_derivation_rule
+    reason: Ankestyrelsen principafgørelse B-4-06, read in full 2026-08-22. Holds under § 2, stk. 1 of
+      the børnefamilieydelse act that residence in Denmark was retained during a temporary non-EU stay
+      of about six months and one week for a spouse's posting, given the kept home, the return planned
+      before departure, the agreed school re-enrolment and continued Danish tax. Supplies the retained-residence
+      test behind the § 2 residence facts the encoded surface consumes as case-supplied inputs, in the
+      same class as B-1-08.
+    bears_on_computed_surface: true
+    bearing: § 2 residence facts (case-supplied)
+  - eli: https://retsinformation.dk/eli/retsinfo/2007/11114
+    status: classified-with-reason
+    title_short: KEN B-2-07 (børnefamilieydelse, eget barn, hjemtagelse fra udlandet)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 3dc55908b696...;
+      in force per the phase-A ELI graph facts'
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse B-2-07, read in full 2026-08-22. A biological father who brought
+      his child home from abroad was not entitled while the custody transfer was pending at Statsforvaltningen:
+      custody must be documented, and the case is not analogous to a child taken into care with a view
+      to adoption. Supplies the custody-documentation test behind the forældremyndighed fact the encoded
+      § 2 surface consumes as a case-supplied input.'
+    bears_on_computed_surface: true
+    bearing: § 2 custody fact (case-supplied)
   - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
     status: classified-with-reason
     title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
@@ -1989,6 +2154,21 @@ committed_decisions:
       a precondition (the counterpoint to principafgørelse 64-13). Governs the documentation standard
       for the § 2, stk. 1, nr. 2 condition fact.'
     bears_on_computed_surface: true
+  - eli: https://retsinformation.dk/eli/retsinfo/2007/9237
+    status: excluded-with-reason
+    title_short: LSR-kendelse om modregning i børnefamilieydelse, daginstitutionsbetaling (retsinfo 2007/9237)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 74bc4f87215c...;
+      in force per the phase-A ELI graph facts'
+    classification: collections_enforcement
+    reason: Landsskatteretten KEN 9237/2006, body captured from the rendered official page 2026-08-22
+      (the XML manifestation is a metadata-only shell). Under § 11, stk. 2 (LBK 846/2000) up to half the
+      benefit may be set off against arrears for daycare, club and after-school places without a prior
+      assessment of the debtor's finances, and the benefit may not otherwise be set off against public
+      claims. Governs only the § 11 setoff, which the spine excludes as collections_enforcement and whose
+      net-cash effect the certificate non-claims.
+    bears_on_computed_surface: false
   - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
     status: classified-with-reason
     title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
@@ -2000,6 +2180,74 @@ committed_decisions:
       supplies the expected-duration and qualifying-education tests that determine the § 2, stk. 3 exception
       facts consumed by the encoded § 2 surface.'
     bears_on_computed_surface: true
+  - eli: https://retsinformation.dk/eli/retsinfo/2009/10575
+    status: classified-with-reason
+    title_short: KEN 29-09 (børnefamilieydelse, arbejdstager, bopæl, EU, prioritet)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 38879af8d20d...;
+      in force per the phase-A ELI graph facts'
+    classification: coordination_instrument
+    reason: Ankestyrelsen principafgørelse 29-09, read in full 2026-08-22. Under regulation 1408/71 article
+      76 and 574/72 article 10 a municipality must establish, by form E 411, whether and in what amount
+      the worker is entitled to family benefits in the priority EU state before deciding between the full
+      Danish benefit and a differential supplement; referring the worker to apply abroad and settling
+      at year end is insufficient. Coordination priority and differential mechanics enter the encoded
+      program only through the case-supplied § 2 inputs; convention entitlement is non-claimed.
+    bears_on_computed_surface: true
+    bearing: § 2 case-supplied inputs for convention-covered persons
+  - eli: https://retsinformation.dk/eli/retsinfo/2009/10577
+    status: classified-with-reason
+    title_short: KEN 31-09 (børnefamilieydelse, ophold i Grønland, udstationering)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 4f99659a93b4...;
+      in force per the phase-A ELI graph facts'
+    classification: input_derivation_rule
+    reason: 'Ankestyrelsen principafgørelse 31-09, read in full 2026-08-22. No entitlement during a posting
+      to Greenland: the full tax liability condition (kildeskatteloven § 1) was not met while the applicants
+      were exempted from Danish withholding and paid only Greenlandic tax, and neither regulation 1408/71
+      nor the Nordic convention applied. Supplies the skattepligt test behind the § 2, stk. 1, nr. 1 fact
+      the encoded surface consumes as a case-supplied input and confirms the territorial boundary the
+      certificate declares. Cites BEK 1026/2005, which is not in force (amended by BEK 1305/2011 and succeeded
+      through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
+    bears_on_computed_surface: true
+    bearing: § 2, stk. 1, nr. 1 skattepligt fact (case-supplied)
+  - eli: https://retsinformation.dk/eli/retsinfo/2011/9323
+    status: excluded-with-reason
+    title_short: LSR-afgørelse om modregning, børnefamilieydelse for daginstitutionsrestance (retsinfo
+      2011/9323)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 9b4caae5c4a8...;
+      in force per the phase-A ELI graph facts'
+    classification: collections_enforcement
+    reason: 'Landsskatteretten decision 9323/2011, read in full 2026-08-22. Setoff of the benefit for
+      daycare arrears under § 11, stk. 2: an earlier setoff lacked hjemmel because the provision had not
+      been consequentially amended when dagtilbud moved out of serviceloven in 2007, the amounts were
+      repaid, and later setoff for the resulting arrears was upheld. Governs only the § 11 setoff, which
+      the spine excludes as collections_enforcement and whose net-cash effect the certificate non-claims.'
+    bears_on_computed_surface: false
+  - eli: https://retsinformation.dk/eli/retsinfo/2021/9457
+    status: classified-with-reason
+    title_short: Ankestyrelsens principmeddelelse 11-21 (ulovligt skolefravær, standsning af børne- og
+      ungeydelse)
+    relation: bears_on
+    provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+      axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 ae6114f11926...; in
+      force per the phase-A ELI graph facts'
+    classification: input_derivation_rule
+    reason: Ankestyrelsen principmeddelelse 11-21 (2021-06-17), read in full 2026-08-22 from the LexDania
+      XML. Holds that when a folkeskole pupil has unlawful absence of 15 percent or more within a quarter
+      the municipality must decide to stop the benefit under serviceloven; the school leader's underretning
+      rests on registration in the electronic absence system, the municipality cannot review that underretning,
+      and it must hear the custody holders (and the young person over 12) on undskyldelige omstændigheder
+      such as disability before deciding. Governs the stop-decision fact that the encoded § 2, stk. 1,
+      nr. 4 condition consumes as a case-supplied observable act; the registration duties upstream of
+      it sit in BEK 1063/2019 (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps out
+      of the municipal decision.
+    bears_on_computed_surface: true
+    bearing: § 2, stk. 1, nr. 4 stop-decision fact (case-supplied)
 computed:
   ledger:
   - ordinal: 1
@@ -2345,12 +2593,12 @@ computed:
       reason: Municipal decision on the 15-17 education/employment duty (§ 2, stk. 1, nr. 6).
   instrument_frontier:
     instrument_count: 27
-    supplemental_count: 8
+    supplemental_count: 23
     counts:
-      total: 35
+      total: 50
       encoded: 0
-      classified-with-reason: 24
-      excluded-with-reason: 11
+      classified-with-reason: 35
+      excluded-with-reason: 15
       pending: 0
     pending: []
     complete: true
@@ -2679,6 +2927,42 @@ computed:
         — a cross-act bearing the act''s own ELI graph cannot express): defines registration and classification
         of the unlawful-absence fact the § 2, stk. 3 exception consumes.'
       bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/lta/2020/1700
+      relation: bears_on
+      title_short: BEK nr 1700 af 2020 (gennemførelse af visse bestemmelser i udtrædelsesaftalen mellem
+        UK og EU)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 1afb9aed4569...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: coordination_instrument
+      reason: BEK 1700/2020 implementing provisions of the UK withdrawal agreement, read 2026-08-22 (hjemmel
+        and the family-benefit passages). Issued under udlændingeloven § 2, stk. 5 and annexing the agreement;
+        its article 32(1)(a) keeps regulation 883/2004 articles 67-69 applying to family benefits already
+        awarded at the end of the transition period for the covered cohort (article 33 extends this to
+        Icelandic, Liechtenstein, Norwegian and Swiss nationals). Carries no Danish operative family-benefit
+        provision; the continued coordination enters the encoded program only through the case-supplied
+        § 2 inputs, and convention entitlement is non-claimed.
+      bearing: § 2 case-supplied inputs for convention-covered persons
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/lta/2026/297
+      relation: bears_on
+      title_short: BEK nr 297 af 2026 (behandlingen af sager om udstedelse af erklæringer vedrørende børne-
+        og ungeydelse)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 01b1047b1ac6...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: nonclaimed_routing_surface
+      reason: BEK 297/2026 (in force 2026-07-01), read in full 2026-08-22. Issued under § 42, nr. 1 of
+        forældreansvarsloven as amended by LOV 1642/2025; governs Familieretshuset's handling of requests
+        for a § 44 b declaration that the child currently stays at least 9 of 14 days with the applicant
+        (hearing of the other custody holder, renewed hearing with a notice of intended issue, rekommanderet
+        fallback, minimum 10-day deadlines, reopening). That declaration is documentation for the § 4
+        payment-split surface, which the spine classifies entity_not_supported and the certificate expressly
+        non-claims; it supplies no entitlement or amount rule.
+      bearing: § 4 payment-split documentation (non-claimed)
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/lta/2026/357
       relation: bears_on
       title_short: LOV nr 357 af 03/03/2026
@@ -2689,6 +2973,105 @@ computed:
       reason: March 2026 act granting one-off amounts to recipients of support benefits; outside benefit
         year 2025, which the certificate expressly non-claims.
       bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/ltc/2014/12
+      relation: bears_on
+      title_short: BKI nr 12 af 2014 (nordisk konvention af 12. juni 2012 om social sikring)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 ca145404ef6b...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: coordination_instrument
+      reason: Nordic convention on social security of 12 June 2012 with administrative agreement (BKI
+        12/2014), articles 3, 4 and 11 and the Danish notes read 2026-08-22. Article 3(3) applies the
+        regulation's family-benefit chapter under the convention to Nordic citizens only, so third-country
+        nationals cannot aggregate Nordic residence or employment periods toward the Danish karenstid
+        nor export the benefit; article 11 prescribes the per-child differential-supplement computation
+        under regulation article 68(2). Such effects enter the encoded program only through the case-supplied
+        § 2 optjening and condition inputs (the boundary BEK 1563 governs); coordination law itself is
+        not encoded and the certificate non-claims convention entitlement.
+      bearing: § 2 case-supplied inputs for convention-covered persons
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/ltc/2025/3
+      relation: bears_on
+      title_short: BKI nr 3 af 2025 (ændring af den administrative aftale til nordisk konvention om social
+        sikring)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 8f9bcf600b41...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: coordination_instrument
+      reason: 'Amendment of the administrative agreement to the Nordic convention (BKI 3/2025), read 2026-08-22.
+        Restates the article 3(3) consequences for Denmark, the Faroe Islands and Greenland: third-country
+        nationals cannot use regulation article 6 to aggregate Nordic residence or employment periods
+        toward the karenstid for Danish family benefits, nor export them. Operative text of the aggregation
+        bar that BKI 12/2014 establishes; same boundary as that row.'
+      bearing: § 2 case-supplied inputs for convention-covered persons
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/mt/2003/140
+      relation: bears_on
+      title_short: CIR nr 140 af 2003 (ændring af cirkulære om lov om en børnefamilieydelse)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 efa5865ab0f4...;
+        in force per the phase-A ELI graph facts'
+      status: excluded-with-reason
+      classification: administrative_notification
+      reason: 'CIR 140/2003, body captured from the rendered official page 2026-08-22 (the XML manifestation
+        is a metadata-only shell). Amends CIR 148/1986 pkt. 11, 2. afsnit, 1. pkt. only: the annual January
+        notification letter is replaced from 2004 by press notice of the rates, and the first-entitlement
+        notice of payment wording is substituted; it also records the intent to replace CIR 148 with an
+        updated vejledning, which never issued (CIR 148 remains gældende). Notification form only; supplies
+        no entitlement, amount, or condition rule and leaves CIR 148''s excluded-with-live-pkt.-7 disposition
+        unchanged.'
+      bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/retsinfo/1986/9052
+      relation: bears_on
+      title_short: KEN B-9-86 (børnetilskud, fast bopæl her i landet, barnets hjemsted)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 d6533af72c31...;
+        in force per the phase-A ELI graph facts'
+      status: excluded-with-reason
+      classification: other_program_precedent
+      reason: Ankestyrelsen principafgørelse B-9-86, read in full 2026-08-22. Decided under børnetilskudsloven
+        § 11, stk. 1 (fast bopæl og hjemsted retained during a six-month study stay abroad while the home
+        and address in Denmark were kept); the citation scan matched it only through the 1978 circular's
+        title covering other family benefits. It governs the residence condition of a different act and
+        no fact on this program's surface.
+      bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/retsinfo/1988/18075
+      relation: bears_on
+      title_short: Meddelelse, Børnefamilieydelse (udland) (retsinfo 1988/18075)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 ba33213f883e...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: coordination_instrument
+      reason: Skattedepartementet decision AFG 18075/1988 (Børnefamilieydelse (udland)), body captured
+        from the rendered official page 2026-08-22 (the XML manifestation is a metadata-only shell). A
+        worker employed in Denmark and resident in West Germany had no Danish entitlement by employment
+        while the spouse was employed in the child's residence state (574/72 article 10(1)(b)(i)); the
+        BEK 968/1986 § 3 differential reduction applied only where child and parents resided in Denmark
+        and the right existed under Danish law alone. A 1408/71-era priority precedent whose operative
+        rules now sit in regulation 883/2004 article 68; coordination effects enter the encoded program
+        only through the case-supplied § 2 inputs.
+      bearing: § 2 case-supplied inputs for convention-covered persons
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/1995/9206
+      relation: bears_on
+      title_short: KEN B-7-95 (børnefamilieydelse, fælles forældremyndighed, udbetaling)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 1dee6eb3f6e3...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: nonclaimed_routing_surface
+      reason: Ankestyrelsen principafgørelse B-7-95, read in full 2026-08-22. Where parents with joint
+        custody and separate homes dispute the folkeregister address of children who stay equally with
+        both, the registration is taken as frozen at the pre-dispute address, and an annulled registration
+        shifts the right to the benefit to the other parent; repayment from the earlier recipient requires
+        receipt mod bedre vidende under § 7, stk. 1. Governs the recipient-determination documentation
+        of the § 4 payment surface, which the spine classifies entity_not_supported and the certificate
+        non-claims.
+      bearing: § 4 recipient determination (non-claimed)
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/1996/9256
       relation: bears_on
       title_short: KEN nr 9256 af 15/01/1996 (B-1-96)
@@ -2734,6 +3117,37 @@ computed:
         is maintained by public funds (benefit refusal upheld; no repayment of amounts already paid).
         Governs the § 2, stk. 1, nr. 4 predicate for detention arrangements.'
       bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2006/10864
+      relation: bears_on
+      title_short: KEN B-4-06 (børnefamilieydelse, korterevarende ophold uden for EU)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 767c70c05d29...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: Ankestyrelsen principafgørelse B-4-06, read in full 2026-08-22. Holds under § 2, stk. 1
+        of the børnefamilieydelse act that residence in Denmark was retained during a temporary non-EU
+        stay of about six months and one week for a spouse's posting, given the kept home, the return
+        planned before departure, the agreed school re-enrolment and continued Danish tax. Supplies the
+        retained-residence test behind the § 2 residence facts the encoded surface consumes as case-supplied
+        inputs, in the same class as B-1-08.
+      bearing: § 2 residence facts (case-supplied)
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2007/11114
+      relation: bears_on
+      title_short: KEN B-2-07 (børnefamilieydelse, eget barn, hjemtagelse fra udlandet)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 3dc55908b696...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse B-2-07, read in full 2026-08-22. A biological father who
+        brought his child home from abroad was not entitled while the custody transfer was pending at
+        Statsforvaltningen: custody must be documented, and the case is not analogous to a child taken
+        into care with a view to adoption. Supplies the custody-documentation test behind the forældremyndighed
+        fact the encoded § 2 surface consumes as a case-supplied input.'
+      bearing: § 2 custody fact (case-supplied)
+      bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/2007/11117
       relation: bears_on
       title_short: KEN nr 11117 af 02/11/2007 (B-5-07)
@@ -2746,6 +3160,22 @@ computed:
         is not itself a precondition (the counterpoint to principafgørelse 64-13). Governs the documentation
         standard for the § 2, stk. 1, nr. 2 condition fact.'
       bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2007/9237
+      relation: bears_on
+      title_short: LSR-kendelse om modregning i børnefamilieydelse, daginstitutionsbetaling (retsinfo
+        2007/9237)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 74bc4f87215c...;
+        in force per the phase-A ELI graph facts'
+      status: excluded-with-reason
+      classification: collections_enforcement
+      reason: Landsskatteretten KEN 9237/2006, body captured from the rendered official page 2026-08-22
+        (the XML manifestation is a metadata-only shell). Under § 11, stk. 2 (LBK 846/2000) up to half
+        the benefit may be set off against arrears for daycare, club and after-school places without a
+        prior assessment of the debtor's finances, and the benefit may not otherwise be set off against
+        public claims. Governs only the § 11 setoff, which the spine excludes as collections_enforcement
+        and whose net-cash effect the certificate non-claims.
+      bears_on_computed_surface: false
     - eli: https://retsinformation.dk/eli/retsinfo/2008/10901
       relation: bears_on
       title_short: KEN nr 10901 af 01/02/2008 (B-1-08)
@@ -2756,6 +3186,75 @@ computed:
       reason: 'Ankestyrelsen principafgørelse B-1-08 on the child''s residence in Denmark versus stays
         abroad: supplies the expected-duration and qualifying-education tests that determine the § 2,
         stk. 3 exception facts consumed by the encoded § 2 surface.'
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2009/10575
+      relation: bears_on
+      title_short: KEN 29-09 (børnefamilieydelse, arbejdstager, bopæl, EU, prioritet)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 38879af8d20d...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: coordination_instrument
+      reason: Ankestyrelsen principafgørelse 29-09, read in full 2026-08-22. Under regulation 1408/71
+        article 76 and 574/72 article 10 a municipality must establish, by form E 411, whether and in
+        what amount the worker is entitled to family benefits in the priority EU state before deciding
+        between the full Danish benefit and a differential supplement; referring the worker to apply abroad
+        and settling at year end is insufficient. Coordination priority and differential mechanics enter
+        the encoded program only through the case-supplied § 2 inputs; convention entitlement is non-claimed.
+      bearing: § 2 case-supplied inputs for convention-covered persons
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2009/10577
+      relation: bears_on
+      title_short: KEN 31-09 (børnefamilieydelse, ophold i Grønland, udstationering)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 4f99659a93b4...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: 'Ankestyrelsen principafgørelse 31-09, read in full 2026-08-22. No entitlement during a
+        posting to Greenland: the full tax liability condition (kildeskatteloven § 1) was not met while
+        the applicants were exempted from Danish withholding and paid only Greenlandic tax, and neither
+        regulation 1408/71 nor the Nordic convention applied. Supplies the skattepligt test behind the
+        § 2, stk. 1, nr. 1 fact the encoded surface consumes as a case-supplied input and confirms the
+        territorial boundary the certificate declares. Cites BEK 1026/2005, which is not in force (amended
+        by BEK 1305/2011 and succeeded through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
+      bearing: § 2, stk. 1, nr. 1 skattepligt fact (case-supplied)
+      bears_on_computed_surface: true
+    - eli: https://retsinformation.dk/eli/retsinfo/2011/9323
+      relation: bears_on
+      title_short: LSR-afgørelse om modregning, børnefamilieydelse for daginstitutionsrestance (retsinfo
+        2011/9323)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "familieydelse" hit; XML manifestation sha256 9b4caae5c4a8...;
+        in force per the phase-A ELI graph facts'
+      status: excluded-with-reason
+      classification: collections_enforcement
+      reason: 'Landsskatteretten decision 9323/2011, read in full 2026-08-22. Setoff of the benefit for
+        daycare arrears under § 11, stk. 2: an earlier setoff lacked hjemmel because the provision had
+        not been consequentially amended when dagtilbud moved out of serviceloven in 2007, the amounts
+        were repaid, and later setoff for the resulting arrears was upheld. Governs only the § 11 setoff,
+        which the spine excludes as collections_enforcement and whose net-cash effect the certificate
+        non-claims.'
+      bears_on_computed_surface: false
+    - eli: https://retsinformation.dk/eli/retsinfo/2021/9457
+      relation: bears_on
+      title_short: Ankestyrelsens principmeddelelse 11-21 (ulovligt skolefravær, standsning af børne-
+        og ungeydelse)
+      provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
+        axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 ae6114f11926...;
+        in force per the phase-A ELI graph facts'
+      status: classified-with-reason
+      classification: input_derivation_rule
+      reason: Ankestyrelsen principmeddelelse 11-21 (2021-06-17), read in full 2026-08-22 from the LexDania
+        XML. Holds that when a folkeskole pupil has unlawful absence of 15 percent or more within a quarter
+        the municipality must decide to stop the benefit under serviceloven; the school leader's underretning
+        rests on registration in the electronic absence system, the municipality cannot review that underretning,
+        and it must hear the custody holders (and the young person over 12) on undskyldelige omstændigheder
+        such as disability before deciding. Governs the stop-decision fact that the encoded § 2, stk.
+        1, nr. 4 condition consumes as a case-supplied observable act; the registration duties upstream
+        of it sit in BEK 1063/2019 (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps
+        out of the municipal decision.
+      bearing: § 2, stk. 1, nr. 4 stop-decision fact (case-supplied)
       bears_on_computed_surface: true
   dependency_closure:
     law_derived_inputs:
@@ -2817,21 +3316,32 @@ computed:
     instruments_bearing_on_computed:
     - https://retsinformation.dk/eli/lta/2013/1563
     - https://retsinformation.dk/eli/lta/2019/1063
+    - https://retsinformation.dk/eli/lta/2020/1700
+    - https://retsinformation.dk/eli/lta/2026/297
+    - https://retsinformation.dk/eli/ltc/2014/12
+    - https://retsinformation.dk/eli/ltc/2025/3
     - https://retsinformation.dk/eli/mt/1986/148
+    - https://retsinformation.dk/eli/retsinfo/1988/18075
+    - https://retsinformation.dk/eli/retsinfo/1995/9206
     - https://retsinformation.dk/eli/retsinfo/1996/9256
     - https://retsinformation.dk/eli/retsinfo/1996/9261
     - https://retsinformation.dk/eli/retsinfo/1997/9246
     - https://retsinformation.dk/eli/retsinfo/1998/9196
+    - https://retsinformation.dk/eli/retsinfo/2006/10864
+    - https://retsinformation.dk/eli/retsinfo/2007/11114
     - https://retsinformation.dk/eli/retsinfo/2007/11117
     - https://retsinformation.dk/eli/retsinfo/2008/10901
+    - https://retsinformation.dk/eli/retsinfo/2009/10575
+    - https://retsinformation.dk/eli/retsinfo/2009/10577
     - https://retsinformation.dk/eli/retsinfo/2013/9724
     - https://retsinformation.dk/eli/retsinfo/2014/9267
     - https://retsinformation.dk/eli/retsinfo/2014/9268
     - https://retsinformation.dk/eli/retsinfo/2014/9269
+    - https://retsinformation.dk/eli/retsinfo/2021/9457
     - https://retsinformation.dk/eli/retsinfo/2023/9456
     - https://retsinformation.dk/eli/retsinfo/2024/9493
     - https://retsinformation.dk/eli/retsinfo/2025/9372
-    open_dependency_count: 71
+    open_dependency_count: 82
     closed: false
   non_encoded_reasons_complete: true
   closed: false

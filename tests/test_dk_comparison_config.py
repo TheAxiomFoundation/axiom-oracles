@@ -181,7 +181,7 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     # Under definition v3 (CERTIFIED.md), closed additionally requires
     # dependency closure: no law-derived leaf may be case-supplied, and no
     # classified instrument may bear on a computed surface. The dk ledger
-    # honestly declares 55 law-derived leaves and 16 bearing instruments,
+    # honestly declares 55 law-derived leaves and 27 bearing instruments,
     # so closed computes false and certified reads no with the encoding
     # worklist in the verdict.
     assert {
@@ -194,16 +194,21 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     }
     closed_verdict = verdicts["closed"]
     # The launch audit's official-source search found bearing instruments
-    # outside the act's ELI graph (B-1-96, B-1-08, BEK 1063/2019, and four
-    # further precedents, all now read and dispositioned) — the frontier is
-    # complete again, and every discovered instrument that governs a § 2
-    # condition fact counts as an open bearing dependency until encoded.
+    # outside the act's ELI graph, and the 2026-08-22 citation scan over
+    # the full retsinformation national mirror (axiom-corpus#611 channel 2)
+    # found fifteen more — the Nordic social-security convention, the
+    # Brexit withdrawal agreement order, Ankestyrelsen residence and
+    # school-absence precedents among them. All are read and
+    # dispositioned (frontier complete); eleven bear on the computed
+    # surface, so the open dependency count rises from 71 to 82.
     assert closed_verdict["instrument_frontier"]["complete"] is True
+    assert closed_verdict["instrument_frontier"]["counts"]["pending"] == 0
+    assert closed_verdict["instrument_frontier"]["counts"]["total"] == 50
     dependency = closed_verdict["dependency_closure"]
     assert dependency["closed"] is False
-    assert dependency["open_dependency_count"] == 71
+    assert dependency["open_dependency_count"] == 82
     assert len(dependency["law_derived_inputs"]) == 55
-    assert len(dependency["instruments_bearing_on_computed"]) == 16
+    assert len(dependency["instruments_bearing_on_computed"]) == 27
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
