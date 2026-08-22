@@ -9,8 +9,8 @@ program:
 generated_facts:
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    ref: 96ec9369e2080f09c75edca1597edb466fe1d629
-    commit: 96ec9369e2080f09c75edca1597edb466fe1d629
+    ref: dc646ea39ececcc2a5eb8bbe0dc31d41d484bf3d
+    commit: dc646ea39ececcc2a5eb8bbe0dc31d41d484bf3d
     path: data/corpus/provisions/dk/statute/2026-08-04-dk-full-parity-tier1-current.jsonl
     sha256: c906f1b6b709d3602bfd1ece96404462cbe53b4f9049056eff997aac037bdf44
     version: 2026-08-04-dk-full-parity-tier1-current
@@ -1933,31 +1933,32 @@ committed_decisions:
     classification: coordination_instrument
     reason: BEK 1700/2020 implementing provisions of the UK withdrawal agreement, read 2026-08-22 (hjemmel
       and the family-benefit passages). Issued under udlændingeloven § 2, stk. 5 and annexing the agreement;
-      its article 32(1)(a) keeps regulation 883/2004 articles 67-69 applying to family benefits already
-      awarded at the end of the transition period for the covered cohort (article 33 extends this to Icelandic,
-      Liechtenstein, Norwegian and Swiss nationals). Carries no Danish operative family-benefit provision;
-      the continued coordination enters the encoded program only through the case-supplied § 2 inputs,
-      and convention entitlement is non-claimed.
+      its article 32(1)(d) keeps regulation 883/2004 articles 67-69 applying to family benefits already
+      awarded at the end of the transition period for the covered cohort, so long as its conditions remain
+      met, and article 33 extends the title to Icelandic, Liechtenstein, Norwegian and Swiss nationals
+      on the conditions it states. Carries no Danish operative family-benefit provision; the continued
+      coordination enters the encoded program only through the case-supplied § 2 inputs, and convention
+      entitlement is non-claimed.
     bears_on_computed_surface: true
     bearing: § 2 case-supplied inputs for convention-covered persons
   - eli: https://retsinformation.dk/eli/lta/2026/297
-    status: classified-with-reason
+    status: excluded-with-reason
     title_short: BEK nr 297 af 2026 (behandlingen af sager om udstedelse af erklæringer vedrørende børne-
       og ungeydelse)
     relation: bears_on
     provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
       axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 01b1047b1ac6...; in
       force per the phase-A ELI graph facts'
-    classification: nonclaimed_routing_surface
-    reason: BEK 297/2026 (in force 2026-07-01), read in full 2026-08-22. Issued under § 42, nr. 1 of forældreansvarsloven
-      as amended by LOV 1642/2025; governs Familieretshuset's handling of requests for a § 44 b declaration
+    classification: out_of_certified_period
+    reason: BEK 297/2026, read in full 2026-08-22. Issued under § 42, nr. 1 of forældreansvarsloven as
+      amended by LOV 1642/2025; governs Familieretshuset's handling of requests for a § 44 b declaration
       that the child currently stays at least 9 of 14 days with the applicant (hearing of the other custody
       holder, renewed hearing with a notice of intended issue, rekommanderet fallback, minimum 10-day
-      deadlines, reopening). That declaration is documentation for the § 4 payment-split surface, which
-      the spine classifies entity_not_supported and the certificate expressly non-claims; it supplies
-      no entitlement or amount rule.
-    bears_on_computed_surface: true
-    bearing: § 4 payment-split documentation (non-claimed)
+      deadlines, reopening). It enters into force on 25 February 2026 (§ 5), after the certified benefit
+      year 2025, and in any case only documents the § 4 payment-split surface the certificate non-claims
+      — so, like the other post-2025 instruments (LOV 303/2026's § 4 e changes and the new § 4 f), it
+      is outside the certified period and bears on no computed output of it.
+    bears_on_computed_surface: false
   - eli: https://retsinformation.dk/eli/lta/2026/357
     status: excluded-with-reason
     title_short: LOV nr 357 af 03/03/2026
@@ -2014,7 +2015,7 @@ committed_decisions:
       is a metadata-only shell). Amends CIR 148/1986 pkt. 11, 2. afsnit, 1. pkt. only: the annual January
       notification letter is replaced from 2004 by press notice of the rates, and the first-entitlement
       notice of payment wording is substituted; it also records the intent to replace CIR 148 with an
-      updated vejledning, which never issued (CIR 148 remains gældende). Notification form only; supplies
+      updated vejledning (CIR 148 itself remains gældende in the ELI graph). Notification form only; supplies
       no entitlement, amount, or condition rule and leaves CIR 148''s excluded-with-live-pkt.-7 disposition
       unchanged.'
     bears_on_computed_surface: false
@@ -2209,8 +2210,8 @@ committed_decisions:
       were exempted from Danish withholding and paid only Greenlandic tax, and neither regulation 1408/71
       nor the Nordic convention applied. Supplies the skattepligt test behind the § 2, stk. 1, nr. 1 fact
       the encoded surface consumes as a case-supplied input and confirms the territorial boundary the
-      certificate declares. Cites BEK 1026/2005, which is not in force (amended by BEK 1305/2011 and succeeded
-      through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
+      certificate declares. Cites BEK 1026/2005, which is not in force (repealed by BEK 1305/2011, itself
+      succeeded through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
     bears_on_computed_surface: true
     bearing: § 2, stk. 1, nr. 1 skattepligt fact (case-supplied)
   - eli: https://retsinformation.dk/eli/retsinfo/2011/9323
@@ -2239,15 +2240,15 @@ committed_decisions:
     classification: input_derivation_rule
     reason: Ankestyrelsen principmeddelelse 11-21 (2021-06-17), read in full 2026-08-22 from the LexDania
       XML. Holds that when a folkeskole pupil has unlawful absence of 15 percent or more within a quarter
-      the municipality must decide to stop the benefit under serviceloven; the school leader's underretning
+      the municipality must decide under serviceloven to stop the benefit; the school leader's underretning
       rests on registration in the electronic absence system, the municipality cannot review that underretning,
       and it must hear the custody holders (and the young person over 12) on undskyldelige omstændigheder
-      such as disability before deciding. Governs the stop-decision fact that the encoded § 2, stk. 1,
-      nr. 4 condition consumes as a case-supplied observable act; the registration duties upstream of
-      it sit in BEK 1063/2019 (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps out
-      of the municipal decision.
+      such as disability before deciding. Governs the serviceloven § 155 c stop-decision fact that the
+      encoded § 2, stk. 1, nr. 10 condition consumes as a case-supplied observable act (the grounding
+      rows already place that decision at nr. 10); the registration duties upstream of it sit in BEK 1063/2019
+      (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps out of the municipal decision.
     bears_on_computed_surface: true
-    bearing: § 2, stk. 1, nr. 4 stop-decision fact (case-supplied)
+    bearing: § 2, stk. 1, nr. 10 stop-decision fact (case-supplied)
 computed:
   ledger:
   - ordinal: 1
@@ -2597,8 +2598,8 @@ computed:
     counts:
       total: 50
       encoded: 0
-      classified-with-reason: 35
-      excluded-with-reason: 15
+      classified-with-reason: 34
+      excluded-with-reason: 16
       pending: 0
     pending: []
     complete: true
@@ -2938,11 +2939,12 @@ computed:
       classification: coordination_instrument
       reason: BEK 1700/2020 implementing provisions of the UK withdrawal agreement, read 2026-08-22 (hjemmel
         and the family-benefit passages). Issued under udlændingeloven § 2, stk. 5 and annexing the agreement;
-        its article 32(1)(a) keeps regulation 883/2004 articles 67-69 applying to family benefits already
-        awarded at the end of the transition period for the covered cohort (article 33 extends this to
-        Icelandic, Liechtenstein, Norwegian and Swiss nationals). Carries no Danish operative family-benefit
-        provision; the continued coordination enters the encoded program only through the case-supplied
-        § 2 inputs, and convention entitlement is non-claimed.
+        its article 32(1)(d) keeps regulation 883/2004 articles 67-69 applying to family benefits already
+        awarded at the end of the transition period for the covered cohort, so long as its conditions
+        remain met, and article 33 extends the title to Icelandic, Liechtenstein, Norwegian and Swiss
+        nationals on the conditions it states. Carries no Danish operative family-benefit provision; the
+        continued coordination enters the encoded program only through the case-supplied § 2 inputs, and
+        convention entitlement is non-claimed.
       bearing: § 2 case-supplied inputs for convention-covered persons
       bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/lta/2026/297
@@ -2952,17 +2954,17 @@ computed:
       provenance: 'citation-scan channel 2026-08-22 over the retsinformation national mirror (ops/dk-lane/national-mirror,
         axiom-corpus#611 channel 2): token "ungeydelse" hit; XML manifestation sha256 01b1047b1ac6...;
         in force per the phase-A ELI graph facts'
-      status: classified-with-reason
-      classification: nonclaimed_routing_surface
-      reason: BEK 297/2026 (in force 2026-07-01), read in full 2026-08-22. Issued under § 42, nr. 1 of
-        forældreansvarsloven as amended by LOV 1642/2025; governs Familieretshuset's handling of requests
-        for a § 44 b declaration that the child currently stays at least 9 of 14 days with the applicant
-        (hearing of the other custody holder, renewed hearing with a notice of intended issue, rekommanderet
-        fallback, minimum 10-day deadlines, reopening). That declaration is documentation for the § 4
-        payment-split surface, which the spine classifies entity_not_supported and the certificate expressly
-        non-claims; it supplies no entitlement or amount rule.
-      bearing: § 4 payment-split documentation (non-claimed)
-      bears_on_computed_surface: true
+      status: excluded-with-reason
+      classification: out_of_certified_period
+      reason: BEK 297/2026, read in full 2026-08-22. Issued under § 42, nr. 1 of forældreansvarsloven
+        as amended by LOV 1642/2025; governs Familieretshuset's handling of requests for a § 44 b declaration
+        that the child currently stays at least 9 of 14 days with the applicant (hearing of the other
+        custody holder, renewed hearing with a notice of intended issue, rekommanderet fallback, minimum
+        10-day deadlines, reopening). It enters into force on 25 February 2026 (§ 5), after the certified
+        benefit year 2025, and in any case only documents the § 4 payment-split surface the certificate
+        non-claims — so, like the other post-2025 instruments (LOV 303/2026's § 4 e changes and the new
+        § 4 f), it is outside the certified period and bears on no computed output of it.
+      bears_on_computed_surface: false
     - eli: https://retsinformation.dk/eli/lta/2026/357
       relation: bears_on
       title_short: LOV nr 357 af 03/03/2026
@@ -3019,9 +3021,9 @@ computed:
         is a metadata-only shell). Amends CIR 148/1986 pkt. 11, 2. afsnit, 1. pkt. only: the annual January
         notification letter is replaced from 2004 by press notice of the rates, and the first-entitlement
         notice of payment wording is substituted; it also records the intent to replace CIR 148 with an
-        updated vejledning, which never issued (CIR 148 remains gældende). Notification form only; supplies
-        no entitlement, amount, or condition rule and leaves CIR 148''s excluded-with-live-pkt.-7 disposition
-        unchanged.'
+        updated vejledning (CIR 148 itself remains gældende in the ELI graph). Notification form only;
+        supplies no entitlement, amount, or condition rule and leaves CIR 148''s excluded-with-live-pkt.-7
+        disposition unchanged.'
       bears_on_computed_surface: false
     - eli: https://retsinformation.dk/eli/retsinfo/1986/9052
       relation: bears_on
@@ -3216,8 +3218,8 @@ computed:
         the applicants were exempted from Danish withholding and paid only Greenlandic tax, and neither
         regulation 1408/71 nor the Nordic convention applied. Supplies the skattepligt test behind the
         § 2, stk. 1, nr. 1 fact the encoded surface consumes as a case-supplied input and confirms the
-        territorial boundary the certificate declares. Cites BEK 1026/2005, which is not in force (amended
-        by BEK 1305/2011 and succeeded through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
+        territorial boundary the certificate declares. Cites BEK 1026/2005, which is not in force (repealed
+        by BEK 1305/2011, itself succeeded through BEK 940/2012 and 1431/2012 by BEK 1563/2013).'
       bearing: § 2, stk. 1, nr. 1 skattepligt fact (case-supplied)
       bears_on_computed_surface: true
     - eli: https://retsinformation.dk/eli/retsinfo/2011/9323
@@ -3247,14 +3249,15 @@ computed:
       classification: input_derivation_rule
       reason: Ankestyrelsen principmeddelelse 11-21 (2021-06-17), read in full 2026-08-22 from the LexDania
         XML. Holds that when a folkeskole pupil has unlawful absence of 15 percent or more within a quarter
-        the municipality must decide to stop the benefit under serviceloven; the school leader's underretning
+        the municipality must decide under serviceloven to stop the benefit; the school leader's underretning
         rests on registration in the electronic absence system, the municipality cannot review that underretning,
         and it must hear the custody holders (and the young person over 12) on undskyldelige omstændigheder
-        such as disability before deciding. Governs the stop-decision fact that the encoded § 2, stk.
-        1, nr. 4 condition consumes as a case-supplied observable act; the registration duties upstream
-        of it sit in BEK 1063/2019 (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps
-        out of the municipal decision.
-      bearing: § 2, stk. 1, nr. 4 stop-decision fact (case-supplied)
+        such as disability before deciding. Governs the serviceloven § 155 c stop-decision fact that the
+        encoded § 2, stk. 1, nr. 10 condition consumes as a case-supplied observable act (the grounding
+        rows already place that decision at nr. 10); the registration duties upstream of it sit in BEK
+        1063/2019 (fraværsbekendtgørelsen), which the principmeddelelse expressly keeps out of the municipal
+        decision.
+      bearing: § 2, stk. 1, nr. 10 stop-decision fact (case-supplied)
       bears_on_computed_surface: true
   dependency_closure:
     law_derived_inputs:
@@ -3317,7 +3320,6 @@ computed:
     - https://retsinformation.dk/eli/lta/2013/1563
     - https://retsinformation.dk/eli/lta/2019/1063
     - https://retsinformation.dk/eli/lta/2020/1700
-    - https://retsinformation.dk/eli/lta/2026/297
     - https://retsinformation.dk/eli/ltc/2014/12
     - https://retsinformation.dk/eli/ltc/2025/3
     - https://retsinformation.dk/eli/mt/1986/148
@@ -3341,7 +3343,7 @@ computed:
     - https://retsinformation.dk/eli/retsinfo/2023/9456
     - https://retsinformation.dk/eli/retsinfo/2024/9493
     - https://retsinformation.dk/eli/retsinfo/2025/9372
-    open_dependency_count: 82
+    open_dependency_count: 81
     closed: false
   non_encoded_reasons_complete: true
   closed: false

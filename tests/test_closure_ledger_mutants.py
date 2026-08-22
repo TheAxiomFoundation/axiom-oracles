@@ -379,15 +379,16 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     # them the Nordic social-security convention, the Brexit withdrawal
     # agreement order, and Ankestyrelsen precedents on the residence and
     # school-absence surfaces — all read and dispositioned the same day,
-    # eleven of them bearing (16 → 27), so the worklist grows to 82.
+    # ten of them bearing (16 → 26; BEK 297/2026 commences after the
+    # certified period and is excluded), so the worklist grows to 81.
     assert summary.closed is False
     assert summary.dependency_closed is False
-    assert summary.open_dependency_count == 82
+    assert summary.open_dependency_count == 81
     assert summary.instrument_frontier_complete is True
     assert summary.instrument_pending_count == 0
     dep = document["computed"]["dependency_closure"]
     assert len(dep["law_derived_inputs"]) == 55
-    assert len(dep["instruments_bearing_on_computed"]) == 27
+    assert len(dep["instruments_bearing_on_computed"]) == 26
     assert (
         "https://retsinformation.dk/eli/ltc/2014/12"
         in dep["instruments_bearing_on_computed"]
@@ -427,8 +428,8 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert frontier["counts"] == {
         "total": 50,
         "encoded": 0,
-        "classified-with-reason": 35,
-        "excluded-with-reason": 15,
+        "classified-with-reason": 34,
+        "excluded-with-reason": 16,
         "pending": 0,
     }
     bek = next(
@@ -456,6 +457,14 @@ def test_committed_dk_closure_artifact_is_internally_valid_and_closed() -> None:
     assert convention["status"] == "classified-with-reason"
     assert convention["classification"] == "coordination_instrument"
     assert convention["bears_on_computed_surface"] is True
+    familieretshus = next(
+        row
+        for row in scanned
+        if row["eli"] == "https://retsinformation.dk/eli/lta/2026/297"
+    )
+    assert familieretshus["status"] == "excluded-with-reason"
+    assert familieretshus["classification"] == "out_of_certified_period"
+    assert familieretshus["bears_on_computed_surface"] is False
 
 
 def test_validator_rejects_an_instrument_without_a_disposition() -> None:

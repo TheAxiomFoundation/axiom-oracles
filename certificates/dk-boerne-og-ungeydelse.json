@@ -71,7 +71,7 @@
       "artifact": "conformance/closure/dk-boerne-og-ungeydelse.yaml",
       "claim": "closed:dk/boerne-og-ungeydelse",
       "mode": "computed",
-      "sha256": "27d78a57ebfe237efa28d7742f504ed824e916b163229f45e1d6456e2a90ca88",
+      "sha256": "7a45c521cfc05b7923379de9b0cea4b826ee055ee37c9ad449c0ba86f5d829f7",
       "verification": "producer_artifact_validation"
     },
     {
@@ -303,7 +303,6 @@
           "https://retsinformation.dk/eli/lta/2013/1563",
           "https://retsinformation.dk/eli/lta/2019/1063",
           "https://retsinformation.dk/eli/lta/2020/1700",
-          "https://retsinformation.dk/eli/lta/2026/297",
           "https://retsinformation.dk/eli/ltc/2014/12",
           "https://retsinformation.dk/eli/ltc/2025/3",
           "https://retsinformation.dk/eli/mt/1986/148",
@@ -385,14 +384,14 @@
           "total_contributions_to_qualifying_pension_accounts",
           "youth_benefit_is_payable_for_young_person"
         ],
-        "open_dependency_count": 82
+        "open_dependency_count": 81
       },
       "instrument_frontier": {
         "complete": true,
         "counts": {
-          "classified-with-reason": 35,
+          "classified-with-reason": 34,
           "encoded": 0,
-          "excluded-with-reason": 15,
+          "excluded-with-reason": 16,
           "pending": 0,
           "total": 50
         },

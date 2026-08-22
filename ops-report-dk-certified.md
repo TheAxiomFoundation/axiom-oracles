@@ -1,6 +1,6 @@
 # dk/boerne-og-ungeydelse: certification status
 
-Status: **CERTIFIED=NO under definition v3 (CERTIFIED.md) — 82 open
+Status: **CERTIFIED=NO under definition v3 (CERTIFIED.md) — 81 open
 dependencies, instrument frontier complete at fifty instruments.**
 Certified requires
 full dependency closure: every quantity a legal instrument defines how to
@@ -12,7 +12,7 @@ kildeskatteloven § 1; straffeloven § 81 a and the § 4 c offence-list
 membership; folkeskoleloven and BEK 1063/2019; the Ankestyrelsen B-1-96 /
 B-1-08 tests behind the § 2 condition facts; and the act's own §§ 1-5
 cadence, flow, and composite rules currently wired as case-supplied
-inputs) and 27 bearing instruments. The launch audit's official-source
+inputs) and 26 bearing instruments. The launch audit's official-source
 search found current precedents OUTSIDE the act's ELI graph (B-1-96,
 B-1-08, BEK 1063/2019, B-1-97, B-5-98, B-9-96, B-5-07), and the
 2026-08-22 citation scan over a complete national mirror of
@@ -20,7 +20,7 @@ retsinformation.dk (axiom-corpus#611 channel 2) found fifteen more —
 the Nordic social-security convention among them — demonstrating that
 the registry's link graph alone under-discovers and that the two
 channels are complementary in both directions. All fifty instruments
-are read and dispositioned (35 classified / 15 excluded / 0 pending);
+are read and dispositioned (34 classified / 16 excluded / 0 pending);
 BEK 1563/2013, BEK 1063/2019 and their amendments are in corpus
 (axiom-corpus#612) so the encoding worklist can cite them. The other
 premises hold: spine closed, input frontier typed and complete, receipt
@@ -82,20 +82,21 @@ the Faroe Islands or Greenland; or post-2025 law, including LOV 303/2026's
   sha and the strict opt-in, so no evidence edit is invisible downstream.
 - **closed (computed FALSE — open dependencies)** — the spine, input
   frontier, and instrument frontier are complete, but the typed leaves
-  declare 55 law-derived inputs and 27 bearing instruments as open
+  declare 55 law-derived inputs and 26 bearing instruments as open
   encoding work — so the premise computes false with the worklist
   enumerated in `computed.dependency_closure`. The completed
   layers: the closure ledger derives the 24-paragraf
-  spine from corpus release `a2e71391` (body sha256 per row) and maps every
+  spine from corpus release `dc646ea3` (body sha256 per row) and maps every
   row: §§ 1, 1a, 2, 3, 4a, 4b, 4c, 4e, 5, 8a encoded by direct signed
   modules; § 4 classified `entity_not_supported`; §§ 4d, 6, 6a, 7, 8, 8b, 9,
   10, 11, 12, 13, 14, 15 excluded with text-grounded reasons; 0 pending;
   boundary frontier complete with 90 committed grounding decisions. The
   ledger also derives the **subordinate-instrument frontier** (oracles#491)
   from a committed snapshot of the act's official ELI graph: all 25
-  `basis_for` instruments, both `changed_by` amendment acts, and eight
-  search-discovered supplements (four dispositioned, four pending their
-  reads) are tracked — BEK 1563/2013 and
+  `basis_for` instruments, both `changed_by` amendment acts, and
+  twenty-three search-discovered supplements (eight from the launch audit's
+  official-source search, fifteen from the 2026-08-22 citation scan), all
+  read and dispositioned — BEK 1563/2013 and
   principafgørelse 64-13 classified as input-derivation rules for the § 2
   case-supplied inputs (cited in the grounding rows), the Ankestyrelsen
   ligedeling line (11-23, 18-24, 4-25) classified against the non-claimed
@@ -205,16 +206,17 @@ citizens and bars third-country nationals from aggregating Nordic
 periods toward the karenstid), the Brexit withdrawal-agreement
 implementation order, and three EU-priority precedents, all as
 coordination instruments; Ankestyrelsen principmeddelelse 11-21 on
-stopping the benefit for unlawful school absence (the § 2, stk. 1,
-nr. 4 stop-decision fact), B-4-06, B-2-07 and 31-09 as input-derivation
-rules for the § 2 residence, custody, and skattepligt facts; BEK
-297/2026 (Familieretshuset's § 44 b nine-of-fourteen-days declarations)
-and B-7-95 on the non-claimed § 4 routing surface; and four exclusions
-(a 2003 notification-form circular amending CIR 148, a børnetilskud-act
-precedent, and two Landsskatteret decisions on the non-claimed § 11
-setoff). Eleven of the fifteen bear on the computed surface, so the
-dependency worklist grows from 71 to 82 open items; the frontier is
-complete again at fifty instruments. Scan artifacts (hit lists with
+stopping the benefit for unlawful school absence (the serviceloven
+§ 155 c stop-decision fact behind § 2, stk. 1, nr. 10), B-4-06, B-2-07
+and 31-09 as input-derivation rules for the § 2 residence, custody, and
+skattepligt facts; B-7-95 on the non-claimed § 4 routing surface; and
+five exclusions (BEK 297/2026 on Familieretshuset's § 44 b
+nine-of-fourteen-days declarations, which commences 25 February 2026 —
+after the certified benefit year — a 2003 notification-form circular
+amending CIR 148, a børnetilskud-act precedent, and two Landsskatteret
+decisions on the non-claimed § 11 setoff). Ten of the fifteen bear on
+the computed surface, so the dependency worklist grows from 71 to 81
+open items; the frontier is complete again at fifty instruments. Scan artifacts (hit lists with
 sha256s, scanned-set ledger, summary) and the read notes live in
 `ops/dk-lane/national-mirror/citation-scan*/` and
 `ops/dk-lane/wave2/scan-reads/` in the ops mirror.

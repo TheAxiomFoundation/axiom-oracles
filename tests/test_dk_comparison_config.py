@@ -181,7 +181,7 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     # Under definition v3 (CERTIFIED.md), closed additionally requires
     # dependency closure: no law-derived leaf may be case-supplied, and no
     # classified instrument may bear on a computed surface. The dk ledger
-    # honestly declares 55 law-derived leaves and 27 bearing instruments,
+    # honestly declares 55 law-derived leaves and 26 bearing instruments,
     # so closed computes false and certified reads no with the encoding
     # worklist in the verdict.
     assert {
@@ -199,16 +199,17 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     # found fifteen more — the Nordic social-security convention, the
     # Brexit withdrawal agreement order, Ankestyrelsen residence and
     # school-absence precedents among them. All are read and
-    # dispositioned (frontier complete); eleven bear on the computed
-    # surface, so the open dependency count rises from 71 to 82.
+    # dispositioned (frontier complete); ten bear on the computed surface
+    # (BEK 297/2026 commences after the certified period and is excluded),
+    # so the open dependency count rises from 71 to 81.
     assert closed_verdict["instrument_frontier"]["complete"] is True
     assert closed_verdict["instrument_frontier"]["counts"]["pending"] == 0
     assert closed_verdict["instrument_frontier"]["counts"]["total"] == 50
     dependency = closed_verdict["dependency_closure"]
     assert dependency["closed"] is False
-    assert dependency["open_dependency_count"] == 82
+    assert dependency["open_dependency_count"] == 81
     assert len(dependency["law_derived_inputs"]) == 55
-    assert len(dependency["instruments_bearing_on_computed"]) == 27
+    assert len(dependency["instruments_bearing_on_computed"]) == 26
     assert not any(
         blocker.startswith("exercise:") for blocker in certificate["blockers"]
     )
