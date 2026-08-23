@@ -79937,6 +79937,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7567.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8231.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80292,6 +80297,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7311.91,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7316.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80862,6 +80872,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 304.16865722656246,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 376.09865722656247,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80936,6 +80951,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 5798.174638671875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6233.304638671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81173,6 +81193,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7810.24,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8231.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81289,6 +81314,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3763.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81432,6 +81462,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6583.268907498437,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7247.268907498437,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81543,6 +81578,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 5577.778091150512,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6241.778091150512,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82266,6 +82306,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4094.81,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82319,6 +82364,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3058.84419921875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3717.25419921875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82961,6 +83011,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3727.12125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4391.12125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84595,6 +84650,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3516.1732031250003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4089.723203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84896,6 +84956,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3616.309033203125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4280.309033203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85397,6 +85462,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4235.884453125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4810.564453125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86035,6 +86105,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6319.64015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6559.86015625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86188,6 +86263,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2239.751328125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2890.001328125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86468,6 +86548,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 872.55978515625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1125.87978515625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86547,6 +86632,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3763.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86969,6 +87059,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1152.3516796875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1486.9016796875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87006,6 +87101,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2475.7981640625003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3061.2681640625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87106,6 +87206,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 490.41202797878174,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 586.4520279787818,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87196,6 +87301,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3935.87,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87296,6 +87406,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4181.35,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87312,6 +87427,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1958.174156360547,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2421.234156360547,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87344,6 +87464,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 870.8712037084509,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1123.711203708451,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87397,6 +87522,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4257.19,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87450,6 +87580,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 5205.56296875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5624.64296875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87736,6 +87871,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4671.353125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5335.353125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88079,6 +88219,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2604.7558420985433,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3138.2558420985433,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88116,6 +88261,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2523.54548828125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3187.54548828125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88327,6 +88477,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3763.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88448,6 +88603,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4514.15671875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5044.23671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88993,6 +89153,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4236.66,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89389,6 +89554,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7116.71640625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7228.96640625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89568,6 +89738,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2868.04765625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3532.04765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89637,6 +89812,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4854.356640625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5326.606640625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89743,6 +89923,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4021.96,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89822,6 +90007,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7181.1431250000005,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7283.053125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91572,6 +91762,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4048.05,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92210,6 +92405,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3763.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92289,6 +92489,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7281.42,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7316.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92389,6 +92594,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6656.05528802461,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6839.05528802461,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92973,6 +93183,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1440.4370996093749,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1858.627099609375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93652,6 +93867,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4186.78,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93721,6 +93941,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3469.0802436334525,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4052.1402436334524,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94380,6 +94605,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7637.4493359375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7805.2693359375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94438,6 +94668,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4186.87,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94470,6 +94705,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 7223.18,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7316.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95034,6 +95274,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3935.87,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95182,6 +95427,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3763.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95562,6 +95812,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3734.0191015625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4268.4191015625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95736,6 +95991,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6937.05,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7316.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96021,6 +96281,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 538.8624096679687,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 695.3124096679687,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96148,6 +96413,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 6840.604375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6997.184375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96164,6 +96434,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3882.2799999999997,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96354,6 +96629,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1527.1428892661525,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1970.5028892661524,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96407,6 +96687,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2016.607939453125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2602.077939453125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96866,6 +97151,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 8198.06,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8231.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97272,6 +97562,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 5278.985775390625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5636.565775390625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97509,6 +97804,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3795.646953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4441.076953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97941,6 +98241,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3848.6953125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4512.6953125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97973,6 +98278,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 3080.3827411512157,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3744.3827411512157,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98100,6 +98410,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4000.38,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98132,6 +98447,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 5048.947060546875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5592.937060546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98343,6 +98663,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 4189.87,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4427.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98470,6 +98795,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1425.703125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1762.853125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98539,6 +98869,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 2758.74734375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3411.12734375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98956,6 +99291,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": 1195.1882446289062,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1439.9882446289062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99024,17 +99364,17 @@
   "summary": {
     "comparison_count": 262557,
     "dispositioned": {
-      "assignment_sha256": "c8160b5b3382e50fecf764917e54e3faae3abcff907655095ccff303f8ed742a",
+      "assignment_sha256": "f7543ef449991a162d6be8b60cbc274b880b8764c1cb3c9cac6169dbcfd2cb41",
       "counts": {
         "axiom_encoding_gap": 11990,
         "bridge_artifact": 0,
         "explained_residual": 2045,
         "unexplained": 0,
-        "upstream_engine_gap": 4078
+        "upstream_engine_gap": 5451
       },
       "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 92.310622,
+      "explained_rate": 92.833556,
       "orphaned_entries": [],
       "raw_match_rate": 89.978557,
       "schema_version": "axiom_oracles.dispositions.v1",
@@ -99042,7 +99382,7 @@
         "path": "reports/axiom-taxsim-fiit-ecps-0-2026-08-23.json",
         "sha256": "612e2f59d6708751e7317e8d770a07c72c4f8862710db167e59abecabf1e6ba9"
       },
-      "unexplained_count": 8199
+      "unexplained_count": 6826
     },
     "error_count": 0,
     "errors_by_engine": [],
