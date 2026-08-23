@@ -108795,6 +108795,11 @@
       "concept": "us:tax/federal-income-tax#standard_deduction",
       "description": "Federal standard deduction",
       "difference": 16100.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-itemized-state-tax-standard-deduction",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 16100.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -126295,17 +126300,17 @@
       "counts": {
         "axiom_encoding_gap": 313,
         "bridge_artifact": 346,
-        "explained_residual": 364,
+        "explained_residual": 365,
         "unexplained": 0,
         "upstream_engine_gap": 733
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 92.86428,
+      "explained_rate": 92.872606,
       "orphaned_entries": [],
       "raw_match_rate": 80.849292,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 544
+      "unexplained_count": 543
     },
     "error_count": 0,
     "errors_by_engine": [],

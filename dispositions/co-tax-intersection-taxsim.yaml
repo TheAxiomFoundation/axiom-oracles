@@ -2804,3 +2804,26 @@ entries:
       tolerance: 0.02
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-itemized-state-tax-standard-deduction
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-59285
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Standard-deduction face of the auto-itemize mechanism already
+
+      enrolled for this unit''s liability and tax-before-credits rows:
+
+      TAXSIM itemizes (v17 = 18,352.57 > 16,100 on solo replay,
+
+      2026-08-24) and reports v13 = 0, while the axiom side reports the
+
+      section 63(c) standard deduction. Delta is exactly -16,100.'
+    arithmetic:
+    - expression: 16100 - 16100
+      equals: 0.0
+      tolerance: 0.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
