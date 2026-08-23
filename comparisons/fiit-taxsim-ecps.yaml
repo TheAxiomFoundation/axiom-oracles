@@ -1,35 +1,40 @@
 # Federal individual income tax — Axiom vs NBER TAXSIM, national.
 #
-# TAXSIM's national federal rollout: serves the composed oracle-bridge
-# program's federal concepts against the pinned TAXSIM-35 binary over the
-# national Populace population — the same concept set the Colorado
-# intersection lane grades, minus the state leg.
+# TAXSIM's national federal lane, scoped to the concepts that carry real
+# national signal today:
 #
-# CAVEAT to verify on first run: co-tax-intersection-taxsim scoped itself to
-# Colorado because the composed oracle-bridge's SALT itemization leg was
-# Colorado-scoped. If the composed program still requires a state-scoped
-# SALT leg, the itemization-sensitive concepts (liability, taxable income,
-# tax before credits) will need either a state-neutral SALT leg upstream or
-# per-state sharding of this lane. The smoke run gates this suite's first
-# full regeneration.
+# - The itemization-dependent federal concepts (liability, taxable income,
+#   tax before credits, AMT) are EXCLUDED: the oracle-bridge's generated
+#   state-income-tax leg implements Colorado only, and
+#   _prepare_cases_for_engines filters those concepts to CO households
+#   (smoke-verified 2026-08-23: a national sample prepared 0 cases). They
+#   stay covered by co-tax-intersection-taxsim until the state bridge grows
+#   beyond Colorado — that upstream extension is the unlock for a truly
+#   national liability lane.
+# - CTC and CDCC are EXCLUDED on signal grounds, not capability: the pinned
+#   2.30.0 binary's 2026 law year lacks the child-credit machinery (CTC
+#   collapses to the $500 ODC path, CDCC returns zero), so every row with
+#   children would be the documented NBER gap and childless rows are
+#   trivially zero — no information about Axiom either way. They remain
+#   graded in the CO intersection lane where the gap classes are enrolled,
+#   and become nationally gradable when a pinned binary models them.
+# - EITC is INCLUDED: childless EITC is fully modeled at 2026 and carries
+#   real signal; EITC-with-children rows surface as the standing
+#   NBER-gap fingerprint class and must be enrolled before publication
+#   (the unexplained ratchet holds new suites at ceiling 0).
 #
-# Known TAXSIM-side gap at the 2026 law year (docs/policyengine-taxsim.md):
-# child-credit machinery absent — CTC collapses to the $500 ODC path; ACTC,
-# CDCC, EITC-with-children return zero. Those residuals are NBER gaps and
-# enroll in dispositions as the intersection lane's existing classes.
-#
-# Known Axiom-side scope carve-out: the composed program excludes
-# us:statutes/26/1411 (NIIT) until axiom-encode#1213 resolves the duplicate
-# 911/a rule; TAXSIM fiitax includes NIIT, so units above the 1411
-# thresholds carry a liability residual equal to TAXSIM's own niit column.
+# Run locally:
+#   .venv/bin/python scripts/run_comparison.py fiit-taxsim-ecps --summary
 
 name: fiit-taxsim-ecps
 title: Federal income tax — Axiom vs TAXSIM (national)
 description: >-
-  Compares the composed oracle-bridge program's federal tax concepts —
-  liability, standard deduction, taxable income, tax before credits, EITC,
-  CTC, CDCC, AMT, and employee-side FICA+SECA — against NBER TAXSIM-35 over
-  the national certified Populace US population at the 2026 law year.
+  Compares the composed oracle-bridge program's itemization-independent
+  federal concepts — standard deduction, EITC, and employee-side FICA+SECA
+  — against NBER TAXSIM-35 over the national certified Populace US
+  population at the 2026 law year. The itemization-dependent concepts stay
+  Colorado-scoped in co-tax-intersection-taxsim until the state-income-tax
+  bridge grows beyond Colorado.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (rulespec-us#1049) before any
@@ -49,14 +54,8 @@ runner:
     period: "2026"
     suite: fiit-taxsim-ecps
     concepts:
-      - us:tax/federal-income-tax#liability
       - us:tax/federal-income-tax#standard_deduction
-      - us:tax/federal-income-tax#taxable_income
-      - us:tax/federal-income-tax#tax_before_credits
       - us:tax/federal-income-tax#eitc
-      - us:tax/federal-income-tax#ctc
-      - us:tax/federal-income-tax#cdcc
-      - us:tax/federal-income-tax#amt
       - us:tax/payroll#employee_fica
     axiom_rulespec_repo_roots: $HOME
 

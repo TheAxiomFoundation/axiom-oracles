@@ -29,7 +29,18 @@ at the wrong law year — is why).
 | --- | --- | --- | --- |
 | `co-state-income-tax-taxsim` | CO Populace slice | CO state liability | `siitax` |
 | `co-tax-intersection-taxsim` | CO Populace slice | 9 federal + CO state | per mapping |
-| `fiit-taxsim-ecps` | national Populace | 9 federal (smoke-gated) | per mapping |
+| `fiit-taxsim-ecps` | national Populace | std deduction, EITC, FICA | per mapping |
+
+The national federal lane is scoped to itemization-*independent* concepts.
+Smoke-verified 2026-08-23: liability, taxable income, tax before credits,
+and AMT pull in the oracle-bridge's generated state-income-tax leg for the
+SALT/itemization choice, and that leg implements Colorado only —
+`_prepare_cases_for_engines` filters those concepts to CO households, so a
+national sample prepares zero cases. Growing the state bridge beyond
+Colorado is the unlock for a national liability lane; until then the CO
+intersection suite carries those concepts. CTC/CDCC are excluded from the
+national lane on signal grounds (the 2026 binary's child-credit gap makes
+every child row a known NBER artifact).
 | State grids (~39 suites) | 12-case synthetic grids | per-state liability concept | per mapping |
 | Populace campaign | national Populace, 43 jurisdictions | per-state output concept | per mapping, or skipped |
 
