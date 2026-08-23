@@ -26475,3 +26475,64 @@ entries:
       tolerance: 0.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-childless-eitc-parameter-vintage
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-103607
+    - ecps-tax-unit-105052
+    - ecps-tax-unit-108317
+    - ecps-tax-unit-116600
+    - ecps-tax-unit-116747
+    - ecps-tax-unit-123343
+    - ecps-tax-unit-125440
+    - ecps-tax-unit-126435
+    - ecps-tax-unit-131877
+    - ecps-tax-unit-132538
+    - ecps-tax-unit-135104
+    - ecps-tax-unit-137456
+    - ecps-tax-unit-139518
+    - ecps-tax-unit-140145
+    - ecps-tax-unit-140755
+    - ecps-tax-unit-142562
+    - ecps-tax-unit-146177
+    - ecps-tax-unit-151265
+    - ecps-tax-unit-153442
+    - ecps-tax-unit-83291
+    - ecps-tax-unit-85276
+    - ecps-tax-unit-86349
+    - ecps-tax-unit-86943
+    - ecps-tax-unit-87008
+    - ecps-tax-unit-87227
+    - ecps-tax-unit-88426
+    - ecps-tax-unit-92527
+    - ecps-tax-unit-98842
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Childless-unit rows where the axiom value reproduces exactly (to
+
+      five cents, verified per-row 2026-08-24) from the enacted
+
+      rev-proc-2025-32 childless schedule — 7.65 percent phase-in to the
+
+      $664 maximum, phase-out from $10,860 ($18,140 joint) at 7.65
+
+      percent — while the pinned binary''s solo-replayed v25 reproduces
+
+      its reported value with extrapolated 2026 parameters that shift
+
+      the phase boundaries. Parameter-vintage residual of TAXSIM''s 2026
+
+      projection (docs/policyengine-taxsim.md documents the same
+
+      extrapolation behavior for state modules).'
+    arithmetic:
+    - expression: 0.0765 * 8680
+      equals: 664.02
+      tolerance: 0.05
+    - expression: 10860 + 664 / 0.0765
+      equals: 19540.0
+      tolerance: 1.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304

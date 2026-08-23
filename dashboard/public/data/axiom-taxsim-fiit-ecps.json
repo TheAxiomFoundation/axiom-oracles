@@ -100869,17 +100869,17 @@
   "summary": {
     "comparison_count": 262557,
     "dispositioned": {
-      "assignment_sha256": "149993b4cfef4fe9ad225bff52c97851fddd33b302ed6e0cbd6bc8d6a856664a",
+      "assignment_sha256": "56f3ec7f00d56b15b061564db66be07649c38bab0ed9e63859e33515d0327a61",
       "counts": {
         "axiom_encoding_gap": 18449,
         "bridge_artifact": 0,
         "explained_residual": 2318,
         "unexplained": 0,
-        "upstream_engine_gap": 5451
+        "upstream_engine_gap": 5479
       },
       "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 92.937534,
+      "explained_rate": 92.948198,
       "orphaned_entries": [],
       "raw_match_rate": 89.978557,
       "schema_version": "axiom_oracles.dispositions.v1",
@@ -100887,7 +100887,7 @@
         "path": "reports/axiom-taxsim-fiit-ecps-0-2026-08-23.json",
         "sha256": "612e2f59d6708751e7317e8d770a07c72c4f8862710db167e59abecabf1e6ba9"
       },
-      "unexplained_count": 94
+      "unexplained_count": 66
     },
     "error_count": 0,
     "errors_by_engine": [],
