@@ -209,7 +209,11 @@ def test_merge_adds_dispositioned_block_and_annotates_rows() -> None:
     assert "disposition" not in report["mismatches"][0]
 
 
-def test_axiom_encoding_gap_is_classified_but_not_explained() -> None:
+def test_axiom_encoding_gap_counts_as_explained_but_stays_broken_out() -> None:
+    # Owner decision 2026-08-24: a verified encoding bug IS explained — the
+    # cause is named, reproduced, and filed. It stays visible via its own
+    # counts bucket (and the dashboard) until fixed upstream and
+    # regenerated away; it never quietly disappears into the explained mass.
     report = _build_report()
     merged = apply_dispositions(
         report,
@@ -217,7 +221,7 @@ def test_axiom_encoding_gap_is_classified_but_not_explained() -> None:
     )
     block = merged["summary"]["dispositioned"]
     assert block["raw_match_rate"] == 50
-    assert block["explained_rate"] == 50
+    assert block["explained_rate"] == 100
     assert block["unexplained_count"] == 0
     assert block["counts"]["axiom_encoding_gap"] == 1
 

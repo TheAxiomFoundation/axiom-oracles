@@ -126306,7 +126306,7 @@
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 92.872606,
+      "explained_rate": 95.478768,
       "orphaned_entries": [],
       "raw_match_rate": 80.849292,
       "schema_version": "axiom_oracles.dispositions.v1",

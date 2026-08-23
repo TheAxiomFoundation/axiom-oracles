@@ -15284,7 +15284,7 @@
       },
       "dispositions_file": "dispositions/ma-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 93.688725,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 91.942402,
       "schema_version": "axiom_oracles.dispositions.v1",

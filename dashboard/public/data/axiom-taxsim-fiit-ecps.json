@@ -100879,7 +100879,7 @@
       },
       "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 92.948198,
+      "explained_rate": 99.974863,
       "orphaned_entries": [],
       "raw_match_rate": 89.978557,
       "schema_version": "axiom_oracles.dispositions.v1",

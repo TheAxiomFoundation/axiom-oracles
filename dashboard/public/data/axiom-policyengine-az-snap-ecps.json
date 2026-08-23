@@ -30691,7 +30691,7 @@
       },
       "dispositions_file": "dispositions/az-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 77.740492,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 77.740492,
       "schema_version": "axiom_oracles.dispositions.v1",

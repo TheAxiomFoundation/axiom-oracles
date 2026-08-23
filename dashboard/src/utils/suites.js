@@ -106,7 +106,7 @@ const SUITE_OVERRIDES = {
   "co-tax-intersection-taxsim": {
     family: "federal_income_tax",
     jurisdiction: "CO",
-    label: "Shared federal + CO tax concepts (vs TAXSIM)",
+    label: "Full federal tax, with Colorado for the SALT deduction (vs TAXSIM)",
     region: "us",
     kind: "household",
     order: 202,
