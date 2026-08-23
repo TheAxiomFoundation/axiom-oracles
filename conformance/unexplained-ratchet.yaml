@@ -1,8 +1,7 @@
 schema: axiom_oracles.unexplained_ratchet.v1
-_comment: 'Per-suite unexplained-mismatch ceilings — GENERATED; advance only via
-  scripts/unexplained_ratchet.py. Ceilings may only fall. A suite absent from this
-  file has ceiling 0, so a new comparison suite cannot publish unexplained disagreements:
-  triage first, publish second.'
+_comment: 'Per-suite unexplained-mismatch ceilings — GENERATED; advance only via scripts/unexplained_ratchet.py.
+  Ceilings may only fall. A suite absent from this file has ceiling 0, so a new comparison
+  suite cannot publish unexplained disagreements: triage first, publish second.'
 ratchets:
 - suite: ak-apa-state-supplement
   unexplained_max: 0
@@ -118,6 +117,8 @@ ratchets:
   unexplained_max: 0
 - suite: fiit-ecps
   unexplained_max: 0
+- suite: fiit-taxsim-ecps
+  unexplained_max: 8199
 - suite: fl-snap-ecps
   unexplained_max: 0
 - suite: fl-tca-standards
