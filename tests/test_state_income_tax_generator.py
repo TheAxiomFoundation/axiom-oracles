@@ -845,3 +845,17 @@ def test_committed_state_income_tax_reports_are_dispositioned_v21():
         report = json.loads(path.read_text())
         assert report["schema_version"] == "axiom.comparison_report.v2.1", path
         assert isinstance(report["summary"].get("dispositioned"), dict), path
+
+
+def test_taxsim_output_column_resolves_from_concept_mapping():
+    """The graded TAXSIM column is mapping-declared, not hardcoded.
+
+    Pre-credit schedule concepts (UT, KY) grade staxbc; final-liability
+    pipelines (IL) grade siitax. This is what retires the 'TAXSIM is
+    supplemental because siitax nets credits' caveat on the grid suites.
+    """
+    generator = _load_generator()
+
+    assert generator._taxsim_output_column("UT") == "staxbc"
+    assert generator._taxsim_output_column("KY") == "staxbc"
+    assert generator._taxsim_output_column("IL") == "siitax"

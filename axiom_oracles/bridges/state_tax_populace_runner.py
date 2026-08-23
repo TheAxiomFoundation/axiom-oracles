@@ -1624,6 +1624,293 @@ def calculate_policyengine_targets(
     return targets
 
 
+# Person-level PolicyEngine variables projected into the per-tax-unit TAXSIM
+# input row. Concept keys mirror populations/populace_us.py's person loader so
+# the populace TAXSIM leg feeds the binary the same input surface as the
+# Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is the
+# single row-assembly authority for both).
+_TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
+    "self_employment_income": "self_employment_income",
+    "dividend_income": "dividend_income",
+    "qualified_dividend_income": "qualified_dividend_income",
+    "interest_income": "taxable_interest_income",
+    "short_term_capital_gains": "short_term_capital_gains",
+    "long_term_capital_gains": "long_term_capital_gains",
+    "pension_income": "taxable_pension_income",
+    "social_security_benefits": "social_security",
+    "unemployment_insurance_income": "unemployment_compensation",
+    "rental_income": "rental_income",
+}
+
+
+def taxsim_target_column(output_concept: str) -> str | None:
+    """The TAXSIM output column graded for a jurisdiction's output concept.
+
+    Resolved from the concept mapping so the graded surface is declared in
+    one place: pre-credit schedule concepts map ``staxbc`` (state tax before
+    credits; staxbc - v40 total credits = siitax on the pinned binary),
+    final-liability concepts map ``siitax``. A concept with no ``taxsim``
+    mapping returns None and its jurisdiction is *skipped* by the TAXSIM
+    leg — never silently graded against a guessed column. (The audit that
+    forced this: CT/DC/KS/MN/OH populace outputs are pre-credit schedules a
+    ``siitax`` default would misgrade, and CA's Behavioral Health Services
+    Tax has no truthful TAXSIM surface at all.)
+    """
+    from ..comparison.mappings import engine_targets_for_concepts
+
+    targets = engine_targets_for_concepts([output_concept], "taxsim")
+    return targets[0] if targets else None
+
+
+def calculate_taxsim_targets(
+    *,
+    dataset: Any,
+    raw_tax_units: Any,
+    raw_persons: Any,
+    routes: Iterable[TaxUnitRoute],
+    year: int,
+    contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
+    microsimulation_factory: Callable[[Any], Any] | None = None,
+    taxsim_runner_factory: Callable[[Any], Any] | None = None,
+) -> dict[str, dict[int | str, float]]:
+    """Calculate the TAXSIM oracle value for every ready-routed tax unit.
+
+    The second oracle leg beside :func:`calculate_policyengine_targets`: each
+    ready state's selected tax units are projected into TAXSIM input rows
+    (via the shared ``taxsim_input_for_case`` projection), executed once per
+    state through the pinned policyengine-taxsim binary, and graded on the
+    column :func:`taxsim_target_column` resolves for the jurisdiction's
+    output concept. Person identity, order, and tax-unit links are verified
+    against the certified Populace tables before any values are used —
+    the same fail-closed discipline as the PolicyEngine legs.
+    """
+
+    from ..adapters.taxsim.projection import taxsim_input_for_case
+    from ..core.case import Case, Concepts, Entity
+
+    resolved_contract = (
+        load_state_tax_populace_contract()
+        if contract is None
+        else validate_state_tax_populace_contract(contract)
+    )
+    if year != resolved_contract.validation_year:
+        raise StateTaxPopulationRoutingError(
+            f"comparison year must be {resolved_contract.validation_year}; got {year}"
+        )
+    _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
+    tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
+    _reject_duplicate_ids(tax_unit_ids, "tax_unit_id")
+    if raw_persons is None:
+        raise StateTaxPopulationRoutingError(
+            "TAXSIM targets require the Populace person table"
+        )
+    _require_columns(
+        raw_persons, {"person_id", "person_tax_unit_id"}, "person"
+    )
+    person_ids = [_clean_id(value) for value in raw_persons["person_id"]]
+    _reject_duplicate_ids(person_ids, "person_id")
+    person_tax_unit_ids = [
+        _clean_id(value) for value in raw_persons["person_tax_unit_id"]
+    ]
+    unknown = sorted(set(person_tax_unit_ids) - set(tax_unit_ids), key=str)
+    if unknown:
+        raise StateTaxPopulationRoutingError(
+            "TAXSIM targets: Populace people link to unknown tax_unit_id "
+            "values: " + ", ".join(str(value) for value in unknown)
+        )
+
+    route_rows = tuple(routes)
+    ready_by_state: dict[str, list[TaxUnitRoute]] = defaultdict(list)
+    for route in route_rows:
+        if route.disposition == DISPOSITION_READY and route.state is not None:
+            ready_by_state[route.state].append(route)
+    if not ready_by_state:
+        return {}
+
+    if microsimulation_factory is None:
+        try:
+            from policyengine_us import Microsimulation
+        except ImportError as exc:  # pragma: no cover - optional runtime dependency
+            raise RuntimeError(
+                "Install the PolicyEngine extra to calculate TAXSIM targets."
+            ) from exc
+
+        def microsimulation_factory(source: Any) -> Any:
+            return Microsimulation(dataset=source)
+
+    sim = microsimulation_factory(dataset)
+
+    # Person identity and tax-unit links must match the certified tables
+    # before any modeled person value is attributed to a tax unit.
+    modeled_person_ids = [
+        _clean_id(value)
+        for value in _array_values(sim.calculate("person_id", period=year))
+    ]
+    if modeled_person_ids != person_ids:
+        raise StateTaxPopulationRoutingError(
+            "TAXSIM targets: PolicyEngine Person identity/order does not "
+            "match the certified Populace person table"
+        )
+    modeled_person_tax_unit_ids = [
+        _clean_id(value)
+        for value in _array_values(
+            sim.calculate("tax_unit_id", period=year, map_to="person")
+        )
+    ]
+    if modeled_person_tax_unit_ids != person_tax_unit_ids:
+        raise StateTaxPopulationRoutingError(
+            "TAXSIM targets: PolicyEngine Person-to-TaxUnit mapping does not "
+            "match certified person_tax_unit_id"
+        )
+
+    def _person_array(variable: str, *, default: float | bool = 0.0) -> list[Any]:
+        try:
+            values = _array_values(sim.calculate(variable, period=year))
+        except Exception:
+            return [default] * len(person_ids)
+        if len(values) != len(person_ids):
+            raise StateTaxPopulationRoutingError(
+                f"TAXSIM targets: PolicyEngine {variable!r} returned "
+                f"{len(values)} rows for {len(person_ids)} people"
+            )
+        return values
+
+    ages = _person_array("age")
+    heads = _person_array("is_tax_unit_head", default=False)
+    spouses = _person_array("is_tax_unit_spouse", default=False)
+    wages = _person_array("employment_income")
+    non_wage = {
+        concept_key: _person_array(pe_variable)
+        for concept_key, pe_variable in _TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
+    }
+
+    concept_by_key = {
+        "self_employment_income": Concepts.SELF_EMPLOYMENT_INCOME,
+        "dividend_income": Concepts.DIVIDEND_INCOME,
+        "qualified_dividend_income": Concepts.QUALIFIED_DIVIDEND_INCOME,
+        "interest_income": Concepts.INTEREST_INCOME,
+        "short_term_capital_gains": Concepts.SHORT_TERM_CAPITAL_GAINS,
+        "long_term_capital_gains": Concepts.LONG_TERM_CAPITAL_GAINS,
+        "pension_income": Concepts.PENSION_INCOME,
+        "social_security_benefits": Concepts.SOCIAL_SECURITY_BENEFITS,
+        "unemployment_insurance_income": Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
+        "rental_income": Concepts.RENTAL_INCOME,
+    }
+
+    person_indices_by_tax_unit: dict[int | str, list[int]] = defaultdict(list)
+    for index, tax_unit_id in enumerate(person_tax_unit_ids):
+        person_indices_by_tax_unit[tax_unit_id].append(index)
+
+    def _case_for_tax_unit(tax_unit_id: int | str, state: str) -> Case:
+        entities = []
+        for index in person_indices_by_tax_unit[tax_unit_id]:
+            if bool(heads[index]):
+                relation = "head"
+            elif bool(spouses[index]):
+                relation = "spouse"
+            else:
+                relation = "dependent"
+            facts: dict[str, Any] = {
+                Concepts.PERSON_AGE: int(_finite_number(ages[index], label="age")),
+                Concepts.HOUSEHOLD_RELATION: relation,
+                Concepts.YEARLY_EARNED_INCOME: _finite_number(
+                    wages[index], label="employment_income"
+                ),
+            }
+            for key, concept in concept_by_key.items():
+                facts[concept] = _finite_number(
+                    non_wage[key][index],
+                    label=_TAXSIM_PERSON_NON_WAGE_VARIABLES[key],
+                )
+            entities.append(
+                Entity(
+                    entity_id=str(person_ids[index]),
+                    kind="person",
+                    facts=facts,
+                )
+            )
+        return Case(
+            case_id=tax_unit_id,
+            period=str(year),
+            entities=tuple(entities),
+            # The projection converts USPS -> TAXSIM/SOI codes itself;
+            # passing the code through metadata keeps that conversion in
+            # one place (docs/policyengine-taxsim.md: FIPS != SOI).
+            metadata={"state": state},
+        )
+
+    if taxsim_runner_factory is None:
+        from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
+
+        from ..adapters.taxsim.pins import installed_binary_path
+
+        binary = installed_binary_path()
+
+        def taxsim_runner_factory(frame: Any) -> Any:
+            if binary is not None:
+                return TaxsimRunner(frame, taxsim_path=binary)
+            return TaxsimRunner(frame)
+
+    import pandas as pd
+
+    targets: dict[str, dict[int | str, float]] = {}
+    for state in sorted(ready_by_state):
+        jurisdiction = resolved_contract.by_state()[state]
+        column = taxsim_target_column(jurisdiction.output)
+        if column is None:
+            # No declared TAXSIM surface for this jurisdiction's concept —
+            # skip rather than guess. compare_ready_state_tax_units reports
+            # the absent leg in taxsim_skipped_states.
+            continue
+        state_routes = ready_by_state[state]
+        rows = []
+        for route in state_routes:
+            row = taxsim_input_for_case(
+                _case_for_tax_unit(route.tax_unit_id, state),
+                taxsimid=route.tax_unit_id,
+            )
+            if row["state"] != jurisdiction.taxsim_state_code:
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: projected TAXSIM state code {row['state']} "
+                    "does not match the contract's "
+                    f"{jurisdiction.taxsim_state_code}"
+                )
+            rows.append(row)
+        runner = taxsim_runner_factory(pd.DataFrame(rows))
+        try:
+            result = runner.run(show_progress=False)
+        except TypeError:
+            result = runner.run()
+        records = result.to_dict(orient="records")
+        if len(records) != len(state_routes):
+            raise StateTaxPopulationRoutingError(
+                f"{state}: TAXSIM returned {len(records)} rows for "
+                f"{len(state_routes)} selected tax units"
+            )
+        state_targets: dict[int | str, float] = {}
+        for route, record in zip(state_routes, records, strict=True):
+            # Identity over order: the binary is expected to preserve row
+            # order, but a reordered or dropped row must fail loudly, not
+            # attribute one unit's tax to another.
+            returned_id = record.get("taxsimid")
+            if returned_id is not None and _clean_id(returned_id) != _clean_id(
+                route.tax_unit_id
+            ):
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: TAXSIM row identity mismatch — expected "
+                    f"taxsimid {route.tax_unit_id}, got {returned_id}"
+                )
+            if column not in record:
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: TAXSIM output omitted {column!r}"
+                )
+            state_targets[route.tax_unit_id] = _finite_number(
+                record[column], label=column
+            )
+        targets[state] = state_targets
+    return targets
+
+
 def calculate_policyengine_projection_inputs(
     *,
     dataset: Any,
@@ -2178,6 +2465,7 @@ def compare_ready_state_tax_units(
         str, Mapping[str, Mapping[int | str, float | bool]]
     ]
     | None = None,
+    taxsim_targets: Mapping[str, Mapping[int | str, float]] | None = None,
     year: int,
     rulespec_root: Path,
     axiom_rules_path: Path,
@@ -2190,6 +2478,13 @@ def compare_ready_state_tax_units(
     Ready inputs must be supplied by the exact runtime projection surface and
     match the contract slot-for-slot.  Relations and unsupported source kinds
     fail closed rather than receiving implicit values.
+
+    ``taxsim_targets`` (from :func:`calculate_taxsim_targets`) adds the
+    second oracle leg: states present in the mapping grade every selected
+    tax unit against TAXSIM too, and a selected unit missing from its
+    state's mapping fails closed. States absent from the mapping keep the
+    PolicyEngine-only shape so partial TAXSIM rollout never silently drops
+    a leg that was expected.
     """
 
     resolved_contract = (
@@ -2230,6 +2525,8 @@ def compare_ready_state_tax_units(
 
     comparisons: dict[str, dict[str, Any]] = {}
     all_mismatches: list[dict[str, Any]] = []
+    all_taxsim_mismatches: list[dict[str, Any]] = []
+    taxsim_state_count = 0
     for state, state_routes in sorted(selected_by_state.items()):
         jurisdiction = resolved_contract.by_state()[state]
         _validate_runtime_relations(
@@ -2340,7 +2637,11 @@ def compare_ready_state_tax_units(
                     outputs[jurisdiction.output]
                 )
 
+        state_taxsim_targets = (
+            taxsim_targets.get(state) if taxsim_targets is not None else None
+        )
         mismatches: list[dict[str, Any]] = []
+        taxsim_mismatches: list[dict[str, Any]] = []
         case_rows: list[dict[str, Any]] = []
         max_abs_diff = 0.0
         max_relative_diff = 0.0
@@ -2379,15 +2680,49 @@ def compare_ready_state_tax_units(
             # Every compared tax unit persists both engines' values so the
             # dashboard's case explorer can show matched households too,
             # not only the disagreements.
-            case_rows.append(
-                {
-                    "tax_unit_id": route.tax_unit_id,
-                    "weight": route.weight,
-                    "axiom": round(axiom_value, 2),
-                    "policyengine": round(pe_value, 2),
-                    "matched": matched,
-                }
-            )
+            case_row = {
+                "tax_unit_id": route.tax_unit_id,
+                "weight": route.weight,
+                "axiom": round(axiom_value, 2),
+                "policyengine": round(pe_value, 2),
+                "matched": matched,
+            }
+            if state_taxsim_targets is not None:
+                # A state carrying the TAXSIM leg fails closed on a missing
+                # unit: a silently absent oracle value would read as a
+                # narrower comparison, not as the defect it is.
+                if route.tax_unit_id not in state_taxsim_targets:
+                    raise StateTaxPopulationRoutingError(
+                        f"{state}: TAXSIM target omitted tax_unit_id "
+                        f"{route.tax_unit_id}"
+                    )
+                taxsim_value = _finite_number(
+                    state_taxsim_targets[route.tax_unit_id],
+                    label="taxsim",
+                )
+                taxsim_abs_diff = abs(axiom_value - taxsim_value)
+                taxsim_relative_diff = taxsim_abs_diff / max(
+                    abs(taxsim_value), 1.0
+                )
+                taxsim_matched = (
+                    taxsim_abs_diff <= jurisdiction.tolerance
+                    or taxsim_relative_diff <= jurisdiction.relative_tolerance
+                )
+                if not taxsim_matched:
+                    taxsim_mismatches.append(
+                        {
+                            "state": state,
+                            "tax_unit_id": route.tax_unit_id,
+                            "weight": route.weight,
+                            "axiom": axiom_value,
+                            "taxsim": taxsim_value,
+                            "absolute_difference": taxsim_abs_diff,
+                            "relative_difference": taxsim_relative_diff,
+                        }
+                    )
+                case_row["taxsim"] = round(taxsim_value, 2)
+                case_row["taxsim_matched"] = taxsim_matched
+            case_rows.append(case_row)
 
         comparisons[state] = {
             "program": jurisdiction.program,
@@ -2405,8 +2740,16 @@ def compare_ready_state_tax_units(
             "mismatches": mismatches,
             "cases": case_rows,
         }
+        if state_taxsim_targets is not None:
+            comparisons[state]["taxsim_target"] = taxsim_target_column(
+                jurisdiction.output
+            )
+            comparisons[state]["taxsim_mismatch_count"] = len(taxsim_mismatches)
+            comparisons[state]["taxsim_mismatches"] = taxsim_mismatches
+            all_taxsim_mismatches.extend(taxsim_mismatches)
+            taxsim_state_count += 1
 
-    return {
+    report = {
         "schema_version": "axiom.state_tax_populace_ready_comparison.v1",
         "validation_year": year,
         "sample_size_per_state": sample_size_per_state,
@@ -2418,6 +2761,16 @@ def compare_ready_state_tax_units(
         "states": comparisons,
         "mismatches": all_mismatches,
     }
+    if taxsim_targets is not None:
+        report["taxsim_state_count"] = taxsim_state_count
+        report["taxsim_mismatch_count"] = len(all_taxsim_mismatches)
+        report["taxsim_mismatches"] = all_taxsim_mismatches
+        # States compared without a TAXSIM leg (no declared truthful
+        # surface for their output concept) — visible, not silent.
+        report["taxsim_skipped_states"] = sorted(
+            state for state in comparisons if state not in taxsim_targets
+        )
+    return report
 
 
 def _state_request(

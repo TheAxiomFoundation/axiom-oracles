@@ -80,3 +80,11 @@ artifacts:
 dashboard:
   filename: axiom-taxsim-co-tax-intersection-ecps.json
   suite: co-tax-intersection-taxsim
+  # Persist every mismatch row in the committed dashboard copy. The triage
+  # pipeline reads this copy, and the default 1,000-row cap left 438 of the
+  # suite's unexplained rows physically untriageable (axiom-oracles#439) —
+  # two binary-verified mechanisms (TAXSIM auto-HoH for mstat=1+depx,
+  # auto-itemized state income tax) could not even be enrolled because
+  # their rows sat past the cap. Headroom above the current 2,300 total
+  # keeps the next regeneration's rows visible too.
+  max_mismatches: 4000

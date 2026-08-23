@@ -21,6 +21,7 @@ fi
 (cd scripts && ../.venv/bin/python run_medicaid_thresholds_comparison.py)
 
 for suite in fiit-ecps co-state-income-tax-ecps co-state-income-tax-taxsim \
+             co-tax-intersection-taxsim \
              ssi-ecps ny-tanf-ecps \
              wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps az-tanf-ecps \
              ks-tanf-ecps medicaid-magi-co-ecps \

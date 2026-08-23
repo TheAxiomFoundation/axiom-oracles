@@ -654,7 +654,10 @@ def main() -> int:
             print(f"Wrote: {output}")
             if dashboard_target and adapted is not None:
                 _write_dashboard_report(
-                    adapted, dashboard_target, full_report_path=output
+                    adapted,
+                    dashboard_target,
+                    full_report_path=output,
+                    dashboard_config=config.get("dashboard"),
                 )
     finally:
         staging.unlink(missing_ok=True)
@@ -953,7 +956,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
-            "policyengine_taxsim": "2.30.0",
+            "policyengine_taxsim": _taxsim_pin_version(),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
@@ -1616,6 +1619,19 @@ _PE_ORACLE_PINS = (
     "policyengine-core==3.28.0",
 )
 
+def _taxsim_pin_version() -> str:
+    """The pinned policyengine-taxsim version, from taxsim_pins.json.
+
+    adapters/taxsim/taxsim_pins.json is the single source of truth for the
+    TAXSIM oracle identity. Every policyengine-taxsim version this script
+    installs must come from it — a second versioned literal is exactly how
+    #266 happened (a stale 2.21.2 here silently regenerated four suites at
+    2024 law while the rest of the repo pinned 2.30.0).
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.pinned_version()
+
 
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
@@ -1749,7 +1765,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # TAXSIM ships as policyengine-taxsim, which bundles the pinned NBER
     # binary (adapters/taxsim/taxsim_pins.json records its identity).
     taxsim_pins = (
-        ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
+        (f"policyengine-taxsim=={_taxsim_pin_version()}",)
+        if "taxsim" in engines
+        else ()
     )
     cmd = [
         "uv",
@@ -2374,11 +2392,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         str(REPO_ROOT),
         *(arg for pin in pe_pins for arg in ("--with", pin)),
         "--with",
-        # Must match adapters/taxsim/taxsim_pins.json — the pinned identity
-        # every TAXSIM oracle number is reproducible against. 2.30.0 models
-        # 2026 law (incl. OBBBA); the old 2.21.2 here silently capped the
-        # grids at 2024 law.
-        "policyengine-taxsim==2.30.0",
+        f"policyengine-taxsim=={_taxsim_pin_version()}",
         "python",
         str(generator),
         "--state",
@@ -4942,16 +4956,30 @@ _DASHBOARD_MAX_MISMATCHES = 1000
 _DASHBOARD_MAX_CASE_ROWS = 1000
 
 
-def _slim_report_for_dashboard(report: dict) -> dict:
+def _slim_report_for_dashboard(
+    report: dict,
+    *,
+    max_mismatches: int | None = None,
+    max_case_rows: int | None = None,
+) -> dict:
+    """Trim a report for the dashboard, honoring per-suite cap overrides.
+
+    A suite whose triage pipeline needs every mismatch row committed (the
+    dispositions flow reads the dashboard copy — #439: 438 of the TAXSIM
+    intersection suite's unexplained rows were physically untriageable
+    behind the default cap) raises ``dashboard.max_mismatches`` in its
+    comparison YAML instead of relying on the ephemeral reports/ artifact.
+    """
+    if max_mismatches is None:
+        max_mismatches = _DASHBOARD_MAX_MISMATCHES
+    if max_case_rows is None:
+        max_case_rows = _DASHBOARD_MAX_CASE_ROWS
     mismatches = report.get("mismatches") or []
     cases = report.get("cases") or []
-    if (
-        len(mismatches) <= _DASHBOARD_MAX_MISMATCHES
-        and len(cases) <= _DASHBOARD_MAX_CASE_ROWS
-    ):
+    if len(mismatches) <= max_mismatches and len(cases) <= max_case_rows:
         return report
     slim = dict(report)
-    kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
+    kept_mismatches = mismatches[:max_mismatches]
     kept_ids = {m.get("case_id") for m in kept_mismatches}
     slim["mismatches"] = kept_mismatches
     # Case rows are only dropped when THEY breach the cap. Filtering them
@@ -4959,10 +4987,10 @@ def _slim_report_for_dashboard(report: dict) -> dict:
     # silently discarded ledgers whose case rows are aggregates with their
     # own id scheme (the us-tariff-panel family ledger shipped 0/73 rows —
     # #448 review round 4).
-    if len(cases) > _DASHBOARD_MAX_CASE_ROWS:
+    if len(cases) > max_case_rows:
         slim["cases"] = [
             case for case in cases if case.get("case_id") in kept_ids
-        ][:_DASHBOARD_MAX_CASE_ROWS]
+        ][:max_case_rows]
     else:
         slim["cases"] = cases
     slim["dashboard_truncation"] = {
@@ -5005,14 +5033,23 @@ def _merge_dispositions(report: dict) -> dict:
 
 
 def _write_dashboard_report(
-    report: dict, filename: str, *, full_report_path: Path | None = None
+    report: dict,
+    filename: str,
+    *,
+    full_report_path: Path | None = None,
+    dashboard_config: dict | None = None,
 ) -> None:
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
     report = _merge_dispositions(report)
     target = DASHBOARD_DATA_DIR / filename
-    slim = _slim_report_for_dashboard(strip_heavy_case_metadata(report))
+    dashboard_config = dashboard_config or {}
+    slim = _slim_report_for_dashboard(
+        strip_heavy_case_metadata(report),
+        max_mismatches=dashboard_config.get("max_mismatches"),
+        max_case_rows=dashboard_config.get("max_case_rows"),
+    )
     truncation = slim.get("dashboard_truncation")
     # A premerged-slim copy (v2.1, trimmed mismatch sample, full-run
     # dispositioned block) binds its block to the just-published full

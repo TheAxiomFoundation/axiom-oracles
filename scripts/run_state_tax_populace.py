@@ -19,6 +19,7 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     NO_BROAD_PIT_FIPS,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
+    calculate_taxsim_targets,
     compare_ready_state_tax_units,
     population_routing_report,
     route_tax_units,
@@ -372,6 +373,16 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rulespec-root", type=Path, required=True)
     parser.add_argument("--axiom-rules-path", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--no-taxsim",
+        action="store_true",
+        help=(
+            "Skip the TAXSIM oracle leg. By default every ready state is "
+            "also graded against the pinned policyengine-taxsim binary "
+            "(adapters/taxsim/taxsim_pins.json); the run fails if the "
+            "package is missing rather than silently dropping the leg."
+        ),
+    )
     return parser
 
 
@@ -449,6 +460,16 @@ def main(argv: list[str] | None = None) -> int:
         year=args.year,
         contract=contract,
     )
+    taxsim_targets = None
+    if not args.no_taxsim:
+        taxsim_targets = calculate_taxsim_targets(
+            dataset=dataset,
+            raw_tax_units=raw_tax_units,
+            raw_persons=raw_persons,
+            routes=comparison_routes,
+            year=args.year,
+            contract=contract,
+        )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -476,11 +497,15 @@ def main(argv: list[str] | None = None) -> int:
             known_tax_unit_ids={route.tax_unit_id for route in routes},
             policyengine_targets=targets,
             policyengine_projection_inputs=projection_inputs,
+            taxsim_targets=taxsim_targets,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
             sample_size_per_state=args.sample_size_per_state,
             contract=contract,
+        ),
+        "taxsim_leg": (
+            "skipped" if args.no_taxsim else "graded"
         ),
     }
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")

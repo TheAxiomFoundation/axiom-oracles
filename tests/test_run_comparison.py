@@ -879,6 +879,46 @@ def test_tax_ecps_dashboard_adapter_keeps_identity_when_all_cases_match():
     assert slim["dataset_identity"] == identity
 
 
+def test_slim_report_honors_per_suite_mismatch_cap_override():
+    """dashboard.max_mismatches lifts the default 1,000-row cap (#439).
+
+    The triage pipeline reads the committed dashboard copy; a suite whose
+    unexplained rows sit past the default cap declares a higher cap in its
+    comparison YAML so every mismatch row persists.
+    """
+    run_comparison = load_run_comparison_module()
+
+    mismatches = [
+        {"case_id": f"case-{i}", "kind": "amount_difference"}
+        for i in range(1500)
+    ]
+    report = {
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {"mismatch_count": len(mismatches)},
+        "mismatches": mismatches,
+        "cases": [],
+    }
+
+    # Default cap truncates and declares it.
+    slim = run_comparison._slim_report_for_dashboard(dict(report))
+    assert len(slim["mismatches"]) == 1000
+    assert slim["dashboard_truncation"]["total_mismatches"] == 1500
+
+    # A per-suite override above the total keeps every row, no truncation.
+    full = run_comparison._slim_report_for_dashboard(
+        dict(report), max_mismatches=4000
+    )
+    assert len(full["mismatches"]) == 1500
+    assert "dashboard_truncation" not in full
+
+    # An override below the total still truncates at the override.
+    tighter = run_comparison._slim_report_for_dashboard(
+        dict(report), max_mismatches=1200
+    )
+    assert len(tighter["mismatches"]) == 1200
+    assert tighter["dashboard_truncation"]["shown_mismatches"] == 1200
+
+
 def test_dataset_label_from_identity_falls_back_without_revision():
     run_comparison = load_run_comparison_module()
 
