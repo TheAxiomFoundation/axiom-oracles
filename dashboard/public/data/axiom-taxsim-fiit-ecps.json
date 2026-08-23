@@ -79979,6 +79979,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -28.315341552734395,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 250.91465844726562,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80016,6 +80021,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3268.5684742402345,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2256.1115257597658,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80074,6 +80084,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2065.4426910966795,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8512.31730890332,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80090,6 +80105,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5966.847345609374,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1395.472654390625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80106,6 +80126,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2710.8991966572266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 634.0008033427735,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80122,6 +80147,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -14282.571350898435,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3340.2786491015627,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80159,6 +80189,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4668566362307,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5286.653143363769,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80175,6 +80210,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4746359331057,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9142.375364066895,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80212,6 +80252,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2339.1178471728517,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 547.0521528271485,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80249,6 +80294,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1606.455805711426,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 375.70419428857423,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80265,6 +80315,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1003.8096588291028,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9961.050341170898,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80281,6 +80336,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1361.6433560107425,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7440.5266439892575,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80318,6 +80378,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2401.0864402919924,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 561.5435597080078,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80460,6 +80525,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4182.528975152343,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3355.171024847656,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80476,6 +80546,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -34.39992187499956,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11496.910078125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80555,6 +80630,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3327.666673291993,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7166.113326708008,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80571,6 +80651,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -573.7339732399896,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6908.87602676001,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80629,6 +80714,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -119.28396525445558,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 27.896034745544434,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80687,6 +80777,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -232.3610894373778,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7619.788910562622,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80766,6 +80861,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6884.829204697266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80782,6 +80882,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4096023486327,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 805.0803976513672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80798,6 +80903,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4130.89142125586,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6988.04857874414,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80835,6 +80945,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2409.6937814277344,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4327.276218572266,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80935,6 +81050,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -7404.632013128907,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1731.7279868710937,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80972,6 +81092,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2445.7371903486337,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6211.292809651367,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80988,6 +81113,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4700480424808,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7795.79995195752,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81235,6 +81365,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4089.585189173828,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2185.454810826172,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81398,6 +81533,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.3528449179685,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3850.9471550820313,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81414,6 +81554,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5468.2738295781255,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5147.556170421874,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81430,6 +81575,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1377.1375902280274,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 322.0724097719727,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81446,6 +81596,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2308.1336029208987,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 539.8063970791015,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81483,6 +81638,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2232.5016852109375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 522.1183147890625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81541,6 +81701,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.936818741211,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9318.733181258789,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81599,6 +81764,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1269.6148118164065,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 569.7951881835937,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81636,6 +81806,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3113.6602630498055,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9932.999736950194,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81778,6 +81953,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -697.0874180236815,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7791.252581976319,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81794,6 +81974,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8261.785996808594,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6114.104003191406,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81852,6 +82037,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3098.1676159599606,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 724.5723840400391,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81889,6 +82079,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1376.9678409394533,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 322.03215906054686,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82115,6 +82310,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 4143.968527022462,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 25547.67852702246,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82152,6 +82352,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 277.00140573126373,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14505.301405731263,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82168,6 +82373,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1606.460602586425,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9994.099397413574,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82237,6 +82447,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1414.312704253418,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 330.767295746582,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82253,6 +82468,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6655.326824123047,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3229.253175876953,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82290,6 +82510,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -7802.803509097659,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10857.776490902343,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82327,6 +82552,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1499.5109384472657,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 582.3290615527344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82427,6 +82657,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4075046923826,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9168.902495307617,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82464,6 +82699,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -996.0599883911133,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 232.9500116088867,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82543,6 +82783,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -140.44683628332496,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8229.393163716675,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82580,6 +82825,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 156.4536766621095,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 15426.753676662109,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82596,6 +82846,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -54.21998383506775,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12.680016164932251,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83116,6 +83371,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.944459366211,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4049.525540633789,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83174,6 +83434,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -334.60343547070306,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 301.1865645292969,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83274,6 +83539,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2540.5006440410157,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 594.1493559589844,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83332,6 +83602,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -216.14042221081542,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 50.54957778918457,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83369,6 +83644,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1032.7258807045898,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 241.52411929541015,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83448,6 +83728,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -613.4347247749024,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1815.4252752250977,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83527,6 +83812,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 9554.772760955078,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 28255.86276095508,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83543,6 +83833,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -97.59597008581542,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 22.82402991418457,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83664,6 +83959,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -803.227902855713,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 187.85209714428711,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83701,6 +84001,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1539.787529473633,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 360.1124705263672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83717,6 +84022,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4689992143558,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11977.711000785645,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83775,6 +84085,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -320.6567588533935,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 74.99324114660645,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83791,6 +84106,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -42.475546874999964,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5436.484453125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83933,6 +84253,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -707.9356405358885,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7963.574359464112,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83970,6 +84295,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 1859.5639751679664,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 23628.923975167967,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84070,6 +84400,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -21526.02565642969,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 18657.62434357031,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84086,6 +84421,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 1195.816906746095,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 17758.476906746095,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84144,6 +84484,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8472.624256796873,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 19093.415743203128,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84202,6 +84547,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -542.2107282773432,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14029.719271722657,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84386,6 +84736,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4399.407286847656,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1028.8927131523437,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84402,6 +84757,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1189.2407748125,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 278.1292251875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84439,6 +84799,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3036.210887648437,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6088.289112351563,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84455,6 +84820,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3212.9216114228516,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 751.4083885771485,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84492,6 +84862,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -359.8437441890874,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8987.556255810912,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84634,6 +85009,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.349354683593,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84671,6 +85051,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -42.476767578124054,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8782.013232421876,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84687,6 +85072,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.351329292968,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2847.288670707031,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84703,6 +85093,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -412.0562010467529,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1745.713798953247,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84719,6 +85114,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -79.00466661880455,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9285.345333381196,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84798,6 +85198,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -14064.553832179685,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 20350.506167820313,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84919,6 +85324,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1491.713811011719,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1854.3561889882812,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85040,6 +85450,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 102.5681351582025,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 22416.838135158203,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85056,6 +85471,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8606.142145910157,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2012.7278540898437,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85219,6 +85639,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4146.081730996093,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 969.6482690039062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85235,6 +85660,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -23541.05561261035,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10779.764387389649,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85272,6 +85702,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3903.6943987089835,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10214.785601291016,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85309,6 +85744,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4264.537420013672,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 997.3525799863281,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85409,6 +85849,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 1011.2728531811517,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 15532.302853181152,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85425,6 +85870,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1611.0470897890618,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5901.942910210938,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85567,6 +86017,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -113.08712418292271,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10785.002875817077,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85583,6 +86038,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -52.67280384062178,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2175.657196159378,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85641,6 +86101,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4368.423301261719,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9607.946698738282,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85741,6 +86206,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -573.7399380837402,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 134.18006191625977,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85778,6 +86248,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1835.953796637207,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 429.376203362793,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85857,6 +86332,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2868.679677341797,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 670.9003226582031,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85873,6 +86353,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.9397523349608,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 536.7202476650391,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85889,6 +86374,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -803.9712766699222,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4237.198723330078,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85905,6 +86395,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 38121.13318516504,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 78989.37318516504,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86047,6 +86542,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -160.64123616729648,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5782.428763832703,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86168,6 +86668,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.350575386719,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4687.329424613281,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86184,6 +86689,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -367.1917306591795,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2762.2982693408203,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86326,6 +86836,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6884.829204697266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86384,6 +86899,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.9397523349608,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 536.7202476650391,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86421,6 +86941,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -15490.858236722657,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3622.861763277344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86437,6 +86962,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1191.534830966797,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 278.66516903320314,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86453,6 +86983,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -713.0410083326416,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 166.7589916673584,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86469,6 +87004,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -507.51880037646515,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14088.201199623534,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86653,6 +87193,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2122.247928178711,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 496.33207182128905,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86753,6 +87298,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -24359.193030828126,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14414.486969171874,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86769,6 +87319,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4016.1495273554688,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 939.2604726445312,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86827,6 +87382,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2868.674388279297,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6525.575611720703,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86864,6 +87424,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -822.564913165771,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3394.0450868342286,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86901,6 +87466,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -344.2405344536137,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5182.439465546387,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87022,6 +87592,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1812.4275682978518,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3115.8324317021484,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87227,6 +87802,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -172.12451473962403,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 65.34548526037598,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87243,6 +87823,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -54.21998383506775,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12.680016164932251,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87448,6 +88033,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -745.8559182011718,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 174.43408179882812,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87485,6 +88075,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -131.12716415124515,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 202.09283584875487,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87564,6 +88159,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3469.948965444336,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 811.5210345556641,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87622,6 +88222,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -917.9717528107913,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2556.558247189209,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87638,6 +88243,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4144851611345,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14187.195514838866,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87675,6 +88285,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -622.7315329597177,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5033.038467040283,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87712,6 +88327,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -83.65485047534185,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6139.335149524658,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87749,6 +88369,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -207.5736502954712,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 48.54634970452881,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87786,6 +88411,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4819.378320667969,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9156.381679332031,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87802,6 +88432,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.9397523349608,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 536.7202476650391,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87818,6 +88453,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4016.1495273554688,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 939.2604726445312,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87834,6 +88474,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4589.8795046699215,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1073.4404953300782,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87892,6 +88537,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -917.9778260529783,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7073.022173947022,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88034,6 +88684,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -57.33673291015623,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 627.4932670898438,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88050,6 +88705,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2648.9406035380857,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 619.5093964619141,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88087,6 +88747,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2868.675224216797,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6107.384775783203,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88145,6 +88810,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1376.9678409394533,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 322.03215906054686,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88161,6 +88831,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6655.331213771484,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1556.4887862285157,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88303,6 +88978,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2753.931146722656,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4658.698853277344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88361,6 +89041,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -367.37278906249776,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 24087.807210937503,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88440,6 +89125,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5793.583103027344,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3938.1168969726564,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88645,6 +89335,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -103.7852978039856,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 830.7547021960144,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88661,6 +89356,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5.738265624999258,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10921.921734375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88677,6 +89377,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -507.5238376181642,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14286.606162381835,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88756,6 +89461,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6884.829204697266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88793,6 +89503,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5278.363372832031,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1234.4566271679687,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88809,6 +89524,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3671.903140149414,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6295.2368598505855,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88841,6 +89561,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1418.9658565834961,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 331.8541434165039,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88878,6 +89603,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4016.14348829297,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10975.84651170703,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88915,6 +89645,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1149.4180016694334,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1427.2819983305665,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88952,6 +89687,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -458.9834100968019,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6568.396589903198,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88968,6 +89708,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -91.3951755707701,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1452.4248244292298,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88984,6 +89729,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4708839799805,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7377.609116020019,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89063,6 +89813,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -7458.562354740235,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8017.207645259766,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89079,6 +89834,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 13012.87621928993,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 31653.43621928993,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89116,6 +89876,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -100.69184179345712,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2879.228158206543,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89237,6 +90002,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1796.9380235336914,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 420.2519764663086,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89253,6 +90023,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1950.6977659462889,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 456.2122340537109,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89290,6 +90065,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1075.062164457032,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7889.637835542969,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89306,6 +90086,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -91.79756352417007,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5106.67243647583,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89343,6 +90128,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -56.63252343749991,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8112.9074765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89464,6 +90254,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5390.816134291015,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10519.063865708984,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89480,6 +90275,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -54.21440375694283,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1337.4355962430573,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89517,6 +90317,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4143132861327,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6659.755686713867,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89575,6 +90380,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4096023486327,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 805.0803976513672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89780,6 +90590,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3764.2734434335925,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10685.116556566407,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89796,6 +90611,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -14484.158689648439,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8938.991310351563,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89833,6 +90653,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -508.1045142360854,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12070.165485763915,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89870,6 +90695,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1595.5570469780268,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8706.202953021973,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89886,6 +90716,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -822.5619385563969,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 10039.938061443603,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90028,6 +90863,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3036.2033974140627,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2359.4266025859374,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90170,6 +91010,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -114.7442451023253,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11317.995754897674,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90207,6 +91052,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1329.1113417944337,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1411.5586582055664,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90223,6 +91073,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -274.1875830344238,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2803.522416965576,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90386,6 +91241,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1229.9734662236328,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 592.0565337763671,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90402,6 +91262,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -25772.191560660158,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6027.3684393398435,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90418,6 +91283,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -10327.23492661328,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 13286.955073386718,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90476,6 +91346,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -7458.559077396484,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1744.3409226035155,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90618,6 +91493,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8606.028927410156,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2012.7010725898438,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90655,6 +91535,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1147.4724933549805,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 16828.72750664502,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90692,6 +91577,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1611.0463788515622,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1097.1536211484377,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90750,6 +91640,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -54.21723578819274,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3930.232764211807,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90766,6 +91661,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -57.37435301991263,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5282.625646980087,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90845,6 +91745,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 323.0781250000018,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14526.298125000001,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90903,6 +91808,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2834.8226220302736,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3991.6373779697265,
       "parent": "us:tax/federal-income-tax#liability",
@@ -90940,6 +91850,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -9753.498934346679,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2281.0610656533204,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91019,6 +91934,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3438.9746688847654,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 804.2753311152344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91140,6 +92060,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -54.21998383506775,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12.680016164932251,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91198,6 +92123,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1423.6090089135741,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 332.94099108642575,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91214,6 +92144,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -97.59597008581542,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 22.82402991418457,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91314,6 +92249,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -272.82501163183593,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 63.80498836816406,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91435,6 +92375,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -49.69132421874929,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8893.76867578125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91472,6 +92417,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6831.467919083984,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1597.6820809160156,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91488,6 +92438,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.9397523349608,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 536.7202476650391,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91546,6 +92501,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2409.6936954902344,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 563.5563045097656,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91562,6 +92522,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4096023486327,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 805.0803976513672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91704,6 +92669,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6884.937605011684,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4771.712394988315,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91804,6 +92774,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -808.6266092824708,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 189.11339071752928,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91862,6 +92837,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3872.7113183964843,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2750.5286816035155,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91962,6 +92942,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -915.590579220705,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 17844.239420779297,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91978,6 +92963,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -20959.12783949219,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4901.732160507812,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92225,6 +93215,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4589.8843874824215,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14455.555612517577,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92262,6 +93257,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -80.32723136489949,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6709.842768635101,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92278,6 +93278,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -9577.004300019533,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 23711.68569998047,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92315,6 +93320,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -30.58,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92331,6 +93341,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1496.4215456748047,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 349.9684543251953,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92347,6 +93362,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5163.61937736914,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1207.6206226308593,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92615,6 +93635,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2106.760806052734,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 492.70919394726565,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92694,6 +93719,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1452.2437477031253,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 14812.366252296875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93004,6 +94034,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -458.9859491593018,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 107.34405084069824,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93083,6 +94118,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 15709.195613900392,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 42970.88561390039,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93288,6 +94328,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -10069.059738792968,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2354.8602612070313,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93325,6 +94370,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 1998.7130051408676,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 16648.25300514087,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93383,6 +94433,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1905.3795417163087,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 581.4404582836914,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93441,6 +94496,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 20633.44685253516,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 43879.88685253516,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93499,6 +94559,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -114.74647557107528,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 18845.603524428923,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93578,6 +94643,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6467.885201476563,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7562.154798523437,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93888,6 +94958,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.349526558593,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8869.240473441407,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93904,6 +94979,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1796.9380235336914,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 420.2519764663086,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93962,6 +95042,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1468.5327101557618,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 343.4472898442383,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94020,6 +95105,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -22877.997164132816,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5635.5628358671875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94057,6 +95147,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -40.14,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94094,6 +95189,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2432.068379856446,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 13077.991620143554,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94131,6 +95231,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -28.315845703124978,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5436.484154296875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94168,6 +95273,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3585.8445705234376,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 838.6254294765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94205,6 +95315,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -803.9777258886716,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4518.272274111328,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94284,6 +95399,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -26791.030365625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 19858.649634375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94342,6 +95462,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1657.5237936308595,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 387.6462063691406,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94400,6 +95525,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8606.02787858203,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6194.612121417969,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94689,6 +95819,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -114.74726463357547,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6299.702735366424,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94726,6 +95861,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -930.9965381901857,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1041.6934618098144,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94952,6 +96092,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1496.4215456748047,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 349.9684543251953,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94968,6 +96113,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -446.1397181601569,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12422.710281839843,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95047,6 +96197,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -137.87163720404055,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 866.6183627959595,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95168,6 +96323,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.349354683593,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95184,6 +96344,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 3173.905458741943,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 18159.035458741942,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95200,6 +96365,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -286.8713518543709,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 7460.708648145629,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95237,6 +96407,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -985.2159924414063,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 230.41400755859374,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95295,6 +96470,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -42.04503124999974,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 12115.41496875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95332,6 +96512,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5685.139755408203,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2667.900244591797,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95369,6 +96554,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8597.421724519532,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2010.6882754804687,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95511,6 +96701,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5483.766881818359,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1282.4931181816405,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95527,6 +96722,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -229.4935849312135,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1726.4364150687866,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95564,6 +96764,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3155.5398817352298,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4501.71011826477,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95580,6 +96785,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -24663.564566480465,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 17276.885433519532,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95617,6 +96827,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 915.8748381011046,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 15265.694838101104,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95654,6 +96869,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -139.4215916125488,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1298.5784083874512,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95712,6 +96932,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 7740.429915824221,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 27351.49991582422,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95833,6 +97058,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -79.00800353286786,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2310.5819964671323,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95870,6 +97100,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -23255.323544656254,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11727.29645534375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96033,6 +97268,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -562.256640380614,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11351.563359619386,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96049,6 +97289,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1530.1517523901366,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 357.85824760986327,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96128,6 +97373,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -100.6891718715815,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5413.170828128418,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96249,6 +97499,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5163.61937736914,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1207.6206226308593,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96265,6 +97520,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 10468.8939375,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 28018.8039375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96323,6 +97583,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3212.9164043916016,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8027.933595608399,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96360,6 +97625,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4016.14499219922,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4953.895007800781,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96397,6 +97667,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -42.4769169921874,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8782.013083007812,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96455,6 +97730,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -8606.028927410156,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2012.7010725898438,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96576,6 +97856,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -96.04825591168213,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 22.46174408831787,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96613,6 +97898,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -458.9859491593018,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 107.34405084069824,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96650,6 +97940,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -714.1260675449219,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 167.01393245507813,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96750,6 +98045,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -630.4801428508299,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 3926.2498571491697,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96829,6 +98129,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2868.676657810548,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5689.193342189453,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96845,6 +98150,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6196.345231919921,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1449.1447680800782,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96882,6 +98192,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -116.18482792181385,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1094.395172078186,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96956,6 +98271,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -143.72776562500076,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 25927.932234375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97014,6 +98334,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 2454.9552583513178,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 17197.22525835132,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97114,6 +98439,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.358690621095,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9287.431309378906,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97172,6 +98502,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2354.615021606445,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 550.6749783935547,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97293,6 +98628,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -918.0950514340819,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 214.71494856591798,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97330,6 +98670,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -158.0028898782349,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 770.2771101217651,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97388,6 +98733,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3712.4089501572266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2959.1810498427735,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97446,6 +98796,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2463.047695947266,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8112.232304052734,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97504,6 +98859,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -28.03649609374952,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6047.04350390625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97667,6 +99027,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1920.8651313105468,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 449.23486868945315,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97683,6 +99048,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2753.9343459414067,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 11851.585654058594,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97846,6 +99216,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -7110.306431197267,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1662.8935688027343,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97925,6 +99300,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2013.8100409472663,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4323.249959052734,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97962,6 +99342,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4016.148713390625,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8473.391286609376,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98020,6 +99405,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -6884.823242783203,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8953.596757216797,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98225,6 +99615,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 8943.80783470902,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 34637.01783470902,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98262,6 +99657,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -24272.29942425781,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 15975.400575742187,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98299,6 +99699,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1356.9973157719726,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 317.3626842280273,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98378,6 +99783,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -537.5294552753912,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8772.650544724609,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98394,6 +99804,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5737.349354683593,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98431,6 +99846,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2294.9375472568363,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4195.892452743164,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98468,6 +99888,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -15985.084045820315,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 9049.155954179687,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98589,6 +100014,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -562.2613332517092,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 967.8786667482909,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98647,6 +100077,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 11615.135472820803,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 29850.955472820802,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98684,6 +100119,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -23576.525709640628,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 8050.804290359375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98742,6 +100182,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -4589.8795046699215,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1073.4404953300782,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98779,6 +100224,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3786.652031058594,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1847.4279689414063,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98816,6 +100266,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -11.464489257812374,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1969.6555107421875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98853,6 +100308,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -5622.605359220703,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 1314.9646407792968,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98932,6 +100392,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -573.7348765603028,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 5068.835123439697,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98969,6 +100434,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -11075.963775441405,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 2590.346224558594,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99027,6 +100497,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -2511.3401450166016,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 587.3298549833985,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99043,6 +100518,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1368.7065660268554,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 6082.823433973144,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99059,6 +100539,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -114.62847116955618,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4862.131528830444,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99075,6 +100560,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -47.781707031250335,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 4640.56829296875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99175,6 +100665,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -1843.4094422192384,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 431.1205577807617,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99212,6 +100707,11 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -3442.4096023486327,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
       "kind": "amount_difference",
       "left": 805.0803976513672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99364,9 +100864,9 @@
   "summary": {
     "comparison_count": 262557,
     "dispositioned": {
-      "assignment_sha256": "f7543ef449991a162d6be8b60cbc274b880b8764c1cb3c9cac6169dbcfd2cb41",
+      "assignment_sha256": "5eedd508e83b65aa26e8a0e50339143ffac79e055398406c283cb1c6f38cda11",
       "counts": {
-        "axiom_encoding_gap": 11990,
+        "axiom_encoding_gap": 18449,
         "bridge_artifact": 0,
         "explained_residual": 2045,
         "unexplained": 0,
@@ -99382,7 +100882,7 @@
         "path": "reports/axiom-taxsim-fiit-ecps-0-2026-08-23.json",
         "sha256": "612e2f59d6708751e7317e8d770a07c72c4f8862710db167e59abecabf1e6ba9"
       },
-      "unexplained_count": 6826
+      "unexplained_count": 367
     },
     "error_count": 0,
     "errors_by_engine": [],
