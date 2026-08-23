@@ -399,7 +399,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.1.0"
+      "axiom_rules_engine": "0.2.2"
     }
   },
   "errors": [],
@@ -414,10 +414,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "c6cc389a8f5e7238019e4fa06849325fad9acd46",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-21T12:24:29Z",
+    "generated_at": "2026-08-23T02:07:32Z",
     "generated_by": "scripts/run_comparison.py::be-marital-quotient",
     "oracle": {
       "euromod_country": "BE",
@@ -426,13 +426,14 @@
       "euromod_system": "BE_2025",
       "name": "euromod"
     },
+    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": "7c85808ae99f5731b21059e643e5e19b66438904"
+        "sha": null
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -448,12 +449,8 @@
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": "dispositions/be-marital-quotient.yaml",
-      "expired_entries": [
-        "couple-slice-base-omits-ssc-and-forfait-60k",
-        "couple-slice-base-omits-ssc-and-forfait-45k",
-        "couple-slice-omits-ssc-forfait-and-refundable-credit-30k"
-      ],
+      "dispositions_file": null,
+      "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 100,
