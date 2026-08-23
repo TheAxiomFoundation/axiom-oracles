@@ -1816,7 +1816,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-regional-pit-surcharge.json",
-      "report_sha256": "9ba574a2d38bf9b2437087be5338ffc93f0fe285f9c9a430f026d37d549db759",
+      "report_sha256": "7b2ab71686b17f84d88410e6fc45dc57b62221376ebe9bc0eee844dcc7afd828",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
