@@ -3512,12 +3512,21 @@ def _validate_south_carolina_policyengine_runtime(
 
     probes = (0.0, 1.0, 29_999.0, 30_000.0, 30_001.0, 100_000.0)
     for taxable_income in probes:
+        # PolicyEngine-core's MarginalRateTaxScale.calc takes an array, not
+        # a scalar (len(tax_base) inside); a scalar probe crashes every
+        # campaign run since this validator landed (2026-08-24).
+        import numpy
+
+        (calc_value,) = rates.calc(numpy.array([taxable_income]))
         actual = _finite_number(
-            rates.calc(taxable_income),
+            calc_value,
             label="gov.states.sc.tax.income.rates",
         )
         expected = _south_carolina_2026_schedule(taxable_income)
-        if actual != expected:
+        # Sub-cent tolerance: the schedule arrives through PE-core's tax
+        # scale in float arithmetic; exact != rejected 597.0520999999999
+        # against 597.0521 (2026-08-24).
+        if abs(actual - expected) > 0.005:
             raise StateTaxPopulationRoutingError(
                 "SC: active 2026 marginal-rate schedule must retain the "
                 "reviewed 1.99% / 5.21%-minus-$966 boundary; "

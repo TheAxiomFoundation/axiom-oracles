@@ -444,6 +444,20 @@ def main(argv: list[str] | None = None) -> int:
         if requested_states
         else routes
     )
+
+    # One Microsimulation shared across the three calculators: each builds
+    # its own by default, and two-to-three concurrent full-population sims
+    # OOM-killed every full campaign attempt on 2026-08-24. The calculators
+    # only ever .calculate() — sharing is read-only.
+    _shared_sim: dict = {}
+
+    def _shared_microsimulation(source):
+        if "sim" not in _shared_sim:
+            from policyengine_us import Microsimulation
+
+            _shared_sim["sim"] = Microsimulation(dataset=source)
+        return _shared_sim["sim"]
+
     targets = calculate_policyengine_targets(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
@@ -451,6 +465,7 @@ def main(argv: list[str] | None = None) -> int:
         routes=comparison_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
     projection_inputs = calculate_policyengine_projection_inputs(
         dataset=dataset,
@@ -459,6 +474,7 @@ def main(argv: list[str] | None = None) -> int:
         routes=comparison_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
     taxsim_targets = None
     if not args.no_taxsim:
@@ -469,6 +485,7 @@ def main(argv: list[str] | None = None) -> int:
             routes=comparison_routes,
             year=args.year,
             contract=contract,
+            microsimulation_factory=_shared_microsimulation,
         )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
