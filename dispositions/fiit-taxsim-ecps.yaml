@@ -26145,3 +26145,333 @@ entries:
       tolerance: 0.01
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1214
+- id: taxsim-auto-itemized-standard-deduction-zeroed
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-104959
+    - ecps-tax-unit-106113
+    - ecps-tax-unit-113278
+    - ecps-tax-unit-126875
+    - ecps-tax-unit-126932
+    - ecps-tax-unit-139356
+    - ecps-tax-unit-139534
+    - ecps-tax-unit-139691
+    - ecps-tax-unit-139839
+    - ecps-tax-unit-139958
+    - ecps-tax-unit-140310
+    - ecps-tax-unit-140380
+    - ecps-tax-unit-140398
+    - ecps-tax-unit-147229
+    - ecps-tax-unit-154277
+    - ecps-tax-unit-154316
+    - ecps-tax-unit-154520
+    - ecps-tax-unit-154525
+    - ecps-tax-unit-154597
+    - ecps-tax-unit-154760
+    - ecps-tax-unit-154795
+    - ecps-tax-unit-154882
+    - ecps-tax-unit-155024
+    - ecps-tax-unit-155048
+    - ecps-tax-unit-155131
+    - ecps-tax-unit-155219
+    - ecps-tax-unit-155261
+    - ecps-tax-unit-155269
+    - ecps-tax-unit-155306
+    - ecps-tax-unit-155341
+    - ecps-tax-unit-155370
+    - ecps-tax-unit-155441
+    - ecps-tax-unit-155452
+    - ecps-tax-unit-155510
+    - ecps-tax-unit-155520
+    - ecps-tax-unit-155521
+    - ecps-tax-unit-155616
+    - ecps-tax-unit-155619
+    - ecps-tax-unit-155655
+    - ecps-tax-unit-155735
+    - ecps-tax-unit-155952
+    - ecps-tax-unit-155989
+    - ecps-tax-unit-156124
+    - ecps-tax-unit-156251
+    - ecps-tax-unit-156301
+    - ecps-tax-unit-156376
+    - ecps-tax-unit-156398
+    - ecps-tax-unit-156459
+    - ecps-tax-unit-156507
+    - ecps-tax-unit-156560
+    - ecps-tax-unit-156648
+    - ecps-tax-unit-156650
+    - ecps-tax-unit-156662
+    - ecps-tax-unit-156731
+    - ecps-tax-unit-156754
+    - ecps-tax-unit-156762
+    - ecps-tax-unit-156782
+    - ecps-tax-unit-156904
+    - ecps-tax-unit-156916
+    - ecps-tax-unit-156958
+    - ecps-tax-unit-157023
+    - ecps-tax-unit-157048
+    - ecps-tax-unit-157190
+    - ecps-tax-unit-157249
+    - ecps-tax-unit-157398
+    - ecps-tax-unit-157405
+    - ecps-tax-unit-157492
+    - ecps-tax-unit-157741
+    - ecps-tax-unit-157822
+    - ecps-tax-unit-157824
+    - ecps-tax-unit-157854
+    - ecps-tax-unit-157936
+    - ecps-tax-unit-157948
+    - ecps-tax-unit-157981
+    - ecps-tax-unit-158090
+    - ecps-tax-unit-158102
+    - ecps-tax-unit-158148
+    - ecps-tax-unit-158154
+    - ecps-tax-unit-158184
+    - ecps-tax-unit-158242
+    - ecps-tax-unit-158246
+    - ecps-tax-unit-158265
+    - ecps-tax-unit-158266
+    - ecps-tax-unit-158509
+    - ecps-tax-unit-158523
+    - ecps-tax-unit-158607
+    - ecps-tax-unit-158635
+    - ecps-tax-unit-158731
+    - ecps-tax-unit-158996
+    - ecps-tax-unit-159068
+    - ecps-tax-unit-159105
+    - ecps-tax-unit-159219
+    - ecps-tax-unit-159239
+    - ecps-tax-unit-159323
+    - ecps-tax-unit-159450
+    - ecps-tax-unit-159454
+    - ecps-tax-unit-159486
+    - ecps-tax-unit-159490
+    - ecps-tax-unit-159492
+    - ecps-tax-unit-159598
+    - ecps-tax-unit-159612
+    - ecps-tax-unit-159684
+    - ecps-tax-unit-159770
+    - ecps-tax-unit-159942
+    - ecps-tax-unit-159990
+    - ecps-tax-unit-160045
+    - ecps-tax-unit-160049
+    - ecps-tax-unit-160093
+    - ecps-tax-unit-160118
+    - ecps-tax-unit-160217
+    - ecps-tax-unit-160247
+    - ecps-tax-unit-160284
+    - ecps-tax-unit-160306
+    - ecps-tax-unit-160355
+    - ecps-tax-unit-160358
+    - ecps-tax-unit-160524
+    - ecps-tax-unit-160599
+    - ecps-tax-unit-160645
+    - ecps-tax-unit-160771
+    - ecps-tax-unit-160814
+    - ecps-tax-unit-160874
+    - ecps-tax-unit-160901
+    - ecps-tax-unit-161073
+    - ecps-tax-unit-161079
+    - ecps-tax-unit-161119
+    - ecps-tax-unit-161283
+    - ecps-tax-unit-161359
+    - ecps-tax-unit-161441
+    - ecps-tax-unit-161455
+    - ecps-tax-unit-161475
+    - ecps-tax-unit-161524
+    - ecps-tax-unit-161527
+    - ecps-tax-unit-161564
+    - ecps-tax-unit-161617
+    - ecps-tax-unit-161711
+    - ecps-tax-unit-161712
+    - ecps-tax-unit-161825
+    - ecps-tax-unit-161919
+    - ecps-tax-unit-161953
+    - ecps-tax-unit-161962
+    - ecps-tax-unit-162021
+    - ecps-tax-unit-162118
+    - ecps-tax-unit-162178
+    - ecps-tax-unit-162184
+    - ecps-tax-unit-162192
+    - ecps-tax-unit-162194
+    - ecps-tax-unit-162270
+    - ecps-tax-unit-162286
+    - ecps-tax-unit-162352
+    - ecps-tax-unit-162355
+    - ecps-tax-unit-162386
+    - ecps-tax-unit-162447
+    - ecps-tax-unit-162462
+    - ecps-tax-unit-162481
+    - ecps-tax-unit-162485
+    - ecps-tax-unit-162512
+    - ecps-tax-unit-162516
+    - ecps-tax-unit-162728
+    - ecps-tax-unit-162762
+    - ecps-tax-unit-162779
+    - ecps-tax-unit-162828
+    - ecps-tax-unit-162894
+    - ecps-tax-unit-162990
+    - ecps-tax-unit-162998
+    - ecps-tax-unit-163019
+    - ecps-tax-unit-163174
+    - ecps-tax-unit-163223
+    - ecps-tax-unit-163232
+    - ecps-tax-unit-163233
+    - ecps-tax-unit-163246
+    - ecps-tax-unit-163267
+    - ecps-tax-unit-163300
+    - ecps-tax-unit-163304
+    - ecps-tax-unit-163342
+    - ecps-tax-unit-163410
+    - ecps-tax-unit-163414
+    - ecps-tax-unit-163416
+    - ecps-tax-unit-163423
+    - ecps-tax-unit-163467
+    - ecps-tax-unit-163532
+    - ecps-tax-unit-163682
+    - ecps-tax-unit-163695
+    - ecps-tax-unit-163739
+    - ecps-tax-unit-163806
+    - ecps-tax-unit-163862
+    - ecps-tax-unit-163931
+    - ecps-tax-unit-163998
+    - ecps-tax-unit-164006
+    - ecps-tax-unit-164050
+    - ecps-tax-unit-164056
+    - ecps-tax-unit-164080
+    - ecps-tax-unit-164218
+    - ecps-tax-unit-164239
+    - ecps-tax-unit-164249
+    - ecps-tax-unit-164272
+    - ecps-tax-unit-164293
+    - ecps-tax-unit-164335
+    - ecps-tax-unit-164384
+    - ecps-tax-unit-164387
+    - ecps-tax-unit-164487
+    - ecps-tax-unit-164568
+    - ecps-tax-unit-27670
+    - ecps-tax-unit-27720
+    - ecps-tax-unit-28135
+    - ecps-tax-unit-28220
+    - ecps-tax-unit-28303
+    - ecps-tax-unit-28656
+    - ecps-tax-unit-28899
+    - ecps-tax-unit-28905
+    - ecps-tax-unit-33836
+    - ecps-tax-unit-43530
+    - ecps-tax-unit-59285
+    - ecps-tax-unit-62239
+    - ecps-tax-unit-62321
+    - ecps-tax-unit-62344
+    - ecps-tax-unit-62355
+    - ecps-tax-unit-62429
+    - ecps-tax-unit-62474
+    - ecps-tax-unit-62501
+    - ecps-tax-unit-62565
+    - ecps-tax-unit-62591
+    - ecps-tax-unit-62618
+    - ecps-tax-unit-62627
+    - ecps-tax-unit-62704
+    - ecps-tax-unit-62775
+    - ecps-tax-unit-62781
+    - ecps-tax-unit-62881
+    - ecps-tax-unit-62926
+    - ecps-tax-unit-62996
+    - ecps-tax-unit-63066
+    - ecps-tax-unit-63084
+    - ecps-tax-unit-63171
+    - ecps-tax-unit-63198
+    - ecps-tax-unit-63241
+    - ecps-tax-unit-6756
+    - ecps-tax-unit-72730
+    - ecps-tax-unit-73695
+    - ecps-tax-unit-7609
+    - ecps-tax-unit-83056
+    - ecps-tax-unit-83591
+    - ecps-tax-unit-84540
+    - ecps-tax-unit-84997
+    - ecps-tax-unit-8534
+    - ecps-tax-unit-85848
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 itemizes on its own whenever its computed deductions beat
+
+      the standard deduction and reports v13 = 0 for the unit; the axiom
+
+      side reports the section 63(c) standard deduction concept
+
+      regardless of election. Every selected row solo-replayed through
+
+      the pinned binary on 2026-08-24: v13 = 0 with v17 > 0 reproduced
+
+      exactly, and the reported value matched the replay to the cent.
+
+      (Batch replays with heterogeneous column sets corrupt the runner''s
+
+      CSV — verification here is single-row on purpose.)'
+    arithmetic:
+    - expression: 0 * 1
+      equals: 0.0
+      tolerance: 0.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-hoh-standard-deduction
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-101493
+    - ecps-tax-unit-106944
+    - ecps-tax-unit-107999
+    - ecps-tax-unit-114704
+    - ecps-tax-unit-11693
+    - ecps-tax-unit-118083
+    - ecps-tax-unit-123076
+    - ecps-tax-unit-126355
+    - ecps-tax-unit-12791
+    - ecps-tax-unit-130725
+    - ecps-tax-unit-134653
+    - ecps-tax-unit-136208
+    - ecps-tax-unit-140943
+    - ecps-tax-unit-141468
+    - ecps-tax-unit-147257
+    - ecps-tax-unit-150249
+    - ecps-tax-unit-17832
+    - ecps-tax-unit-31630
+    - ecps-tax-unit-36451
+    - ecps-tax-unit-479
+    - ecps-tax-unit-50582
+    - ecps-tax-unit-54886
+    - ecps-tax-unit-66698
+    - ecps-tax-unit-69411
+    - ecps-tax-unit-74324
+    - ecps-tax-unit-84644
+    - ecps-tax-unit-9796
+    - ecps-tax-unit-98474
+    - ecps-tax-unit-98795
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 elects head-of-household on its own for mstat=1 units
+
+      carrying dependents: solo replay on 2026-08-24 shows v13 = 24,150
+
+      (or 24,150 plus exact 63(f) $2,050 increments for aged heads) on
+
+      every selected row, reproducing the reported value to the cent,
+
+      while the axiom side files the single-filer statute the bridge
+
+      declared. Same mechanism as the Colorado intersection lane''s
+
+      auto-HoH classes (axiom-oracles#439).'
+    arithmetic:
+    - expression: 24150 - 16100
+      equals: 8050.0
+      tolerance: 0.0
+    - expression: 24150 + 2050
+      equals: 26200.0
+      tolerance: 0.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439

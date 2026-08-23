@@ -82394,6 +82394,11 @@
       "concept": "us:tax/federal-income-tax#standard_deduction",
       "description": "Federal standard deduction",
       "difference": -8050.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-standard-deduction",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 18150.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -100864,17 +100869,17 @@
   "summary": {
     "comparison_count": 262557,
     "dispositioned": {
-      "assignment_sha256": "5eedd508e83b65aa26e8a0e50339143ffac79e055398406c283cb1c6f38cda11",
+      "assignment_sha256": "149993b4cfef4fe9ad225bff52c97851fddd33b302ed6e0cbd6bc8d6a856664a",
       "counts": {
         "axiom_encoding_gap": 18449,
         "bridge_artifact": 0,
-        "explained_residual": 2045,
+        "explained_residual": 2318,
         "unexplained": 0,
         "upstream_engine_gap": 5451
       },
       "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 92.833556,
+      "explained_rate": 92.937534,
       "orphaned_entries": [],
       "raw_match_rate": 89.978557,
       "schema_version": "axiom_oracles.dispositions.v1",
@@ -100882,7 +100887,7 @@
         "path": "reports/axiom-taxsim-fiit-ecps-0-2026-08-23.json",
         "sha256": "612e2f59d6708751e7317e8d770a07c72c4f8862710db167e59abecabf1e6ba9"
       },
-      "unexplained_count": 367
+      "unexplained_count": 94
     },
     "error_count": 0,
     "errors_by_engine": [],
