@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-tax-intersection-taxsim
-updated: '2026-07-30'
+updated: '2026-08-23'
 entries:
 - id: taxsim-2026-ctc-child-credit-machinery-absent
   concept: us:tax/federal-income-tax#ctc
@@ -2396,17 +2396,16 @@ entries:
     - ecps-tax-unit-59031
   disposition: upstream_engine_gap
   evidence:
-    mechanism: 'Intersection-lane echo of the triangulated TAXSIM Colorado
-      refundable-credit vintage divergence: on every selected row the
-      intersection state-liability difference equals, to within five cents,
-      the difference already dispositioned as taxsim-co-refundable-credit-
-      vintage for the identical tax unit in the co-state-income-tax-taxsim
-      suite (where axiom equals PolicyEngine on the same unit - none of these
-      case ids appears in the 31-row axiom-vs-PE mismatch set for the same
-      1,201-unit population). Delta equality across the two lanes proves the
-      intersection row carries the same TAXSIM-side state credit-stack
-      divergence, not a new intersection artifact, even where the unit also
-      has a dispositioned federal-side residual.'
+    mechanism: 'Intersection-lane echo of the triangulated TAXSIM Colorado refundable-credit
+      vintage divergence: on every selected row the intersection state-liability
+      difference equals, to within five cents, the difference already dispositioned
+      as taxsim-co-refundable-credit- vintage for the identical tax unit in the
+      co-state-income-tax-taxsim suite (where axiom equals PolicyEngine on the same
+      unit - none of these case ids appears in the 31-row axiom-vs-PE mismatch set
+      for the same 1,201-unit population). Delta equality across the two lanes proves
+      the intersection row carries the same TAXSIM-side state credit-stack divergence,
+      not a new intersection artifact, even where the unit also has a dispositioned
+      federal-side residual.'
     arithmetic:
     - expression: -363.8327580786133 - -363.8327580786133
       equals: 0.0
@@ -2439,16 +2438,14 @@ entries:
   disposition: upstream_engine_gap
   evidence:
     mechanism: 'Liability face of the dispositioned TAXSIM 2026 credit-machinery
-      gaps on zero-net-pre-credit-tax rows, verified per row against the
-      pinned binary (cdate 2026-05-21) rerun with idtl=2 on the persisted
-      input rows: TAXSIM v28 is fully absorbed by its v22 (500 x depx path)
-      and fiitax equals -(v25 childless-schedule EITC), while axiom
-      liability equals -(axiom EITC + min(1,700 x qualifying children,
-      axiom refundable-capped CTC)). On all twelve rows
-      L_liab - (-(L_eitc + ACTC)) = 0.00 exactly, i.e. the whole
-      difference is the sum of the already-dispositioned EITC-schedule and
-      CTC/ACTC machinery gaps; no independent liability-level
-      disagreement.'
+      gaps on zero-net-pre-credit-tax rows, verified per row against the pinned
+      binary (cdate 2026-05-21) rerun with idtl=2 on the persisted input rows: TAXSIM
+      v28 is fully absorbed by its v22 (500 x depx path) and fiitax equals -(v25
+      childless-schedule EITC), while axiom liability equals -(axiom EITC + min(1,700
+      x qualifying children, axiom refundable-capped CTC)). On all twelve rows L_liab
+      - (-(L_eitc + ACTC)) = 0.00 exactly, i.e. the whole difference is the sum
+      of the already-dispositioned EITC-schedule and CTC/ACTC machinery gaps; no
+      independent liability-level disagreement.'
     arithmetic:
     - expression: -(4427.0 + 1700) - -4.09
       equals: -6122.91
@@ -2465,15 +2462,13 @@ entries:
   disposition: upstream_engine_gap
   evidence:
     mechanism: 'Nonrefundable-arm liability face of the dispositioned TAXSIM 2026
-      child-credit machinery gap: the federal liability difference equals
-      -(2,200 - 500) x 3 qualifying children exactly - axiom applies the
-      enacted 26 USC 24 credit (3 x 2,200 nonrefundable, liability
-      sufficient to absorb it) while TAXSIM v22 carries only the 500 x
-      depx other-dependent path (v22 = 1,500 on the idtl=2 rerun of the
-      pinned binary against the persisted input row). Same mechanism as
-      taxsim-2026-ctc-child-credit-machinery-absent, surfacing at the
-      liability bucket because the ctc bucket compares the
-      refundable-capped value.'
+      child-credit machinery gap: the federal liability difference equals -(2,200
+      - 500) x 3 qualifying children exactly - axiom applies the enacted 26 USC
+      24 credit (3 x 2,200 nonrefundable, liability sufficient to absorb it) while
+      TAXSIM v22 carries only the 500 x depx other-dependent path (v22 = 1,500 on
+      the idtl=2 rerun of the pinned binary against the persisted input row). Same
+      mechanism as taxsim-2026-ctc-child-credit-machinery-absent, surfacing at the
+      liability bucket because the ctc bucket compares the refundable-capped value.'
     arithmetic:
     - expression: -(2200 - 500) * 3
       equals: -5100.00060616932
@@ -2506,14 +2501,13 @@ entries:
     - ecps-tax-unit-59031
   disposition: bridge_artifact
   evidence:
-    mechanism: 'Chain propagation of the dispositioned QBID rental-convention
-      taxable-income class (taxsim-qbid-rental-convention-taxable-income)
-      into the tax-before-credits bucket: on every selected row the case''s
-      taxable_income row is claimed by that class and the
-      tax-before-credits difference equals exactly one statutory 2026
-      bracket rate (10/12/22/24 per cent) times the taxable-income
-      difference, within $0.60 - ordinary-bracket propagation of the same
-      convention delta, no independent tax computation disagreement.'
+    mechanism: 'Chain propagation of the dispositioned QBID rental-convention taxable-income
+      class (taxsim-qbid-rental-convention-taxable-income) into the tax-before-credits
+      bucket: on every selected row the case''s taxable_income row is claimed by
+      that class and the tax-before-credits difference equals exactly one statutory
+      2026 bracket rate (10/12/22/24 per cent) times the taxable-income difference,
+      within $0.60 - ordinary-bracket propagation of the same convention delta,
+      no independent tax computation disagreement.'
     arithmetic:
     - expression: 0.22 * -16909.85
       equals: -3720.17
@@ -2533,12 +2527,11 @@ entries:
   disposition: explained_residual
   evidence:
     mechanism: 'Blindness 63(f) class member whose axiom taxable income floors at
-      zero: TAXSIM (no blindness column) computes taxable income 997.52
-      under the 16,100 single standard deduction, while axiom''s 18,150
-      (16,100 + 2,050 blind increment, the case''s dispositioned
-      standard_deduction row) exceeds AGI, so axiom taxable income clamps
-      to 0 and the difference equals -997.52, the truncated remainder of
-      the same 63(f) increment rather than a whole multiple.'
+      zero: TAXSIM (no blindness column) computes taxable income 997.52 under the
+      16,100 single standard deduction, while axiom''s 18,150 (16,100 + 2,050 blind
+      increment, the case''s dispositioned standard_deduction row) exceeds AGI,
+      so axiom taxable income clamps to 0 and the difference equals -997.52, the
+      truncated remainder of the same 63(f) increment rather than a whole multiple.'
     arithmetic:
     - expression: 997.52 - 2050
       equals: -1052.48
@@ -2555,12 +2548,11 @@ entries:
   kind: amount_difference
   disposition: explained_residual
   evidence:
-    mechanism: 'Compound of two dispositioned mechanisms on one row: the 63(f)
-      blindness increment (2,050 single, the case''s dispositioned
-      standard_deduction row) plus the H.R.1 section 70105 QBID minimum
-      deduction of 400 that the bridge grants on the case''s 8,860 of
-      rental (otherprop) income while TAXSIM applies no QBID to otherprop
-      (the dispositioned QBID rental convention). The taxable-income
+    mechanism: 'Compound of two dispositioned mechanisms on one row: the 63(f) blindness
+      increment (2,050 single, the case''s dispositioned standard_deduction row)
+      plus the H.R.1 section 70105 QBID minimum deduction of 400 that the bridge
+      grants on the case''s 8,860 of rental (otherprop) income while TAXSIM applies
+      no QBID to otherprop (the dispositioned QBID rental convention). The taxable-income
       difference equals -(2,050 + 400) within a cent.'
     arithmetic:
     - expression: -(2050 + 400)
@@ -2587,14 +2579,13 @@ entries:
   disposition: axiom_encoding_gap
   evidence:
     mechanism: 'AGI-side propagation of the fingerprinted SECA chain drift: every
-      selected row''s tax unit carries self-employment income and its
-      employee_fica row is already classified under
-      axiom-seca-chain-drift-pending-triage, so the half-SECA above-the-
-      line deduction and the QBI base both inherit the same axiom-side
-      drift and no clean single-mechanism arithmetic fits (135628
-      additionally compounds its dispositioned 1,650 blindness increment).
-      Classified on the axiom side pending the same pull-one-case triage
-      as the parent class; not counted as explained.'
+      selected row''s tax unit carries self-employment income and its employee_fica
+      row is already classified under axiom-seca-chain-drift-pending-triage, so
+      the half-SECA above-the- line deduction and the QBI base both inherit the
+      same axiom-side drift and no clean single-mechanism arithmetic fits (135628
+      additionally compounds its dispositioned 1,650 blindness increment). Classified
+      on the axiom side pending the same pull-one-case triage as the parent class;
+      not counted as explained.'
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: axiom-seca-chain-drift-tbc-bracket-propagation
@@ -2611,14 +2602,13 @@ entries:
     - ecps-tax-unit-58403
   disposition: axiom_encoding_gap
   evidence:
-    mechanism: 'Bracket-rate propagation of the SECA-chain-contaminated
-      taxable-income rows (axiom-seca-chain-drift-taxable-income-
-      propagation) into tax before credits: on every selected row the
-      tax-before-credits difference equals exactly one statutory 2026
-      bracket rate (10/12/22/24/37 per cent) times the case''s
-      taxable-income difference, within $0.60 - pure propagation, no
-      independent divergence. Classified axiom-side with the parent SECA
-      drift class; not counted as explained.'
+    mechanism: 'Bracket-rate propagation of the SECA-chain-contaminated taxable-income
+      rows (axiom-seca-chain-drift-taxable-income- propagation) into tax before
+      credits: on every selected row the tax-before-credits difference equals exactly
+      one statutory 2026 bracket rate (10/12/22/24/37 per cent) times the case''s
+      taxable-income difference, within $0.60 - pure propagation, no independent
+      divergence. Classified axiom-side with the parent SECA drift class; not counted
+      as explained.'
     arithmetic:
     - expression: 0.12 * -1732.10
       equals: -207.85
@@ -2631,3 +2621,186 @@ entries:
       tolerance: 0.01
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-auto-hoh-standard-deduction
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-136208
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 elects head-of-household filing on its own whenever a
+
+      mstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0
+
+      binary''s v13 shows the $24,150 HoH standard deduction and the HoH
+
+      rate schedule flows through v18/v19/v28/fiitax. The oracle bridge
+
+      files these units single on both engines'' inputs, and the axiom
+
+      side computes the single-filer statute it was given. Verified by
+
+      binary replay on 2026-08-23 over the affected units: rerunning the
+
+      exact persisted taxsim_input row reproduces the reported TAXSIM
+
+      value to the cent, with v13 = 24,150 the only divergence trigger
+
+      (axiom-oracles#439''s first verified-but-unenrollable mechanism,
+
+      enrollable now that every mismatch row persists).'
+    arithmetic:
+    - expression: 24150 - 16100
+      equals: 8050.0
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-hoh-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-136208
+    - ecps-tax-unit-136404
+    - ecps-tax-unit-59089
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 elects head-of-household filing on its own whenever a
+
+      mstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0
+
+      binary''s v13 shows the $24,150 HoH standard deduction and the HoH
+
+      rate schedule flows through v18/v19/v28/fiitax. The oracle bridge
+
+      files these units single on both engines'' inputs, and the axiom
+
+      side computes the single-filer statute it was given. Verified by
+
+      binary replay on 2026-08-23 over the affected units: rerunning the
+
+      exact persisted taxsim_input row reproduces the reported TAXSIM
+
+      value to the cent, with v13 = 24,150 the only divergence trigger
+
+      (axiom-oracles#439''s first verified-but-unenrollable mechanism,
+
+      enrollable now that every mismatch row persists).'
+    arithmetic:
+    - expression: 57382.20 - 57382.20
+      equals: 0.0
+      tolerance: 0.02
+    - expression: 539.01 - 539.01
+      equals: 0.0
+      tolerance: 0.02
+    - expression: 5931.80 - 5931.80
+      equals: 0.0
+      tolerance: 0.02
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-hoh-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135795
+    - ecps-tax-unit-136404
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 elects head-of-household filing on its own whenever a
+
+      mstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0
+
+      binary''s v13 shows the $24,150 HoH standard deduction and the HoH
+
+      rate schedule flows through v18/v19/v28/fiitax. The oracle bridge
+
+      files these units single on both engines'' inputs, and the axiom
+
+      side computes the single-filer statute it was given. Verified by
+
+      binary replay on 2026-08-23 over the affected units: rerunning the
+
+      exact persisted taxsim_input row reproduces the reported TAXSIM
+
+      value to the cent, with v13 = 24,150 the only divergence trigger
+
+      (axiom-oracles#439''s first verified-but-unenrollable mechanism,
+
+      enrollable now that every mismatch row persists).'
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 0.02
+    - expression: 39.01 - 39.01
+      equals: 0.0
+      tolerance: 0.02
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-itemized-state-tax-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-59285
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 itemizes on its own whenever its computed deductions beat
+
+      the standard deduction, and it feeds its own computed state income
+
+      tax (siitax) into that itemized total: the pinned binary''s v17
+
+      (itemized deductions allowed) is nonzero on the affected unit while
+
+      the axiom side takes the section 63(c) standard deduction from the
+
+      same input row. Verified by binary replay on 2026-08-23: rerunning
+
+      the persisted taxsim_input row reproduces the reported TAXSIM value
+
+      to the cent with v17 = 18,352.57 > 16,100 the only divergence
+
+      trigger (axiom-oracles#439''s second verified-but-unenrollable
+
+      mechanism).'
+    arithmetic:
+    - expression: 18352.57 - 16100
+      equals: 2252.57
+      tolerance: 0.01
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-auto-itemized-state-tax-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-59285
+  disposition: explained_residual
+  evidence:
+    mechanism: 'TAXSIM-35 itemizes on its own whenever its computed deductions beat
+
+      the standard deduction, and it feeds its own computed state income
+
+      tax (siitax) into that itemized total: the pinned binary''s v17
+
+      (itemized deductions allowed) is nonzero on the affected unit while
+
+      the axiom side takes the section 63(c) standard deduction from the
+
+      same input row. Verified by binary replay on 2026-08-23: rerunning
+
+      the persisted taxsim_input row reproduces the reported TAXSIM value
+
+      to the cent with v17 = 18,352.57 > 16,100 the only divergence
+
+      trigger (axiom-oracles#439''s second verified-but-unenrollable
+
+      mechanism).'
+    arithmetic:
+    - expression: 90984.64 - 90984.64
+      equals: 0.0
+      tolerance: 0.02
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439

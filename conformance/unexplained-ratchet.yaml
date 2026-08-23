@@ -109,7 +109,7 @@ ratchets:
 - suite: co-tanf-ecps
   unexplained_max: 0
 - suite: co-tax-intersection-taxsim
-  unexplained_max: 552
+  unexplained_max: 544
 - suite: csfp-parameters
   unexplained_max: 0
 - suite: de-tanf-ecps

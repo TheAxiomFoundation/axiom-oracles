@@ -1,6 +1,6 @@
 {
  "suite": "co-tax-intersection-taxsim",
- "updated": "2026-07-30",
+ "updated": "2026-08-23",
  "entries": [
   {
    "id": "taxsim-2026-ctc-child-credit-machinery-absent",
@@ -2361,6 +2361,106 @@
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-auto-hoh-standard-deduction",
+   "concept": "us:tax/federal-income-tax#standard_deduction",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM-35 elects head-of-household filing on its own whenever a\nmstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0\nbinary's v13 shows the $24,150 HoH standard deduction and the HoH\nrate schedule flows through v18/v19/v28/fiitax. The oracle bridge\nfiles these units single on both engines' inputs, and the axiom\nside computes the single-filer statute it was given. Verified by\nbinary replay on 2026-08-23 over the affected units: rerunning the\nexact persisted taxsim_input row reproduces the reported TAXSIM\nvalue to the cent, with v13 = 24,150 the only divergence trigger\n(axiom-oracles#439's first verified-but-unenrollable mechanism,\nenrollable now that every mismatch row persists).",
+   "cases": [
+    "ecps-tax-unit-136208"
+   ],
+   "arithmetic": [
+    {
+     "expression": "24150 - 16100",
+     "equals": 8050.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+  },
+  {
+   "id": "taxsim-auto-hoh-tax-before-credits",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM-35 elects head-of-household filing on its own whenever a\nmstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0\nbinary's v13 shows the $24,150 HoH standard deduction and the HoH\nrate schedule flows through v18/v19/v28/fiitax. The oracle bridge\nfiles these units single on both engines' inputs, and the axiom\nside computes the single-filer statute it was given. Verified by\nbinary replay on 2026-08-23 over the affected units: rerunning the\nexact persisted taxsim_input row reproduces the reported TAXSIM\nvalue to the cent, with v13 = 24,150 the only divergence trigger\n(axiom-oracles#439's first verified-but-unenrollable mechanism,\nenrollable now that every mismatch row persists).",
+   "cases": [
+    "ecps-tax-unit-136208",
+    "ecps-tax-unit-136404",
+    "ecps-tax-unit-59089"
+   ],
+   "arithmetic": [
+    {
+     "expression": "57382.20 - 57382.20",
+     "equals": 0.0
+    },
+    {
+     "expression": "539.01 - 539.01",
+     "equals": 0.0
+    },
+    {
+     "expression": "5931.80 - 5931.80",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+  },
+  {
+   "id": "taxsim-auto-hoh-liability",
+   "concept": "us:tax/federal-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM-35 elects head-of-household filing on its own whenever a\nmstat=1 unit carries dependents (depx >= 1): the pinned 2.30.0\nbinary's v13 shows the $24,150 HoH standard deduction and the HoH\nrate schedule flows through v18/v19/v28/fiitax. The oracle bridge\nfiles these units single on both engines' inputs, and the axiom\nside computes the single-filer statute it was given. Verified by\nbinary replay on 2026-08-23 over the affected units: rerunning the\nexact persisted taxsim_input row reproduces the reported TAXSIM\nvalue to the cent, with v13 = 24,150 the only divergence trigger\n(axiom-oracles#439's first verified-but-unenrollable mechanism,\nenrollable now that every mismatch row persists).",
+   "cases": [
+    "ecps-tax-unit-135795",
+    "ecps-tax-unit-136404"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.0 - 0.0",
+     "equals": 0.0
+    },
+    {
+     "expression": "39.01 - 39.01",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+  },
+  {
+   "id": "taxsim-auto-itemized-state-tax-tax-before-credits",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM-35 itemizes on its own whenever its computed deductions beat\nthe standard deduction, and it feeds its own computed state income\ntax (siitax) into that itemized total: the pinned binary's v17\n(itemized deductions allowed) is nonzero on the affected unit while\nthe axiom side takes the section 63(c) standard deduction from the\nsame input row. Verified by binary replay on 2026-08-23: rerunning\nthe persisted taxsim_input row reproduces the reported TAXSIM value\nto the cent with v17 = 18,352.57 > 16,100 the only divergence\ntrigger (axiom-oracles#439's second verified-but-unenrollable\nmechanism).",
+   "cases": [
+    "ecps-tax-unit-59285"
+   ],
+   "arithmetic": [
+    {
+     "expression": "18352.57 - 16100",
+     "equals": 2252.57
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+  },
+  {
+   "id": "taxsim-auto-itemized-state-tax-liability",
+   "concept": "us:tax/federal-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM-35 itemizes on its own whenever its computed deductions beat\nthe standard deduction, and it feeds its own computed state income\ntax (siitax) into that itemized total: the pinned binary's v17\n(itemized deductions allowed) is nonzero on the affected unit while\nthe axiom side takes the section 63(c) standard deduction from the\nsame input row. Verified by binary replay on 2026-08-23: rerunning\nthe persisted taxsim_input row reproduces the reported TAXSIM value\nto the cent with v17 = 18,352.57 > 16,100 the only divergence\ntrigger (axiom-oracles#439's second verified-but-unenrollable\nmechanism).",
+   "cases": [
+    "ecps-tax-unit-59285"
+   ],
+   "arithmetic": [
+    {
+     "expression": "90984.64 - 90984.64",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
   }
  ]
 }

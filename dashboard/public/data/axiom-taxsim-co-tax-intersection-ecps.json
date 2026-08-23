@@ -90406,6 +90406,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -8462.92445625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": -8462.92445625,
       "parent": null,
@@ -101826,6 +101831,11 @@
       "concept": "us:tax/federal-income-tax#standard_deduction",
       "description": "Federal standard deduction",
       "difference": -8050.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-standard-deduction",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 16100.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101858,6 +101868,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 4459.623309559422,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-tax-before-credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 61841.82330955942,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102564,6 +102579,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -245.99562500000047,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-tax-before-credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 5685.804375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108075,6 +108095,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5263.123633764649,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": -5224.1136337646485,
       "parent": null,
@@ -108112,6 +108137,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -107.80180664062499,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-tax-before-credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 431.208193359375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108744,6 +108774,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4860.1444616699155,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-itemized-state-tax-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 86124.49553833008,
       "parent": null,
@@ -108792,6 +108827,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -15461.596304931634,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-itemized-state-tax-tax-before-credits",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+      },
       "kind": "amount_difference",
       "left": 70349.49369506836,
       "parent": "us:tax/federal-income-tax#liability",
@@ -126255,17 +126295,17 @@
       "counts": {
         "axiom_encoding_gap": 313,
         "bridge_artifact": 346,
-        "explained_residual": 356,
+        "explained_residual": 364,
         "unexplained": 0,
         "upstream_engine_gap": 733
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 92.797669,
+      "explained_rate": 92.86428,
       "orphaned_entries": [],
       "raw_match_rate": 80.849292,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 552
+      "unexplained_count": 544
     },
     "error_count": 0,
     "errors_by_engine": [],
