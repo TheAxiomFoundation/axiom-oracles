@@ -3712,6 +3712,24 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
                 value,
             )
         )
+    # Raw section 112 combat-zone inputs, zero-defaulted from the populace
+    # bridge's shared table. Compositions built from rulespec-us vintages
+    # whose 26/32 EITC closure imports the raw 26/112 machinery (e.g. the
+    # pinned ca2d424f snapshot) require these on every tax unit; newer
+    # vintages take the aggregate section-112 exclusion input instead and
+    # the runner prunes these unsupported records, so carrying them is
+    # vintage-safe in both directions.
+    from ...bridges.tax_populace import project_section_112_tax_unit_inputs
+
+    for name, value in project_section_112_tax_unit_inputs().items():
+        records.append(
+            _input_record_for_ref(
+                f"us:statutes/26/112#input.{name}",
+                "TaxUnit",
+                _TAX_UNIT_ID,
+                value,
+            )
+        )
     return records
 
 

@@ -51,7 +51,13 @@ ci: manual
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  # Pinned to the exact stack in this suite's last good provenance (engine
+  # 0.1.0 @ 0c39023e, rulespec-us @ ca2d424f): engine main rejects the
+  # current tree (#1049/#1050) and current rulespec-us main carries a
+  # cyclic derived dependency in the federal credits/AMT web (2026-08-23
+  # smoke). Re-point at $HOME/axiom-rules + $HOME when the upstream chain
+  # lands (axiom-oracles#455).
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
   parameters:
     left: axiom
     right: taxsim
@@ -72,7 +78,8 @@ runner:
       - us:tax/federal-income-tax#amt
       - us:tax/payroll#employee_fica
       - us:tax/state-income-tax#liability
-    axiom_rulespec_repo_roots: $HOME
+    # Pinned rulespec-us snapshot — see the engine pin note above.
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
 
 artifacts:
   report_basename: axiom-taxsim-co-tax-intersection-ecps

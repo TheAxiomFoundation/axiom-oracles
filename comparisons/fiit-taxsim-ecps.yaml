@@ -45,7 +45,14 @@ ci: manual
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  # Pinned to engine 0.1.0 @ 0c39023e — the exact identity in the last good
+  # CO intersection run's provenance. Engine main (0.2.1, #103/#109 hard
+  # cut) rejects the current rulespec-us tree (#1049/#1050) and flags a
+  # cyclic derived dependency in the full federal bridge; v0.1.1 (release
+  # cut) additionally hard-errors on inputs the July tree's EITC rules
+  # expect the ECPS projection to omit. Revisit when axiom-oracles#455
+  # flips the lanes back.
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
   parameters:
     left: axiom
     right: taxsim
@@ -57,7 +64,12 @@ runner:
       - us:tax/federal-income-tax#standard_deduction
       - us:tax/federal-income-tax#eitc
       - us:tax/payroll#employee_fica
-    axiom_rulespec_repo_roots: $HOME
+    # Pinned rulespec-us snapshot (ca2d424f, 2026-07-27 — the revision the
+    # last good CO intersection compile ran on). Current main introduces a
+    # cyclic derived dependency in the federal credits/AMT web (education
+    # credits x income_tax; smoke 2026-08-23, reproduced on BOTH engine
+    # contracts) — file upstream and re-point at $HOME when fixed.
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
 
 artifacts:
   report_basename: axiom-taxsim-fiit-ecps
