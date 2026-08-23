@@ -99,7 +99,11 @@ const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "D
  * still gates its reports at the data level regardless of UI visibility.
  * Delete an entry to restore the oracle.
  */
-const HIDDEN_ORACLES = new Set(["taxsim"]);
+// TAXSIM re-enabled 2026-08-24: its comparison surface is rebuilt — full
+// mismatch persistence (#439), 10 verified disposition classes on the
+// national federal lane (99.75% classified), and the intersection lane's
+// residue characterized. Ratchets pin every remaining unexplained count.
+const HIDDEN_ORACLES = new Set([]);
 
 /**
  * The unit of counting is the household case: one household compared once,
@@ -476,13 +480,25 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
       entry.mismatches += m.mismatches;
       entry.unexplained += countUnexplained([report], knownCauses || []);
       entry.households += reportHouseholds(report);
+      // Canonical explained rate from the disposition merge — see the
+      // roster computation below for why visible-row arithmetic misleads
+      // on truncated (premerged-slim) suites.
+      if (m.explainedRate != null && m.total > 0) {
+        entry.explainedWeighted =
+          (entry.explainedWeighted || 0) + m.explainedRate * m.total;
+        entry.explainedTotal = (entry.explainedTotal || 0) + m.total;
+      }
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
         explainedRate:
-          p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
+          p.explainedTotal > 0
+            ? p.explainedWeighted / p.explainedTotal
+            : p.total > 0
+              ? ((p.total - p.unexplained) / p.total) * 100
+              : null,
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [regionScoped, knownCauses]);
@@ -751,12 +767,26 @@ export default function OraclesV2() {
       entry.unexplained += countUnexplained([report], data.knownCauses || []);
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));
+      // Prefer the disposition merge's canonical explained rate: computing
+      // from visible rows overstated truncated suites (a premerged-slim
+      // copy carries only the first 1,000 mismatch rows, all annotated —
+      // fiit-taxsim-ecps rendered 100.0% while carrying 66 unexplained)
+      // and mixed household/row grains across suites.
+      if (m.explainedRate != null && m.total > 0) {
+        entry.explainedWeighted =
+          (entry.explainedWeighted || 0) + m.explainedRate * m.total;
+        entry.explainedTotal = (entry.explainedTotal || 0) + m.total;
+      }
     }
     return [...byProgram.values()].map((p) => ({
       ...p,
       rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
       explainedRate:
-        p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
+        p.explainedTotal > 0
+          ? p.explainedWeighted / p.explainedTotal
+          : p.total > 0
+            ? ((p.total - p.unexplained) / p.total) * 100
+            : null,
     }));
   }, [model]);
 

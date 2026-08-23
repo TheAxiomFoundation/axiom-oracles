@@ -95,6 +95,22 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 10,
   },
+  "fiit-taxsim-ecps": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal income tax (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 12,
+  },
+  "co-tax-intersection-taxsim": {
+    family: "federal_income_tax",
+    jurisdiction: "CO",
+    label: "Shared federal + CO tax concepts (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 202,
+  },
   "taxcalc-fiit-ecps": {
     family: "federal_income_tax",
     jurisdiction: "US",
