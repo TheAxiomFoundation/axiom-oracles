@@ -481,7 +481,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-20T01:57:24Z",
+    "generated_at": "2026-08-23T02:07:59Z",
     "generated_by": "scripts/run_comparison.py::us-snap-abawd-grid",
     "oracle": {
       "name": "policyengine",
@@ -492,7 +492,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c55778119c0dd208a5ea3366092a17d0b0392c8b"
+        "sha": "d58cc0ce67ad891fde4c9061c86a2091bfdd524f"
       }
     ],
     "run_kind": "affected-rerun",
