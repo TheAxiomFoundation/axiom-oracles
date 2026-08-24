@@ -677,7 +677,7 @@
       "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-23T18:54:54Z",
+    "generated_at": "2026-08-24T02:03:00Z",
     "generated_by": "scripts/run_comparison.py::uk-scottish-child-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",
