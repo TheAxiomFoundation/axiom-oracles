@@ -25903,7 +25903,7 @@ entries:
       equals: 0.0267815
       tolerance: 1.0e-07
   expires_on_source_change: true
-  linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1214
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1537
 - id: axiom-seca-medicare-rate-only-1402b2-gate
   concept: us:tax/payroll#employee_fica
   kind: amount_difference
@@ -26144,7 +26144,7 @@ entries:
       equals: 369.4
       tolerance: 0.01
   expires_on_source_change: true
-  linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1214
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1537
 - id: taxsim-auto-itemized-standard-deduction-zeroed
   concept: us:tax/federal-income-tax#standard_deduction
   kind: amount_difference

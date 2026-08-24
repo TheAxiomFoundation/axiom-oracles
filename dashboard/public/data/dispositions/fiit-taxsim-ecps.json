@@ -25828,7 +25828,7 @@
      "equals": 0.0267815
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
   },
   {
    "id": "axiom-seca-medicare-rate-only-1402b2-gate",
@@ -26061,7 +26061,7 @@
      "equals": 369.4
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
   },
   {
    "id": "taxsim-auto-itemized-standard-deduction-zeroed",
