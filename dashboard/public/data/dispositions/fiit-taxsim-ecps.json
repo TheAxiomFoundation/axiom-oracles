@@ -1,6 +1,6 @@
 {
  "suite": "fiit-taxsim-ecps",
- "updated": "2026-08-23",
+ "updated": "2026-08-24",
  "entries": [
   {
    "id": "taxsim-2026-eitc-child-machinery-absent",
@@ -26377,7 +26377,7 @@
    "concept": "us:tax/federal-income-tax#eitc",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Childless-unit rows where the axiom value reproduces exactly (to\nfive cents, verified per-row 2026-08-24) from the enacted\nrev-proc-2025-32 childless schedule \u2014 7.65 percent phase-in to the\n$664 maximum, phase-out from $10,860 ($18,140 joint) at 7.65\npercent \u2014 while the pinned binary's solo-replayed v25 reproduces\nits reported value with extrapolated 2026 parameters that shift\nthe phase boundaries. Parameter-vintage residual of TAXSIM's 2026\nprojection (docs/policyengine-taxsim.md documents the same\nextrapolation behavior for state modules).",
+   "mechanism": "Childless-unit rows where the axiom value reproduces exactly (to\nfive cents, verified per-row 2026-08-24) from the enacted\nrev-proc-2025-32 childless schedule \u2014 7.65 percent phase-in to the\n$664 maximum, phase-out from $10,860 ($18,140 joint) at 7.65\npercent \u2014 while the pinned binary's solo-replayed v25 reproduces\nits reported value with extrapolated 2026 parameters that shift\nthe phase boundaries. Parameter-vintage residual of TAXSIM's 2026\nprojection (docs/policyengine-taxsim.md documents the same\nextrapolation behavior for state modules).\nExtended 2026-08-24 with equal-AGI rows verified by full\nrecorded-chain replay (axiom AGI == TAXSIM v10; the row's value\nreproduces from the enacted schedule at that AGI).",
    "cases": [
     "ecps-tax-unit-103607",
     "ecps-tax-unit-105052",
@@ -26390,6 +26390,7 @@
     "ecps-tax-unit-131877",
     "ecps-tax-unit-132538",
     "ecps-tax-unit-135104",
+    "ecps-tax-unit-135880",
     "ecps-tax-unit-137456",
     "ecps-tax-unit-139518",
     "ecps-tax-unit-140145",
@@ -26398,6 +26399,8 @@
     "ecps-tax-unit-146177",
     "ecps-tax-unit-151265",
     "ecps-tax-unit-153442",
+    "ecps-tax-unit-162824",
+    "ecps-tax-unit-6610",
     "ecps-tax-unit-83291",
     "ecps-tax-unit-85276",
     "ecps-tax-unit-86349",
@@ -26416,6 +26419,56 @@
     {
      "expression": "10860 + 664 / 0.0765",
      "equals": 19540.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-input-format-lacks-alaska-pfd-eitc",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "The TAXSIM input format carries no column for the Alaska\nPermanent Fund dividend, so TAXSIM never sees income the axiom\nside correctly includes in AGI (26 USC 61; Rev. Rul. 90-56).\nVerified per-unit on 2026-08-24 by recorded-chain replay: the\naxiom-vs-TAXSIM AGI gap equals the unit's recorded\nalaska_permanent_fund_dividend to the cent (constant $1,403.83\nper eligible person at 2026), and this row's delta reproduces\nfrom that AGI gap through the row's own formula.",
+   "cases": [
+    "ecps-tax-unit-152020",
+    "ecps-tax-unit-152059",
+    "ecps-tax-unit-152159",
+    "ecps-tax-unit-152179",
+    "ecps-tax-unit-152182",
+    "ecps-tax-unit-152205",
+    "ecps-tax-unit-152245",
+    "ecps-tax-unit-152263",
+    "ecps-tax-unit-152272",
+    "ecps-tax-unit-152380",
+    "ecps-tax-unit-152480",
+    "ecps-tax-unit-74878",
+    "ecps-tax-unit-75222",
+    "ecps-tax-unit-75261",
+    "ecps-tax-unit-75448"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1403.83 - 1403.83",
+     "equals": 0.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-binary-2025-parameter-fallback",
+   "concept": "us:tax/federal-income-tax#standard_deduction",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The pinned 2.30.0 binary computes these year=2026 units with\n2025-law parameters: solo replay reproduces the reported values\nwith v13 in the 2025 amounts ($15,750 single / $17,750\nsingle-aged), replay-deterministic across runs. Some input\ncombination triggers a year fallback in the NBER binary \u2014\nisolation of the trigger is tracked for the policyengine-taxsim\nupstream report.",
+   "cases": [
+    "ecps-tax-unit-139472",
+    "ecps-tax-unit-139980",
+    "ecps-tax-unit-62801"
+   ],
+   "arithmetic": [
+    {
+     "expression": "15750 + 2000",
+     "equals": 17750.0
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"

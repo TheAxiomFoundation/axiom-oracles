@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: fiit-taxsim-ecps
-updated: '2026-08-23'
+updated: '2026-08-24'
 entries:
 - id: taxsim-2026-eitc-child-machinery-absent
   concept: us:tax/federal-income-tax#eitc
@@ -26491,6 +26491,7 @@ entries:
     - ecps-tax-unit-131877
     - ecps-tax-unit-132538
     - ecps-tax-unit-135104
+    - ecps-tax-unit-135880
     - ecps-tax-unit-137456
     - ecps-tax-unit-139518
     - ecps-tax-unit-140145
@@ -26499,6 +26500,8 @@ entries:
     - ecps-tax-unit-146177
     - ecps-tax-unit-151265
     - ecps-tax-unit-153442
+    - ecps-tax-unit-162824
+    - ecps-tax-unit-6610
     - ecps-tax-unit-83291
     - ecps-tax-unit-85276
     - ecps-tax-unit-86349
@@ -26526,7 +26529,13 @@ entries:
 
       projection (docs/policyengine-taxsim.md documents the same
 
-      extrapolation behavior for state modules).'
+      extrapolation behavior for state modules).
+
+      Extended 2026-08-24 with equal-AGI rows verified by full
+
+      recorded-chain replay (axiom AGI == TAXSIM v10; the row''s value
+
+      reproduces from the enacted schedule at that AGI).'
     arithmetic:
     - expression: 0.0765 * 8680
       equals: 664.02
@@ -26534,5 +26543,77 @@ entries:
     - expression: 10860 + 664 / 0.0765
       equals: 19540.0
       tolerance: 1.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-input-format-lacks-alaska-pfd-eitc
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-152020
+    - ecps-tax-unit-152059
+    - ecps-tax-unit-152159
+    - ecps-tax-unit-152179
+    - ecps-tax-unit-152182
+    - ecps-tax-unit-152205
+    - ecps-tax-unit-152245
+    - ecps-tax-unit-152263
+    - ecps-tax-unit-152272
+    - ecps-tax-unit-152380
+    - ecps-tax-unit-152480
+    - ecps-tax-unit-74878
+    - ecps-tax-unit-75222
+    - ecps-tax-unit-75261
+    - ecps-tax-unit-75448
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'The TAXSIM input format carries no column for the Alaska
+
+      Permanent Fund dividend, so TAXSIM never sees income the axiom
+
+      side correctly includes in AGI (26 USC 61; Rev. Rul. 90-56).
+
+      Verified per-unit on 2026-08-24 by recorded-chain replay: the
+
+      axiom-vs-TAXSIM AGI gap equals the unit''s recorded
+
+      alaska_permanent_fund_dividend to the cent (constant $1,403.83
+
+      per eligible person at 2026), and this row''s delta reproduces
+
+      from that AGI gap through the row''s own formula.'
+    arithmetic:
+    - expression: 1403.83 - 1403.83
+      equals: 0.0
+      tolerance: 0.0
+  expires_on_source_change: true
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: taxsim-binary-2025-parameter-fallback
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-139472
+    - ecps-tax-unit-139980
+    - ecps-tax-unit-62801
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'The pinned 2.30.0 binary computes these year=2026 units with
+
+      2025-law parameters: solo replay reproduces the reported values
+
+      with v13 in the 2025 amounts ($15,750 single / $17,750
+
+      single-aged), replay-deterministic across runs. Some input
+
+      combination triggers a year fallback in the NBER binary —
+
+      isolation of the trigger is tracked for the policyengine-taxsim
+
+      upstream report.'
+    arithmetic:
+    - expression: 15750 + 2000
+      equals: 17750.0
+      tolerance: 0.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
