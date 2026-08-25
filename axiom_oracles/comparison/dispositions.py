@@ -65,12 +65,16 @@ Merge semantics
 disposition and adds ``summary.dispositioned``::
 
     raw_match_rate    match_count / comparison_count
-    explained_rate    (match_count + explained rows) / comparison_count,
-                      where explained = explained_residual,
-                      upstream_engine_gap, bridge_artifact
+    explained_rate    (match_count + classified rows) / comparison_count,
+                      where classified = explained_residual,
+                      upstream_engine_gap, bridge_artifact, and
+                      axiom_encoding_gap — a bug we can name, reproduce,
+                      and have filed upstream IS explained (owner
+                      decision, 2026-08-24); the encoding-gap count stays
+                      broken out in ``counts`` so our own open bugs
+                      remain visible until fixed
     unexplained_count mismatch_count minus rows classified as any of the
-                      four explanatory kinds (axiom_encoding_gap counts as
-                      classified but never as explained)
+                      four explanatory kinds
 
 The result is additive over ``axiom.comparison_report.v2``; merged reports
 are stamped ``axiom.comparison_report.v2.1``. Reports that slim their
@@ -686,9 +690,6 @@ def apply_dispositions(
         else:
             orphaned.append(entry_id)
 
-    explained_rows = sum(
-        counts[kind] for kind in EXPLAINED_DISPOSITION_KINDS
-    )
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
