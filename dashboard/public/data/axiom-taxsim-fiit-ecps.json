@@ -79982,7 +79982,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 250.91465844726562,
@@ -80024,7 +80024,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2256.1115257597658,
@@ -80087,7 +80087,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8512.31730890332,
@@ -80108,7 +80108,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1395.472654390625,
@@ -80129,7 +80129,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 634.0008033427735,
@@ -80150,7 +80150,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3340.2786491015627,
@@ -80192,7 +80192,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5286.653143363769,
@@ -80213,7 +80213,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9142.375364066895,
@@ -80255,7 +80255,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 547.0521528271485,
@@ -80297,7 +80297,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 375.70419428857423,
@@ -80318,7 +80318,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9961.050341170898,
@@ -80339,7 +80339,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7440.5266439892575,
@@ -80381,7 +80381,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 561.5435597080078,
@@ -80528,7 +80528,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3355.171024847656,
@@ -80549,7 +80549,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11496.910078125,
@@ -80633,7 +80633,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7166.113326708008,
@@ -80654,7 +80654,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6908.87602676001,
@@ -80717,7 +80717,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 27.896034745544434,
@@ -80780,7 +80780,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7619.788910562622,
@@ -80864,7 +80864,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
@@ -80885,7 +80885,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 805.0803976513672,
@@ -80906,7 +80906,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6988.04857874414,
@@ -80948,7 +80948,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4327.276218572266,
@@ -81053,7 +81053,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1731.7279868710937,
@@ -81095,7 +81095,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6211.292809651367,
@@ -81116,7 +81116,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7795.79995195752,
@@ -81368,7 +81368,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2185.454810826172,
@@ -81536,7 +81536,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3850.9471550820313,
@@ -81557,7 +81557,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5147.556170421874,
@@ -81578,7 +81578,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 322.0724097719727,
@@ -81599,7 +81599,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 539.8063970791015,
@@ -81641,7 +81641,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 522.1183147890625,
@@ -81704,7 +81704,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9318.733181258789,
@@ -81767,7 +81767,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 569.7951881835937,
@@ -81809,7 +81809,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9932.999736950194,
@@ -81956,7 +81956,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7791.252581976319,
@@ -81977,7 +81977,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6114.104003191406,
@@ -82040,7 +82040,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 724.5723840400391,
@@ -82082,7 +82082,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 322.03215906054686,
@@ -82313,7 +82313,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 25547.67852702246,
@@ -82355,7 +82355,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14505.301405731263,
@@ -82376,7 +82376,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9994.099397413574,
@@ -82455,7 +82455,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 330.767295746582,
@@ -82476,7 +82476,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3229.253175876953,
@@ -82518,7 +82518,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10857.776490902343,
@@ -82560,7 +82560,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 582.3290615527344,
@@ -82665,7 +82665,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9168.902495307617,
@@ -82707,7 +82707,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 232.9500116088867,
@@ -82791,7 +82791,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8229.393163716675,
@@ -82833,7 +82833,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 15426.753676662109,
@@ -82854,7 +82854,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12.680016164932251,
@@ -83379,7 +83379,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4049.525540633789,
@@ -83442,7 +83442,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 301.1865645292969,
@@ -83547,7 +83547,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 594.1493559589844,
@@ -83610,7 +83610,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 50.54957778918457,
@@ -83652,7 +83652,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 241.52411929541015,
@@ -83736,7 +83736,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1815.4252752250977,
@@ -83820,7 +83820,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 28255.86276095508,
@@ -83841,7 +83841,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 22.82402991418457,
@@ -83967,7 +83967,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 187.85209714428711,
@@ -84009,7 +84009,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 360.1124705263672,
@@ -84030,7 +84030,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11977.711000785645,
@@ -84093,7 +84093,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 74.99324114660645,
@@ -84114,7 +84114,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5436.484453125,
@@ -84261,7 +84261,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7963.574359464112,
@@ -84303,7 +84303,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 23628.923975167967,
@@ -84408,7 +84408,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 18657.62434357031,
@@ -84429,7 +84429,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 17758.476906746095,
@@ -84492,7 +84492,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 19093.415743203128,
@@ -84555,7 +84555,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14029.719271722657,
@@ -84744,7 +84744,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1028.8927131523437,
@@ -84765,7 +84765,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 278.1292251875,
@@ -84807,7 +84807,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6088.289112351563,
@@ -84828,7 +84828,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 751.4083885771485,
@@ -84870,7 +84870,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8987.556255810912,
@@ -85017,7 +85017,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
@@ -85059,7 +85059,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8782.013232421876,
@@ -85080,7 +85080,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2847.288670707031,
@@ -85101,7 +85101,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1745.713798953247,
@@ -85122,7 +85122,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9285.345333381196,
@@ -85206,7 +85206,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 20350.506167820313,
@@ -85332,7 +85332,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1854.3561889882812,
@@ -85458,7 +85458,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 22416.838135158203,
@@ -85479,7 +85479,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2012.7278540898437,
@@ -85647,7 +85647,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 969.6482690039062,
@@ -85668,7 +85668,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10779.764387389649,
@@ -85710,7 +85710,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10214.785601291016,
@@ -85752,7 +85752,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 997.3525799863281,
@@ -85857,7 +85857,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 15532.302853181152,
@@ -85878,7 +85878,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5901.942910210938,
@@ -86025,7 +86025,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10785.002875817077,
@@ -86046,7 +86046,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2175.657196159378,
@@ -86109,7 +86109,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9607.946698738282,
@@ -86214,7 +86214,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 134.18006191625977,
@@ -86256,7 +86256,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 429.376203362793,
@@ -86340,7 +86340,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 670.9003226582031,
@@ -86361,7 +86361,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 536.7202476650391,
@@ -86382,7 +86382,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4237.198723330078,
@@ -86403,7 +86403,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 78989.37318516504,
@@ -86550,7 +86550,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5782.428763832703,
@@ -86676,7 +86676,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4687.329424613281,
@@ -86697,7 +86697,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2762.2982693408203,
@@ -86844,7 +86844,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
@@ -86907,7 +86907,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 536.7202476650391,
@@ -86949,7 +86949,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3622.861763277344,
@@ -86970,7 +86970,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 278.66516903320314,
@@ -86991,7 +86991,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 166.7589916673584,
@@ -87012,7 +87012,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14088.201199623534,
@@ -87201,7 +87201,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 496.33207182128905,
@@ -87306,7 +87306,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14414.486969171874,
@@ -87327,7 +87327,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 939.2604726445312,
@@ -87390,7 +87390,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6525.575611720703,
@@ -87432,7 +87432,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3394.0450868342286,
@@ -87474,7 +87474,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5182.439465546387,
@@ -87600,7 +87600,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3115.8324317021484,
@@ -87810,7 +87810,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 65.34548526037598,
@@ -87831,7 +87831,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12.680016164932251,
@@ -88041,7 +88041,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 174.43408179882812,
@@ -88083,7 +88083,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 202.09283584875487,
@@ -88167,7 +88167,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 811.5210345556641,
@@ -88230,7 +88230,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2556.558247189209,
@@ -88251,7 +88251,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14187.195514838866,
@@ -88293,7 +88293,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5033.038467040283,
@@ -88335,7 +88335,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6139.335149524658,
@@ -88377,7 +88377,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 48.54634970452881,
@@ -88419,7 +88419,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9156.381679332031,
@@ -88440,7 +88440,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 536.7202476650391,
@@ -88461,7 +88461,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 939.2604726445312,
@@ -88482,7 +88482,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1073.4404953300782,
@@ -88545,7 +88545,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7073.022173947022,
@@ -88692,7 +88692,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 627.4932670898438,
@@ -88713,7 +88713,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 619.5093964619141,
@@ -88755,7 +88755,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6107.384775783203,
@@ -88818,7 +88818,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 322.03215906054686,
@@ -88839,7 +88839,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1556.4887862285157,
@@ -88986,7 +88986,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4658.698853277344,
@@ -89049,7 +89049,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 24087.807210937503,
@@ -89133,7 +89133,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3938.1168969726564,
@@ -89343,7 +89343,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 830.7547021960144,
@@ -89364,7 +89364,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10921.921734375,
@@ -89385,7 +89385,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14286.606162381835,
@@ -89469,7 +89469,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1610.1607953027344,
@@ -89511,7 +89511,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1234.4566271679687,
@@ -89532,7 +89532,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6295.2368598505855,
@@ -89569,7 +89569,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 331.8541434165039,
@@ -89611,7 +89611,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10975.84651170703,
@@ -89653,7 +89653,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1427.2819983305665,
@@ -89695,7 +89695,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6568.396589903198,
@@ -89716,7 +89716,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1452.4248244292298,
@@ -89737,7 +89737,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7377.609116020019,
@@ -89821,7 +89821,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8017.207645259766,
@@ -89842,7 +89842,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 31653.43621928993,
@@ -89884,7 +89884,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2879.228158206543,
@@ -90010,7 +90010,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 420.2519764663086,
@@ -90031,7 +90031,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 456.2122340537109,
@@ -90073,7 +90073,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7889.637835542969,
@@ -90094,7 +90094,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5106.67243647583,
@@ -90136,7 +90136,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8112.9074765625,
@@ -90262,7 +90262,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10519.063865708984,
@@ -90283,7 +90283,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1337.4355962430573,
@@ -90325,7 +90325,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6659.755686713867,
@@ -90388,7 +90388,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 805.0803976513672,
@@ -90598,7 +90598,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10685.116556566407,
@@ -90619,7 +90619,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8938.991310351563,
@@ -90661,7 +90661,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12070.165485763915,
@@ -90703,7 +90703,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8706.202953021973,
@@ -90724,7 +90724,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 10039.938061443603,
@@ -90871,7 +90871,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2359.4266025859374,
@@ -91018,7 +91018,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11317.995754897674,
@@ -91060,7 +91060,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1411.5586582055664,
@@ -91081,7 +91081,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2803.522416965576,
@@ -91249,7 +91249,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 592.0565337763671,
@@ -91270,7 +91270,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6027.3684393398435,
@@ -91291,7 +91291,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 13286.955073386718,
@@ -91354,7 +91354,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1744.3409226035155,
@@ -91501,7 +91501,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2012.7010725898438,
@@ -91543,7 +91543,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 16828.72750664502,
@@ -91585,7 +91585,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1097.1536211484377,
@@ -91648,7 +91648,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3930.232764211807,
@@ -91669,7 +91669,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5282.625646980087,
@@ -91753,7 +91753,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14526.298125000001,
@@ -91816,7 +91816,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3991.6373779697265,
@@ -91858,7 +91858,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2281.0610656533204,
@@ -91942,7 +91942,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 804.2753311152344,
@@ -92068,7 +92068,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12.680016164932251,
@@ -92131,7 +92131,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 332.94099108642575,
@@ -92152,7 +92152,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 22.82402991418457,
@@ -92257,7 +92257,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 63.80498836816406,
@@ -92383,7 +92383,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8893.76867578125,
@@ -92425,7 +92425,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1597.6820809160156,
@@ -92446,7 +92446,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 536.7202476650391,
@@ -92509,7 +92509,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 563.5563045097656,
@@ -92530,7 +92530,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 805.0803976513672,
@@ -92677,7 +92677,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4771.712394988315,
@@ -92782,7 +92782,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 189.11339071752928,
@@ -92845,7 +92845,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2750.5286816035155,
@@ -92950,7 +92950,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 17844.239420779297,
@@ -92971,7 +92971,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4901.732160507812,
@@ -93223,7 +93223,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14455.555612517577,
@@ -93265,7 +93265,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6709.842768635101,
@@ -93286,7 +93286,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 23711.68569998047,
@@ -93328,7 +93328,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 0.0,
@@ -93349,7 +93349,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 349.9684543251953,
@@ -93370,7 +93370,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1207.6206226308593,
@@ -93643,7 +93643,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 492.70919394726565,
@@ -93727,7 +93727,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 14812.366252296875,
@@ -94042,7 +94042,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 107.34405084069824,
@@ -94126,7 +94126,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 42970.88561390039,
@@ -94336,7 +94336,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2354.8602612070313,
@@ -94378,7 +94378,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 16648.25300514087,
@@ -94441,7 +94441,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 581.4404582836914,
@@ -94504,7 +94504,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 43879.88685253516,
@@ -94567,7 +94567,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 18845.603524428923,
@@ -94651,7 +94651,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7562.154798523437,
@@ -94966,7 +94966,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8869.240473441407,
@@ -94987,7 +94987,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 420.2519764663086,
@@ -95050,7 +95050,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 343.4472898442383,
@@ -95113,7 +95113,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5635.5628358671875,
@@ -95155,7 +95155,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 0.0,
@@ -95197,7 +95197,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 13077.991620143554,
@@ -95239,7 +95239,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5436.484154296875,
@@ -95281,7 +95281,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 838.6254294765625,
@@ -95323,7 +95323,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4518.272274111328,
@@ -95407,7 +95407,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 19858.649634375,
@@ -95470,7 +95470,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 387.6462063691406,
@@ -95533,7 +95533,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6194.612121417969,
@@ -95827,7 +95827,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6299.702735366424,
@@ -95869,7 +95869,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1041.6934618098144,
@@ -96100,7 +96100,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 349.9684543251953,
@@ -96121,7 +96121,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12422.710281839843,
@@ -96205,7 +96205,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 866.6183627959595,
@@ -96331,7 +96331,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
@@ -96352,7 +96352,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 18159.035458741942,
@@ -96373,7 +96373,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 7460.708648145629,
@@ -96415,7 +96415,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 230.41400755859374,
@@ -96478,7 +96478,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 12115.41496875,
@@ -96520,7 +96520,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2667.900244591797,
@@ -96562,7 +96562,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2010.6882754804687,
@@ -96709,7 +96709,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1282.4931181816405,
@@ -96730,7 +96730,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1726.4364150687866,
@@ -96772,7 +96772,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4501.71011826477,
@@ -96793,7 +96793,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 17276.885433519532,
@@ -96835,7 +96835,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 15265.694838101104,
@@ -96877,7 +96877,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1298.5784083874512,
@@ -96940,7 +96940,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 27351.49991582422,
@@ -97066,7 +97066,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2310.5819964671323,
@@ -97108,7 +97108,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11727.29645534375,
@@ -97276,7 +97276,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11351.563359619386,
@@ -97297,7 +97297,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 357.85824760986327,
@@ -97381,7 +97381,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5413.170828128418,
@@ -97507,7 +97507,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1207.6206226308593,
@@ -97528,7 +97528,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 28018.8039375,
@@ -97591,7 +97591,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8027.933595608399,
@@ -97633,7 +97633,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4953.895007800781,
@@ -97675,7 +97675,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8782.013083007812,
@@ -97738,7 +97738,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2012.7010725898438,
@@ -97864,7 +97864,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 22.46174408831787,
@@ -97906,7 +97906,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 107.34405084069824,
@@ -97948,7 +97948,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 167.01393245507813,
@@ -98053,7 +98053,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 3926.2498571491697,
@@ -98137,7 +98137,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5689.193342189453,
@@ -98158,7 +98158,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1449.1447680800782,
@@ -98200,7 +98200,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1094.395172078186,
@@ -98279,7 +98279,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 25927.932234375,
@@ -98342,7 +98342,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 17197.22525835132,
@@ -98447,7 +98447,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9287.431309378906,
@@ -98510,7 +98510,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 550.6749783935547,
@@ -98636,7 +98636,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 214.71494856591798,
@@ -98678,7 +98678,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 770.2771101217651,
@@ -98741,7 +98741,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2959.1810498427735,
@@ -98804,7 +98804,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8112.232304052734,
@@ -98867,7 +98867,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6047.04350390625,
@@ -99035,7 +99035,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 449.23486868945315,
@@ -99056,7 +99056,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 11851.585654058594,
@@ -99224,7 +99224,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1662.8935688027343,
@@ -99308,7 +99308,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4323.249959052734,
@@ -99350,7 +99350,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8473.391286609376,
@@ -99413,7 +99413,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8953.596757216797,
@@ -99623,7 +99623,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 34637.01783470902,
@@ -99665,7 +99665,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 15975.400575742187,
@@ -99707,7 +99707,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 317.3626842280273,
@@ -99791,7 +99791,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8772.650544724609,
@@ -99812,7 +99812,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1341.8006453164062,
@@ -99854,7 +99854,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4195.892452743164,
@@ -99896,7 +99896,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 9049.155954179687,
@@ -100022,7 +100022,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 967.8786667482909,
@@ -100085,7 +100085,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 29850.955472820802,
@@ -100127,7 +100127,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 8050.804290359375,
@@ -100190,7 +100190,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1073.4404953300782,
@@ -100232,7 +100232,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1847.4279689414063,
@@ -100274,7 +100274,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1969.6555107421875,
@@ -100316,7 +100316,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 1314.9646407792968,
@@ -100400,7 +100400,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 5068.835123439697,
@@ -100442,7 +100442,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 2590.346224558594,
@@ -100505,7 +100505,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 587.3298549833985,
@@ -100526,7 +100526,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 6082.823433973144,
@@ -100547,7 +100547,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4862.131528830444,
@@ -100568,7 +100568,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only-1402b2-gate",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 4640.56829296875,
@@ -100673,7 +100673,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 431.1205577807617,
@@ -100715,7 +100715,7 @@
       "disposition": {
         "disposition": "axiom_encoding_gap",
         "id": "axiom-seca-medicare-rate-only",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
       },
       "kind": "amount_difference",
       "left": 805.0803976513672,
