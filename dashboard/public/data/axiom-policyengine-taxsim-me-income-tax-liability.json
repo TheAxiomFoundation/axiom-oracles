@@ -1,5 +1,168 @@
 {
   "case_count": 6,
+  "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-me:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "me_income_tax_before_refundable_credits",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "me-single-30000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 113.19,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 565.5,
+      "left_engine": "axiom",
+      "right": 452.31,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "me-single-60000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 34.465000000000146,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 2428.525,
+      "left_engine": "axiom",
+      "right": 2394.06,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "me-single-150000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 79.375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 9483.725,
+      "left_engine": "axiom",
+      "right": 9404.35,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "me-married-60000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 129.55999999999995,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1131.0,
+      "left_engine": "axiom",
+      "right": 1001.44,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "me-married-120000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 68.92000000000007,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 4857.05,
+      "left_engine": "axiom",
+      "right": 4788.13,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "me-married-300000",
+      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
+      "difference": 158.03499999999985,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-me-module-divergence-axiom-pe-agree"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 18966.735,
+      "left_engine": "axiom",
+      "right": 18808.7,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-27T04:12:16Z",
+    "generated_by": "scripts/run_comparison.py::me-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "me-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_match_rate": 0.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 6
+      },
+      "dispositions_file": "dispositions/me-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 6,
+    "mismatch_count": 6,
+    "policyengine_matches": 6,
+    "taxsim_matches": 0
+  },
+  "taxsim_law_year": 2026,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026,
   "cases": [
     {
       "axiom": 565.5,
@@ -103,174 +266,5 @@
       "policyengine": 18966.734375,
       "taxsim": 18808.7
     }
-  ],
-  "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-  "engines": {
-    "axiom": "us-me:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "me_income_tax_before_refundable_credits",
-    "taxsim": "siitax"
-  },
-  "mismatches": [
-    {
-      "case_id": "me-single-30000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 113.19,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 565.5,
-      "left_engine": "axiom",
-      "right": 452.31,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "me-single-60000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 34.465000000000146,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 2428.525,
-      "left_engine": "axiom",
-      "right": 2394.06,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "me-single-150000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 79.375,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 9483.725,
-      "left_engine": "axiom",
-      "right": 9404.35,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "me-married-60000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 129.55999999999995,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 1131.0,
-      "left_engine": "axiom",
-      "right": 1001.44,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "me-married-120000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 68.92000000000007,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 4857.05,
-      "left_engine": "axiom",
-      "right": 4788.13,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "me-married-300000",
-      "concept": "us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability",
-      "difference": 158.03499999999985,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "me-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 18966.735,
-      "left_engine": "axiom",
-      "right": 18808.7,
-      "right_engine": "taxsim"
-    }
-  ],
-  "population": "case-grid",
-  "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-27T04:12:16Z",
-    "generated_by": "scripts/run_comparison.py::me-income-tax-liability",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
-      }
-    ],
-    "run_kind": "affected-rerun",
-    "schema": "axiom_oracles.provenance.v1"
-  },
-  "schema_version": "axiom.comparison_report.v2.1",
-  "suite": "me-income-tax-liability",
-  "summary": {
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_match_rate": 0.0,
-    "comparison_count": 12,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
-        "explained_residual": 6,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": "dispositions/me-income-tax-liability.yaml",
-      "expired_entries": [],
-      "explained_rate": 100,
-      "orphaned_entries": [],
-      "raw_match_rate": 50,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 0
-    },
-    "match_count": 6,
-    "mismatch_count": 6,
-    "policyengine_matches": 6,
-    "taxsim_matches": 0
-  },
-  "taxsim_law_year": 2026,
-  "tolerance": {
-    "absolute": 1.0,
-    "relative": 0.0
-  },
-  "validation_year": 2026
+  ]
 }
