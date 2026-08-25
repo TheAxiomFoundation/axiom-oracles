@@ -58,6 +58,10 @@ runner:
   # smoke). Re-point at $HOME/axiom-rules + $HOME when the upstream chain
   # lands (axiom-oracles#455).
   axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  # Directory names are not provenance: run_comparison verifies the
+  # checkouts actually hold these revisions before running, so a drifted
+  # worktree fails loudly instead of regenerating wrong-vintage numbers.
+  axiom_rules_repo_revision: 0c39023e
   parameters:
     left: axiom
     right: taxsim
@@ -80,6 +84,7 @@ runner:
       - us:tax/state-income-tax#liability
     # Pinned rulespec-us snapshot — see the engine pin note above.
     axiom_rulespec_repo_roots: $HOME/oracle-pins
+    axiom_rulespec_repo_roots_revision: ca2d424f
 
 artifacts:
   report_basename: axiom-taxsim-co-tax-intersection-ecps

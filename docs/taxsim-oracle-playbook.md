@@ -81,6 +81,12 @@ gap; disposition it, do not chase the Axiom encoding):
 - NIIT bookkeeping against the composed Axiom program while
   axiom-encode#1213 keeps §1411 out of the composition (TAXSIM `fiitax`
   includes it; the residual equals TAXSIM's own `niit` column).
+- Units where a **dependent** carries non-wage income: TAXSIM-35 has no
+  dependent-income input, so the shared projection sums non-wage columns
+  over head+spouse only, while the Axiom/PolicyEngine side computes the
+  full tax-unit value. The one-sided AGI gap equals the dependents'
+  unearned income; it is a projection-surface limitation (all lanes,
+  ECPS and populace alike), not an oracle disagreement.
 
 ## Extending coverage
 

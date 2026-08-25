@@ -3529,7 +3529,14 @@ def test_compare_fails_closed_when_taxsim_leg_omits_a_selected_unit(
         )
 
 
-def test_compare_reports_states_skipped_by_the_taxsim_leg(tmp_path) -> None:
+def test_compare_reports_states_skipped_by_the_taxsim_leg(
+    tmp_path, monkeypatch
+) -> None:
+    # A state may only be reported as skipped when its output concept
+    # genuinely resolves no TAXSIM column (CA-BHST style).
+    monkeypatch.setattr(
+        state_tax_runner, "taxsim_target_column", lambda _output: None
+    )
     routes = (TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),)
 
     report = compare_ready_state_tax_units(
@@ -3546,6 +3553,29 @@ def test_compare_reports_states_skipped_by_the_taxsim_leg(tmp_path) -> None:
     assert report["taxsim_state_count"] == 0
     assert report["taxsim_skipped_states"] == ["UT"]
     assert "taxsim" not in report["states"]["UT"]["cases"][0]
+
+
+def test_compare_fails_loudly_when_a_mapped_state_loses_its_taxsim_leg(
+    tmp_path,
+) -> None:
+    # UT's concept maps staxbc, so an empty TAXSIM targets mapping means
+    # the leg was lost — a producer regression or a stale/filtered dict —
+    # and must not masquerade as an intentional skip.
+    routes = (TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),)
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError, match="TAXSIM targets missing"
+    ):
+        compare_ready_state_tax_units(
+            routes=routes,
+            policyengine_targets={"UT": {2: 0.0}},
+            policyengine_projection_inputs={"UT": _ut_inputs({2: 0.0})},
+            taxsim_targets={},
+            year=2026,
+            rulespec_root=tmp_path / "rulespec-us",
+            axiom_rules_path=tmp_path / "axiom-rules",
+            axiom_runner=_fake_axiom_zero_runner,
+        )
 
 
 def test_taxsim_target_column_is_mapping_declared_or_none() -> None:

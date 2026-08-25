@@ -1763,11 +1763,17 @@ def calculate_taxsim_targets(
             "match certified person_tax_unit_id"
         )
 
-    def _person_array(variable: str, *, default: float | bool = 0.0) -> list[Any]:
+    def _person_array(variable: str) -> list[Any]:
+        # Fail closed: a variable that cannot be calculated (renamed or
+        # removed on a policyengine-us upgrade, missing dataset input) must
+        # stop the leg, not silently zero an input for the whole population.
         try:
             values = _array_values(sim.calculate(variable, period=year))
-        except Exception:
-            return [default] * len(person_ids)
+        except Exception as exc:
+            raise StateTaxPopulationRoutingError(
+                f"TAXSIM targets: PolicyEngine could not calculate "
+                f"{variable!r} for {year}: {exc}"
+            ) from exc
         if len(values) != len(person_ids):
             raise StateTaxPopulationRoutingError(
                 f"TAXSIM targets: PolicyEngine {variable!r} returned "
@@ -1776,25 +1782,19 @@ def calculate_taxsim_targets(
         return values
 
     ages = _person_array("age")
-    heads = _person_array("is_tax_unit_head", default=False)
-    spouses = _person_array("is_tax_unit_spouse", default=False)
+    heads = _person_array("is_tax_unit_head")
+    spouses = _person_array("is_tax_unit_spouse")
     wages = _person_array("employment_income")
     non_wage = {
         concept_key: _person_array(pe_variable)
         for concept_key, pe_variable in _TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
     }
 
+    # Concept keys are Concepts member names lowercased, so the module-level
+    # variable table stays the single place a new income source is added.
     concept_by_key = {
-        "self_employment_income": Concepts.SELF_EMPLOYMENT_INCOME,
-        "dividend_income": Concepts.DIVIDEND_INCOME,
-        "qualified_dividend_income": Concepts.QUALIFIED_DIVIDEND_INCOME,
-        "interest_income": Concepts.INTEREST_INCOME,
-        "short_term_capital_gains": Concepts.SHORT_TERM_CAPITAL_GAINS,
-        "long_term_capital_gains": Concepts.LONG_TERM_CAPITAL_GAINS,
-        "pension_income": Concepts.PENSION_INCOME,
-        "social_security_benefits": Concepts.SOCIAL_SECURITY_BENEFITS,
-        "unemployment_insurance_income": Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
-        "rental_income": Concepts.RENTAL_INCOME,
+        key: getattr(Concepts, key.upper())
+        for key in _TAXSIM_PERSON_NON_WAGE_VARIABLES
     }
 
     person_indices_by_tax_unit: dict[int | str, list[int]] = defaultdict(list)
@@ -1817,6 +1817,13 @@ def calculate_taxsim_targets(
                     wages[index], label="employment_income"
                 ),
             }
+            # Non-wage income is attached to every member, but the shared
+            # projection (taxsim_input_for_case) sums these columns over
+            # head+spouse only — TAXSIM-35 has no dependent-income input.
+            # A dependent's unearned income therefore reaches the PE/Axiom
+            # tax-unit value but not the TAXSIM row: a known one-sided
+            # projection gap shared with the ECPS lanes (see
+            # docs/taxsim-oracle-playbook.md), not an oracle disagreement.
             for key, concept in concept_by_key.items():
                 facts[concept] = _finite_number(
                     non_wage[key][index],
@@ -1891,11 +1898,16 @@ def calculate_taxsim_targets(
         for route, record in zip(state_routes, records, strict=True):
             # Identity over order: the binary is expected to preserve row
             # order, but a reordered or dropped row must fail loudly, not
-            # attribute one unit's tax to another.
-            returned_id = record.get("taxsimid")
-            if returned_id is not None and _clean_id(returned_id) != _clean_id(
-                route.tax_unit_id
-            ):
+            # attribute one unit's tax to another. A result frame without
+            # the taxsimid echo column would degrade every row to positional
+            # trust, so its absence is itself a loud failure.
+            if "taxsimid" not in record:
+                raise StateTaxPopulationRoutingError(
+                    f"{state}: TAXSIM output omitted the 'taxsimid' identity "
+                    "column; refusing to attribute rows by position"
+                )
+            returned_id = record["taxsimid"]
+            if _clean_id(returned_id) != _clean_id(route.tax_unit_id):
                 raise StateTaxPopulationRoutingError(
                     f"{state}: TAXSIM row identity mismatch — expected "
                     f"taxsimid {route.tax_unit_id}, got {returned_id}"
@@ -2766,10 +2778,26 @@ def compare_ready_state_tax_units(
         report["taxsim_mismatch_count"] = len(all_taxsim_mismatches)
         report["taxsim_mismatches"] = all_taxsim_mismatches
         # States compared without a TAXSIM leg (no declared truthful
-        # surface for their output concept) — visible, not silent.
-        report["taxsim_skipped_states"] = sorted(
+        # surface for their output concept) — visible, not silent. Only a
+        # state whose concept mapping genuinely resolves no TAXSIM column
+        # may be skipped: a mapped state absent from the targets means the
+        # leg was lost (a producer regression or a stale/filtered mapping),
+        # which must fail loudly rather than masquerade as an intended skip.
+        skipped_states = sorted(
             state for state in comparisons if state not in taxsim_targets
         )
+        by_state = resolved_contract.by_state()
+        lost_states = [
+            state
+            for state in skipped_states
+            if taxsim_target_column(by_state[state].output) is not None
+        ]
+        if lost_states:
+            raise StateTaxPopulationRoutingError(
+                "TAXSIM targets missing for states whose output concept "
+                "declares a TAXSIM surface: " + ", ".join(lost_states)
+            )
+        report["taxsim_skipped_states"] = skipped_states
     return report
 
 
@@ -3472,6 +3500,13 @@ def _south_carolina_2026_schedule(taxable_income: float) -> float:
     return taxable_income * 0.0521 - 966
 
 
+# Sub-cent probe tolerance: the schedule arrives through PE-core's tax scale
+# in float arithmetic; exact != rejected 597.0520999999999 against 597.0521
+# (2026-08-24). Deliberately stricter than SC's graded tolerance — the probe
+# checks the schedule's shape, not a household comparison.
+_SC_SCHEDULE_PROBE_TOLERANCE = 0.005
+
+
 def _validate_south_carolina_policyengine_runtime(
     *,
     sim: Any,
@@ -3510,23 +3545,20 @@ def _validate_south_carolina_policyengine_runtime(
             "SC: active 2026 formula and marginal-rate schedule are required"
         )
 
+    # PolicyEngine-core's MarginalRateTaxScale.calc takes an array, not
+    # a scalar (len(tax_base) inside); a scalar probe crashes every
+    # campaign run since this validator landed (2026-08-24).
+    import numpy
+
     probes = (0.0, 1.0, 29_999.0, 30_000.0, 30_001.0, 100_000.0)
     for taxable_income in probes:
-        # PolicyEngine-core's MarginalRateTaxScale.calc takes an array, not
-        # a scalar (len(tax_base) inside); a scalar probe crashes every
-        # campaign run since this validator landed (2026-08-24).
-        import numpy
-
         (calc_value,) = rates.calc(numpy.array([taxable_income]))
         actual = _finite_number(
             calc_value,
             label="gov.states.sc.tax.income.rates",
         )
         expected = _south_carolina_2026_schedule(taxable_income)
-        # Sub-cent tolerance: the schedule arrives through PE-core's tax
-        # scale in float arithmetic; exact != rejected 597.0520999999999
-        # against 597.0521 (2026-08-24).
-        if abs(actual - expected) > 0.005:
+        if abs(actual - expected) > _SC_SCHEDULE_PROBE_TOLERANCE:
             raise StateTaxPopulationRoutingError(
                 "SC: active 2026 marginal-rate schedule must retain the "
                 "reviewed 1.99% / 5.21%-minus-$966 boundary; "

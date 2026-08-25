@@ -3718,7 +3718,12 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     # pinned ca2d424f snapshot) require these on every tax unit; newer
     # vintages take the aggregate section-112 exclusion input instead and
     # the runner prunes these unsupported records, so carrying them is
-    # vintage-safe in both directions.
+    # vintage-safe in both directions — PROVIDED pruning is on. The runner
+    # defaults prune_unsupported_inputs=False, and cli.py enables it only
+    # when it derives program_imports itself: a future tax suite passing an
+    # explicit axiom_program/axiom_compiled_program on a newer vintage
+    # would receive these records unpruned and must enable pruning (or
+    # strip them) explicitly.
     from ...bridges.tax_populace import project_section_112_tax_unit_inputs
 
     for name, value in project_section_112_tax_unit_inputs().items():

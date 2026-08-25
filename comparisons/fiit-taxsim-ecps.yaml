@@ -20,8 +20,11 @@
 #   and become nationally gradable when a pinned binary models them.
 # - EITC is INCLUDED: childless EITC is fully modeled at 2026 and carries
 #   real signal; EITC-with-children rows surface as the standing
-#   NBER-gap fingerprint class and must be enrolled before publication
-#   (the unexplained ratchet holds new suites at ceiling 0).
+#   NBER-gap fingerprint class and were enrolled before publication.
+#   (New suites normally enter the unexplained ratchet at ceiling 0;
+#   this suite was published with a deliberate hand-pin at its
+#   fully-characterized first-light residue — see
+#   conformance/unexplained-ratchet.yaml — which only ratchets down.)
 #
 # Run locally:
 #   .venv/bin/python scripts/run_comparison.py fiit-taxsim-ecps --summary
@@ -53,6 +56,10 @@ runner:
   # expect the ECPS projection to omit. Revisit when axiom-oracles#455
   # flips the lanes back.
   axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  # Directory names are not provenance: run_comparison verifies the
+  # checkouts actually hold these revisions before running, so a drifted
+  # worktree fails loudly instead of regenerating wrong-vintage numbers.
+  axiom_rules_repo_revision: 0c39023e
   parameters:
     left: axiom
     right: taxsim
@@ -60,6 +67,7 @@ runner:
     sample_size: 0
     period: "2026"
     suite: fiit-taxsim-ecps
+    axiom_rulespec_repo_roots_revision: ca2d424f
     concepts:
       - us:tax/federal-income-tax#standard_deduction
       - us:tax/federal-income-tax#eitc
