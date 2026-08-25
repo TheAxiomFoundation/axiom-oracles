@@ -24,6 +24,7 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     population_routing_report,
     route_tax_units,
     runtime_provenance,
+    select_ready_tax_units,
     validate_campaign_dataset_identity,
 )
 
@@ -444,25 +445,43 @@ def main(argv: list[str] | None = None) -> int:
         if requested_states
         else routes
     )
+    # The comparison grades only the per-state selection; computing oracle
+    # targets for the full ready population would make a sampled smoke run
+    # as expensive as a full campaign (and the extra targets are discarded
+    # at grading time). Applying the same deterministic selection
+    # compare_ready_state_tax_units uses keeps the target legs and the
+    # graded set identical.
+    target_routes = select_ready_tax_units(
+        comparison_routes, sample_size_per_state=args.sample_size_per_state
+    )
 
     # One Microsimulation shared across the three calculators: each builds
     # its own by default, and two-to-three concurrent full-population sims
     # OOM-killed every full campaign attempt on 2026-08-24. The calculators
-    # only ever .calculate() — sharing is read-only.
-    _shared_sim: dict = {}
+    # only ever .calculate() — sharing is read-only. Bound to the campaign
+    # dataset: any other source is a programming error, not a cache miss
+    # (a keyless memo here once silently served the first dataset to every
+    # caller). The import stays lazy so non-simulation paths run without
+    # the PolicyEngine extra.
+    _shared_sim: list = []
 
     def _shared_microsimulation(source):
-        if "sim" not in _shared_sim:
+        if source is not dataset:
+            raise ValueError(
+                "the shared campaign Microsimulation is bound to the loaded "
+                "Populace dataset; refusing to serve a different source"
+            )
+        if not _shared_sim:
             from policyengine_us import Microsimulation
 
-            _shared_sim["sim"] = Microsimulation(dataset=source)
-        return _shared_sim["sim"]
+            _shared_sim.append(Microsimulation(dataset=dataset))
+        return _shared_sim[0]
 
     targets = calculate_policyengine_targets(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
         microsimulation_factory=_shared_microsimulation,
@@ -471,7 +490,7 @@ def main(argv: list[str] | None = None) -> int:
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
         microsimulation_factory=_shared_microsimulation,
@@ -482,7 +501,7 @@ def main(argv: list[str] | None = None) -> int:
             dataset=dataset,
             raw_tax_units=raw_tax_units,
             raw_persons=raw_persons,
-            routes=comparison_routes,
+            routes=target_routes,
             year=args.year,
             contract=contract,
             microsimulation_factory=_shared_microsimulation,
@@ -498,9 +517,11 @@ def main(argv: list[str] | None = None) -> int:
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
         ),
+        # Diagnostics describe the selected (graded) population — the same
+        # routes the projection inputs were computed for.
         "projection_diagnostics": _projection_branch_diagnostics(
             projection_inputs,
-            tuple(comparison_routes),
+            target_routes,
             targets,
         ),
         "routing": population_routing_report(
