@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import gzip
+import json
+from collections import Counter
+from pathlib import Path
+
 import pytest
 import yaml
 
@@ -9,7 +14,10 @@ from scripts.us_tariff_schedule_campaign import (
     BASE_INDEPENDENT_AUTHORITY_SLOTS,
     ENTRY_FLAG_ALIASES,
     EXPECTED_DROPPED_ENTRY_FLAGS,
+    PREVIEW_DISPOSITION_LINE_SETS,
+    _named_line_sets,
     _case_feed,
+    _routing_dispositions,
     canonicalize_entry_flags,
     compare_record,
     computed_conformant,
@@ -18,6 +26,7 @@ from scripts.us_tariff_schedule_campaign import (
     query_plan,
     matching_class_id,
     mismatch_signature,
+    mismatch_unit,
     route_member,
     selector_matches,
     validate_dispositions,
@@ -122,6 +131,60 @@ def test_mismatch_signature_preserves_selector_dimensions() -> None:
     other_iso2 = {**row, "context": {**row["context"], "iso2": "AR"}}
     assert mismatch_signature(row) != mismatch_signature(other_hts10)
     assert mismatch_signature(row) != mismatch_signature(other_iso2)
+
+
+def test_preview_disposition_line_sets_are_receipted_and_registered() -> None:
+    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    names = set(receipt["line_sets"])
+    assert receipt["verdict"] == "PASS"
+    assert len(names) == len(receipt["selectors"]) == 20
+    registered = _named_line_sets()
+    assert names <= set(registered)
+    assert all(registered[name][0][0] == 10 for name in names)
+
+
+def test_cafta_preview_class_remains_axiom_attributed_open() -> None:
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    cafta = next(entry for entry in ledger["entries"] if entry["id"] == "cafta-52i-deferred")
+    assert cafta["attribution"] == "axiom-attributed-open"
+    assert cafta["disposition"] == "axiom_encoding_gap"
+
+
+PREVIEW_TARGET_MISMATCH = (
+    Path(__file__).parents[1]
+    / "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz"
+)
+
+
+@pytest.mark.skipif(
+    not PREVIEW_TARGET_MISMATCH.is_file(),
+    reason="needs the externally receipted preview-1311 target mismatch sidecar",
+)
+def test_preview_dispositions_select_exact_395330_population() -> None:
+    routes = _routing_dispositions()
+    counts: Counter[str] = Counter()
+    observed = {}
+    with gzip.open(PREVIEW_TARGET_MISMATCH, "rt") as source:
+        for line in source:
+            row = json.loads(line)
+            signature = mismatch_signature(row)
+            counts[signature] += 1
+            observed.setdefault(signature, mismatch_unit(row, routes))
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    selectors = validate_dispositions(ledger["entries"], observed)
+    census: Counter[str] = Counter()
+    unexplained = 0
+    for signature, unit in observed.items():
+        class_id = matching_class_id(signature, unit, selectors)
+        if class_id is None:
+            unexplained += counts[signature]
+        else:
+            census[class_id] += counts[signature]
+    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    expected = {item["id"]: item["expected_units"] for item in receipt["selectors"]}
+    assert {name: census[name] for name in expected} == expected
+    assert unexplained == 0
+    assert sum(expected.values()) == 395_330
 
 
 def test_specific_disposition_routes_to_components_only() -> None:

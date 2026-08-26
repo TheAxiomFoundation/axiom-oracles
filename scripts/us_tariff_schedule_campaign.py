@@ -44,6 +44,9 @@ EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
 COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
 CLASSIFICATION_RECEIPT = OUT_DIR / "classification-receipt.json"
 DISPOSITION_LEDGER = REPO_ROOT / "reference/us-tariff-schedule/campaign-dispositions.yaml"
+PREVIEW_DISPOSITION_LINE_SETS = (
+    REPO_ROOT / "reference/us-tariff-schedule/preview-disposition-line-sets.json"
+)
 REPORT_PATH = REPO_ROOT / "conformance/detail/us-tariff-schedule.json"
 WITNESS_REPLAY_RECEIPT = OUT_DIR / "witness-replay-execute-receipt.json"
 CACHE_ROOT = Path(os.environ.get(
@@ -1002,7 +1005,7 @@ def _named_line_sets() -> dict[str, tuple[tuple[int, frozenset[str]], ...]]:
     unconditional = tuple(value for name, value in s122.items() if "aa_ii_" in name or "aa_iii_" in name)
     gn6 = tuple(value for name, value in s122.items()
                 if "aa_iv_" in name or "gn6_conditional" in name)
-    return {
+    result = {
         "metal-membership-union": metal,
         "not-metal-membership-union": metal,
         "note20-membership-union": note20,
@@ -1012,6 +1015,46 @@ def _named_line_sets() -> dict[str, tuple[tuple[int, frozenset[str]], ...]]:
         "s122-no-exemption-membership": unconditional + gn6,
         "chapter-98-lines": ((2, frozenset({"98"})),),
     }
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    _require(
+        preview.get("schema")
+        == "axiom_oracles.us_tariff_schedule.preview_disposition_line_sets.v1"
+        and preview.get("verdict") == "PASS",
+        "invalid preview disposition line-set receipt",
+    )
+    received_digest = preview.get("receipt_payload_sha256")
+    digest_payload = dict(preview)
+    digest_payload.pop("receipt_payload_sha256", None)
+    _require(
+        received_digest == hashlib.sha256(json.dumps(
+            digest_payload, allow_nan=False, sort_keys=True, separators=(",", ":")
+        ).encode()).hexdigest(),
+        "preview disposition line-set payload digest drift",
+    )
+    for name, receipt in preview.get("line_sets", {}).items():
+        width = receipt.get("width")
+        values = receipt.get("values")
+        _require(
+            isinstance(name, str) and name.startswith("preview-1311-")
+            and width == 10 and isinstance(values, list) and values,
+            "invalid preview disposition line-set entry",
+        )
+        _require(
+            values == sorted(set(values))
+            and all(isinstance(value, str) and len(value) == width and value.isdigit()
+                    for value in values),
+            f"invalid exact HTS10 values in {name}",
+        )
+        _require(receipt.get("value_count") == len(values), f"line-set count drift: {name}")
+        _require(
+            receipt.get("values_sha256")
+            == hashlib.sha256(("\n".join(values) + "\n").encode()).hexdigest(),
+            f"line-set value hash drift: {name}",
+        )
+        _require(name not in result, f"duplicate named line set: {name}")
+        result[name] = ((width, frozenset(values)),)
+    _require(len(preview.get("selectors", [])) == 20, "preview selector census drift")
+    return result
 
 
 def _line_set_contains(unit: dict[str, Any], name: str) -> bool:
