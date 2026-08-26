@@ -29,6 +29,8 @@
 - Added exact current-input shard-key binding plus partner/date footprint counters and distinct CAFTA interval-cell conservation; the target pass cannot accept stale cache keys or infer the 8,702 interval rows by division.
 - Passed the final static census over 9,913,304 selected interval rows in 57.84 seconds: it reconstructed 1,499,038 forced-labor plus 93,198 Brazil units exactly, confirmed the 94-chapter partition, and independently fixed the Note 52(i) panel at 17,404 endpoints / 8,702 distinct interval rows.
 - Receipted a conservative flag-true/Yale-zero ceiling of 259,270 forced-labor plus 14,130 Brazil endpoint units. This is deliberately broader than actual mismatches; the target engine comparison is the authority for realized disagreements.
+- Refreshed the frozen-driver contract/provenance gates. The partition contract reproduced SHA-256 `699b00217825e68cd9ee9e9b881d810ba4bb9cd087aee6351293f46c7122126f`, so the in-flight shards remain valid; provenance is now `4a2b408a4abec3fa173dc18571b9668f04199148645a7a4c6d7a46755e3e34d2`.
+- Re-ran the deterministic projection: it passes the 16-hour ceiling and estimates 0.751 engine-hours. The final report will contrast this micro-benchmark with the more conservative 10.243 historical sequential shard-hours / 3-worker lower-bound estimate.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
