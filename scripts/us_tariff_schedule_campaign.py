@@ -67,6 +67,14 @@ COMPONENT_SLOTS = (
 )
 BASE_DEPENDENT_COMPONENTS = ("ieepa", "forced_labor_section_301")
 EXPECTED_DROPPED_ENTRY_FLAGS = frozenset({"entry_is_line_c", "entry_is_line_e"})
+# C6 emits these historical aliases alongside the compiled compositions'
+# canonical ``*_listed`` inputs.  The campaign consumes one canonical surface:
+# aliases must agree exactly with their targets and are then removed before
+# contract comparison or case construction.
+ENTRY_FLAG_ALIASES = {
+    "entry_is_brazil_301": "entry_is_brazil_301_listed",
+    "entry_is_forced_labor_301": "entry_is_forced_labor_301_listed",
+}
 NEUTRAL_BOOLEAN_INPUTS = (
     "article_is_potash", "cbp_agrees_chapter_98_entry_is_appropriate",
     "entry_is_9802_excepted_entry", "entry_is_chapter_98_subchapter_xxiii_entry",
@@ -170,6 +178,33 @@ def declared_inputs_from_artifact(path: Path) -> frozenset[str]:
     return frozenset(inputs)
 
 
+def canonicalize_entry_flags(
+    raw_flags: dict[str, Any],
+) -> tuple[dict[str, bool], tuple[str, ...]]:
+    """Validate and remove C6 aliases before campaign input consumption."""
+
+    flags = {
+        name: bool(value)
+        for name, value in raw_flags.items()
+        if name.startswith("entry_is_")
+    }
+    observed = []
+    for alias, canonical in ENTRY_FLAG_ALIASES.items():
+        if alias not in flags:
+            continue
+        _require(
+            canonical in flags,
+            f"entry-flag alias {alias} was emitted without canonical {canonical}",
+        )
+        _require(
+            flags[alias] == flags[canonical],
+            f"entry-flag alias disagreement: {alias} != {canonical}",
+        )
+        observed.append(alias)
+        del flags[alias]
+    return flags, tuple(sorted(observed))
+
+
 def filter_declared_feed(
     feed: dict[str, Any],
     declared_inputs: Iterable[str],
@@ -214,10 +249,11 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
     sys.path.insert(0, str(rulespec_root))
     from tools.b16_entry_flags import entry_flags  # type: ignore
 
-    emitted = entry_flags(102294000, "0102294024", "CA")
+    raw_emitted = entry_flags(102294000, "0102294024", "CA")
+    emitted, observed_aliases = canonicalize_entry_flags(raw_emitted)
     # The tool also returns incidence diagnostics (``s232_*``, list-specific
     # helpers).  The harness feeds only its public entry-input namespace.
-    emitted_names = frozenset(name for name in emitted if name.startswith("entry_is_"))
+    emitted_names = frozenset(emitted)
     modules = sorted(
         path for path in (rulespec_root / "us/policies/cbp/us-tariff-schedule/generated").glob("ch*/ch*.yaml")
         if not path.name.endswith(".test.yaml")
@@ -260,6 +296,8 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
         "composition_count": len(chapters),
         "entry_flag_tool": str((rulespec_root / "tools/b16_entry_flags.py").relative_to(rulespec_root)),
         "entry_flag_tool_sha256": _sha256(rulespec_root / "tools/b16_entry_flags.py"),
+        "entry_flag_aliases": dict(ENTRY_FLAG_ALIASES),
+        "observed_entry_flag_aliases": list(observed_aliases),
         "emitted_entry_flags": sorted(emitted_names),
         "expected_dropped_entry_flags": sorted(EXPECTED_DROPPED_ENTRY_FLAGS),
         "absent_declared_input_semantics": {
@@ -502,11 +540,12 @@ def _first_shard_cases(*, rulespec_root: Path, limit: int) -> tuple[list[Any], l
         if disposition not in COMPARABLE:
             continue
         for probe in _probe_dates(row):
+            public_flags, _aliases = canonicalize_entry_flags(entry_flags(
+                int(route["hts_line"]), row["hts10"], row["iso2"]
+            ))
             flags = {
-                key: value for key, value in entry_flags(
-                    int(route["hts_line"]), row["hts10"], row["iso2"]
-                ).items()
-                if key.startswith("entry_is_") and key not in EXPECTED_DROPPED_ENTRY_FLAGS
+                key: value for key, value in public_flags.items()
+                if key not in EXPECTED_DROPPED_ENTRY_FLAGS
             }
             feed = {
                 "hts_line": int(route["hts_line"]),
@@ -602,9 +641,10 @@ def _chapter_from_route(route: dict[str, str]) -> str:
 
 def _case_feed(row: dict[str, str], route: dict[str, str], entry_flags: Any) -> tuple[dict[str, Any], dict[str, bool]]:
     raw_flags = entry_flags(int(route["hts_line"]), row["hts10"], row["iso2"])
+    public_flags, _aliases = canonicalize_entry_flags(raw_flags)
     flags = {
-        key: bool(value) for key, value in raw_flags.items()
-        if key.startswith("entry_is_") and key not in EXPECTED_DROPPED_ENTRY_FLAGS
+        key: value for key, value in public_flags.items()
+        if key not in EXPECTED_DROPPED_ENTRY_FLAGS
     }
     feed = {
         "hts_line": int(route["hts_line"]), "hts_number": row["hts10"],

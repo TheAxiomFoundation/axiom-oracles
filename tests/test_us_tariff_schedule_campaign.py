@@ -7,7 +7,10 @@ from axiom_oracles.comparison.dispositions import validate_dispositions as valid
 
 from scripts.us_tariff_schedule_campaign import (
     BASE_INDEPENDENT_AUTHORITY_SLOTS,
+    ENTRY_FLAG_ALIASES,
     EXPECTED_DROPPED_ENTRY_FLAGS,
+    _case_feed,
+    canonicalize_entry_flags,
     compare_record,
     computed_conformant,
     enforce_excluded_exposure,
@@ -49,6 +52,55 @@ def test_declared_but_unfed_input_mutant_surfaces_before_default() -> None:
             feed, {"required_neutral_fact"},
             emitted_flag_names={"entry_is_line_c", "entry_is_line_e"},
         )
+
+
+def test_entry_flag_aliases_canonicalize_when_equal() -> None:
+    raw = {
+        "entry_is_brazil_301": True,
+        "entry_is_brazil_301_listed": True,
+        "entry_is_forced_labor_301": False,
+        "entry_is_forced_labor_301_listed": False,
+        "entry_is_section_232_covered": True,
+    }
+    flags, aliases = canonicalize_entry_flags(raw)
+    assert aliases == tuple(sorted(ENTRY_FLAG_ALIASES))
+    assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
+    assert flags["entry_is_brazil_301_listed"] is True
+    assert flags["entry_is_forced_labor_301_listed"] is False
+
+
+def test_entry_flag_alias_disagreement_fails_closed() -> None:
+    with pytest.raises(ValueError, match="entry-flag alias disagreement"):
+        canonicalize_entry_flags({
+            "entry_is_brazil_301": True,
+            "entry_is_brazil_301_listed": False,
+        })
+
+
+def test_entry_flag_alias_without_canonical_fails_closed() -> None:
+    with pytest.raises(ValueError, match="without canonical"):
+        canonicalize_entry_flags({"entry_is_brazil_301": True})
+
+
+def test_case_feed_never_forwards_entry_flag_aliases() -> None:
+    def entry_flags(_line, _hts, _iso2):
+        return {
+            "entry_is_brazil_301": True,
+            "entry_is_brazil_301_listed": True,
+            "entry_is_forced_labor_301": False,
+            "entry_is_forced_labor_301_listed": False,
+            "entry_is_line_c": False,
+            "entry_is_line_e": False,
+        }
+
+    feed, flags = _case_feed(
+        {"hts10": "0102294024", "iso2": "BR"},
+        {"hts_line": "102294000"},
+        entry_flags,
+    )
+    assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
+    assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
+    assert feed["entry_is_brazil_301_listed"] is True
 
 
 def test_specific_disposition_routes_to_components_only() -> None:
