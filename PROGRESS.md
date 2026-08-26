@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: lane-local input-contract/projection gates pass and the resumed 94-chapter preview evaluation is in flight with three workers.
+- Status: the lane-local gates, static census, and 94-chapter preview evaluation pass; target comparison/classification is next.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -32,10 +32,11 @@
 - Refreshed the frozen-driver contract/provenance gates. The partition contract reproduced SHA-256 `699b00217825e68cd9ee9e9b881d810ba4bb9cd087aee6351293f46c7122126f`, so the in-flight shards remain valid; provenance is now `4a2b408a4abec3fa173dc18571b9668f04199148645a7a4c6d7a46755e3e34d2`.
 - Re-ran the deterministic projection: it passes the 16-hour ceiling and estimates 0.751 engine-hours. The final report will contrast this micro-benchmark with the more conservative 10.243 historical sequential shard-hours / 3-worker lower-bound estimate.
 - Prepared and independently audited the uncommitted cell-level taxonomy postprocessor (SHA-256 `efcf9b115fa156d572d56f23566ead852bceef48c32fb5f3680a4619753a0177`). Its source-parity checks pass, and its final conservation gates bind every input/new/per-slot/CAFTA count and per-row exact-CAFTA marker back to the target receipt. The exact-cell surprise list includes every new disagreement other than the separately expected/deferred Note 52(i) population.
+- Completed all 94 preview shards: 19,085,544 endpoint records, zero engine errors, and 23,650.117 aggregate shard seconds. The final manifest SHA-256 is `74fc9e5085ac379054e456eb457cdc51032d9cb68542497c080c5fc9c5907b1a`.
+- Rehashed every cached shard successfully; the 94-line verification log SHA-256 is `fad800f2fd830b37815d0e00d29cefbb409c51a4bba77c12b3d43dbf18ace6df`.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
 
-- Finish the in-flight 94-chapter evaluation and verify every cached shard hash and case count; the advancing manifest has zero engine errors.
-- Stream the resulting shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
+- Stream the verified shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
 - Reconcile closure, CAFTA residuals, and any non-CAFTA surprises; write the requested report and final receipts.
