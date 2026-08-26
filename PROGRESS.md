@@ -4,7 +4,7 @@
 
 - Lane: execute the 2026-08-26 human-maintainer ruling for preview-1311 disposition classes.
 - Branch: `codex/dispositions-output-semantics` from local baseline `f5743d4a6`.
-- Status: implementation complete; exact preview dry run passes; full validation and report handoff in progress.
+- Status: complete; exact preview classification, closure verification, and proportional repository validation pass.
 - Boundary: campaign-local changes only; no toolchain, workflow, waiver, or `rulespec-us` edits; do not push.
 - Certified semantics: statutory non-exempt components. Yale utilization proxies, masks, and parser artifacts are bounded receipted reference behavior, not constructs to reproduce.
 
@@ -22,8 +22,10 @@
 - Fixed the campaign mismatch aggregation identity to preserve HTS10 and ISO2 selector dimensions; the old key mixed 168 annex/heading rows across 33 signatures.
 - Generated and registered 20 exact, hashed preview HTS10 line sets; their selector and signature audits conserve all 395,330 component units with zero overlaps or residue.
 - Replaced the superseded broad fed-false classes with 20 bounded, per-slot ruling classes and validated their exact signature-level censuses against the preview artifact.
+- Rechecked the generated receipt byte-for-byte, re-derived and verified the restored closure artifact, and verified the checked-in certificate.
+- Ran the affected repository suite: 235 tests passed.
+- Audited the complete branch diff: no RuleSpec, toolchain, workflow, or waiver changes; the inherited preview inputs remain untracked and unchanged.
 
 ## Next
 
-- Run the proportional repository validation suite and inspect all branch diffs.
-- Write the requested report, commit the final progress state, and finish the handoff.
+- Dispatching session: open the PR, run the official post-rebind campaign, and obtain dual-agree review; do not treat the open CAFTA or Section-232 classes as conformant before their statutory encodings land.
