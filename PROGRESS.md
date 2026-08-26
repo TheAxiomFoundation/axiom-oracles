@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: affected-footprint and execution-path discovery complete; lane-local preview driver is next.
+- Status: lane-local input-contract/projection gates pass and the resumable 94-chapter preview evaluation is in flight with three workers.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -21,10 +21,12 @@
 - Confirmed stock `input-contract` fails closed because C6 adds two undeclared alias outputs (`entry_is_brazil_301` and `entry_is_forced_labor_301`) alongside the declared `_listed` inputs. The preview will project away only those aliases at runtime and will not edit campaign or rulespec source.
 - Confirmed stock compare requires every input-contract chapter and would emit a prior-size 1.8 GB artifact. A lane-local 94-chapter contract plus a target-slot compare/classify pass is the minimal faithful route.
 - Confirmed the successor release selector contains Rev-15 notes 50/52 but no general note 29. Exact Note 52(i) closure also needs a CAFTA duty-free claim input, not corpus ingest alone.
+- Created the uncommitted lane-local `preview_driver.py` (SHA-256 `9749805636271e59ef94fc15b0aab4b9c4eae835390e9fc8588113a7ce58184b`) without editing campaign or rulespec source.
+- Passed the lane input-contract and projection gates. The partition contract covers 94 chapters, and the projected three-worker engine cost is 1.078 hours against the 16-hour ceiling.
+- Started the resume-safe, nice, three-worker evaluation; its advancing manifest reports zero engine errors so far.
 
 ## Next
 
-- Create an uncommitted, lane-local driver that freezes the 94-chapter input contract, projects only the two undeclared aliases, and records all hashes.
-- Run input-contract and projection, then evaluate the 94-chapter union with at most three workers and resume-safe cache keys.
+- Finish the in-flight 94-chapter evaluation and verify every cached shard hash and case count.
 - Stream the resulting shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
 - Reconcile closure, CAFTA residuals, and any non-CAFTA surprises; write the requested report and final receipts.
