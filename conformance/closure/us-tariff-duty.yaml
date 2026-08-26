@@ -1,8 +1,8 @@
-# GENERATED facts; edit decisions in scripts/closure_ledger.py.
+# GENERATED facts; edit decisions in scripts/us_tariff_closure.py.
 schema: axiom_oracles.closure.ledger.v1
 program:
   id: us/tariff-duty
-  rulespec_ref: 96d5e7c1
+  rulespec_ref: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
 generated_facts:
   corpus_roots:
     hts-rate-provisions:
