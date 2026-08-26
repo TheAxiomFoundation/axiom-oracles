@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: the lane-local gates, static census, and 94-chapter preview evaluation pass; target comparison/classification is next.
+- Status: the lane-local gates, evaluation, target comparison, and cell taxonomy pass; residual-cause audit and final report are next.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -34,9 +34,12 @@
 - Prepared and independently audited the uncommitted cell-level taxonomy postprocessor (SHA-256 `efcf9b115fa156d572d56f23566ead852bceef48c32fb5f3680a4619753a0177`). Its source-parity checks pass, and its final conservation gates bind every input/new/per-slot/CAFTA count and per-row exact-CAFTA marker back to the target receipt. The exact-cell surprise list includes every new disagreement other than the separately expected/deferred Note 52(i) population.
 - Completed all 94 preview shards: 19,085,544 endpoint records, zero engine errors, and 23,650.117 aggregate shard seconds. The final manifest SHA-256 is `74fc9e5085ac379054e456eb457cdc51032d9cb68542497c080c5fc9c5907b1a`.
 - Rehashed every cached shard successfully; the 94-line verification log SHA-256 is `fad800f2fd830b37815d0e00d29cefbb409c51a4bba77c12b3d43dbf18ace6df`.
+- The target pass predicts partial original-class closure: forced labor closes 1,359,384 / 1,499,038 and leaves 139,654; Brazil closes 84,462 / 93,198 and leaves 8,736. Total closure is 1,443,846 / 1,592,236, with 148,390 old-class residual units.
+- The same pass confirms all 17,404 exact Note 52(i) panel units as new disagreements and exposes 229,536 additional new units, for 246,940 new Yale-zero disagreements total. Target receipt SHA-256: `845c4ad0516c03ef4cfb5224f5c5f67f812d42a084db9de52633ca050205f9c7`.
+- The source-backed taxonomy conserves all 246,940 new units: CAFTA 17,404; Brazil aircraft 414; Brazil pharma 84; forced-labor aircraft 40,392; forced-labor pharma 1,058; encoded-full invariant failures 0; unmapped 187,588. Its 114,768 exact non-CAFTA cell groups are fully listed. Taxonomy receipt SHA-256: `3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de`.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
 
-- Stream the verified shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
-- Reconcile closure, CAFTA residuals, and any non-CAFTA surprises; write the requested report and final receipts.
+- Reconcile the causal composition of the 148,390 old-class residual and 187,588 unmapped new units so the report does not hide systematic disagreements behind aggregate labels.
+- Write the requested report and final receipt index; leave all generated lane artifacts uncommitted.
