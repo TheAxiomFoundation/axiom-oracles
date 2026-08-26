@@ -31,6 +31,7 @@
 - Receipted a conservative flag-true/Yale-zero ceiling of 259,270 forced-labor plus 14,130 Brazil endpoint units. This is deliberately broader than actual mismatches; the target engine comparison is the authority for realized disagreements.
 - Refreshed the frozen-driver contract/provenance gates. The partition contract reproduced SHA-256 `699b00217825e68cd9ee9e9b881d810ba4bb9cd087aee6351293f46c7122126f`, so the in-flight shards remain valid; provenance is now `4a2b408a4abec3fa173dc18571b9668f04199148645a7a4c6d7a46755e3e34d2`.
 - Re-ran the deterministic projection: it passes the 16-hour ceiling and estimates 0.751 engine-hours. The final report will contrast this micro-benchmark with the more conservative 10.243 historical sequential shard-hours / 3-worker lower-bound estimate.
+- Prepared and independently audited the uncommitted cell-level taxonomy postprocessor (SHA-256 `f8ed2a614b0a0e28eccd9d3338b1d9c13235fc5a985b8f6b2932a1e686e36a45`). Its source-parity checks pass, and its final conservation gates bind every input/new/per-slot/CAFTA count back to the target receipt.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
