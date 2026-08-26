@@ -21,10 +21,11 @@
 - Confirmed stock `input-contract` fails closed because C6 adds two undeclared alias outputs (`entry_is_brazil_301` and `entry_is_forced_labor_301`) alongside the declared `_listed` inputs. The preview will project away only those aliases at runtime and will not edit campaign or rulespec source.
 - Confirmed stock compare requires every input-contract chapter and would emit a prior-size 1.8 GB artifact. A lane-local 94-chapter contract plus a target-slot compare/classify pass is the minimal faithful route.
 - Confirmed the successor release selector contains Rev-15 notes 50/52 but no general note 29. Exact Note 52(i) closure also needs a CAFTA duty-free claim input, not corpus ingest alone.
-- Created the uncommitted lane-local `preview_driver.py` (current SHA-256 `0afb21f04417e7e58f213b43cc4caad08048ce7ca20b2387f7924f8121402ee1`) without editing campaign or rulespec source.
+- Created the uncommitted lane-local `preview_driver.py` (current SHA-256 `e9003f7641ef85c19e66304dc50a982cb4b33d096d6f31e01887ac5701c8cc68`) without editing campaign or rulespec source.
 - Passed the lane input-contract and projection gates. The partition contract covers 94 chapters, and the projected three-worker engine cost is 1.078 hours against the 16-hour ceiling.
 - Independently joined Yale's exact 1,737-row `condition=fta` HTS8 list to the campaign panel: 8,702 interval rows / 17,404 endpoint units, all C6-flag-true and Yale-zero. The exercised join covers 1,633 HTS8 and 3,909 HTS10 codes across all six CAFTA origins.
 - Extended the uncommitted preview driver so the engine-confirmed Note 52(i) residual must join that exact list; the earlier six-country heuristic is retained only as a cross-check.
+- Bound the target pass to independently generated static gates: exactly 17,404 CAFTA endpoint units, the exact per-slot flag-true/Yale-zero ceiling, and 19,085,544 evaluated endpoint records. Pre-existing mismatches without a target disposition and any engine errors now fail closed.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
