@@ -1740,7 +1740,20 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/1/j#income_tax_main_rates
+      # Same two-component composition the PolicyEngine target below needs, for
+      # the same reason: 1(j) main rates are the ORDINARY-bracket tax only, so
+      # on any unit with net capital gain they cannot reach `taxbc` scope. The
+      # 1(h) worksheet total (main + unrecaptured 1250 + 28%-rate gain) is the
+      # missing half. Mapping main rates alone made every capital-gains unit
+      # read axiom-low against TAXSIM's `v28` by the full preferential-rate
+      # spread — the "tax-before-credits continuum" class in axiom-oracles#304
+      # (e.g. ecps-tax-unit-154437: axiom 431,687 vs v28 49,930,649 on
+      # $249,062,816 of LTCG, while axiom's own `liability`, which does carry
+      # the 1(h) tax, lands within 0.1% of `v28`). The comparator sums a list
+      # target, as it already does for us:tax/payroll#employee_fica.
+      axiom:
+        - us:statutes/26/1/j#income_tax_main_rates
+        - us:statutes/26/1/h#capital_gains_tax
       # Tax-Calculator's `taxbc` is regular tax before credits including the
       # Schedule D preferential-rate worksheet, so it must be compared against
       # PolicyEngine's ordinary-bracket tax PLUS its separate capital-gains tax.
