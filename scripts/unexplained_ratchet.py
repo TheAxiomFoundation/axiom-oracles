@@ -130,12 +130,25 @@ def gated_reports() -> dict[str, dict]:
         if not isinstance(report, dict):
             continue
         suite = report.get("suite")
-        if not suite or "aggregates" not in report:
+        if not suite:
+            continue
+        # A comparison report is one that carries graded rows. `aggregates` is
+        # present only on the population lanes; the multi-oracle grid reports
+        # (scripts/generate_state_income_tax_liability.py) publish `summary` +
+        # `mismatches` and no `aggregates`, so requiring it silently dropped
+        # 83 suites — every state income-tax grid among them — out of the
+        # gate entirely. Absent from the pin file means ceiling 0, so those
+        # suites read as governed while nothing actually checked them.
+        if "mismatches" not in report or "summary" not in report:
             continue
         if suite in diagnostics or "diagnostic" in suite:
             continue
         engines = report.get("engines") or {}
-        if "axiom" not in (engines.get("left"), engines.get("right")):
+        # Two shapes in the wild: two-engine lanes use {left, right}; the grid
+        # lanes key each engine by name ({axiom, policyengine, taxsim}).
+        if "axiom" not in (engines.get("left"), engines.get("right")) and (
+            "axiom" not in engines
+        ):
             continue
         # One report per suite; prefer the one with the larger comparison
         # surface if a suite ever has two committed copies.
