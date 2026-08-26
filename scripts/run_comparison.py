@@ -575,6 +575,7 @@ def main() -> int:
         return _run_sanity(args.name)
 
     config = _load_comparison(args.name)
+    _verify_declared_pins(config)
     if args.sample_size is not None:
         config["runner"]["parameters"]["sample_size"] = args.sample_size
     runner_type = config["runner"]["type"]
@@ -698,6 +699,7 @@ def main() -> int:
                     adapted,
                     dashboard_target,
                     full_report_path=output,
+                    dashboard_config=config.get("dashboard"),
                     preserve_existing_versioned=preserve_existing_versioned,
                 )
     finally:
@@ -1001,7 +1003,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
-            "policyengine_taxsim": "2.30.0",
+            "policyengine_taxsim": _taxsim_pin_version(),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
@@ -1697,6 +1699,19 @@ _PE_ORACLE_PINS = (
     "policyengine-core==3.28.0",
 )
 
+def _taxsim_pin_version() -> str:
+    """The pinned policyengine-taxsim version, from taxsim_pins.json.
+
+    adapters/taxsim/taxsim_pins.json is the single source of truth for the
+    TAXSIM oracle identity. Every policyengine-taxsim version this script
+    installs must come from it — a second versioned literal is exactly how
+    #266 happened (a stale 2.21.2 here silently regenerated four suites at
+    2024 law while the rest of the repo pinned 2.30.0).
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.pinned_version()
+
 
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
@@ -1830,7 +1845,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # TAXSIM ships as policyengine-taxsim, which bundles the pinned NBER
     # binary (adapters/taxsim/taxsim_pins.json records its identity).
     taxsim_pins = (
-        ("policyengine-taxsim==2.30.0",) if "taxsim" in engines else ()
+        (f"policyengine-taxsim=={_taxsim_pin_version()}",)
+        if "taxsim" in engines
+        else ()
     )
     cmd = [
         "uv",
@@ -1907,6 +1924,10 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
             [str(_resolve_path(roots_env, "axiom_rulespec_repo_roots"))]
         )
+        # The runner's root fallback consults the singular AXIOM_RULESPEC_ROOT
+        # first; an ambient developer export would silently override the
+        # suite's declared roots. The suite pin is authoritative here.
+        env.pop("AXIOM_RULESPEC_ROOT", None)
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
@@ -1962,6 +1983,9 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
         compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
             [str(_expand_path(roots_env))]
         )
+        # Suite-declared roots are authoritative over an ambient singular
+        # export (the runner fallback reads AXIOM_RULESPEC_ROOT first).
+        compile_env.pop("AXIOM_RULESPEC_ROOT", None)
     elif "AXIOM_RULESPEC_REPO_ROOTS" not in compile_env and roots:
         compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
             [str(root.parent) for root in roots]
@@ -2147,6 +2171,9 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
             [str(_expand_path(roots_env))]
         )
+        # Suite-declared roots are authoritative over an ambient singular
+        # export (the runner fallback reads AXIOM_RULESPEC_ROOT first).
+        env.pop("AXIOM_RULESPEC_ROOT", None)
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
@@ -2460,11 +2487,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         str(REPO_ROOT),
         *(arg for pin in pe_pins for arg in ("--with", pin)),
         "--with",
-        # Must match adapters/taxsim/taxsim_pins.json — the pinned identity
-        # every TAXSIM oracle number is reproducible against. 2.30.0 models
-        # 2026 law (incl. OBBBA); the old 2.21.2 here silently capped the
-        # grids at 2024 law.
-        "policyengine-taxsim==2.30.0",
+        f"policyengine-taxsim=={_taxsim_pin_version()}",
         "python",
         str(generator),
         "--state",
@@ -4070,9 +4093,117 @@ def _resolve_path(raw: str, field: str) -> Path:
             expanded = Path(
                 os.path.expandvars(os.path.expanduser(os.environ[env_override]))
             ).resolve()
+            # A substituted checkout is not the one the suite declared —
+            # say so loudly instead of silently unpinning the identity.
+            print(
+                f"WARNING: {field}: declared path {raw!r} does not exist; "
+                f"substituting ${env_override}={expanded}. If the suite "
+                "pins a revision, verification below still applies.",
+                file=sys.stderr,
+            )
     if not expanded.exists():
         raise SystemExit(f"{field}: path does not exist: {expanded}")
     return expanded
+
+
+def _git_toplevel_head(path: Path) -> str | None:
+    """HEAD of the git checkout rooted exactly at ``path`` (else None).
+
+    ``git -C`` walks upward, so a plain directory inside some unrelated
+    repository would otherwise report the parent's HEAD — anchoring on
+    ``--show-toplevel`` keeps a non-checkout from borrowing an identity.
+    """
+    try:
+        toplevel = subprocess.run(
+            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        if Path(toplevel).resolve() != path.resolve():
+            return None
+        return subprocess.run(
+            ["git", "-C", str(path), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, OSError):
+        return None
+
+
+def _verify_declared_pins(config: dict) -> None:
+    """Fail loudly when a pinned checkout does not hold its declared revision.
+
+    Suites that point ``axiom_rules_repo`` / ``axiom_rulespec_repo_roots``
+    at pre-materialized worktrees may declare the revision those
+    directories must hold (``axiom_rules_repo_revision``,
+    ``axiom_rulespec_repo_roots_revision``). Directory names are not
+    provenance: a drifted worktree would otherwise silently regenerate
+    wrong-vintage numbers while the suite claims the pin.
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+
+    def _declared(field: str) -> str | None:
+        value = params.get(field) or runner.get(field)
+        return str(value) if value else None
+
+    expected_engine = _declared("axiom_rules_repo_revision")
+    if expected_engine:
+        raw = _declared("axiom_rules_repo")
+        if not raw:
+            raise SystemExit(
+                "axiom_rules_repo_revision declared without axiom_rules_repo"
+            )
+        path = _resolve_path(raw, "axiom_rules_repo")
+        head = _git_toplevel_head(path)
+        if head is None:
+            raise SystemExit(
+                f"axiom_rules_repo: cannot verify pinned revision "
+                f"{expected_engine}; {path} is not a git checkout"
+            )
+        if not head.startswith(expected_engine):
+            raise SystemExit(
+                f"axiom_rules_repo: {path} is at {head[:12]}, but the suite "
+                f"pins {expected_engine}; refusing to run a drifted checkout"
+            )
+
+    expected_rulespec = _declared("axiom_rulespec_repo_roots_revision")
+    if expected_rulespec:
+        raw = _declared("axiom_rulespec_repo_roots")
+        if not raw:
+            raise SystemExit(
+                "axiom_rulespec_repo_roots_revision declared without "
+                "axiom_rulespec_repo_roots"
+            )
+        root = _resolve_path(raw, "axiom_rulespec_repo_roots")
+        candidates = [root, *sorted(root.glob("rulespec-*"))]
+        heads = {
+            candidate: head
+            for candidate in candidates
+            if (head := _git_toplevel_head(candidate)) is not None
+        }
+        if not heads:
+            raise SystemExit(
+                f"axiom_rulespec_repo_roots: cannot verify pinned revision "
+                f"{expected_rulespec}; no git checkout under {root}"
+            )
+        drifted = {
+            candidate: head
+            for candidate, head in heads.items()
+            if not head.startswith(expected_rulespec)
+        }
+        if drifted:
+            detail = ", ".join(
+                f"{candidate.name}@{head[:12]}"
+                for candidate, head in drifted.items()
+            )
+            raise SystemExit(
+                f"axiom_rulespec_repo_roots: {detail} does not match the "
+                f"suite pin {expected_rulespec}; refusing to run a drifted "
+                "checkout"
+            )
 
 
 def _rulespec_repo_roots_env(base_roots: list[str]) -> str:
@@ -5303,18 +5434,32 @@ def _slim_report_for_dashboard(
     report: dict,
     *,
     versioned_case_chunks: bool | None = None,
+    max_mismatches: int | None = None,
+    max_case_rows: int | None = None,
 ) -> dict:
+    """Trim a report for the dashboard, honoring per-suite cap overrides.
+
+    A suite whose triage pipeline needs every mismatch row committed (the
+    dispositions flow reads the dashboard copy — #439: 438 of the TAXSIM
+    intersection suite's unexplained rows were physically untriageable behind
+    the default cap) raises ``dashboard.max_mismatches`` in its comparison
+    YAML instead of relying on the ephemeral reports/ artifact.
+    """
+    if max_mismatches is None:
+        max_mismatches = _DASHBOARD_MAX_MISMATCHES
+    if max_case_rows is None:
+        max_case_rows = _DASHBOARD_MAX_CASE_ROWS
     mismatches = report.get("mismatches") or []
     cases = report.get("cases") or []
     within_inline_limits = (
-        len(mismatches) <= _DASHBOARD_MAX_MISMATCHES
-        and len(cases) <= _DASHBOARD_MAX_CASE_ROWS
+        len(mismatches) <= max_mismatches
+        and len(cases) <= max_case_rows
     )
     if within_inline_limits:
         slim = report
     else:
         slim = dict(report)
-        kept_mismatches = mismatches[:_DASHBOARD_MAX_MISMATCHES]
+        kept_mismatches = mismatches[:max_mismatches]
         kept_ids = {m.get("case_id") for m in kept_mismatches}
         slim["mismatches"] = kept_mismatches
         # Case rows are only dropped when THEY breach the cap. Filtering them
@@ -5322,10 +5467,10 @@ def _slim_report_for_dashboard(
         # silently discarded ledgers whose case rows are aggregates with their
         # own id scheme (the us-tariff-panel family ledger shipped 0/73 rows —
         # #448 review round 4).
-        if len(cases) > _DASHBOARD_MAX_CASE_ROWS:
+        if len(cases) > max_case_rows:
             slim["cases"] = [
                 case for case in cases if case.get("case_id") in kept_ids
-            ][:_DASHBOARD_MAX_CASE_ROWS]
+            ][:max_case_rows]
         else:
             slim["cases"] = cases
         slim["dashboard_truncation"] = {
@@ -5432,6 +5577,7 @@ def _write_dashboard_report(
     filename: str,
     *,
     full_report_path: Path | None = None,
+    dashboard_config: dict | None = None,
     preserve_existing_versioned: bool = False,
 ) -> None:
     """Publish a dashboard copy and refresh its versioned case evidence.
@@ -5466,9 +5612,12 @@ def _write_dashboard_report(
         )
         return
     target = DASHBOARD_DATA_DIR / filename
+    dashboard_config = dashboard_config or {}
     slim = _slim_report_for_dashboard(
         strip_heavy_case_metadata(report),
         versioned_case_chunks=versioned_case_chunks,
+        max_mismatches=dashboard_config.get("max_mismatches"),
+        max_case_rows=dashboard_config.get("max_case_rows"),
     )
     truncation = slim.get("dashboard_truncation")
     # A premerged-slim copy (v2.1, trimmed mismatch sample, full-run

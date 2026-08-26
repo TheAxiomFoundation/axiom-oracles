@@ -14,9 +14,11 @@ grid for its RCW 82.87 tax.
   Kentucky executes its canonical KRS 141.020 RuleSpec live.
 * **policyengine** — the configured per-state PolicyEngine liability target in
   ``_PE_VAR``, computed live at the 2026 tax year.
-* **taxsim** — the pinned policyengine-taxsim binary's ``siitax``, run at 2026.
-  Any target-scope or model-vintage residual is recorded in dispositions rather
-  than absorbed by tolerance.
+* **taxsim** — the pinned policyengine-taxsim binary, run at 2026. The graded
+  output column resolves from the concept mapping (``_taxsim_output_column``):
+  ``staxbc`` (state tax before credits) for pre-credit schedule concepts,
+  ``siitax`` for final-liability concepts. Any target-scope or model-vintage
+  residual is recorded in dispositions rather than absorbed by tolerance.
 
 Nothing here invents a value: the axiom side is the engine fixture, the
 PolicyEngine side is a live calculation, and the TAXSIM side is the pinned
@@ -965,6 +967,33 @@ def _taxsim_binary() -> Path | None:
     return None
 
 
+def _taxsim_output_column(state: str) -> str:
+    """The TAXSIM output column graded for a state's liability concept.
+
+    Resolved from the concept mapping so the comparison surface stays
+    declared in one place: states whose canonical concept is a pre-credit
+    schedule map ``staxbc`` (state tax before credits — staxbc - v40 =
+    siitax on the pinned binary); final-liability concepts map ``siitax``.
+    A concept the mapping does not know fails loudly — the graded column
+    is mapping-declared, never guessed (a ``siitax`` default would
+    misgrade any pre-credit schedule silently; every runnable grid state
+    is mapped today, so this branch only fires on a renamed or missing
+    mapping entry).
+    """
+    from axiom_oracles.comparison.mappings import engine_targets_for_concepts
+
+    targets = engine_targets_for_concepts(
+        [_LIABILITY_OUTPUT[state]], "taxsim"
+    )
+    if not targets:
+        raise SystemExit(
+            f"{state}: liability concept {_LIABILITY_OUTPUT[state]!r} has "
+            "no 'taxsim' entry in concept_mappings.yaml; declare the graded "
+            "column instead of guessing"
+        )
+    return targets[0]
+
+
 def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
     from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
     import pandas as pd
@@ -994,8 +1023,14 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
     except TypeError:
         result = runner.run()
     records = result.to_dict(orient="records")
+    # One resolution per state, not per record — the resolver re-reads the
+    # concept mapping and all of a grid's cases share one state anyway.
+    column_by_state = {
+        state: _taxsim_output_column(state)
+        for state in {case.state for case in cases}
+    }
     return {
-        case.case_id: float(rec["siitax"])
+        case.case_id: float(rec[column_by_state[case.state]])
         for case, rec in zip(cases, records, strict=True)
     }
 
@@ -1217,7 +1252,7 @@ def _build_report(
         "engines": {
             "axiom": _MODULE[state],
             "policyengine": _PE_VAR[state],
-            "taxsim": "siitax",
+            "taxsim": _taxsim_output_column(state),
         },
         "tolerance": {"absolute": tol, "relative": rel},
         "case_count": n,

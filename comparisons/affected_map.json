@@ -470,6 +470,15 @@
       "source": "comparisons/fiit-ecps.yaml"
     },
     {
+      "suite": "fiit-taxsim-ecps",
+      "name": null,
+      "report": "axiom-taxsim-fiit-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/fiit-taxsim-ecps.yaml"
+    },
+    {
       "suite": "fl-snap-ecps",
       "name": null,
       "report": "axiom-policyengine-fl-snap-ecps.json",

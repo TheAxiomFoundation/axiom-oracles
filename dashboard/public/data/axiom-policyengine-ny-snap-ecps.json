@@ -13251,7 +13251,7 @@
       },
       "dispositions_file": "dispositions/ny-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 98.697835,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 96.658299,
       "schema_version": "axiom_oracles.dispositions.v1",

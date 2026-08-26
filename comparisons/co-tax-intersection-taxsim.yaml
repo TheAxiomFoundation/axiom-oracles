@@ -51,7 +51,17 @@ ci: manual
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  # Pinned to the exact stack in this suite's last good provenance (engine
+  # 0.1.0 @ 0c39023e, rulespec-us @ ca2d424f): engine main rejects the
+  # current tree (#1049/#1050) and current rulespec-us main carries a
+  # cyclic derived dependency in the federal credits/AMT web (2026-08-23
+  # smoke). Re-point at $HOME/axiom-rules + $HOME when the upstream chain
+  # lands (axiom-oracles#455).
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  # Directory names are not provenance: run_comparison verifies the
+  # checkouts actually hold these revisions before running, so a drifted
+  # worktree fails loudly instead of regenerating wrong-vintage numbers.
+  axiom_rules_repo_revision: 0c39023e
   parameters:
     left: axiom
     right: taxsim
@@ -72,7 +82,9 @@ runner:
       - us:tax/federal-income-tax#amt
       - us:tax/payroll#employee_fica
       - us:tax/state-income-tax#liability
-    axiom_rulespec_repo_roots: $HOME
+    # Pinned rulespec-us snapshot — see the engine pin note above.
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
+    axiom_rulespec_repo_roots_revision: ca2d424f
 
 artifacts:
   report_basename: axiom-taxsim-co-tax-intersection-ecps
@@ -80,3 +92,11 @@ artifacts:
 dashboard:
   filename: axiom-taxsim-co-tax-intersection-ecps.json
   suite: co-tax-intersection-taxsim
+  # Persist every mismatch row in the committed dashboard copy. The triage
+  # pipeline reads this copy, and the default 1,000-row cap left 438 of the
+  # suite's unexplained rows physically untriageable (axiom-oracles#439) —
+  # two binary-verified mechanisms (TAXSIM auto-HoH for mstat=1+depx,
+  # auto-itemized state income tax) could not even be enrolled because
+  # their rows sat past the cap. Headroom above the current 2,300 total
+  # keeps the next regeneration's rows visible too.
+  max_mismatches: 4000

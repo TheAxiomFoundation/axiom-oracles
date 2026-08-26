@@ -22,6 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
+import yaml
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = "scripts/commit_refreshed_report.sh"
@@ -122,11 +123,52 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
     for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
         shutil.copy2(md, seed / md.name)
+    _grant_perturbation_headroom(seed)
     _git(seed, "init", "-q", "-b", "main")
     _git(seed, "add", "-A")
     _git(seed, "commit", "-q", "-m", "seed")
     return seed
 
+
+
+#: Suites whose reports the tests perturb to simulate a rerun.
+_PERTURBED_SUITES = (
+    "nc-income-tax-liability",
+    "mi-income-tax-liability",
+    "be-article-51-forfait",
+)
+
+
+def _grant_perturbation_headroom(seed: Path) -> None:
+    """Pin one row of ratchet headroom for the suites these tests perturb.
+
+    ``_perturb_report`` moves a match to a mismatch WITHOUT adding a mismatch
+    row or a disposition, so the rerun it simulates reads as one new
+    unexplained disagreement. In production that is exactly what the
+    unexplained ratchet exists to refuse — and since the state income-tax grid
+    lanes became gated, the fixture's own perturbation trips it and the script
+    correctly declines to push, which these tests then read as a failure.
+
+    The tests are about push/race/derived-artifact mechanics, not about the
+    publication gate, so the synthetic repo pins the synthetic row the way a
+    real triage would: +1 on the perturbed suites only, in the throwaway seed.
+    The committed ratchet is untouched, and a regression in any OTHER suite
+    still fails these tests exactly as before.
+    """
+    path = seed / "conformance" / "unexplained-ratchet.yaml"
+    if not path.exists():
+        return
+    doc = yaml.safe_load(path.read_text())
+    rows = doc.get("ratchets") or []
+    by_suite = {row["suite"]: row for row in rows}
+    for suite in _PERTURBED_SUITES:
+        row = by_suite.get(suite)
+        if row is None:
+            rows.append({"suite": suite, "unexplained_max": 1})
+        else:
+            row["unexplained_max"] = int(row.get("unexplained_max", 0)) + 1
+    doc["ratchets"] = sorted(rows, key=lambda row: row["suite"])
+    path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
 
 @pytest.fixture()
 def origin(seed_repo: Path, tmp_path: Path) -> Path:

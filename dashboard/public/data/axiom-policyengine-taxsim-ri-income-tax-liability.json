@@ -1,5 +1,278 @@
 {
   "case_count": 6,
+  "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+  "engines": {
+    "axiom": "us-ri:policies/income_tax/pilot_liability_pipeline",
+    "policyengine": "ri_income_tax_before_non_refundable_credits",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "ri-single-30000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -4.605000000000018,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ri-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 508.125,
+      "left_engine": "axiom",
+      "right": 512.73,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-single-30000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -13.125,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-single-30000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 508.125,
+      "left_engine": "axiom",
+      "right": 521.25,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ri-single-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -4.605000000000018,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ri-uprating-vintage-flat-deltas",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1633.125,
+      "left_engine": "axiom",
+      "right": 1637.73,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-single-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -13.125,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-single-60000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 1633.125,
+      "left_engine": "axiom",
+      "right": 1646.25,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ri-single-150000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -3.0950000000002547,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "ri-open-rows-axiom-pe-divergent"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 5523.125,
+      "left_engine": "axiom",
+      "right": 5526.22,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-single-150000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -38.125,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-single-150000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 5523.125,
+      "left_engine": "axiom",
+      "right": 5561.25,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ri-married-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -9.220000000000027,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "ri-open-rows-axiom-pe-divergent"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1016.25,
+      "left_engine": "axiom",
+      "right": 1025.47,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-married-60000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -26.25,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-married-60000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 1016.25,
+      "left_engine": "axiom",
+      "right": 1042.5,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ri-married-120000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -8.940000000000055,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "ri-open-rows-axiom-pe-divergent"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 3316.75,
+      "left_engine": "axiom",
+      "right": 3325.69,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-married-120000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -54.75,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-married-120000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 3316.75,
+      "left_engine": "axiom",
+      "right": 3371.5,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "ri-married-300000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": 10.81000000000131,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "ri-open-rows-axiom-pe-divergent"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 14837.52,
+      "left_engine": "axiom",
+      "right": 14826.71,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ri-married-300000",
+      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
+      "difference": -81.02003906249956,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "ri-pe-2026-uprating-married-300000"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "policyengine_amount_difference",
+      "left": 14837.52,
+      "left_engine": "axiom",
+      "right": 14918.5400390625,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-07-27T04:16:22Z",
+    "generated_by": "scripts/run_comparison.py::ri-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "ri-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 0.0,
+    "axiom_vs_taxsim_match_rate": 0.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 6,
+        "bridge_artifact": 0,
+        "explained_residual": 2,
+        "unexplained": 4,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/ri-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 66.666667,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 4
+    },
+    "match_count": 0,
+    "mismatch_count": 12,
+    "policyengine_matches": 0,
+    "taxsim_matches": 0
+  },
+  "taxsim_law_year": 2026,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026,
   "cases": [
     {
       "axiom": 508.125,
@@ -103,282 +376,5 @@
       "policyengine": 14918.5400390625,
       "taxsim": 14826.71
     }
-  ],
-  "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-  "engines": {
-    "axiom": "us-ri:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "ri_income_tax_before_non_refundable_credits",
-    "taxsim": "siitax"
-  },
-  "mismatches": [
-    {
-      "case_id": "ri-single-30000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -4.605000000000018,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 508.125,
-      "left_engine": "axiom",
-      "right": 512.73,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-single-30000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -13.125,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-single-30000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 508.125,
-      "left_engine": "axiom",
-      "right": 521.25,
-      "right_engine": "policyengine"
-    },
-    {
-      "case_id": "ri-single-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -4.605000000000018,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 1633.125,
-      "left_engine": "axiom",
-      "right": 1637.73,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-single-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -13.125,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-single-60000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 1633.125,
-      "left_engine": "axiom",
-      "right": 1646.25,
-      "right_engine": "policyengine"
-    },
-    {
-      "case_id": "ri-single-150000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -3.0950000000002547,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 5523.125,
-      "left_engine": "axiom",
-      "right": 5526.22,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-single-150000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -38.125,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-single-150000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 5523.125,
-      "left_engine": "axiom",
-      "right": 5561.25,
-      "right_engine": "policyengine"
-    },
-    {
-      "case_id": "ri-married-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -9.220000000000027,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 1016.25,
-      "left_engine": "axiom",
-      "right": 1025.47,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-married-60000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -26.25,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-married-60000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 1016.25,
-      "left_engine": "axiom",
-      "right": 1042.5,
-      "right_engine": "policyengine"
-    },
-    {
-      "case_id": "ri-married-120000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -8.940000000000055,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 3316.75,
-      "left_engine": "axiom",
-      "right": 3325.69,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-married-120000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -54.75,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-married-120000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 3316.75,
-      "left_engine": "axiom",
-      "right": 3371.5,
-      "right_engine": "policyengine"
-    },
-    {
-      "case_id": "ri-married-300000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": 10.81000000000131,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ri-uprating-vintage-flat-deltas",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 14837.52,
-      "left_engine": "axiom",
-      "right": 14826.71,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ri-married-300000",
-      "concept": "us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability",
-      "difference": -81.02003906249956,
-      "disposition": {
-        "disposition": "axiom_encoding_gap",
-        "id": "ri-pe-2026-uprating-married-300000"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "kind": "policyengine_amount_difference",
-      "left": 14837.52,
-      "left_engine": "axiom",
-      "right": 14918.5400390625,
-      "right_engine": "policyengine"
-    }
-  ],
-  "population": "case-grid",
-  "provenance": {
-    "engine": {},
-    "generated_at": "2026-07-27T04:16:22Z",
-    "generated_by": "scripts/run_comparison.py::ri-income-tax-liability",
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
-      }
-    ],
-    "run_kind": "affected-rerun",
-    "schema": "axiom_oracles.provenance.v1"
-  },
-  "schema_version": "axiom.comparison_report.v2.1",
-  "suite": "ri-income-tax-liability",
-  "summary": {
-    "axiom_vs_policyengine_match_rate": 0.0,
-    "axiom_vs_taxsim_match_rate": 0.0,
-    "comparison_count": 12,
-    "dispositioned": {
-      "counts": {
-        "axiom_encoding_gap": 6,
-        "bridge_artifact": 0,
-        "explained_residual": 2,
-        "unexplained": 0,
-        "upstream_engine_gap": 0
-      },
-      "dispositions_file": "dispositions/ri-income-tax-liability.yaml",
-      "expired_entries": [],
-      "explained_rate": 16.666667,
-      "orphaned_entries": [],
-      "raw_match_rate": 0,
-      "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 4
-    },
-    "match_count": 0,
-    "mismatch_count": 12,
-    "policyengine_matches": 0,
-    "taxsim_matches": 0
-  },
-  "taxsim_law_year": 2026,
-  "tolerance": {
-    "absolute": 1.0,
-    "relative": 0.0
-  },
-  "validation_year": 2026
+  ]
 }

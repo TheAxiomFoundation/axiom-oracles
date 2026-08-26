@@ -1917,7 +1917,20 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/1/j#income_tax_main_rates
+      # Same two-component composition the PolicyEngine target below needs, for
+      # the same reason: 1(j) main rates are the ORDINARY-bracket tax only, so
+      # on any unit with net capital gain they cannot reach `taxbc` scope. The
+      # 1(h) worksheet total (main + unrecaptured 1250 + 28%-rate gain) is the
+      # missing half. Mapping main rates alone made every capital-gains unit
+      # read axiom-low against TAXSIM's `v28` by the full preferential-rate
+      # spread — the "tax-before-credits continuum" class in axiom-oracles#304
+      # (e.g. ecps-tax-unit-154437: axiom 431,687 vs v28 49,930,649 on
+      # $249,062,816 of LTCG, while axiom's own `liability`, which does carry
+      # the 1(h) tax, lands within 0.1% of `v28`). The comparator sums a list
+      # target, as it already does for us:tax/payroll#employee_fica.
+      axiom:
+        - us:statutes/26/1/j#income_tax_main_rates
+        - us:statutes/26/1/h#capital_gains_tax
       # Tax-Calculator's `taxbc` is regular tax before credits including the
       # Schedule D preferential-rate worksheet, so it must be compared against
       # PolicyEngine's ordinary-bracket tax PLUS its separate capital-gains tax.
@@ -2492,8 +2505,13 @@ concepts:
     # PolicyEngine publishes the section 59-10-104 pre-credit amount and the
     # section 59-10-104.1 exemption separately. The reviewed derived target
     # combines them; direct comparison to ut_income_tax_before_credits would
-    # silently omit the statutory exemption. TAXSIM siitax remains supplemental
-    # because it is a downstream final-tax surface that includes credits.
+    # silently omit the statutory exemption. TAXSIM staxbc is the exact
+    # pre-credit peer (verified against the pinned 2.30.0 binary: staxbc -
+    # v40 total credits = siitax, with the section 59-10-1018 taxpayer
+    # credit booked in v40) — the earlier siitax target was supplemental
+    # precisely because it netted that credit. Residual caveat: TAXSIM's
+    # 2026 Utah module extrapolates the rate (4.5 vs enacted 4.45 percent);
+    # rate-vintage rows stay dispositionable as before.
     tolerance: 0.01
     relative_tolerance: 0.0000001
     priority: high
@@ -2508,7 +2526,7 @@ concepts:
           type: country
           geoid: US
       policyengine: ut_resident_income_tax_before_credits_derived
-      taxsim: siitax
+      taxsim: staxbc
 
   us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
     description: Alabama Code section 40-18-5 graduated schedule tax on completed Alabama taxable income, before nonrefundable credits
@@ -2528,6 +2546,11 @@ concepts:
           type: country
           geoid: US
       policyengine: al_income_tax_before_non_refundable_credits
+      # TAXSIM state tax before credits (pinned 2.30.0: staxbc - v40 total
+      # credits = siitax). Deduction/exemption-model differences between
+      # TAXSIM's Alabama module and the completed-taxable-income boundary
+      # stay dispositionable, as on every TAXSIM state comparison.
+      taxsim: staxbc
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
     category: tax
@@ -2559,7 +2582,10 @@ concepts:
     # PolicyEngine's unit-level before-nonrefundable-credit variable is the
     # direct pre-credit analog. The Axiom grid projects only its completed net
     # income from PolicyEngine's upstream joint/separate taxable-income
-    # variables and executes the canonical RuleSpec live.
+    # variables and executes the canonical RuleSpec live. TAXSIM staxbc is
+    # the pre-credit peer (staxbc - v40 = siitax on the pinned binary);
+    # its 2026 Kentucky module retains the un-enacted 4.0 percent rate
+    # (enacted 3.5) — rate-vintage rows stay dispositionable as before.
     tolerance: 0.01
     priority: high
     locales: [US-KY]
@@ -2573,7 +2599,7 @@ concepts:
           type: country
           geoid: US
       policyengine: ky_income_tax_before_non_refundable_credits_unit
-      taxsim: siitax
+      taxsim: staxbc
 
 
   us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability:
@@ -2623,6 +2649,12 @@ concepts:
           type: country
           geoid: US
       policyengine: de_income_tax_before_non_refundable_credits_indv
+      # TAXSIM state tax before credits, unit-grain (staxbc - v40 = siitax
+      # on the pinned binary; the 113-dollar spread at the probe case is
+      # Delaware's personal credit, correctly outside this pre-credit
+      # surface). Joint returns: TAXSIM optimizes Delaware's separate
+      # filing internally; structural rows stay dispositionable.
+      taxsim: staxbc
   us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
     description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
     category: tax
@@ -2766,6 +2798,10 @@ concepts:
           type: country
           geoid: US
       policyengine: ga_income_tax_before_non_refundable_credits
+      # TAXSIM state tax before credits. Known vintage gap: TAXSIM's 2026
+      # Georgia module retains the un-enacted 5.19 percent rate (enacted
+      # 4.99) — rate-vintage rows stay dispositionable.
+      taxsim: staxbc
   us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
     description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
     category: tax
@@ -3149,6 +3185,11 @@ concepts:
         name: ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
         scope: {type: country, geoid: US}
       policyengine: ar_income_tax_before_non_refundable_credits_indiv
+      # TAXSIM state tax before credits, unit-grain. The Axiom side sums
+      # Person-grain individual schedules to TaxUnit for accounting; on
+      # joint returns TAXSIM's own separate-filing computation can differ
+      # structurally — such rows stay dispositionable.
+      taxsim: staxbc
   us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax:
     description: Mississippi tax-year-2026 section 27-7-5 Person-grain schedule tax on caller-completed taxable income
     category: tax
@@ -3162,6 +3203,10 @@ concepts:
         name: ms_pit_2026_section_27_7_5_schedule_tax
         scope: {type: country, geoid: US}
       policyengine: ms_income_tax_before_credits_joint
+      # TAXSIM state tax before credits, unit-grain (the concept already
+      # bridges Person-grain to a joint PE target, so the same accounting
+      # caveat applies to the TAXSIM leg).
+      taxsim: staxbc
   us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
     description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
     category: tax
@@ -3190,3 +3235,86 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: vt_income_tax_before_non_refundable_credits
       taxsim: siitax
+
+  # --- Populace-campaign pre-credit schedule concepts with a TAXSIM staxbc
+  # leg. Each staxbc peer was probe-verified against the pinned 2.30.0
+  # binary on 2026-08-23 (single filer, 60k wages): DC/KS/MN/OH satisfy
+  # staxbc - v40 = siitax with v40 = 0 at the probe; CT's staxbc sits
+  # exactly one personal-tax-credit (10 percent at the probe AGI) above
+  # siitax, which is precisely the before-personal-credit boundary the CT
+  # concept declares. Deduction/exemption-model and vintage residuals stay
+  # dispositionable, as on every TAXSIM state comparison.
+  us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit:
+    description: Connecticut full-year-resident section 12-700 ordinary tax before the personal tax credit
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-CT]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ct_pit_2026_resident_ordinary_tax_before_personal_credit
+        scope: {type: country, geoid: US}
+      policyengine: ct_resident_ordinary_tax_before_personal_credit_derived
+      taxsim: staxbc
+  us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits:
+    description: District of Columbia section 47-1806.03 schedule tax on completed DC taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-DC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: dc_pit_2026_section_47_1806_03_schedule_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: dc_income_tax_before_credits_joint
+      taxsim: staxbc
+  us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits:
+    description: Kansas K-40ES schedule tax on completed Kansas taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-KS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ks_pit_2026_k40es_schedule_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: ks_k40es_schedule_before_credits_reviewed
+      taxsim: staxbc
+  us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax:
+    description: Minnesota section 290.06 basic schedule tax on completed Minnesota taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MN]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: mn_pit_pilot_schedule_tax
+        scope: {type: country, geoid: US}
+      policyengine: mn_basic_tax_precision_stable
+      taxsim: staxbc
+  us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_schedule_tax:
+    description: Ohio section 5747.02 nonbusiness schedule tax on completed Ohio taxable nonbusiness income, before nonrefundable credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-OH]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: oh_pit_pilot_schedule_tax
+        scope: {type: country, geoid: US}
+      policyengine: oh_nonbusiness_income_tax_before_non_refundable_credits_derived
+      taxsim: staxbc

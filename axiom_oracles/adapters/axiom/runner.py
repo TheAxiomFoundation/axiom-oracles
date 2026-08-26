@@ -1590,6 +1590,25 @@ def _default_rulespec_repo_roots() -> tuple[Path, ...]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         return (root,)
+    # AXIOM_RULESPEC_REPO_ROOTS (plural, os.pathsep-joined) is what
+    # run_comparison.py forwards from a suite's `axiom_rulespec_repo_roots`
+    # config. Honoring it here makes suite YAMLs self-sufficient — before
+    # this, the compare subprocess received the variable but this fallback
+    # never read it, so lanes only ran on machines with AXIOM_RULESPEC_ROOT
+    # exported or a ~/TheAxiomFoundation workspace (fiit-taxsim-ecps smoke,
+    # 2026-08-23).
+    plural = os.environ.get(AXIOM_RULESPEC_REPO_ROOTS_ENV)
+    if plural:
+        roots = []
+        for part in plural.split(os.pathsep):
+            if not part:
+                continue
+            root = Path(part).expanduser()
+            if root.name.startswith("rulespec-"):
+                root = root.parent
+            roots.append(root)
+        if roots:
+            return tuple(roots)
     candidate = Path.home() / "TheAxiomFoundation"
     if candidate.exists():
         return (candidate,)

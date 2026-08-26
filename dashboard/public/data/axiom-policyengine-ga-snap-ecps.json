@@ -12800,7 +12800,7 @@
       },
       "dispositions_file": "dispositions/ga-snap-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 95.756458,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 94.148656,
       "schema_version": "axiom_oracles.dispositions.v1",

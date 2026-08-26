@@ -90,12 +90,18 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     def comparison(**kwargs):
         calls["comparison"] = tuple(kwargs["routes"])
         calls["known_tax_unit_ids"] = set(kwargs["known_tax_unit_ids"])
+        calls["taxsim_targets"] = kwargs["taxsim_targets"]
         return {"scope": "filtered"}
+
+    def taxsim_targets(**kwargs):
+        calls["taxsim"] = tuple(kwargs["routes"])
+        return {"NJ": {1: 0.0}}
 
     monkeypatch.setattr(campaign, "calculate_policyengine_targets", targets)
     monkeypatch.setattr(
         campaign, "calculate_policyengine_projection_inputs", projections
     )
+    monkeypatch.setattr(campaign, "calculate_taxsim_targets", taxsim_targets)
     monkeypatch.setattr(campaign, "population_routing_report", routing_report)
     monkeypatch.setattr(campaign, "compare_ready_state_tax_units", comparison)
     monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {})
@@ -126,6 +132,11 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     assert calls["projections"] == expected_filtered
     assert calls["comparison"] == expected_filtered
     assert calls["known_tax_unit_ids"] == {1, 2, 3}
+    # The TAXSIM leg runs by default over the same filtered routes and its
+    # targets flow into the comparison.
+    assert calls["taxsim"] == expected_filtered
+    assert calls["taxsim_targets"] == {"NJ": {1: 0.0}}
+    assert report["taxsim_leg"] == "graded"
 
 
 def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> None:

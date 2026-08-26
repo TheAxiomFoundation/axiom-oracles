@@ -262,7 +262,7 @@
       "inline_cases_not_counted": 27,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-al-snap-ecps.json",
-      "report_sha256": "f668ea33cfd82f576e27a76aa80c82e16c43b4c1e0677969688299b47d004d60",
+      "report_sha256": "7f84ff274e6ef6d23117af63d22e833493b47eb09bee88467f3a44b1e0397a3c",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -617,7 +617,7 @@
       "inline_cases_not_counted": 306,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-az-snap-ecps.json",
-      "report_sha256": "8493c8044225344cddf6d6c16f947861677b8d64f33fe82fa05713eeaa547b3d",
+      "report_sha256": "3ca65a6e2b5386db0b5f427e3dfb053c0238c1e2ad5b4afa056e7f3f9bc2dcf2",
       "varied_fields": 9,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -2463,7 +2463,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-ca-income-tax-liability.json",
-      "report_sha256": "9e7e139fc58287c27b854e4da22b215e68f2b0eec6aef029f1bb63f4275eb65c",
+      "report_sha256": "2e3b5ddf7f49c4e8be68ec6ac17635e254777cd23efc06560c66d9e90c97dce7",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3272,17 +3272,17 @@
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-0.json",
-          "sha256": "eb2f5cd67c4e2250783500f67f9d216aa6b4a6721ccb0e7847e18b6ebd1c54dc"
+          "sha256": "a03e8296e8a0e1bd3b8d7e520a83e89c5f8a335d0f204296240471498584811d"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-1.json",
-          "sha256": "c1652bfa6da3f37d7a6b86dac5c466bcd3256c77c26e21f065c720a87622806a"
+          "sha256": "f5aa74018aea8bfb8166b155ff27755f399cee792c8f8e9873d9fde02776f869"
         },
         {
           "cases": 201,
           "chunk": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-2.json",
-          "sha256": "550bbcd620210ba6e1abe02bfac5b829ae038b32fca0a04e58b7b6bb1cd3f524"
+          "sha256": "027e1cf30ad9f7302affa79dece66211daa6fd241baf0ecf2ccfbea1e3eb2f04"
         }
       ],
       "constant_fields": 1,
@@ -3293,10 +3293,10 @@
         }
       },
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 369,
+      "inline_cases_not_counted": 723,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
-      "report_sha256": "15b1583c9ea4f0982a1abab5af64b09ed848c2f980d52c04c415bbfef361cd54",
+      "report_sha256": "004b3dfda30650a44f85d4e2b7b006d117cdf63de1bdeb210bc6a6403524733b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3886,6 +3886,60 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "fiit-taxsim-ecps": {
+      "binding": "unbound",
+      "binding_defects": [
+        "fiit-taxsim-ecps: chunk index dashboard/public/data/cases/fiit-taxsim-ecps/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 954,
+      "chunk_manifest": [],
+      "constant_fields": 3,
+      "evidence_fields": {
+        "axiom_input_records_count": {
+          "distinct": 8,
+          "state": "varied"
+        },
+        "axiom_relations_count": {
+          "distinct": 14,
+          "state": "varied"
+        },
+        "case_unit": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dataset": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "household_id": {
+          "distinct": 931,
+          "state": "varied"
+        },
+        "household_weight": {
+          "distinct": 931,
+          "state": "varied"
+        },
+        "population": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "tax_unit_id": {
+          "distinct": 954,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-taxsim-fiit-ecps.json",
+      "report_sha256": "e81a398549bc19b2cddd96afb9966808ce88d6605d34738a46ecf96159a73193",
+      "varied_fields": 5,
+      "verdict_concepts": {}
+    },
     "fl-snap-ecps": {
       "binding": "unbound",
       "binding_defects": [
@@ -4021,7 +4075,7 @@
       "inline_cases_not_counted": 437,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-fl-snap-ecps.json",
-      "report_sha256": "9f5c42684d0de9dee306c62cc5defc83bb5d84da69f2bc9cd989a9f5256a1844",
+      "report_sha256": "a8d5f26d7df88864c7578a09871cfca027943808ba6a6700984389b2922621b9",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -4325,7 +4379,7 @@
       "inline_cases_not_counted": 141,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-ga-snap-ecps.json",
-      "report_sha256": "74e0753d6a8460b67ea8fbd41f575eb6c4100c1d1fbfa9fe9ff671773f4229ab",
+      "report_sha256": "1dc237a085a0b9c8c86438b71d7752e7cd3ebf904a680a997a5d6647edcd8d49",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -5374,7 +5428,7 @@
       "inline_cases_not_counted": 157,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-ma-snap-ecps.json",
-      "report_sha256": "b5576bd278d2dd38a3c3f7840f615b13a34366ff623a3827e0606742b32527c2",
+      "report_sha256": "b7b8c1b74c7c13cdd82d44c2096a1975df0ad3eccc12b014bf8020741d83f847",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -5408,7 +5462,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-md-income-tax-liability.json",
-      "report_sha256": "30b68f94b555f693ac11b65b7b85f818545be5e2aa91999018db578d1b8f51ef",
+      "report_sha256": "36678b3d70f4a3e855f8545f9e3eec7912d5428e7e778cb5d93fba2c27efc557",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5517,7 +5571,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-me-income-tax-liability.json",
-      "report_sha256": "70c0cea8264e7933952782d6324ca0efec59fe1a29650fbcc9a7da188df0f32c",
+      "report_sha256": "a4b50f868d742ce25df43b011b15d9580c40e103e57bad129cd9a3de7a6938ca",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -5682,7 +5736,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json",
-      "report_sha256": "e145a55a364fe14b37bded3709cefee0dc2d19a656bc82ff7829533255b0413a",
+      "report_sha256": "bbbc9b2f66031c8093dcacbff4d7ccf38ea8228a47aa3f6955e857636481ee7b",
       "varied_fields": 4,
       "verdict_concepts": {}
     },
@@ -5832,7 +5886,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-mn-income-tax-liability.json",
-      "report_sha256": "373c713de84d3229499c76c7c092940df57862752c035480c93199f41a0a4aa6",
+      "report_sha256": "da30de5d1539f0c369d35deab33ebad6ef83979e7f3308f872a738e0feece05a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6306,7 +6360,7 @@
       "inline_cases_not_counted": 62,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-nc-snap-ecps.json",
-      "report_sha256": "46893b886082e7d0ad73c9b32999584e8d6aae552b808570ca71769f9c2e8fd8",
+      "report_sha256": "04b790650d367c78c9d990572b3fdb8288c0510e9fdba6237ac9684c493cc3e6",
       "varied_fields": 12,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -6340,7 +6394,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-nd-income-tax-liability.json",
-      "report_sha256": "d2b5579bb4157b6761f41b610f8a06adb432c1edcb4798ae900bbad1378b4616",
+      "report_sha256": "0adfb3c8141424faca3d06a8de79af24e362500bdd4da576ddd318ca6f9ac19b",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6529,7 +6583,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-ny-income-tax-liability.json",
-      "report_sha256": "45afe520828b88eaed8fbe32a95bbab01a0084db7cc6c82aff0d88f5df56c05a",
+      "report_sha256": "df78efa400663397fe9034e022e175664c39dbec82902203d7e1c925bb65b9ba",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -6741,7 +6795,7 @@
       "inline_cases_not_counted": 150,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-ny-snap-ecps.json",
-      "report_sha256": "a6705a99774d926befb4f57c3421e552bd4bf463a91967eacd3e9511f01c70f4",
+      "report_sha256": "4523b791db961586c4414b98f26af08341ed12b9a7a5c26350e9f4f5a5c90ac9",
       "varied_fields": 7,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {
@@ -7278,7 +7332,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-or-income-tax-liability.json",
-      "report_sha256": "644800a2ebb546342b9d6d7e2221d49e8d8f3c836e03905179750200d34b08eb",
+      "report_sha256": "bfcf1b3298199cec4080316430677137d05551e75833b6312aff581884a9d759",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7448,7 +7502,7 @@
       "inline_cases_not_counted": 6,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-taxsim-ri-income-tax-liability.json",
-      "report_sha256": "de96fe45e7d9b484dca008e17bc16ec715ccd002d6a0d7886023d6c11cbd6899",
+      "report_sha256": "daf6342cb6b3eb728e1a3733c5f014374c3e43b2b243686d6e86241604fd5c0c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -7654,7 +7708,7 @@
       "inline_cases_not_counted": 112,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-sc-snap-ecps.json",
-      "report_sha256": "397f774774e2ca2586b88853ea4c1604bb68801c569e054b2aaa57ba11a4003a",
+      "report_sha256": "a20f8326c42b035a997c5c163f7c469ac939cc9b1d634bcf2629d2530dfe02a8",
       "varied_fields": 8,
       "verdict_concepts": {
         "us:statutes/7/2014/o#snap_eligible": {

@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: md-income-tax-liability
-updated: '2026-07-27'
+updated: '2026-08-25'
 entries:
 - id: md-uprating-vintage-flat-deltas
   concept: us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability
@@ -13,14 +13,21 @@ entries:
     - md-single-60000
   disposition: explained_residual
   evidence:
-    mechanism: "Parameter uprating vintage between the legs: the axiom program carries\n\
-      FY2026-uprated MD parameters while the oracle leg's parameter set holds\n\
-      the prior vintage, producing income-invariant flat deltas within each\nfiling\
-      \ band (the fingerprint: identical differences across the grid's\nincome levels\
-      \ \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times\
-      \ the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs\
-      \ axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the\
-      \ oracle's parameters uprate."
+    mechanism: 'Parameter uprating vintage between the legs: the axiom program carries
+
+      FY2026-uprated MD parameters while the oracle leg''s parameter set holds
+
+      the prior vintage, producing income-invariant flat deltas within each
+
+      filing band (the fingerprint: identical differences across the grid''s
+
+      income levels — e.g. Washington''s flat \$163.92 equals the 7 percent
+
+      rate times the \$2,342 capital-gains standard-deduction vintage gap, PE
+
+      278,000 vs axiom''s uprated value). Favors the encoded 2026 truth;
+
+      resolves when the oracle''s parameters uprate.'
     arithmetic:
     - expression: '8.54'
       equals: 8.54
@@ -29,4 +36,39 @@ entries:
       equals: 13.12
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
+  expires_on_source_change: true
+- id: taxsim-md-module-divergence-axiom-pe-agree
+  concept: us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - md-married-300000
+    - md-single-150000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence at the top of each Maryland
+      filing
+
+      band: on both selected rows axiom and PolicyEngine agree to the cent
+
+      (7,039.50 and 14,695.75; `axiom_vs_policyengine.match` is true), while
+
+      TAXSIM reports a lower liability. The lower grid points in the same band
+
+      already reconcile within tolerance, so the divergence is confined to the
+
+      top bracket and grows with income (29.93 at 150k single, 45.64 at 300k
+
+      married) rather than being the income-invariant flat delta of the vintage
+
+      class. A bracket-threshold or county-rate vintage difference in TAXSIM''s
+
+      Maryland module; per-row proof is the axiom==PolicyEngine agreement.'
+    arithmetic:
+    - expression: 7039.50 - 7009.57
+      equals: 29.93
+      tolerance: 0.05
+    - expression: 14695.75 - 14650.11
+      equals: 45.64
+      tolerance: 0.05
   expires_on_source_change: true
