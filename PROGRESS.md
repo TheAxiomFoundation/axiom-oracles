@@ -27,10 +27,12 @@
 - Extended the uncommitted preview driver so the engine-confirmed Note 52(i) residual must join that exact list; the earlier six-country heuristic is retained only as a cross-check.
 - Bound the target pass to independently generated static gates: exactly 17,404 CAFTA endpoint units, the exact per-slot flag-true/Yale-zero ceiling, and 19,085,544 evaluated endpoint records. Pre-existing mismatches without a target disposition and any engine errors now fail closed.
 - Added exact current-input shard-key binding plus partner/date footprint counters and distinct CAFTA interval-cell conservation; the target pass cannot accept stale cache keys or infer the 8,702 interval rows by division.
+- Passed the final static census over 9,913,304 selected interval rows in 57.84 seconds: it reconstructed 1,499,038 forced-labor plus 93,198 Brazil units exactly, confirmed the 94-chapter partition, and independently fixed the Note 52(i) panel at 17,404 endpoints / 8,702 distinct interval rows.
+- Receipted a conservative flag-true/Yale-zero ceiling of 259,270 forced-labor plus 14,130 Brazil endpoint units. This is deliberately broader than actual mismatches; the target engine comparison is the authority for realized disagreements.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
 
 ## Next
 
-- Finish the in-flight 94-chapter evaluation and verify every cached shard hash and case count.
+- Finish the in-flight 94-chapter evaluation and verify every cached shard hash and case count; the advancing manifest has zero engine errors.
 - Stream the resulting shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
 - Reconcile closure, CAFTA residuals, and any non-CAFTA surprises; write the requested report and final receipts.
