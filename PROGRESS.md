@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: provenance and path constraints verified; affected-footprint discovery is starting.
+- Status: affected-footprint and execution-path discovery complete; lane-local preview driver is next.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -12,10 +12,19 @@
 - Read `/Users/maxghenis/TheAxiomFoundation/CLAUDE.md` and the binding provenance-regime memory.
 - Confirmed the cert worktree starts clean at the requested commit.
 - Confirmed this lane will not push, edit toolchain/workflow/waiver surfaces, or touch `rulespec-us-338`.
+- Verified both the C6 worktree and canonical engine-discovery clone are clean at `3357f7dc710d18861b1fefdff115e2434e67b988` (tree `c3d530c72344310aa2fdfcebe5aec286b1ad4869`).
+- Verified the pinned engine commit `ffd8213271947b0189a9dd61a055c1e0e78908a0` and binary SHA-256 `674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7`.
+- Enumerated the original two-class footprint: 92 chapters and 18,978,516 of 19,118,619 prior endpoint cases.
+- Extended the minimal footprint to 94 chapters after a flags-only census found newly exposed Yale-zero cells in chapters 74 and 98; the omitted shards are 27, 31, 97, 99a, 99b, and 99c.
+- Reproduced all 93,198 Brazil and 1,499,038 forced-labor target units with the C6 declared `_listed` flags true.
+- Identified 17,404 candidate Note 52(i) CAFTA endpoint units from Yale's 1,737-code conditional list, pending engine confirmation.
+- Confirmed stock `input-contract` fails closed because C6 adds two undeclared alias outputs (`entry_is_brazil_301` and `entry_is_forced_labor_301`) alongside the declared `_listed` inputs. The preview will project away only those aliases at runtime and will not edit campaign or rulespec source.
+- Confirmed stock compare requires every input-contract chapter and would emit a prior-size 1.8 GB artifact. A lane-local 94-chapter contract plus a target-slot compare/classify pass is the minimal faithful route.
+- Confirmed the successor release selector contains Rev-15 notes 50/52 but no general note 29. Exact Note 52(i) closure also needs a CAFTA duty-free claim input, not corpus ingest alone.
 
 ## Next
 
-- Read the existing classify ledger and enumerate affected chapters, partners, dates, and cells.
-- Trace the campaign CLI to determine the minimal safe evaluate/compare/classify commands.
-- Verify the #1311 rulespec tree, canonical engine-discovery root, pinned engine, and successor corpus release.
-- Run the smallest authorized preview with `nice`, at most three workers, then reconcile counts and write the final report.
+- Create an uncommitted, lane-local driver that freezes the 94-chapter input contract, projects only the two undeclared aliases, and records all hashes.
+- Run input-contract and projection, then evaluate the 94-chapter union with at most three workers and resume-safe cache keys.
+- Stream the resulting shards through the campaign comparison/classification functions for the Brazil and forced-labor slots; emit exact mismatch-cell and aggregate receipts without the unrelated 1.8 GB all-slot artifact.
+- Reconcile closure, CAFTA residuals, and any non-CAFTA surprises; write the requested report and final receipts.
