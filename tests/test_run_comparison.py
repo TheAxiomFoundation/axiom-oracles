@@ -17,6 +17,15 @@ def load_run_comparison_module():
     return module
 
 
+def load_script_module(name: str):
+    module_path = Path(__file__).parents[1] / "scripts" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, module_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
 def test_resolve_path_uses_repo_env_override_when_config_path_is_missing(
     monkeypatch, tmp_path
 ):
@@ -462,9 +471,7 @@ def test_gettsim_synthetic_first_run_shell_attributes_unavailable_engine(tmp_pat
             "error": "skipped: EUROMOD_PYTHON unset",
         }
     ]
-    assert euromod_report["summary"]["errors_by_engine"] == [
-        {"value": "euromod", "count": 1}
-    ]
+    assert euromod_report["summary"]["errors_by_engine"] == {"euromod": 1}
 
     gettsim_output = tmp_path / "gettsim-missing.json"
     run_comparison._reemit_gettsim_synthetic_report(
@@ -518,6 +525,155 @@ def test_de_dual_oracle_registry_config_shape() -> None:
     assert config["dashboard"]["filename"] == (
         "euromod-gettsim-de-worker-dual-oracle.json"
     )
+
+
+def test_de_axiom_pair_runner_is_registered() -> None:
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["de-axiom-oracle-compare"] is (
+        run_comparison._run_de_axiom_oracle_compare
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "oracle", "canonical_record"),
+    [
+        (
+            "de-worker-dual-oracle-axiom-euromod",
+            "euromod",
+            "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+        ),
+        (
+            "de-worker-dual-oracle-axiom-gettsim",
+            "gettsim",
+            "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+        ),
+    ],
+)
+def test_de_axiom_pair_configs_have_exact_names_and_synchronized_pins(
+    name, oracle, canonical_record
+) -> None:
+    run_comparison = load_run_comparison_module()
+    executable = load_script_module("de_executable")
+    unified = load_script_module("de_unified_comparison")
+    config_path = COMPARISONS_DIR / f"{name}.yaml"
+    config = run_comparison._load_comparison(name)
+    params = config["runner"]["parameters"]
+
+    assert config_path.stem == config["name"] == name
+    assert config["runner"]["type"] == "de-axiom-oracle-compare"
+    assert params["suite"] == name
+    assert params["oracle"] == oracle
+    assert config["artifacts"]["canonical_record"] == canonical_record
+    assert config["selector"]["report"] == canonical_record
+
+    configured_pin = {
+        "commit": params["rulespec_upstream_sha"],
+        "tree": params["rulespec_upstream_tree"],
+    }
+    assert configured_pin == unified.RULESPEC_REF_PIN
+    assert configured_pin == {
+        "commit": executable.RULESPEC_PIN["commit"],
+        "tree": executable.RULESPEC_PIN["tree"],
+    }
+    assert all(
+        len(value) == 40 and set(value) <= set("0123456789abcdef")
+        for value in configured_pin.values()
+    )
+
+
+def test_load_comparison_rejects_internal_name_drift(monkeypatch, tmp_path):
+    """A selector name must resolve to a config declaring that exact name;
+    silently running a differently named config repeats the #295 failure."""
+
+    run_comparison = load_run_comparison_module()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "expected-name.yaml").write_text(
+        "name: different-name\n"
+        "runner:\n"
+        "  type: de-axiom-oracle-compare\n"
+        "  parameters: {}\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    with pytest.raises(SystemExit, match="config.*name|name.*config"):
+        run_comparison._load_comparison("expected-name")
+
+
+def test_canonical_record_path_accepts_only_comparisons_descendants(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    comparisons = repo / "comparisons"
+    comparisons.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+
+    assert run_comparison._canonical_record_path({}) is None
+    assert run_comparison._canonical_record_path(
+        {
+            "artifacts": {
+                "canonical_record": (
+                    "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+                )
+            }
+        }
+    ) == (comparisons / "de-worker-dual-oracle" / "axiom-euromod.json").resolve()
+
+    for unsafe in (
+        "",
+        str(tmp_path / "absolute.json"),
+        "../outside.json",
+        "dashboard/public/data/not-canonical.json",
+        "comparisons/../../outside.json",
+    ):
+        with pytest.raises(SystemExit, match="canonical_record"):
+            run_comparison._canonical_record_path(
+                {"artifacts": {"canonical_record": unsafe}}
+            )
+
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (comparisons / "escape").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(SystemExit, match="canonical_record"):
+        run_comparison._canonical_record_path(
+            {
+                "artifacts": {
+                    "canonical_record": "comparisons/escape/record.json"
+                }
+            }
+        )
+
+
+def test_write_canonical_record_publishes_exact_bytes_atomically(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    source = tmp_path / "reports" / "source.json"
+    target = tmp_path / "comparisons" / "de" / "record.json"
+    source.parent.mkdir()
+    source.write_bytes(b'{"suite":"de-pair","revision":1}\n')
+    replaced = []
+    real_replace = run_comparison.os.replace
+
+    def recording_replace(staging, destination):
+        replaced.append((Path(staging), Path(destination)))
+        real_replace(staging, destination)
+
+    monkeypatch.setattr(run_comparison.os, "replace", recording_replace)
+
+    run_comparison._write_canonical_record(source, target)
+
+    assert target.read_bytes() == source.read_bytes()
+    assert len(replaced) == 1
+    assert replaced[0][1] == target
+    assert replaced[0][0].parent == target.parent
+    assert not list(target.parent.glob(f".{target.name}.*.tmp"))
+
+    source.write_bytes(b'{"suite":"de-pair","revision":2}\n')
+    run_comparison._write_canonical_record(source, target)
+    assert target.read_bytes() == source.read_bytes()
 
 
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
@@ -919,6 +1075,192 @@ def test_slim_report_honors_per_suite_mismatch_cap_override():
     assert tighter["dashboard_truncation"]["shown_mismatches"] == 1200
 
 
+def test_versioned_chunk_storage_removes_inline_case_mirrors(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "mismatches": [],
+        "cases": [{"case_id": "mirrored", "matched": True}],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    slim = run_comparison._slim_report_for_dashboard(report)
+
+    assert slim["cases"] == []
+    assert slim["dashboard_truncation"] == {
+        "total_mismatches": 0,
+        "shown_mismatches": 0,
+        "total_case_rows": 1,
+        "shown_case_rows": 0,
+    }
+    assert report["cases"], "slimming must not mutate the full report"
+
+
+def test_dashboard_writer_refreshes_versioned_chunks_before_slimming(
+    monkeypatch, tmp_path
+):
+    from axiom_oracles.evidence import validate_suite_evidence
+
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "chunk-0.json").write_text(
+        '[{"id":"stale","r":100,"h":{},"m":[],"v":[]}]'
+    )
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "engines": {"left": "axiom", "right": "oracle"},
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            }
+        ],
+        "mismatches": [],
+        "cases": [
+            {
+                "case_id": "fresh",
+                "match_rate": 100,
+                "matches": [{"concept": "benefit", "left": 2, "right": 2}],
+                "mismatches": [],
+                "metadata": {
+                    "household_summary": {"household_size": 1},
+                    "axiom_input_records": [
+                        {"name": "income", "value": 5, "entity_id": "household"}
+                    ],
+                    "axiom_all_outputs": {"benefit": 2},
+                },
+            }
+        ],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    run_comparison._write_dashboard_report(report, "bound-report.json")
+
+    dashboard_report = tmp_path / "bound-report.json"
+    stored = json.loads(dashboard_report.read_text())
+    chunk = json.loads((suite_dir / "chunk-0.json").read_text())
+    index = json.loads((suite_dir / "index.json").read_text())
+    evidence = validate_suite_evidence(dashboard_report)
+    generator = load_script_module("generate_chunk_indexes")
+    index_current, _message = generator.generate(
+        dashboard_report,
+        check=True,
+        strip_inline=False,
+    )
+    assert stored["cases"] == []
+    assert chunk[0]["id"] == "fresh"
+    assert chunk[0]["v"] == [{"c": "benefit", "l": 2, "x": 2}]
+    assert index["input_slots"] == ["income"]
+    assert index["output_slots"] == ["benefit"]
+    assert evidence.valid is True
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert index_current is True
+
+
+def test_compact_full_evidence_preserves_explicit_zero_matches():
+    from scripts.emit_case_artifacts import compact_case
+
+    all_mismatch = compact_case(
+        {
+            "case_id": "all-mismatch",
+            "matches": [],
+            "mismatches": [
+                {"concept": "benefit", "left": 1, "right": 2}
+            ],
+        },
+        {},
+    )
+    all_match = compact_case(
+        {
+            "case_id": "all-match",
+            "match_rate": 99.9999995,
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+        },
+        {},
+    )
+    verdict_free = compact_case(
+        {"case_id": "qc-shape", "matched": True, "mismatches": []},
+        {},
+    )
+
+    assert all_mismatch["v"] == []
+    assert all_mismatch["m"][0]["d"] == 1
+    assert all_mismatch["r"] == 0.0
+    assert all_match["r"] == 100.0
+    assert "v" not in verdict_free
+
+
+def test_skipped_versioned_run_preserves_existing_bound_artifacts(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    target = tmp_path / "bound-report.json"
+    index_path = suite_dir / "index.json"
+    chunk_path = suite_dir / "chunk-0.json"
+    target.write_text('{"existing":"report"}')
+    index_path.write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    chunk_path.write_text('[{"id":"existing"}]')
+    before = tuple(
+        path.read_bytes() for path in (target, index_path, chunk_path)
+    )
+
+    run_comparison._write_dashboard_report(
+        {
+            "suite": "bound-suite",
+            "case_count": 1,
+            "cases": [],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            },
+        },
+        target.name,
+        preserve_existing_versioned=True,
+    )
+
+    after = tuple(path.read_bytes() for path in (target, index_path, chunk_path))
+    assert after == before
+
+
 def test_dataset_label_from_identity_falls_back_without_revision():
     run_comparison = load_run_comparison_module()
 
@@ -1228,6 +1570,40 @@ def test_be_elderly_income_support_registry_config_shape():
     assert config["dashboard"]["filename"] == (
         "axiom-euromod-be-elderly-income-support.json"
     )
+
+
+def test_euromod_synthetic_runner_forwards_extra_template_columns(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    model_root = tmp_path / "model"
+    model_root.mkdir()
+    engine_repo = tmp_path / "engine"
+    engine_binary = engine_repo / "target" / "release" / "axiom-rules-engine"
+    engine_binary.parent.mkdir(parents=True)
+    engine_binary.write_text("")
+    monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
+    captured = {}
+
+    def fake_run(command, *, check, cwd, env):
+        captured.update({"command": command, "check": check, "cwd": cwd, "env": env})
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison._run_euromod_synthetic_compare(
+        {
+            "axiom_rules_repo": str(engine_repo),
+            "parameters": {
+                "suite": "be-replacement-income-pit",
+                "period": 2025,
+                "sample_size": 0,
+                "euromod_model_root": str(model_root),
+                "euromod_extra_columns": ["drgn1", "bhl"],
+            },
+        },
+        tmp_path / "report.json",
+    )
+
+    assert captured["env"]["EUROMOD_EXTRA_COLUMNS"] == "drgn1,bhl"
 
 
 # ---------------------------------------------------------------------------

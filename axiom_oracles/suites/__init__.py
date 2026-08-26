@@ -38,13 +38,20 @@ from .be_worker import (
     be_article_51_forfait_cases,
     be_employer_ssc_cases,
     be_marital_quotient_cases,
+    be_pensioner_pit_cases,
     be_pit_work_bonus_credit_cases,
+    be_replacement_income_pit_cases,
+    be_self_employment_pit_cases,
     be_worker_disposable_income_list_cases,
     be_worker_pit_cases,
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
-from .dk_child_youth_benefit import dk_child_youth_benefit_cases
+from .dk_child_youth_benefit import (
+    dk_child_youth_benefit_2023_cases,
+    dk_child_youth_benefit_cases,
+    dk_child_youth_benefit_couple_cases,
+)
 from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
@@ -97,6 +104,9 @@ def available_suites() -> tuple[str, ...]:
         "be-article-51-forfait",
         "be-work-bonus-credit",
         "be-marital-quotient",
+        "be-pensioner-pit",
+        "be-self-employment-pit",
+        "be-replacement-income-pit",
         "be-worker-tax-income-list",
         "be-worker-disposable-income-list",
         "be-worker-ssc",
@@ -124,6 +134,8 @@ def available_suites() -> tuple[str, ...]:
         "be-unemployment",
         "be-pensioner-contributions",
         "dk-child-youth-benefit",
+        "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
         "de-worker-dual-oracle",
         "uk-worker-pit",
         "uk-personal-allowance",
@@ -172,6 +184,12 @@ def load_suite(name: str):
         return be_pit_work_bonus_credit_cases()
     if name == "be-marital-quotient":
         return be_marital_quotient_cases()
+    if name == "be-pensioner-pit":
+        return be_pensioner_pit_cases()
+    if name == "be-self-employment-pit":
+        return be_self_employment_pit_cases()
+    if name == "be-replacement-income-pit":
+        return be_replacement_income_pit_cases()
     if name == "be-worker-tax-income-list":
         return be_worker_tax_income_list_cases()
     if name == "be-worker-disposable-income-list":
@@ -226,6 +244,10 @@ def load_suite(name: str):
         return be_pensioner_contributions_cases()
     if name == "dk-child-youth-benefit":
         return dk_child_youth_benefit_cases()
+    if name == "dk-child-youth-benefit-2023":
+        return dk_child_youth_benefit_2023_cases()
+    if name == "dk-child-youth-benefit-couple":
+        return dk_child_youth_benefit_couple_cases()
     if name == "de-worker-dual-oracle":
         return de_worker_dual_oracle_cases()
     if name == "uk-worker-pit":
@@ -305,15 +327,18 @@ __all__ = [
     "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
     "be_pensioner_contributions_cases",
+    "be_pensioner_pit_cases",
     "be_pit_work_bonus_credit_cases",
     "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
     "be_regional_pit_surcharge_cases",
     "be_self_employed_ssc_cases",
+    "be_self_employment_pit_cases",
     "be_special_social_security_contribution_cases",
     "be_social_assistance_cases",
     "be_study_allowance_cases",
     "be_unemployment_cases",
+    "be_replacement_income_pit_cases",
     "be_worker_disposable_income_list_cases",
     "be_worker_pit_cases",
     "be_worker_ssc_cases",

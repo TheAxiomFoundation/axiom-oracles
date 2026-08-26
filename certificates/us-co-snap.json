@@ -4,7 +4,7 @@
     "exercise: census incomplete (missing per-case evidence or unaudited bridge) for at least one suite"
   ],
   "certified": {
-    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. state=unavailable means no producer computes closed/executable yet, so certification is not merely withheld but not yet offerable.",
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects. A premise counts only when its mode is computed AND its value is true; attested premises never satisfy it. The canonical definition, including the closure requirements (spine, instruments, dependency closure with leaf discipline), is CERTIFIED.md at the repository root. state=unavailable means no producer computes closed/executable yet, so certification is not merely withheld but not yet offerable.",
     "state": "unavailable",
     "value": false
   },
@@ -13,13 +13,19 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "e6fe79903281eff177fbf5c4205aa9c2d4affb9835a2ba2295990e1919aa5a81"
+      "sha256": "0e622056adb9fae260eb04ade75542b1f4f50445a83bf3382cb502f7ddff52b5"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
       "claim": "suite:co-snap-ecps",
       "mode": "computed",
-      "sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0"
+      "sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-ecps/index.json",
+      "claim": "case-evidence-index:co-snap-ecps",
+      "mode": "computed",
+      "sha256": "b1db0d901aad3c7d159bb4b34718c6aecda40f4e5f0a2f1d60ee010e71414dea"
     },
     {
       "artifact": "dispositions/co-snap-ecps.yaml",
@@ -31,7 +37,13 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "5de3365cb76ff3c8a6033764a8ab1b4953f56e5f07ab5966994542ae09076b90"
+      "sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b"
+    },
+    {
+      "artifact": "dashboard/public/data/cases/co-snap-qc/index.json",
+      "claim": "case-evidence-index:co-snap-qc",
+      "mode": "computed",
+      "sha256": "f615f20bbd79d3bd34d2eee75f9d66e0d371d70a24bc10596eb9298ecabb1669"
     }
   ],
   "period": "2026-01",
@@ -59,13 +71,16 @@
       "reality_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 856,
+          "evidence_cases": 856,
           "matches": 856,
           "mismatches": 0,
           "note": "reality-oracle disagreements are leads, not defects",
           "oracle": "USDA SNAP QC FY2024 administrative sample (rulespec overlay, per-patch citations in report provenance)",
           "oracle_type": "reality",
+          "reconciliation": "cardinality",
           "report_defects": [],
           "suite": "co-snap-qc",
           "unexplained": 0,
@@ -75,12 +90,15 @@
       "reference_legs": [
         {
           "axiom_attributed_open": 0,
+          "binding": "bound",
           "clean": true,
           "comparisons": 2144,
+          "evidence_cases": 1072,
           "matches": 2143,
           "mismatches": 1,
           "oracle": "policyengine-us 1.705.1 over the populace population",
           "oracle_type": "reference",
+          "reconciliation": "full",
           "report_defects": [],
           "suite": "co-snap-ecps",
           "unexplained": 0,
@@ -105,6 +123,7 @@
       "mode": "computed",
       "suites": {
         "co-snap-ecps": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [
             "dependent_care_deduction",
@@ -114,19 +133,28 @@
           "constant_fields": 1,
           "contested_reports": [],
           "per_case_evidence_committed": true,
+          "reconciliation": "none",
+          "registry_report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
+          "registry_report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "report": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
-          "report_sha256": "4ce6eb95a89453a5b7c4b8e5ed7bbf48851ae6749d77587f1f1022a723595be0",
+          "report_identity_matches_registry": true,
+          "report_sha256": "696efc8883e20afcc80ec69345b46ab88127f50f4a104757c6bc0a903a268a90",
           "varied_fields": 7
         },
         "co-snap-qc": {
+          "binding": "bound",
           "bridge_audited": false,
           "bridged_through": [],
           "cases": 856,
           "constant_fields": 0,
           "contested_reports": [],
           "per_case_evidence_committed": false,
+          "reconciliation": "cardinality",
+          "registry_report": "dashboard/public/data/axiom-snapqc-co-snap.json",
+          "registry_report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "report_sha256": "5de3365cb76ff3c8a6033764a8ab1b4953f56e5f07ab5966994542ae09076b90",
+          "report_identity_matches_registry": true,
+          "report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
           "varied_fields": 0
         }
       },

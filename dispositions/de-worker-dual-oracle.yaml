@@ -50,25 +50,47 @@ entries:
     expires_on_source_change: true
     notes: Model finding against EUROMOD; GETTSIM is statute-consistent.
 
-  - id: gettsim-midijob-childless-care-surcharge-base
+  - id: euromod-midijob-childless-care-surcharge-base
     concept: de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly
     case_id: single-w-1200
     kind: amount_difference
     disposition: upstream_engine_gap
     evidence:
       mechanism: >-
-        GETTSIM applies the childless Pflegeversicherung surcharge to the total
-        reduced Midijob contribution base instead of the SGB IV §20(2a)
-        sentence 6 employee base. EUROMOD follows the statutory employee-base
-        rule, yielding EUROMOD minus GETTSIM = -1.06973 EUR/month.
+        EUROMOD DE_2025 applies the employee-only 0.6 percentage-point
+        childless Pflegeversicherung surcharge to the SGB IV §20(2a)
+        sentence 6 employee-share assessment base. BVV §2(2) sentence 3 uses
+        that base for the employee half of the shared contribution, but
+        sentence 6 expressly requires an employee-only Beitragszuschlag to be
+        calculated on the §20(2a) sentence 1 total assessment base. Because
+        SGB XI §58(1) sentence 3 makes the childless surcharge employee-only,
+        GETTSIM follows the controlling base rule and EUROMOD is low by
+        1.06973 EUR/month in the committed parity row.
       arithmetic:
+        - expression: "1040.3640680648991 * 0.018 + 1218.6523328056985 * 0.006"
+          equals: 26.038467222002375
+          tolerance: 0.000001
+        - expression: "1040.3640680648991 * 0.024"
+          equals: 24.968737633557577
+          tolerance: 0.000001
         - expression: "24.968737633557577 - 26.038467222002375"
           equals: -1.069729588444798
           tolerance: 0.000001
-      upstream_url: https://github.com/ttsim-dev/gettsim/issues/1215
-    linked_issue: https://github.com/ttsim-dev/gettsim/issues/1215
+      upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23
+      sources:
+        - https://www.gesetze-im-internet.de/beitrvv/__2.html
+        - https://rvrecht.deutsche-rentenversicherung.de/SharedDocs/rvRecht/05_Normen_und_Vertraege/02_A-B/BVV/0002/0002_2025_01_01.html
+        - https://www.kbs.de/DE/AngeboteFuerFirmen/VersicherungsrechtBeitraegeUndMeldungen/Versicherungsrecht/Midijobs/midijobs_node.html
+    linked_issue: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23
     expires_on_source_change: true
     pinned:
       left: 24.968737633557577
       right: 26.038467222002375
-    notes: Model finding against GETTSIM; EUROMOD is statute-consistent.
+    notes: >-
+      Re-adjudicated 2026-08-19 after ttsim-dev/gettsim#1215 was rejected by
+      the maintainer (surcharge rides the total base). Classification as
+      upstream_engine_gap against EUROMOD rests on the independent controlling
+      derivation from BVV §2(2) sentences 3 and 6 together with SGB XI §58(1)
+      sentence 3, not on EC-JRC maintainer acceptance. GETTSIM's aggregate
+      exposes a distinct potential one-cent component-rounding nuance (BVV
+      separate-component rounding) tracked separately from this base finding.

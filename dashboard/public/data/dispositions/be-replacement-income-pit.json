@@ -1,0 +1,31 @@
+{
+ "suite": "be-replacement-income-pit",
+ "updated": "2026-08-22",
+ "entries": [
+  {
+   "id": "mixed-unemployment-proration-and-work-bonus-engine-semantics",
+   "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Two named EUROMOD BE_2025 mechanisms close the mixed unemployment and wage residual. Function 63 applies the additional Article 147 amount without the unemployment-income share used for the base reduction, lowering tax by 50.646189266114 EUR after autonomy (ec-jrc issue #25). EUROMOD's uncapped 1,504.848888 EUR work-bonus credit instead of the 1,028.28906 EUR credit on the reduction actually granted lowers it by another 476.559828 EUR (the existing issue #12 disposition). Their -527.206017266114 EUR sum equals the observed EUROMOD-minus-Axiom residual to displayed-float precision.",
+   "cases": [
+    "be-replacement-income-pit-bun-15k-yem-15k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-(163.9032131147541 - 96.41365477338476) * 0.75043",
+     "equals": -50.64618926611379
+    },
+    {
+     "expression": "1028.28906 - 1504.848888",
+     "equals": -476.559828
+    },
+    {
+     "expression": "(-(163.9032131147541 - 96.41365477338476) * 0.75043) + (1028.28906 - 1504.848888)",
+     "equals": -527.2060172661138
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/25"
+  }
+ ]
+}

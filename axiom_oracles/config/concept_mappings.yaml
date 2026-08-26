@@ -177,6 +177,160 @@ concepts:
           type: country
           geoid: BE
 
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding:
+    description: Belgium pension and replacement-income PIT before withholding
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_federal_and_local_tax_before_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding:
+    description: Belgium pensioner annual health and solidarity withholding
+    category: social_contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_annual_social_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tscpe_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits:
+    description: Belgium Articles 147--153 pension-income tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_replacement_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits:
+    description: Belgium Articles 147--153 unemployment-income tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_replacement_unemployment_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits:
+    description: Belgium Articles 147--153 sickness/invalidity tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_replacement_sickness_invalidity_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding:
+    description: Belgium self-employment PIT before withholding
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income:
+    description: Belgium combined worker and self-employment taxable income
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: il_taxabley
+        scope:
+          type: country
+          geoid: BE
+
   be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions:
     description: Belgium employee social-security contribution before worker reductions
     category: social_contributions
@@ -398,6 +552,29 @@ concepts:
     targets:
       axiom:
         name: single_recipient_annual_child_youth_benefit
+        scope:
+          type: country
+          geoid: DK
+      euromod:
+        name: bfachnm_s
+        scope:
+          type: country
+          geoid: DK
+
+  dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit:
+    description: Denmark child and youth benefit (couple recipients, household sum)
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [DK]
+    scope:
+      type: country
+      geoid: DK
+    targets:
+      axiom:
+        name: couple_recipient_annual_child_youth_benefit
         scope:
           type: country
           geoid: DK

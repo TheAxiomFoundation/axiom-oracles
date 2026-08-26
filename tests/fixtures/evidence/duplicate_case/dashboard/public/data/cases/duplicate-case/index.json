@@ -1,0 +1,16 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/duplicate_case/dashboard/public/data/report.json",
+  "report_sha256": "ccfe5ee467654209c21bb4dccc43a34338761d62b6f7ebd6a80bf9390291c94a",
+  "case_verdicts_sha256": "21b5dfe4eccee9f20c726829ae7055ea7160d41ac4f37b87e38d7e413acda4d5",
+  "suite": "duplicate-case",
+  "count": 2,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "72f3a747a8e853e2e0100fc5296989eb3e48954c3e081b9f882af9359aa71c6b",
+      "cases": 2
+    }
+  ]
+}

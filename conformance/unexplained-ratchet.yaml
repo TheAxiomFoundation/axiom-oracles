@@ -1,8 +1,7 @@
 schema: axiom_oracles.unexplained_ratchet.v1
-_comment: 'Per-suite unexplained-mismatch ceilings — GENERATED; advance only via
-  scripts/unexplained_ratchet.py. Ceilings may only fall. A suite absent from this
-  file has ceiling 0, so a new comparison suite cannot publish unexplained disagreements:
-  triage first, publish second.'
+_comment: 'Per-suite unexplained-mismatch ceilings — GENERATED; advance only via scripts/unexplained_ratchet.py.
+  Ceilings may only fall. A suite absent from this file has ceiling 0, so a new comparison suite cannot
+  publish unexplained disagreements: triage first, publish second.'
 ratchets:
 - suite: ak-apa-state-supplement
   unexplained_max: 0
@@ -66,11 +65,17 @@ ratchets:
   unexplained_max: 0
 - suite: be-pensioner-contributions
   unexplained_max: 0
+- suite: be-pensioner-pit
+  unexplained_max: 0
 - suite: be-property-tax
   unexplained_max: 0
 - suite: be-regional-pit-surcharge
   unexplained_max: 0
+- suite: be-replacement-income-pit
+  unexplained_max: 0
 - suite: be-self-employed-ssc
+  unexplained_max: 0
+- suite: be-self-employment-pit
   unexplained_max: 0
 - suite: be-social-assistance
   unexplained_max: 0
@@ -99,7 +104,7 @@ ratchets:
 - suite: ca-income-tax-populace
   unexplained_max: 0
 - suite: ca-snap-ecps
-  unexplained_max: 4
+  unexplained_max: 0
 - suite: ca-snap-qc
   unexplained_max: 0
 - suite: ca-tanf-ecps
@@ -140,6 +145,10 @@ ratchets:
   unexplained_max: 0
 - suite: dk-child-youth-benefit
   unexplained_max: 0
+- suite: dk-child-youth-benefit-2023
+  unexplained_max: 0
+- suite: dk-child-youth-benefit-couple
+  unexplained_max: 0
 - suite: fiit-ecps
   unexplained_max: 0
 - suite: fiit-taxsim-ecps
@@ -155,7 +164,7 @@ ratchets:
 - suite: ga-income-tax-populace
   unexplained_max: 0
 - suite: ga-snap-ecps
-  unexplained_max: 2
+  unexplained_max: 0
 - suite: ga-snap-qc
   unexplained_max: 0
 - suite: ga-tanf-ecps
@@ -271,6 +280,8 @@ ratchets:
 - suite: ny-tanf-ecps
   unexplained_max: 0
 - suite: ny-tanf-standards
+  unexplained_max: 0
+- suite: nz-treasury-incomeexplorer
   unexplained_max: 0
 - suite: oh-income-tax-liability
   unexplained_max: 0

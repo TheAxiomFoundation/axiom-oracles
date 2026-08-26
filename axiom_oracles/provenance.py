@@ -180,6 +180,13 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     ]
     home = Path.home()
     candidates = []
+    # AXIOM_RULESPEC_US_ROOT pins the rulespec-us checkout a comparison runs
+    # against (see scripts/run_comparison.py); the recorded SHA must come
+    # from the same checkout the run actually resolved, not whatever branch
+    # the developer's convention-path checkout happens to be on.
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override and name == "rulespec-us":
+        candidates.append(Path(override))
     for candidate_name in candidate_names:
         candidates.extend(
             [

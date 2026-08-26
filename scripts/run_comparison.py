@@ -13,6 +13,7 @@ import csv
 import fcntl
 import fnmatch
 import hashlib
+import importlib.util
 import json
 import os
 import shutil
@@ -558,6 +559,12 @@ def main() -> int:
                 # filename rather than crashing --list.
                 print(f"{path.stem:24s}  (non-registry config)")
                 continue
+            if config["name"] != path.stem:
+                raise SystemExit(
+                    f"comparison config {path.name!r} declares name "
+                    f"{config['name']!r}; expected {path.stem!r} to match its "
+                    "registry selector"
+                )
             print(f"{config['name']:24s}  {config.get('title', '')}")
         return 0
 
@@ -603,6 +610,13 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
         runner_fn(config["runner"], staging)
+        canonical_record = _canonical_record_path(config)
+        producer_native_canonical = (
+            staging.read_bytes()
+            if canonical_record is not None
+            and runner_type == "de-axiom-oracle-compare"
+            else None
+        )
 
         # Provenance (O2): stamp what produced this report — rulespec repos +
         # SHAs, engine identity, oracle identity, dataset identity, run kind —
@@ -621,8 +635,8 @@ def main() -> int:
                 runner_type == "axiom-oracles-compare"
                 and "policyengine" in compared_engines
             ),
+            preserve_runner_provenance=(runner_type == "de-axiom-oracle-compare"),
         )
-
         dashboard_target = config.get("dashboard", {}).get("filename")
         adapted = None
         if dashboard_target:
@@ -634,6 +648,9 @@ def main() -> int:
                 suite=suite,
             )
             adapted["provenance"] = provenance
+        preserve_existing_versioned = bool(
+            config["runner"].get("_reemitted_report")
+        )
 
         # Publish the report and its dashboard copy as a pair under an
         # exclusive same-directory lock, so two same-day runs cannot
@@ -651,14 +668,39 @@ def main() -> int:
                     f"staging report {staging} is no longer this user's "
                     "regular file — refusing to publish"
                 )
-            os.replace(staging, output)
-            print(f"Wrote: {output}")
+            preserve_bound_source = (
+                preserve_existing_versioned
+                and dashboard_target is not None
+                and _preserved_versioned_source_is_output(
+                    dashboard_target, output
+                )
+            )
+            if preserve_bound_source:
+                # A real run and a later skip on the same UTC date share this
+                # deterministic output path. Replacing it with the re-emitted
+                # slim dashboard view would destroy the exact prior full bytes
+                # that the preserved dashboard binding still names.
+                print(
+                    f"Preserved prior full report for skipped run: {output}"
+                )
+            else:
+                os.replace(staging, output)
+                print(f"Wrote: {output}")
+            if canonical_record is not None:
+                if producer_native_canonical is not None:
+                    _write_canonical_record_bytes(
+                        producer_native_canonical, canonical_record
+                    )
+                else:
+                    _write_canonical_record(output, canonical_record)
+                print(f"Wrote canonical record: {canonical_record}")
             if dashboard_target and adapted is not None:
                 _write_dashboard_report(
                     adapted,
                     dashboard_target,
                     full_report_path=output,
                     dashboard_config=config.get("dashboard"),
+                    preserve_existing_versioned=preserve_existing_versioned,
                 )
     finally:
         staging.unlink(missing_ok=True)
@@ -772,11 +814,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # HEAD only if it survives; a fresh --depth 1 clone is main's tip).
     rulespec_paths: list[str] = []
     for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
-        rulespec_paths.append(str(entry))
+        # _expand_path honors AXIOM_RULESPEC_US_ROOT: the recorded SHA must
+        # come from the checkout the run actually resolved, not the
+        # developer's convention-path checkout.
+        rulespec_paths.append(str(_expand_path(entry)))
     for key in ("rulespec_root",):
         val = runner.get(key) or params.get(key)
         if val:
-            rulespec_paths.append(str(val))
+            rulespec_paths.append(str(_expand_path(val)))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
@@ -841,6 +886,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-encode-snap-ecps-compare",
         "axiom-encode-tax-ecps-compare",
         "axiom-oracles-compare",
+        "de-axiom-oracle-compare",
     ):
         rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
     # A skip-capable runner that re-emitted the committed report never
@@ -992,6 +1038,22 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 "gettsim_policy_date", "2025-06-30"
             ),
         }
+    elif runner_type == "de-axiom-oracle-compare":
+        oracle_id = str(params.get("oracle", ""))
+        if oracle_id == "euromod":
+            oracle = {
+                "name": "euromod",
+                "euromod_release": "J2.0+",
+                "euromod_country": "DE",
+                "euromod_system": "DE_2025",
+                "euromod_dataset": "DE_2024_b1_2015_03_e2",
+            }
+        elif oracle_id == "gettsim":
+            oracle = {
+                "name": "gettsim",
+                "gettsim_version": "1.2.1",
+                "gettsim_policy_date": "2025-06-30",
+            }
     elif runner_type == "snap-qc-compare":
         # The USDA SNAP QC public-use file is the oracle; its identity is the
         # pinned posting for the fiscal year (immutable, sha256-verified by the
@@ -1053,6 +1115,7 @@ def _stamp_report_provenance(
     provenance: dict,
     *,
     require_engine_versions: bool = False,
+    preserve_runner_provenance: bool = False,
 ) -> None:
     """Add ``provenance`` to the reports/ JSON, preserving the file's own format.
 
@@ -1068,7 +1131,23 @@ def _stamp_report_provenance(
         return
     if not isinstance(data, dict):
         return
-    data["provenance"] = provenance
+    existing_provenance = data.get("provenance")
+    if preserve_runner_provenance and isinstance(existing_provenance, dict):
+        # DE's unified pair record carries the evidence-producing execution
+        # receipt in this block.  Keep it while adding the generic affected-
+        # rerun provenance (rulespec pin, engine, oracle, dataset).  Other
+        # runners retain the historical replace behavior so stale producer
+        # metadata cannot survive an ordinary rerun accidentally.
+        data["provenance"] = {
+            **provenance,
+            **existing_provenance,
+            "registry_run": {
+                "generated_by": provenance.get("generated_by"),
+                "generated_at": provenance.get("generated_at"),
+            },
+        }
+    else:
+        data["provenance"] = provenance
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -1842,8 +1921,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _resolve_path(roots_env, "axiom_rulespec_repo_roots")
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_resolve_path(roots_env, "axiom_rulespec_repo_roots"))]
         )
         # The runner's root fallback consults the singular AXIOM_RULESPEC_ROOT
         # first; an ambient developer export would silently override the
@@ -1901,13 +1980,15 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     compile_env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = str(_expand_path(roots_env))
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_expand_path(roots_env))]
+        )
         # Suite-declared roots are authoritative over an ambient singular
         # export (the runner fallback reads AXIOM_RULESPEC_ROOT first).
         compile_env.pop("AXIOM_RULESPEC_ROOT", None)
     elif "AXIOM_RULESPEC_REPO_ROOTS" not in compile_env and roots:
-        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-            str(root.parent) for root in roots
+        compile_env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(root.parent) for root in roots]
         )
 
     # Post-hard-cut engines compile compose output via compile-composed with
@@ -2080,10 +2161,15 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     constant_overrides = params.get("euromod_constant_overrides")
     if constant_overrides:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
+    extra_columns = params.get("euromod_extra_columns")
+    if extra_columns:
+        if not isinstance(extra_columns, list):
+            raise SystemExit("euromod_extra_columns must be a list")
+        env["EUROMOD_EXTRA_COLUMNS"] = ",".join(str(name) for name in extra_columns)
     roots_env = params.get("axiom_rulespec_repo_roots")
     if roots_env:
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(
-            _expand_path(roots_env)
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = _rulespec_repo_roots_env(
+            [str(_expand_path(roots_env))]
         )
         # Suite-declared roots are authoritative over an ambient singular
         # export (the runner fallback reads AXIOM_RULESPEC_ROOT first).
@@ -2168,9 +2254,7 @@ def _reemit_gettsim_synthetic_report(
                     "mismatches_by_kind": [],
                     "mismatches_by_scenario": [],
                     "error_count": 1,
-                    "errors_by_engine": [
-                        {"value": unavailable_engine, "count": 1}
-                    ],
+                    "errors_by_engine": {unavailable_engine: 1},
                 },
                 "aggregates": [],
                 "mismatches": [],
@@ -3820,6 +3904,37 @@ def _run_spsm_ca_compare(runner: dict, output: Path) -> None:
         cwd=REPO_ROOT,
     )
 
+def _run_us_tariff_schedule(runner: dict, output: Path) -> None:
+    """Publish the completed, separately sharded C1 campaign report."""
+    del runner
+    subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts/us_tariff_schedule_campaign.py"), "report"],
+        check=True,
+        cwd=REPO_ROOT,
+    )
+    shutil.copyfile(REPO_ROOT / "conformance/detail/us-tariff-schedule.json", output)
+
+def _run_de_axiom_oracle_compare(runner: dict, output: Path) -> None:
+    """Build one pinned DE Axiom↔oracle unified tuple record.
+
+    The producer owns exact-ref inspection and its pre-signing pending record;
+    keeping this registry wrapper thin makes the affected-rerun dispatch name
+    the same callable developers run locally.  The private verified pin is
+    stamped only after that producer accepts the configured commit/tree.
+    """
+
+    module_path = REPO_ROOT / "scripts" / "de_axiom_legs.py"
+    spec = importlib.util.spec_from_file_location("_de_axiom_legs_runner", module_path)
+    if spec is None or spec.loader is None:
+        raise SystemExit("cannot load scripts/de_axiom_legs.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.run_registered_leg(runner, output)
+    params = runner.get("parameters") or {}
+    pin = params.get("rulespec_upstream_sha")
+    if pin:
+        params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = str(pin)
+
 RUNNERS = {
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
@@ -3828,6 +3943,7 @@ RUNNERS = {
     "euromod-synthetic-compare": _run_euromod_synthetic_compare,
     "federal-tax-liability-grid": _run_federal_tax_liability_grid,
     "gettsim-synthetic-compare": _run_gettsim_synthetic_compare,
+    "de-axiom-oracle-compare": _run_de_axiom_oracle_compare,
     "snap-abawd-boundary-grid": _run_snap_abawd_boundary_grid,
     "snap-qc-compare": _run_snap_qc_compare,
     "spsm-ca-compare": _run_spsm_ca_compare,
@@ -3844,6 +3960,7 @@ RUNNERS = {
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
     "us-tariff-grid": _run_us_tariff_grid,
     "us-tariff-panel": _run_us_tariff_panel,
+    "us-tariff-schedule": _run_us_tariff_schedule,
 }
 
 
@@ -3909,7 +4026,60 @@ def _load_comparison(name: str) -> dict:
         raise SystemExit(
             f"unknown comparison {name!r}; available: {', '.join(available)}"
         )
-    return yaml.safe_load(path.read_text())
+    config = yaml.safe_load(path.read_text())
+    if not isinstance(config, dict):
+        raise SystemExit(f"comparison config {path.name!r} must be a mapping")
+    declared = config.get("name")
+    if declared != name:
+        raise SystemExit(
+            f"comparison config {path.name!r} declares name {declared!r}; "
+            f"expected {name!r} to match its registry selector"
+        )
+    return config
+
+
+def _canonical_record_path(config: dict) -> Path | None:
+    """Resolve an optional fixed comparison record without path traversal.
+
+    Most runners publish a dated full report plus a dashboard copy.  Unified
+    tuple records are instead stable certificate inputs under ``comparisons``;
+    the dated report remains useful run evidence, while this exact copy is the
+    registry/selector surface and is regenerated on every run.
+    """
+
+    raw = (config.get("artifacts") or {}).get("canonical_record")
+    if raw is None:
+        return None
+    if not isinstance(raw, str) or not raw.strip() or Path(raw).is_absolute():
+        raise SystemExit("artifacts.canonical_record must be a repo-relative path")
+    target = (REPO_ROOT / raw).resolve()
+    comparisons_root = (REPO_ROOT / "comparisons").resolve()
+    if comparisons_root not in target.parents:
+        raise SystemExit("artifacts.canonical_record must stay under comparisons/")
+    return target
+
+
+def _write_canonical_record(source: Path, target: Path) -> None:
+    """Atomically publish the exact stamped full record at its stable path."""
+
+    _write_canonical_record_bytes(source.read_bytes(), target)
+
+
+def _write_canonical_record_bytes(payload: bytes, target: Path) -> None:
+    """Atomically publish canonical bytes without mutating producer evidence."""
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(
+        dir=target.parent,
+        prefix=f".{target.name}.",
+        suffix=".tmp",
+    )
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(payload)
+        os.replace(temporary, target)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
 
 
 def _resolve_path(raw: str, field: str) -> Path:
@@ -4036,8 +4206,36 @@ def _verify_declared_pins(config: dict) -> None:
             )
 
 
+def _rulespec_repo_roots_env(base_roots: list[str]) -> str:
+    """AXIOM_RULESPEC_REPO_ROOTS value honoring AXIOM_RULESPEC_US_ROOT.
+
+    With the override set, children (compile, compare) must find
+    ``rulespec-us`` at the override rather than through the developer
+    checkout under the configured root — prepend the override's parent so it
+    wins repo resolution while other repos still resolve under the
+    configured roots.
+    """
+    roots = list(base_roots)
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        roots.insert(0, str(Path(override).resolve().parent))
+    return os.pathsep.join(dict.fromkeys(roots))
+
+
 def _expand_path(raw: str | Path) -> Path:
-    return Path(os.path.expandvars(os.path.expanduser(str(raw)))).resolve()
+    expanded = os.path.expandvars(os.path.expanduser(str(raw)))
+    # AXIOM_RULESPEC_US_ROOT reroutes the canonical `$HOME/rulespec-us`
+    # checkout (mirroring the AXIOM_RULES_REPO / AXIOM_ENCODE_REPO overrides)
+    # so comparisons can run against a pinned clean snapshot instead of
+    # whatever branch the developer's working checkout happens to be on —
+    # `$HOME/rulespec-us` is often a symlink into an active feature worktree,
+    # and provenance must not silently record its WIP sha.
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        canonical = os.path.join(os.path.expanduser("~"), "rulespec-us")
+        if expanded == canonical or expanded.startswith(canonical + os.sep):
+            expanded = override + expanded[len(canonical):]
+    return Path(expanded).resolve()
 
 
 def _ensure_engine_binary(repo: Path, *, kind: str) -> None:
@@ -5073,11 +5271,169 @@ def _csv_scalar(value: object) -> object:
 # mismatching cases (and cap both lists) once a report crosses the threshold.
 _DASHBOARD_MAX_MISMATCHES = 1000
 _DASHBOARD_MAX_CASE_ROWS = 1000
+_CHUNK_INDEX_SCHEMA_VERSION = "axiom_oracles.chunk_index.v1"
+
+
+def _uses_versioned_case_chunks(report: dict) -> bool:
+    """Whether this suite has migrated its case corpus to bound chunks.
+
+    The existing index binds the previous report bytes while a refresh is
+    being produced, so this checks the storage contract rather than its stale
+    hash. This producer refreshes the chunks from its still-full case corpus
+    and binds the new report itself; the generic generator then verifies that
+    identity idempotently.
+    """
+
+    suite = report.get("suite")
+    if not isinstance(suite, str) or not suite:
+        return False
+    index_path = DASHBOARD_DATA_DIR / "cases" / suite / "index.json"
+    try:
+        index = json.loads(index_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(index, dict)
+        and index.get("schema_version") == _CHUNK_INDEX_SCHEMA_VERSION
+    )
+
+
+def _refresh_versioned_case_chunks(report: dict) -> dict | None:
+    """Write fresh compact chunks while the producer still holds full cases.
+
+    A generic index generator cannot prove that changed aggregate report bytes
+    and changed chunks came from the same execution once inline mirrors are
+    gone. The comparison producer can: this function runs before slimming and
+    returns refreshed display metadata for the new bound index.
+    """
+
+    suite = report.get("suite")
+    if (
+        not isinstance(suite, str)
+        or not suite
+        or suite in {".", ".."}
+        or Path(suite).name != suite
+        or "\\" in suite
+    ):
+        raise ValueError("versioned evidence suite must be a safe path component")
+    raw_cases = report.get("cases")
+    if raw_cases in (None, []):
+        return None
+    if not isinstance(raw_cases, list) or not all(
+        isinstance(case, dict) for case in raw_cases
+    ):
+        raise ValueError("versioned evidence cases must be an array of objects")
+    declared = report.get("case_count")
+    if (
+        isinstance(declared, bool)
+        or not isinstance(declared, int)
+        or declared != len(raw_cases)
+    ):
+        raise ValueError(
+            "versioned evidence case_count must equal the full case corpus "
+            f"({declared!r} != {len(raw_cases)})"
+        )
+
+    from scripts.emit_case_artifacts import (
+        CHUNK_SIZE,
+        MAX_CASES,
+        compact_case,
+        explained_lookup,
+    )
+
+    if len(raw_cases) > MAX_CASES:
+        raise ValueError(
+            f"versioned evidence has {len(raw_cases)} cases, over cap {MAX_CASES}"
+        )
+    explained = explained_lookup(report)
+    rows = [compact_case(case, explained) for case in raw_cases]
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
+
+    out_dir = DASHBOARD_DATA_DIR / "cases" / suite
+    out_dir.mkdir(parents=True, exist_ok=True)
+    chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
+    expected_names = set()
+    for index, chunk in enumerate(chunks):
+        name = f"chunk-{index}.json"
+        expected_names.add(name)
+        (out_dir / name).write_text(json.dumps(chunk, separators=(",", ":")))
+    for stale in out_dir.glob("chunk-*.json"):
+        if stale.name not in expected_names:
+            stale.unlink()
+
+    mismatch_concepts = sorted(
+        {
+            mismatch["c"]
+            for row in rows
+            for mismatch in row["m"]
+            if mismatch.get("c")
+        }
+    )
+    return {
+        "chunk_size": CHUNK_SIZE,
+        "engines": report.get("engines"),
+        "input_slots": input_slots,
+        "mismatch_concepts": mismatch_concepts,
+        "output_slots": output_slots,
+        "source": "run_comparison.py full case corpus",
+        "total_cases": len(rows),
+    }
+
+
+def _write_refreshed_chunk_index(report_path: Path, metadata: dict) -> None:
+    """Bind producer-refreshed chunks to the exact dashboard report bytes."""
+
+    from axiom_oracles.evidence import (
+        build_chunk_index,
+        validate_suite_evidence,
+    )
+
+    candidate = build_chunk_index(report_path)
+    chunk_count = candidate.pop("chunk_count")
+    chunks = candidate.pop("chunks")
+    for optional in ("input_slots", "output_slots"):
+        candidate.pop(optional, None)
+        if metadata[optional]:
+            candidate[optional] = metadata[optional]
+    candidate.update(
+        {
+            key: value
+            for key, value in metadata.items()
+            if key not in {"input_slots", "output_slots"}
+        }
+    )
+    # Keep the descriptor tail in the same canonical order produced by
+    # build_chunk_index; --check compares deterministic rendered bytes.
+    candidate["chunk_count"] = chunk_count
+    candidate["chunks"] = chunks
+    suite = candidate["suite"]
+    index_path = report_path.parent / "cases" / suite / "index.json"
+    index_path.write_text(json.dumps(candidate, indent=2) + "\n")
+    evidence = validate_suite_evidence(report_path)
+    if not evidence.valid:
+        details = "\n".join(f"- {defect}" for defect in evidence.defects)
+        raise ValueError(
+            f"producer-refreshed evidence did not validate for {suite}:\n{details}"
+        )
 
 
 def _slim_report_for_dashboard(
     report: dict,
     *,
+    versioned_case_chunks: bool | None = None,
     max_mismatches: int | None = None,
     max_case_rows: int | None = None,
 ) -> dict:
@@ -5085,9 +5441,9 @@ def _slim_report_for_dashboard(
 
     A suite whose triage pipeline needs every mismatch row committed (the
     dispositions flow reads the dashboard copy — #439: 438 of the TAXSIM
-    intersection suite's unexplained rows were physically untriageable
-    behind the default cap) raises ``dashboard.max_mismatches`` in its
-    comparison YAML instead of relying on the ephemeral reports/ artifact.
+    intersection suite's unexplained rows were physically untriageable behind
+    the default cap) raises ``dashboard.max_mismatches`` in its comparison
+    YAML instead of relying on the ephemeral reports/ artifact.
     """
     if max_mismatches is None:
         max_mismatches = _DASHBOARD_MAX_MISMATCHES
@@ -5095,36 +5451,63 @@ def _slim_report_for_dashboard(
         max_case_rows = _DASHBOARD_MAX_CASE_ROWS
     mismatches = report.get("mismatches") or []
     cases = report.get("cases") or []
-    if len(mismatches) <= max_mismatches and len(cases) <= max_case_rows:
-        return report
-    slim = dict(report)
-    kept_mismatches = mismatches[:max_mismatches]
-    kept_ids = {m.get("case_id") for m in kept_mismatches}
-    slim["mismatches"] = kept_mismatches
-    # Case rows are only dropped when THEY breach the cap. Filtering them
-    # by retained mismatch ids whenever the mismatch list is truncated
-    # silently discarded ledgers whose case rows are aggregates with their
-    # own id scheme (the us-tariff-panel family ledger shipped 0/73 rows —
-    # #448 review round 4).
-    if len(cases) > max_case_rows:
-        slim["cases"] = [
-            case for case in cases if case.get("case_id") in kept_ids
-        ][:max_case_rows]
+    within_inline_limits = (
+        len(mismatches) <= max_mismatches
+        and len(cases) <= max_case_rows
+    )
+    if within_inline_limits:
+        slim = report
     else:
-        slim["cases"] = cases
-    slim["dashboard_truncation"] = {
-        "total_mismatches": len(mismatches),
-        "shown_mismatches": len(kept_mismatches),
-        "total_case_rows": len(cases),
-        "shown_case_rows": len(slim["cases"]),
-    }
+        slim = dict(report)
+        kept_mismatches = mismatches[:max_mismatches]
+        kept_ids = {m.get("case_id") for m in kept_mismatches}
+        slim["mismatches"] = kept_mismatches
+        # Case rows are only dropped when THEY breach the cap. Filtering them
+        # by retained mismatch ids whenever the mismatch list is truncated
+        # silently discarded ledgers whose case rows are aggregates with their
+        # own id scheme (the us-tariff-panel family ledger shipped 0/73 rows —
+        # #448 review round 4).
+        if len(cases) > max_case_rows:
+            slim["cases"] = [
+                case for case in cases if case.get("case_id") in kept_ids
+            ][:max_case_rows]
+        else:
+            slim["cases"] = cases
+        slim["dashboard_truncation"] = {
+            "total_mismatches": len(mismatches),
+            "shown_mismatches": len(kept_mismatches),
+            "total_case_rows": len(cases),
+            "shown_case_rows": len(slim["cases"]),
+        }
+    if versioned_case_chunks is None:
+        versioned_case_chunks = _uses_versioned_case_chunks(report)
+    if versioned_case_chunks and cases:
+        # A case ID may exist in exactly one evidence source. Once a suite has
+        # a versioned chunk contract, the report remains the aggregate view
+        # and chunks are the sole per-case corpus.
+        slim = dict(slim)
+        slim["cases"] = []
+        truncation = dict(slim.get("dashboard_truncation") or {})
+        truncation.update(
+            {
+                "total_mismatches": len(mismatches),
+                "shown_mismatches": len(slim.get("mismatches") or []),
+                "total_case_rows": len(cases),
+                "shown_case_rows": 0,
+            }
+        )
+        slim["dashboard_truncation"] = truncation
     # When a dispositioned report is trimmed, record how many example mismatch
     # rows survive so scripts/apply_dispositions.py --check recognizes it as a
     # premerged-slim report (v2.1) and keeps the full-run summary.dispositioned
     # block instead of re-merging dispositions against the truncated examples
     # (which would undercount classified rows). See dispositions._is_premerged_...
     summary = report.get("summary")
-    if isinstance(summary, dict) and isinstance(summary.get("dispositioned"), dict):
+    if (
+        not within_inline_limits
+        and isinstance(summary, dict)
+        and isinstance(summary.get("dispositioned"), dict)
+    ):
         slim["summary"] = dict(summary)
         slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
     return slim
@@ -5151,21 +5534,88 @@ def _merge_dispositions(report: dict) -> dict:
     )
 
 
+def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
+    """Whether a skip publish would overwrite its preserved bound source.
+
+    The pointer is read from the existing dashboard copy, because that is the
+    evidence set a versioned skip preserves.  Resolution mirrors
+    ``apply_dispositions._resolve_source_pointer``: only a repo-relative path
+    resolving beneath ``reports/`` is eligible.  Digest and fullness remain
+    the consumer's fail-closed responsibility; this helper only prevents the
+    publisher from changing the bytes at that exact path before the consumer
+    can verify them.
+    """
+
+    target = DASHBOARD_DATA_DIR / filename
+    try:
+        existing = json.loads(target.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(existing, dict) or not _uses_versioned_case_chunks(
+        existing
+    ):
+        return False
+    block = (existing.get("summary") or {}).get("dispositioned")
+    pointer = block.get("source_report") if isinstance(block, dict) else None
+    if not isinstance(pointer, dict):
+        return False
+    raw_path = pointer.get("path")
+    digest = pointer.get("sha256")
+    if (
+        not isinstance(raw_path, str)
+        or not isinstance(digest, str)
+        or Path(raw_path).is_absolute()
+    ):
+        return False
+    candidate = (REPO_ROOT / raw_path).resolve()
+    reports_dir = (REPO_ROOT / "reports").resolve()
+    return reports_dir in candidate.parents and candidate == output.resolve()
+
+
 def _write_dashboard_report(
     report: dict,
     filename: str,
     *,
     full_report_path: Path | None = None,
     dashboard_config: dict | None = None,
+    preserve_existing_versioned: bool = False,
 ) -> None:
+    """Publish a dashboard copy and refresh its versioned case evidence.
+
+    A versioned report copied by a skip-capable runner is not a new execution.
+    With ``preserve_existing_versioned``, its committed dashboard report and
+    chunks therefore remain byte-for-byte unchanged, including the existing
+    ``summary.dispositioned.source_report`` path, source-file SHA-256, and
+    row-assignment SHA-256 from the prior real execution.  The skip's
+    ``full_report_path`` is deliberately ignored: rebinding the preserved slim
+    copy to a newly published re-emission would claim a fresh full source that
+    did not execute.  ``apply_dispositions --check`` resolves the retained
+    repo-relative path under ``reports/`` and validates those prior exact
+    bytes, so the preserved binding remains checkable while that source stays
+    present and unchanged.  The main publisher also protects a same-path,
+    same-day skip from replacing those prior source bytes before this return.
+    """
+
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
     report = _merge_dispositions(report)
+    versioned_case_chunks = _uses_versioned_case_chunks(report)
+    if preserve_existing_versioned and versioned_case_chunks:
+        # A skip-capable runner copied the committed dashboard view and did
+        # not execute. Inline-only v1 corpora can legitimately carry cases, so
+        # their presence is not proof of a fresh run. Rewriting provenance or
+        # chunks would create a new binding without execution; preserve the
+        # entire already-bound evidence set for every versioned skip.
+        print(
+            f"Preserved dashboard report and bound chunks for skipped {report['suite']}"
+        )
+        return
     target = DASHBOARD_DATA_DIR / filename
     dashboard_config = dashboard_config or {}
     slim = _slim_report_for_dashboard(
         strip_heavy_case_metadata(report),
+        versioned_case_chunks=versioned_case_chunks,
         max_mismatches=dashboard_config.get("max_mismatches"),
         max_case_rows=dashboard_config.get("max_case_rows"),
     )
@@ -5260,6 +5710,12 @@ def _write_dashboard_report(
         slim_summary = dict(slim_summary)
         slim_summary["dispositioned"] = block
         slim["summary"] = slim_summary
+    # Refresh versioned chunks only after every no-publish path above has
+    # returned. The dashboard bytes and chunk corpus form one binding; a run
+    # that cannot publish the dashboard must not rewrite only the chunks.
+    refreshed_chunk_metadata = (
+        _refresh_versioned_case_chunks(report) if versioned_case_chunks else None
+    )
     # Atomic publish: the dashboard is fetched by the UI and read by tests —
     # it must never be observable as partially written JSON (#448 review
     # round 4).
@@ -5272,6 +5728,8 @@ def _write_dashboard_report(
         os.replace(dash_name, target)
     finally:
         Path(dash_name).unlink(missing_ok=True)
+    if refreshed_chunk_metadata is not None:
+        _write_refreshed_chunk_index(target, refreshed_chunk_metadata)
     print(f"Wrote dashboard report: {target}")
     if truncation:
         print(

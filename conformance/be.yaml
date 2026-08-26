@@ -18,24 +18,28 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILDef_be
     oracle_policy_name: ILDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILsDef_be
     oracle_policy_name: ILsDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILsUDBDef_be
     oracle_policy_name: ILsUDBDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:InitVars_be
     oracle_policy_name: InitVars_be
@@ -55,6 +59,7 @@ policies:
       - ddppr_s
       - ddp_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - temp_rand_ind
       - temp_rand_ind2
@@ -72,6 +77,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - xhl00
       - xed00
@@ -81,6 +87,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:TransLMA_be
     oracle_policy_name: TransLMA_be
@@ -94,6 +101,7 @@ policies:
       - bwkmcsemy_s
       - ysemwmy_s
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - lma
       - yem_a
@@ -114,6 +122,7 @@ policies:
       - sin11_s
       - sin13_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
       - i_dchor01
@@ -138,6 +147,7 @@ policies:
       - sin01_s
       - bchba_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-family-birth-allowance
   - id: be:bed_be
     oracle_policy_name: bed_be
@@ -165,6 +175,7 @@ policies:
       - sin16_s
       - sin17_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bed_fl_be
       - i_bed_fl_frac_be_BCH
@@ -203,6 +214,7 @@ policies:
     output_vars:
       - bfapl_s
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - i_lpb
       - i_elparent_bfapl
@@ -228,6 +240,7 @@ policies:
     output_vars:
       - bmact_s
     in_scope: true
+    oracle_switch: switch
     internal_only_vars:
       - i_elparent
       - i_durdays_em
@@ -252,6 +265,7 @@ policies:
     output_vars:
       - bpact_s
     in_scope: true
+    oracle_switch: switch
     internal_only_vars:
       - i_elparent_bpact
       - i_amount_bpact
@@ -273,6 +287,7 @@ policies:
       - bsamt02_s
       - bsamt04_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - ISSPI_s
       - nparents
@@ -288,6 +303,7 @@ policies:
       - bsaoa_s
       - yeaoamn_s
     in_scope: true
+    oracle_switch: 'off'
     suite: be-elderly-income-support
     note: Elderly income guarantee (GRAPA/IGO). Marked 'TO BE SWITCHED ON MANUALLY, otherwise from data'
       in BE_2025, so it is off in a default run, but activatable per run via euromod_policy_switch_overrides
@@ -303,6 +319,7 @@ policies:
       - yempv_s
       - bun_s
     in_scope: true
+    oracle_switch: 'off'
     internal_only_vars:
       - i_bunmw
       - i_bunel
@@ -323,12 +340,14 @@ policies:
     output_vars:
       - bwkrg_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-flemish-jobbonus
   - id: be:byr_be
     oracle_policy_name: byr_be
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: input_carrying
@@ -343,12 +362,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: be:neg_be
     oracle_policy_name: neg_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yse
     exclusion_reason: technical
@@ -357,18 +378,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:output_std_hh_be
     oracle_policy_name: output_std_hh_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: be:random_be
     oracle_policy_name: random_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - temp_rand
       - temp_rand_ind
@@ -396,12 +420,14 @@ policies:
       - kivhooo_s
       - sin01_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-flemish-social-protection-premium
   - id: be:tco_be
     oracle_policy_name: tco_be
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: extension_not_available
     note: Indirect consumption tax (VAT/excise). In BE_2025 its body is 15 DefConst/DefIl functions with
       no OutputVar and no compute function, and the public EUROMOD_RELEASES_J2.0+ ships no consumption-tax
@@ -424,6 +450,7 @@ policies:
       - sin18_s
       - sin22_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-work-bonus-credit
@@ -446,6 +473,7 @@ policies:
     output_vars:
       - tinkt_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-capital-income-tax
     note: 'TAX: separately-taxed movable/capital income tax. The be-capital-income-tax suite live-compares
       tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3).'
@@ -456,6 +484,7 @@ policies:
       - tinmu_s
       - tin_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-local-municipal-pit
     note: 'TAX: municipal PIT surcharge (communal centimes). The be-local-municipal-pit suite live-compares
       tinmu_s (communal_additions) and matches EUROMOD exactly (3/3).'
@@ -473,6 +502,7 @@ policies:
       - tintatc01_s
       - sin08_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - tmp_tinna
       - n/a
@@ -489,6 +519,7 @@ policies:
       - tinrg01_s
       - tin_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-regional-pit-surcharge
     note: 'TAX: regional PIT additional tax. The be-regional-pit-surcharge suite live-compares tinrg_s
       (special financing law of 16 January 1989 article 5/2 — the reduced State tax times the region''s
@@ -500,6 +531,7 @@ policies:
     output_vars:
       - tintace_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-article-51-forfait
     note: 'TAX: PIT professional-expense forfait (article_51_forfaits). The be-article-51-forfait suite
       live-compares tintace_s as its own surface on a five-point single-worker earnings sweep (12k / 22k
@@ -529,6 +561,7 @@ policies:
       - sin33_s
       - xccfd_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
       - kivho
@@ -548,6 +581,7 @@ policies:
       - tprhm_s
       - tprhmtr_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-property-tax
   - id: be:tscee_be
     oracle_policy_name: tscee_be
@@ -564,6 +598,7 @@ policies:
       - tsceerd_s
       - tsceerdwb02B_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - wbhours_s
       - i_tsceerdB_s
@@ -576,6 +611,7 @@ policies:
     output_vars:
       - tsceesp_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-special-social-security-contribution
@@ -598,6 +634,7 @@ policies:
       - tscerrd_s
       - tscer_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-employer-ssc
@@ -607,6 +644,7 @@ policies:
     output_vars:
       - tscpe_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-pensioner-contributions
     note: 'SIC: pensioner health/disability + solidarity contribution; encoded in non_labour_income_contributions.yaml
       (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions
@@ -621,12 +659,14 @@ policies:
     output_vars:
       - tscse_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-self-employed-ssc
   - id: be:uprate_be
     oracle_policy_name: uprate_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:yem_be
     oracle_policy_name: yem_be
@@ -637,6 +677,7 @@ policies:
       - yem04_s
       - yem01_s
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - yem
     exclusion_reason: technical
@@ -649,6 +690,7 @@ policies:
       - yemmw_s
       - bwkmcee_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmcee_s
     exclusion_reason: oracle_dataset_lacks_input
@@ -675,6 +717,7 @@ policies:
       - bwkmcse01_s
       - bwkmcse02_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmcse01_s
       - i_bwkmcse02_s

@@ -103,6 +103,6 @@ def test_de_dual_oracle_report_pins_filed_findings_only() -> None:
     assert Counter(row["disposition"]["id"] for row in mismatches) == {
         "euromod-vorsorgeaufwendungen-deduction-haircut-and-pauschbetrag": 9,
         "euromod-child-allowance-without-kindergeld-addback": 2,
-        "gettsim-midijob-childless-care-surcharge-base": 1,
+        "euromod-midijob-childless-care-surcharge-base": 1,
     }
 

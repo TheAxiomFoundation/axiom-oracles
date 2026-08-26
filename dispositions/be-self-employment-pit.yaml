@@ -1,0 +1,99 @@
+schema: axiom_oracles.dispositions.v1
+suite: be-self-employment-pit
+updated: "2026-08-22"
+entries:
+  - id: self-employment-25k-credit-before-communal-addition
+    concept: be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+    case_id: be-self-employment-pit-yse-25k
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        EUROMOD BE_2025 tinfe_be subtracts the 880 EUR refundable activity
+        credit before tinmu_be computes the 7.17% Flanders communal addition.
+        The statutory order computes the addition before imputing the credit,
+        so EUROMOD understates tax by exactly 880 x 7.17% = 63.096 EUR
+        (ec-jrc issue #24).
+      arithmetic:
+        - expression: "-(880 * 0.0717)"
+          equals: -63.096
+          tolerance: 0.000001
+      upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24
+      sources:
+        - axiom_oracles/data/euromod_issues.json#euromod-be-2025-credit-before-communal-addition-order
+    linked_issue: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24
+    expires_on_source_change: true
+    pinned:
+      left: 2030.3371518803276
+      right: 2093.4331518803265
+      difference: -63.09599999999887
+  - id: mixed-worker-self-employment-base-credit-and-order-semantics
+    concept: be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+    case_id: be-self-employment-pit-yem-30k-yse-20k
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Three quantified EUROMOD-side mechanisms close the mixed worker and
+        self-employment residual. RuleSpec applies 20.5% secondary-activity SSC
+        to the full 20,000 EUR (4,100 EUR), while EUROMOD applies it only above
+        1,881.76 EUR (3,714.2392 EUR), a 385.7608 EUR net-income difference.
+        RuleSpec worker SSC is 1,591.35 EUR versus EUROMOD's
+        3,921 - 3,398.52 = 522.48 EUR, and its forfait is 5,930 EUR versus
+        5,929.995 EUR, another 1,068.875 EUR of worker-net difference. The
+        resulting -1,454.6358 EUR RuleSpec taxable-base difference adds
+        701.520288424719 EUR of tax in the fixed-credit counterfactual.
+        EUROMOD's uncapped work-bonus credit then removes 552.615720 EUR
+        relative to the credit on the reduction actually granted (existing
+        issue #12 disposition), and subtracting the 1,504.848888 EUR credit
+        before the 7.17% Flanders addition removes another 107.8976652696 EUR
+        (ec-jrc issue #24). Their 41.006903155119 EUR sum closes the observed
+        EUROMOD-minus-Axiom residual to displayed-float precision.
+      arithmetic:
+        - expression: "4100 - ((20000 - 1881.76) * 0.205)"
+          equals: 385.7608
+          tolerance: 0.000001
+        - expression: "(1591.35 - (3921 - 3398.52)) + (5930 - 5929.995)"
+          equals: 1068.875
+          tolerance: 0.000001
+        - expression: "-385.7608 + -1068.875"
+          equals: -1454.6358
+          tolerance: 0.000001
+        - expression: "701.5202884247187 - 552.615720 - (1504.848888 * 0.0717)"
+          equals: 41.0069031551187
+          tolerance: 0.000001
+      upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24
+      sources:
+        - axiom_oracles/data/euromod_issues.json#euromod-be-2025-credit-before-communal-addition-order
+        - dispositions/be-work-bonus-credit.yaml#work-bonus-credit-uncapped-ab-bases-14k
+    linked_issue: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24
+    expires_on_source_change: true
+    pinned:
+      left: 10507.62779506539
+      right: 10466.620891910272
+      difference: 41.00690315511747
+  - id: negative-self-employment-income-clipped-by-euromod
+    concept: be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income
+    case_id: be-self-employment-pit-negative-yse-1k-yem-10k
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        EUROMOD BE_2025 neg_be/Max overwrites the requested -1,000 EUR yse
+        value with zero, leaving 7,000 EUR of taxable worker income. The merged
+        RuleSpec fixture applies Article 23 current-period activity netting and
+        subtracts the 1,000 EUR self-employment loss, yielding 6,000 EUR. The
+        named clipping mechanism therefore explains the full +1,000 EUR
+        EUROMOD-minus-Axiom taxable-income residual.
+      arithmetic:
+        - expression: "7000 - (7000 + (1000 - 2000))"
+          equals: 1000
+          tolerance: 0.000001
+      sources:
+        - comparisons/be-self-employment-pit.yaml
+        - axiom_oracles/suites/be_worker.py#be_self_employment_pit_cases
+    expires_on_source_change: true
+    pinned:
+      left: 7000.0
+      right: 6000.0
+      difference: 1000.0

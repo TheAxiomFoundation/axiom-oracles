@@ -152,6 +152,14 @@ def test_entry_requires_exactly_one_case_reference() -> None:
     assert any("exactly one of" in error for error in errors)
 
 
+def test_shared_validator_rejects_campaign_match_selector() -> None:
+    entry = _entry(match={"slot": "base", "delta": {"sign": "pos"}})
+    del entry["case_id"]
+    errors = validate_dispositions(_document([entry]))
+    assert any("unknown keys: ['match']" in error for error in errors)
+    assert any("exactly one of" in error for error in errors)
+
+
 def test_expires_on_source_change_is_required() -> None:
     entry = _entry()
     del entry["expires_on_source_change"]
@@ -285,7 +293,11 @@ def _load_dashboard_report(suite: str) -> dict:
 
 
 def test_seeded_dispositions_files_are_schema_valid() -> None:
-    paths = sorted(DISPOSITIONS_DIR.glob("*.yaml"))
+    paths = sorted(
+        path
+        for path in DISPOSITIONS_DIR.glob("*.yaml")
+        if path.name != "us-tariff-schedule.yaml"
+    )
     assert paths, "expected seeded dispositions files"
     for path in paths:
         load_dispositions(path, repo_root=REPO_ROOT)
@@ -344,6 +356,49 @@ def _load_script_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def test_shared_apply_loader_skips_only_tariff_campaign_ledger(
+    tmp_path: Path,
+) -> None:
+    module = _load_script_module()
+    dispositions_dir = tmp_path / "dispositions"
+    dispositions_dir.mkdir()
+    module.REPO_ROOT = tmp_path
+    module.DISPOSITIONS_DIR = dispositions_dir
+
+    (dispositions_dir / "example-suite.yaml").write_text(
+        yaml.safe_dump(_document([_entry()]))
+    )
+    campaign_document = {
+        "schema": DISPOSITIONS_SCHEMA_VERSION,
+        "suite": "us-tariff-schedule",
+        "entries": [
+            _entry(
+                match={"slot": "base", "delta": {"sign": "pos"}},
+            )
+        ],
+    }
+    campaign_document["entries"][0].pop("case_id")
+    (dispositions_dir / "us-tariff-schedule.yaml").write_text(
+        yaml.safe_dump(campaign_document)
+    )
+
+    loaded, errors = module._load_dispositions_files()
+    assert loaded == {"example-suite": _document([_entry()])}
+    assert errors == []
+
+    # The exception is exact: another ledger using the campaign-only matcher
+    # must still fail the shared validator rather than receiving a broad skip.
+    campaign_document["suite"] = "other-campaign"
+    (dispositions_dir / "other-campaign.yaml").write_text(
+        yaml.safe_dump(campaign_document)
+    )
+    loaded, errors = module._load_dispositions_files()
+    assert loaded == {"example-suite": _document([_entry()])}
+    assert len(errors) == 1
+    assert "other-campaign.yaml" in errors[0]
+    assert "unknown keys: ['match']" in errors[0]
 
 
 def _premerged_fixture(tmp_path: Path) -> tuple[object, Path, dict, dict]:

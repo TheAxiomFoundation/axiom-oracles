@@ -1,13 +1,28 @@
 {
- "suite": "co-snap-qc",
- "count": 856,
- "chunks": 2,
- "chunk_size": 500,
- "engines": {
-  "left": "snap-qc",
-  "right": "axiom"
- },
- "mismatch_concepts": [],
- "source": "axiom-snapqc-co-snap-0-2026-07-24.json",
- "total_cases": 856
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "dashboard/public/data/axiom-snapqc-co-snap.json",
+  "report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
+  "suite": "co-snap-qc",
+  "count": 856,
+  "chunk_size": 500,
+  "engines": {
+    "left": "snap-qc",
+    "right": "axiom"
+  },
+  "mismatch_concepts": [],
+  "source": "axiom-snapqc-co-snap-0-2026-08-10.json",
+  "total_cases": 856,
+  "chunk_count": 2,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "d64558d6040df9729a2cfadf27f212b4177af3da81b2ac14b4ac35afaf9947d6",
+      "cases": 500
+    },
+    {
+      "name": "chunk-1.json",
+      "sha256": "41b8a587a9aad7d2ec177a1520614e3e81bcb02e34269d5099b204bcfe218a11",
+      "cases": 356
+    }
+  ]
 }

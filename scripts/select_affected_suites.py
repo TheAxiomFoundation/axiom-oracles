@@ -109,6 +109,53 @@ def _report_ran_against(report: dict) -> dict[str, str | None]:
     return {r["repo"]: r.get("sha") for r in rulespecs if r.get("repo")}
 
 
+def _selector_report_path(value: object) -> Path | None:
+    """Resolve a committed selector report, failing loudly on unsafe paths.
+
+    Legacy map entries contain a bare dashboard filename.  New unified-record
+    entries contain a repo-relative ``comparisons/...`` path.  Supporting both
+    explicitly avoids overloading dashboard suite keys as registry names (the
+    #295 failure mode) or making certificate records masquerade as UI reports.
+    """
+
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value.strip() or Path(value).is_absolute():
+        raise SystemExit(f"affected map has malformed report path {value!r}")
+    relative = Path(value)
+    if ".." in relative.parts:
+        raise SystemExit(f"affected map report path escapes the repo: {value!r}")
+    if len(relative.parts) == 1:
+        return DASHBOARD_DATA_DIR / relative
+    candidate = (REPO_ROOT / relative).resolve()
+    if REPO_ROOT.resolve() not in candidate.parents:
+        raise SystemExit(f"affected map report path escapes the repo: {value!r}")
+    return candidate
+
+
+def load_reports(affected_map: dict) -> dict[str, dict]:
+    """Load dashboard and explicitly mapped canonical selector records."""
+
+    reports_by_suite: dict[str, dict] = {}
+    paths = set(DASHBOARD_DATA_DIR.glob("*.json"))
+    for entry in affected_map.get("suites", []):
+        if not isinstance(entry, dict):
+            raise SystemExit("affected map suite entries must be objects")
+        path = _selector_report_path(entry.get("report"))
+        if path is not None:
+            paths.add(path)
+    for path in sorted(paths):
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text())
+        except json.JSONDecodeError:
+            continue
+        if isinstance(data, dict) and data.get("suite"):
+            reports_by_suite[str(data["suite"])] = data
+    return reports_by_suite
+
+
 def select(
     affected_map: dict,
     heads: dict[str, str],
@@ -270,14 +317,7 @@ def main() -> int:
         if not args.heads_json:
             raise SystemExit("--heads-json is required unless --force-all")
         heads = _load_heads(args.heads_json)
-        reports_by_suite: dict[str, dict] = {}
-        for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
-            try:
-                data = json.loads(path.read_text())
-            except json.JSONDecodeError:
-                continue
-            if isinstance(data, dict) and data.get("suite"):
-                reports_by_suite[data["suite"]] = data
+        reports_by_suite = load_reports(affected_map)
         selected = select(affected_map, heads, reports_by_suite)
 
     names = runnable_names(selected)

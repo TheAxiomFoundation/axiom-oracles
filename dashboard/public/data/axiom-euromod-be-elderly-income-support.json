@@ -104,7 +104,7 @@
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.2.1"
+      "axiom_rules_engine": "0.2.2"
     }
   },
   "errors": [],
@@ -119,10 +119,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
-      "axiom_rules_engine_version": "0.2.1"
+      "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-10T13:52:31Z",
+    "generated_at": "2026-08-26T13:30:55Z",
     "generated_by": "scripts/run_comparison.py::be-elderly-income-support",
     "oracle": {
       "euromod_country": "BE",

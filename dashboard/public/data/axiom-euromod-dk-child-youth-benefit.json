@@ -3,721 +3,27 @@
     {
       "category": "benefits",
       "comparison": "amount",
-      "comparison_count": 7,
-      "comparison_weight": 7,
+      "comparison_count": 8,
+      "comparison_weight": 8,
       "components": [],
       "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
       "description": "Denmark child and youth benefit (single recipient)",
-      "left_weighted_sum": 92196,
-      "match_rate": 100,
+      "left_weighted_sum": 103380,
+      "match_rate": 87.5,
       "match_weight": 7,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 92196,
-      "weighted_difference": 0,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 103693.333333,
+      "weighted_difference": -313.333333,
+      "weighted_match_rate": 87.5
     }
   ],
-  "case_count": 7,
-  "cases": [
-    {
-      "case_id": "dk-child-youth-benefit-age1-yem300000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 1,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 25000.0
-          },
-          {
-            "amrtn": 1,
-            "dag": 1,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
-        },
-        "head_annual_earnings": 300000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            1
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            300000.0
-          ],
-          "yearly_earned_income_total": 300000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age5-yem300000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 5,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 25000.0
-          },
-          {
-            "amrtn": 1,
-            "dag": 5,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
-        },
-        "head_annual_earnings": 300000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            5
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            300000.0
-          ],
-          "yearly_earned_income_total": 300000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age10-yem300000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 10,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 25000.0
-          },
-          {
-            "amrtn": 1,
-            "dag": 10,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
-        },
-        "head_annual_earnings": 300000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            10
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            300000.0
-          ],
-          "yearly_earned_income_total": 300000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age16-yem300000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": true
-        },
-        "child_age": 16,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 25000.0
-          },
-          {
-            "amrtn": 1,
-            "dag": 16,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 276000.0
-        },
-        "head_annual_earnings": 300000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            16
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            300000.0
-          ],
-          "yearly_earned_income_total": 300000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age5-yem1000000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 919999.9999999999,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 5,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 83333.33333333333
-          },
-          {
-            "amrtn": 1,
-            "dag": 5,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 919999.9999999999
-        },
-        "head_annual_earnings": 1000000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            5
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            1000000.0
-          ],
-          "yearly_earned_income_total": 1000000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age5-yem1300000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1196000.0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 5,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 108333.33333333333
-          },
-          {
-            "amrtn": 1,
-            "dag": 5,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1196000.0
-        },
-        "head_annual_earnings": 1300000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            5
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            1300000.0
-          ],
-          "yearly_earned_income_total": 1300000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    },
-    {
-      "case_id": "dk-child-youth-benefit-age5-yem2000000",
-      "left_engine": "euromod",
-      "left_errors": [],
-      "match_rate": 100.0,
-      "metadata": {
-        "axiom_entity": "Person",
-        "axiom_entity_id": "recipient",
-        "axiom_inputs": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.applicable_pension_contribution_cap": 61200,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2012_adjustment": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.calendar_year_uses_2013_or_later_adjustment": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_3_and_under_7_years_old": true,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_at_least_7_and_under_15_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.child_is_under_3_years_old": false,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.consumer_price_index_change_since_2009": 0.285,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance": 917000,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1839999.9999999998,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.qualifying_contributions_to_age_insurance_savings_and_supplementary_lump_sum": 0,
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.young_person_is_at_least_15_and_under_18_years_old": false
-        },
-        "child_age": 5,
-        "euromod_inputs": [
-          {
-            "amrtn": 1,
-            "dag": 35,
-            "ddi": 0,
-            "dec": 0,
-            "dgn": 0,
-            "dhr": 1,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 0,
-            "idpartner": 0,
-            "idperson": 101,
-            "les": 7,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 166666.66666666666
-          },
-          {
-            "amrtn": 1,
-            "dag": 5,
-            "ddi": 0,
-            "dec": 1,
-            "dgn": 1,
-            "dhr": 0,
-            "dms": 1,
-            "drgur": 1,
-            "dwt": 1000.0,
-            "idfather": 0,
-            "idmother": 101,
-            "idpartner": 0,
-            "idperson": 102,
-            "les": 0,
-            "lhw": 0,
-            "liwmy": 0,
-            "liwwh": 0,
-            "loc": 5,
-            "yem": 0.0
-          }
-        ],
-        "euromod_to_axiom_input_bridge": {
-          "tintbto_s": {
-            "inputs": [
-              "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis"
-            ]
-          }
-        },
-        "euromod_to_axiom_input_bridge_applied": {
-          "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.middle_tax_basis": 1839999.9999999998
-        },
-        "head_annual_earnings": 2000000.0,
-        "household_summary": {
-          "ages": [
-            35,
-            5
-          ],
-          "household_size": 2,
-          "yearly_earned_income_per_person": [
-            2000000.0
-          ],
-          "yearly_earned_income_total": 2000000.0
-        },
-        "locale": "DK",
-        "scenario": "single-parent-child-youth-benefit",
-        "scope": {
-          "geoid": "DK",
-          "type": "country"
-        }
-      },
-      "mismatches": [],
-      "right_engine": "axiom",
-      "right_errors": []
-    }
-  ],
+  "case_count": 8,
+  "cases": [],
   "concepts": [
     {
       "category": "benefits",
@@ -731,18 +37,46 @@
       "tolerance": 1
     }
   ],
+  "dashboard_truncation": {
+    "shown_case_rows": 0,
+    "shown_mismatches": 1,
+    "total_case_rows": 8,
+    "total_mismatches": 1
+  },
   "engines": {
     "left": "euromod",
     "right": "axiom",
     "versions": {
-      "axiom_rules_engine": "0.2.1"
+      "axiom_rules_engine": "0.1.0"
     }
   },
   "errors": [],
   "locales": [
     "DK"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "dk-child-youth-benefit-age5-yem1300000-pension60000",
+      "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+      "description": "Denmark child and youth benefit (single recipient)",
+      "difference": -313.33333333333394,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "euromod-dk-bfachnm-taper-pension-grossup-absent",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20"
+      },
+      "kind": "amount_difference",
+      "left": 11184.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0.001,
+      "right": 11497.333333333334,
+      "scenario": "single-parent-child-youth-benefit",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
   "population": "synthetic",
   "provenance": {
     "dataset": {
@@ -750,10 +84,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "dc7eb90d2cfcf6b7ecf68ada226112a8ac444350",
-      "axiom_rules_engine_version": "0.2.1"
+      "axiom_rules_engine_sha": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+      "axiom_rules_engine_version": "0.1.0",
+      "binary_sha256": "079c26f4244db8c2a72fcbfb8cf88aaa5cb7c99628dc1c8d9d3b2d011e5f32a5"
     },
-    "generated_at": "2026-08-10T13:52:19Z",
+    "generated_at": "2026-08-19T00:23:50Z",
     "generated_by": "scripts/run_comparison.py::dk-child-youth-benefit-euromod",
     "oracle": {
       "euromod_country": "DK",
@@ -762,49 +97,63 @@
       "euromod_system": "DK_2025",
       "name": "euromod"
     },
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-dk",
-        "sha": null
+        "sha": "9a9469edbbc4829847698cd0adf218771120b9cd"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "dk-child-youth-benefit",
   "summary": {
-    "comparison_count": 7,
+    "comparison_count": 8,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 1
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/dk-child-youth-benefit.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 100,
+      "raw_match_rate": 87.5,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
-    "errors_by_engine": [],
+    "errors_by_engine": {},
     "match_count": 7,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "single-parent-child-youth-benefit"
+      }
+    ],
     "weighted": {
-      "comparison_weight": 7,
-      "match_rate": 100,
+      "comparison_weight": 8,
+      "match_rate": 87.5,
       "match_weight": 7,
-      "mismatch_weight": 0
+      "mismatch_weight": 1
     }
   }
 }

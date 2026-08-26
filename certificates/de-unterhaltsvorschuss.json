@@ -1,0 +1,198 @@
+{
+  "_comment": "Generated pending DE certificate. The declaration is visible and fail-closed; no empty suite, attested signature, or absent producer can satisfy a certification premise.",
+  "blockers": [
+    "no comparison record has been declared",
+    "de/statute/uhvorschg/2: final-amount encoding remains partial",
+    "executable reproduction receipt pending"
+  ],
+  "certified": {
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
+    "state": "no",
+    "value": false
+  },
+  "declared_root_set": {
+    "citation_roots": [
+      {
+        "attestation": {
+          "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
+          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
+        },
+        "citation_path": "de/regulation/minuhv/1",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "signed minimum-support encoding is merged on pinned main",
+        "role": "governing",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
+          "ref": "0a5ba23",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "d9c494557d2e439acf1270cb43e070005bf4ec91d9a0117ff076ce11818080cf"
+        },
+        "citation_path": "de/statute/uhvorschg/2",
+        "claim_mode": "attested",
+        "classification": "pending",
+        "reason": "reviewed unsigned module covers the base subtraction only; partial-month, income/maintenance offsets, and school/work income abatements in subsections 1, 3, and 4 remain open",
+        "role": "governing",
+        "signature_state": "pending"
+      },
+      {
+        "attestation": {
+          "artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
+          "encoding_manifest_payload_sha256": "9a181bf76934891d909997a6a61b0d2ee9c6a46b7710906e76b72599f48f23de",
+          "encoding_manifest_source_file_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+          "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+          "sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+          "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
+        },
+        "attestation_claim_mode": "computed",
+        "citation_path": "de/statute/estg/66",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "the executable verifier validated the exact signed 2025 module, apply manifest, corpus binding, and Ed25519 trust root",
+        "role": "dependency",
+        "signature_state": "signed",
+        "signature_state_claim_mode": "computed"
+      }
+    ],
+    "mode": "computed",
+    "root_nodes": [
+      "de:statutes/uhvorschg/2#advance_maintenance_amount"
+    ]
+  },
+  "evidence": [
+    {
+      "artifact": "conformance/de-certificate-census.json",
+      "claim": "certificate candidate census:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "f291a6fe3fd11e26c04a2e5e8015642cd5c3e9b8e59ce7b31d5c56ee6e494e1f"
+    },
+    {
+      "artifact": "closure/de/summary.json",
+      "claim": "closure census:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
+    }
+  ],
+  "period": "2025",
+  "program": "de/unterhaltsvorschuss",
+  "schema": "axiom_oracles.program_certificate.v1",
+  "verdicts": {
+    "closed": {
+      "blockers": [
+        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
+        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+      ],
+      "boundaries": [],
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 1,
+        "signed": 2
+      },
+      "by_status": {
+        "encoded": 2,
+        "evidence": 0,
+        "excluded": 0,
+        "open_dependency": 0,
+        "pending": 1
+      },
+      "citation_paths": [
+        "de/regulation/minuhv/1",
+        "de/statute/estg/66",
+        "de/statute/uhvorschg/2"
+      ],
+      "citation_root_count": 3,
+      "closed_claim_mode": "computed",
+      "corpus_release": "de-rulespec-2026-07-21",
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/minuhv/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
+          "role": "minimum_maintenance_amount",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/uhvorschg/2",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "The reviewed unsigned module covers the base subtraction only; partial-month, income and maintenance offsets, and school or work income abatements remain open.",
+          "role": "advance_amount_and_offsets",
+          "signature_state": "pending",
+          "state": "pending"
+        },
+        {
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
+          "role": "kindergeld_dependency",
+          "signature_state": "signed",
+          "state": "encoded"
+        }
+      ],
+      "dependency_closure": {
+        "closed": false,
+        "missing": true,
+        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+      },
+      "evidence_roots": [],
+      "instrument_frontier": {
+        "complete": false,
+        "missing": true,
+        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this closure declares none"
+      },
+      "mode": "computed",
+      "pending_citations": 1,
+      "pending_money_atoms": null,
+      "resolution_mode": "computed",
+      "root_node_count": 1,
+      "root_nodes": [
+        "de:statutes/uhvorschg/2#advance_maintenance_amount"
+      ],
+      "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "signature_blockers": [
+        "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
+      ],
+      "signature_pending_citations": [
+        "de/statute/uhvorschg/2"
+      ],
+      "spine_closed": false,
+      "spine_closed_claim_mode": "computed",
+      "status": "computed_open",
+      "subgraph_node_count": null,
+      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "universe_mode": "attested",
+      "unresolved_sources": [
+        "de/statute/uhvorschg/2"
+      ],
+      "value": false
+    },
+    "conformant": {
+      "missing": "no comparison record has been declared",
+      "mode": "computed",
+      "reference_legs": [],
+      "status": "computed_open",
+      "value": false
+    },
+    "executable": {
+      "missing_inputs": [
+        "executable reproduction contract"
+      ],
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    },
+    "exercised": {
+      "missing": "no comparison corpus has been declared",
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    }
+  }
+}

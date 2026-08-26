@@ -141,12 +141,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-10T13:52:45Z",
+    "generated_at": "2026-08-20T01:57:11Z",
     "generated_by": "scripts/run_comparison.py::uk-vat",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "07cb4b61726a6e06d6d2101fc2d9404ead69b74a"
+        "sha": "459d4092e67b92640ddf05518756cd94e6a862f0"
       }
     ],
     "run_kind": "affected-rerun",

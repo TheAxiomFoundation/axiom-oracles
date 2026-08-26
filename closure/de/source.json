@@ -1,0 +1,376 @@
+{
+  "schema": "axiom_oracles.de_closure_source.v1",
+  "jurisdiction": "de",
+  "period": "2025",
+  "resolution": {
+    "protocol": "de-exact-citation-closure-v1",
+    "key": "citation_path",
+    "match": "exact",
+    "descendants_by": "parent_citation_path",
+    "filename_filters": false
+  },
+  "corpus": {
+    "repository": "TheAxiomFoundation/axiom-corpus",
+    "commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
+    "release": "de-rulespec-2026-07-21",
+    "release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+    "release_selector_sha256": "106612aa6075a23fae4aae7fc80c39920cb6e0ff95e38694baa6191f8f3905f5",
+    "inventories": [
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
+        "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
+        "row_count": 172
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
+        "sha256": "0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974",
+        "row_count": 3376
+      }
+    ],
+    "provision_sources": [
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_count": 172
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_count": 3376
+      }
+    ],
+    "rows": [
+      {
+        "citation_path": "de/regulation/bsv-2018/1",
+        "record_id": "d2a5fedd-e25a-5cc1-b526-6a29331ef8d6",
+        "line_number": 155,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "976b67ee8e5ba0d41cfafa3253b66272349d9f4640a9f4b04a9838815f89fccf",
+        "source_sha256": "eb946f4fbfb57efd114dc8870c1deead519a4bbc99f49e70111bae29f0f03199",
+        "body_sha256": "4a58026075e618b8e288f2c07ec329604e365f57aa9b54be297bfb1eb9af0f7e",
+        "body_length": 155
+      },
+      {
+        "citation_path": "de/regulation/minuhv/1",
+        "record_id": "509faa2d-58d7-5efa-8318-a46d7a9a86f3",
+        "line_number": 114,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "f8974764234a0f8740ca9c8d1fb0c137dd98ee39d1662efaee665e5e7e348839",
+        "source_sha256": "dcadd62d68b3d20934bfb8d4bd887d99aff90a797cdac7a0bc0430124bf11879",
+        "body_sha256": "dc5fe67760f3cd298fd3ce3c7fa2625e4ea1bb60216be9cf05353316c44c3b7a",
+        "body_length": 595
+      },
+      {
+        "citation_path": "de/regulation/svbezgrv-2025/4",
+        "record_id": "6d446fb1-6632-5699-8fa2-93702cf5cebc",
+        "line_number": 121,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "b2706b40e534046eb90002430e1f14434da69c372201aa2aa4521214c2044f69",
+        "source_sha256": "59576e5f25abd46db802e39af1f035cca05021f90435af37e94e607d0fea25f4",
+        "body_sha256": "711017bbdb17a7837a5f97ebcde33af76261ae59e28b57670abfbf968e0b0152",
+        "body_length": 511
+      },
+      {
+        "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+        "record_id": "5ad57e6e-3a70-5315-82ab-885fbb90cdd4",
+        "line_number": 3375,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840",
+        "source_sha256": "0a679eafcaf3a658b84a5ef0a69992539fee7052cc80eca6fe2a04a9e56ddcf3",
+        "body_sha256": null,
+        "body_length": 0,
+        "amendment_targets": [
+          "de/statute/bkgg-1996",
+          "de/statute/bkgg-1996/6",
+          "de/statute/bkgg-1996/6a",
+          "de/statute/estg",
+          "de/statute/estg/32",
+          "de/statute/estg/32a",
+          "de/statute/estg/39b",
+          "de/statute/estg/66",
+          "de/statute/sgb-12",
+          "de/statute/sgb-12/145",
+          "de/statute/sgb-2",
+          "de/statute/sgb-2/72",
+          "de/statute/solzg-1995",
+          "de/statute/solzg-1995/3",
+          "de/statute/solzg-1995/6"
+        ]
+      },
+      {
+        "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+        "record_id": "49f25d22-2cb8-51fa-bd72-5b8f8a989dab",
+        "line_number": 3376,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+        "source_sha256": "0a679eafcaf3a658b84a5ef0a69992539fee7052cc80eca6fe2a04a9e56ddcf3",
+        "body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+        "body_length": 11875,
+        "parent_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz"
+      },
+      {
+        "citation_path": "de/statute/estg/62",
+        "record_id": "9e270815-0394-5cb9-a77d-7a9f87126090",
+        "line_number": 257,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+        "body_length": 4458
+      },
+      {
+        "citation_path": "de/statute/estg/63",
+        "record_id": "6d0e0175-60fc-5ab1-889b-7f216ba53c41",
+        "line_number": 258,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
+        "body_length": 1740
+      },
+      {
+        "citation_path": "de/statute/estg/64",
+        "record_id": "bb80aca5-89eb-5223-8163-76ab808b128a",
+        "line_number": 259,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "ef5df3a51a31f6f337bb38b50a355e242dc8070c1739ea969660013c2258f22e",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "5fb1a7ca8a448bf09481c7f46b25fbae9540b3f2b3b533d3f399ae3ba3e363f9",
+        "body_length": 1389
+      },
+      {
+        "citation_path": "de/statute/estg/65",
+        "record_id": "a9dd7e3d-3266-5684-88ef-6f8e98354897",
+        "line_number": 260,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "ddbe896963be9213a6473c56efa61a095fc292849ca467bc3276949020b1b5f9",
+        "body_length": 1444
+      },
+      {
+        "citation_path": "de/statute/estg/66",
+        "record_id": "367b529f-ab0e-550d-ada8-134a4c4f5710",
+        "line_number": 261,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "2a4472648ac2a7678a43fff5b0c683eb040caff25d644d324302cdac6d737272",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e",
+        "body_length": 461
+      },
+      {
+        "citation_path": "de/statute/sgb-6/168",
+        "record_id": "5d9e8fc7-3879-5e80-8656-2861b6d8d139",
+        "line_number": 2772,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
+        "source_sha256": "03a5b3f2e66619e4784ca5dd5e835530c3c7d084372e04df648a704d477e7926",
+        "body_sha256": "d2273811aee8dd5fe03679fdd3e0d7aabedb058cd1b280e90df105187452a2f5",
+        "body_length": 4543
+      },
+      {
+        "citation_path": "de/statute/uhvorschg/2",
+        "record_id": "dac2b57d-44f0-5840-bbfc-63cad3e757d8",
+        "line_number": 3296,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+        "source_sha256": "f9dee7d0e69f0d511bc3e65bfe9bb2d6ad77b2a8c41b9524928342cfeadb1310",
+        "body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+        "body_length": 2108
+      }
+    ]
+  },
+  "rulespec": {
+    "repository": "TheAxiomFoundation/rulespec-de",
+    "observed_main_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "claim_mode": "attested",
+    "modules": [
+      {
+        "citation_path": "de/regulation/bsv-2018/1",
+        "classification": "pending",
+        "signature_state": "pending",
+        "claim_mode": "attested",
+        "reason": "No RuleSpec encoding exists, and the 2018 instrument alone does not establish that the 18.6 percent rate continued through 2025."
+      },
+      {
+        "citation_path": "de/regulation/minuhv/1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
+        "artifact": {
+          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "path": "de/regulations/minuhv/1.yaml",
+          "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
+          "manifest_sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
+        }
+      },
+      {
+        "citation_path": "de/regulation/svbezgrv-2025/4",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
+        "artifact": {
+          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "path": "de/regulations/svbezgrv-2025/4.yaml",
+          "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
+          "manifest_sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
+        }
+      },
+      {
+        "citation_path": "de/statute/estg/66",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
+        "artifact": {
+          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "path": "de/statutes/estg/66.yaml",
+          "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
+          "manifest_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a"
+        }
+      },
+      {
+        "citation_path": "de/statute/sgb-6/168",
+        "classification": "encoded",
+        "signature_state": "pending",
+        "claim_mode": "attested",
+        "reason": "A reviewed encoding exists for Absatz 1 Nummer 1, but its signature has not landed on main.",
+        "scope": "Absatz 1 Nummer 1 — ordinary persons employed for remuneration",
+        "artifact": {
+          "ref": "203420d61b6282b5ea78c6aa4a6c70d0cc2879da",
+          "path": "de/statutes/sgb-6/168.yaml",
+          "sha256": "8a21603735171601927e2cbd626c0566a9c9d145c20263d78cb1dd849a79313c"
+        }
+      },
+      {
+        "citation_path": "de/statute/uhvorschg/2",
+        "classification": "pending",
+        "signature_state": "pending",
+        "claim_mode": "attested",
+        "reason": "The reviewed unsigned module covers the base subtraction only; partial-month, income and maintenance offsets, and school or work income abatements remain open.",
+        "artifact": {
+          "ref": "0a5ba23acca19b4e5db971a8f7bec28e3db049cf",
+          "path": "de/statutes/uhvorschg/2.yaml",
+          "sha256": "d9c494557d2e439acf1270cb43e070005bf4ec91d9a0117ff076ce11818080cf"
+        }
+      }
+    ]
+  },
+  "programs": {
+    "de/kindergeld": {
+      "claim_mode": "attested",
+      "root_nodes": [
+        "de:statutes/estg/66#monthly_kindergeld_per_child"
+      ],
+      "declared_sources": [
+        {
+          "citation_path": "de/statute/estg/66",
+          "role": "amount_parameter"
+        }
+      ],
+      "evidence_roots": [
+        {
+          "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+          "resolution": "self_and_descendants",
+          "reason": "SteFeG Article 1 number 4 supplies the 2025-effective 255 EUR amount that the current consolidated EStG text no longer displays."
+        }
+      ],
+      "boundaries": [
+        {
+          "input": "claimant_entitlement",
+          "classification": "open-law-derived-dependency",
+          "assignment_required": true,
+          "citation_path": "de/statute/estg/62",
+          "reason": "claimant_entitlement is a law-derived quantity (62 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
+        },
+        {
+          "input": "qualifying_child_count",
+          "classification": "open-law-derived-dependency",
+          "assignment_required": true,
+          "citation_path": "de/statute/estg/63",
+          "reason": "qualifying_child_count is a law-derived quantity (63 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
+        },
+        {
+          "input": "recipient_priority",
+          "classification": "open-law-derived-dependency",
+          "assignment_required": true,
+          "citation_path": "de/statute/estg/64",
+          "reason": "recipient_priority is a law-derived quantity (64 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
+        },
+        {
+          "input": "substitute_child_benefit_exclusion",
+          "classification": "open-law-derived-dependency",
+          "assignment_required": true,
+          "citation_path": "de/statute/estg/65",
+          "reason": "substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.",
+          "leaf_kind": "law_derived"
+        }
+      ]
+    },
+    "de/rv-employee-contribution": {
+      "claim_mode": "attested",
+      "root_nodes": [
+        "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
+        "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
+      ],
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/bsv-2018/1",
+          "role": "contribution_rate"
+        },
+        {
+          "citation_path": "de/regulation/svbezgrv-2025/4",
+          "role": "monthly_assessment_ceiling"
+        },
+        {
+          "citation_path": "de/statute/sgb-6/168",
+          "role": "employee_share"
+        }
+      ],
+      "evidence_roots": [],
+      "boundaries": []
+    },
+    "de/unterhaltsvorschuss": {
+      "claim_mode": "attested",
+      "root_nodes": [
+        "de:statutes/uhvorschg/2#advance_maintenance_amount"
+      ],
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/minuhv/1",
+          "role": "minimum_maintenance_amount"
+        },
+        {
+          "citation_path": "de/statute/uhvorschg/2",
+          "role": "advance_amount_and_offsets"
+        },
+        {
+          "citation_path": "de/statute/estg/66",
+          "role": "kindergeld_dependency"
+        }
+      ],
+      "evidence_roots": [],
+      "boundaries": []
+    }
+  }
+}

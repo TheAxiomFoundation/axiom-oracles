@@ -1,0 +1,39 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "dashboard/public/data/nz-treasury-incomeexplorer.json",
+  "report_sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784",
+  "case_verdicts_sha256": "2b7adb537af2627a937e4e61bf026aeee5e9555a2e4f2cdfb8677907f53c1bd5",
+  "suite": "nz-treasury-incomeexplorer",
+  "count": 104,
+  "chunk_size": 500,
+  "engines": {
+    "left": "axiom",
+    "right": "treasury-incomeexplorer"
+  },
+  "mismatch_concepts": [
+    "nz:comparison/treasury-incomeexplorer#net_income",
+    "nz:comparison/treasury-incomeexplorer#net_income_annual",
+    "nz:comparison/treasury-incomeexplorer#net_wage",
+    "nz:comparison/treasury-incomeexplorer#net_wage1",
+    "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
+    "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+    "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+    "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+    "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+    "nz:statutes/income_tax/family_scheme/tax_credits#wff_total",
+    "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+    "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+    "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
+    "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period"
+  ],
+  "source": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+  "total_cases": 104,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "67b885ab0bd6d2a6a7cdbf9ea8c16533d4ebe71c5edeca44e6fb46d65c4a65ce",
+      "cases": 104
+    }
+  ]
+}

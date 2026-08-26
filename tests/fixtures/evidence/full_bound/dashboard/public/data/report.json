@@ -1,0 +1,55 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "full-bound",
+  "case_count": 2,
+  "concepts": [
+    {
+      "id": "eligibility",
+      "comparison": "eligibility",
+      "tolerance": 0,
+      "relative_tolerance": 0
+    },
+    {
+      "id": "benefit",
+      "comparison": "amount",
+      "tolerance": 0,
+      "relative_tolerance": 0
+    }
+  ],
+  "summary": {
+    "comparison_count": 3,
+    "match_count": 2,
+    "mismatch_count": 1
+  },
+  "aggregates": [
+    {
+      "concept": "eligibility",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "match_count": 1,
+      "mismatch_count": 0,
+      "left_positive_weight": 0,
+      "right_positive_weight": 0
+    },
+    {
+      "concept": "benefit",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "match_count": 1,
+      "mismatch_count": 1,
+      "left_weighted_sum": 10,
+      "right_weighted_sum": 20
+    }
+  ],
+  "mismatches": [
+    {
+      "case_id": "full-2",
+      "concept": "benefit",
+      "left": 10,
+      "right": 20,
+      "tolerance": 0,
+      "relative_tolerance": 0
+    }
+  ],
+  "cases": []
+}

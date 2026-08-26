@@ -47,7 +47,7 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
 | `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open` may only fall. | `scripts/conformance_ratchet.py` |
-| `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v1`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), the query entity, the supplied-input surface, and the engine→input bridge — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
+| `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v2`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), query entity, flat and record-targeted supplied inputs, relation tuples, and engine→input bridges — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated
 snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
@@ -58,6 +58,39 @@ burn-down atomically with every report refresh it commits
 lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
 by the bot — advance it deliberately with `uv run
 scripts/conformance_ratchet.py` after a genuine improvement.
+
+## Execution-evidence validation
+
+Comparison reports are aggregate views; committed case chunks are their
+execution evidence. A versioned `cases/<suite>/index.json` binds each chunk's
+name, SHA-256, and row count to the exact report path and SHA-256. A missing or
+legacy index is recorded as `binding: unbound`: it remains visible in the
+exercise census, but it cannot make a reference leg clean.
+
+Validation deliberately has two cost tiers:
+
+* `scripts/exercise_census.py` reuses its census-wide chunk pass to check
+  cardinality and index binding for every registered report. It does not run a
+  second structural/verdict scan across the full corpus.
+* `scripts/certify.py` calls `axiom_oracles.evidence.validate_suite_evidence`
+  only for the small set of suites named in its `PROGRAMS` registry. That
+  strict path parses every row, checks IDs and compact shapes, rejects
+  duplicates, and reconciles summary counts as `full`, `cardinality`, or
+  `none`.
+
+`full` means stored per-case verdicts reproduce all three summary counts.
+`cardinality` means verdict-free chunk rows reproduce only
+`comparison_count` (while the summary counts still conserve). `none` states
+that the stored shape cannot support either claim. This report/chunk binding is
+separate from execution attestation, which identifies engines and output
+surfaces.
+
+For a migrated suite, the comparison producer writes fresh chunks while it
+still holds the full case corpus, then binds the slim report to those exact
+bytes. The generic index generator may create the initial v1 index or verify an
+idempotent one; it refuses to rebind changed v1 report/chunk identities because
+aggregate counts alone cannot prove that replacement chunks came from the same
+execution.
 
 ## Universe facts are generated, not hand-invented
 
@@ -160,10 +193,11 @@ passthroughs are excluded `input_carrying` rather than carried as in-scope
    ```bash
    uv run scripts/generate_conformance_universe.py <jur>
    ```
-   Every policy appears with a *proposed* default scope that is intentionally
-   invalid until you decide it (an in-scope row with no `output_var`, or a
-   proposed `unobservable_boundary`, surfaces loudly rather than passing
-   vacuously).
+   Every policy appears with a proposed default scope. A queryable policy starts
+   as the honest `in_scope: true, suite: null` uncovered state, while an
+   unqueryable non-definition starts as `unobservable_boundary` and requires a
+   reviewed note. Either way, the new row remains visible rather than passing
+   as covered.
 3. **Author the scope decisions.** For each row set `in_scope` and either the
    covering `suite` (for a policy an Axiom suite compares) or an
    `exclusion_reason` (+ the reason-specific `note` required above). Ground each
@@ -217,11 +251,10 @@ re-deriving it.
 
 `conformance/compositions/<jur>.yaml` records it. For every covered suite it
 captures the exact program the harness composes — the same import-set the CLI
-builds, its repo-relative files in the rulespec checkout, the query entity, the
-supplied-input boundaries, and the engine→input **bridge** (the supplied
-defaults *beyond* the suite's own `axiom_inputs`; e.g. EUROMOD `yem` overriding
-the Article-89 professional-income boundary). It is generated from the suites,
-never hand-authored:
+builds, its repo-relative files in the rulespec checkout, the query entity, flat
+supplied-input boundaries, record-targeted supplied inputs, relation tuples, and
+the engine→input **bridge**, including record targets and numeric transforms.
+It is generated from the suites, never hand-authored:
 
 ```bash
 uv run scripts/generate_conformance_compositions.py be          # write
@@ -235,15 +268,15 @@ path — it cannot describe a program the harness would not compile.
 
 **Most BE compositions are a single top-level module** (it transitively imports
 its own stages); only `be-worker-ssc` spans two (`employee_contributions` +
-`work_bonus`, its three outputs). One caveat the record makes explicit and
-honest: **`be-marital-quotient` is *not* front-chained** with the SSC / Article-51
-forfait / work-bonus stages. It runs the lone `couple_pit_oracle_pipeline`
-module as a `TaxUnit`, and its 3/3 residual against EUROMOD `tin_s` (raw match 0)
-is carried entirely by dispositions (`dispositions/be-marital-quotient.yaml`,
-each classed `explained_residual` — the omitted SSC + forfait base reduction, and
-at 30k the refundable work-bonus credit), **not** by a wider program. The
-record therefore describes what actually runs, not an idealised composition that
-would make the raw numbers match.
+`work_bonus`, its three outputs). `be-marital-quotient` likewise imports the
+single top-level `couple_pit_oracle_pipeline`, but its suite now supplies two
+related `Person` records beneath the queried `TaxUnit`: EUROMOD `yem` and
+`yemeq_s` bridge to spouse A's worker inputs, spouse B carries zero worker
+amounts, and the composition records both role facts and spouse→tax-unit
+relations. Its published dispositions predate the repaired rulespec-be#118
+pipeline and remain attached to the current committed 0/3 publication until a
+canonical comparison refresh replaces those observed mismatch rows; a
+supervised worktree validation is not itself a disposition-retirement event.
 
 ### CLI convenience
 

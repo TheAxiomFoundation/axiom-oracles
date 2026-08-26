@@ -42,11 +42,78 @@ jobs:
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
+      - name: Validate NZ IncomeExplorer report, traces, and bound cases
+        run: uv run python scripts/nz_incomeexplorer.py --check
+
+      - name: Validate served DE mismatch and disposition artifacts
+        run: |
+          uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle
+          uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle
+
+      - name: Validate pinned DE Axiom comparison legs
+        run: uv run python scripts/de_axiom_legs.py --check
+
+      - name: Validate DE unified comparison record
+        run: uv run python scripts/de_unified_comparison.py --check
+
+      - name: Validate DE exact-citation closure summary
+        run: uv run python scripts/de_closure.py --check
+
+      - name: Validate DE Kindergeld executable status
+        run: uv run python scripts/de_executable.py --check
+
+      - name: Validate DE certificate-candidate census
+        run: uv run python scripts/de_certificate_census.py --check
+
+      - name: Validate report-bound case chunk indexes
+        run: uv run python scripts/generate_chunk_indexes.py --check
+
       - name: Exercise census is current (varied/constant/bridged per suite)
         run: uv run python scripts/exercise_census.py --check
 
-      - name: Bridge manifests validate (findings reported, errors fail)
-        run: uv run python scripts/validate_bridge_manifests.py
+      - name: Bridge manifests validate (strict-clean lanes enforce findings)
+        run: uv run python scripts/validate_bridge_manifests.py --strict
+
+      - name: NZ computed closure and executable evidence is current
+        run: |
+          uv run python scripts/nz_executable_reproduction.py --check
+          uv run python scripts/nz_closure.py --check
+          uv run python scripts/nz_exercise_denominator.py --check
+
+      - name: Cache pinned NZ engine source build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ${{ runner.temp }}/nz-engine-target
+          key: nz-engine-${{ runner.os }}-d59969b53430ae2fd97eb4349d44ad23ce930d85
+
+      - name: Checkout pinned NZ engine source
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules-engine
+          ref: d59969b53430ae2fd97eb4349d44ad23ce930d85
+          path: .ci/axiom-rules-engine
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout pinned NZ RuleSpec source
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-nz
+          ref: 89a7d25dc03a4d045348620283332de10b1047da
+          path: .ci/rulespec-nz
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build pinned NZ engine and replay committed requests
+        env:
+          NZ_ENGINE_ROOT: ${{ github.workspace }}/.ci/axiom-rules-engine
+          NZ_ENGINE_TARGET: ${{ runner.temp }}/nz-engine-target
+          NZ_RULESPEC_ROOT: ${{ github.workspace }}/.ci/rulespec-nz
+        run: |
+          set -euo pipefail
+          CARGO_TARGET_DIR="$NZ_ENGINE_TARGET" cargo build --locked --release --manifest-path "$NZ_ENGINE_ROOT/Cargo.toml" --bin axiom-rules-engine
+          uv run python scripts/nz_executable_reproduction.py --check --live --source-built-engine --engine-root "$NZ_ENGINE_ROOT" --engine-binary "$NZ_ENGINE_TARGET/release/axiom-rules-engine" --rulespec-root "$NZ_RULESPEC_ROOT"
 
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
