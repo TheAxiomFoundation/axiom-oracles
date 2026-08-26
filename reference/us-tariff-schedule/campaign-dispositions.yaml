@@ -1,6 +1,11 @@
+# RULING — human-maintainer decision by Max, 2026-08-26: this certificate
+# certifies statutory non-exempt component semantics. Yale utilization proxies,
+# scope masks, parser artifacts, and other modeled constructs are bounded,
+# receipted reference behavior; they are not constructs for Axiom to reproduce.
+# Full legal/source receipt: output-semantics-ruling.md.
 schema: axiom_oracles.dispositions.v1
 suite: us-tariff-schedule
-updated: '2026-08-17'
+updated: '2026-08-26'
 entries:
   - id: fed-false-family-forced-labor
     concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
