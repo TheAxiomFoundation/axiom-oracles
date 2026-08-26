@@ -19,6 +19,7 @@
 - Canonicalized the two C6 historical entry-flag aliases at all campaign helper-consumption sites, with equality checks and receipt metadata.
 - Ran the official C6 input-contract stage across all 100 compositions: canonical aliases were consumed, only `entry_is_line_c` and `entry_is_line_e` were dropped, and the gate passed.
 - Recorded Max's 2026-08-26 certified-output ruling and the line-level Rev-15, Yale, C6, parser, Chapter-98, broadening, and CAFTA legal receipts.
+- Fixed the campaign mismatch aggregation identity to preserve HTS10 and ISO2 selector dimensions; the old key mixed 168 annex/heading rows across 33 signatures.
 
 ## Next
 

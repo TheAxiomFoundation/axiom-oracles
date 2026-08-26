@@ -17,6 +17,7 @@ from scripts.us_tariff_schedule_campaign import (
     filter_declared_feed,
     query_plan,
     matching_class_id,
+    mismatch_signature,
     route_member,
     selector_matches,
     validate_dispositions,
@@ -101,6 +102,26 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
     assert feed["entry_is_brazil_301_listed"] is True
+
+
+def test_mismatch_signature_preserves_selector_dimensions() -> None:
+    row = {
+        "slot": "brazil_section_301",
+        "delta": 0.25,
+        "context": {
+            "flags": {"entry_is_brazil_301_listed": True},
+            "revision": "bnd_2026-07-22",
+            "interval": ["2026-07-22", "2026-07-23"],
+            "origin_regime": "0000000001000000",
+            "hts10": "0409000010",
+            "hts_line": "0409000000",
+            "iso2": "BR",
+        },
+    }
+    other_hts10 = {**row, "context": {**row["context"], "hts10": "0409000090"}}
+    other_iso2 = {**row, "context": {**row["context"], "iso2": "AR"}}
+    assert mismatch_signature(row) != mismatch_signature(other_hts10)
+    assert mismatch_signature(row) != mismatch_signature(other_iso2)
 
 
 def test_specific_disposition_routes_to_components_only() -> None:

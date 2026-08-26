@@ -886,7 +886,13 @@ def mismatch_signature(row: dict[str, Any]) -> str:
         "authority_slot": row["slot"], "delta": row["delta"],
         "flag_vector": context["flags"], "revision_interval_regime": [context["revision"], *context["interval"]],
         "origin_regime": context["origin_regime"],
-        "line_incidence_signature": [context["hts_line"], sorted(name for name, value in context["flags"].items() if value)],
+        # Structured selectors can bind both HTS10 and ISO2. They therefore
+        # belong in the aggregation identity: otherwise two selector-distinct
+        # units can collapse behind one arbitrary first exemplar.
+        "line_incidence_signature": [
+            context["hts10"], context["hts_line"], context["iso2"],
+            sorted(name for name, value in context["flags"].items() if value),
+        ],
     }
     return hashlib.sha256(_render(signature).encode()).hexdigest()
 
