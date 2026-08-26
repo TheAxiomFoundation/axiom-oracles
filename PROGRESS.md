@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: preview computation and causal audits are complete; the final lane report is frozen at SHA-256 641f20eefac22a84549f8ab45f56621ef64d5a35f0bab81bdc2fe7fd548e217b.
+- Status: preview computation and causal audits are complete; the final lane report is frozen at SHA-256 641f20eefac22a84549f8ab45f56621ef64d5a35f0bab81bdc2fe7fd548e217b. Installation at the requested PolicyEngine output path is blocked by this session's workspace-write boundary.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -42,9 +42,11 @@
 - Eliminated the 187,588-unit `unmapped` bucket with a unique join over all 89,346 interval keys: Section 232 mask 185,954; Chapter 98 handling 1,514; Yale HTS8 statistical broadening 120. The Section 232 population splits into 119,682 exposed-but-unconsumed engine facts, 33,834 unflagged annex units, and 32,438 unflagged heading-program units. Receipt SHA-256: `4572f1a121848337bcd0ea797c09e771fc55a3e0efaeb79c195979ddb5a5e29e`.
 - Finalized the uncommitted 357-line preview report at `reference/us-tariff-schedule/preview-1311/preview-conformance-report.md`. It includes the closure prediction, exact CAFTA census, all new-cell artifact paths, causal interpretations, pins, hashes, commands, limitations, and official post-rebind recipe.
 - Revalidated all four analysis scripts with `py_compile`, all four final receipts with `verdict == PASS`, both gzip sidecars with `gzip -t`, the report hash, and a clean tracked diff.
+- Attempted to write `/Users/maxghenis/PolicyEngine/_tariff-p5/burndown/preview-conformance-report.md` with the required patch-based edit path. The sandbox rejected the write as outside the project; the existing zero-byte placeholder was not modified.
 
 ## Next
 
 - On the official rebind, run the stock full-surface campaign without the preview alias projection and compare its exact cells to this preview.
 - Ingest General Note 29 and expose an entry-level DR-CAFTA duty-free claim/eligibility fact before expecting the 17,404 Note 52(i) units to reach zero.
 - Reconcile certificate target semantics for utilization proxies, Section 232, and Chapter 98 before closing the 148,390 old residual or accepting the 229,536 new non-CAFTA disagreements.
+- From a host shell with PolicyEngine write access, copy the frozen lane report to the requested output path and verify its SHA-256 remains `641f20eefac22a84549f8ab45f56621ef64d5a35f0bab81bdc2fe7fd548e217b`.
