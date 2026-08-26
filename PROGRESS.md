@@ -4,7 +4,7 @@
 
 - Lane: preview conformance for rulespec-us PR #1311 note-50/52 classes.
 - Cert worktree baseline: `903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7` on `hotfix/relocate-tariff-campaign-dispositions`.
-- Status: the lane-local gates, evaluation, target comparison, and cell taxonomy pass; residual-cause audit and final report are next.
+- Status: preview computation and causal audits are complete; the final lane report is frozen at SHA-256 641f20eefac22a84549f8ab45f56621ef64d5a35f0bab81bdc2fe7fd548e217b.
 - Scope: predict closure of 1,592,236 axiom-attributed-open units and quantify any deferred note 52(i) CAFTA residual before toolchain rebind.
 
 ## Done
@@ -38,8 +38,13 @@
 - The same pass confirms all 17,404 exact Note 52(i) panel units as new disagreements and exposes 229,536 additional new units, for 246,940 new Yale-zero disagreements total. Target receipt SHA-256: `845c4ad0516c03ef4cfb5224f5c5f67f812d42a084db9de52633ca050205f9c7`.
 - The source-backed taxonomy conserves all 246,940 new units: CAFTA 17,404; Brazil aircraft 414; Brazil pharma 84; forced-labor aircraft 40,392; forced-labor pharma 1,058; encoded-full invariant failures 0; unmapped 187,588. Its 114,768 exact non-CAFTA cell groups are fully listed. Taxonomy receipt SHA-256: `3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de`.
 - Resumed the evaluation with three workers and cache validation after the prior lane process stopped. `nice -n 10` was requested, but the sandbox denied `setpriority`; the command continued at default priority. The advancing manifest reports zero engine errors.
+- Exactly classified the 148,390 old-class residual: 74,822 Yale aircraft-utilization proxy units, 73,500 Yale pharma-utilization proxy units, and 68 MFN-cap input/parser-vintage units. There are no date, listed-flag, CAFTA-overlap, or cap-formula failures. Receipt SHA-256: `b4f9d26d5a800cf1b0e6e50c6b3935ee18b24ca55bbcc5eecf9e10ab8f829bea`.
+- Eliminated the 187,588-unit `unmapped` bucket with a unique join over all 89,346 interval keys: Section 232 mask 185,954; Chapter 98 handling 1,514; Yale HTS8 statistical broadening 120. The Section 232 population splits into 119,682 exposed-but-unconsumed engine facts, 33,834 unflagged annex units, and 32,438 unflagged heading-program units. Receipt SHA-256: `4572f1a121848337bcd0ea797c09e771fc55a3e0efaeb79c195979ddb5a5e29e`.
+- Finalized the uncommitted 357-line preview report at `reference/us-tariff-schedule/preview-1311/preview-conformance-report.md`. It includes the closure prediction, exact CAFTA census, all new-cell artifact paths, causal interpretations, pins, hashes, commands, limitations, and official post-rebind recipe.
+- Revalidated all four analysis scripts with `py_compile`, all four final receipts with `verdict == PASS`, both gzip sidecars with `gzip -t`, the report hash, and a clean tracked diff.
 
 ## Next
 
-- Reconcile the causal composition of the 148,390 old-class residual and 187,588 unmapped new units so the report does not hide systematic disagreements behind aggregate labels.
-- Write the requested report and final receipt index; leave all generated lane artifacts uncommitted.
+- On the official rebind, run the stock full-surface campaign without the preview alias projection and compare its exact cells to this preview.
+- Ingest General Note 29 and expose an entry-level DR-CAFTA duty-free claim/eligibility fact before expecting the 17,404 Note 52(i) units to reach zero.
+- Reconcile certificate target semantics for utilization proxies, Section 232, and Chapter 98 before closing the 148,390 old residual or accepting the 229,536 new non-CAFTA disagreements.
