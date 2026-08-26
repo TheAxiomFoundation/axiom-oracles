@@ -17,6 +17,7 @@
 - Created the required new branch without pushing.
 - Restored the U.S. closure producer under a campaign-specific filename, pinned both external Git object inputs, and re-enabled full verification without changing the Danish producer.
 - Canonicalized the two C6 historical entry-flag aliases at all campaign helper-consumption sites, with equality checks and receipt metadata.
+- Ran the official C6 input-contract stage across all 100 compositions: canonical aliases were consumed, only `entry_is_line_c` and `entry_is_line_e` were dropped, and the gate passed.
 
 ## Next
 
