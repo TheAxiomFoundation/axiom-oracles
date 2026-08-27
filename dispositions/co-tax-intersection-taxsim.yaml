@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-tax-intersection-taxsim
-updated: '2026-08-23'
+updated: '2026-08-27'
 entries:
 - id: taxsim-2026-ctc-child-credit-machinery-absent
   concept: us:tax/federal-income-tax#ctc
@@ -2827,3 +2827,193 @@ entries:
       tolerance: 0.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
+- id: taxsim-qbid-rental-convention-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135571
+    - ecps-tax-unit-135602
+    - ecps-tax-unit-135620
+    - ecps-tax-unit-135809
+    - ecps-tax-unit-135881
+    - ecps-tax-unit-136038
+    - ecps-tax-unit-136291
+    - ecps-tax-unit-136428
+    - ecps-tax-unit-136446
+    - ecps-tax-unit-136461
+    - ecps-tax-unit-136470
+    - ecps-tax-unit-154437
+    - ecps-tax-unit-154577
+    - ecps-tax-unit-154579
+    - ecps-tax-unit-155073
+    - ecps-tax-unit-155340
+    - ecps-tax-unit-155531
+    - ecps-tax-unit-155678
+    - ecps-tax-unit-155799
+    - ecps-tax-unit-156032
+    - ecps-tax-unit-156148
+    - ecps-tax-unit-156747
+    - ecps-tax-unit-157428
+    - ecps-tax-unit-157637
+    - ecps-tax-unit-157802
+    - ecps-tax-unit-157930
+    - ecps-tax-unit-158100
+    - ecps-tax-unit-158127
+    - ecps-tax-unit-158513
+    - ecps-tax-unit-158573
+    - ecps-tax-unit-158697
+    - ecps-tax-unit-158735
+    - ecps-tax-unit-158993
+    - ecps-tax-unit-159082
+    - ecps-tax-unit-159126
+    - ecps-tax-unit-159138
+    - ecps-tax-unit-159315
+    - ecps-tax-unit-159366
+    - ecps-tax-unit-159502
+    - ecps-tax-unit-159609
+    - ecps-tax-unit-159616
+    - ecps-tax-unit-159739
+    - ecps-tax-unit-159952
+    - ecps-tax-unit-160042
+    - ecps-tax-unit-160518
+    - ecps-tax-unit-160988
+    - ecps-tax-unit-161153
+    - ecps-tax-unit-161684
+    - ecps-tax-unit-161737
+    - ecps-tax-unit-161791
+    - ecps-tax-unit-161974
+    - ecps-tax-unit-162175
+    - ecps-tax-unit-162193
+    - ecps-tax-unit-162241
+    - ecps-tax-unit-162668
+    - ecps-tax-unit-162837
+    - ecps-tax-unit-163010
+    - ecps-tax-unit-163041
+    - ecps-tax-unit-163066
+    - ecps-tax-unit-163227
+    - ecps-tax-unit-163427
+    - ecps-tax-unit-163548
+    - ecps-tax-unit-163639
+    - ecps-tax-unit-163672
+    - ecps-tax-unit-163755
+    - ecps-tax-unit-163861
+    - ecps-tax-unit-164248
+    - ecps-tax-unit-58339
+    - ecps-tax-unit-58509
+    - ecps-tax-unit-58658
+    - ecps-tax-unit-58697
+    - ecps-tax-unit-58784
+    - ecps-tax-unit-58790
+    - ecps-tax-unit-58809
+    - ecps-tax-unit-58890
+    - ecps-tax-unit-58903
+    - ecps-tax-unit-59070
+    - ecps-tax-unit-59074
+    - ecps-tax-unit-59091
+    - ecps-tax-unit-59131
+    - ecps-tax-unit-59145
+    - ecps-tax-unit-59166
+    - ecps-tax-unit-59203
+    - ecps-tax-unit-59214
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Downstream shadow of taxsim-qbid-rental-convention-taxable-income
+      at the
+
+      unit''s ordinary marginal rate. On every selected row (a) the taxable-income
+
+      row is dispositioned to that entry - axiom grants 26 USC 199A QBID on
+
+      rental/SE income (H.R.1 section 70105 $400 minimum deduction on the floor
+
+      rows, 20% of QBI in the phase region) while TAXSIM''s otherprop column is
+
+      non-QBI by definition and grants zero - and (b) the hand-computed statutory
+
+      QDCGT worksheet (Rev. Proc. 2025-32 brackets and capital-gains thresholds,
+
+      validated against TAXSIM''s own v19 ordinary-tax column, 147/147 joint and
+
+      60/63 single exact) reproduces axiom''s tax_before_credits to the dollar
+
+      FROM AXIOM''S OWN TAXABLE INCOME. The tax_before_credits residual is
+
+      therefore exactly the taxable-income convention gap times the marginal
+
+      rate: -400.00 x 0.37 = -148.00 on the top-bracket rows (the -148 cluster),
+
+      -639.13 x 0.22 = -140.61 and -721.49 x 0.22 = -158.73 on the 22%-bracket
+
+      rows. Same bridge convention, not a rules disagreement; resolves with the
+
+      parent entry when the projection surface gains a QBI-capable column.'
+    arithmetic:
+    - expression: -400.00 * 0.37
+      equals: -148.0
+      tolerance: 0.01
+    - expression: -639.13 * 0.22
+      equals: -140.61
+      tolerance: 0.01
+    - expression: -721.49 * 0.22
+      equals: -158.73
+      tolerance: 0.01
+  expires_on_source_change: true
+- id: taxsim-2026-capgains-zero-threshold-vintage
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135586
+    - ecps-tax-unit-135903
+    - ecps-tax-unit-135966
+    - ecps-tax-unit-136056
+    - ecps-tax-unit-136364
+    - ecps-tax-unit-162440
+    - ecps-tax-unit-58335
+    - ecps-tax-unit-58480
+    - ecps-tax-unit-58842
+    - ecps-tax-unit-59100
+    - ecps-tax-unit-59117
+    - ecps-tax-unit-59127
+    - ecps-tax-unit-59151
+    - ecps-tax-unit-59205
+    - ecps-tax-unit-59316
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated to TAXSIM''s capital-gains bracket vintage by hand-computing
+
+      the statutory QDCGT worksheet from TAXSIM''s OWN taxable income (v18) with
+
+      Rev. Proc. 2025-32 parameters, brackets first validated against TAXSIM''s
+
+      own v19 ordinary-tax column (147/147 joint, 60/63 single exact). The
+
+      worksheet exceeds TAXSIM''s v28 by a flat 134.79 on joint rows and 67.40 on
+
+      single rows across all income levels: TAXSIM''s 2026-05-21 module projects
+
+      the 0% capital-gains threshold forward from the 2025 value (96,700 MFJ) at
+
+      its own inflation assumption (implied threshold 99,798.61) instead of the
+
+      published 98,900, sheltering 898.61 more gain at 0% - 898.61 x 0.15 =
+
+      134.79, halved for single filers (449.31 x 0.15 = 67.40). Rows between 2
+
+      and the fingerprint straddle the threshold partially. Axiom matches the
+
+      published Rev. Proc. values; a TAXSIM-side parameter vintage, resolved
+
+      when NBER re-bases the 2026 thresholds.'
+    arithmetic:
+    - expression: 99798.61 - 98900
+      equals: 898.61
+      tolerance: 0.01
+    - expression: 898.61 * 0.15
+      equals: 134.79
+      tolerance: 0.01
+    - expression: 449.31 * 0.15
+      equals: 67.4
+      tolerance: 0.01
+  expires_on_source_change: true

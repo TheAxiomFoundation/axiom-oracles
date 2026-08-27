@@ -76263,6 +76263,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 98.26755535888879,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 24681.137555358888,
       "parent": "us:tax/federal-income-tax#liability",
@@ -76505,6 +76509,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -162.3364142333994,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 26830.8635857666,
       "parent": "us:tax/federal-income-tax#liability",
@@ -78811,6 +78819,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -140.61207473754985,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 12984.41792526245,
       "parent": "us:tax/federal-income-tax#liability",
@@ -79132,6 +79144,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -208.5485638453756,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 18154.141436154623,
       "parent": "us:tax/federal-income-tax#liability",
@@ -79647,6 +79663,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -91.59094610595639,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 25997.029053894043,
       "parent": "us:tax/federal-income-tax#liability",
@@ -79926,6 +79946,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 65.87123698463438,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 9562.671236984634,
       "parent": "us:tax/federal-income-tax#liability",
@@ -80063,6 +80087,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -20.563546539309755,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 21642.86645346069,
       "parent": "us:tax/federal-income-tax#liability",
@@ -81093,6 +81121,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -96.00226074219972,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 80233.3177392578,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85135,6 +85167,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -38.318125672245515,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 69588.53187432776,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85924,6 +85960,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -88.00366058349027,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 91424.2263394165,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86687,6 +86727,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -496.0234353332562,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 46396.21656466674,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87539,6 +87583,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1953.332154052734,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 8788.787845947267,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88070,6 +88118,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.40103126953181,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 14092.161031269532,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88417,6 +88469,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -541.1200847778309,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 49449.399915222166,
       "parent": "us:tax/federal-income-tax#liability",
@@ -88801,6 +88857,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -595.712532974092,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 14584.557467025908,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89164,6 +89224,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -287.05231970215027,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 17884.88768029785,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89790,6 +89854,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 26.794564819334482,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 35016.89456481933,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89990,6 +90058,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 134.7916043567675,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 22599.911604356766,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91282,6 +91354,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -324.71977858734317,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 51817.770221412655,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91834,6 +91910,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1999.4705216140792,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 31510.399478385923,
       "parent": "us:tax/federal-income-tax#liability",
@@ -91929,6 +92009,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -270.5611811523486,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 51044.848818847655,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92250,6 +92334,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.39831534194855,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 11903.918315341949,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95671,6 +95759,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -793.6375996093775,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 52660.93240039062,
       "parent": "us:tax/federal-income-tax#liability",
@@ -95835,6 +95927,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1488.0712460937502,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 25783.27875390625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96530,6 +96626,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -496.01778595733776,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 17137.822214042662,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96851,6 +96951,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 134.79054877758244,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 29243.25054877758,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97177,6 +97281,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.39563598144468,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 7386.785635981445,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97320,6 +97428,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.39330429687561,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 6240.833304296875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97420,6 +97532,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -545.6251170654286,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 27619.324882934572,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97779,6 +97895,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -158.72555095703137,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 16829.76444904297,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97885,6 +98005,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 5800.798529262695,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 11553.158529262695,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98043,6 +98167,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -7.843562255859069,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 6915.366437744141,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98285,6 +98413,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -270.5605683593749,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 58505.469431640624,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99715,6 +99847,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -993.483055946359,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 54350.426944053645,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99868,6 +100004,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 134.7973850440976,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 8722.587385044098,
       "parent": "us:tax/federal-income-tax#liability",
@@ -100089,6 +100229,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1388.8615339706448,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 29776.908466029356,
       "parent": "us:tax/federal-income-tax#liability",
@@ -100578,6 +100722,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.39461621093778,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 4098.844616210938,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102430,6 +102578,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -853.8047909179691,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 2919.225209082031,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102883,6 +103035,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -128.0040454101545,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 83809.71595458985,
       "parent": "us:tax/federal-income-tax#liability",
@@ -103020,6 +103176,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 67.39175342048475,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 7508.511753420485,
       "parent": "us:tax/federal-income-tax#liability",
@@ -103131,6 +103291,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1849.2899344531252,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 28273.600065546874,
       "parent": "us:tax/federal-income-tax#liability",
@@ -103515,6 +103679,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -103.08216210937462,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4605.617837890625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -103941,6 +104109,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -149.65699218958616,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 49930498.87300781,
       "parent": "us:tax/federal-income-tax#liability",
@@ -104393,6 +104565,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -149.52552197128534,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 46830366.21447803,
       "parent": "us:tax/federal-income-tax#liability",
@@ -104483,6 +104659,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -149.5691621080041,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 49199268.670837894,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105109,6 +105289,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.70013476908207,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 34393057.36986523,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105514,6 +105698,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.26965624839067,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 22681281.27034375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105753,6 +105941,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.18202148377895,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 33734703.02797852,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105948,6 +106140,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.03005371242762,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 23011946.42994629,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106101,6 +106297,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.19453124701977,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 21680756.45546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106328,6 +106528,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.70221069455147,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 22086824.317789305,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106508,6 +106712,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.00264282221906,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 1814814.7473571778,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107354,6 +107562,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.54710937291384,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 17024241.532890625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108235,6 +108447,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.25289062503725,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 8058540.387109375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108435,6 +108651,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.44875000044703,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 15418373.39125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108635,6 +108855,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.35363281145692,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 10863643.076367188,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108814,6 +109038,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0055859349668,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 21989405.554414064,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109052,6 +109280,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.03242187481374,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 3603945.537578125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109147,6 +109379,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.38562500104308,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 12455200.364374999,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109655,6 +109891,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.03786621242762,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 18203359.552133787,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109729,6 +109969,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.23698437400162,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 13312319.863015626,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109819,6 +110063,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0028124973178,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 18998788.837187503,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109914,6 +110162,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.28351562656462,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 11807931.366484374,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110434,6 +110686,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.1060369256884,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4745667.733963074,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110524,6 +110780,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.01812499994412,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 3870045.391875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110724,6 +110984,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.066250000149,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 2867261.59375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110798,6 +111062,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.06806640606374,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 2552213.601933594,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111277,6 +111545,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.33320312574506,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 12203464.296796875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111435,6 +111707,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.21394140645862,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 13370262.026058594,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111588,6 +111864,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.00771484378492,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 522360.1922851562,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111746,6 +112026,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.1206249985844,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 14433919.319375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111841,6 +112125,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0978027349338,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4288905.682197265,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111936,6 +112224,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.3460375983268,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 10702687.333962401,
       "parent": "us:tax/federal-income-tax#liability",
@@ -112136,6 +112428,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.00390167231672,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 854388.1860983276,
       "parent": "us:tax/federal-income-tax#liability",
@@ -112321,6 +112617,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.210004882887,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 9283557.009995118,
       "parent": "us:tax/federal-income-tax#liability",
@@ -113153,6 +113453,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.31964843720198,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 10218930.660351563,
       "parent": "us:tax/federal-income-tax#liability",
@@ -113568,6 +113872,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.16368896421045,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 7125657.0163110355,
       "parent": "us:tax/federal-income-tax#liability",
@@ -113663,6 +113971,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.13958203233778,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 10207342.260417968,
       "parent": "us:tax/federal-income-tax#liability",
@@ -113984,6 +114296,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.02947265468538,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 11846542.570527345,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114142,6 +114458,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.23940917942673,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 8288660.760590821,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114216,6 +114536,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0283789075911,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 12656526.271621093,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114522,6 +114846,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.1662280280143,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 6525279.323771972,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114813,6 +115141,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.129494628869,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4304544.530505371,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114887,6 +115219,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0086022950709,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 3123237.051397705,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115087,6 +115423,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.05523437540978,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4306140.174765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115355,6 +115695,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 46569.49632781251,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-zero-threshold-vintage"
+      },
       "kind": "amount_difference",
       "left": 62644.24632781251,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115445,6 +115789,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.02368554472923,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 10462907.176314455,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115582,6 +115930,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.20739257801324,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 6849329.542607422,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115740,6 +116092,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.04937499994412,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 2328471.260625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115962,6 +116318,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -147.99662109371275,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 1392640.7233789063,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116120,6 +116480,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.00872265640646,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 3120268.4912773436,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116252,6 +116616,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.015468750149,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 9553500.98453125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116410,6 +116778,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.08677734434605,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 4272376.193222656,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116694,6 +117066,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.07338281255215,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 3597616.0466171876,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116957,6 +117333,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -147.99819335935172,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 841644.2618066407,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117052,6 +117432,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.15500000026077,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 5059836.535,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117147,6 +117531,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -147.99868560786126,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 416236.0413143921,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117242,6 +117630,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.0139062500093,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 1537631.52609375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117690,6 +118082,10 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -148.06403906270862,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-qbid-rental-convention-tax-before-credits"
+      },
       "kind": "amount_difference",
       "left": 6684074.995960937,
       "parent": "us:tax/federal-income-tax#liability",
@@ -118078,18 +118474,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 313,
-        "bridge_artifact": 194,
+        "bridge_artifact": 278,
         "explained_residual": 365,
         "unexplained": 0,
-        "upstream_engine_gap": 733
+        "upstream_engine_gap": 748
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 95.720233,
+      "explained_rate": 96.544546,
       "orphaned_entries": [],
       "raw_match_rate": 82.35637,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 514
+      "unexplained_count": 415
     },
     "error_count": 0,
     "errors_by_engine": {},
