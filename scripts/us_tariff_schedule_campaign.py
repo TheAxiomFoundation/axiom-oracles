@@ -18,12 +18,12 @@ import hashlib
 import io
 import json
 import math
+import os
 import re
 import subprocess
 import sys
 import tempfile
 import time
-import os
 from functools import cache
 from collections import Counter
 from datetime import date
@@ -42,6 +42,7 @@ ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 EVAL_DIR = OUT_DIR / "eval"
 EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
+EVAL_MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v1"
 COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
 CLASSIFICATION_RECEIPT = OUT_DIR / "classification-receipt.json"
 DISPOSITION_LEDGER = REPO_ROOT / "reference/us-tariff-schedule/campaign-dispositions.yaml"
@@ -123,9 +124,10 @@ SELECTOR_FIELDS = frozenset({
     "line_set", "date",
 })
 NON_SLOT_SELECTOR_FIELDS = frozenset({"origin_regime", "delta", "iso2", "line_set", "date"})
-INCIDENCE_ROOT = Path(os.environ.get(
+RULESPEC_US_ROOT = Path(os.environ.get(
     "RULESPEC_US_CHECKOUT", "/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us-b16"
-)).expanduser() / "us/policies/usitc/us-tariff-incidence/generated"
+)).expanduser()
+INCIDENCE_ROOT = RULESPEC_US_ROOT / "us/policies/usitc/us-tariff-incidence/generated"
 CH98_LINES = INCIDENCE_ROOT.parent.parent / "us-tariff-duty/lines/generated/ch98.yaml"
 EXPECTED_COLUMNS = (
     "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip",
@@ -674,13 +676,44 @@ def _atomic_json(path: Path, payload: Any) -> None:
     temporary.replace(path)
 
 
+def _empty_eval_manifest() -> dict[str, Any]:
+    return {"schema": EVAL_MANIFEST_SCHEMA, "shards": {}}
+
+
 def _load_manifest() -> dict[str, Any]:
     if not EVAL_MANIFEST.exists():
-        return {"schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1", "shards": {}}
+        return _empty_eval_manifest()
     payload = json.loads(EVAL_MANIFEST.read_text())
-    _require(payload.get("schema") == "axiom_oracles.us_tariff_schedule.eval_manifest.v1", "bad eval manifest schema")
+    _require(payload.get("schema") == EVAL_MANIFEST_SCHEMA, "bad eval manifest schema")
     _require(isinstance(payload.get("shards"), dict), "bad eval manifest shards")
     return payload
+
+
+def _prepare_eval_manifest(
+    manifest: dict[str, Any], current_keys: dict[str, str]
+) -> dict[str, Any]:
+    """Drop downstream bindings and shards superseded by current inputs.
+
+    Shard keys commit the RuleSpec module, engine, selected population, routing,
+    outputs, and declared-input contract.  Carrying a non-current key into a
+    rebind would leave two receipts for one chapter and make comparison order
+    dependent.  Comparison bindings are downstream evidence and are likewise
+    invalid as soon as a new evaluation begins.
+    """
+
+    prepared = _empty_eval_manifest()
+    expected_by_key = {key: chapter for chapter, key in current_keys.items()}
+    for key, shard in manifest["shards"].items():
+        if key not in expected_by_key:
+            continue
+        chapter = expected_by_key[key]
+        _require(isinstance(shard, dict), f"invalid shard receipt {key}")
+        _require(
+            shard.get("key") == key and shard.get("chapter") == chapter,
+            f"invalid shard identity {key}",
+        )
+        prepared["shards"][key] = shard
+    return prepared
 
 
 def _chapter_from_route(route: dict[str, str]) -> str:
@@ -816,16 +849,32 @@ def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path,
 
 def evaluate_campaign(*, rulespec_root: Path, engine_binary: Path, workers: int,
                       chapters: Iterable[str] | None = None, resume: bool = False,
+                      fresh: bool = False,
                       cache_dir: Path | None = None) -> dict[str, Any]:
     _require(1 <= workers <= 3, "workers must be between 1 and 3")
+    _require(not (fresh and resume), "--fresh and --resume are mutually exclusive")
     declared_chapters = [item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]]
     chosen = sorted(set(chapters or declared_chapters))
     _require(set(chosen) <= set(declared_chapters), f"unknown chapters: {sorted(set(chosen) - set(declared_chapters))}")
     cache = cache_dir or CACHE_ROOT / "eval"
-    manifest = _load_manifest()
+    current_keys = {
+        chapter: _shard_key(
+            chapter=chapter,
+            rulespec_root=rulespec_root,
+            engine_binary=engine_binary,
+        )
+        for chapter in declared_chapters
+    }
+    manifest = _empty_eval_manifest() if fresh else _prepare_eval_manifest(
+        _load_manifest(), current_keys
+    )
+    # Commit the invalidation before launching any engine process.  An
+    # interrupted rebind therefore cannot retain old comparison bindings or
+    # superseded shards and masquerade as a complete current run.
+    _atomic_json(EVAL_MANIFEST, manifest)
     pending = []
     for chapter in chosen:
-        key = _shard_key(chapter=chapter, rulespec_root=rulespec_root, engine_binary=engine_binary)
+        key = current_keys[chapter]
         old = manifest["shards"].get(key)
         complete = old and Path(old["path"]).is_file() and _sha256(Path(old["path"])) == old["sha256"]
         if resume and complete:
@@ -839,6 +888,10 @@ def evaluate_campaign(*, rulespec_root: Path, engine_binary: Path, workers: int,
                                engine_binary=engine_binary, cache_dir=cache): chapter for chapter in pending}
         for future in concurrent.futures.as_completed(futures):
             receipt = future.result()
+            _require(
+                receipt.get("key") == current_keys.get(receipt.get("chapter")),
+                f"evaluation returned a non-current shard: {receipt.get('chapter')}",
+            )
             manifest["shards"][receipt["key"]] = receipt
             _atomic_json(EVAL_MANIFEST, manifest)
             finished += 1
@@ -905,8 +958,10 @@ def compare_campaign(*, cache_dir: Path | None = None) -> dict[str, Any]:
     chapters = {shard["chapter"] for shard in manifest["shards"].values()}
     expected_chapters = {item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]}
     _require(chapters == expected_chapters, "evaluation manifest is incomplete")
+    evaluation_manifest = _empty_eval_manifest()
+    evaluation_manifest["shards"] = manifest["shards"]
     counts: dict[str, Counter[str]] = {}
-    digest = hashlib.sha256(_render(manifest).encode()).hexdigest()
+    digest = hashlib.sha256(_render(evaluation_manifest).encode()).hexdigest()
     output = (cache_dir or CACHE_ROOT / "compare") / digest[:2] / f"{digest}.jsonl.gz"
     output.parent.mkdir(parents=True, exist_ok=True)
     engine_errors = 0
@@ -925,6 +980,14 @@ def compare_campaign(*, cache_dir: Path | None = None) -> dict[str, Any]:
                "per_slot": {slot: dict(counter) for slot, counter in sorted(counts.items())},
                "engine_errors": engine_errors}
     _atomic_json(COMPARISON_RECEIPT, receipt)
+    evaluation_manifest["comparison_artifact"] = {
+        "sha256": receipt["comparison_artifact"]["sha256"]
+    }
+    evaluation_manifest["comparison_receipt"] = {
+        "path": str(COMPARISON_RECEIPT.relative_to(REPO_ROOT)),
+        "sha256": _sha256(COMPARISON_RECEIPT),
+    }
+    _atomic_json(EVAL_MANIFEST, evaluation_manifest)
     return receipt
 
 
@@ -1086,10 +1149,16 @@ def _preview_disposition_receipt() -> dict[str, Any]:
     return preview
 
 
-def _preview_selector_contract(
+def _preview_selector_snapshot(
     entries: list[dict[str, Any]], preview: dict[str, Any] | None = None
-) -> dict[str, dict[str, Any]]:
-    """Bind expiring ledger selectors to their receipted preview populations."""
+) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Bind active and retired selectors to an immutable preview snapshot.
+
+    The receipt describes a historical mismatch population, not a requirement
+    that every mismatch survive future RuleSpec fixes.  A selector may leave
+    the ledger only after its receipted match population vanishes completely;
+    the classifier enforces that transition against fresh comparison evidence.
+    """
 
     preview = _preview_disposition_receipt() if preview is None else preview
     selectors = preview.get("selectors")
@@ -1112,13 +1181,16 @@ def _preview_selector_contract(
         "expected_signature_count", "expected_signature_population_sha256", "match",
     }
     contract: dict[str, dict[str, Any]] = {}
+    retired: dict[str, dict[str, Any]] = {}
+    receipt_ids: set[str] = set()
     for selector in selectors:
         _require(isinstance(selector, dict) and set(selector) == expected_fields,
                  "invalid preview selector contract fields")
         selector_id = selector.get("id")
         _require(isinstance(selector_id, str) and selector_id,
                  "invalid preview selector id")
-        _require(selector_id not in contract, f"duplicate preview selector id: {selector_id}")
+        _require(selector_id not in receipt_ids, f"duplicate preview selector id: {selector_id}")
+        receipt_ids.add(selector_id)
         _require(isinstance(selector.get("logical_class"), str)
                  and bool(selector["logical_class"]),
                  f"invalid preview logical class: {selector_id}")
@@ -1179,8 +1251,9 @@ def _preview_selector_contract(
                 f"invalid preview selector delta values: {selector_id}",
             )
         ledger_entry = ledger_by_id.get(selector_id)
-        _require(ledger_entry is not None,
-                 f"preview selector absent from disposition ledger: {selector_id}")
+        if ledger_entry is None:
+            retired[selector_id] = selector
+            continue
         _require(ledger_entry.get("match") == selector.get("match"),
                  f"preview selector match drift: {selector_id}")
         _require(ledger_entry.get("disposition") == selector.get("disposition"),
@@ -1190,32 +1263,43 @@ def _preview_selector_contract(
         _require(ledger_entry.get("expires_on_source_change") is True,
                  f"preview selector lost source-change expiry: {selector_id}")
         contract[selector_id] = selector
-    contract_line_sets = [
+    receipt_line_sets = [
         selector["match"].get("line_set")
         if isinstance(selector.get("match"), dict) else None
-        for selector in contract.values()
+        for selector in selectors
     ]
     _require(
-        len(set(contract_line_sets)) == len(contract_line_sets)
-        and set(contract_line_sets) == set(line_sets),
+        len(set(receipt_line_sets)) == len(receipt_line_sets)
+        and set(receipt_line_sets) == set(line_sets),
         "preview selectors and line sets are not one-to-one",
     )
     for entry_id, entry in ledger_by_id.items():
         match = entry.get("match")
         line_set = match.get("line_set") if isinstance(match, dict) else None
         if isinstance(line_set, str) and line_set.startswith("preview-1311-"):
-            _require(entry_id in contract,
+            _require(entry_id in receipt_ids,
                      f"unreceipted preview selector in disposition ledger: {entry_id}")
     census = preview.get("census", {}).get("per_selector")
     _require(
         isinstance(census, dict)
         and census == {selector_id: selector["expected_units"]
-                       for selector_id, selector in sorted(contract.items())},
+                       for selector_id, selector in sorted(
+                           {**contract, **retired}.items()
+                       )},
         "preview selector census does not match selector contracts",
     )
     _require(preview.get("census", {}).get("total") == sum(
-        selector["expected_units"] for selector in contract.values()
+        selector["expected_units"] for selector in selectors
     ), "preview selector total does not conserve")
+    return contract, retired
+
+
+def _preview_selector_contract(
+    entries: list[dict[str, Any]], preview: dict[str, Any] | None = None
+) -> dict[str, dict[str, Any]]:
+    """Return the still-enrolled portion of the receipted preview snapshot."""
+
+    contract, _retired = _preview_selector_snapshot(entries, preview)
     return contract
 
 
@@ -1224,6 +1308,8 @@ def _enforce_preview_selector_population(
     signature_classes: dict[str, str | None],
     counts: Counter[str],
 ) -> None:
+    """Require each active expiring selector to be absent or snapshot-exact."""
+
     selected: dict[str, list[tuple[str, int]]] = {
         selector_id: [] for selector_id in contract
     }
@@ -1232,6 +1318,12 @@ def _enforce_preview_selector_population(
             selected[selector_id].append((signature, counts[signature]))
     for selector_id, expected in contract.items():
         population = selected[selector_id]
+        # ``expires_on_source_change`` permits one transition: the historical
+        # population may disappear completely after a RuleSpec fix.  Any
+        # partial survival or substitution still expires the snapshot and must
+        # be reviewed against newly receipted evidence.
+        if not population:
+            continue
         actual_units = sum(units for _, units in population)
         _require(
             actual_units == expected["expected_units"],
@@ -1248,6 +1340,26 @@ def _enforce_preview_selector_population(
             actual_digest == expected["expected_signature_population_sha256"],
             f"preview selector population expired: {selector_id}: signature digest drift "
             f"(expected {expected['expected_signature_population_sha256']}, got {actual_digest})",
+        )
+
+
+def _enforce_retired_preview_selectors_absent(
+    retired: dict[str, dict[str, Any]],
+    observed: dict[str, dict[str, Any]],
+    counts: Counter[str],
+) -> None:
+    """Prove that every preview selector removed from the ledger is absent."""
+
+    for selector_id, snapshot in retired.items():
+        population = [
+            (signature, counts[signature])
+            for signature, unit in observed.items()
+            if selector_matches(unit, snapshot["match"])
+        ]
+        _require(
+            not population,
+            f"retired preview selector remains live: {selector_id}: "
+            f"{sum(units for _, units in population)} units",
         )
 
 
@@ -1395,6 +1507,7 @@ def _rederive_classification_sidecar(
     }
     signature_classes: dict[str, str | None] = {}
     signature_counts: Counter[str] = Counter()
+    observed: dict[str, dict[str, Any]] = {}
     class_census: Counter[str] = Counter()
     per_slot: dict[str, Counter[str]] = {}
     sample_signatures: dict[str, list[str]] = {}
@@ -1453,6 +1566,7 @@ def _rederive_classification_sidecar(
                 }, units)
                 signature_classes[signature] = class_id
                 signature_counts[signature] = units
+                observed[signature] = fields
                 component_units += units
                 bucket = class_id or "__unexplained__"
                 per_slot.setdefault(bucket, Counter())[fields["slot"]] += units
@@ -1538,6 +1652,7 @@ def _rederive_classification_sidecar(
         "classification_population": _population_receipt(population_state),
         "_signature_classes": signature_classes,
         "_signature_counts": signature_counts,
+        "_observed": observed,
     }
 
 
@@ -1551,7 +1666,7 @@ def _validate_classification_handoff(
         == "axiom_oracles.us_tariff_schedule.classification.v2",
         "classification receipt schema is stale",
     )
-    preview_contract = _preview_selector_contract(entries)
+    preview_contract, retired_preview_contract = _preview_selector_snapshot(entries)
     _require(classification.get("inputs") == _classification_inputs(comparison),
              "classification receipt input binding is stale")
     entry_ids = [entry.get("id") for entry in entries]
@@ -1575,7 +1690,7 @@ def _validate_classification_handoff(
     )
     _require(
         all(
-            class_census.get(selector_id, 0) == selector["expected_units"]
+            class_census.get(selector_id, 0) in {0, selector["expected_units"]}
             for selector_id, selector in preview_contract.items()
         ),
         "classification receipt preview-selector census is stale",
@@ -1648,8 +1763,12 @@ def _validate_classification_handoff(
     rederived = _rederive_classification_sidecar(expected_sidecar, entries)
     sidecar_signature_classes = rederived.pop("_signature_classes")
     sidecar_signature_counts = rederived.pop("_signature_counts")
+    sidecar_observed = rederived.pop("_observed")
     _enforce_preview_selector_population(
         preview_contract, sidecar_signature_classes, sidecar_signature_counts
+    )
+    _enforce_retired_preview_selectors_absent(
+        retired_preview_contract, sidecar_observed, sidecar_signature_counts
     )
     for field, expected in rederived.items():
         _require(classification.get(field) == expected,
@@ -1881,9 +2000,10 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     ledger = yaml.safe_load(disposition_ledger.read_text())
     _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
     entries = ledger.get("entries", []) if entries_override is None else entries_override
-    preview_contract = (
-        _preview_selector_contract(entries) if entries_override is None else None
-    )
+    if entries_override is None:
+        preview_contract, retired_preview_contract = _preview_selector_snapshot(entries)
+    else:
+        preview_contract = retired_preview_contract = None
     selectors = validate_dispositions(entries, observed)
     signature_classes = {
         signature: matching_class_id(signature, unit, selectors)
@@ -1891,6 +2011,9 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     }
     if preview_contract is not None:
         _enforce_preview_selector_population(preview_contract, signature_classes, counts)
+        _enforce_retired_preview_selectors_absent(
+            retired_preview_contract or {}, observed, counts
+        )
     census: Counter[str] = Counter()
     derived_total_compositions: Counter[str] = Counter()
     per_slot: dict[str, Counter[str]] = {}
@@ -2095,18 +2218,41 @@ def witness_replay(*, execute: bool = False) -> dict[str, Any]:
     return receipt
 
 
+def _require_rulespec_root_consistency(requested: Path) -> None:
+    configured = RULESPEC_US_ROOT.resolve()
+    _require(
+        requested.resolve() == configured,
+        "--rulespec-root must match the import-time RULESPEC_US_CHECKOUT "
+        f"({configured}); export RULESPEC_US_CHECKOUT={requested.resolve()} before "
+        "invoking the campaign",
+    )
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        epilog=(
+            "For a RuleSpec rebind, export RULESPEC_US_CHECKOUT before starting "
+            "this process; disposition incidence tables are bound at import time. "
+            "Example: RULESPEC_US_CHECKOUT=/path/to/rulespec-us "
+            "python scripts/us_tariff_schedule_campaign.py evaluate --fresh"
+        )
+    )
     parser.add_argument("stage", choices=("prepass", "input-contract", "projection", "evaluate",
                                          "compare", "classify", "report", "witness-replay"))
     parser.add_argument("--rulespec-root", type=Path,
-                        default=Path("/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us-b16"))
+                        default=RULESPEC_US_ROOT)
     parser.add_argument("--engine-binary", type=Path,
                         default=Path("/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"))
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--chapters", help="comma-separated chapters, for example CH01,CH72")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--fresh",
+        action="store_true",
+        help="start evaluation from an empty manifest and invalidate downstream bindings",
+    )
     args = parser.parse_args()
+    _require_rulespec_root_consistency(args.rulespec_root)
     started = time.perf_counter()
     if args.stage == "projection":
         receipt = evaluate_projection(
@@ -2119,7 +2265,7 @@ def main() -> int:
         chapters = None if not args.chapters else [item.strip().upper().removeprefix("CH") for item in args.chapters.split(",")]
         receipt = evaluate_campaign(rulespec_root=args.rulespec_root.resolve(),
                                     engine_binary=args.engine_binary.resolve(), workers=args.workers,
-                                    chapters=chapters, resume=args.resume)
+                                    chapters=chapters, resume=args.resume, fresh=args.fresh)
         print(_render(receipt), end="")
         return 0
     if args.stage == "compare":

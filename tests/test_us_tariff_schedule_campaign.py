@@ -20,8 +20,10 @@ from scripts.us_tariff_schedule_campaign import (
     PREVIEW_DISPOSITION_LINE_SETS,
     PREVIEW_SELECTOR_COUNT,
     _enforce_preview_selector_population,
+    _enforce_retired_preview_selectors_absent,
     _named_line_sets,
     _preview_selector_contract,
+    _preview_selector_snapshot,
     _case_feed,
     _routing_dispositions,
     canonicalize_entry_flags,
@@ -127,6 +129,121 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
     assert feed["entry_is_brazil_301_listed"] is True
+
+
+def test_prepare_eval_manifest_prunes_superseded_keys_and_bindings() -> None:
+    current = {
+        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
+        "comparison_artifact": {"sha256": "a" * 64},
+        "comparison_receipt": {"path": "old", "sha256": "b" * 64},
+        "shards": {
+            "old-01": {"key": "old-01", "chapter": "01"},
+            "new-02": {"key": "new-02", "chapter": "02"},
+        },
+    }
+    prepared = campaign_module._prepare_eval_manifest(
+        current, {"01": "new-01", "02": "new-02"}
+    )
+    assert prepared == {
+        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
+        "shards": {
+            "new-02": {"key": "new-02", "chapter": "02"},
+        },
+    }
+
+
+def test_fresh_evaluation_publishes_empty_manifest_before_engine(
+    tmp_path, monkeypatch
+) -> None:
+    manifest_path = tmp_path / "eval" / "MANIFEST.json"
+    contract_path = tmp_path / "declared-input-contract.json"
+    contract_path.write_text(json.dumps({"chapters": [{"chapter": "01"}]}))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path)
+    monkeypatch.setattr(
+        campaign_module, "_shard_key", lambda **_kwargs: "current-01"
+    )
+
+    def evaluate(chapter, **_kwargs):
+        assert json.loads(manifest_path.read_text()) == (
+            campaign_module._empty_eval_manifest()
+        )
+        return {
+            "chapter": chapter,
+            "key": "current-01",
+            "path": str(tmp_path / "current-01.jsonl.gz"),
+            "sha256": "c" * 64,
+            "cases": 1,
+            "engine_errors": 0,
+            "elapsed_seconds": 0.1,
+        }
+
+    monkeypatch.setattr(campaign_module, "_evaluate_chapter", evaluate)
+    result = campaign_module.evaluate_campaign(
+        rulespec_root=tmp_path / "rulespec-us",
+        engine_binary=tmp_path / "axiom-rules-engine",
+        workers=1,
+        fresh=True,
+        cache_dir=tmp_path / "cache",
+    )
+    assert set(result["shards"]) == {"current-01"}
+    assert set(result) == {"schema", "shards"}
+
+
+def test_fresh_evaluation_cannot_resume(tmp_path) -> None:
+    with pytest.raises(ValueError, match="mutually exclusive"):
+        campaign_module.evaluate_campaign(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "axiom-rules-engine",
+            workers=1,
+            fresh=True,
+            resume=True,
+        )
+
+
+def test_compare_rebinds_manifest_to_fresh_artifact(tmp_path, monkeypatch) -> None:
+    manifest_path = tmp_path / "eval" / "MANIFEST.json"
+    comparison_path = tmp_path / "comparison-summary.json"
+    contract_path = tmp_path / "declared-input-contract.json"
+    manifest_path.parent.mkdir()
+    manifest_path.write_text(json.dumps({
+        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
+        "shards": {"current-01": {"key": "current-01", "chapter": "01"}},
+    }))
+    contract_path.write_text(json.dumps({"chapters": [{"chapter": "01"}]}))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
+    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path)
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(campaign_module, "_iter_eval_records", lambda _manifest: iter(()))
+
+    receipt = campaign_module.compare_campaign(cache_dir=tmp_path / "compare")
+    rebound = json.loads(manifest_path.read_text())
+    assert rebound["comparison_artifact"]["sha256"] == (
+        receipt["comparison_artifact"]["sha256"]
+    )
+    assert rebound["comparison_receipt"] == {
+        "path": "comparison-summary.json",
+        "sha256": campaign_module._sha256(comparison_path),
+    }
+
+
+def test_cli_rejects_rulespec_root_not_bound_at_import(tmp_path, monkeypatch) -> None:
+    configured = tmp_path / "configured-rulespec-us"
+    requested = tmp_path / "different-rulespec-us"
+    monkeypatch.setattr(campaign_module, "RULESPEC_US_ROOT", configured)
+    monkeypatch.setattr(
+        campaign_module.sys,
+        "argv",
+        [
+            "us_tariff_schedule_campaign.py",
+            "evaluate",
+            "--rulespec-root",
+            str(requested),
+        ],
+    )
+    with pytest.raises(ValueError, match="export RULESPEC_US_CHECKOUT"):
+        campaign_module.main()
 
 
 def test_mismatch_signature_preserves_selector_dimensions() -> None:
@@ -293,6 +410,75 @@ def test_preview_population_digest_rejects_count_preserving_drift() -> None:
         )
 
 
+def test_expiring_preview_population_allows_zero_but_not_partial_survival() -> None:
+    population = [("a" * 64, 2), ("b" * 64, 3)]
+    contract = {
+        "preview": {
+            "expected_units": 5,
+            "expected_signature_count": 2,
+            "expected_signature_population_sha256": signature_population_sha256(
+                population
+            ),
+        }
+    }
+    _enforce_preview_selector_population(contract, {}, Counter())
+    with pytest.raises(ValueError, match="unit count drift"):
+        _enforce_preview_selector_population(
+            contract,
+            {"a" * 64: "preview"},
+            Counter({"a" * 64: 2}),
+        )
+
+
+def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
+    _without_external_membership_tables,
+) -> None:
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = [
+        entry for entry in ledger["entries"]
+        if entry["id"] != "cafta-52i-deferred"
+    ]
+    active, retired = _preview_selector_snapshot(entries)
+    assert "cafta-52i-deferred" not in active
+    assert "cafta-52i-deferred" in retired
+
+    cafta = retired["cafta-52i-deferred"]
+    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    hts10 = receipt["line_sets"][cafta["match"]["line_set"]]["values"][0]
+    observed = {
+        "f" * 64: {
+            **_selector_unit(),
+            "slot": cafta["match"]["slot"],
+            "hts10": hts10,
+            "delta": 0.25,
+        }
+    }
+    with pytest.raises(ValueError, match="retired preview selector remains live"):
+        _enforce_retired_preview_selectors_absent(
+            retired, observed, Counter({"f" * 64: 1})
+        )
+    _enforce_retired_preview_selectors_absent(retired, {}, Counter())
+
+
+def test_vanished_section_232_selectors_can_retire_without_retiring_cafta() -> None:
+    section_232 = {
+        "section232-annex-brazil",
+        "section232-annex-forced-labor",
+        "section232-exposed-brazil",
+        "section232-exposed-forced-labor",
+        "section232-heading-brazil",
+        "section232-heading-forced-labor",
+    }
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = [
+        entry for entry in ledger["entries"] if entry["id"] not in section_232
+    ]
+    active, retired = _preview_selector_snapshot(entries)
+    assert set(retired) == section_232
+    assert "cafta-52i-deferred" in active
+    _enforce_retired_preview_selectors_absent(retired, {}, Counter())
+
+
 def test_report_rejects_stale_classification_schema(tmp_path, monkeypatch) -> None:
     classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
     classification["schema"] = "axiom_oracles.us_tariff_schedule.classification.v1"
@@ -338,7 +524,10 @@ def test_classification_handoff_rejects_preview_census_reassignment() -> None:
         "classified": 395_330,
         "unexplained": 0,
         "engine_errors": comparison["engine_errors"],
-        "class_census": {"non-metal-232-family": 395_330},
+        "class_census": {
+            "aircraft-utilization-proxy-brazil": 1,
+            "non-metal-232-family": 395_329,
+        },
         "derived_total_units": 0,
         "derived_total_compositions": {},
         "selector_count": len(ledger["entries"]),
@@ -545,7 +734,9 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         }
     }
     monkeypatch.setattr(
-        campaign_module, "_preview_selector_contract", lambda _entries: contract
+        campaign_module,
+        "_preview_selector_snapshot",
+        lambda _entries: (contract, {}),
     )
     sidecar = campaign_module._classification_sidecar_path(inputs)
     sidecar.parent.mkdir(parents=True)
@@ -561,6 +752,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
     rederived = campaign_module._rederive_classification_sidecar(sidecar, entries)
     rederived.pop("_signature_classes")
     rederived.pop("_signature_counts")
+    rederived.pop("_observed")
     classification = {
         "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
         "inputs": inputs,
@@ -594,7 +786,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         )
     comparison["per_slot"]["base"]["match"] = 1
     monkeypatch.setattr(
-        campaign_module, "_preview_selector_contract", lambda _entries: {}
+        campaign_module, "_preview_selector_snapshot", lambda _entries: ({}, {})
     )
     substituted_fields = {**fields, "revision": "fabricated-revision"}
     substituted_signature = mismatch_signature({
@@ -617,6 +809,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
     substituted = campaign_module._rederive_classification_sidecar(sidecar, entries)
     substituted.pop("_signature_classes")
     substituted.pop("_signature_counts")
+    substituted.pop("_observed")
     classification.update(substituted)
     classification["sidecar"]["sha256"] = campaign_module._sha256(sidecar)
     with pytest.raises(ValueError, match="population is not derived from comparison artifact"):
