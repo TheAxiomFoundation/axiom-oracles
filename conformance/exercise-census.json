@@ -1538,7 +1538,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-local-municipal-pit.json",
-      "report_sha256": "11116a9a3345dde436b3aaaa39f9ef855aafd86a933669b41c69faca42d316ba",
+      "report_sha256": "5384186fb99ca2638042f244286a9be07703a390f36a30ee56c8629caf02910f",
       "varied_fields": 2,
       "verdict_concepts": {}
     },
