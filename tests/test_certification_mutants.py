@@ -3255,6 +3255,21 @@ def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
     assert leg["clean"] is False
 
 
+def test_tariff_preview_ruling_does_not_rewrite_current_certificate():
+    certify = _load("certify")
+    actual = certify.build_certificate(
+        "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
+    )
+    committed = json.loads(
+        (REPO / "certificates/us-tariff-duty.json").read_text()
+    )
+
+    assert actual == committed
+    assert actual["certified"]["value"] is False
+    assert actual["verdicts"]["closed"]["status"] == "computed_open"
+    assert actual["verdicts"]["executable"]["status"] == "computed_pass"
+
+
 # ── Exercise denominator: computed from committed artifacts ──────────────────
 
 
