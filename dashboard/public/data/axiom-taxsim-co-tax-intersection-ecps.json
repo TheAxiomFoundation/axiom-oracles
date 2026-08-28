@@ -76226,6 +76226,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1601.7324446411112,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 22481.137555358888,
       "parent": null,
@@ -76472,6 +76476,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -162.3364142333994,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 26830.8635857666,
       "parent": null,
@@ -78782,6 +78790,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -140.61207473754985,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12984.41792526245,
       "parent": null,
@@ -79112,6 +79124,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -208.5485638453756,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18154.141436154623,
       "parent": null,
@@ -79626,6 +79642,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -91.59094610595639,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 25997.029053894043,
       "parent": null,
@@ -79909,6 +79929,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 65.87123698463438,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9562.671236984634,
       "parent": null,
@@ -80050,6 +80074,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -20.563546539306117,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 21642.866453460694,
       "parent": null,
@@ -80527,6 +80555,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -141.9973938056355,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 73784.85260619437,
       "parent": null,
@@ -80669,6 +80701,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -7128.624953125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 58123.365046875,
       "parent": null,
@@ -81084,6 +81120,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -8429.672260742198,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 77283.3177392578,
       "parent": null,
@@ -81960,6 +82000,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2346.6827343750047,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 190804.757265625,
       "parent": null,
@@ -82197,6 +82241,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3432.6867867127767,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8448.603213287224,
       "parent": null,
@@ -83815,6 +83863,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5521.747797102958,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 110820.23220289704,
       "parent": null,
@@ -84556,6 +84608,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3706.084508489039,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 59842.97549151096,
       "parent": null,
@@ -84946,6 +85002,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1587.6919023437513,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 47343.13809765625,
       "parent": null,
@@ -85130,6 +85190,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -9500.068125672246,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 67838.53187432776,
       "parent": null,
@@ -85618,6 +85682,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1337.644295501712,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 94473.74570449829,
       "parent": null,
@@ -85923,6 +85991,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -12229.513097229006,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 93999.366902771,
       "parent": null,
@@ -86416,6 +86488,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -17246.6223876953,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 225021.6776123047,
       "parent": null,
@@ -86690,6 +86766,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4852.773435333249,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 43696.21656466675,
       "parent": null,
@@ -87546,6 +87626,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1953.3321540527359,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8788.787845947265,
       "parent": null,
@@ -88102,6 +88186,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.40103126953181,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14092.161031269532,
       "parent": null,
@@ -88432,6 +88520,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5445.640084777835,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 45049.399915222166,
       "parent": null,
@@ -88820,6 +88912,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -595.7125329740902,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14584.55746702591,
       "parent": null,
@@ -89187,6 +89283,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -287.05231970214663,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 17884.887680297852,
       "parent": null,
@@ -89622,6 +89722,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1843.8897632031258,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 17785.810236796875,
       "parent": null,
@@ -89817,6 +89921,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1521.555435180664,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 35016.89456481933,
       "parent": null,
@@ -90042,6 +90150,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -788.4483956432341,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 22599.911604356766,
       "parent": null,
@@ -91317,6 +91429,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5007.889778587341,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 47417.77022141266,
       "parent": null,
@@ -91668,6 +91784,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -520.1645449218777,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 59120.80545507812,
       "parent": null,
@@ -91873,6 +91993,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5399.470521614072,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 27110.399478385927,
       "parent": null,
@@ -91972,6 +92096,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2349.3811811523483,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 48844.848818847655,
       "parent": null,
@@ -92318,6 +92446,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.39831534194855,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11903.918315341949,
       "parent": null,
@@ -92501,6 +92633,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -332.24461926464573,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 38578.935380735355,
       "parent": null,
@@ -92649,6 +92785,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 2781.384106742509,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12408.07410674251,
       "parent": null,
@@ -95423,6 +95563,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -22830.683045410202,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 291299.3369545898,
       "parent": null,
@@ -95722,6 +95866,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5696.597599609377,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 52660.93240039062,
       "parent": null,
@@ -95890,6 +96038,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1488.0712460937502,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 25283.27875390625,
       "parent": null,
@@ -96935,6 +97087,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -830.73945122242,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 29243.25054877758,
       "parent": null,
@@ -97265,6 +97421,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.39563598144468,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7386.785635981445,
       "parent": null,
@@ -97343,6 +97503,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -115645.19254199218,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 797586.9774580079,
       "parent": null,
@@ -97412,6 +97576,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.39330429687561,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6240.833304296875,
       "parent": null,
@@ -97652,6 +97820,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -18003.790318789484,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 180597.64968121052,
       "parent": null,
@@ -97763,6 +97935,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -61.13,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": null,
@@ -97973,6 +98149,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 5800.798529262695,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11053.158529262695,
       "parent": null,
@@ -98376,6 +98556,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -7062.320568359377,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 54105.469431640624,
       "parent": null,
@@ -98932,6 +99116,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -9597.258765258797,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 70495.98123474121,
       "parent": null,
@@ -99810,6 +99998,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3353.9730559463496,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 54350.42694405365,
       "parent": null,
@@ -99988,6 +100180,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 134.79738504409852,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8222.587385044098,
       "parent": null,
@@ -100192,6 +100388,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1388.8615339706412,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 29776.90846602936,
       "parent": null,
@@ -100706,6 +100906,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.39461621093778,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4098.844616210938,
       "parent": null,
@@ -100910,6 +101114,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -19783.813408203132,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 136586.80659179686,
       "parent": null,
@@ -101416,6 +101624,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2441.8997329101585,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 25679.820267089843,
       "parent": null,
@@ -102141,6 +102353,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2034.206679687486,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 141939.4033203125,
       "parent": null,
@@ -102998,6 +103214,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -218.64404541015392,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 83809.71595458985,
       "parent": null,
@@ -103160,6 +103380,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 67.39175342048475,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7508.511753420485,
       "parent": null,
@@ -103254,6 +103478,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1849.2899344531252,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 28273.600065546874,
       "parent": null,
@@ -104072,6 +104300,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -9446809.376992188,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 49930498.87300781,
       "parent": null,
@@ -104150,6 +104382,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -7475312.027578123,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 41522608.772421874,
       "parent": null,
@@ -104228,6 +104464,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5686698.344516907,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 30197173.005483095,
       "parent": null,
@@ -104286,6 +104526,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -10169632.585476562,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 54241623.48452344,
       "parent": null,
@@ -104370,6 +104614,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4044581.14453125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 38901350.20546875,
       "parent": null,
@@ -104434,6 +104682,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3321293.511640623,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 30986382.668359376,
       "parent": null,
@@ -104528,6 +104780,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -8742901.42552197,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 46830366.21447803,
       "parent": null,
@@ -104622,6 +104878,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -9068931.369162105,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 49199268.670837894,
       "parent": null,
@@ -104779,6 +105039,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4348919.515781153,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 33127632.094218846,
       "parent": null,
@@ -104931,6 +105195,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -6289464.247299805,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 33348237.602700196,
       "parent": null,
@@ -104989,6 +105257,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -590574.6668750001,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3945883.583125,
       "parent": null,
@@ -105088,6 +105360,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5967799.640000001,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 31619662.07,
       "parent": null,
@@ -105125,6 +105401,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5234695.155124858,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 34651326.64487514,
       "parent": null,
@@ -105252,6 +105532,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4024877.690134771,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 34393057.36986523,
       "parent": null,
@@ -105409,6 +105693,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4242880.815546874,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 24697462.914453126,
       "parent": null,
@@ -105508,6 +105796,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5631440.3906529285,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 29773806.199347075,
       "parent": null,
@@ -105661,6 +105953,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3005351.699656248,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 22681281.27034375,
       "parent": null,
@@ -105755,6 +106051,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4476275.331968557,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 25464090.81803144,
       "parent": null,
@@ -105840,6 +106140,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 7998943.375507813,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 35328514.17550781,
       "parent": null,
@@ -105904,6 +106208,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2277364.27202148,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 33734703.02797852,
       "parent": null,
@@ -106003,6 +106311,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4700134.924214438,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 24971134.095785562,
       "parent": null,
@@ -106103,6 +106415,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1233320.300053712,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 23011946.42994629,
       "parent": null,
@@ -106260,6 +106576,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1108139.814531248,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 21680756.45546875,
       "parent": null,
@@ -106401,6 +106721,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4236116.180866059,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 22391421.19913394,
       "parent": null,
@@ -106491,6 +106815,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -4094968.962210696,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 22086824.317789305,
       "parent": null,
@@ -106590,6 +106918,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -373729.3009857456,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 2408628.229014254,
       "parent": null,
@@ -106675,6 +107007,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -157863.68264282215,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 1814814.7473571778,
       "parent": null,
@@ -106774,6 +107110,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2626602.1487695314,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14177162.101230469,
       "parent": null,
@@ -106873,6 +107213,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3807279.0788085945,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 20142810.291191407,
       "parent": null,
@@ -107089,6 +107433,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3434545.8339941427,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18235329.17600586,
       "parent": null,
@@ -107167,6 +107515,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3554713.025244754,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18765016.074755248,
       "parent": null,
@@ -107377,6 +107729,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3529574.3829676285,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18998395.20703237,
       "parent": null,
@@ -107525,6 +107881,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3128305.0171093754,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 17024241.532890625,
       "parent": null,
@@ -107624,6 +107984,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -3155321.80078125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 17383344.45921875,
       "parent": null,
@@ -107708,6 +108072,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2667354.32623047,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14143434.773769531,
       "parent": null,
@@ -107882,6 +108250,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -659660.6989245601,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3640422.8210754395,
       "parent": null,
@@ -107955,6 +108327,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -81837.06069725193,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 1290553.7793027482,
       "parent": null,
@@ -108103,6 +108479,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -144596.63553695753,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 23406020.17446304,
       "parent": null,
@@ -108172,6 +108552,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2861125.4491860345,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 15215845.430813964,
       "parent": null,
@@ -108325,6 +108709,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2852146.406926289,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 16464193.29307371,
       "parent": null,
@@ -108410,6 +108798,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1473016.502890626,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8058540.387109375,
       "parent": null,
@@ -108614,6 +109006,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2746220.3287499994,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 15418373.39125,
       "parent": null,
@@ -108687,6 +109083,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2744542.402626954,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14719774.267373048,
       "parent": null,
@@ -108760,6 +109160,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -548656.9036195874,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3410152.2763804127,
       "parent": null,
@@ -108818,6 +109222,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2039216.493632812,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10863643.076367188,
       "parent": null,
@@ -108896,6 +109304,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2283551.7003332525,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12241289.999666747,
       "parent": null,
@@ -109001,6 +109413,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -30463.37558593601,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 21989405.554414064,
       "parent": null,
@@ -109100,6 +109516,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2693736.128683092,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14323471.211316908,
       "parent": null,
@@ -109243,6 +109663,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -349519.462421875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3603945.537578125,
       "parent": null,
@@ -109342,6 +109766,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2215825.935625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12455200.364375,
       "parent": null,
@@ -109441,6 +109869,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2598789.7253124993,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 13824617.5546875,
       "parent": null,
@@ -109573,6 +110005,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -114250.02656250005,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 536575.2734375,
       "parent": null,
@@ -109679,6 +110115,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2519217.3500000015,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 13407810.37,
       "parent": null,
@@ -109769,6 +110209,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2456866.402129814,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 16254249.147870187,
       "parent": null,
@@ -109854,6 +110298,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1973499.2078662142,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18203359.552133787,
       "parent": null,
@@ -109932,6 +110380,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1901008.6669843737,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 13312319.863015626,
       "parent": null,
@@ -110026,6 +110478,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -41907.432812500745,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 18998788.8371875,
       "parent": null,
@@ -110125,6 +110581,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1937876.8735156246,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11807931.366484376,
       "parent": null,
@@ -110203,6 +110663,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2223313.108076172,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11976963.351923829,
       "parent": null,
@@ -110339,6 +110803,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2170284.3059954457,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11539907.454004554,
       "parent": null,
@@ -110496,6 +110964,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2233246.152202148,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11905252.447797852,
       "parent": null,
@@ -110649,6 +111121,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -692784.2760369256,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4745667.733963074,
       "parent": null,
@@ -110743,6 +111219,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -147640.06812499976,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3870045.391875,
       "parent": null,
@@ -110947,6 +111427,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -478644.67625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 2867261.59375,
       "parent": null,
@@ -111025,6 +111509,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -446695.4380664062,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 2552213.601933594,
       "parent": null,
@@ -111103,6 +111591,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1974827.9471796863,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10671554.652820313,
       "parent": null,
@@ -111161,6 +111653,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -714246.3912499994,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3898619.45875,
       "parent": null,
@@ -111297,6 +111793,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1623613.70703125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8942539.73296875,
       "parent": null,
@@ -111365,6 +111865,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2194066.122978516,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11658398.767021485,
       "parent": null,
@@ -111455,6 +111959,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -2078629.6089419555,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11043812.821058044,
       "parent": null,
@@ -111508,6 +112016,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1892888.7632031254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12203464.296796875,
       "parent": null,
@@ -111670,6 +112182,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1371737.653941406,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 13370262.026058594,
       "parent": null,
@@ -111827,6 +112343,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -58266.517714843736,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 522360.1922851562,
       "parent": null,
@@ -111989,6 +112509,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -921333.7806249987,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 14433919.319375,
       "parent": null,
@@ -112088,6 +112612,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -666748.3778027343,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4288905.682197265,
       "parent": null,
@@ -112187,6 +112715,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1983966.2660375964,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10702687.333962403,
       "parent": null,
@@ -112391,6 +112923,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -45731.25390167232,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 854388.1860983276,
       "parent": null,
@@ -112490,6 +113026,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1688192.0078125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9025426.4421875,
       "parent": null,
@@ -112580,6 +113120,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1503666.920004882,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9283557.009995118,
       "parent": null,
@@ -112658,6 +113202,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1806237.0373046882,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9662263.132695312,
       "parent": null,
@@ -112736,6 +113284,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1261922.3229534905,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6742055.277046509,
       "parent": null,
@@ -112956,6 +113508,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1484375.71079895,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8206172.319201049,
       "parent": null,
@@ -113014,6 +113570,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1891337.9287864082,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10164540.891213592,
       "parent": null,
@@ -113115,6 +113675,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1387110.9170709234,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7784175.552929077,
       "parent": null,
@@ -113173,6 +113737,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1855202.9451562501,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9860454.31484375,
       "parent": null,
@@ -113263,6 +113831,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1661937.2892264463,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8902032.540773554,
       "parent": null,
@@ -113416,6 +113988,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1790228.1696484368,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10218930.660351563,
       "parent": null,
@@ -113515,6 +114091,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1853225.1189804692,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9909342.06101953,
       "parent": null,
@@ -113588,6 +114168,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1768810.2992968746,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9432184.930703126,
       "parent": null,
@@ -113678,6 +114262,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1221045.24890625,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6558496.62109375,
       "parent": null,
@@ -113835,6 +114423,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -968208.8736889642,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7125657.0163110355,
       "parent": null,
@@ -113934,6 +114526,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -891236.1695820317,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10207342.260417968,
       "parent": null,
@@ -114259,6 +114855,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -212206.3294726573,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 11846542.570527343,
       "parent": null,
@@ -114421,6 +115021,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1472757.7294091797,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 8288660.760590821,
       "parent": null,
@@ -114499,6 +115103,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -186747.23837890662,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12656526.271621093,
       "parent": null,
@@ -114661,6 +115269,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -145987.02445625886,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 12902136.055543741,
       "parent": null,
@@ -114809,6 +115421,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1101522.8162280275,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6525279.323771972,
       "parent": null,
@@ -114887,6 +115503,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -137241.71774645522,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10810452.012253545,
       "parent": null,
@@ -115035,6 +115655,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1233295.4923437499,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6641257.57765625,
       "parent": null,
@@ -115104,6 +115728,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -785221.329494629,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4304544.530505371,
       "parent": null,
@@ -115182,6 +115810,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -332818.0786022949,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3123237.051397705,
       "parent": null,
@@ -115386,6 +116018,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -571445.8352343747,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4306140.174765625,
       "parent": null,
@@ -115548,6 +116184,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1412747.649023437,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7584670.610976563,
       "parent": null,
@@ -115663,6 +116303,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 46569.4963278125,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 62644.2463278125,
       "parent": null,
@@ -115752,6 +116396,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1120582.2736855466,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10462907.176314453,
       "parent": null,
@@ -115893,6 +116541,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1209856.2573925778,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6849329.542607422,
       "parent": null,
@@ -116055,6 +116707,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -370712.82937499974,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 2328471.260625,
       "parent": null,
@@ -116133,6 +116789,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -18621.155255166814,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 10962467.214744832,
       "parent": null,
@@ -116281,6 +116941,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -41431.51662109373,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 1392640.7233789063,
       "parent": null,
@@ -116443,6 +117107,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -112503.18872265657,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3120268.4912773436,
       "parent": null,
@@ -116579,6 +117247,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -97268.25546875037,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 9553500.98453125,
       "parent": null,
@@ -116741,6 +117413,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -512970.71677734423,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 4272376.193222656,
       "parent": null,
@@ -117029,6 +117705,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -551028.9233828126,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3597616.0466171876,
       "parent": null,
@@ -117296,6 +117976,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -16457.478193359333,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 841644.2618066407,
       "parent": null,
@@ -117395,6 +118079,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -905590.3049999997,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 5059836.535,
       "parent": null,
@@ -117494,6 +118182,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -21594.898685607885,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 416236.0413143921,
       "parent": null,
@@ -117593,6 +118285,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -127086.59390625008,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 1537631.52609375,
       "parent": null,
@@ -117755,6 +118451,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1114345.999633789,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6060365.050366211,
       "parent": null,
@@ -117849,6 +118549,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1132888.0279062502,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6076439.12209375,
       "parent": null,
@@ -117976,6 +118680,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -1033405.4570087865,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6145269.222991213,
       "parent": null,
@@ -118045,6 +118753,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -445173.3840390621,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6684074.995960938,
       "parent": null,
@@ -118202,6 +118914,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -363444.02191115636,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 3019496.7280888436,
       "parent": null,
@@ -118287,6 +119003,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": 1549238.9898742791,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 7586187.519874279,
       "parent": null,
@@ -118372,6 +119092,10 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -769389.9511100966,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "liability-composite-of-member-classes-and-niit-scope-r2"
+      },
       "kind": "amount_difference",
       "left": 6081829.078889904,
       "parent": null,
@@ -118475,17 +119199,17 @@
       "counts": {
         "axiom_encoding_gap": 313,
         "bridge_artifact": 278,
-        "explained_residual": 365,
+        "explained_residual": 546,
         "unexplained": 0,
         "upstream_engine_gap": 748
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 96.544546,
+      "explained_rate": 98.051624,
       "orphaned_entries": [],
       "raw_match_rate": 82.35637,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 415
+      "unexplained_count": 234
     },
     "error_count": 0,
     "errors_by_engine": {},

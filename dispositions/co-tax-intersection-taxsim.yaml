@@ -3017,3 +3017,215 @@ entries:
       equals: 67.4
       tolerance: 0.01
   expires_on_source_change: true
+- id: liability-composite-of-member-classes-and-niit-scope-r2
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135571
+    - ecps-tax-unit-135586
+    - ecps-tax-unit-135602
+    - ecps-tax-unit-135620
+    - ecps-tax-unit-135629
+    - ecps-tax-unit-135698
+    - ecps-tax-unit-135801
+    - ecps-tax-unit-135809
+    - ecps-tax-unit-135881
+    - ecps-tax-unit-135903
+    - ecps-tax-unit-135959
+    - ecps-tax-unit-135966
+    - ecps-tax-unit-136038
+    - ecps-tax-unit-136056
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-136364
+    - ecps-tax-unit-136446
+    - ecps-tax-unit-136461
+    - ecps-tax-unit-154437
+    - ecps-tax-unit-154451
+    - ecps-tax-unit-154461
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-154504
+    - ecps-tax-unit-154519
+    - ecps-tax-unit-154577
+    - ecps-tax-unit-154579
+    - ecps-tax-unit-154724
+    - ecps-tax-unit-154841
+    - ecps-tax-unit-154897
+    - ecps-tax-unit-154917
+    - ecps-tax-unit-154973
+    - ecps-tax-unit-155073
+    - ecps-tax-unit-155152
+    - ecps-tax-unit-155272
+    - ecps-tax-unit-155340
+    - ecps-tax-unit-155406
+    - ecps-tax-unit-155431
+    - ecps-tax-unit-155531
+    - ecps-tax-unit-155624
+    - ecps-tax-unit-155678
+    - ecps-tax-unit-155799
+    - ecps-tax-unit-155918
+    - ecps-tax-unit-156032
+    - ecps-tax-unit-156147
+    - ecps-tax-unit-156148
+    - ecps-tax-unit-156218
+    - ecps-tax-unit-156221
+    - ecps-tax-unit-156423
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156651
+    - ecps-tax-unit-156747
+    - ecps-tax-unit-156922
+    - ecps-tax-unit-156945
+    - ecps-tax-unit-157006
+    - ecps-tax-unit-157013
+    - ecps-tax-unit-157251
+    - ecps-tax-unit-157259
+    - ecps-tax-unit-157317
+    - ecps-tax-unit-157428
+    - ecps-tax-unit-157637
+    - ecps-tax-unit-157643
+    - ecps-tax-unit-157701
+    - ecps-tax-unit-157802
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-157930
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158100
+    - ecps-tax-unit-158127
+    - ecps-tax-unit-158158
+    - ecps-tax-unit-158219
+    - ecps-tax-unit-158285
+    - ecps-tax-unit-158403
+    - ecps-tax-unit-158513
+    - ecps-tax-unit-158573
+    - ecps-tax-unit-158697
+    - ecps-tax-unit-158735
+    - ecps-tax-unit-158759
+    - ecps-tax-unit-158820
+    - ecps-tax-unit-158883
+    - ecps-tax-unit-158993
+    - ecps-tax-unit-159082
+    - ecps-tax-unit-159126
+    - ecps-tax-unit-159138
+    - ecps-tax-unit-159140
+    - ecps-tax-unit-159167
+    - ecps-tax-unit-159221
+    - ecps-tax-unit-159237
+    - ecps-tax-unit-159302
+    - ecps-tax-unit-159315
+    - ecps-tax-unit-159366
+    - ecps-tax-unit-159502
+    - ecps-tax-unit-159609
+    - ecps-tax-unit-159616
+    - ecps-tax-unit-159739
+    - ecps-tax-unit-159952
+    - ecps-tax-unit-160010
+    - ecps-tax-unit-160042
+    - ecps-tax-unit-160120
+    - ecps-tax-unit-160186
+    - ecps-tax-unit-160319
+    - ecps-tax-unit-160366
+    - ecps-tax-unit-160387
+    - ecps-tax-unit-160400
+    - ecps-tax-unit-160413
+    - ecps-tax-unit-160518
+    - ecps-tax-unit-160520
+    - ecps-tax-unit-160690
+    - ecps-tax-unit-160751
+    - ecps-tax-unit-160988
+    - ecps-tax-unit-161153
+    - ecps-tax-unit-161684
+    - ecps-tax-unit-161737
+    - ecps-tax-unit-161791
+    - ecps-tax-unit-161870
+    - ecps-tax-unit-161974
+    - ecps-tax-unit-161979
+    - ecps-tax-unit-162171
+    - ecps-tax-unit-162175
+    - ecps-tax-unit-162193
+    - ecps-tax-unit-162241
+    - ecps-tax-unit-162276
+    - ecps-tax-unit-162440
+    - ecps-tax-unit-162668
+    - ecps-tax-unit-162837
+    - ecps-tax-unit-163010
+    - ecps-tax-unit-163020
+    - ecps-tax-unit-163041
+    - ecps-tax-unit-163066
+    - ecps-tax-unit-163227
+    - ecps-tax-unit-163427
+    - ecps-tax-unit-163548
+    - ecps-tax-unit-163639
+    - ecps-tax-unit-163672
+    - ecps-tax-unit-163755
+    - ecps-tax-unit-163861
+    - ecps-tax-unit-164175
+    - ecps-tax-unit-164195
+    - ecps-tax-unit-164227
+    - ecps-tax-unit-164248
+    - ecps-tax-unit-164548
+    - ecps-tax-unit-164633
+    - ecps-tax-unit-164636
+    - ecps-tax-unit-58335
+    - ecps-tax-unit-58339
+    - ecps-tax-unit-58480
+    - ecps-tax-unit-58501
+    - ecps-tax-unit-58509
+    - ecps-tax-unit-58555
+    - ecps-tax-unit-58620
+    - ecps-tax-unit-58643
+    - ecps-tax-unit-58652
+    - ecps-tax-unit-58658
+    - ecps-tax-unit-58687
+    - ecps-tax-unit-58697
+    - ecps-tax-unit-58784
+    - ecps-tax-unit-58790
+    - ecps-tax-unit-58809
+    - ecps-tax-unit-58842
+    - ecps-tax-unit-58890
+    - ecps-tax-unit-58897
+    - ecps-tax-unit-58903
+    - ecps-tax-unit-58942
+    - ecps-tax-unit-58950
+    - ecps-tax-unit-59063
+    - ecps-tax-unit-59070
+    - ecps-tax-unit-59074
+    - ecps-tax-unit-59100
+    - ecps-tax-unit-59117
+    - ecps-tax-unit-59122
+    - ecps-tax-unit-59127
+    - ecps-tax-unit-59138
+    - ecps-tax-unit-59151
+    - ecps-tax-unit-59166
+    - ecps-tax-unit-59182
+    - ecps-tax-unit-59203
+    - ecps-tax-unit-59205
+    - ecps-tax-unit-59214
+    - ecps-tax-unit-59245
+    - ecps-tax-unit-59264
+    - ecps-tax-unit-59284
+    - ecps-tax-unit-59316
+  disposition: explained_residual
+  evidence:
+    mechanism: "Composite/de-duplication face of the unit's own component classes,\
+      \ the\nsame contract as liability-composite-of-member-classes-and-niit-addmed-scope:\n\
+      on every selected row the federal liability residual reproduces within the\n\
+      concept's $15 tolerance (178 of 181 within $1) as\n\n  d(tax_before_credits)\
+      \ + d(amt) - d(ctc) - d(eitc) - d(cdcc) - niit\n\nwhere the component deltas\
+      \ are this same report's own rows and niit is the\npinned binary's idtl=2\
+      \ niit column (the documented §1411 carve-out,\naxiom-encode#1213). fiitax\
+      \ carries NO addmed term - verified against the\npinned binary: fiitax equals\
+      \ v28 + v27 - v22 - v25 + niit exactly on these\nrows (e.g. 73,767.02 + 159.83\
+      \ = 73,926.85 on ecps-tax-unit-135629). The\nliability face therefore adds\
+      \ no information beyond the component rows; its\nmismatch mass is already\
+      \ counted once at the concept where each mechanism\noriginates (QBID rental-convention\
+      \ bridge shadow, TAXSIM capital-gains\nthreshold vintage, CTC/EITC 2026 machinery\
+      \ gaps, AMT class, NIIT scope),\nand those root-cause rows retain their own\
+      \ dispositions or remain openly\nunexplained rather than being laundered through\
+      \ this composite."
+    arithmetic:
+    - expression: 98.27 + 0.00 - 1700.00 - 0.00 - 0.00 - 0.00
+      equals: -1601.73
+      tolerance: 15
+    - expression: 17.83 + 0.00 - 0.00 - 0.00 - 0.00 - 159.83
+      equals: -142.0
+      tolerance: 15
+  expires_on_source_change: true
