@@ -34,12 +34,16 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "conformance/closure/us-tariff-duty.yaml"
-CORPUS = Path.home() / "TheAxiomFoundation/axiom-corpus"
-CORPUS_REF = "bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6"
-RULESPEC = Path.home() / "TheAxiomFoundation/_b1wt/rulespec-us"
-RULESPEC_REF = "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
+CORPUS = Path.home() / "TheAxiomFoundation/_worktrees/axiom-corpus-gn29-20260828"
+CORPUS_REF = "a664e437fafc7784f0a833abd76ddd16ea83686b"
+RULESPEC = (
+    Path.home()
+    / "TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us"
+)
+RULESPEC_REF = "550818779a5fb0618e1374ed33bc471084c0b4ce"
 SCHEDULE = "data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl"
 NOTES = "data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl"
+GENERAL_NOTE_29 = "data/corpus/provisions/us/statute/2026-08-28-usitc-hts-2026-rev15-general-note-29.jsonl"
 SCHEMA = "axiom_oracles.closure.ledger.v1"
 SCHEDULE_SHA256 = "6c8d07d21a1e3f2233197c1b2f96169f01a1a768dd2509a71c0fdb03d4a99d14"
 SCHEDULE_VERSION = "2026-08-09-usitc-hts-2026-rev15-full-schedule"
@@ -47,8 +51,15 @@ SCHEDULE_DECLARED_COUNT = 29_845
 NOTES_SHA256 = "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8"
 NOTES_VERSION = "2026-08-04-usitc-hts-2026-rev15-notes"
 NOTES_DECLARED_COUNT = 805
-RULESPEC_MODULE_COUNT = 380
-RULESPEC_PATHS_SHA256 = "481956d2972610d8fe382d37ee8e651fa8bbeaf29e3550f9b08c06ca656c1a45"
+GENERAL_NOTE_29_SHA256 = (
+    "3b3de5d98c81bad3cc560fcb738551591d7b7b5c080ca914718047a4a797368b"
+)
+GENERAL_NOTE_29_VERSION = "2026-08-28-usitc-hts-2026-rev15-general-note-29"
+GENERAL_NOTE_29_DECLARED_COUNT = 93
+RULESPEC_MODULE_COUNT = 414
+RULESPEC_PATHS_SHA256 = (
+    "493113e001ab82a210c28b5a8d100a541905774f410d87861421de1ce87a2cea"
+)
 STATUSES = ("encoded", "partially-encoded", "excluded-with-reason", "pending")
 MODULE_PREFIXES = (
     "us/policies/usitc/us-tariff-duty/",
@@ -94,6 +105,13 @@ EXPECTED_CORPUS_ROOTS = {
         "version": NOTES_VERSION,
         "declared_count": NOTES_DECLARED_COUNT,
     },
+    "dr-cafta-general-note-29": {
+        "path": GENERAL_NOTE_29,
+        "commit": CORPUS_REF,
+        "sha256": GENERAL_NOTE_29_SHA256,
+        "version": GENERAL_NOTE_29_VERSION,
+        "declared_count": GENERAL_NOTE_29_DECLARED_COUNT,
+    },
     "fr-instrument-families": {
         "derived_from": "composition source_verification plus overlays",
         "rulespec_commit": RULESPEC_REF,
@@ -108,32 +126,185 @@ EXPECTED_SOURCE_COUNTS = {
     "rated-minus-9802": 13_781,
     "rated-9802": 5,
     "unrated": 16_059,
-    "chapter99-remainder": 800,
+    "chapter99-remainder": 799,
+    "general-note-29-d-v": 1,
+    "general-note-29-remainder": 92,
 }
 
 
 DECISIONS = [
-    {"root": "hts-rate-provisions", "family": "rated-lines-except-9802", "status": "encoded", "count_source": "rated-minus-9802", "reason": "B1.2 generated chapter tables supply the Rev-15 column rates."},
-    {"root": "hts-rate-provisions", "family": "9802-partial-value-rated-lines", "status": "partially-encoded", "count_source": "rated-9802", "reason": "The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than derived."},
-    {"root": "hts-rate-provisions", "family": "unrated-structural-rows", "status": "excluded-with-reason", "count_source": "unrated", "reason": "Headings without a Rates of duty (1-General) field do not themselves supply a rate line."},
-    {"root": "chapter-99-notes", "family": "note-20-section-301-lists", "status": "encoded", "count": 1, "membership_rows": 301, "reason": "Incidence membership tables are composed for the original China list overlays."},
-    {"root": "chapter-99-notes", "family": "notes-16-19-section-232-metals", "status": "encoded", "count": 1, "membership_rows": 232, "reason": "Steel/aluminum incidence and composed overlays are present."},
-    {"root": "chapter-99-notes", "family": "note-18-section-201", "status": "encoded", "count": 1, "membership_rows": 201, "reason": "Section 201 solar incidence and overlay are composed."},
-    {"root": "chapter-99-notes", "family": "note-2aa-section-122", "status": "encoded", "count": 1, "membership_rows": 122, "reason": "Section 122 incidence and overlay are composed."},
-    {"root": "chapter-99-notes", "family": "note-51-section-338", "status": "pending", "count": 1, "reason": "Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338."},
-    {"root": "chapter-99-notes", "family": "other-chapter-99-pages", "status": "partially-encoded", "count_source": "chapter99-remainder", "reason": "The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves every other Chapter-99 note covered."},
-    {"root": "fr-instrument-families", "family": "section-232-metal-instruments", "status": "encoded", "count": 1, "reason": "2018 and 2025 metal actions plus the 2026 annex restructure are represented in the composed aluminum/steel overlays."},
-    {"root": "fr-instrument-families", "family": "section-232-non-metal-annexes", "status": "pending", "count": 6, "reason": "Autos/parts, copper, semiconductors, medium/heavy-duty vehicles, and wood proclamation annexes are not encoded (approximately ten annex documents)."},
-    {"root": "fr-instrument-families", "family": "china-301-original-2018-actions", "status": "pending", "count": 1, "reason": "Original 2018 instruments are absent from the D0 corpus."},
-    {"root": "fr-instrument-families", "family": "china-301-2024-action", "status": "partially-encoded", "count": 1, "reason": "Membership and overlay exist, but the action is not fed into the final composition."},
-    {"root": "fr-instrument-families", "family": "brazil-301", "status": "partially-encoded", "count": 1, "reason": "Membership and headings exist, but the family is not fed into the final composition."},
-    {"root": "fr-instrument-families", "family": "forced-labor-301", "status": "partially-encoded", "count": 1, "reason": "Membership and country tiers exist, but the family is not fed into the final composition."},
-    {"root": "fr-instrument-families", "family": "solar-china", "status": "partially-encoded", "count": 1, "reason": "Membership is encoded but the action is not fed into the final composition."},
-    {"root": "fr-instrument-families", "family": "section-201-proclamation-10339", "status": "encoded", "count": 1, "reason": "The solar safeguard is encoded and composed."},
-    {"root": "fr-instrument-families", "family": "section-122-proclamation-11012", "status": "encoded", "count": 1, "reason": "The temporary surcharge and exclusions are encoded and composed."},
-    {"root": "fr-instrument-families", "family": "ieepa-orders-and-termination", "status": "encoded", "count": 1, "reason": "Fentanyl, reciprocal families, exclusions, and termination are composed for the codified Rev-15 state."},
-    {"root": "fr-instrument-families", "family": "section-338-instruments", "status": "pending", "count": 1, "reason": "Blocked on the missing note-51 ingest."},
-    {"root": "fr-instrument-families", "family": "historical-vintages", "status": "pending", "count": 1, "reason": "This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not a reproduced root."},
+    {
+        "root": "hts-rate-provisions",
+        "family": "rated-lines-except-9802",
+        "status": "encoded",
+        "count_source": "rated-minus-9802",
+        "reason": "B1.2 generated chapter tables supply the Rev-15 column rates.",
+    },
+    {
+        "root": "hts-rate-provisions",
+        "family": "9802-partial-value-rated-lines",
+        "status": "partially-encoded",
+        "count_source": "rated-9802",
+        "reason": "The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than derived.",
+    },
+    {
+        "root": "hts-rate-provisions",
+        "family": "unrated-structural-rows",
+        "status": "excluded-with-reason",
+        "count_source": "unrated",
+        "reason": "Headings without a Rates of duty (1-General) field do not themselves supply a rate line.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "note-20-section-301-lists",
+        "status": "encoded",
+        "count": 1,
+        "membership_rows": 301,
+        "reason": "Incidence membership tables are composed for the original China list overlays.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "notes-16-19-section-232-metals",
+        "status": "encoded",
+        "count": 1,
+        "membership_rows": 232,
+        "reason": "Steel/aluminum incidence and composed overlays are present.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "note-18-section-201",
+        "status": "encoded",
+        "count": 1,
+        "membership_rows": 201,
+        "reason": "Section 201 solar incidence and overlay are composed.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "note-2aa-section-122",
+        "status": "encoded",
+        "count": 1,
+        "membership_rows": 122,
+        "reason": "Section 122 incidence and overlay are composed.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "notes-50-52-section-232-sector-precedence",
+        "status": "partially-encoded",
+        "count": 1,
+        "reason": "Generated schedules derive the notes 50(a)(vi) and 52(f) precedence judgment, but transaction and certification qualifications remain declared entry facts rather than source-derived judgments.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "note-51-section-338",
+        "status": "pending",
+        "count": 1,
+        "reason": "The Rev-15 chapter-99 root predates the August 19 section-338 action and contains no note 51; ingest the codified note and reconcile it to the Federal Register-backed composition.",
+    },
+    {
+        "root": "chapter-99-notes",
+        "family": "other-chapter-99-pages",
+        "status": "partially-encoded",
+        "count_source": "chapter99-remainder",
+        "reason": "Generated schedules compose many 9903.01/.02/.05 and sector-precedence surfaces, but no page-level census proves every other chapter-99 note covered.",
+    },
+    {
+        "root": "dr-cafta-general-note-29",
+        "family": "note-29-d-v-textile-apparel-definition",
+        "status": "partially-encoded",
+        "count_source": "general-note-29-d-v",
+        "reason": "The note 52(i) exception cites and composes General Note 29(d)(v), but membership still requires the WTO Agreement on Textiles and Clothing annex and a historical HTS concordance and is therefore a declared entry fact.",
+    },
+    {
+        "root": "dr-cafta-general-note-29",
+        "family": "note-29-origin-and-free-duty-remainder",
+        "status": "pending",
+        "count_source": "general-note-29-remainder",
+        "reason": "The remaining 92 pages are ingested but their origin and tariff-treatment rules are not encoded; entry under DR-CAFTA free of duty remains a declared transaction fact.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "section-232-metal-instruments",
+        "status": "encoded",
+        "count": 1,
+        "reason": "2018 and 2025 metal actions plus the 2026 annex restructure are represented in the composed aluminum/steel overlays.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "section-232-non-metal-annexes",
+        "status": "pending",
+        "count": 6,
+        "reason": "Selected codified memberships now support notes 50/52 section-301 precedence, but the automobile/parts, copper, semiconductor, pharmaceutical, medium/heavy-duty-vehicle, and wood section-232 duty actions and their complete proclamation annexes are not composed.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "china-301-original-2018-actions",
+        "status": "pending",
+        "count": 1,
+        "reason": "Original 2018 instruments are absent from the D0 corpus.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "china-301-2024-action",
+        "status": "partially-encoded",
+        "count": 1,
+        "reason": "The 2024 action rate is composed, but generated schedules still consume a declared note-31 membership fact because the complete membership table is absent.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "brazil-301",
+        "status": "encoded",
+        "count": 1,
+        "reason": "The Brazil component is composed in generated statutory stacks with note-50 exclusions and the locally derived notes-50/52 sector-precedence judgment.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "forced-labor-301",
+        "status": "partially-encoded",
+        "count": 1,
+        "reason": "Country tiers and the entry-level exception wrapper are composed, including note 52(i), but section-232 qualifications and both General Note 29(d)(v) and DR-CAFTA free-duty eligibility remain declared facts.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "solar-china",
+        "status": "partially-encoded",
+        "count": 1,
+        "reason": "The solar-China rate is composed, but generated schedules still consume a declared note-31 membership fact because the complete membership table is absent.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "section-201-proclamation-10339",
+        "status": "encoded",
+        "count": 1,
+        "reason": "The solar safeguard is encoded and composed.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "section-122-proclamation-11012",
+        "status": "encoded",
+        "count": 1,
+        "reason": "The temporary surcharge and exclusions are encoded and composed.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "ieepa-orders-and-termination",
+        "status": "encoded",
+        "count": 1,
+        "reason": "Fentanyl, reciprocal families, exclusions, and termination are composed for the codified Rev-15 state.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "section-338-instruments",
+        "status": "partially-encoded",
+        "count": 1,
+        "reason": "The Federal Register-backed section-338 component and entry wrapper are composed, but the later codified note-51 root and complete membership surface remain absent.",
+    },
+    {
+        "root": "fr-instrument-families",
+        "family": "historical-vintages",
+        "status": "pending",
+        "count": 1,
+        "reason": "This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not a reproduced root.",
+    },
 ]
 
 INPUTS = [
@@ -160,11 +331,128 @@ INPUTS = [
     ("is_section_122_232_excluded", "witness boolean: 122/232 exclusion"),
     ("is_brazil_301_excluded", "witness boolean: Brazil-301 exclusion"),
     ("is_forced_labor_annex_excluded", "witness boolean: forced-labor annex exclusion"),
-    ("is_forced_labor_metals_excluded", "witness boolean: forced-labor metals exclusion"),
+    (
+        "is_forced_labor_metals_excluded",
+        "witness boolean: forced-labor metals exclusion",
+    ),
+    (
+        "entry_is_brazil_301_listed",
+        "entry-preparation determination under U.S. note 50 for the Brazil section-301 component",
+    ),
+    (
+        "entry_is_forced_labor_301_listed",
+        "entry-preparation determination under U.S. note 52 for the forced-labor section-301 component",
+    ),
+    (
+        "entry_is_section_232_covered",
+        "entry-preparation determination of existing aluminum or steel section-232 coverage",
+    ),
+    (
+        "entry_is_s232_copper_primary_member",
+        "HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_copper_additional_member",
+        "HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note37_softwood_member",
+        "HTS U.S. note 37(b) softwood membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note37_upholstered_wood_furniture_member",
+        "HTS U.S. note 37(d) upholstered-wood membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note38_mhd_vehicle_member",
+        "HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note38_bus_member",
+        "HTS U.S. note 38(c) bus membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note33_vehicle_candidate",
+        "HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
+        "transaction qualification for a note-33 vehicle heading listed in notes 50 and 52",
+    ),
+    (
+        "entry_is_s232_note33_auto_part_candidate",
+        "HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_note33_g_automobile_part",
+        "entry-level determination that a note-33(g) candidate is an automobile part",
+    ),
+    (
+        "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
+        "importer certification for a note-33 automobile part listed in notes 50 and 52",
+    ),
+    (
+        "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
+        "entry-level note-33 automobile-part import-adjustment-offset determination",
+    ),
+    (
+        "entry_is_s232_note37_cabinet_vanity_candidate",
+        "HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
+        "entry-level determination that a note-37(f) candidate is a completed cabinet, vanity, or part",
+    ),
+    (
+        "entry_is_s232_note38_mhd_part_candidate",
+        "HTS U.S. note 38(i) medium/heavy-duty-vehicle-part candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
+        "entry-level determination that a note-38(i) candidate is a medium/heavy-duty-vehicle part",
+    ),
+    (
+        "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
+        "importer certification for a note-38 vehicle part listed in notes 50 and 52",
+    ),
+    (
+        "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
+        "entry-level note-38 vehicle-part import-adjustment-offset determination",
+    ),
+    (
+        "entry_is_s232_note39_semiconductor_candidate",
+        "HTS U.S. note 39 semiconductor candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_qualifies_for_note39_heading_9903_79_01",
+        "entry-level technical qualification for semiconductor heading 9903.79.01",
+    ),
+    (
+        "entry_is_s232_note40_pharmaceutical_candidate",
+        "HTS U.S. note 40 pharmaceutical candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_note40_patented_pharmaceutical_article",
+        "entry-level determination that a note-40 candidate is covered by a valid unexpired U.S. patent",
+    ),
+    (
+        "entry_is_general_note_29_d_v_textile_or_apparel_good",
+        "General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated exclusions",
+    ),
+    (
+        "entry_is_entered_free_of_duty_under_dr_cafta",
+        "claim and qualification for duty-free DR-CAFTA treatment, including applicable subchapter XXII treatment",
+    ),
     ("is_china_2024_action_member", "witness boolean: 2024 China action membership"),
     ("is_solar_china_member", "witness boolean: solar-China membership"),
-    ("chapter_98_partial_value_share", "9802 dutiable-value share supplied by the declarant"),
-    ("section_338_reduced_duty_base_share", "note-51 partial-value share supplied by the declarant"),
+    (
+        "chapter_98_partial_value_share",
+        "9802 dutiable-value share supplied by the declarant",
+    ),
+    (
+        "section_338_reduced_duty_base_share",
+        "note-51 partial-value share supplied by the declarant",
+    ),
 ]
 
 
@@ -181,7 +469,12 @@ def _blob_facts(
     commit = _git(root, "rev-parse", "--verify", f"{ref}^{{commit}}").decode().strip()
     blob = _git(root, "show", f"{commit}:{relative}")
     rows = [json.loads(line) for line in blob.splitlines() if line.strip()]
-    return rows, {"path": relative, "commit": commit, "sha256": hashlib.sha256(blob).hexdigest(), "version": rows[0]["version"]}
+    return rows, {
+        "path": relative,
+        "commit": commit,
+        "sha256": hashlib.sha256(blob).hexdigest(),
+        "version": rows[0]["version"],
+    }
 
 
 def _decision_state(
@@ -221,7 +514,8 @@ def _decision_state(
             "input_count": len(frontier),
             "inputs": frontier,
         },
-        "closed": not pending and all(sum(values.values()) > 0 for values in counts.values()),
+        "closed": not pending
+        and all(sum(values.values()) > 0 for values in counts.values()),
     }
     return decisions, computed
 
@@ -235,20 +529,89 @@ def build(
 ) -> dict[str, Any]:
     schedule, sf = _blob_facts(corpus_root, corpus_ref, SCHEDULE)
     notes, nf = _blob_facts(corpus_root, corpus_ref, NOTES)
+    general_note_29, gn29f = _blob_facts(corpus_root, corpus_ref, GENERAL_NOTE_29)
     srows = schedule[1:]
-    rated = [r for r in srows if r.get("body") and "Rates of duty (1-General):" in r["body"]]
+    rated = [
+        r for r in srows if r.get("body") and "Rates of duty (1-General):" in r["body"]
+    ]
     r9802 = [r for r in rated if r["citation_path"].split("/")[-1].startswith("9802")]
-    chapter99 = [r for r in notes if r.get("parent_citation_path") == "us/statute/hts/chapter-99"]
-    rs_commit = _git(rulespec_root, "rev-parse", "--verify", f"{rulespec_ref}^{{commit}}").decode().strip()
-    paths = _git(rulespec_root, "ls-tree", "-r", "--name-only", rs_commit).decode().splitlines()
-    modules = sorted(p for p in paths if p.endswith(".yaml") and not p.endswith(".test.yaml") and p.startswith(MODULE_PREFIXES))
-    source_counts = {"rated-minus-9802": len(rated)-len(r9802), "rated-9802": len(r9802), "unrated": len(srows)-len(rated), "chapter99-remainder": len(chapter99)-5}
+    chapter99 = [
+        r for r in notes if r.get("parent_citation_path") == "us/statute/hts/chapter-99"
+    ]
+    general_note_29_pages = [
+        r
+        for r in general_note_29
+        if r.get("parent_citation_path") == "us/statute/hts/general-note-29"
+    ]
+    general_note_29_d_v = [
+        r
+        for r in general_note_29_pages
+        if r.get("citation_path") == "us/statute/hts/general-note-29/page-4"
+    ]
+    rs_commit = (
+        _git(rulespec_root, "rev-parse", "--verify", f"{rulespec_ref}^{{commit}}")
+        .decode()
+        .strip()
+    )
+    paths = (
+        _git(rulespec_root, "ls-tree", "-r", "--name-only", rs_commit)
+        .decode()
+        .splitlines()
+    )
+    modules = sorted(
+        p
+        for p in paths
+        if p.endswith(".yaml")
+        and not p.endswith(".test.yaml")
+        and p.startswith(MODULE_PREFIXES)
+    )
+    source_counts = {
+        "rated-minus-9802": len(rated) - len(r9802),
+        "rated-9802": len(r9802),
+        "unrated": len(srows) - len(rated),
+        "chapter99-remainder": len(chapter99) - 6,
+        "general-note-29-d-v": len(general_note_29_d_v),
+        "general-note-29-remainder": len(general_note_29_pages)
+        - len(general_note_29_d_v),
+    }
     decisions, computed = _decision_state(source_counts)
-    return {"schema": SCHEMA, "program": {"id": "us/tariff-duty", "rulespec_ref": rs_commit}, "generated_facts": {"corpus_roots": {"hts-rate-provisions": {**sf, "declared_count": len(srows)}, "chapter-99-notes": {**nf, "declared_count": len(chapter99)}, "fr-instrument-families": {"derived_from": "composition source_verification plus overlays", "rulespec_commit": rs_commit}}, "rulespec": {"commit": rs_commit, "module_count": len(modules), "paths_sha256": hashlib.sha256(("\n".join(modules)+"\n").encode()).hexdigest()}}, "committed_decisions": decisions, "computed": computed}
+    return {
+        "schema": SCHEMA,
+        "program": {"id": "us/tariff-duty", "rulespec_ref": rs_commit},
+        "generated_facts": {
+            "corpus_roots": {
+                "hts-rate-provisions": {**sf, "declared_count": len(srows)},
+                "chapter-99-notes": {
+                    **nf,
+                    "declared_count": len(chapter99),
+                },
+                "dr-cafta-general-note-29": {
+                    **gn29f,
+                    "declared_count": len(general_note_29_pages),
+                },
+                "fr-instrument-families": {
+                    "derived_from": "composition source_verification plus overlays",
+                    "rulespec_commit": rs_commit,
+                },
+            },
+            "rulespec": {
+                "commit": rs_commit,
+                "module_count": len(modules),
+                "paths_sha256": hashlib.sha256(
+                    ("\n".join(modules) + "\n").encode()
+                ).hexdigest(),
+            },
+        },
+        "committed_decisions": decisions,
+        "computed": computed,
+    }
 
 
 def serialize(doc: dict[str, Any]) -> str:
-    return "# GENERATED facts; edit decisions in scripts/us_tariff_closure.py.\n" + yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=110)
+    return (
+        "# GENERATED facts; edit decisions in scripts/us_tariff_closure.py.\n"
+        + yaml.safe_dump(doc, sort_keys=False, allow_unicode=True, width=110)
+    )
 
 
 def validate(doc: dict[str, Any]) -> list[str]:
@@ -291,7 +654,9 @@ def validate(doc: dict[str, Any]) -> list[str]:
         for row in ledger
     ):
         errors.append("invalid status or missing reason")
-    should_close = not any(r.get("status") in ("pending", "partially-encoded") for r in ledger)
+    should_close = not any(
+        r.get("status") in ("pending", "partially-encoded") for r in ledger
+    )
     if computed.get("closed") != should_close:
         errors.append("computed.closed is not derived")
     frontier = computed.get("boundary_frontier", {})
@@ -320,7 +685,11 @@ def validate(doc: dict[str, Any]) -> list[str]:
     if not isinstance(counts, Mapping) or not isinstance(roots, Mapping):
         errors.append("root counts are malformed")
     else:
-        for root in ("hts-rate-provisions", "chapter-99-notes"):
+        for root in (
+            "hts-rate-provisions",
+            "chapter-99-notes",
+            "dr-cafta-general-note-29",
+        ):
             bucket = counts.get(root)
             fact = roots.get(root)
             if not isinstance(bucket, Mapping) or not isinstance(fact, Mapping):
@@ -410,7 +779,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         for e in errors:
             print(f"closure ledger error: {e}", file=sys.stderr)
         return 1
-    print(f"closure ledger up to date: closed={str(expected['computed']['closed']).lower()}")
+    print(
+        f"closure ledger up to date: closed={str(expected['computed']['closed']).lower()}"
+    )
     return 0
 
 
