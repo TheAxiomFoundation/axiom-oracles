@@ -4,6 +4,7 @@ import copy
 import gzip
 import hashlib
 import json
+import threading
 from collections import Counter
 from pathlib import Path
 
@@ -42,6 +43,80 @@ from scripts.us_tariff_schedule_campaign import (
     witness_replay,
 )
 from scripts.us_tariff_schedule_campaign import DISPOSITION_LEDGER
+
+EVAL_GENERATION_ID = "1" * 32
+
+
+def _fake_run_identity(*, marker: str = "a", chapters: tuple[str, ...] = ("01",)):
+    digest = marker * 64
+    return {
+        "schema": campaign_module.EVAL_RUN_IDENTITY_SCHEMA,
+        "rulespec": {
+            "root": f"/rulespec/{marker}",
+            "head_commit": digest[:40],
+            "head_tree": digest[:40],
+            "content_sha256": digest,
+        },
+        "engine": {"path": f"/engine/{marker}", "bytes": 1, "sha256": digest},
+        "entry_flag_producers": {
+            "tool": {"path": "tools/b16_entry_flags.py", "bytes": 1,
+                     "sha256": digest},
+            "dependencies": [],
+            "producer_sha256": digest,
+        },
+        "input_contract": {"path": "contract.json", "bytes": 1,
+                           "sha256": digest, "schema": "contract"},
+        "campaign_evaluator": {
+            "campaign": {"path": "campaign.py", "bytes": 1,
+                         "sha256": digest},
+            "oracle_sources": [],
+            "python": {"executable": {"path": "/python", "bytes": 1,
+                                      "sha256": digest}, "version": marker},
+            "pyyaml_version": marker,
+            "producer_sha256": digest,
+        },
+        "selected_population": {"path": "selected.gz", "bytes": 1,
+                                "sha256": digest},
+        "routing": {"path": "routing.gz", "bytes": 1, "sha256": digest},
+        "outputs": list(campaign_module.OUTPUT_NAMES),
+        "chapters": {
+            chapter: {
+                "module": f"generated/ch{chapter}.yaml",
+                "module_sha256": digest,
+                "compiled_artifact_sha256": digest,
+            }
+            for chapter in chapters
+        },
+    }
+
+
+def _complete_eval_manifest(
+    tmp_path: Path,
+    run_identity: dict,
+    generation_id: str = EVAL_GENERATION_ID,
+):
+    manifest = campaign_module._empty_eval_manifest(run_identity, generation_id)
+    for chapter, key in campaign_module._current_shard_keys(
+        run_identity, generation_id
+    ).items():
+        path = tmp_path / f"{key}.jsonl.gz"
+        with path.open("wb") as raw:
+            with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0):
+                pass
+        manifest["shards"][key] = {
+            "chapter": chapter,
+            "key": key,
+            "run_identity_sha256": campaign_module._run_identity_sha256(
+                run_identity
+            ),
+            "generation_id": generation_id,
+            "path": str(path),
+            "sha256": campaign_module._sha256(path),
+            "cases": 0,
+            "engine_errors": 0,
+            "elapsed_seconds": 0,
+        }
+    return manifest
 
 
 def test_declared_feed_drops_only_retired_exemplar_flags() -> None:
@@ -132,46 +207,83 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
 
 
 def test_prepare_eval_manifest_prunes_superseded_keys_and_bindings() -> None:
-    current = {
-        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
+    run_identity = _fake_run_identity(chapters=("01", "02"))
+    run_identity_sha256 = campaign_module._run_identity_sha256(run_identity)
+    current = campaign_module._empty_eval_manifest(
+        run_identity, EVAL_GENERATION_ID
+    ) | {
         "comparison_artifact": {"sha256": "a" * 64},
         "comparison_receipt": {"path": "old", "sha256": "b" * 64},
         "shards": {
-            "old-01": {"key": "old-01", "chapter": "01"},
-            "new-02": {"key": "new-02", "chapter": "02"},
+            "old-01": {"key": "old-01", "chapter": "01",
+                       "run_identity_sha256": run_identity_sha256,
+                       "generation_id": EVAL_GENERATION_ID},
+            "new-02": {"key": "new-02", "chapter": "02",
+                       "run_identity_sha256": run_identity_sha256,
+                       "generation_id": EVAL_GENERATION_ID},
         },
     }
     prepared = campaign_module._prepare_eval_manifest(
-        current, {"01": "new-01", "02": "new-02"}
+        current, {"01": "new-01", "02": "new-02"}, run_identity,
+        EVAL_GENERATION_ID,
     )
-    assert prepared == {
-        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
-        "shards": {
-            "new-02": {"key": "new-02", "chapter": "02"},
-        },
+    expected = campaign_module._empty_eval_manifest(
+        run_identity, EVAL_GENERATION_ID
+    )
+    expected["shards"] = {
+        "new-02": {"key": "new-02", "chapter": "02",
+                   "run_identity_sha256": run_identity_sha256,
+                   "generation_id": EVAL_GENERATION_ID},
     }
+    assert prepared == expected
+
+
+def test_prepare_eval_manifest_never_mixes_run_identities(tmp_path) -> None:
+    old_identity = _fake_run_identity(marker="a")
+    new_identity = _fake_run_identity(marker="b")
+    old = _complete_eval_manifest(tmp_path, old_identity)
+    current_keys = campaign_module._current_shard_keys(
+        new_identity, EVAL_GENERATION_ID
+    )
+    assert campaign_module._prepare_eval_manifest(
+        old, current_keys, new_identity, EVAL_GENERATION_ID
+    ) == campaign_module._empty_eval_manifest(
+        new_identity, EVAL_GENERATION_ID
+    )
 
 
 def test_fresh_evaluation_publishes_empty_manifest_before_engine(
     tmp_path, monkeypatch
 ) -> None:
     manifest_path = tmp_path / "eval" / "MANIFEST.json"
-    contract_path = tmp_path / "declared-input-contract.json"
-    contract_path.write_text(json.dumps({"chapters": [{"chapter": "01"}]}))
+    run_identity = _fake_run_identity()
+    key = campaign_module._shard_key(
+        chapter="01",
+        run_identity=run_identity,
+        generation_id=EVAL_GENERATION_ID,
+    )
     monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
-    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path)
     monkeypatch.setattr(
-        campaign_module, "_shard_key", lambda **_kwargs: "current-01"
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    monkeypatch.setattr(
+        campaign_module, "_new_eval_generation_id",
+        lambda: EVAL_GENERATION_ID,
     )
 
-    def evaluate(chapter, **_kwargs):
-        assert json.loads(manifest_path.read_text()) == (
-            campaign_module._empty_eval_manifest()
+    def evaluate(chapter, *, run_identity, expected_key, **_kwargs):
+        published = json.loads(manifest_path.read_text())
+        assert published == campaign_module._empty_eval_manifest(
+            run_identity, published["generation_id"]
         )
         return {
             "chapter": chapter,
-            "key": "current-01",
-            "path": str(tmp_path / "current-01.jsonl.gz"),
+            "key": expected_key,
+            "run_identity_sha256": campaign_module._run_identity_sha256(
+                run_identity
+            ),
+            "generation_id": published["generation_id"],
+            "path": str(tmp_path / f"{expected_key}.jsonl.gz"),
             "sha256": "c" * 64,
             "cases": 1,
             "engine_errors": 0,
@@ -186,8 +298,11 @@ def test_fresh_evaluation_publishes_empty_manifest_before_engine(
         fresh=True,
         cache_dir=tmp_path / "cache",
     )
-    assert set(result["shards"]) == {"current-01"}
-    assert set(result) == {"schema", "shards"}
+    assert set(result["shards"]) == {key}
+    assert set(result) == {
+        "schema", "run_identity", "run_identity_sha256", "generation_id",
+        "shards",
+    }
 
 
 def test_fresh_evaluation_cannot_resume(tmp_path) -> None:
@@ -201,31 +316,442 @@ def test_fresh_evaluation_cannot_resume(tmp_path) -> None:
         )
 
 
+def test_interrupted_fresh_evaluation_leaves_manifest_unbound(
+    tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity()
+    manifest_path = tmp_path / "MANIFEST.json"
+    old = _complete_eval_manifest(tmp_path, run_identity)
+    old["comparison_artifact"] = {"sha256": "a" * 64}
+    old["comparison_receipt"] = {"sha256": "b" * 64}
+    manifest_path.write_text(json.dumps(old))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    monkeypatch.setattr(
+        campaign_module, "_new_eval_generation_id",
+        lambda: "2" * 32,
+    )
+
+    def interrupted(*_args, **_kwargs):
+        raise RuntimeError("interrupted")
+
+    monkeypatch.setattr(campaign_module, "_evaluate_chapter", interrupted)
+    with pytest.raises(RuntimeError, match="interrupted"):
+        campaign_module.evaluate_campaign(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+            workers=1,
+            fresh=True,
+            cache_dir=tmp_path / "cache",
+        )
+    interrupted = json.loads(manifest_path.read_text())
+    assert interrupted == campaign_module._empty_eval_manifest(
+        run_identity, interrupted["generation_id"]
+    )
+
+
+def test_inflight_shard_cannot_repopulate_a_new_fresh_generation(
+    tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity()
+    manifest_path = tmp_path / "MANIFEST.json"
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    monkeypatch.setattr(
+        campaign_module, "_new_eval_generation_id",
+        lambda: EVAL_GENERATION_ID,
+    )
+    replacement_generation = "2" * 32
+
+    def replace_generation(
+        chapter, *, generation_id, expected_key, **_kwargs
+    ):
+        with campaign_module._eval_manifest_lock():
+            campaign_module._atomic_json(
+                manifest_path,
+                campaign_module._empty_eval_manifest(
+                    run_identity, replacement_generation
+                ),
+            )
+        return {
+            "chapter": chapter,
+            "key": expected_key,
+            "run_identity_sha256": campaign_module._run_identity_sha256(
+                run_identity
+            ),
+            "generation_id": generation_id,
+            "path": str(tmp_path / f"{expected_key}.jsonl.gz"),
+            "sha256": "c" * 64,
+            "cases": 1,
+            "engine_errors": 0,
+            "elapsed_seconds": 0.1,
+        }
+
+    monkeypatch.setattr(
+        campaign_module, "_evaluate_chapter", replace_generation
+    )
+    with pytest.raises(ValueError, match="replaced by another run"):
+        campaign_module.evaluate_campaign(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+            workers=1,
+            fresh=True,
+            cache_dir=tmp_path / "cache",
+        )
+    assert json.loads(manifest_path.read_text()) == (
+        campaign_module._empty_eval_manifest(
+            run_identity, replacement_generation
+        )
+    )
+
+
+def test_interrupted_nonfresh_evaluation_cannot_leave_old_shard_rebound(
+    tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity()
+    manifest_path = tmp_path / "MANIFEST.json"
+    old = _complete_eval_manifest(tmp_path, run_identity)
+    old["comparison_artifact"] = {"sha256": "a" * 64}
+    old["comparison_receipt"] = {"sha256": "b" * 64}
+    manifest_path.write_text(json.dumps(old))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+
+    def interrupted(*_args, **_kwargs):
+        invalidated = json.loads(manifest_path.read_text())
+        assert invalidated["shards"] == {}
+        assert "comparison_artifact" not in invalidated
+        assert "comparison_receipt" not in invalidated
+        with pytest.raises(
+            ValueError, match="incomplete or contains stale shards"
+        ):
+            campaign_module.compare_campaign(
+                rulespec_root=tmp_path / "rulespec-us",
+                engine_binary=tmp_path / "engine",
+                cache_dir=tmp_path / "compare",
+            )
+        raise RuntimeError("interrupted")
+
+    monkeypatch.setattr(campaign_module, "_evaluate_chapter", interrupted)
+    with pytest.raises(RuntimeError, match="interrupted"):
+        campaign_module.evaluate_campaign(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+            workers=1,
+            cache_dir=tmp_path / "eval-cache",
+        )
+    invalidated = json.loads(manifest_path.read_text())
+    assert invalidated["shards"] == {}
+    assert "comparison_artifact" not in invalidated
+    assert "comparison_receipt" not in invalidated
+
+
 def test_compare_rebinds_manifest_to_fresh_artifact(tmp_path, monkeypatch) -> None:
     manifest_path = tmp_path / "eval" / "MANIFEST.json"
     comparison_path = tmp_path / "comparison-summary.json"
-    contract_path = tmp_path / "declared-input-contract.json"
     manifest_path.parent.mkdir()
-    manifest_path.write_text(json.dumps({
-        "schema": campaign_module.EVAL_MANIFEST_SCHEMA,
-        "shards": {"current-01": {"key": "current-01", "chapter": "01"}},
-    }))
-    contract_path.write_text(json.dumps({"chapters": [{"chapter": "01"}]}))
+    run_identity = _fake_run_identity()
+    manifest_path.write_text(json.dumps(
+        _complete_eval_manifest(tmp_path, run_identity)
+    ))
     monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
     monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
-    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path)
     monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
-    monkeypatch.setattr(campaign_module, "_iter_eval_records", lambda _manifest: iter(()))
-
-    receipt = campaign_module.compare_campaign(cache_dir=tmp_path / "compare")
-    rebound = json.loads(manifest_path.read_text())
-    assert rebound["comparison_artifact"]["sha256"] == (
-        receipt["comparison_artifact"]["sha256"]
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
     )
-    assert rebound["comparison_receipt"] == {
-        "path": "comparison-summary.json",
-        "sha256": campaign_module._sha256(comparison_path),
+
+    receipt = campaign_module.compare_campaign(
+        rulespec_root=tmp_path / "rulespec-us",
+        engine_binary=tmp_path / "axiom-rules-engine",
+        cache_dir=tmp_path / "compare",
+    )
+    rebound = json.loads(manifest_path.read_text())
+    assert rebound["comparison_artifact"] == receipt["comparison_artifact"]
+    assert rebound["comparison_receipt"] == campaign_module._file_receipt(
+        comparison_path, relative_to=tmp_path
+    )
+
+
+def test_compare_cannot_restore_manifest_after_concurrent_fresh_invalidation(
+    tmp_path, monkeypatch
+) -> None:
+    manifest_path = tmp_path / "eval" / "MANIFEST.json"
+    comparison_path = tmp_path / "comparison-summary.json"
+    manifest_path.parent.mkdir()
+    run_identity = _fake_run_identity()
+    manifest_path.write_text(json.dumps(
+        _complete_eval_manifest(tmp_path, run_identity)
+    ))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    replacement_generation = "2" * 32
+    monkeypatch.setattr(
+        campaign_module, "_new_eval_generation_id",
+        lambda: replacement_generation,
+    )
+
+    def interrupted(*_args, **_kwargs):
+        raise RuntimeError("fresh interrupted")
+
+    monkeypatch.setattr(campaign_module, "_evaluate_chapter", interrupted)
+    original_atomic_json = campaign_module._atomic_json
+    fresh_started = threading.Event()
+    fresh_finished = threading.Event()
+    fresh_errors: list[BaseException] = []
+    threads: list[threading.Thread] = []
+
+    def run_fresh() -> None:
+        fresh_started.set()
+        try:
+            campaign_module.evaluate_campaign(
+                rulespec_root=tmp_path / "rulespec-us",
+                engine_binary=tmp_path / "engine",
+                workers=1,
+                fresh=True,
+                cache_dir=tmp_path / "eval-cache",
+            )
+        except BaseException as error:
+            fresh_errors.append(error)
+        finally:
+            fresh_finished.set()
+
+    def atomic_json(path, payload):
+        original_atomic_json(path, payload)
+        if path == comparison_path and not threads:
+            thread = threading.Thread(target=run_fresh)
+            threads.append(thread)
+            thread.start()
+            assert fresh_started.wait(1)
+            assert not fresh_finished.wait(0.05)
+
+    monkeypatch.setattr(campaign_module, "_atomic_json", atomic_json)
+    campaign_module.compare_campaign(
+        rulespec_root=tmp_path / "rulespec-us",
+        engine_binary=tmp_path / "engine",
+        cache_dir=tmp_path / "compare",
+    )
+    threads[0].join(timeout=2)
+    assert fresh_finished.is_set()
+    assert len(fresh_errors) == 1
+    assert isinstance(fresh_errors[0], RuntimeError)
+    assert str(fresh_errors[0]) == "fresh interrupted"
+    assert json.loads(manifest_path.read_text()) == (
+        campaign_module._empty_eval_manifest(
+            run_identity, replacement_generation
+        )
+    )
+
+
+def test_compare_rejects_arbitrary_stale_shard_key(tmp_path, monkeypatch) -> None:
+    run_identity = _fake_run_identity()
+    manifest = _complete_eval_manifest(tmp_path, run_identity)
+    current_key, shard = manifest["shards"].popitem()
+    stale_key = "not-a-current-content-key"
+    shard["key"] = stale_key
+    manifest["shards"][stale_key] = shard
+    manifest_path = tmp_path / "MANIFEST.json"
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    with pytest.raises(ValueError, match="incomplete or contains stale shards"):
+        campaign_module.compare_campaign(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+            cache_dir=tmp_path / "compare",
+        )
+    assert current_key != stale_key
+
+
+@pytest.mark.parametrize(
+    "identity_path",
+    (
+        ("rulespec", "root"),
+        ("rulespec", "head_tree"),
+        ("rulespec", "content_sha256"),
+        ("engine", "sha256"),
+        ("entry_flag_producers", "producer_sha256"),
+        ("input_contract", "sha256"),
+        ("campaign_evaluator", "producer_sha256"),
+    ),
+)
+def test_shard_key_binds_every_live_producer(identity_path) -> None:
+    original = _fake_run_identity()
+    mutant = copy.deepcopy(original)
+    mutant[identity_path[0]][identity_path[1]] = "b" * 64
+    assert campaign_module._shard_key(
+        chapter="01", run_identity=original,
+        generation_id=EVAL_GENERATION_ID,
+    ) != campaign_module._shard_key(
+        chapter="01", run_identity=mutant,
+        generation_id=EVAL_GENERATION_ID,
+    )
+
+
+def test_shard_key_binds_fresh_run_generation() -> None:
+    run_identity = _fake_run_identity()
+    assert campaign_module._shard_key(
+        chapter="01",
+        run_identity=run_identity,
+        generation_id="1" * 32,
+    ) != campaign_module._shard_key(
+        chapter="01",
+        run_identity=run_identity,
+        generation_id="2" * 32,
+    )
+
+
+def test_entry_flag_provenance_binds_live_dependency_content(tmp_path) -> None:
+    tool = tmp_path / "tools/b16_entry_flags.py"
+    dependency = (
+        tmp_path
+        / "us/policies/usitc/us-tariff-incidence/generated/note.yaml"
+    )
+    tool.parent.mkdir(parents=True)
+    dependency.parent.mkdir(parents=True)
+    tool.write_text(
+        "from pathlib import Path\n"
+        "ROOT = Path(__file__).resolve().parents[1]\n"
+        "INCIDENCE_DIR = ROOT / 'us/policies/usitc/us-tariff-incidence/generated'\n"
+        "MODULES = ('note.yaml',)\n"
+        "def entry_flags(*_args): return {}\n"
+    )
+    dependency.write_text("old")
+    _entry_flags, old = campaign_module._load_entry_flag_tool(tmp_path)
+    dependency.write_text("new")
+    _entry_flags, new = campaign_module._load_entry_flag_tool(tmp_path)
+    assert old["producer_sha256"] != new["producer_sha256"]
+
+
+def test_campaign_evaluator_identity_binds_adapter_source(
+    tmp_path, monkeypatch
+) -> None:
+    campaign = tmp_path / "campaign.py"
+    runner = tmp_path / "runner.py"
+    campaign.write_text("campaign")
+    runner.write_text("old adapter")
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(campaign_module, "__file__", str(campaign))
+    monkeypatch.setattr(
+        campaign_module, "CAMPAIGN_EVALUATOR_SOURCES", ("runner.py",)
+    )
+    old = campaign_module._campaign_evaluator_identity()
+    runner.write_text("new adapter")
+    new = campaign_module._campaign_evaluator_identity()
+    assert old["producer_sha256"] != new["producer_sha256"]
+
+
+@pytest.mark.parametrize("stage", ("classify", "report"))
+def test_downstream_rejects_unbound_comparison_after_interrupted_fresh_run(
+    stage, tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity()
+    manifest_path = tmp_path / "MANIFEST.json"
+    manifest_path.write_text(json.dumps(
+        _complete_eval_manifest(tmp_path, run_identity)
+    ))
+    comparison_path = tmp_path / "comparison-summary.json"
+    comparison_path.write_text("{}")
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    function = (
+        campaign_module.classify_campaign
+        if stage == "classify" else campaign_module.build_report
+    )
+    with pytest.raises(ValueError, match="binding is absent or stale"):
+        function(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+        )
+
+
+@pytest.mark.parametrize("stage", ("classify", "report"))
+def test_downstream_rejects_incomplete_current_manifest(
+    stage, tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity(chapters=("01", "02"))
+    manifest = _complete_eval_manifest(tmp_path, run_identity)
+    manifest["shards"].pop(next(iter(manifest["shards"])))
+    manifest_path = tmp_path / "MANIFEST.json"
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    function = (
+        campaign_module.classify_campaign
+        if stage == "classify" else campaign_module.build_report
+    )
+    with pytest.raises(ValueError, match="incomplete or contains stale shards"):
+        function(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+        )
+
+
+def test_downstream_rejects_stale_comparison_artifact_binding(
+    tmp_path, monkeypatch
+) -> None:
+    run_identity = _fake_run_identity()
+    manifest = _complete_eval_manifest(tmp_path, run_identity)
+    evaluation_manifest = campaign_module._empty_eval_manifest(
+        run_identity, EVAL_GENERATION_ID
+    )
+    evaluation_manifest["shards"] = manifest["shards"]
+    artifact = tmp_path / "comparison.jsonl.gz"
+    with artifact.open("wb") as raw:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0):
+            pass
+    comparison = {
+        "schema": campaign_module.COMPARISON_SCHEMA,
+        "run_identity_sha256": campaign_module._run_identity_sha256(run_identity),
+        "generation_id": EVAL_GENERATION_ID,
+        "evaluation_manifest_sha256": campaign_module._canonical_sha256(
+            evaluation_manifest
+        ),
+        "tolerance": campaign_module.TOLERANCE,
+        "comparison_artifact": campaign_module._file_receipt(artifact),
+        "per_slot": {},
+        "engine_errors": 0,
     }
+    comparison_path = tmp_path / "comparison-summary.json"
+    comparison_path.write_text(campaign_module._render(comparison))
+    manifest["comparison_receipt"] = campaign_module._file_receipt(
+        comparison_path, relative_to=tmp_path
+    )
+    manifest["comparison_artifact"] = {
+        **comparison["comparison_artifact"],
+        "sha256": "0" * 64,
+    }
+    manifest_path = tmp_path / "MANIFEST.json"
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
+    monkeypatch.setattr(
+        campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
+    )
+    with pytest.raises(ValueError, match="artifact binding is absent or stale"):
+        campaign_module._load_bound_comparison(
+            rulespec_root=tmp_path / "rulespec-us",
+            engine_binary=tmp_path / "engine",
+        )
 
 
 def test_cli_rejects_rulespec_root_not_bound_at_import(tmp_path, monkeypatch) -> None:
@@ -244,6 +770,60 @@ def test_cli_rejects_rulespec_root_not_bound_at_import(tmp_path, monkeypatch) ->
     )
     with pytest.raises(ValueError, match="export RULESPEC_US_CHECKOUT"):
         campaign_module.main()
+
+
+def test_engine_environment_cannot_select_an_ambient_checkout(tmp_path) -> None:
+    rulespec_root = tmp_path / "workspace/rulespec-us"
+    rulespec_root.mkdir(parents=True)
+    env = campaign_module._engine_environment(
+        rulespec_root,
+        {
+            "AXIOM_RULESPEC_ROOT": "/wrong/singular",
+            "AXIOM_RULESPEC_REPO_ROOTS": "/wrong/plural",
+            "UNCHANGED": "yes",
+        },
+    )
+    assert "AXIOM_RULESPEC_ROOT" not in env
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"] == str(
+        rulespec_root.resolve().parent
+    )
+    assert env["UNCHANGED"] == "yes"
+
+
+def test_manifest_lock_is_shared_across_processes_with_different_tmpdir(
+    tmp_path, monkeypatch
+) -> None:
+    manifest_path = tmp_path / "eval/MANIFEST.json"
+    alternate_tmp = tmp_path / "alternate-tmp"
+    alternate_tmp.mkdir()
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    child = (
+        "import sys\n"
+        "from pathlib import Path\n"
+        "from scripts import us_tariff_schedule_campaign as campaign\n"
+        "campaign.EVAL_MANIFEST = Path(sys.argv[1])\n"
+        "print('ready', flush=True)\n"
+        "with campaign._eval_manifest_lock():\n"
+        "    print('acquired', flush=True)\n"
+    )
+    env = dict(campaign_module.os.environ)
+    env["TMPDIR"] = str(alternate_tmp)
+    with campaign_module._eval_manifest_lock():
+        process = campaign_module.subprocess.Popen(
+            [campaign_module.sys.executable, "-c", child, str(manifest_path)],
+            cwd=campaign_module.REPO_ROOT,
+            env=env,
+            text=True,
+            stdout=campaign_module.subprocess.PIPE,
+            stderr=campaign_module.subprocess.PIPE,
+        )
+        assert process.stdout is not None
+        assert process.stdout.readline().strip() == "ready"
+        with pytest.raises(campaign_module.subprocess.TimeoutExpired):
+            process.wait(timeout=0.1)
+    stdout, stderr = process.communicate(timeout=2)
+    assert process.returncode == 0, stderr
+    assert stdout.strip() == "acquired"
 
 
 def test_mismatch_signature_preserves_selector_dimensions() -> None:
@@ -410,7 +990,7 @@ def test_preview_population_digest_rejects_count_preserving_drift() -> None:
         )
 
 
-def test_expiring_preview_population_allows_zero_but_not_partial_survival() -> None:
+def test_active_expiring_preview_population_rejects_zero_and_partial_survival() -> None:
     population = [("a" * 64, 2), ("b" * 64, 3)]
     contract = {
         "preview": {
@@ -421,7 +1001,8 @@ def test_expiring_preview_population_allows_zero_but_not_partial_survival() -> N
             ),
         }
     }
-    _enforce_preview_selector_population(contract, {}, Counter())
+    with pytest.raises(ValueError, match="unit count drift"):
+        _enforce_preview_selector_population(contract, {}, Counter())
     with pytest.raises(ValueError, match="unit count drift"):
         _enforce_preview_selector_population(
             contract,
@@ -455,9 +1036,15 @@ def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
     }
     with pytest.raises(ValueError, match="retired preview selector remains live"):
         _enforce_retired_preview_selectors_absent(
-            retired, observed, Counter({"f" * 64: 1})
+            retired, observed, Counter({"f" * 64: 1}), engine_errors=0
         )
-    _enforce_retired_preview_selectors_absent(retired, {}, Counter())
+    _enforce_retired_preview_selectors_absent(
+        retired, {}, Counter(), engine_errors=0
+    )
+    with pytest.raises(ValueError, match="cannot be proven with engine errors"):
+        _enforce_retired_preview_selectors_absent(
+            retired, {}, Counter(), engine_errors=1
+        )
 
 
 def test_vanished_section_232_selectors_can_retire_without_retiring_cafta() -> None:
@@ -476,10 +1063,17 @@ def test_vanished_section_232_selectors_can_retire_without_retiring_cafta() -> N
     active, retired = _preview_selector_snapshot(entries)
     assert set(retired) == section_232
     assert "cafta-52i-deferred" in active
-    _enforce_retired_preview_selectors_absent(retired, {}, Counter())
+    _enforce_retired_preview_selectors_absent(
+        retired, {}, Counter(), engine_errors=0
+    )
 
 
 def test_report_rejects_stale_classification_schema(tmp_path, monkeypatch) -> None:
+    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
+    monkeypatch.setattr(
+        campaign_module, "_load_bound_comparison_locked",
+        lambda **_kwargs: comparison,
+    )
     classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
     classification["schema"] = "axiom_oracles.us_tariff_schedule.classification.v1"
     stale = tmp_path / "classification-receipt.json"

@@ -13,8 +13,10 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import csv
+import fcntl
 import gzip
 import hashlib
+import importlib.util
 import io
 import json
 import math
@@ -24,6 +26,8 @@ import subprocess
 import sys
 import tempfile
 import time
+import uuid
+from contextlib import contextmanager
 from functools import cache
 from collections import Counter
 from datetime import date
@@ -33,8 +37,9 @@ from typing import Any, Iterable, Iterator
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+while str(REPO_ROOT) in sys.path:
+    sys.path.remove(str(REPO_ROOT))
+sys.path.insert(0, str(REPO_ROOT))
 SELECTED = REPO_ROOT / "reference/us-tariff-schedule/selected-intervals.csv.gz"
 OUT_DIR = REPO_ROOT / "reference/us-tariff-schedule"
 ROUTING_ROWS = OUT_DIR / "disposition-routing.csv.gz"
@@ -42,7 +47,10 @@ ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 EVAL_DIR = OUT_DIR / "eval"
 EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
-EVAL_MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v1"
+INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v2"
+EVAL_RUN_IDENTITY_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_run_identity.v2"
+EVAL_MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
+COMPARISON_SCHEMA = "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
 COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
 CLASSIFICATION_RECEIPT = OUT_DIR / "classification-receipt.json"
 DISPOSITION_LEDGER = REPO_ROOT / "reference/us-tariff-schedule/campaign-dispositions.yaml"
@@ -127,6 +135,30 @@ NON_SLOT_SELECTOR_FIELDS = frozenset({"origin_regime", "delta", "iso2", "line_se
 RULESPEC_US_ROOT = Path(os.environ.get(
     "RULESPEC_US_CHECKOUT", "/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us-b16"
 )).expanduser()
+DEFAULT_ENGINE_BINARY = Path(
+    "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
+)
+CAMPAIGN_EVALUATOR_SOURCES = (
+    "axiom_oracles/__init__.py",
+    "axiom_oracles/adapters/__init__.py",
+    "axiom_oracles/adapters/axiom/__init__.py",
+    "axiom_oracles/adapters/axiom/_snap_co_base_inputs.py",
+    "axiom_oracles/adapters/axiom/runner.py",
+    "axiom_oracles/adapters/axiom/snap_co_projection.py",
+    "axiom_oracles/adapters/axiom/tax_projection.py",
+    "axiom_oracles/comparison/__init__.py",
+    "axiom_oracles/comparison/comparator.py",
+    "axiom_oracles/comparison/mappings.py",
+    "axiom_oracles/comparison/report.py",
+    "axiom_oracles/config/concept_mappings.yaml",
+    "axiom_oracles/core/__init__.py",
+    "axiom_oracles/core/case.py",
+    "axiom_oracles/core/engine.py",
+    "axiom_oracles/core/geography.py",
+    "axiom_oracles/core/household.py",
+    "axiom_oracles/core/results.py",
+    "axiom_oracles/engine_compat.py",
+)
 INCIDENCE_ROOT = RULESPEC_US_ROOT / "us/policies/usitc/us-tariff-incidence/generated"
 CH98_LINES = INCIDENCE_ROOT.parent.parent / "us-tariff-duty/lines/generated/ch98.yaml"
 EXPECTED_COLUMNS = (
@@ -179,6 +211,156 @@ def _render(value: Any) -> str:
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
+
+
+def _canonical_sha256(value: Any) -> str:
+    return hashlib.sha256(json.dumps(
+        value, allow_nan=False, sort_keys=True, separators=(",", ":")
+    ).encode()).hexdigest()
+
+
+def _file_receipt(path: Path, *, relative_to: Path | None = None) -> dict[str, Any]:
+    resolved = path.resolve()
+    _require(resolved.is_file(), f"missing producer source: {resolved}")
+    rendered_path = (
+        str(resolved.relative_to(relative_to.resolve()))
+        if relative_to is not None else str(resolved)
+    )
+    return {
+        "path": rendered_path,
+        "bytes": resolved.stat().st_size,
+        "sha256": _sha256(resolved),
+    }
+
+
+def _campaign_evaluator_identity() -> dict[str, Any]:
+    """Bind the Python implementation that constructs and parses engine runs.
+
+    Importing ``AxiomRulesRunner`` executes the listed package modules, while
+    ``run_cases`` consults the concept mapping before invoking the engine.  A
+    receipt for the campaign script alone would therefore allow adapter,
+    compatibility, result-parsing, or mapping changes to reuse old shards.
+    """
+
+    sources = [
+        _file_receipt(REPO_ROOT / relative, relative_to=REPO_ROOT)
+        for relative in CAMPAIGN_EVALUATOR_SOURCES
+    ]
+    identity = {
+        "campaign": _file_receipt(Path(__file__), relative_to=REPO_ROOT),
+        "oracle_sources": sources,
+        "python": {
+            "executable": _file_receipt(Path(sys.executable)),
+            "version": sys.version,
+        },
+        "pyyaml_version": yaml.__version__,
+    }
+    identity["producer_sha256"] = _canonical_sha256(identity)
+    return identity
+
+
+def _git_output(root: Path, *args: str) -> bytes:
+    result = subprocess.run(
+        ["git", *args], cwd=root, check=True, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return result.stdout
+
+
+def _rulespec_root_identity(rulespec_root: Path) -> dict[str, Any]:
+    """Bind the exact RuleSpec checkout, including non-committed content."""
+
+    root = rulespec_root.resolve()
+    _require(root.is_dir(), f"RuleSpec root is missing: {root}")
+    top = Path(_git_output(root, "rev-parse", "--show-toplevel").decode().strip()).resolve()
+    _require(top == root, f"RuleSpec root must be the git worktree root: {root} != {top}")
+    head = _git_output(root, "rev-parse", "HEAD").decode().strip()
+    tree = _git_output(root, "rev-parse", "HEAD^{tree}").decode().strip()
+    tracked_diff = _git_output(root, "diff", "--no-ext-diff", "--binary", "HEAD", "--")
+    untracked_names = [
+        item.decode()
+        for item in _git_output(
+            root, "ls-files", "--others", "--exclude-standard", "-z"
+        ).split(b"\0")
+        if item
+    ]
+    untracked = []
+    for name in sorted(untracked_names):
+        path = root / name
+        if path.is_symlink():
+            material = os.readlink(path).encode()
+            kind = "symlink"
+        else:
+            _require(path.is_file(), f"unsupported untracked RuleSpec path: {name}")
+            material = path.read_bytes()
+            kind = "file"
+        untracked.append({
+            "path": name,
+            "kind": kind,
+            "bytes": len(material),
+            "sha256": hashlib.sha256(material).hexdigest(),
+        })
+    content = {
+        "head_tree": tree,
+        "tracked_worktree_diff_sha256": hashlib.sha256(tracked_diff).hexdigest(),
+        "untracked": untracked,
+    }
+    return {
+        "root": str(root),
+        "head_commit": head,
+        "head_tree": tree,
+        "dirty": bool(tracked_diff or untracked),
+        "tracked_worktree_diff_sha256": content["tracked_worktree_diff_sha256"],
+        "untracked": untracked,
+        "content_sha256": _canonical_sha256(content),
+    }
+
+
+def _load_entry_flag_tool(
+    rulespec_root: Path,
+) -> tuple[Any, dict[str, Any]]:
+    """Load the entry preparer from one explicit checkout and receipt its inputs."""
+
+    root = rulespec_root.resolve()
+    source = root / "tools/b16_entry_flags.py"
+    tool_receipt = _file_receipt(source, relative_to=root)
+    module_name = "_axiom_tariff_entry_flags_" + hashlib.sha256(
+        (str(source) + tool_receipt["sha256"]).encode()
+    ).hexdigest()
+    spec = importlib.util.spec_from_file_location(module_name, source)
+    _require(spec is not None and spec.loader is not None,
+             f"cannot load entry-flag producer: {source}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    entry_flags = getattr(module, "entry_flags", None)
+    module_names = getattr(module, "MODULES", None)
+    incidence_dir = getattr(module, "INCIDENCE_DIR", None)
+    _require(callable(entry_flags), "entry-flag producer lacks entry_flags")
+    _require(
+        isinstance(module_names, tuple)
+        and module_names
+        and all(isinstance(name, str) and name for name in module_names),
+        "entry-flag producer MODULES is malformed",
+    )
+    expected_incidence = root / "us/policies/usitc/us-tariff-incidence/generated"
+    _require(
+        isinstance(incidence_dir, Path)
+        and incidence_dir.resolve() == expected_incidence.resolve(),
+        "entry-flag producer incidence root escaped the requested checkout",
+    )
+    dependencies = [
+        _file_receipt(expected_incidence / name, relative_to=root)
+        for name in module_names
+    ]
+    provenance = {
+        "tool": tool_receipt,
+        "dependencies": dependencies,
+        "producer_sha256": _canonical_sha256({
+            "tool": tool_receipt,
+            "dependencies": dependencies,
+        }),
+    }
+    return entry_flags, provenance
 
 
 def signature_population_sha256(population: Iterable[tuple[str, int]]) -> str:
@@ -294,10 +476,36 @@ def filter_declared_feed(
     }
 
 
+def _engine_environment(
+    rulespec_root: Path, base: dict[str, str] | None = None
+) -> dict[str, str]:
+    """Make legacy engine fallback resolve the same explicit RuleSpec root."""
+
+    env = dict(os.environ if base is None else base)
+    env.pop("AXIOM_RULESPEC_ROOT", None)
+    env["AXIOM_RULESPEC_REPO_ROOTS"] = str(rulespec_root.resolve().parent)
+    return env
+
+
+def _engine_subprocess_runner(rulespec_root: Path) -> Any:
+    def run(
+        command: list[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess:
+        kwargs["env"] = _engine_environment(
+            rulespec_root, kwargs.get("env")
+        )
+        return subprocess.run(command, **kwargs)
+
+    return run
+
+
 def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) -> dict[str, Any]:
     """Compile all generated compositions and receipt their entry-flag surface."""
-    sys.path.insert(0, str(rulespec_root))
-    from tools.b16_entry_flags import entry_flags  # type: ignore
+    rulespec_root = rulespec_root.resolve()
+    engine_binary = engine_binary.resolve()
+    rulespec_identity = _rulespec_root_identity(rulespec_root)
+    engine_receipt = _file_receipt(engine_binary)
+    entry_flags, entry_flag_producers = _load_entry_flag_tool(rulespec_root)
 
     raw_emitted = entry_flags(102294000, "0102294024", "CA")
     emitted, observed_aliases = canonicalize_entry_flags(raw_emitted)
@@ -309,8 +517,7 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
         if not path.name.endswith(".test.yaml")
     )
     _require(len(modules) == 100, f"expected 100 generated compositions, found {len(modules)}")
-    env = dict(__import__("os").environ)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = str(rulespec_root.parent)
+    env = _engine_environment(rulespec_root)
     chapters = []
     with tempfile.TemporaryDirectory(prefix="tariff-input-contract-") as raw:
         work = Path(raw)
@@ -341,8 +548,11 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
                 "dropped_entry_flags": sorted(dropped),
                 "missing_declared_entry_flags": [],
             })
-    return {
-        "schema": "axiom_oracles.us_tariff_schedule.declared_input_contract.v1",
+    receipt = {
+        "schema": INPUT_CONTRACT_SCHEMA,
+        "rulespec": rulespec_identity,
+        "engine": engine_receipt,
+        "entry_flag_producers": entry_flag_producers,
         "composition_count": len(chapters),
         "entry_flag_tool": str((rulespec_root / "tools/b16_entry_flags.py").relative_to(rulespec_root)),
         "entry_flag_tool_sha256": _sha256(rulespec_root / "tools/b16_entry_flags.py"),
@@ -359,6 +569,19 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
         "chapters": chapters,
         "verdict": "PASS",
     }
+    _require(
+        _rulespec_root_identity(rulespec_root) == rulespec_identity,
+        "RuleSpec checkout changed during input-contract compilation",
+    )
+    _require(
+        _file_receipt(engine_binary) == engine_receipt,
+        "engine binary changed during input-contract compilation",
+    )
+    _require(
+        _load_entry_flag_tool(rulespec_root)[1] == entry_flag_producers,
+        "entry-flag producers changed during input-contract compilation",
+    )
+    return receipt
 
 
 def _chapter_table_paths(rulespec_root: Path) -> list[Path]:
@@ -571,8 +794,7 @@ def _first_shard_cases(*, rulespec_root: Path, limit: int) -> tuple[list[Any], l
     """Build the deterministic timing shard using only full-comparison cells."""
     from axiom_oracles.core.case import Case
 
-    sys.path.insert(0, str(rulespec_root))
-    from tools.b16_entry_flags import entry_flags  # type: ignore
+    entry_flags, _provenance = _load_entry_flag_tool(rulespec_root)
 
     routes = _routing_by_member()
     chapter = "01"
@@ -634,6 +856,7 @@ def evaluate_projection(*, rulespec_root: Path, engine_binary: Path, limit: int 
             program_path=program, binary_path=engine_binary,
             default_entity="CustomsEntry", default_entity_id="entry",
             rulespec_repo_roots=(rulespec_root,), batch_size=limit,
+            subprocess_run=_engine_subprocess_runner(rulespec_root),
         )
         results = runner.run_cases(cases, outputs)
         elapsed = time.perf_counter() - started
@@ -676,8 +899,159 @@ def _atomic_json(path: Path, payload: Any) -> None:
     temporary.replace(path)
 
 
-def _empty_eval_manifest() -> dict[str, Any]:
-    return {"schema": EVAL_MANIFEST_SCHEMA, "shards": {}}
+@contextmanager
+def _eval_manifest_lock() -> Iterator[None]:
+    """Serialize every manifest transition across campaign processes."""
+
+    lock_path = EVAL_MANIFEST.with_name(f".{EVAL_MANIFEST.name}.lock")
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with lock_path.open("a+") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
+
+
+def _new_eval_generation_id() -> str:
+    return uuid.uuid4().hex
+
+
+def _valid_eval_generation_id(value: Any) -> bool:
+    return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{32}", value) is not None
+
+
+def _validated_input_contract(
+    *,
+    rulespec_root: Path,
+    engine_binary: Path,
+    rulespec_identity: dict[str, Any] | None = None,
+    engine_receipt: dict[str, Any] | None = None,
+    entry_flag_producers: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    _require(INPUT_CONTRACT_RECEIPT.is_file(), "declared-input contract is missing")
+    contract = json.loads(INPUT_CONTRACT_RECEIPT.read_text())
+    _require(contract.get("schema") == INPUT_CONTRACT_SCHEMA,
+             "declared-input contract schema is stale; regenerate input-contract")
+    rulespec_root = rulespec_root.resolve()
+    engine_binary = engine_binary.resolve()
+    rulespec_identity = rulespec_identity or _rulespec_root_identity(rulespec_root)
+    engine_receipt = engine_receipt or _file_receipt(engine_binary)
+    entry_flag_producers = (
+        entry_flag_producers or _load_entry_flag_tool(rulespec_root)[1]
+    )
+    _require(contract.get("rulespec") == rulespec_identity,
+             "declared-input contract RuleSpec provenance is stale")
+    _require(contract.get("engine") == engine_receipt,
+             "declared-input contract engine provenance is stale")
+    _require(contract.get("entry_flag_producers") == entry_flag_producers,
+             "declared-input contract entry-flag provenance is stale")
+    _require(
+        contract.get("entry_flag_tool_sha256")
+        == entry_flag_producers["tool"]["sha256"],
+        "declared-input contract entry-flag tool hash is stale",
+    )
+    chapters = contract.get("chapters")
+    _require(
+        isinstance(chapters, list)
+        and contract.get("composition_count") == len(chapters) == 100,
+        "declared-input contract chapter census is stale",
+    )
+    expected_modules = sorted(
+        path for path in (
+            rulespec_root / "us/policies/cbp/us-tariff-schedule/generated"
+        ).glob("ch*/ch*.yaml")
+        if not path.name.endswith(".test.yaml")
+    )
+    _require(len(expected_modules) == 100,
+             f"expected 100 generated compositions, found {len(expected_modules)}")
+    by_chapter: dict[str, dict[str, Any]] = {}
+    for chapter in chapters:
+        _require(isinstance(chapter, dict), "malformed input-contract chapter")
+        name = chapter.get("chapter")
+        _require(isinstance(name, str) and name not in by_chapter,
+                 f"duplicate or malformed input-contract chapter: {name!r}")
+        module = _module_path(rulespec_root, name)
+        _require(
+            chapter.get("module") == str(module.relative_to(rulespec_root))
+            and chapter.get("module_sha256") == _sha256(module),
+            f"declared-input contract module provenance is stale: {name}",
+        )
+        _require(
+            isinstance(chapter.get("artifact_sha256"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", chapter["artifact_sha256"]) is not None,
+            f"declared-input contract artifact hash is malformed: {name}",
+        )
+        by_chapter[name] = chapter
+    _require(
+        set(by_chapter)
+        == {path.parent.name.removeprefix("ch") for path in expected_modules},
+        "declared-input contract chapter set is stale",
+    )
+    _require(contract.get("verdict") == "PASS",
+             "declared-input contract is not PASS")
+    return contract
+
+
+def _current_run_identity(
+    *, rulespec_root: Path, engine_binary: Path
+) -> dict[str, Any]:
+    """Derive the complete content identity used by evaluation and comparison."""
+
+    _require_rulespec_root_consistency(rulespec_root)
+    rulespec_root = rulespec_root.resolve()
+    engine_binary = engine_binary.resolve()
+    rulespec_identity = _rulespec_root_identity(rulespec_root)
+    engine_receipt = _file_receipt(engine_binary)
+    _entry_flags, entry_flag_producers = _load_entry_flag_tool(rulespec_root)
+    contract = _validated_input_contract(
+        rulespec_root=rulespec_root,
+        engine_binary=engine_binary,
+        rulespec_identity=rulespec_identity,
+        engine_receipt=engine_receipt,
+        entry_flag_producers=entry_flag_producers,
+    )
+    chapters = {
+        item["chapter"]: {
+            "module": item["module"],
+            "module_sha256": item["module_sha256"],
+            "compiled_artifact_sha256": item["artifact_sha256"],
+        }
+        for item in contract["chapters"]
+    }
+    return {
+        "schema": EVAL_RUN_IDENTITY_SCHEMA,
+        "rulespec": rulespec_identity,
+        "engine": engine_receipt,
+        "entry_flag_producers": entry_flag_producers,
+        "input_contract": {
+            **_file_receipt(INPUT_CONTRACT_RECEIPT, relative_to=REPO_ROOT),
+            "schema": contract["schema"],
+        },
+        "campaign_evaluator": _campaign_evaluator_identity(),
+        "selected_population": _file_receipt(SELECTED, relative_to=REPO_ROOT),
+        "routing": _file_receipt(ROUTING_ROWS, relative_to=REPO_ROOT),
+        "outputs": list(OUTPUT_NAMES),
+        "chapters": chapters,
+    }
+
+
+def _run_identity_sha256(run_identity: dict[str, Any]) -> str:
+    return _canonical_sha256(run_identity)
+
+
+def _empty_eval_manifest(
+    run_identity: dict[str, Any] | None = None,
+    generation_id: str | None = None,
+) -> dict[str, Any]:
+    manifest: dict[str, Any] = {"schema": EVAL_MANIFEST_SCHEMA, "shards": {}}
+    if run_identity is not None:
+        _require(_valid_eval_generation_id(generation_id),
+                 "evaluation manifest requires a valid generation id")
+        manifest["run_identity"] = run_identity
+        manifest["run_identity_sha256"] = _run_identity_sha256(run_identity)
+        manifest["generation_id"] = generation_id
+    return manifest
 
 
 def _load_manifest() -> dict[str, Any]:
@@ -690,7 +1064,8 @@ def _load_manifest() -> dict[str, Any]:
 
 
 def _prepare_eval_manifest(
-    manifest: dict[str, Any], current_keys: dict[str, str]
+    manifest: dict[str, Any], current_keys: dict[str, str],
+    run_identity: dict[str, Any], generation_id: str,
 ) -> dict[str, Any]:
     """Drop downstream bindings and shards superseded by current inputs.
 
@@ -701,7 +1076,16 @@ def _prepare_eval_manifest(
     invalid as soon as a new evaluation begins.
     """
 
-    prepared = _empty_eval_manifest()
+    _require(_valid_eval_generation_id(generation_id),
+             "evaluation manifest requires a valid generation id")
+    prepared = _empty_eval_manifest(run_identity, generation_id)
+    run_identity_sha256 = _run_identity_sha256(run_identity)
+    if (
+        manifest.get("run_identity") != run_identity
+        or manifest.get("run_identity_sha256") != run_identity_sha256
+        or manifest.get("generation_id") != generation_id
+    ):
+        return prepared
     expected_by_key = {key: chapter for chapter, key in current_keys.items()}
     for key, shard in manifest["shards"].items():
         if key not in expected_by_key:
@@ -709,7 +1093,10 @@ def _prepare_eval_manifest(
         chapter = expected_by_key[key]
         _require(isinstance(shard, dict), f"invalid shard receipt {key}")
         _require(
-            shard.get("key") == key and shard.get("chapter") == chapter,
+            shard.get("key") == key
+            and shard.get("chapter") == chapter
+            and shard.get("run_identity_sha256") == run_identity_sha256
+            and shard.get("generation_id") == generation_id,
             f"invalid shard identity {key}",
         )
         prepared["shards"][key] = shard
@@ -758,14 +1145,36 @@ def _module_path(rulespec_root: Path, chapter: str) -> Path:
     return rulespec_root / f"us/policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}.yaml"
 
 
-def _shard_key(*, chapter: str, rulespec_root: Path, engine_binary: Path) -> str:
+def _shard_key(
+    *, chapter: str, run_identity: dict[str, Any], generation_id: str
+) -> str:
+    _require(_valid_eval_generation_id(generation_id),
+             "shard key requires a valid generation id")
+    chapter_identity = run_identity.get("chapters", {}).get(chapter)
+    _require(isinstance(chapter_identity, dict), f"unknown run-identity chapter: {chapter}")
     ingredients = {
-        "chapter": chapter, "selected_sha256": _sha256(SELECTED),
-        "routing_sha256": _sha256(ROUTING_ROWS), "module_sha256": _sha256(_module_path(rulespec_root, chapter)),
-        "engine_sha256": _sha256(engine_binary), "outputs": OUTPUT_NAMES,
-        "input_contract_sha256": _sha256(INPUT_CONTRACT_RECEIPT),
+        "chapter": chapter,
+        "chapter_identity": chapter_identity,
+        "generation_id": generation_id,
+        "run_identity_sha256": _run_identity_sha256(run_identity),
     }
-    return hashlib.sha256(_render(ingredients).encode()).hexdigest()
+    return _canonical_sha256(ingredients)
+
+
+def _current_shard_keys(
+    run_identity: dict[str, Any], generation_id: str
+) -> dict[str, str]:
+    chapters = run_identity.get("chapters")
+    _require(isinstance(chapters, dict) and chapters,
+             "evaluation run identity has no chapters")
+    return {
+        chapter: _shard_key(
+            chapter=chapter,
+            run_identity=run_identity,
+            generation_id=generation_id,
+        )
+        for chapter in chapters
+    }
 
 
 def _result_values(result: Any, requested: Iterable[str]) -> dict[str, float]:
@@ -780,14 +1189,37 @@ def _result_values(result: Any, requested: Iterable[str]) -> dict[str, float]:
     return values
 
 
-def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path, cache_dir: Path) -> dict[str, Any]:
-    from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
-    from axiom_oracles.core.case import Case
+def _evaluate_chapter(
+    chapter: str,
+    *,
+    rulespec_root: Path,
+    engine_binary: Path,
+    cache_dir: Path,
+    run_identity: dict[str, Any],
+    generation_id: str,
+    expected_key: str,
+) -> dict[str, Any]:
+    from axiom_oracles.adapters.axiom import runner as runner_module
+    from axiom_oracles.core import case as case_module
 
-    sys.path.insert(0, str(rulespec_root))
-    from tools.b16_entry_flags import entry_flags  # type: ignore
+    _require(
+        Path(runner_module.__file__).resolve()
+        == (REPO_ROOT / "axiom_oracles/adapters/axiom/runner.py").resolve()
+        and Path(case_module.__file__).resolve()
+        == (REPO_ROOT / "axiom_oracles/core/case.py").resolve(),
+        "campaign evaluator imports resolve outside the receipted checkout",
+    )
+    AxiomRulesRunner = runner_module.AxiomRulesRunner
+    Case = case_module.Case
+
+    entry_flags, entry_flag_producers = _load_entry_flag_tool(rulespec_root)
+    _require(
+        entry_flag_producers == run_identity.get("entry_flag_producers"),
+        f"chapter {chapter}: entry-flag producer drift before evaluation",
+    )
 
     started = time.perf_counter()
+
     records = list(_chapter_records(chapter))
     module_ref = f"us:policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}"
     cases: dict[str, list[Any]] = {"full": [], "components": []}
@@ -809,7 +1241,8 @@ def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path,
         contexts[group].append((record, flags, case_id, requested))
     runner = AxiomRulesRunner(program_path=_module_path(rulespec_root, chapter), binary_path=engine_binary,
                               default_entity="CustomsEntry", default_entity_id="entry",
-                              rulespec_repo_roots=(rulespec_root,), batch_size=5_000)
+                              rulespec_repo_roots=(rulespec_root,), batch_size=5_000,
+                              subprocess_run=_engine_subprocess_runner(rulespec_root))
     paired = []
     for group in ("full", "components"):
         group_cases = cases[group]
@@ -819,7 +1252,12 @@ def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path,
         results = runner.run_cases(group_cases, variables)
         _require(len(results) == len(contexts[group]), f"chapter {chapter}: missing engine results")
         paired.extend(zip(results, contexts[group], strict=True))
-    key = _shard_key(chapter=chapter, rulespec_root=rulespec_root, engine_binary=engine_binary)
+    key = _shard_key(
+        chapter=chapter,
+        run_identity=run_identity,
+        generation_id=generation_id,
+    )
+    _require(key == expected_key, f"chapter {chapter}: expected shard key drift")
     path = cache_dir / key[:2] / f"{key}.jsonl.gz"
     path.parent.mkdir(parents=True, exist_ok=True)
     errors = 0
@@ -842,7 +1280,10 @@ def _evaluate_chapter(chapter: str, *, rulespec_root: Path, engine_binary: Path,
                 }
                 zipped.write((json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode())
     temporary.replace(path)
-    return {"chapter": chapter, "key": key, "sha256": _sha256(path), "path": str(path),
+    return {"chapter": chapter, "key": key,
+            "run_identity_sha256": _run_identity_sha256(run_identity),
+            "generation_id": generation_id,
+            "sha256": _sha256(path), "path": str(path),
             "cases": sum(map(len, cases.values())), "engine_errors": errors,
             "elapsed_seconds": round(time.perf_counter() - started, 3)}
 
@@ -853,47 +1294,98 @@ def evaluate_campaign(*, rulespec_root: Path, engine_binary: Path, workers: int,
                       cache_dir: Path | None = None) -> dict[str, Any]:
     _require(1 <= workers <= 3, "workers must be between 1 and 3")
     _require(not (fresh and resume), "--fresh and --resume are mutually exclusive")
-    declared_chapters = [item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]]
-    chosen = sorted(set(chapters or declared_chapters))
-    _require(set(chosen) <= set(declared_chapters), f"unknown chapters: {sorted(set(chosen) - set(declared_chapters))}")
-    cache = cache_dir or CACHE_ROOT / "eval"
-    current_keys = {
-        chapter: _shard_key(
-            chapter=chapter,
-            rulespec_root=rulespec_root,
-            engine_binary=engine_binary,
-        )
-        for chapter in declared_chapters
-    }
-    manifest = _empty_eval_manifest() if fresh else _prepare_eval_manifest(
-        _load_manifest(), current_keys
+    rulespec_root = rulespec_root.resolve()
+    engine_binary = engine_binary.resolve()
+    run_identity = _current_run_identity(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
     )
-    # Commit the invalidation before launching any engine process.  An
-    # interrupted rebind therefore cannot retain old comparison bindings or
-    # superseded shards and masquerade as a complete current run.
-    _atomic_json(EVAL_MANIFEST, manifest)
-    pending = []
-    for chapter in chosen:
-        key = current_keys[chapter]
-        old = manifest["shards"].get(key)
-        complete = old and Path(old["path"]).is_file() and _sha256(Path(old["path"])) == old["sha256"]
-        if resume and complete:
-            print(f"{chapter}: resume skip cases={old['cases']} errors={old['engine_errors']}", flush=True)
+    run_identity_sha256 = _run_identity_sha256(run_identity)
+    with _eval_manifest_lock():
+        if fresh:
+            generation_id = _new_eval_generation_id()
+            manifest = _empty_eval_manifest(run_identity, generation_id)
         else:
+            existing = _load_manifest()
+            generation_id = existing.get("generation_id")
+            if (
+                existing.get("run_identity") != run_identity
+                or existing.get("run_identity_sha256") != run_identity_sha256
+                or not _valid_eval_generation_id(generation_id)
+            ):
+                generation_id = _new_eval_generation_id()
+            current_keys = _current_shard_keys(run_identity, generation_id)
+            manifest = _prepare_eval_manifest(
+                existing, current_keys, run_identity, generation_id
+            )
+        current_keys = _current_shard_keys(run_identity, generation_id)
+        declared_chapters = sorted(current_keys)
+        chosen = sorted(set(chapters or declared_chapters))
+        _require(
+            set(chosen) <= set(declared_chapters),
+            f"unknown chapters: {sorted(set(chosen) - set(declared_chapters))}",
+        )
+        pending = []
+        resume_skips = []
+        for chapter in chosen:
+            key = current_keys[chapter]
+            old = manifest["shards"].get(key)
+            complete = (
+                old
+                and Path(old["path"]).is_file()
+                and _sha256(Path(old["path"])) == old["sha256"]
+            )
+            if resume and complete:
+                resume_skips.append(old)
+                continue
+            # A chapter being recomputed is absent before the worker starts.
+            # Comparison can never mistake the previous receipt for the
+            # output of an in-flight or interrupted non-fresh invocation.
+            manifest["shards"].pop(key, None)
             pending.append(chapter)
+        # Commit the invalidation before launching any engine process.  An
+        # interrupted rebind therefore cannot retain old comparison bindings
+        # or superseded shards and masquerade as a complete current run.
+        _atomic_json(EVAL_MANIFEST, manifest)
+    cache = cache_dir or CACHE_ROOT / "eval"
+    for old in resume_skips:
+        print(f"{old['chapter']}: resume skip cases={old['cases']} "
+              f"errors={old['engine_errors']}", flush=True)
     campaign_started = time.perf_counter()
     finished = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(_evaluate_chapter, chapter, rulespec_root=rulespec_root,
-                               engine_binary=engine_binary, cache_dir=cache): chapter for chapter in pending}
+                               engine_binary=engine_binary, cache_dir=cache,
+                               run_identity=run_identity,
+                               generation_id=generation_id,
+                               expected_key=current_keys[chapter]): chapter
+                   for chapter in pending}
         for future in concurrent.futures.as_completed(futures):
             receipt = future.result()
             _require(
-                receipt.get("key") == current_keys.get(receipt.get("chapter")),
+                receipt.get("key") == current_keys.get(receipt.get("chapter"))
+                and receipt.get("run_identity_sha256") == run_identity_sha256
+                and receipt.get("generation_id") == generation_id,
                 f"evaluation returned a non-current shard: {receipt.get('chapter')}",
             )
-            manifest["shards"][receipt["key"]] = receipt
-            _atomic_json(EVAL_MANIFEST, manifest)
+            with _eval_manifest_lock():
+                _require(
+                    _current_run_identity(
+                        rulespec_root=rulespec_root, engine_binary=engine_binary
+                    ) == run_identity,
+                    "evaluation producers changed while the campaign was running",
+                )
+                published = _load_manifest()
+                _require(
+                    published.get("run_identity") == run_identity
+                    and published.get("run_identity_sha256") == run_identity_sha256
+                    and published.get("generation_id") == generation_id,
+                    "evaluation manifest was replaced by another run",
+                )
+                manifest = _prepare_eval_manifest(
+                    published, current_keys, run_identity, generation_id
+                )
+                manifest["shards"][receipt["key"]] = receipt
+                _atomic_json(EVAL_MANIFEST, manifest)
             finished += 1
             elapsed = time.perf_counter() - campaign_started
             eta = elapsed / finished * (len(pending) - finished) if finished else 0
@@ -904,14 +1396,33 @@ def evaluate_campaign(*, rulespec_root: Path, engine_binary: Path, workers: int,
 
 def _iter_eval_records(manifest: dict[str, Any]) -> Iterator[dict[str, Any]]:
     seen_chapters = set()
-    for shard in sorted(manifest["shards"].values(), key=lambda item: item["chapter"]):
+    run_identity_sha256 = manifest.get("run_identity_sha256")
+    generation_id = manifest.get("generation_id")
+    _require(_valid_eval_generation_id(generation_id),
+             "evaluation manifest generation id is malformed")
+    for key, shard in sorted(
+        manifest["shards"].items(), key=lambda item: item[1]["chapter"]
+    ):
+        _require(
+            shard.get("key") == key
+            and shard.get("run_identity_sha256") == run_identity_sha256
+            and shard.get("generation_id") == generation_id,
+            f"invalid shard identity {key}",
+        )
         path = Path(shard["path"])
         _require(path.is_file() and _sha256(path) == shard["sha256"], f"invalid shard {shard['key']}")
         _require(shard["chapter"] not in seen_chapters, f"duplicate chapter shard {shard['chapter']}")
         seen_chapters.add(shard["chapter"])
+        records = 0
         with gzip.open(path, "rt") as source:
             for line in source:
-                yield json.loads(line)
+                record = json.loads(line)
+                _require(record.get("chapter") == shard["chapter"],
+                         f"shard {key} contains a foreign chapter record")
+                records += 1
+                yield record
+        _require(records == shard.get("cases"),
+                 f"shard {key} case count does not match its receipt")
 
 
 def _expected_slots(expected: dict[str, str]) -> dict[str, float]:
@@ -953,40 +1464,168 @@ def compare_record(record: dict[str, Any], tolerance: float = TOLERANCE) -> list
     return rows
 
 
-def compare_campaign(*, cache_dir: Path | None = None) -> dict[str, Any]:
+def _require_current_complete_manifest_locked(
+    *, rulespec_root: Path, engine_binary: Path
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    run_identity = _current_run_identity(
+        rulespec_root=rulespec_root.resolve(),
+        engine_binary=engine_binary.resolve(),
+    )
+    run_identity_sha256 = _run_identity_sha256(run_identity)
     manifest = _load_manifest()
-    chapters = {shard["chapter"] for shard in manifest["shards"].values()}
-    expected_chapters = {item["chapter"] for item in json.loads(INPUT_CONTRACT_RECEIPT.read_text())["chapters"]}
-    _require(chapters == expected_chapters, "evaluation manifest is incomplete")
-    evaluation_manifest = _empty_eval_manifest()
+    generation_id = manifest.get("generation_id")
+    _require(_valid_eval_generation_id(generation_id),
+             "evaluation manifest generation id is absent or malformed")
+    current_keys = _current_shard_keys(run_identity, generation_id)
+    _require(
+        manifest.get("run_identity") == run_identity
+        and manifest.get("run_identity_sha256") == run_identity_sha256,
+        "evaluation manifest is bound to a different producer run",
+    )
+    expected_keys = set(current_keys.values())
+    _require(set(manifest["shards"]) == expected_keys,
+             "evaluation manifest is incomplete or contains stale shards")
+    expected_by_key = {key: chapter for chapter, key in current_keys.items()}
+    for key, shard in manifest["shards"].items():
+        _require(
+            isinstance(shard, dict)
+            and shard.get("key") == key
+            and shard.get("chapter") == expected_by_key[key]
+            and shard.get("run_identity_sha256") == run_identity_sha256
+            and shard.get("generation_id") == generation_id,
+            f"evaluation manifest contains a non-current shard identity: {key}",
+        )
+        path = Path(shard.get("path", ""))
+        _require(
+            path.is_file()
+            and isinstance(shard.get("sha256"), str)
+            and _sha256(path) == shard["sha256"],
+            f"evaluation manifest contains an invalid shard artifact: {key}",
+        )
+    evaluation_manifest = _empty_eval_manifest(run_identity, generation_id)
     evaluation_manifest["shards"] = manifest["shards"]
+    return manifest, evaluation_manifest, run_identity
+
+
+def _require_current_complete_manifest(
+    *, rulespec_root: Path, engine_binary: Path
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    with _eval_manifest_lock():
+        return _require_current_complete_manifest_locked(
+            rulespec_root=rulespec_root, engine_binary=engine_binary
+        )
+
+
+def _load_bound_comparison_locked(
+    *, rulespec_root: Path, engine_binary: Path
+) -> dict[str, Any]:
+    manifest, evaluation_manifest, run_identity = _require_current_complete_manifest_locked(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
+    )
+    _require(COMPARISON_RECEIPT.is_file(), "comparison receipt is missing")
+    comparison_receipt = _file_receipt(COMPARISON_RECEIPT, relative_to=REPO_ROOT)
+    _require(
+        manifest.get("comparison_receipt") == comparison_receipt,
+        "evaluation manifest comparison-receipt binding is absent or stale",
+    )
+    comparison = json.loads(COMPARISON_RECEIPT.read_text())
+    evaluation_sha256 = _canonical_sha256(evaluation_manifest)
+    _require(comparison.get("schema") == COMPARISON_SCHEMA,
+             "comparison receipt schema is stale")
+    _require(
+        comparison.get("run_identity_sha256")
+        == _run_identity_sha256(run_identity)
+        and comparison.get("generation_id")
+        == evaluation_manifest["generation_id"]
+        and comparison.get("evaluation_manifest_sha256") == evaluation_sha256,
+        "comparison receipt evaluation binding is stale",
+    )
+    artifact = comparison.get("comparison_artifact")
+    _require(isinstance(artifact, dict) and isinstance(artifact.get("path"), str),
+             "comparison artifact receipt is malformed")
+    artifact_path = Path(artifact["path"])
+    _require(artifact_path.is_file(), "comparison artifact is missing")
+    actual_artifact = _file_receipt(artifact_path)
+    _require(artifact == actual_artifact,
+             "comparison artifact receipt is stale")
+    _require(manifest.get("comparison_artifact") == artifact,
+             "evaluation manifest comparison-artifact binding is absent or stale")
+    return comparison
+
+
+def _load_bound_comparison(
+    *, rulespec_root: Path, engine_binary: Path
+) -> dict[str, Any]:
+    with _eval_manifest_lock():
+        return _load_bound_comparison_locked(
+            rulespec_root=rulespec_root, engine_binary=engine_binary
+        )
+
+
+def compare_campaign(
+    *,
+    rulespec_root: Path = RULESPEC_US_ROOT,
+    engine_binary: Path = DEFAULT_ENGINE_BINARY,
+    cache_dir: Path | None = None,
+) -> dict[str, Any]:
+    with _eval_manifest_lock():
+        return _compare_campaign_locked(
+            rulespec_root=rulespec_root,
+            engine_binary=engine_binary,
+            cache_dir=cache_dir,
+        )
+
+
+def _compare_campaign_locked(
+    *,
+    rulespec_root: Path,
+    engine_binary: Path,
+    cache_dir: Path | None,
+) -> dict[str, Any]:
+    _manifest, evaluation_manifest, run_identity = _require_current_complete_manifest_locked(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
+    )
+    # Clear any old downstream binding before producing a replacement.  A
+    # crash anywhere below leaves a complete but deliberately unbound run.
+    _atomic_json(EVAL_MANIFEST, evaluation_manifest)
     counts: dict[str, Counter[str]] = {}
-    digest = hashlib.sha256(_render(evaluation_manifest).encode()).hexdigest()
+    digest = _canonical_sha256(evaluation_manifest)
     output = (cache_dir or CACHE_ROOT / "compare") / digest[:2] / f"{digest}.jsonl.gz"
     output.parent.mkdir(parents=True, exist_ok=True)
     engine_errors = 0
     with tempfile.NamedTemporaryFile("wb", dir=output.parent, delete=False) as raw:
         temporary = Path(raw.name)
         with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as zipped:
-            for record in _iter_eval_records(manifest):
+            for record in _iter_eval_records(evaluation_manifest):
                 for comparison in compare_record(record):
                     slot = comparison["slot"]
                     counts.setdefault(slot, Counter())["match" if comparison["match"] else "mismatch"] += 1
                     engine_errors += slot == "engine_error"
                     zipped.write((json.dumps(comparison, sort_keys=True, separators=(",", ":")) + "\n").encode())
     temporary.replace(output)
-    receipt = {"schema": "axiom_oracles.us_tariff_schedule.comparison_summary.v1",
-               "tolerance": TOLERANCE, "comparison_artifact": {"path": str(output), "sha256": _sha256(output)},
+    receipt = {"schema": COMPARISON_SCHEMA,
+               "run_identity_sha256": _run_identity_sha256(run_identity),
+               "generation_id": evaluation_manifest["generation_id"],
+               "evaluation_manifest_sha256": digest,
+               "tolerance": TOLERANCE,
+               "comparison_artifact": _file_receipt(output),
                "per_slot": {slot: dict(counter) for slot, counter in sorted(counts.items())},
                "engine_errors": engine_errors}
     _atomic_json(COMPARISON_RECEIPT, receipt)
-    evaluation_manifest["comparison_artifact"] = {
-        "sha256": receipt["comparison_artifact"]["sha256"]
-    }
-    evaluation_manifest["comparison_receipt"] = {
-        "path": str(COMPARISON_RECEIPT.relative_to(REPO_ROOT)),
-        "sha256": _sha256(COMPARISON_RECEIPT),
-    }
+    _published, current_evaluation_manifest, current_identity = (
+        _require_current_complete_manifest_locked(
+            rulespec_root=rulespec_root, engine_binary=engine_binary
+        )
+    )
+    _require(
+        current_evaluation_manifest == evaluation_manifest
+        and current_identity == run_identity,
+        "evaluation manifest changed during comparison",
+    )
+    evaluation_manifest["comparison_artifact"] = receipt["comparison_artifact"]
+    evaluation_manifest["comparison_receipt"] = _file_receipt(
+        COMPARISON_RECEIPT, relative_to=REPO_ROOT
+    )
     _atomic_json(EVAL_MANIFEST, evaluation_manifest)
     return receipt
 
@@ -1308,7 +1947,7 @@ def _enforce_preview_selector_population(
     signature_classes: dict[str, str | None],
     counts: Counter[str],
 ) -> None:
-    """Require each active expiring selector to be absent or snapshot-exact."""
+    """Require every still-active expiring selector to remain snapshot-exact."""
 
     selected: dict[str, list[tuple[str, int]]] = {
         selector_id: [] for selector_id in contract
@@ -1318,12 +1957,6 @@ def _enforce_preview_selector_population(
             selected[selector_id].append((signature, counts[signature]))
     for selector_id, expected in contract.items():
         population = selected[selector_id]
-        # ``expires_on_source_change`` permits one transition: the historical
-        # population may disappear completely after a RuleSpec fix.  Any
-        # partial survival or substitution still expires the snapshot and must
-        # be reviewed against newly receipted evidence.
-        if not population:
-            continue
         actual_units = sum(units for _, units in population)
         _require(
             actual_units == expected["expected_units"],
@@ -1347,9 +1980,20 @@ def _enforce_retired_preview_selectors_absent(
     retired: dict[str, dict[str, Any]],
     observed: dict[str, dict[str, Any]],
     counts: Counter[str],
+    *,
+    engine_errors: int,
 ) -> None:
     """Prove that every preview selector removed from the ledger is absent."""
 
+    _require(
+        not retired
+        or (
+            isinstance(engine_errors, int)
+            and not isinstance(engine_errors, bool)
+            and engine_errors == 0
+        ),
+        "retired preview selector absence cannot be proven with engine errors",
+    )
     for selector_id, snapshot in retired.items():
         population = [
             (signature, counts[signature])
@@ -1372,8 +2016,10 @@ def _classification_inputs(
     comparison_sha = artifact.get("sha256")
     _require(isinstance(comparison_sha, str) and re.fullmatch(r"[0-9a-f]{64}", comparison_sha),
              "comparison artifact hash is malformed")
+    _require(COMPARISON_RECEIPT.is_file(), "comparison receipt is missing")
     return {
         "comparison_artifact_sha256": comparison_sha,
+        "comparison_receipt_sha256": _sha256(COMPARISON_RECEIPT),
         "disposition_ledger_sha256": _sha256(disposition_ledger),
         "preview_disposition_receipt_sha256": _sha256(PREVIEW_DISPOSITION_LINE_SETS),
         "preview_disposition_payload_sha256": preview["receipt_payload_sha256"],
@@ -1381,9 +2027,7 @@ def _classification_inputs(
 
 
 def _classification_sidecar_path(inputs: dict[str, str]) -> Path:
-    digest = hashlib.sha256((
-        inputs["comparison_artifact_sha256"] + inputs["disposition_ledger_sha256"]
-    ).encode()).hexdigest()
+    digest = _canonical_sha256(inputs)
     return CACHE_ROOT / "classify" / digest[:2] / f"{digest}.jsonl.gz"
 
 
@@ -1690,7 +2334,7 @@ def _validate_classification_handoff(
     )
     _require(
         all(
-            class_census.get(selector_id, 0) in {0, selector["expected_units"]}
+            class_census.get(selector_id, 0) == selector["expected_units"]
             for selector_id, selector in preview_contract.items()
         ),
         "classification receipt preview-selector census is stale",
@@ -1768,7 +2412,10 @@ def _validate_classification_handoff(
         preview_contract, sidecar_signature_classes, sidecar_signature_counts
     )
     _enforce_retired_preview_selectors_absent(
-        retired_preview_contract, sidecar_observed, sidecar_signature_counts
+        retired_preview_contract,
+        sidecar_observed,
+        sidecar_signature_counts,
+        engine_errors=rederived["engine_errors"],
     )
     for field, expected in rederived.items():
         _require(classification.get(field) == expected,
@@ -1959,9 +2606,32 @@ def matching_class_id(signature: str, unit: dict[str, Any], selectors: list[dict
     return matches[0] if matches else None
 
 
-def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
-                      entries_override: list[dict[str, Any]] | None = None) -> dict[str, Any]:
-    comparison = json.loads(COMPARISON_RECEIPT.read_text())
+def classify_campaign(
+    *,
+    rulespec_root: Path = RULESPEC_US_ROOT,
+    engine_binary: Path = DEFAULT_ENGINE_BINARY,
+    disposition_ledger: Path = DISPOSITION_LEDGER,
+    entries_override: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    with _eval_manifest_lock():
+        return _classify_campaign_locked(
+            rulespec_root=rulespec_root,
+            engine_binary=engine_binary,
+            disposition_ledger=disposition_ledger,
+            entries_override=entries_override,
+        )
+
+
+def _classify_campaign_locked(
+    *,
+    rulespec_root: Path,
+    engine_binary: Path,
+    disposition_ledger: Path,
+    entries_override: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    comparison = _load_bound_comparison_locked(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
+    )
     artifact = Path(comparison["comparison_artifact"]["path"])
     _require(_sha256(artifact) == comparison["comparison_artifact"]["sha256"], "comparison artifact hash mismatch")
     observed: dict[str, dict[str, Any]] = {}
@@ -2012,7 +2682,8 @@ def classify_campaign(*, disposition_ledger: Path = DISPOSITION_LEDGER,
     if preview_contract is not None:
         _enforce_preview_selector_population(preview_contract, signature_classes, counts)
         _enforce_retired_preview_selectors_absent(
-            retired_preview_contract or {}, observed, counts
+            retired_preview_contract or {}, observed, counts,
+            engine_errors=engine_errors,
         )
     census: Counter[str] = Counter()
     derived_total_compositions: Counter[str] = Counter()
@@ -2116,8 +2787,24 @@ def computed_conformant(*, unexplained: int, engine_errors: int) -> bool:
     return unexplained == 0 and engine_errors == 0
 
 
-def build_report() -> dict[str, Any]:
-    comparison = json.loads(COMPARISON_RECEIPT.read_text())
+def build_report(
+    *,
+    rulespec_root: Path = RULESPEC_US_ROOT,
+    engine_binary: Path = DEFAULT_ENGINE_BINARY,
+) -> dict[str, Any]:
+    with _eval_manifest_lock():
+        return _build_report_locked(
+            rulespec_root=rulespec_root,
+            engine_binary=engine_binary,
+        )
+
+
+def _build_report_locked(
+    *, rulespec_root: Path, engine_binary: Path
+) -> dict[str, Any]:
+    comparison = _load_bound_comparison_locked(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
+    )
     classification = json.loads(CLASSIFICATION_RECEIPT.read_text())
     quotient = json.loads((OUT_DIR / "quotient-receipt.json").read_text())
     routing = json.loads(ROUTING_RECEIPT.read_text())
@@ -2234,6 +2921,7 @@ def main() -> int:
             "For a RuleSpec rebind, export RULESPEC_US_CHECKOUT before starting "
             "this process; disposition incidence tables are bound at import time. "
             "Example: RULESPEC_US_CHECKOUT=/path/to/rulespec-us "
+            "python scripts/us_tariff_schedule_campaign.py input-contract && "
             "python scripts/us_tariff_schedule_campaign.py evaluate --fresh"
         )
     )
@@ -2242,7 +2930,7 @@ def main() -> int:
     parser.add_argument("--rulespec-root", type=Path,
                         default=RULESPEC_US_ROOT)
     parser.add_argument("--engine-binary", type=Path,
-                        default=Path("/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"))
+                        default=DEFAULT_ENGINE_BINARY)
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--chapters", help="comma-separated chapters, for example CH01,CH72")
     parser.add_argument("--resume", action="store_true")
@@ -2269,13 +2957,22 @@ def main() -> int:
         print(_render(receipt), end="")
         return 0
     if args.stage == "compare":
-        print(_render(compare_campaign()), end="")
+        print(_render(compare_campaign(
+            rulespec_root=args.rulespec_root.resolve(),
+            engine_binary=args.engine_binary.resolve(),
+        )), end="")
         return 0
     if args.stage == "classify":
-        print(_render(classify_campaign()), end="")
+        print(_render(classify_campaign(
+            rulespec_root=args.rulespec_root.resolve(),
+            engine_binary=args.engine_binary.resolve(),
+        )), end="")
         return 0
     if args.stage == "report":
-        print(_render(build_report()), end="")
+        print(_render(build_report(
+            rulespec_root=args.rulespec_root.resolve(),
+            engine_binary=args.engine_binary.resolve(),
+        )), end="")
         return 0
     if args.stage == "witness-replay":
         print(_render(witness_replay(execute=True)), end="")
