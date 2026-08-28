@@ -3229,3 +3229,163 @@ entries:
       equals: -142.0
       tolerance: 15
   expires_on_source_change: true
+- id: taxsim-co-credit-stack-vintage-intersection-lane
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135519
+    - ecps-tax-unit-135614
+    - ecps-tax-unit-135698
+    - ecps-tax-unit-135881
+    - ecps-tax-unit-136212
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-136327
+    - ecps-tax-unit-136384
+    - ecps-tax-unit-136390
+    - ecps-tax-unit-136399
+    - ecps-tax-unit-136428
+    - ecps-tax-unit-136429
+    - ecps-tax-unit-136461
+    - ecps-tax-unit-136463
+    - ecps-tax-unit-136470
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-154504
+    - ecps-tax-unit-154519
+    - ecps-tax-unit-154577
+    - ecps-tax-unit-154579
+    - ecps-tax-unit-154724
+    - ecps-tax-unit-154973
+    - ecps-tax-unit-155073
+    - ecps-tax-unit-155340
+    - ecps-tax-unit-155406
+    - ecps-tax-unit-155431
+    - ecps-tax-unit-155678
+    - ecps-tax-unit-156147
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156651
+    - ecps-tax-unit-156922
+    - ecps-tax-unit-157013
+    - ecps-tax-unit-157317
+    - ecps-tax-unit-157637
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158219
+    - ecps-tax-unit-158403
+    - ecps-tax-unit-158573
+    - ecps-tax-unit-158993
+    - ecps-tax-unit-159221
+    - ecps-tax-unit-159366
+    - ecps-tax-unit-160366
+    - ecps-tax-unit-161153
+    - ecps-tax-unit-161870
+    - ecps-tax-unit-161979
+    - ecps-tax-unit-162440
+    - ecps-tax-unit-163020
+    - ecps-tax-unit-163066
+    - ecps-tax-unit-164195
+    - ecps-tax-unit-164248
+    - ecps-tax-unit-164548
+    - ecps-tax-unit-164633
+    - ecps-tax-unit-58423
+    - ecps-tax-unit-58645
+    - ecps-tax-unit-58658
+    - ecps-tax-unit-58697
+    - ecps-tax-unit-58712
+    - ecps-tax-unit-58784
+    - ecps-tax-unit-58790
+    - ecps-tax-unit-58903
+    - ecps-tax-unit-58942
+    - ecps-tax-unit-58950
+    - ecps-tax-unit-59063
+    - ecps-tax-unit-59070
+    - ecps-tax-unit-59074
+    - ecps-tax-unit-59089
+    - ecps-tax-unit-59091
+    - ecps-tax-unit-59131
+    - ecps-tax-unit-59145
+    - ecps-tax-unit-59151
+    - ecps-tax-unit-59166
+    - ecps-tax-unit-59203
+    - ecps-tax-unit-59214
+    - ecps-tax-unit-59247
+    - ecps-tax-unit-59264
+    - ecps-tax-unit-59316
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence in Colorado''s credit stack,
+      the same
+
+      mechanism and proof standard as taxsim-co-refundable-credit-vintage in
+
+      co-state-income-tax-taxsim: on every selected row axiom and PolicyEngine
+
+      agree on Colorado liability (the tax unit is absent from the complete
+
+      31-row axiom-vs-PE mismatch set of
+
+      dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json over
+
+      the same 1,201-unit population), while TAXSIM departs. The pinned binary''s
+
+      idtl=2 decomposition locates the divergence in TAXSIM''s state credit
+
+      columns (sctc family-affordability/CTC and sptcr; e.g. sctc 2,528.67 on
+
+      ecps-tax-unit-58696) plus a before-credits component on units whose federal
+
+      taxable income carries the dispositioned QBID rental-convention gap
+
+      (Colorado starts from federal taxable income, so -400.00 x 0.044 = -17.60
+
+      flows through). Deltas are heterogeneous because the credit stack varies
+
+      per household; the per-row proof is the axiom==PolicyEngine agreement. The
+
+      seven units where that triangulation FAILS (the documented
+
+      co-state-open-rows-axiom-pe-divergent class) are excluded and stay raw.'
+    arithmetic:
+    - expression: -400.00 * 0.044
+      equals: -17.6
+      tolerance: 0.01
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: co-intersection-state-open-rows-axiom-pe-divergent
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135552
+    - ecps-tax-unit-135799
+    - ecps-tax-unit-135880
+    - ecps-tax-unit-136208
+    - ecps-tax-unit-136404
+    - ecps-tax-unit-58696
+    - ecps-tax-unit-59285
+  disposition: unexplained
+  evidence:
+    mechanism: 'Documented open investigation, mirroring co-state-open-rows-axiom-pe-divergent
+
+      in co-state-income-tax-taxsim: these are exactly the units where the
+
+      credit-stack triangulation FAILS because the unit appears in the 31-row
+
+      axiom-vs-PolicyEngine mismatch set for the same 1,201-unit population, so
+
+      axiom''s own Colorado value is not independently corroborated and the TAXSIM
+
+      residual cannot be attributed to TAXSIM. Known TAXSIM-side ingredients
+
+      (childless-EITC coupling, mstat=1-with-dependents auto-HoH projection,
+
+      auto-itemized state income tax) are catalogued in the sibling entry; these
+
+      rows stay unexplained until the axiom-vs-PolicyEngine divergence on these
+
+      units is closed, which makes the triangulation decidable.'
+    arithmetic:
+    - expression: 31 - 31
+      equals: 0
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
