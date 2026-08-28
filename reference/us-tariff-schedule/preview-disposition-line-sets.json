@@ -12853,9 +12853,9 @@
   },
   "producer": {
     "campaign_classifier": {
-      "bytes": 137457,
+      "bytes": 137569,
       "path": "scripts/us_tariff_schedule_campaign.py",
-      "sha256": "16df5ab2c9a96f7ca4ddb4f217b94a850c1231761a4b23465b82bc3eed2390f4"
+      "sha256": "6b104e985f0c2cd53137a5a61ca452279f17d57e9d6ee9bbd82da3eeba387454"
     },
     "script": {
       "bytes": 38288,
@@ -12863,7 +12863,7 @@
       "sha256": "65129b397e50471d8c686e74e0b3b2230e764075e9202bd595eace835fe8e420"
     }
   },
-  "receipt_payload_sha256": "07af464b836c5a7facca166a15999aa1f8673e1d976e1d5925df962dad3f4b97",
+  "receipt_payload_sha256": "5d481b1447e11166a6f1e7ac76fbd19f53bda0a4951ef39703e0fd8f23957b15",
   "schema": "axiom_oracles.us_tariff_schedule.preview_disposition_line_sets.v1",
   "selectors": [
     {

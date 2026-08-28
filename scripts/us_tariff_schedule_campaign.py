@@ -112,7 +112,9 @@ ENTRY_FLAG_ALIASES = {
 NEUTRAL_BOOLEAN_INPUTS = (
     "article_is_potash", "cbp_agrees_chapter_98_entry_is_appropriate",
     "entry_is_9802_excepted_entry", "entry_is_chapter_98_subchapter_xxiii_entry",
+    "entry_is_entered_free_of_duty_under_dr_cafta",
     "entry_is_entered_free_of_duty_under_usmca",
+    "entry_is_general_note_29_d_v_textile_or_apparel_good",
     "entry_is_humanitarian_donation_article", "entry_is_informational_material_article",
     "entry_is_personal_use_accompanied_baggage",
     "entry_is_properly_claimed_chapter_98_entry", "entry_is_usmca_duty_free_entry",

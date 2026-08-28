@@ -206,6 +206,18 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
     assert feed["entry_is_brazil_301_listed"] is True
 
 
+def test_case_feed_receipts_dr_cafta_inputs_as_neutral_false() -> None:
+    feed, _flags = _case_feed(
+        {"hts10": "0102294024", "iso2": "CR"},
+        {"hts_line": "102294000"},
+        lambda _line, _hts, _iso2: {},
+    )
+    assert feed["entry_is_entered_free_of_duty_under_dr_cafta"] is False
+    assert (
+        feed["entry_is_general_note_29_d_v_textile_or_apparel_good"] is False
+    )
+
+
 def test_prepare_eval_manifest_prunes_superseded_keys_and_bindings() -> None:
     run_identity = _fake_run_identity(chapters=("01", "02"))
     run_identity_sha256 = campaign_module._run_identity_sha256(run_identity)
