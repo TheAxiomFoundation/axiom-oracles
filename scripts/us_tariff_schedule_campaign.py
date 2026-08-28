@@ -418,7 +418,7 @@ def canonicalize_entry_flags(
     flags = {
         name: value
         for name, value in raw_flags.items()
-        if name.startswith("entry_is_")
+        if name.startswith(("entry_is_", "entry_qualifies_"))
     }
     malformed = sorted(name for name, value in flags.items() if type(value) is not bool)
     _require(not malformed, f"entry flags must be boolean: {malformed}")

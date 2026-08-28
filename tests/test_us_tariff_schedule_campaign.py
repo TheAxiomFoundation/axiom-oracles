@@ -155,12 +155,14 @@ def test_entry_flag_aliases_canonicalize_when_equal() -> None:
         "entry_is_forced_labor_301": False,
         "entry_is_forced_labor_301_listed": False,
         "entry_is_section_232_covered": True,
+        "entry_qualifies_for_note39_heading_9903_79_01": False,
     }
     flags, aliases = canonicalize_entry_flags(raw)
     assert aliases == tuple(sorted(ENTRY_FLAG_ALIASES))
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert flags["entry_is_brazil_301_listed"] is True
     assert flags["entry_is_forced_labor_301_listed"] is False
+    assert flags["entry_qualifies_for_note39_heading_9903_79_01"] is False
 
 
 def test_entry_flag_alias_disagreement_fails_closed() -> None:
