@@ -2,9 +2,10 @@
 """Build exact, fail-closed disposition line sets for the PR #1311 preview.
 
 The receipt is campaign-local.  It derives every selector from the pinned
-preview mismatch artifacts, replays the source-backed Section 232 precedence
-from ``unmapped-cause-audit-receipt.json``, and validates conservation using
-the campaign classifier's signature aggregation (not merely row by row).
+preview mismatch artifacts, applies the maintainer-ratified statutory-authority
+precedence over the source taxonomy in ``unmapped-cause-audit-receipt.json``,
+and validates conservation using the campaign classifier's signature
+aggregation (not merely row by row).
 
 The current campaign signature intentionally receives special scrutiny:
 selectors are evaluated on the first exemplar for each mismatch signature,
@@ -19,6 +20,7 @@ import csv
 import gzip
 import hashlib
 import json
+import math
 import subprocess
 import sys
 import tempfile
@@ -31,6 +33,8 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+PRODUCER_SOURCE = Path(__file__).resolve()
+CAMPAIGN_SOURCE = REPO_ROOT / "scripts/us_tariff_schedule_campaign.py"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -40,6 +44,7 @@ from scripts import us_tariff_schedule_campaign as campaign  # noqa: E402
 PREVIEW = REPO_ROOT / "reference/us-tariff-schedule/preview-1311"
 TARGET_MISMATCH = PREVIEW / "target-mismatch-cells.jsonl.gz"
 NEW_MISMATCH = PREVIEW / "new-mismatch-cells.jsonl.gz"
+SELECTED_INTERVALS = REPO_ROOT / "reference/us-tariff-schedule/selected-intervals.csv.gz"
 OLD_RECEIPT = PREVIEW / "old-residual-taxonomy-receipt.json"
 TAXONOMY_RECEIPT = PREVIEW / "mismatch-taxonomy-receipt.json"
 UNMAPPED_RECEIPT = PREVIEW / "unmapped-cause-audit-receipt.json"
@@ -55,6 +60,7 @@ IN_SCOPE_ANNEX_TIERS = frozenset(
 EXPECTED_HASHES = {
     TARGET_MISMATCH: "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705",
     NEW_MISMATCH: "7e26a7e746abd4d033b8dcc6b7d95efcece45b1405ac84238011500c84bbe029",
+    SELECTED_INTERVALS: "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826",
     OLD_RECEIPT: "b4f9d26d5a800cf1b0e6e50c6b3935ee18b24ca55bbcc5eecf9e10ab8f829bea",
     TAXONOMY_RECEIPT: "3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de",
     UNMAPPED_RECEIPT: "4572f1a121848337bcd0ea797c09e771fc55a3e0efaeb79c195979ddb5a5e29e",
@@ -67,40 +73,36 @@ EXPECTED_SELECTOR_UNITS = {
     "pharma-utilization-proxy-forced-labor-non035": 67_430,
     "pharma-utilization-proxy-forced-labor-035": 988,
     "yale-parser-zero-statutory-base": 68,
-    "yale-zero-aircraft-brazil": 414,
-    "yale-zero-aircraft-forced-labor": 40_392,
     "yale-zero-pharma-brazil": 84,
     "yale-zero-pharma-forced-labor": 1_058,
     "cafta-52i-deferred": 17_404,
-    "section232-exposed-brazil": 8_826,
-    "section232-exposed-forced-labor": 110_856,
-    "section232-annex-brazil": 2_346,
-    "section232-annex-forced-labor": 31_488,
-    "section232-heading-brazil": 2_334,
-    "section232-heading-forced-labor": 30_104,
+    "section232-exposed-brazil": 9_096,
+    "section232-exposed-forced-labor": 138_340,
+    "section232-annex-brazil": 2_478,
+    "section232-annex-forced-labor": 41_412,
+    "section232-heading-brazil": 2_370,
+    "section232-heading-forced-labor": 33_088,
     "chapter98-brazil": 6,
     "chapter98-forced-labor": 1_508,
-    "yale-hts8-broadening-brazil": 120,
+    "yale-hts8-broadening-brazil": 96,
 }
 
 EXPECTED_LOGICAL_UNITS = {
     "aircraft-utilization-proxy": 74_822,
     "pharma-utilization-proxy": 73_500,
     "yale-parser-zero-statutory-base": 68,
-    "yale-zero-aircraft-conditional": 40_806,
     "yale-zero-pharma-conditional": 1_142,
     "cafta-52i-deferred": 17_404,
-    "section232-exposed-unconsumed": 119_682,
-    "section232-annex-membership": 33_834,
-    "section232-heading-program": 32_438,
+    "section232-exposed-unconsumed": 147_436,
+    "section232-annex-membership": 43_890,
+    "section232-heading-program": 35_458,
     "chapter98-handling": 1_514,
-    "yale-hts8-broadening": 120,
+    "yale-hts8-broadening": 96,
 }
 EXPECTED_LOGICAL_RULINGS = {
     "aircraft-utilization-proxy": ("explained_residual", "reference-behavior"),
     "pharma-utilization-proxy": ("explained_residual", "reference-behavior"),
     "yale-parser-zero-statutory-base": ("upstream_engine_gap", "reference-defect"),
-    "yale-zero-aircraft-conditional": ("explained_residual", "reference-behavior"),
     "yale-zero-pharma-conditional": ("explained_residual", "reference-behavior"),
     "cafta-52i-deferred": ("axiom_encoding_gap", "axiom-attributed-open"),
     "section232-exposed-unconsumed": ("axiom_encoding_gap", "axiom-attributed-open"),
@@ -109,6 +111,12 @@ EXPECTED_LOGICAL_RULINGS = {
     "chapter98-handling": ("explained_residual", "reference-behavior"),
     "yale-hts8-broadening": ("upstream_engine_gap", "reference-defect"),
 }
+EXPECTED_STATUTORY_PRECEDENCE_OVERRIDES = {
+    "yale-hts8-broadening": 24,
+    "yale-zero-aircraft": 40_806,
+}
+EXPECTED_SECTION232_UNITS = 226_784
+EXPECTED_AXIOM_OPEN_UNITS = 244_188
 
 
 def require(condition: bool, message: str) -> None:
@@ -146,6 +154,15 @@ def input_receipt(path: Path) -> dict[str, Any]:
     actual = sha256(path)
     require(actual == EXPECTED_HASHES[path], f"preview input hash drift: {path}: {actual}")
     return {"path": relative(path), "bytes": path.stat().st_size, "sha256": actual}
+
+
+def source_receipt(path: Path) -> dict[str, Any]:
+    require(path.is_file(), f"missing producer source: {path}")
+    return {
+        "path": relative(path),
+        "bytes": path.stat().st_size,
+        "sha256": sha256(path),
+    }
 
 
 def normalize_code(value: str) -> str:
@@ -280,6 +297,68 @@ def record_key(row: dict[str, Any]) -> tuple[str, str, str]:
     return row["case_id"], row["probe"], row["slot"]
 
 
+def mismatch_interval_key(row: dict[str, Any]) -> tuple[str, ...]:
+    context = row["context"]
+    return (
+        context["hts10"],
+        context["iso2"],
+        context["revision"],
+        context["interval"][0],
+        context["interval"][1],
+        context["origin_regime"],
+    )
+
+
+def selected_interval_key(row: dict[str, str]) -> tuple[str, ...]:
+    return (
+        row["hts10"],
+        row["iso2"],
+        row["revision"],
+        row["clipped_from"],
+        row["clipped_until"],
+        row["origin_regime"],
+    )
+
+
+def selected_rate_join() -> tuple[
+    dict[tuple[str, ...], tuple[float, float, float]], dict[str, Any]
+]:
+    """Join every new mismatch interval to its unique selected-panel rates."""
+
+    needed: set[tuple[str, ...]] = set()
+    with gzip.open(NEW_MISMATCH, "rt") as source:
+        for line in source:
+            needed.add(mismatch_interval_key(json.loads(line)))
+
+    joined: dict[tuple[str, ...], tuple[float, float, float]] = {}
+    duplicates: Counter[tuple[str, ...]] = Counter()
+    rows_scanned = 0
+    with gzip.open(SELECTED_INTERVALS, "rt", newline="") as source:
+        for row in csv.DictReader(source):
+            rows_scanned += 1
+            key = selected_interval_key(row)
+            if key not in needed:
+                continue
+            duplicates[key] += 1
+            joined[key] = (
+                float(row["statutory_rate_232"] or 0),
+                float(row["statutory_rate_s301fl"] or 0),
+                float(row["statutory_rate_s301br"] or 0),
+            )
+    require(set(joined) == needed, "not every new mismatch joined to selected panel")
+    require(max(duplicates.values(), default=0) == 1, "selected-panel join was not unique")
+    return joined, {
+        "key": [
+            "hts10", "iso2", "revision", "clipped_from", "clipped_until",
+            "origin_regime",
+        ],
+        "mismatch_interval_keys": len(needed),
+        "joined_keys": len(joined),
+        "duplicate_selected_keys": sum(count > 1 for count in duplicates.values()),
+        "selected_rows_scanned": rows_scanned,
+    }
+
+
 def near(left: float, right: float) -> bool:
     return abs(left - right) <= TOLERANCE
 
@@ -341,6 +420,79 @@ def signature_audit(
     }
 
 
+def section232_classification(
+    row: dict[str, Any],
+    heading_families: dict[str, set[str]],
+    annex_tier: Any,
+    statutory_rate_232: float,
+) -> tuple[str, str] | None:
+    """Classify positive statutory Note-50/52 authority before Yale causes."""
+
+    require(
+        math.isfinite(statutory_rate_232) and statutory_rate_232 >= 0,
+        "invalid selected-panel statutory_rate_232",
+    )
+    if statutory_rate_232 == 0:
+        return None
+    require(
+        row["slot"] in {"brazil_section_301", "forced_labor_section_301"},
+        f"unexpected preview slot: {row['slot']}",
+    )
+    require(float(row["delta"]) > 0, "statutory Section-232 mismatch must be positive")
+    context = row["context"]
+    code = context["hts10"]
+    slot_suffix = (
+        "brazil" if row["slot"] == "brazil_section_301" else "forced-labor"
+    )
+    if context["flags"].get("entry_is_section_232_covered") is True:
+        return f"section232-exposed-{slot_suffix}", "section232-exposed-unconsumed"
+    tier = annex_tier(code, context["interval"][0])
+    if tier in IN_SCOPE_ANNEX_TIERS:
+        return f"section232-annex-{slot_suffix}", "section232-annex-membership"
+    if any(prefix_hit(code, prefixes) for prefixes in heading_families.values()):
+        return f"section232-heading-{slot_suffix}", "section232-heading-program"
+    raise ValueError(
+        f"positive statutory Section-232 row lacks a grounded subcause: {record_key(row)}"
+    )
+
+
+def classify_new_row(
+    row: dict[str, Any],
+    heading_families: dict[str, set[str]],
+    annex_tier: Any,
+    statutory_rate_232: float,
+) -> tuple[str, str]:
+    """Apply statutory-authority-first precedence to one preview mismatch."""
+
+    section232 = section232_classification(
+        row, heading_families, annex_tier, statutory_rate_232
+    )
+    if section232 is not None:
+        return section232
+
+    taxonomy = row["taxonomy_primary"]
+    context = row["context"]
+    code = context["hts10"]
+    slot_suffix = (
+        "brazil" if row["slot"] == "brazil_section_301" else "forced-labor"
+    )
+    if taxonomy in {"brazil-aircraft", "forced-aircraft"}:
+        raise ValueError(
+            f"Yale-zero aircraft row lacks positive statutory authority: {record_key(row)}"
+        )
+    if taxonomy in {"brazil-pharma", "forced-pharma"}:
+        return f"yale-zero-pharma-{slot_suffix}", "yale-zero-pharma-conditional"
+    if taxonomy == "cafta-52i":
+        return "cafta-52i-deferred", "cafta-52i-deferred"
+    if taxonomy == "unmapped":
+        if row.get("yale_full_list_statistical_broadening"):
+            return "yale-hts8-broadening-brazil", "yale-hts8-broadening"
+        if code.startswith("98"):
+            return f"chapter98-{slot_suffix}", "chapter98-handling"
+        raise ValueError(f"unclassified preview unmapped row: {record_key(row)}")
+    raise ValueError(f"unexpected preview taxonomy: {taxonomy!r}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -352,6 +504,10 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    producer_receipts = {
+        "script": source_receipt(PRODUCER_SOURCE),
+        "campaign_classifier": source_receipt(CAMPAIGN_SOURCE),
+    }
     inputs = {relative(path): input_receipt(path) for path in EXPECTED_HASHES}
     old_receipt = json.loads(OLD_RECEIPT.read_text())
     taxonomy_receipt = json.loads(TAXONOMY_RECEIPT.read_text())
@@ -374,10 +530,16 @@ def main() -> int:
         unmapped_receipt["inputs"]["new_mismatch_cells"]["sha256"] == EXPECTED_HASHES[NEW_MISMATCH],
         "unmapped receipt is not bound to new mismatch artifact",
     )
+    require(
+        unmapped_receipt["inputs"]["selected_intervals"]["sha256"]
+        == EXPECTED_HASHES[SELECTED_INTERVALS],
+        "unmapped receipt is not bound to selected panel",
+    )
 
     heading_families, annex_tier, yale_source_receipt = verify_yale_sources(
         args.yale_root.resolve(), unmapped_receipt
     )
+    selected_rates, selected_join_audit = selected_rate_join()
     parser_pairs = {
         (cell["hts10"], cell["iso2"])
         for cell in old_receipt["mfn_cap_parser_proof"]["cells"]
@@ -390,6 +552,8 @@ def main() -> int:
     new_labels: dict[tuple[str, str, str], str] = {}
     broadening_lines: Counter[tuple[str, str, str, str]] = Counter()
     cafta_origins: Counter[str] = Counter()
+    statutory_precedence_overrides: Counter[str] = Counter()
+    positive_section232_units = 0
 
     def add(selector_id: str, logical_class: str, row: dict[str, Any]) -> None:
         population = populations[selector_id]
@@ -406,49 +570,49 @@ def main() -> int:
             taxonomy = row["taxonomy_primary"]
             context = row["context"]
             code = context["hts10"]
-            slot_suffix = "brazil" if row["slot"] == "brazil_section_301" else "forced-labor"
-            if taxonomy in {"brazil-aircraft", "forced-aircraft"}:
-                logical = "yale-zero-aircraft-conditional"
-                selector_id = f"yale-zero-aircraft-{slot_suffix}"
-            elif taxonomy in {"brazil-pharma", "forced-pharma"}:
-                logical = "yale-zero-pharma-conditional"
-                selector_id = f"yale-zero-pharma-{slot_suffix}"
-            elif taxonomy == "cafta-52i":
-                logical = selector_id = "cafta-52i-deferred"
+            statutory_rate_232, forced_labor_rate, brazil_rate = selected_rates[
+                mismatch_interval_key(row)
+            ]
+            selected_slot_rate = (
+                brazil_rate
+                if row["slot"] == "brazil_section_301"
+                else forced_labor_rate
+            )
+            require(
+                near(selected_slot_rate, float(row["expected"])),
+                f"selected-panel slot rate disagrees with mismatch: {record_key(row)}",
+            )
+            selector_id, logical = classify_new_row(
+                row, heading_families, annex_tier, statutory_rate_232
+            )
+            positive_section232_units += statutory_rate_232 > 0
+            if selector_id == "cafta-52i-deferred":
                 cafta_origins[context["iso2"]] += 1
-            elif taxonomy == "unmapped":
-                broadening = row.get("yale_full_list_statistical_broadening")
+            broadening = row.get("yale_full_list_statistical_broadening")
+            if logical == "yale-hts8-broadening":
+                broadening_lines[(
+                    broadening["yale_hts8"], broadening["legal_hts10"],
+                    code, context["hts_line"],
+                )] += 1
+            if logical.startswith("section232-"):
+                if taxonomy in {"brazil-aircraft", "forced-aircraft"}:
+                    statutory_precedence_overrides["yale-zero-aircraft"] += 1
                 if broadening:
-                    logical = "yale-hts8-broadening"
-                    selector_id = "yale-hts8-broadening-brazil"
-                    broadening_lines[(
-                        broadening["yale_hts8"], broadening["legal_hts10"],
-                        code, context["hts_line"],
-                    )] += 1
-                elif code.startswith("98"):
-                    logical = "chapter98-handling"
-                    selector_id = f"chapter98-{slot_suffix}"
-                elif context["flags"].get("entry_is_section_232_covered"):
-                    logical = "section232-exposed-unconsumed"
-                    selector_id = f"section232-exposed-{slot_suffix}"
-                else:
-                    tier = annex_tier(code, context["interval"][0])
-                    heading_hit = any(prefix_hit(code, prefixes) for prefixes in heading_families.values())
-                    if tier in IN_SCOPE_ANNEX_TIERS:
-                        logical = "section232-annex-membership"
-                        selector_id = f"section232-annex-{slot_suffix}"
-                    elif heading_hit:
-                        logical = "section232-heading-program"
-                        selector_id = f"section232-heading-{slot_suffix}"
-                    else:
-                        raise ValueError(f"unclassified preview unmapped row: {record_key(row)}")
-            else:
-                raise ValueError(f"unexpected preview taxonomy: {taxonomy!r}")
+                    statutory_precedence_overrides["yale-hts8-broadening"] += 1
             require(record_key(row) not in new_labels, f"duplicate new mismatch key: {record_key(row)}")
             new_labels[record_key(row)] = selector_id
             add(selector_id, logical, row)
 
     require(len(new_labels) == 246_940, f"new mismatch row drift: {len(new_labels)}")
+    require(
+        positive_section232_units == EXPECTED_SECTION232_UNITS,
+        "positive statutory Section-232 census drift",
+    )
+    require(
+        dict(sorted(statutory_precedence_overrides.items()))
+        == EXPECTED_STATUTORY_PRECEDENCE_OVERRIDES,
+        "statutory precedence override census drift",
+    )
 
     parser_line_units: Counter[str] = Counter()
 
@@ -534,7 +698,10 @@ def main() -> int:
             "match": {"slot": slot, "line_set": line_set_name, "delta": delta_match},
         })
 
-    require(len(selectors) == 20, f"selector count drift: {len(selectors)}")
+    require(
+        len(selectors) == len(EXPECTED_SELECTOR_UNITS),
+        f"selector count drift: {len(selectors)}",
+    )
 
     row_census: Counter[str] = Counter()
     row_overlaps = 0
@@ -594,11 +761,19 @@ def main() -> int:
     require(dict(sorted(logical_census.items())) == EXPECTED_LOGICAL_UNITS, "logical census drift")
     require(set(logical_census) == set(EXPECTED_LOGICAL_RULINGS), "logical ruling coverage drift")
     require(sum(logical_census.values()) == 395_330, "logical conservation failure")
+    attribution_census = Counter()
+    for selector in selectors:
+        attribution_census[selector["attribution"]] += selector["expected_units"]
+    require(
+        attribution_census["axiom-attributed-open"] == EXPECTED_AXIOM_OPEN_UNITS,
+        "Axiom-attributed-open preview census drift",
+    )
 
     verdict = "PASS"
     payload: dict[str, Any] = {
         "schema": "axiom_oracles.us_tariff_schedule.preview_disposition_line_sets.v1",
         "verdict": verdict,
+        "producer": producer_receipts,
         "inputs": dict(sorted(inputs.items())),
         "yale_sources": yale_source_receipt,
         "definition": {
@@ -608,7 +783,14 @@ def main() -> int:
             "selector_population_hash": (
                 "SHA-256 of the canonical sorted JSON [mismatch_signature, multiplicity] population"
             ),
-            "taxonomy_precedence": unmapped_receipt["definitions"]["exclusive_top_precedence"],
+            "source_taxonomy_precedence": unmapped_receipt["definitions"][
+                "exclusive_top_precedence"
+            ],
+            "ruling_precedence": [
+                "positive statutory Note-50/52 Section-232 authority",
+                "Yale reference behavior or defect",
+                "unexplained",
+            ],
         },
         "line_sets": {
             name: {
@@ -623,6 +805,7 @@ def main() -> int:
         "census": {
             "per_selector": dict(sorted(intended_counts.items())),
             "per_logical_class": dict(sorted(logical_census.items())),
+            "per_attribution": dict(sorted(attribution_census.items())),
             "per_slot": {
                 "brazil_section_301": sum(
                     selector["expected_units"] for selector in selectors
@@ -663,6 +846,11 @@ def main() -> int:
                 for key, units in sorted(broadening_lines.items())
             ],
             "cafta_units_by_origin": dict(sorted(cafta_origins.items())),
+            "statutory_precedence_overrides": dict(
+                sorted(statutory_precedence_overrides.items())
+            ),
+            "positive_statutory_section232_units": positive_section232_units,
+            "selected_panel_join": selected_join_audit,
         },
         "conservation": {
             "identity": "148390 old + 246940 new = 395330",
@@ -677,10 +865,19 @@ def main() -> int:
             "Each logical cross-slot class requires separate entries because slot must be exact.",
             "The existing fed-false-family-forced-labor selector overlaps the 68 parser rows and must be replaced or refined.",
             "Do not merge the 17,404 CAFTA units into a conformant/reference class; they remain axiom-attributed-open until encoded.",
+            "Classify positive Note-50/52 Section-232 authority before Yale reference causes; 40,830 source-taxonomy rows are Axiom-attributed-open under the maintainer ruling.",
         ],
     }
     payload["receipt_payload_sha256"] = hashlib.sha256(canonical(payload)).hexdigest()
     output = render(payload)
+    require(
+        {
+            "script": source_receipt(PRODUCER_SOURCE),
+            "campaign_classifier": source_receipt(CAMPAIGN_SOURCE),
+        }
+        == producer_receipts,
+        "producer source changed during receipt build",
+    )
 
     if args.check:
         require(args.output.is_file(), f"generated receipt missing: {args.output}")

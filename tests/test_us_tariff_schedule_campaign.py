@@ -18,6 +18,7 @@ from scripts.us_tariff_schedule_campaign import (
     ENTRY_FLAG_ALIASES,
     EXPECTED_DROPPED_ENTRY_FLAGS,
     PREVIEW_DISPOSITION_LINE_SETS,
+    PREVIEW_SELECTOR_COUNT,
     _enforce_preview_selector_population,
     _named_line_sets,
     _preview_selector_contract,
@@ -98,6 +99,15 @@ def test_entry_flag_alias_without_canonical_fails_closed() -> None:
         canonicalize_entry_flags({"entry_is_brazil_301": True})
 
 
+@pytest.mark.parametrize("malformed", ["false", 0, 1, None])
+def test_entry_flag_values_must_be_boolean(malformed) -> None:
+    with pytest.raises(ValueError, match="entry flags must be boolean"):
+        canonicalize_entry_flags({
+            "entry_is_brazil_301": malformed,
+            "entry_is_brazil_301_listed": True,
+        })
+
+
 def test_case_feed_never_forwards_entry_flag_aliases() -> None:
     def entry_flags(_line, _hts, _iso2):
         return {
@@ -139,11 +149,28 @@ def test_mismatch_signature_preserves_selector_dimensions() -> None:
     assert mismatch_signature(row) != mismatch_signature(other_iso2)
 
 
-def test_preview_disposition_line_sets_are_receipted_and_registered() -> None:
+@pytest.fixture
+def _without_external_membership_tables(monkeypatch):
+    """Keep structural receipt tests independent of a RuleSpec checkout."""
+
+    _named_line_sets.cache_clear()
+    monkeypatch.setattr(campaign_module, "_membership_rules", lambda _path: {})
+    yield
+    _named_line_sets.cache_clear()
+
+
+def test_missing_membership_table_fails_closed(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="line-set membership table unavailable"):
+        campaign_module._membership_rules(tmp_path / "missing.yaml")
+
+
+def test_preview_disposition_line_sets_are_receipted_and_registered(
+    _without_external_membership_tables,
+) -> None:
     receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     names = set(receipt["line_sets"])
     assert receipt["verdict"] == "PASS"
-    assert len(names) == len(receipt["selectors"]) == 20
+    assert len(names) == len(receipt["selectors"]) == PREVIEW_SELECTOR_COUNT
     registered = _named_line_sets()
     assert names <= set(registered)
     assert all(registered[name][0][0] == 10 for name in names)
@@ -162,6 +189,18 @@ def test_preview_selector_match_drift_fails_hermetically() -> None:
     entries[0]["match"]["delta"] = {"sign": "neg"}
     with pytest.raises(ValueError, match="preview selector match drift"):
         _preview_selector_contract(entries)
+
+
+@pytest.mark.parametrize("missing_field", ["slot", "delta"])
+def test_preview_selector_requires_exact_match_bounds(missing_field: str) -> None:
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    entries = copy.deepcopy(yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"])
+    selector = preview["selectors"][0]
+    ledger_entry = next(entry for entry in entries if entry["id"] == selector["id"])
+    selector["match"].pop(missing_field)
+    ledger_entry["match"].pop(missing_field)
+    with pytest.raises(ValueError, match="invalid preview selector match fields"):
+        _preview_selector_contract(entries, preview)
 
 
 @pytest.mark.parametrize(
@@ -213,6 +252,23 @@ def test_preview_source_hash_mutation_cannot_self_validate(tmp_path, monkeypatch
     mutant.write_text(json.dumps(receipt))
     monkeypatch.setattr(campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", mutant)
     with pytest.raises(ValueError, match="preview disposition source hash drift"):
+        campaign_module._preview_disposition_receipt()
+
+
+@pytest.mark.parametrize("producer_name", ["script", "campaign_classifier"])
+def test_preview_producer_mutation_cannot_self_validate(
+    producer_name, tmp_path, monkeypatch
+) -> None:
+    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    receipt["producer"][producer_name]["sha256"] = "0" * 64
+    receipt.pop("receipt_payload_sha256")
+    receipt["receipt_payload_sha256"] = hashlib.sha256(json.dumps(
+        receipt, allow_nan=False, sort_keys=True, separators=(",", ":")
+    ).encode()).hexdigest()
+    mutant = tmp_path / "mutant-preview-receipt.json"
+    mutant.write_text(json.dumps(receipt))
+    monkeypatch.setattr(campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", mutant)
+    with pytest.raises(ValueError, match="preview disposition producer source drift"):
         campaign_module._preview_disposition_receipt()
 
 
@@ -586,7 +642,9 @@ PREVIEW_TARGET_MISMATCH = (
     not PREVIEW_TARGET_MISMATCH.is_file(),
     reason="needs the externally receipted preview-1311 target mismatch sidecar",
 )
-def test_preview_dispositions_select_exact_395330_population() -> None:
+def test_preview_dispositions_select_exact_395330_population(
+    _without_external_membership_tables,
+) -> None:
     routes = _routing_dispositions()
     counts: Counter[str] = Counter()
     observed = {}
@@ -699,7 +757,9 @@ def test_stale_and_overlapping_disposition_selectors_fail() -> None:
                                (base | {"id": "two", "signatures": ["live"]})], {"live": 1})
 
 
-def test_campaign_ledger_uses_only_campaign_local_matcher() -> None:
+def test_campaign_ledger_uses_only_campaign_local_matcher(
+    _without_external_membership_tables,
+) -> None:
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = ledger["entries"]
     assert any(entry.get("match") for entry in entries)

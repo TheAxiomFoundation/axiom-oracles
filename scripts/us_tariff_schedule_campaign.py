@@ -17,6 +17,7 @@ import gzip
 import hashlib
 import io
 import json
+import math
 import re
 import subprocess
 import sys
@@ -47,6 +48,10 @@ DISPOSITION_LEDGER = REPO_ROOT / "reference/us-tariff-schedule/campaign-disposit
 PREVIEW_DISPOSITION_LINE_SETS = (
     REPO_ROOT / "reference/us-tariff-schedule/preview-disposition-line-sets.json"
 )
+PREVIEW_DISPOSITION_PRODUCER_SOURCES = {
+    "script": REPO_ROOT / "scripts/build_us_tariff_preview_disposition_receipt.py",
+    "campaign_classifier": Path(__file__).resolve(),
+}
 PREVIEW_DISPOSITION_INPUT_SHA256 = {
     "reference/us-tariff-schedule/preview-1311/mismatch-taxonomy-receipt.json":
         "3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de",
@@ -58,9 +63,12 @@ PREVIEW_DISPOSITION_INPUT_SHA256 = {
         "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705",
     "reference/us-tariff-schedule/preview-1311/unmapped-cause-audit-receipt.json":
         "4572f1a121848337bcd0ea797c09e771fc55a3e0efaeb79c195979ddb5a5e29e",
+    "reference/us-tariff-schedule/selected-intervals.csv.gz":
+        "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826",
 }
 PREVIEW_YALE_COMMIT = "c4307e514196618afcbf88cf7fd33746417eeabf"
 PREVIEW_YALE_TREE = "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+PREVIEW_SELECTOR_COUNT = 18
 REPORT_PATH = REPO_ROOT / "conformance/detail/us-tariff-schedule.json"
 WITNESS_REPLAY_RECEIPT = OUT_DIR / "witness-replay-execute-receipt.json"
 CACHE_ROOT = Path(os.environ.get(
@@ -222,10 +230,12 @@ def canonicalize_entry_flags(
     """Validate and remove C6 aliases before campaign input consumption."""
 
     flags = {
-        name: bool(value)
+        name: value
         for name, value in raw_flags.items()
         if name.startswith("entry_is_")
     }
+    malformed = sorted(name for name, value in flags.items() if type(value) is not bool)
+    _require(not malformed, f"entry flags must be boolean: {malformed}")
     observed = []
     for alias, canonical in ENTRY_FLAG_ALIASES.items():
         if alias not in flags:
@@ -1054,6 +1064,18 @@ def _preview_disposition_receipt() -> dict[str, Any]:
         input_hashes == PREVIEW_DISPOSITION_INPUT_SHA256,
         "preview disposition source hash drift",
     )
+    expected_producer = {
+        name: {
+            "path": str(path.relative_to(REPO_ROOT)),
+            "bytes": path.stat().st_size,
+            "sha256": _sha256(path),
+        }
+        for name, path in PREVIEW_DISPOSITION_PRODUCER_SOURCES.items()
+    }
+    _require(
+        preview.get("producer") == expected_producer,
+        "preview disposition producer source drift",
+    )
     yale_sources = preview.get("yale_sources")
     _require(isinstance(yale_sources, dict), "preview Yale source receipt is malformed")
     _require(
@@ -1071,10 +1093,12 @@ def _preview_selector_contract(
 
     preview = _preview_disposition_receipt() if preview is None else preview
     selectors = preview.get("selectors")
-    _require(isinstance(selectors, list) and len(selectors) == 20,
+    _require(
+        isinstance(selectors, list) and len(selectors) == PREVIEW_SELECTOR_COUNT,
              "preview selector census drift")
     line_sets = preview.get("line_sets")
-    _require(isinstance(line_sets, dict) and len(line_sets) == 20,
+    _require(
+        isinstance(line_sets, dict) and len(line_sets) == PREVIEW_SELECTOR_COUNT,
              "preview line-set census drift")
     ledger_by_id: dict[str, dict[str, Any]] = {}
     for entry in entries:
@@ -1113,6 +1137,47 @@ def _preview_selector_contract(
             ) is not None,
             f"invalid preview signature-population hash: {selector_id}",
         )
+        match = selector.get("match")
+        _require(
+            isinstance(match, dict)
+            and set(match) == {"slot", "line_set", "delta"},
+            f"invalid preview selector match fields: {selector_id}",
+        )
+        _require(
+            match["slot"] in {"brazil_section_301", "forced_labor_section_301"},
+            f"invalid preview selector slot: {selector_id}",
+        )
+        _require(
+            isinstance(match["line_set"], str)
+            and match["line_set"].startswith("preview-1311-")
+            and match["line_set"] in line_sets,
+            f"invalid preview selector line set: {selector_id}",
+        )
+        delta = match["delta"]
+        _require(
+            isinstance(delta, dict)
+            and set(delta) in ({"sign"}, {"values"}),
+            f"invalid preview selector delta bound: {selector_id}",
+        )
+        if "sign" in delta:
+            _require(
+                delta["sign"] in {"pos", "neg"},
+                f"invalid preview selector delta sign: {selector_id}",
+            )
+        else:
+            values = delta["values"]
+            _require(
+                isinstance(values, list)
+                and values
+                and all(
+                    isinstance(value, (int, float))
+                    and not isinstance(value, bool)
+                    and math.isfinite(value)
+                    for value in values
+                )
+                and values == sorted(set(values)),
+                f"invalid preview selector delta values: {selector_id}",
+            )
         ledger_entry = ledger_by_id.get(selector_id)
         _require(ledger_entry is not None,
                  f"preview selector absent from disposition ledger: {selector_id}")
@@ -1655,7 +1720,10 @@ def _named_line_sets() -> dict[str, tuple[tuple[int, frozenset[str]], ...]]:
         )
         _require(name not in result, f"duplicate named line set: {name}")
         result[name] = ((width, frozenset(values)),)
-    _require(len(preview.get("selectors", [])) == 20, "preview selector census drift")
+    _require(
+        len(preview.get("selectors", [])) == PREVIEW_SELECTOR_COUNT,
+        "preview selector census drift",
+    )
     return result
 
 

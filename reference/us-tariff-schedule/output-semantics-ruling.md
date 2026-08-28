@@ -4,9 +4,16 @@
 
 Max ruled on 2026-08-26 that the certificate certifies the statutory
 non-exempt component semantics. Reference-modeled behavior—including Yale's
-utilization proxies, scope masks, and parser artifacts—must be classified only
-as bounded, receipted reference-behavior disposition classes. The certificate
-does not reproduce Yale's modeled construct.
+utilization proxies, parser artifacts, and scope masks without positive
+statutory authority—must be classified only as bounded, receipted
+reference-behavior disposition classes. The certificate does not reproduce
+Yale's modeled construct.
+
+On 2026-08-28, Max clarified that positive statutory authority takes
+precedence over a Yale source-taxonomy cause. A mismatch supported by the
+Note-50/52 exclusions remains Axiom-attributed and open until Axiom encodes the
+statutory behavior, even when Yale also labels the row as aircraft behavior or
+HTS8 broadening.
 
 This ruling controls `campaign-dispositions.yaml`. An
 `axiom-attributed-open` class continues to count against certificate
@@ -48,14 +55,25 @@ authority. Yale's implementation is at
 `src/pipeline/06_calculate_rates.R:901-921`, applied to forced-labor at
 `:969-976` and Brazil at `:1077-1094`.
 
-Therefore all 185,954 preview scope-mask units are Axiom-attributed and open:
+The preview receipt joins all new mismatch rows to the pinned selected panel
+on HTS10, ISO2, revision, clipped interval, and origin regime. All 118,842
+interval keys join uniquely while scanning 9,913,304 selected rows; the
+receipt then requires `statutory_rate_232 > 0` before assigning any of the
+three Section-232 classes.
 
-- 119,682 exposed-but-unconsumed units: consume
+Therefore all 226,784 preview units with positive Note-50/52 authority are
+Axiom-attributed and open:
+
+- 147,436 exposed-but-unconsumed units: consume
   `entry_is_section_232_covered` in both panel components.
-- 33,834 annex-membership units: broaden the grounded per-article fact beyond
+- 43,890 annex-membership units: broaden the grounded per-article fact beyond
   the direct aluminum/steel surface, then consume it.
-- 32,438 heading-program units: expose and consume membership in the programs
+- 35,458 heading-program units: expose and consume membership in the programs
   enumerated by Notes 50(a)(vi)(2)-(8) and 52(f)(2)-(8).
+
+The corrected census reassigns 40,806 Yale-zero aircraft rows and 24 Yale
+HTS8-broadening rows from reference classes. Together with the 17,404 open
+CAFTA units below, the preview contains 244,188 Axiom-attributed-open units.
 
 The C6 helper's current direct fact is aluminum-or-steel only
 (`tools/b16_entry_flags.py:119-130`). The Brazil and forced-labor panel
@@ -67,7 +85,7 @@ Note-50/52 Chapter-99 families. Its line 270/page-260 stacking text says that
 covered products “shall continue to be subject to antidumping, countervailing,
 or other duties, fees, exactions and charges ... as well as” the Section-301
 duty. A Section-232 mask for a Note-20 family would therefore be unsupported
-reference behavior. None of the preview's 185,954 units is a Note-20 unit.
+reference behavior. None of the preview's 226,784 units is a Note-20 unit.
 
 ## Reference-behavior and reference-defect receipts
 
@@ -82,9 +100,10 @@ statutory component by `1 - share` at
 
 The old-residual receipt proves 74,822 aircraft units satisfy exactly
 `expected = 0.10 * actual`, and 73,500 pharmaceutical units satisfy exactly
-`expected = 0.50 * actual`. Those are reference-behavior classes. The 41,948
-new Yale-zero aircraft/pharmaceutical units do not satisfy those equations and
-are kept in separate reference-behavior classes.
+`expected = 0.50 * actual`. Those are reference-behavior classes. Of the new
+Yale-zero population, the 1,142 pharmaceutical units remain a separate
+reference-behavior class. All 40,806 aircraft units carry positive Note-50/52
+authority and therefore remain Axiom-attributed-open.
 
 ### Yale parser zero
 
@@ -121,9 +140,9 @@ Yale stores the five eight-digit parents at
 prefix membership in `src/pipeline/06_calculate_rates.R:1070,1092`. Note
 50(a)(ii), corpus lines 553-555/pages 543-545, enumerates only these children:
 `0409000005`, `4407990295`, `8422409181`, `8505110070`, and `8537109170`.
-The 120 neighboring-child units have no note-text authority and are a reference
-defect. The taxonomy gives this cause precedence over its 24-unit overlap with
-the Section-232 population.
+Of the 120 neighboring-child units, 24 also carry positive Note-50/52 authority
+and therefore remain Axiom-attributed-open. The other 96 have no note-text
+authority and are a bounded reference defect.
 
 ## CAFTA 52(i): deferred encoding, still open
 
