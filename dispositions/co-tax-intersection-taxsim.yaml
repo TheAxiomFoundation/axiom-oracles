@@ -3465,3 +3465,53 @@ entries:
       tolerance: 0.01
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: taxsim-qbid-wage-limit-and-floor-vintage-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135698
+    - ecps-tax-unit-136220
+    - ecps-tax-unit-136384
+    - ecps-tax-unit-136390
+    - ecps-tax-unit-154973
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158403
+    - ecps-tax-unit-160366
+    - ecps-tax-unit-164636
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side QBID machinery gap. On every selected row
+
+      TAXSIM''s own identity v18 = v10 - v13 - qbid holds within $1, so the entire
+
+      taxable-income residual is the QBID difference — the two AGIs agree. The
+
+      implied axiom deduction (taxsim qbid minus the residual) lands exactly on
+
+      the H.R.1 section 70105 $400 minimum deduction or on zero. These units sit
+
+      far above the section 199A(b)(3) phase-in ceiling, where the deduction is
+
+      limited to 50% of W-2 wages / UBIA; the activity carries no W-2 wages, so
+
+      the statutory regular deduction is extinguished and only the $400 floor
+
+      survives — which is what axiom grants. TAXSIM''s qbid column shows roughly
+
+      20% of (psemp minus half SE tax): its 2026-05-21 module applies the 20%
+
+      rate without the wage/UBIA limitation (and, on rows where its qbid is
+
+      below 400, without the section 70105 minimum). Axiom matches statute;
+
+      TAXSIM''s QBID machinery vintage does not.'
+    arithmetic:
+    - expression: 251.44 - 400.00
+      equals: -148.56
+      tolerance: 1
+    - expression: 223.78 - 400.01
+      equals: -176.23
+      tolerance: 1
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true

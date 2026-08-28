@@ -82259,6 +82259,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -148.56096521609288,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 106809.7190347839,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96602,6 +96607,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -176.2256871122131,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1562.944312887787,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101380,6 +101390,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -135.98895591541077,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 63269.17104408459,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101580,6 +101595,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -83.19028134140535,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 172844.63971865858,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105631,6 +105651,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 832.0337165594101,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 137980624.55371657,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109867,6 +109892,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 4528.138406381011,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 71549302.21840638,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110590,6 +110620,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 188.36093293875456,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 64873607.12093294,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114001,6 +114036,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 26101.720306187868,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 50741211.880306184,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119623,6 +119663,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -399.3030002601445,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 20460615.24699974,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119712,15 +119757,15 @@
         "bridge_artifact": 278,
         "explained_residual": 546,
         "unexplained": 7,
-        "upstream_engine_gap": 854
+        "upstream_engine_gap": 863
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 98.950874,
+      "explained_rate": 99.025812,
       "orphaned_entries": [],
       "raw_match_rate": 82.373022,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 126
+      "unexplained_count": 117
     },
     "error_count": 0,
     "errors_by_engine": {},
