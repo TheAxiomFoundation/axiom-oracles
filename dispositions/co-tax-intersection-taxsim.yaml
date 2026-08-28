@@ -3389,3 +3389,79 @@ entries:
       equals: 0
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: taxsim-2026-amt-parameter-vintage
+  concept: us:tax/federal-income-tax#amt
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-155272
+    - ecps-tax-unit-155918
+    - ecps-tax-unit-156221
+    - ecps-tax-unit-156945
+    - ecps-tax-unit-157006
+    - ecps-tax-unit-157259
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158158
+    - ecps-tax-unit-158219
+    - ecps-tax-unit-158285
+    - ecps-tax-unit-158820
+    - ecps-tax-unit-159167
+    - ecps-tax-unit-159237
+    - ecps-tax-unit-160010
+    - ecps-tax-unit-160186
+    - ecps-tax-unit-160400
+    - ecps-tax-unit-160413
+    - ecps-tax-unit-160520
+    - ecps-tax-unit-160690
+    - ecps-tax-unit-160751
+    - ecps-tax-unit-162171
+    - ecps-tax-unit-162276
+    - ecps-tax-unit-164175
+    - ecps-tax-unit-164195
+    - ecps-tax-unit-59063
+    - ecps-tax-unit-59122
+    - ecps-tax-unit-59138
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated to TAXSIM''s AMT parameter vintage by hand-computing
+      Form 6251
+
+      from the published parameters: Rev. Proc. 2025-32 exemptions (90,100
+
+      unmarried / 140,200 joint), the H.R.1 section 70107 phaseout (50% rate from
+
+      500,000 / 1,000,000), the 244,500 28%-rate threshold, and the section
+
+      55(b)(3) Part III worksheet at the regular 0/15/20 breakpoints. On every
+
+      selected row axiom''s AMT reproduces that statutory computation within $5
+      —
+
+      two independent implementations (the composed bridge worksheet and the
+
+      verifier''s model, built separately from the same published parameters)
+
+      agreeing — while TAXSIM''s v27 departs (it matches the same statutory model
+
+      on only 3 of 39 rows; its 2026-05-21 module carries pre-OBBBA
+
+      exemption-phaseout geometry, consistent with the capital-gains threshold
+
+      vintage dispositioned as taxsim-2026-capgains-zero-threshold-vintage).
+
+      Deltas are heterogeneous because the exemption phaseout interacts per
+
+      household; the per-row proof is the axiom==statute agreement. Rows where
+
+      axiom itself is not yet on statute stay raw.'
+    arithmetic:
+    - expression: 90100 - 0.50 * (909547.89 - 500000)
+      equals: -114673.945
+      tolerance: 0.01
+    - expression: 0.26 * 244500
+      equals: 63570
+      tolerance: 0.01
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true

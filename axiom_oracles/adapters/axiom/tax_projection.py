@@ -1414,7 +1414,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "min("
             "amt_capital_gain_line_22_smaller_income_or_gain, "
             "amt_capital_gain_line_21_reduced_zero_rate_bracket"
-            ") * capital_gains_zero_rate"
+            ")"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1439,8 +1439,8 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "max("
             "0, "
             "capital_gains_fifteen_percent_threshold "
-            "- (loss_limited_net_capital_gains "
-            "+ amt_capital_gain_line_21_reduced_zero_rate_bracket)"
+            "- (capital_gains_worksheet_line_14 "
+            "+ amt_capital_gain_line_23_zero_rate_amount)"
             ")"
         ),
     ),
