@@ -2826,13 +2826,21 @@
     "entry_is_section_232_covered",
     "entry_is_section_232_steel"
   ],
+  "entry_flag_aliases": {
+    "entry_is_brazil_301": "entry_is_brazil_301_listed",
+    "entry_is_forced_labor_301": "entry_is_forced_labor_301_listed"
+  },
   "entry_flag_tool": "tools/b16_entry_flags.py",
-  "entry_flag_tool_sha256": "d3f4b26e062e99349f656f7d9e39521db2897d565f5335e59e21b9aae7a5cc90",
+  "entry_flag_tool_sha256": "8032dde5fe4a9bc14448cc84e338181a69b912e37b74331d89e9d5f9ef746c8a",
   "expected_dropped_entry_flags": [
     "entry_is_line_c",
     "entry_is_line_e"
   ],
+  "observed_entry_flag_aliases": [
+    "entry_is_brazil_301",
+    "entry_is_forced_labor_301"
+  ],
   "schema": "axiom_oracles.us_tariff_schedule.declared_input_contract.v1",
-  "stage_wall_clock_seconds": 7.673,
+  "stage_wall_clock_seconds": 8.677,
   "verdict": "PASS"
 }

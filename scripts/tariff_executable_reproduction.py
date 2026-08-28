@@ -226,7 +226,13 @@ def _certified_cases(repo_root: Path) -> list[dict[str, Any]]:
     return selected
 
 
-def build_reproduction(*, rulespec_repo: Path, rulespec_ref: str, engine_binary: Path, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
+def build_reproduction(
+    *,
+    rulespec_repo: Path = DEFAULT_RULESPEC_ROOT,
+    rulespec_ref: str,
+    engine_binary: Path = DEFAULT_ENGINE_BINARY,
+    repo_root: Path = REPO_ROOT,
+) -> dict[str, Any]:
     rulespec_repo = rulespec_repo.expanduser().resolve()
     engine_binary = engine_binary.expanduser().resolve()
     sha = _git_commit(rulespec_repo, rulespec_ref)

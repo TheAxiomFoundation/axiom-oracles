@@ -1,28 +1,518 @@
+# RULING — human-maintainer decision by Max, 2026-08-26: this certificate
+# certifies statutory non-exempt component semantics. Yale utilization proxies,
+# scope masks, parser artifacts, and other modeled constructs are bounded,
+# receipted reference behavior; they are not constructs for Axiom to reproduce.
+# Full legal/source receipt: output-semantics-ruling.md.
 schema: axiom_oracles.dispositions.v1
 suite: us-tariff-schedule
-updated: '2026-08-17'
+updated: '2026-08-26'
 entries:
-  - id: fed-false-family-forced-labor
-    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
-    kind: signature_class
-    match: {slot: forced_labor_section_301, delta: {values: [-0.125, -0.124, -0.123, -0.122, -0.121, -0.12, -0.119, -0.118, -0.117, -0.116, -0.115, -0.114, -0.113, -0.112, -0.111, -0.11, -0.109, -0.108, -0.107, -0.106, -0.105, -0.104, -0.103, -0.102, -0.101, -0.1005, -0.1, -0.099, -0.098, -0.097, -0.096, -0.095, -0.094, -0.093, -0.0925, -0.092, -0.091, -0.09, -0.089, -0.088, -0.087, -0.086, -0.085, -0.084, -0.083, -0.082, -0.081, -0.08, -0.079, -0.078, -0.077, -0.076, -0.0755, -0.075, -0.074, -0.073, -0.072, -0.071, -0.07, -0.069, -0.068, -0.0675, -0.067, -0.066, -0.065, -0.064, -0.063, -0.0625, -0.062, -0.061, -0.0605, -0.06, -0.059, -0.058, -0.0575, -0.057, -0.0565, -0.056, -0.0555, -0.055, -0.0545, -0.054, -0.0535, -0.053, -0.052, -0.051, -0.05, -0.049, -0.0485, -0.048, -0.0475, -0.047, -0.046, -0.0455, -0.045, -0.044, -0.0435, -0.043, -0.0425, -0.042, -0.0415, -0.041, -0.0405, -0.04, -0.0395, -0.039, -0.0385, -0.038, -0.0375, -0.037, -0.0365, -0.036, -0.035, -0.0345, -0.034, -0.0335, -0.033, -0.0325, -0.032, -0.0315, -0.031, -0.0305, -0.03, -0.029, -0.028, -0.027, -0.026, -0.025, -0.0245, -0.024, -0.0235, -0.023, -0.0225, -0.022, -0.021, -0.0205, -0.02, -0.0195, -0.019, -0.0185, -0.018, -0.0175, -0.017, -0.016, -0.015, -0.014, -0.013, -0.0125, -0.012, -0.0115, -0.0114, -0.0112, -0.0111, -0.011, -0.0109, -0.0108, -0.0105, -0.0101, -0.01, -0.0099, -0.0098, -0.0096, -0.0095, -0.0094, -0.0091, -0.00900000000000001, -0.009, -0.0089, -0.0088, -0.0087, -0.0086, -0.0084, -0.0083, -0.0081, -0.00800000000000001, -0.008, -0.0078, -0.0076, -0.0075, -0.0074, -0.0073, -0.0072, -0.0071, -0.007, -0.00699999999999999, -0.0069, -0.0068, -0.0066, -0.0065, -0.0063, -0.0062, -0.0061, -0.00600000000000001, -0.00599999999999999, -0.0056, -0.0053, -0.0051, -0.005, -0.0049, -0.0047, -0.0043, -0.004, -0.00300000000000002, -0.003, -0.0024, -0.002, -0.00199999999999999, -0.001]}, date: {from: '2026-07-24'}}
-    disposition: axiom_encoding_gap
-    attribution: axiom-attributed-open
-    receipt: Note 52 is present in the Rev-15 corpus (page 553); pages 639-652 receipt each country tier and ceiling. The exact admitted delta set and tier-minus-ceiling arithmetic are censused in note52-delta-census.json; no note-52 generated incidence table exists in B1.6.
-    reason: Note 52 membership is encoded, but the evaluated entry flag was false from 2026-07-24.
-    comment: Data corrects the proposed likely +25%/+100% pattern; Axiom-minus-Yale is negative, dominated by -12.5% and -10%, with smaller line-specific tiers.
-    expires_on_source_change: true
-    evidence: {mechanism: Note 52 incidence is present but its entry flag was fed false, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: instrument-and-input-feed, instrument_receipt: note-52-rev15-and-ustr-july-2026}
-  - id: fed-false-family-brazil
+  - id: aircraft-utilization-proxy-brazil
     concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
     kind: signature_class
-    match: {slot: brazil_section_301, iso2: [BR], delta: {values: [-0.25, -0.125, -0.025]}, date: {from: '2026-07-22'}}
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-aircraft-utilization-proxy-brazil-hts10
+      slot: brazil_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview old-residual receipt proves expected = 0.10 * actual on every selected unit; Yale c4307e51
+      configures a 90% aircraft exempt share and applies rate * (1 - share).
+    reason: Yale's utilization proxy is a receipted reference behavior; the certificate retains the statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact 10%-of-nonexempt relationship plus Yale 90% configured share
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-configuration
+      instrument_receipt: yale-c430-aircraft-utilization-proxy
+  - id: aircraft-utilization-proxy-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-aircraft-utilization-proxy-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview old-residual receipt proves expected = 0.10 * actual on every selected unit; Yale c4307e51
+      configures a 90% aircraft exempt share and applies rate * (1 - share).
+    reason: Yale's utilization proxy is a receipted reference behavior; the certificate retains the statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact 10%-of-nonexempt relationship plus Yale 90% configured share
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-configuration
+      instrument_receipt: yale-c430-aircraft-utilization-proxy
+  - id: cafta-52i-deferred
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-cafta-52i-deferred-hts10
+      slot: forced_labor_section_301
     disposition: axiom_encoding_gap
     attribution: axiom-attributed-open
-    receipt: No Brazil-action generated membership table exists in B1.6; bounded to BR, observed -25/-12.5/-2.5-point tiers, and the 2026-07-22 effective window.
-    reason: The Brazil action incidence is positive at Yale while the evaluated Axiom entry flag is false.
+    receipt: C6/#1311 records Note 52(i) as deferred pending GN 29 ingest; the note additionally conditions relief
+      on an actual DR-CAFTA duty-free entry. The preview exact join contains 17,404 units.
+    reason: GN-29(d)(v) scope and a DR-CAFTA duty-free claim/eligibility fact remain unencoded and unwired.
     expires_on_source_change: true
-    evidence: {mechanism: Brazil action incidence is present but its entry flag was fed false, sources: [comparisons/us-tariff-schedule.yaml], receipt_type: instrument-and-input-feed, instrument_receipt: brazil-301-action-and-rev15-notes}
+    evidence:
+      mechanism: 'Rev-15 Note 52(i), #1311 deferred-output note, GN-29 scope, and entry-level claim prerequisite'
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-condition-and-deferred-encoding
+      instrument_receipt: hts-rev15-note52i-c6-1311-deferred
+  - id: chapter98-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-chapter98-brazil-hts10
+      slot: brazil_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: Notes 50(a)(i) and 52(a) require a proper Chapter-98 claim and CBP agreement. Yale statically zeros listed
+      secondary codes; the panel supplies neutral non-exempt claim facts.
+    reason: Yale lacks an entry-level proper-claim-and-CBP-agreement receipt for these 1,514 reference-zero units.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Conditional Chapter-98 authority versus Yale secondary-code zeroing
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-entry-condition-and-reference-behavior
+      instrument_receipt: hts-rev15-notes50a-i-52a-ch98
+  - id: chapter98-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-chapter98-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: Notes 50(a)(i) and 52(a) require a proper Chapter-98 claim and CBP agreement. Yale statically zeros listed
+      secondary codes; the panel supplies neutral non-exempt claim facts.
+    reason: Yale lacks an entry-level proper-claim-and-CBP-agreement receipt for these 1,514 reference-zero units.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Conditional Chapter-98 authority versus Yale secondary-code zeroing
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-entry-condition-and-reference-behavior
+      instrument_receipt: hts-rev15-notes50a-i-52a-ch98
+  - id: pharma-utilization-proxy-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        values:
+        - 0.125
+      line_set: preview-1311-pharma-utilization-proxy-brazil-hts10
+      slot: brazil_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview old-residual receipt proves expected = 0.50 * actual on every selected unit; Yale c4307e51
+      configures a 50% pharmaceutical exempt share and applies rate * (1 - share).
+    reason: Yale's utilization proxy is a receipted reference behavior; the certificate retains the statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact 50%-of-nonexempt relationship plus Yale 50% configured share
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-configuration
+      instrument_receipt: yale-c430-pharma-utilization-proxy
+  - id: pharma-utilization-proxy-forced-labor-035
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        values:
+        - 0.035
+      line_set: preview-1311-pharma-utilization-proxy-forced-labor-035-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview old-residual receipt proves expected = 0.50 * actual on every selected unit; Yale c4307e51
+      configures a 50% pharmaceutical exempt share and applies rate * (1 - share).
+    reason: Yale's utilization proxy is a receipted reference behavior; the certificate retains the statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact 50%-of-nonexempt relationship plus Yale 50% configured share
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-configuration
+      instrument_receipt: yale-c430-pharma-utilization-proxy
+  - id: pharma-utilization-proxy-forced-labor-non035
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        values:
+        - 0.0175
+        - 0.018
+        - 0.0185
+        - 0.019
+        - 0.0195
+        - 0.02
+        - 0.0205
+        - 0.021
+        - 0.0225
+        - 0.0235
+        - 0.024
+        - 0.0245
+        - 0.025
+        - 0.026
+        - 0.027
+        - 0.028
+        - 0.029
+        - 0.03
+        - 0.0305
+        - 0.031
+        - 0.0315
+        - 0.032
+        - 0.0325
+        - 0.033
+        - 0.0335
+        - 0.0345
+        - 0.036
+        - 0.0365
+        - 0.037
+        - 0.0375
+        - 0.0385
+        - 0.0395
+        - 0.0405
+        - 0.041
+        - 0.0415
+        - 0.042
+        - 0.0425
+        - 0.043
+        - 0.0435
+        - 0.044
+        - 0.045
+        - 0.0455
+        - 0.046
+        - 0.047
+        - 0.0475
+        - 0.048
+        - 0.0485
+        - 0.05
+        - 0.052
+        - 0.0535
+        - 0.054
+        - 0.0545
+        - 0.055
+        - 0.0555
+        - 0.056
+        - 0.0565
+        - 0.0575
+        - 0.0605
+        - 0.0625
+      line_set: preview-1311-pharma-utilization-proxy-forced-labor-non035-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview old-residual receipt proves expected = 0.50 * actual on every selected unit; Yale c4307e51
+      configures a 50% pharmaceutical exempt share and applies rate * (1 - share).
+    reason: Yale's utilization proxy is a receipted reference behavior; the certificate retains the statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact 50%-of-nonexempt relationship plus Yale 50% configured share
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-configuration
+      instrument_receipt: yale-c430-pharma-utilization-proxy
+  - id: section232-annex-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-annex-brazil-hts10
+      slot: brazil_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi)(1) and 52(f)(1) expressly exclude the applicable metal/copper/derivative articles;
+      the preview audit receipts the exact unflagged in-scope annex population.
+    reason: 'The direct fact surface is too narrow; proposed fix: broaden the grounded per-article fact to in-scope
+      annex membership and consume it.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)(1)/52(f)(1) authority plus exact annex membership
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-annex-membership
+      instrument_receipt: hts-rev15-notes50a-vi-1-52f-1
+  - id: section232-annex-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-annex-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi)(1) and 52(f)(1) expressly exclude the applicable metal/copper/derivative articles;
+      the preview audit receipts the exact unflagged in-scope annex population.
+    reason: 'The direct fact surface is too narrow; proposed fix: broaden the grounded per-article fact to in-scope
+      annex membership and consume it.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)(1)/52(f)(1) authority plus exact annex membership
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-annex-membership
+      instrument_receipt: hts-rev15-notes50a-vi-1-52f-1
+  - id: section232-exposed-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-exposed-brazil-hts10
+      slot: brazil_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi) and 52(f) expressly exclude the enumerated Chapter-99 program families; entry_is_section_232_covered
+      is already true on these exact 119,682 units.
+    reason: 'The panel components omit an express statutory exclusion; proposed fix: consume entry_is_section_232_covered
+      in both components.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)/52(f) authority plus exposed entry fact
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-exposed-input-fact
+      instrument_receipt: hts-rev15-notes50a-vi-52f
+  - id: section232-exposed-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-exposed-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi) and 52(f) expressly exclude the enumerated Chapter-99 program families; entry_is_section_232_covered
+      is already true on these exact 119,682 units.
+    reason: 'The panel components omit an express statutory exclusion; proposed fix: consume entry_is_section_232_covered
+      in both components.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)/52(f) authority plus exposed entry fact
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-exposed-input-fact
+      instrument_receipt: hts-rev15-notes50a-vi-52f
+  - id: section232-heading-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-heading-brazil-hts10
+      slot: brazil_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi)(2)-(8) and 52(f)(2)-(8) expressly enumerate the applicable vehicle, parts, wood,
+      MHD, semiconductor, and patented-pharma headings.
+    reason: 'The fact surface omits those heading programs; proposed fix: expose and consume their per-article membership
+      in both panel components.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)(2)-(8)/52(f)(2)-(8) authority plus exact heading-program membership
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-heading-membership
+      instrument_receipt: hts-rev15-notes50a-vi-2-8-52f-2-8
+  - id: section232-heading-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-section232-heading-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: axiom_encoding_gap
+    attribution: axiom-attributed-open
+    receipt: Rev-15 Notes 50(a)(vi)(2)-(8) and 52(f)(2)-(8) expressly enumerate the applicable vehicle, parts, wood,
+      MHD, semiconductor, and patented-pharma headings.
+    reason: 'The fact surface omits those heading programs; proposed fix: expose and consume their per-article membership
+      in both panel components.'
+    expires_on_source_change: true
+    evidence:
+      mechanism: Positive Note 50(a)(vi)(2)-(8)/52(f)(2)-(8) authority plus exact heading-program membership
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: statutory-note-and-heading-membership
+      instrument_receipt: hts-rev15-notes50a-vi-2-8-52f-2-8
+  - id: yale-hts8-broadening-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-yale-hts8-broadening-brazil-hts10
+      slot: brazil_section_301
+    disposition: upstream_engine_gap
+    attribution: reference-defect
+    receipt: Yale stores five HTS8 parents and exempts every child; Note 50(a)(ii) enumerates only five exact HTS10
+      children. The exact neighboring-child population is 120 units.
+    reason: The Yale HTS8-over-HTS10 broadening has no note-text authority; taxonomy precedence retains its 24-unit
+      Section-232 overlap here.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Five Yale HTS8 parents versus five statutory HTS10 children
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: reference-line-broadening-and-statutory-enumeration
+      instrument_receipt: hts-rev15-note50a-ii-yale-c430-hts8
+  - id: yale-parser-zero-statutory-base
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: neg
+      line_set: preview-1311-yale-parser-zero-statutory-base-hts10
+      slot: forced_labor_section_301
+    disposition: upstream_engine_gap
+    attribution: reference-defect
+    receipt: Yale rev_11/rev_12 carry four trailing-HTML-tag General rate strings; its strict parser returns missing
+      and its schema coalesces the base to zero, while C6 preserves 3.7%, 6%, 5%, and 10%.
+    reason: The 68 units arise from Yale parser/default artifacts, not the preserved statutory rates.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Four exact HTS10 lines with tagged rate strings and zero-coalescing parser path
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: reference-parser-and-preserved-statutory-rate
+      instrument_receipt: yale-c430-tagged-rate-parser-defect
+  - id: yale-zero-aircraft-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-yale-zero-aircraft-brazil-hts10
+      slot: brazil_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview new-mismatch taxonomy receipts Yale expected zero on this exact conditional-source population.
+      These units do not satisfy the old 10% proxy equation and are kept separate.
+    reason: Yale's conditional/source zero is reference behavior; it is not the certificate's statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact Yale-zero aircraft source population distinct from utilization-equation rows
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-zero
+      instrument_receipt: yale-c430-aircraft-conditional-zero
+  - id: yale-zero-aircraft-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        sign: pos
+      line_set: preview-1311-yale-zero-aircraft-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview new-mismatch taxonomy receipts Yale expected zero on this exact conditional-source population.
+      These units do not satisfy the old 10% proxy equation and are kept separate.
+    reason: Yale's conditional/source zero is reference behavior; it is not the certificate's statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact Yale-zero aircraft source population distinct from utilization-equation rows
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-zero
+      instrument_receipt: yale-c430-aircraft-conditional-zero
+  - id: yale-zero-pharma-brazil
+    concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
+    kind: signature_class
+    match:
+      delta:
+        values:
+        - 0.25
+      line_set: preview-1311-yale-zero-pharma-brazil-hts10
+      slot: brazil_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview new-mismatch taxonomy receipts Yale expected zero on this exact conditional-source population.
+      These units do not satisfy the old 50% proxy equation and are kept separate.
+    reason: Yale's conditional/source zero is reference behavior; it is not the certificate's statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact Yale-zero pharmaceutical source population distinct from utilization-equation rows
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-zero
+      instrument_receipt: yale-c430-pharma-conditional-zero
+  - id: yale-zero-pharma-forced-labor
+    concept: us:policies/cbp/us-tariff-schedule#forced_labor_section_301
+    kind: signature_class
+    match:
+      delta:
+        values:
+        - 0.035
+        - 0.04
+        - 0.06
+        - 0.063
+        - 0.065
+        - 0.088
+        - 0.1
+        - 0.125
+      line_set: preview-1311-yale-zero-pharma-forced-labor-hts10
+      slot: forced_labor_section_301
+    disposition: explained_residual
+    attribution: reference-behavior
+    receipt: The preview new-mismatch taxonomy receipts Yale expected zero on this exact conditional-source population.
+      These units do not satisfy the old 50% proxy equation and are kept separate.
+    reason: Yale's conditional/source zero is reference behavior; it is not the certificate's statutory non-exempt
+      component.
+    expires_on_source_change: true
+    evidence:
+      mechanism: Exact Yale-zero pharmaceutical source population distinct from utilization-equation rows
+      sources:
+      - reference/us-tariff-schedule/output-semantics-ruling.md
+      - reference/us-tariff-schedule/preview-disposition-line-sets.json
+      receipt_type: preview-exact-population-and-reference-zero
+      instrument_receipt: yale-c430-pharma-conditional-zero
   - id: non-metal-232-family
     concept: us:policies/cbp/us-tariff-schedule#section_232
     kind: signature_class
