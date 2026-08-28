@@ -165,6 +165,18 @@ def test_entry_flag_aliases_canonicalize_when_equal() -> None:
     assert flags["entry_qualifies_for_note39_heading_9903_79_01"] is False
 
 
+def test_all_public_entry_prefixes_are_preserved() -> None:
+    flags, _aliases = canonicalize_entry_flags({
+        "entry_loaded_before_deadline": True,
+        "entry_qualifies_for_exception": False,
+        "internal_diagnostic": True,
+    })
+    assert flags == {
+        "entry_loaded_before_deadline": True,
+        "entry_qualifies_for_exception": False,
+    }
+
+
 def test_entry_flag_alias_disagreement_fails_closed() -> None:
     with pytest.raises(ValueError, match="entry-flag alias disagreement"):
         canonicalize_entry_flags({
@@ -202,6 +214,13 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
         {"hts10": "0102294024", "iso2": "BR"},
         {"hts_line": "102294000"},
         entry_flags,
+        probe="2026-07-24",
+        case_feed_inputs=campaign_module._case_feed_input_names({
+            "entry_is_brazil_301_listed",
+            "entry_is_forced_labor_301_listed",
+            "entry_is_line_c",
+            "entry_is_line_e",
+        }),
     )
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
@@ -212,12 +231,172 @@ def test_case_feed_receipts_dr_cafta_inputs_as_neutral_false() -> None:
     feed, _flags = _case_feed(
         {"hts10": "0102294024", "iso2": "CR"},
         {"hts_line": "102294000"},
-        lambda _line, _hts, _iso2: {},
+        lambda _line, _hts, _iso2: {
+            "entry_is_line_c": False,
+            "entry_is_line_e": False,
+        },
+        probe="2026-07-24",
+        case_feed_inputs=campaign_module._case_feed_input_names({
+            "entry_is_line_c", "entry_is_line_e",
+        }),
     )
     assert feed["entry_is_entered_free_of_duty_under_dr_cafta"] is False
     assert (
         feed["entry_is_general_note_29_d_v_textile_or_apparel_good"] is False
     )
+    assert feed["entry_is_within_temporary_surcharge_effective_period"] is False
+
+
+@pytest.mark.parametrize(
+    ("probe", "expected"),
+    (
+        ("2026-02-23", False),
+        ("2026-02-24", True),
+        ("2026-07-23", True),
+        ("2026-07-24", False),
+    ),
+)
+def test_temporary_surcharge_period_fact_tracks_probe(
+    probe: str, expected: bool
+) -> None:
+    feed, _flags = _case_feed(
+        {"hts10": "0102294024", "iso2": "CR"},
+        {"hts_line": "102294000"},
+        lambda _line, _hts, _iso2: {
+            "entry_is_line_c": False,
+            "entry_is_line_e": False,
+        },
+        probe=probe,
+        case_feed_inputs=campaign_module._case_feed_input_names({
+            "entry_is_line_c", "entry_is_line_e",
+        }),
+    )
+    assert (
+        feed["entry_is_within_temporary_surcharge_effective_period"]
+        is expected
+    )
+
+
+def test_case_feed_contract_receipts_neutral_cafta_and_all_entry_inputs() -> None:
+    emitted = {"entry_is_current", "entry_is_line_c", "entry_is_line_e"}
+    supplied = campaign_module._case_feed_input_names(emitted)
+    declared = supplied | {"unrelated_import_input"}
+    contract = campaign_module._case_feed_contract(
+        chapter="01",
+        declared_inputs=declared,
+        reachable_inputs=supplied,
+        emitted_flag_names=emitted,
+    )
+    assert "entry_is_entered_free_of_duty_under_dr_cafta" in contract[
+        "case_feed_inputs"
+    ]
+    assert "entry_is_general_note_29_d_v_textile_or_apparel_good" in contract[
+        "declared_entry_inputs"
+    ]
+    assert contract["missing_declared_entry_inputs"] == []
+    assert contract["missing_reachable_inputs"] == []
+
+
+def test_case_feed_contract_rejects_unfed_public_entry_input() -> None:
+    emitted = {"entry_is_line_c", "entry_is_line_e"}
+    supplied = campaign_module._case_feed_input_names(emitted)
+    with pytest.raises(ValueError, match="declared entry inputs absent from feed"):
+        campaign_module._case_feed_contract(
+            chapter="01",
+            declared_inputs=supplied | {"entry_requires_new_fact"},
+            reachable_inputs=supplied,
+            emitted_flag_names=emitted,
+        )
+
+
+def test_case_feed_contract_only_allows_receipted_ch99_column2_input() -> None:
+    emitted = {"entry_is_line_c", "entry_is_line_e"}
+    supplied = campaign_module._case_feed_input_names(emitted)
+    resolved = "resolved_non_ad_valorem_column2_rate"
+    contract = campaign_module._case_feed_contract(
+        chapter="99a",
+        declared_inputs=supplied | {resolved},
+        reachable_inputs=supplied | {resolved},
+        emitted_flag_names=emitted,
+    )
+    assert contract["conditionally_unfed_reachable_inputs"] == [resolved]
+    with pytest.raises(ValueError, match="reachable unfed inputs changed"):
+        campaign_module._case_feed_contract(
+            chapter="01",
+            declared_inputs=supplied | {resolved},
+            reachable_inputs=supplied | {resolved},
+            emitted_flag_names=emitted,
+        )
+
+
+def test_reachable_input_closure_includes_every_output_version(
+    tmp_path: Path,
+) -> None:
+    artifact = tmp_path / "compiled.json"
+    artifact.write_text(json.dumps({
+        "program": {
+            "derived": [
+                {
+                    "name": "campaign_output",
+                    "expr": {"kind": "derived", "name": "helper"},
+                    "versions": [],
+                },
+                {
+                    "name": "helper",
+                    "expr": {"kind": "input", "name": "current_fact"},
+                    "versions": [
+                        {
+                            "expr": {
+                                "kind": "input_or_else",
+                                "name": "historical_fact",
+                            }
+                        }
+                    ],
+                },
+                {
+                    "name": "unrequested_output",
+                    "expr": {"kind": "input", "name": "irrelevant_fact"},
+                    "versions": [],
+                },
+            ]
+        }
+    }))
+    assert campaign_module.reachable_inputs_from_artifact(
+        artifact, ("campaign_output",)
+    ) == {"current_fact", "historical_fact"}
+
+
+def test_entry_flag_producer_receipts_dynamic_note_fragments(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us"
+    tool = root / "tools/b16_entry_flags.py"
+    incidence = root / "us/policies/usitc/us-tariff-incidence/generated"
+    (incidence / "note50").mkdir(parents=True)
+    (incidence / "note52").mkdir()
+    tool.parent.mkdir(parents=True)
+    tool.write_text(
+        "from pathlib import Path\n"
+        "ROOT = Path(__file__).resolve().parents[1]\n"
+        "INCIDENCE_DIR = ROOT / "
+        "'us/policies/usitc/us-tariff-incidence/generated'\n"
+        "MODULES = ('main.yaml',)\n"
+        "def entry_flags(*_args): return {}\n"
+    )
+    (incidence / "main.yaml").write_text("main\n")
+    note50 = incidence / "note50/page-1.yaml"
+    note52 = incidence / "note52/page-2.yaml"
+    note50.write_text("note50-v1\n")
+    note52.write_text("note52-v1\n")
+    (incidence / "note52/page-2.test.yaml").write_text("not-consumed\n")
+
+    _entry_flags, first = campaign_module._load_entry_flag_tool(root)
+    assert [item["path"] for item in first["dependencies"]] == [
+        "us/policies/usitc/us-tariff-incidence/generated/main.yaml",
+        "us/policies/usitc/us-tariff-incidence/generated/note50/page-1.yaml",
+        "us/policies/usitc/us-tariff-incidence/generated/note52/page-2.yaml",
+    ]
+    note50.write_text("note50-v2\n")
+    _entry_flags, second = campaign_module._load_entry_flag_tool(root)
+    assert second["producer_sha256"] != first["producer_sha256"]
 
 
 def test_prepare_eval_manifest_prunes_superseded_keys_and_bindings() -> None:

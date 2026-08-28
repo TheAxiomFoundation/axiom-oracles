@@ -47,8 +47,8 @@ ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 EVAL_DIR = OUT_DIR / "eval"
 EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
-INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v2"
-EVAL_RUN_IDENTITY_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_run_identity.v2"
+INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v3"
+EVAL_RUN_IDENTITY_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_run_identity.v3"
 EVAL_MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
 COMPARISON_SCHEMA = "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
 COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
@@ -101,6 +101,7 @@ COMPONENT_SLOTS = (
 )
 BASE_DEPENDENT_COMPONENTS = ("ieepa", "forced_labor_section_301")
 EXPECTED_DROPPED_ENTRY_FLAGS = frozenset({"entry_is_line_c", "entry_is_line_e"})
+CORE_CASE_FEED_INPUTS = frozenset({"country_of_origin", "hts_line", "hts_number"})
 # C6 emits these historical aliases alongside the compiled compositions'
 # canonical ``*_listed`` inputs.  The campaign consumes one canonical surface:
 # aliases must agree exactly with their targets and are then removed before
@@ -120,6 +121,35 @@ NEUTRAL_BOOLEAN_INPUTS = (
     "entry_is_properly_claimed_chapter_98_entry", "entry_is_usmca_duty_free_entry",
     "entry_loaded_and_in_transit_before_july_24_2026",
 )
+PROBE_BOOLEAN_INPUTS = ("entry_is_within_temporary_surcharge_effective_period",)
+TEMPORARY_SURCHARGE_FIRST_DAY = date(2026, 2, 24)
+TEMPORARY_SURCHARGE_LAST_DAY = date(2026, 7, 23)
+PROBE_BOOLEAN_INPUT_CONTRACT = {
+    "entry_is_within_temporary_surcharge_effective_period": {
+        "derivation": "probe date is inside the inclusive effective-day interval",
+        "effective_from": TEMPORARY_SURCHARGE_FIRST_DAY.isoformat(),
+        "effective_through": TEMPORARY_SURCHARGE_LAST_DAY.isoformat(),
+        "source_rule": (
+            "us:policies/usitc/us-tariff-duty/overlays/section-122/"
+            "proclamation#temporary_import_surcharge_applies"
+        ),
+    }
+}
+# Chapter 99a/99b have no flat column-2 table.  The input is intentionally
+# absent: query planning excludes base-dependent outputs for column-2 origins,
+# while non-column-2 cases take the other branch.  It must never be synthesized
+# as zero.
+CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER = {
+    "99a": frozenset({"resolved_non_ad_valorem_column2_rate"}),
+    "99b": frozenset({"resolved_non_ad_valorem_column2_rate"}),
+}
+CONDITIONALLY_UNFED_INPUT_SEMANTICS = {
+    "resolved_non_ad_valorem_column2_rate": (
+        "No flat column-2 table exists for chapter 99a/99b. Column-2 cases "
+        "are restricted to base-independent component outputs; non-column-2 "
+        "cases take the General-rate branch. Never synthesize a zero value."
+    )
+}
 OUTPUT_NAMES = (
     "mfn_ad_valorem_rate", "ieepa_component_rate", "section_201_component_rate",
     "section_122_component_rate", "section_232_aluminum_component_rate",
@@ -350,9 +380,22 @@ def _load_entry_flag_tool(
         and incidence_dir.resolve() == expected_incidence.resolve(),
         "entry-flag producer incidence root escaped the requested checkout",
     )
+    dependency_paths = [expected_incidence / name for name in module_names]
+    # b16_entry_flags._tables() also consumes every non-test per-page Note 50
+    # and Note 52 fragment.  Receipt the exact dynamic inputs, not only the
+    # top-level MODULES tuple.
+    for directory in ("note50", "note52"):
+        dependency_paths.extend(
+            path
+            for path in sorted((expected_incidence / directory).glob("page-*.yaml"))
+            if not path.name.endswith(".test.yaml")
+        )
+    _require(
+        len(dependency_paths) == len(set(dependency_paths)),
+        "entry-flag producer dependency paths are duplicated",
+    )
     dependencies = [
-        _file_receipt(expected_incidence / name, relative_to=root)
-        for name in module_names
+        _file_receipt(path, relative_to=root) for path in dependency_paths
     ]
     provenance = {
         "tool": tool_receipt,
@@ -410,6 +453,66 @@ def declared_inputs_from_artifact(path: Path) -> frozenset[str]:
     return frozenset(inputs)
 
 
+def reachable_inputs_from_artifact(
+    path: Path, output_names: Iterable[str]
+) -> frozenset[str]:
+    """Collect inputs in the all-version dependency closure of campaign outputs."""
+
+    payload = json.loads(path.read_text())
+    program = payload.get("program")
+    _require(isinstance(program, dict), f"{path}: compiled artifact has no program")
+    derived = program.get("derived")
+    _require(isinstance(derived, list), f"{path}: compiled artifact has no derived rules")
+    by_name = {
+        rule.get("name"): rule
+        for rule in derived
+        if isinstance(rule, dict) and isinstance(rule.get("name"), str)
+    }
+    requested = tuple(output_names)
+    _require(
+        set(requested) <= set(by_name),
+        f"{path}: campaign outputs absent from artifact: {sorted(set(requested) - set(by_name))}",
+    )
+    inputs: set[str] = set()
+    visited: set[str] = set()
+
+    def visit_expression(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit_expression(item)
+            return
+        if not isinstance(node, dict):
+            return
+        kind = node.get("kind")
+        if kind in {"input", "input_or_else"}:
+            name = node.get("name")
+            _require(isinstance(name, str) and name, "compiled input has no name")
+            inputs.add(name)
+        elif kind == "derived":
+            name = node.get("name")
+            _require(isinstance(name, str) and name in by_name,
+                     f"{path}: unresolved derived dependency {name!r}")
+            visit_rule(name)
+        for value in node.values():
+            visit_expression(value)
+
+    def visit_rule(name: str) -> None:
+        if name in visited:
+            return
+        visited.add(name)
+        rule = by_name[name]
+        visit_expression(rule.get("expr"))
+        versions = rule.get("versions", [])
+        _require(isinstance(versions, list), f"{path}: malformed versions for {name}")
+        for version in versions:
+            _require(isinstance(version, dict), f"{path}: malformed version for {name}")
+            visit_expression(version.get("expr"))
+
+    for name in requested:
+        visit_rule(name)
+    return frozenset(inputs)
+
+
 def canonicalize_entry_flags(
     raw_flags: dict[str, Any],
 ) -> tuple[dict[str, bool], tuple[str, ...]]:
@@ -418,7 +521,7 @@ def canonicalize_entry_flags(
     flags = {
         name: value
         for name, value in raw_flags.items()
-        if name.startswith(("entry_is_", "entry_qualifies_"))
+        if name.startswith("entry_")
     }
     malformed = sorted(name for name, value in flags.items() if type(value) is not bool)
     _require(not malformed, f"entry flags must be boolean: {malformed}")
@@ -439,6 +542,78 @@ def canonicalize_entry_flags(
     return flags, tuple(sorted(observed))
 
 
+def _probe_boolean_inputs(probe: str) -> dict[str, bool]:
+    probe_day = date.fromisoformat(probe)
+    return {
+        "entry_is_within_temporary_surcharge_effective_period": (
+            TEMPORARY_SURCHARGE_FIRST_DAY
+            <= probe_day
+            <= TEMPORARY_SURCHARGE_LAST_DAY
+        )
+    }
+
+
+def _case_feed_input_names(emitted_flag_names: Iterable[str]) -> frozenset[str]:
+    return frozenset(
+        CORE_CASE_FEED_INPUTS
+        | set(NEUTRAL_BOOLEAN_INPUTS)
+        | set(PROBE_BOOLEAN_INPUTS)
+        | (set(emitted_flag_names) - EXPECTED_DROPPED_ENTRY_FLAGS)
+    )
+
+
+def _case_feed_contract(
+    *,
+    chapter: str,
+    declared_inputs: Iterable[str],
+    reachable_inputs: Iterable[str],
+    emitted_flag_names: Iterable[str],
+) -> dict[str, Any]:
+    """Validate and describe the exact input surface supplied by the campaign."""
+
+    declared = frozenset(declared_inputs)
+    reachable = frozenset(reachable_inputs)
+    emitted = frozenset(emitted_flag_names)
+    case_feed_inputs = _case_feed_input_names(emitted)
+    dropped = emitted - declared
+    _require(
+        dropped == EXPECTED_DROPPED_ENTRY_FLAGS,
+        f"chapter {chapter}: dropped entry flags changed: {sorted(dropped)}",
+    )
+    undeclared = case_feed_inputs - declared
+    _require(
+        not undeclared,
+        f"chapter {chapter}: case-feed inputs are undeclared: {sorted(undeclared)}",
+    )
+    declared_entry_inputs = frozenset(
+        name for name in declared if name.startswith("entry_")
+    )
+    missing_entry_inputs = declared_entry_inputs - case_feed_inputs
+    _require(
+        not missing_entry_inputs,
+        f"chapter {chapter}: declared entry inputs absent from feed: {sorted(missing_entry_inputs)}",
+    )
+    conditionally_unfed = CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER.get(
+        chapter, frozenset()
+    )
+    missing_reachable = reachable - case_feed_inputs
+    _require(
+        missing_reachable == conditionally_unfed,
+        f"chapter {chapter}: reachable unfed inputs changed: expected "
+        f"{sorted(conditionally_unfed)}, got {sorted(missing_reachable)}",
+    )
+    return {
+        "case_feed_inputs": sorted(case_feed_inputs),
+        "declared_entry_inputs": sorted(declared_entry_inputs),
+        "declared_entry_flags": sorted(declared & emitted),
+        "reachable_campaign_inputs": sorted(reachable),
+        "conditionally_unfed_reachable_inputs": sorted(conditionally_unfed),
+        "dropped_entry_flags": sorted(dropped),
+        "missing_declared_entry_inputs": [],
+        "missing_reachable_inputs": [],
+    }
+
+
 def filter_declared_feed(
     feed: dict[str, Any],
     declared_inputs: Iterable[str],
@@ -449,7 +624,8 @@ def filter_declared_feed(
     """Fail-closed projection of one case feed onto its compiled input surface.
 
     Only surplus fields emitted by the entry-flag tool may be projected away.
-    Every declared field must already be present: the engine supports
+    Every field in the receipted campaign case-feed contract must already be
+    present: the engine supports
     ``input_or_else`` defaults, but this campaign deliberately does not rely on
     them because an accidentally unfed declared input must remain observable.
     """
@@ -530,24 +706,21 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
                 check=True, capture_output=True, text=True, env=env,
             )
             declared = declared_inputs_from_artifact(artifact)
-            declared_flags = declared & emitted_names
-            dropped = emitted_names - declared_flags
-            _require(
-                dropped == EXPECTED_DROPPED_ENTRY_FLAGS,
-                f"{module}: dropped entry flags changed: {sorted(dropped)}",
-            )
-            _require(
-                not (declared_flags - emitted_names),
-                f"{module}: declared entry flags are not emitted: {sorted(declared_flags - emitted_names)}",
+            reachable = reachable_inputs_from_artifact(artifact, OUTPUT_NAMES)
+            chapter = module.parent.name.removeprefix("ch")
+            feed_contract = _case_feed_contract(
+                chapter=chapter,
+                declared_inputs=declared,
+                reachable_inputs=reachable,
+                emitted_flag_names=emitted_names,
             )
             chapters.append({
-                "chapter": module.parent.name.removeprefix("ch"),
+                "chapter": chapter,
                 "module": str(module.relative_to(rulespec_root)),
                 "module_sha256": _sha256(module),
                 "artifact_sha256": _sha256(artifact),
                 "declared_input_count": len(declared),
-                "declared_entry_flags": sorted(declared_flags),
-                "dropped_entry_flags": sorted(dropped),
+                **feed_contract,
                 "missing_declared_entry_flags": [],
             })
     receipt = {
@@ -562,6 +735,15 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
         "observed_entry_flag_aliases": list(observed_aliases),
         "emitted_entry_flags": sorted(emitted_names),
         "expected_dropped_entry_flags": sorted(EXPECTED_DROPPED_ENTRY_FLAGS),
+        "neutral_boolean_inputs": list(NEUTRAL_BOOLEAN_INPUTS),
+        "neutral_boolean_value": False,
+        "probe_boolean_inputs": PROBE_BOOLEAN_INPUT_CONTRACT,
+        "conditionally_unfed_inputs_by_chapter": {
+            chapter: sorted(inputs)
+            for chapter, inputs in CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER.items()
+        },
+        "conditionally_unfed_input_semantics":
+            CONDITIONALLY_UNFED_INPUT_SEMANTICS,
         "absent_declared_input_semantics": {
             "harness": "STOP before engine execution",
             "engine_strict_input": "MissingInput",
@@ -792,7 +974,9 @@ def _probe_dates(row: dict[str, str]) -> tuple[str, ...]:
     return (start.isoformat(),) if start == end else (start.isoformat(), end.isoformat())
 
 
-def _first_shard_cases(*, rulespec_root: Path, limit: int) -> tuple[list[Any], list[str]]:
+def _first_shard_cases(
+    *, rulespec_root: Path, limit: int, case_feed_inputs: Iterable[str]
+) -> tuple[list[Any], list[str]]:
     """Build the deterministic timing shard using only full-comparison cells."""
     from axiom_oracles.core.case import Case
 
@@ -814,20 +998,13 @@ def _first_shard_cases(*, rulespec_root: Path, limit: int) -> tuple[list[Any], l
         if disposition not in COMPARABLE:
             continue
         for probe in _probe_dates(row):
-            public_flags, _aliases = canonicalize_entry_flags(entry_flags(
-                int(route["hts_line"]), row["hts10"], row["iso2"]
-            ))
-            flags = {
-                key: value for key, value in public_flags.items()
-                if key not in EXPECTED_DROPPED_ENTRY_FLAGS
-            }
-            feed = {
-                "hts_line": int(route["hts_line"]),
-                "hts_number": row["hts10"],
-                "country_of_origin": row["iso2"],
-                **{name: False for name in NEUTRAL_BOOLEAN_INPUTS},
-                **flags,
-            }
+            feed, _flags = _case_feed(
+                row,
+                route,
+                entry_flags,
+                probe=probe,
+                case_feed_inputs=case_feed_inputs,
+            )
             cases.append(Case(
                 case_id=f"{row['hts10']}-{row['country']}-{probe}",
                 period=probe,
@@ -848,7 +1025,17 @@ def evaluate_projection(*, rulespec_root: Path, engine_binary: Path, limit: int 
     """Run and deterministically replay the first shard, then enforce 16 hours."""
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
 
-    cases, outputs = _first_shard_cases(rulespec_root=rulespec_root, limit=limit)
+    contract = _validated_input_contract(
+        rulespec_root=rulespec_root, engine_binary=engine_binary
+    )
+    chapter_contract = next(
+        item for item in contract["chapters"] if item["chapter"] == "01"
+    )
+    cases, outputs = _first_shard_cases(
+        rulespec_root=rulespec_root,
+        limit=limit,
+        case_feed_inputs=chapter_contract["case_feed_inputs"],
+    )
     program = rulespec_root / "us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml"
     runs = []
     value_hashes = []
@@ -953,6 +1140,36 @@ def _validated_input_contract(
         == entry_flag_producers["tool"]["sha256"],
         "declared-input contract entry-flag tool hash is stale",
     )
+    _require(
+        contract.get("neutral_boolean_inputs") == list(NEUTRAL_BOOLEAN_INPUTS)
+        and contract.get("neutral_boolean_value") is False,
+        "declared-input contract neutral-input semantics are stale",
+    )
+    _require(
+        contract.get("probe_boolean_inputs") == PROBE_BOOLEAN_INPUT_CONTRACT,
+        "declared-input contract probe-input semantics are stale",
+    )
+    expected_conditionally_unfed = {
+        chapter: sorted(inputs)
+        for chapter, inputs in CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER.items()
+    }
+    _require(
+        contract.get("conditionally_unfed_inputs_by_chapter")
+        == expected_conditionally_unfed,
+        "declared-input contract conditional-input semantics are stale",
+    )
+    _require(
+        contract.get("conditionally_unfed_input_semantics")
+        == CONDITIONALLY_UNFED_INPUT_SEMANTICS,
+        "declared-input contract conditional-input rationale is stale",
+    )
+    emitted = contract.get("emitted_entry_flags")
+    _require(
+        isinstance(emitted, list)
+        and all(isinstance(name, str) and name for name in emitted),
+        "declared-input contract emitted entry flags are malformed",
+    )
+    expected_case_feed_inputs = sorted(_case_feed_input_names(emitted))
     chapters = contract.get("chapters")
     _require(
         isinstance(chapters, list)
@@ -983,6 +1200,19 @@ def _validated_input_contract(
             isinstance(chapter.get("artifact_sha256"), str)
             and re.fullmatch(r"[0-9a-f]{64}", chapter["artifact_sha256"]) is not None,
             f"declared-input contract artifact hash is malformed: {name}",
+        )
+        _require(
+            chapter.get("case_feed_inputs") == expected_case_feed_inputs
+            and chapter.get("missing_declared_entry_inputs") == []
+            and chapter.get("missing_reachable_inputs") == []
+            and chapter.get("conditionally_unfed_reachable_inputs")
+            == expected_conditionally_unfed.get(name, []),
+            f"declared-input contract case-feed surface is stale: {name}",
+        )
+        _require(
+            set(chapter.get("declared_entry_inputs", []))
+            <= set(chapter["case_feed_inputs"]),
+            f"declared-input contract omits public entry inputs: {name}",
         )
         by_chapter[name] = chapter
     _require(
@@ -1018,6 +1248,9 @@ def _current_run_identity(
             "module": item["module"],
             "module_sha256": item["module_sha256"],
             "compiled_artifact_sha256": item["artifact_sha256"],
+            "case_feed_inputs": item["case_feed_inputs"],
+            "conditionally_unfed_reachable_inputs":
+                item["conditionally_unfed_reachable_inputs"],
         }
         for item in contract["chapters"]
     }
@@ -1109,17 +1342,40 @@ def _chapter_from_route(route: dict[str, str]) -> str:
     return route["chapter_shard"]
 
 
-def _case_feed(row: dict[str, str], route: dict[str, str], entry_flags: Any) -> tuple[dict[str, Any], dict[str, bool]]:
+def _case_feed(
+    row: dict[str, str],
+    route: dict[str, str],
+    entry_flags: Any,
+    *,
+    probe: str,
+    case_feed_inputs: Iterable[str],
+) -> tuple[dict[str, Any], dict[str, bool]]:
     raw_flags = entry_flags(int(route["hts_line"]), row["hts10"], row["iso2"])
     public_flags, _aliases = canonicalize_entry_flags(raw_flags)
-    flags = {
-        key: value for key, value in public_flags.items()
-        if key not in EXPECTED_DROPPED_ENTRY_FLAGS
-    }
-    feed = {
+    reserved = (
+        CORE_CASE_FEED_INPUTS
+        | set(NEUTRAL_BOOLEAN_INPUTS)
+        | set(PROBE_BOOLEAN_INPUTS)
+    )
+    overlap = set(public_flags) & reserved
+    _require(
+        not overlap,
+        f"entry-flag producer overlaps campaign-owned inputs: {sorted(overlap)}",
+    )
+    unfiltered_feed = {
         "hts_line": int(route["hts_line"]), "hts_number": row["hts10"],
         "country_of_origin": row["iso2"],
-        **{name: False for name in NEUTRAL_BOOLEAN_INPUTS}, **flags,
+        **{name: False for name in NEUTRAL_BOOLEAN_INPUTS},
+        **_probe_boolean_inputs(probe),
+        **public_flags,
+    }
+    feed, _receipt = filter_declared_feed(
+        unfiltered_feed,
+        case_feed_inputs,
+        emitted_flag_names=public_flags,
+    )
+    flags = {
+        key: value for key, value in public_flags.items() if key in feed
     }
     return feed, flags
 
@@ -1223,13 +1479,34 @@ def _evaluate_chapter(
     started = time.perf_counter()
 
     records = list(_chapter_records(chapter))
+    chapter_identity = run_identity.get("chapters", {}).get(chapter)
+    _require(isinstance(chapter_identity, dict),
+             f"chapter {chapter}: run identity has no chapter contract")
+    case_feed_inputs = chapter_identity.get("case_feed_inputs")
+    _require(isinstance(case_feed_inputs, list),
+             f"chapter {chapter}: run identity has no case-feed surface")
     module_ref = f"us:policies/cbp/us-tariff-schedule/generated/ch{chapter}/ch{chapter}"
     cases: dict[str, list[Any]] = {"full": [], "components": []}
     contexts: dict[str, list[Any]] = {"full": [], "components": []}
     for record in records:
-        feed, flags = _case_feed(record["row"], record["route"], entry_flags)
+        feed, flags = _case_feed(
+            record["row"],
+            record["route"],
+            entry_flags,
+            probe=record["probe"],
+            case_feed_inputs=case_feed_inputs,
+        )
         case_id = _case_id(record["row"], record["probe"], record["ordinal"])
         group = "full" if record["plan"]["base"] == "compare" else "components"
+        if (
+            chapter in CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER
+            and record["row"]["iso2"] in COLUMN2_ORIGINS
+        ):
+            _require(
+                group == "components",
+                f"chapter {chapter}: unresolved non-ad-valorem column-2 input "
+                "reached base-dependent outputs",
+            )
         requested = list(dict.fromkeys(
             name for slot in record["plan"]["components"] for name in SLOT_OUTPUTS[slot]
         ))
