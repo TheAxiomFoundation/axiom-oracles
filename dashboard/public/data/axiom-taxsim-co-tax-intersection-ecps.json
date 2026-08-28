@@ -82018,6 +82018,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 249.28930633544223,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 155338.12930633544,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82280,6 +82285,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -32.686786712776666,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12848.603213287224,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83907,6 +83917,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 420.70220289703866,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 110820.23220289704,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84652,6 +84667,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -595.1145084890377,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 59842.97549151096,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84747,6 +84767,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -325.5121875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1147.0178125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85767,6 +85792,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -857.5042955017125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 94473.74570449829,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86515,6 +86545,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 249.2832409667899,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 191515.6632409668,
       "parent": "us:tax/federal-income-tax#liability",
@@ -89821,6 +89856,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -1843.8897632031258,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 17785.810236796875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92716,6 +92756,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 410.6953807353493,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38578.93538073535,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92873,6 +92918,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 2781.3841067425074,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12908.074106742508,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93493,6 +93543,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -129.87636718750002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 519.5136328125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94176,6 +94231,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 1822.6080273437492,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9270.35802734375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96628,6 +96688,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -17.62556871122129,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 156.2944312887787,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97625,6 +97690,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 316.6676406250335,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 759203.3376406251,
       "parent": "us:tax/federal-income-tax#liability",
@@ -97952,6 +98022,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 249.29052882193355,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 175275.29052882193,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98114,6 +98189,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -61.13,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 0.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99725,6 +99805,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -39.760290333726516,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9232.969709666273,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101411,6 +101496,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -16.31947470984869,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7096.300525290151,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101616,6 +101706,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -19.96646752194647,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 34080.713532478054,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101711,6 +101806,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -16.363344094999775,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 25459.926655905,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102570,6 +102670,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 287.31843749999825,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 121449.6384375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -103037,6 +103142,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -164.5860917639684,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5017.7839082360315,
       "parent": "us:tax/federal-income-tax#liability",
@@ -104855,6 +104965,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 9024.245468750596,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 38901350.20546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105672,6 +105787,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 307.2048751413822,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 34651326.64487514,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106061,6 +106181,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 279.5318470746279,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 29745110.901847076,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106342,6 +106467,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 831.2080314420164,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 25464090.81803144,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106436,6 +106566,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 11951871.125507813,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 35328514.17550781,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107032,6 +107167,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 119.7839413434267,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 22366418.063941345,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107229,6 +107369,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 16700.659014254343,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2408628.229014254,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107534,6 +107679,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 131.86296874657273,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 20104230.822968747,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108055,6 +108205,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 20268.66703237593,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 18998395.207032375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108413,6 +108568,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 132.05962402373552,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14104743.479624024,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108689,6 +108849,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 35208.79930274817,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 1290553.7793027482,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108846,6 +109011,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 36.55446304008365,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 23406020.17446304,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108903,6 +109073,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.0192749015987,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15185284.089274902,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109081,6 +109256,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 106809.74307370931,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16464193.29307371,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109913,6 +110093,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 1561.9751347266138,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14289320.595134726,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110260,6 +110445,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 248.83484374918044,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 13789260.16484375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110422,6 +110612,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 164.51070312503725,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 521304.670703125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110521,6 +110716,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.08343750052154,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 13360633.8334375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -110641,6 +110841,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 69.38787018693984,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 16254249.147870187,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111395,6 +111600,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.1317248530686,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11858887.591724854,
       "parent": "us:tax/federal-income-tax#liability",
@@ -112311,6 +112521,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 248.90139648504555,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11640540.081396485,
       "parent": "us:tax/federal-income-tax#liability",
@@ -113482,6 +113697,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.23562500067055,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8993199.515625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114057,6 +114277,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 7327.654401417822,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 10116618.054401418,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114213,6 +114438,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.2010937500745,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9826868.72109375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114312,6 +114542,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.23798310011625,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 8856122.3179831,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114680,6 +114915,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 164.21648437343538,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 9386391.926484374,
       "parent": "us:tax/federal-income-tax#liability",
@@ -115791,6 +116031,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 27357.46554374136,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12902136.055543741,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116030,6 +116275,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 16427.112253544852,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 10810452.012253545,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116171,6 +116421,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 280.30886718817055,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6594982.778867188,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117336,6 +117591,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 14020.744744831696,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 10962467.214744832,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119116,6 +119376,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 132.3259140625596,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6033255.815914063,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119252,6 +119517,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 12.76299121323973,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6145269.222991213,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119491,6 +119761,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 58969.78808884369,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3019496.7280888436,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119585,6 +119860,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": 1551493.2198742796,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7586187.519874279,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119684,6 +119964,11 @@
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
       "difference": -147.8011100962758,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-capgains-bracket-set-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6081829.078889904,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119757,15 +120042,15 @@
         "bridge_artifact": 278,
         "explained_residual": 546,
         "unexplained": 7,
-        "upstream_engine_gap": 863
+        "upstream_engine_gap": 920
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 99.025812,
+      "explained_rate": 99.500416,
       "orphaned_entries": [],
       "raw_match_rate": 82.373022,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 117
+      "unexplained_count": 60
     },
     "error_count": 0,
     "errors_by_engine": {},

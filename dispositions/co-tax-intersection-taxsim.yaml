@@ -3515,3 +3515,110 @@ entries:
       tolerance: 1
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+- id: taxsim-2026-capgains-bracket-set-vintage
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135698
+    - ecps-tax-unit-135801
+    - ecps-tax-unit-135959
+    - ecps-tax-unit-136114
+    - ecps-tax-unit-136220
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-136327
+    - ecps-tax-unit-136384
+    - ecps-tax-unit-136390
+    - ecps-tax-unit-136399
+    - ecps-tax-unit-136429
+    - ecps-tax-unit-154504
+    - ecps-tax-unit-154973
+    - ecps-tax-unit-155272
+    - ecps-tax-unit-155406
+    - ecps-tax-unit-155431
+    - ecps-tax-unit-155918
+    - ecps-tax-unit-156147
+    - ecps-tax-unit-156221
+    - ecps-tax-unit-156651
+    - ecps-tax-unit-156945
+    - ecps-tax-unit-157013
+    - ecps-tax-unit-157251
+    - ecps-tax-unit-157259
+    - ecps-tax-unit-157317
+    - ecps-tax-unit-157956
+    - ecps-tax-unit-158158
+    - ecps-tax-unit-158219
+    - ecps-tax-unit-158285
+    - ecps-tax-unit-158403
+    - ecps-tax-unit-158883
+    - ecps-tax-unit-159237
+    - ecps-tax-unit-160010
+    - ecps-tax-unit-160366
+    - ecps-tax-unit-160400
+    - ecps-tax-unit-160413
+    - ecps-tax-unit-160690
+    - ecps-tax-unit-161870
+    - ecps-tax-unit-161979
+    - ecps-tax-unit-162171
+    - ecps-tax-unit-163020
+    - ecps-tax-unit-164195
+    - ecps-tax-unit-164227
+    - ecps-tax-unit-164548
+    - ecps-tax-unit-164633
+    - ecps-tax-unit-164636
+    - ecps-tax-unit-58555
+    - ecps-tax-unit-58620
+    - ecps-tax-unit-58643
+    - ecps-tax-unit-58645
+    - ecps-tax-unit-58687
+    - ecps-tax-unit-58942
+    - ecps-tax-unit-58950
+    - ecps-tax-unit-59011
+    - ecps-tax-unit-59122
+    - ecps-tax-unit-59138
+    - ecps-tax-unit-59284
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Extension of taxsim-2026-capgains-zero-threshold-vintage to the
+      full
+
+      capital-gains bracket set. Modeling TAXSIM with BOTH 2026 thresholds
+
+      projected from the 2025 values at its own ~3.204% inflation assumption
+
+      (0% rate: 96,700 -> 99,798.61 joint / 48,350 -> 49,899.31 single; 15% rate:
+
+      600,050 -> 619,283 joint / 533,400 -> 550,494 single) reproduces its v28
+
+      within $1.50 on every selected row, while the same worksheet at the
+
+      published Rev. Proc. 2025-32 values reproduces axiom''s tax_before_credits
+
+      from axiom''s own taxable income within $5. The compound fingerprints
+
+      confirm it in closed form: rows straddling both thresholds show exactly the
+
+      sum of the two effects (134.79 + 280.53 = 415.32 joint; 67.40 + 249.29 =
+
+      316.69 single, where 280.53 = (619,283 - 613,700) x 0.05 and 249.29 =
+
+      (550,494 - 545,500) x 0.05 within rounding of the projection factor).
+
+      A TAXSIM-side parameter vintage across its 2026 capital-gains bracket set;
+
+      axiom matches the published values. Resolves when NBER re-bases.'
+    arithmetic:
+    - expression: (619283 - 613700) * 0.05
+      equals: 279.15
+      tolerance: 1.5
+    - expression: (550494 - 545500) * 0.05
+      equals: 249.7
+      tolerance: 0.5
+    - expression: 134.79 + 280.53
+      equals: 415.32
+      tolerance: 0.01
+    - expression: 67.40 + 249.29
+      equals: 316.69
+      tolerance: 0.05
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
