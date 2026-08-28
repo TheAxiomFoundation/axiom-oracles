@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: fiit-taxsim-ecps
-updated: '2026-08-24'
+updated: '2026-08-27'
 entries:
 - id: taxsim-2026-eitc-child-machinery-absent
   concept: us:tax/federal-income-tax#eitc
@@ -26617,3 +26617,167 @@ entries:
       tolerance: 0.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+- id: ecps-projection-defaults-eitc-investment-income
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-120774
+    - ecps-tax-unit-144007
+    - ecps-tax-unit-148427
+    - ecps-tax-unit-19690
+    - ecps-tax-unit-67419
+    - ecps-tax-unit-67900
+    - ecps-tax-unit-7267
+    - ecps-tax-unit-7765
+    - ecps-tax-unit-80976
+    - ecps-tax-unit-94670
+    - ecps-tax-unit-96028
+  disposition: bridge_artifact
+  evidence:
+    mechanism: The ECPS lane's tax-unit projection lists eitc_relevant_investment_income
+      in _TAX_UNIT_NUMERIC_DEFAULTS (axiom_oracles/adapters/axiom/tax_projection.py),
+      so the 32(i) disqualified-income input reaches the composed program as zero
+      and axiom's eitc_investment_income_eligible gate always passes. Every selected
+      unit's actual investment income (interest + dividends + positive net capital
+      gain + positive net rent, from the same person facts the projection reads)
+      exceeds the Rev. Proc. 2025-32 $12,200 maximum, so statute allows NO credit
+      — TAXSIM's zero is correct and axiom's grant is a projection-surface artifact.
+      On ecps-tax-unit-67900 (investment income 12,214, just over the limit) TAXSIM
+      also grants 194.68 because its own limit is 2025-projected upward; the row
+      is enrolled here because the axiom-side default is what makes the row exist.
+      Resolves when the ECPS projection computes the input the way the populace
+      lane's project_eitc_relevant_investment_income already does.
+    arithmetic:
+    - expression: '14504'
+      equals: 14504
+      tolerance: 0
+    - expression: '12200'
+      equals: 12200
+      tolerance: 0
+  expires_on_source_change: true
+- id: ecps-projection-dependent-se-income-fica
+  concept: us:tax/payroll#employee_fica
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-16293
+    - ecps-tax-unit-1997
+    - ecps-tax-unit-23427
+    - ecps-tax-unit-36485
+    - ecps-tax-unit-44409
+    - ecps-tax-unit-44626
+    - ecps-tax-unit-479
+    - ecps-tax-unit-51038
+    - ecps-tax-unit-5150
+    - ecps-tax-unit-5280
+    - ecps-tax-unit-55866
+    - ecps-tax-unit-57215
+    - ecps-tax-unit-5734
+    - ecps-tax-unit-64210
+    - ecps-tax-unit-66228
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Dependent-held (unprojected) self-employment income: TAXSIM-35 has
+      no dependent-income input, so the shared projection sums SE income over head
+      and spouse only (docs/taxsim-oracle-playbook.md), while the axiom leg computes
+      SECA over every member. On every selected row the residual equals axiom''s
+      Medicare-only SECA rate (the dispositioned axiom-seca-medicare-rate-only vintage)
+      on exactly the SE income absent from the TAXSIM row: e.g. 5,010 x 0.9235 x
+      0.029 = 134.18 on ecps-tax-unit-479. A projection-surface limitation, not
+      an oracle disagreement.'
+    arithmetic:
+    - expression: 5010 * 0.9235 * 0.029
+      equals: 134.18
+      tolerance: 0.02
+  expires_on_source_change: true
+- id: axiom-seca-medicare-rate-only-r2-leftovers
+  concept: us:tax/payroll#employee_fica
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-10820
+    - ecps-tax-unit-11478
+    - ecps-tax-unit-25216
+    - ecps-tax-unit-33996
+    - ecps-tax-unit-36735
+    - ecps-tax-unit-37791
+    - ecps-tax-unit-42808
+    - ecps-tax-unit-51059
+    - ecps-tax-unit-62700
+    - ecps-tax-unit-65027
+    - ecps-tax-unit-74939
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Leftover rows of the dispositioned axiom-seca-medicare-rate-only
+      class whose mixed dependent-SE composition kept them outside the original
+      selector: on every selected row axiom''s employee_fica equals 7.65% of wages
+      plus 0.9235 x 2.9% of ALL members'' SE income while TAXSIM''s tfica carries
+      the full 15.3% SECA on the head/spouse SE it receives — the residual reproduces
+      within $5 as 0.02678 x total SE minus TAXSIM''s own SECA (tfica - 0.0765 x
+      wages). Same 1401(a) omission, filed with the parent class.'
+    arithmetic:
+    - expression: 160326 * 0.9235 * 0.029
+      equals: 4293.69
+      tolerance: 0.5
+    - expression: 80163 * 0.9235 * 0.153
+      equals: 11326.79
+      tolerance: 0.5
+  expires_on_source_change: true
+- id: taxsim-binary-2025-parameter-fallback-r2-standard-deduction
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-139776
+    - ecps-tax-unit-62434
+    - ecps-tax-unit-62911
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'More rows of the dispositioned taxsim-binary-2025-parameter-fallback
+      class: TAXSIM''s v13 returns the 2025 standard deduction (15,750 single; 17,750
+      single aged) where the 2026 law year requires 16,100 / 18,150 (Rev. Proc.
+      2025-32). Axiom carries the published 2026 values.'
+    arithmetic:
+    - expression: 16100 - 15750
+      equals: 350
+      tolerance: 0
+    - expression: 18150 - 17750
+      equals: 400
+      tolerance: 0
+  expires_on_source_change: true
+- id: taxsim-auto-itemized-standard-deduction-zeroed-r2
+  concept: us:tax/federal-income-tax#standard_deduction
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-62276
+  disposition: explained_residual
+  evidence:
+    mechanism: 'One more row of the dispositioned taxsim-auto-itemized-standard-deduction-zeroed
+      class: TAXSIM itemizes on its own when computed deductions beat the standard
+      deduction and reports v13 = 0, while axiom reports the statutory standard
+      deduction (35,500 = 32,200 joint + 2 x 1,650 aged). A reporting-surface difference,
+      not a rules disagreement.'
+    arithmetic:
+    - expression: 32200 + 2 * 1650
+      equals: 35500
+      tolerance: 0
+  expires_on_source_change: true
+- id: taxsim-childless-eitc-parameter-vintage-r2
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-152588
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'One more row of the dispositioned taxsim-childless-eitc-parameter-vintage
+      class: a childless unit qualifying through the 58-year-old spouse where TAXSIM''s
+      2025-projected phaseout parameters yield 507.49 against axiom''s 419.68 from
+      the published Rev. Proc. 2025-32 schedule.'
+    arithmetic:
+    - expression: 507.49 - 419.68
+      equals: 87.81
+      tolerance: 0.01
+  expires_on_source_change: true
