@@ -2,28 +2,34 @@
 schema: axiom_oracles.closure.ledger.v1
 program:
   id: us/tariff-duty
-  rulespec_ref: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+  rulespec_ref: 550818779a5fb0618e1374ed33bc471084c0b4ce
 generated_facts:
   corpus_roots:
     hts-rate-provisions:
       path: data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl
-      commit: bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6
+      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
       sha256: 6c8d07d21a1e3f2233197c1b2f96169f01a1a768dd2509a71c0fdb03d4a99d14
       version: 2026-08-09-usitc-hts-2026-rev15-full-schedule
       declared_count: 29845
     chapter-99-notes:
       path: data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl
-      commit: bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6
+      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
       sha256: 0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8
       version: 2026-08-04-usitc-hts-2026-rev15-notes
       declared_count: 805
+    dr-cafta-general-note-29:
+      path: data/corpus/provisions/us/statute/2026-08-28-usitc-hts-2026-rev15-general-note-29.jsonl
+      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
+      sha256: 3b3de5d98c81bad3cc560fcb738551591d7b7b5c080ca914718047a4a797368b
+      version: 2026-08-28-usitc-hts-2026-rev15-general-note-29
+      declared_count: 93
     fr-instrument-families:
       derived_from: composition source_verification plus overlays
-      rulespec_commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+      rulespec_commit: 550818779a5fb0618e1374ed33bc471084c0b4ce
   rulespec:
-    commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
-    module_count: 380
-    paths_sha256: 481956d2972610d8fe382d37ee8e651fa8bbeaf29e3550f9b08c06ca656c1a45
+    commit: 550818779a5fb0618e1374ed33bc471084c0b4ce
+    module_count: 414
+    paths_sha256: 493113e001ab82a210c28b5a8d100a541905774f410d87861421de1ce87a2cea
 committed_decisions:
   ledger:
   - root: hts-rate-provisions
@@ -67,16 +73,36 @@ committed_decisions:
     membership_rows: 122
     reason: Section 122 incidence and overlay are composed.
   - root: chapter-99-notes
+    family: notes-50-52-section-232-sector-precedence
+    status: partially-encoded
+    count: 1
+    reason: Generated schedules derive the notes 50(a)(vi) and 52(f) precedence judgment, but transaction and certification
+      qualifications remain declared entry facts rather than source-derived judgments.
+  - root: chapter-99-notes
     family: note-51-section-338
     status: pending
     count: 1
-    reason: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
+    reason: The Rev-15 chapter-99 root predates the August 19 section-338 action and contains no note 51; ingest
+      the codified note and reconcile it to the Federal Register-backed composition.
   - root: chapter-99-notes
     family: other-chapter-99-pages
     status: partially-encoded
-    reason: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
-      every other Chapter-99 note covered.
-    count: 800
+    reason: Generated schedules compose many 9903.01/.02/.05 and sector-precedence surfaces, but no page-level census
+      proves every other chapter-99 note covered.
+    count: 799
+  - root: dr-cafta-general-note-29
+    family: note-29-d-v-textile-apparel-definition
+    status: partially-encoded
+    reason: The note 52(i) exception cites and composes General Note 29(d)(v), but membership still requires the
+      WTO Agreement on Textiles and Clothing annex and a historical HTS concordance and is therefore a declared
+      entry fact.
+    count: 1
+  - root: dr-cafta-general-note-29
+    family: note-29-origin-and-free-duty-remainder
+    status: pending
+    reason: The remaining 92 pages are ingested but their origin and tariff-treatment rules are not encoded; entry
+      under DR-CAFTA free of duty remains a declared transaction fact.
+    count: 92
   - root: fr-instrument-families
     family: section-232-metal-instruments
     status: encoded
@@ -87,8 +113,9 @@ committed_decisions:
     family: section-232-non-metal-annexes
     status: pending
     count: 6
-    reason: Autos/parts, copper, semiconductors, medium/heavy-duty vehicles, and wood proclamation annexes are not
-      encoded (approximately ten annex documents).
+    reason: Selected codified memberships now support notes 50/52 section-301 precedence, but the automobile/parts,
+      copper, semiconductor, pharmaceutical, medium/heavy-duty-vehicle, and wood section-232 duty actions and their
+      complete proclamation annexes are not composed.
   - root: fr-instrument-families
     family: china-301-original-2018-actions
     status: pending
@@ -98,22 +125,26 @@ committed_decisions:
     family: china-301-2024-action
     status: partially-encoded
     count: 1
-    reason: Membership and overlay exist, but the action is not fed into the final composition.
+    reason: The 2024 action rate is composed, but generated schedules still consume a declared note-31 membership
+      fact because the complete membership table is absent.
   - root: fr-instrument-families
     family: brazil-301
-    status: partially-encoded
+    status: encoded
     count: 1
-    reason: Membership and headings exist, but the family is not fed into the final composition.
+    reason: The Brazil component is composed in generated statutory stacks with note-50 exclusions and the locally
+      derived notes-50/52 sector-precedence judgment.
   - root: fr-instrument-families
     family: forced-labor-301
     status: partially-encoded
     count: 1
-    reason: Membership and country tiers exist, but the family is not fed into the final composition.
+    reason: Country tiers and the entry-level exception wrapper are composed, including note 52(i), but section-232
+      qualifications and both General Note 29(d)(v) and DR-CAFTA free-duty eligibility remain declared facts.
   - root: fr-instrument-families
     family: solar-china
     status: partially-encoded
     count: 1
-    reason: Membership is encoded but the action is not fed into the final composition.
+    reason: The solar-China rate is composed, but generated schedules still consume a declared note-31 membership
+      fact because the complete membership table is absent.
   - root: fr-instrument-families
     family: section-201-proclamation-10339
     status: encoded
@@ -131,9 +162,10 @@ committed_decisions:
     reason: Fentanyl, reciprocal families, exclusions, and termination are composed for the codified Rev-15 state.
   - root: fr-instrument-families
     family: section-338-instruments
-    status: pending
+    status: partially-encoded
     count: 1
-    reason: Blocked on the missing note-51 ingest.
+    reason: The Federal Register-backed section-338 component and entry wrapper are composed, but the later codified
+      note-51 root and complete membership surface remain absent.
   - root: fr-instrument-families
     family: historical-vintages
     status: pending
@@ -213,6 +245,90 @@ committed_decisions:
   - input: is_forced_labor_metals_excluded
     grounding: uncaptured
     uncaptured_scope: 'witness boolean: forced-labor metals exclusion'
+  - input: entry_is_brazil_301_listed
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation determination under U.S. note 50 for the Brazil section-301 component
+  - input: entry_is_forced_labor_301_listed
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation determination under U.S. note 52 for the forced-labor section-301 component
+  - input: entry_is_section_232_covered
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation determination of existing aluminum or steel section-232 coverage
+  - input: entry_is_s232_copper_primary_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation
+  - input: entry_is_s232_copper_additional_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation
+  - input: entry_is_s232_note37_softwood_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 37(b) softwood membership supplied by entry preparation
+  - input: entry_is_s232_note37_upholstered_wood_furniture_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 37(d) upholstered-wood membership supplied by entry preparation
+  - input: entry_is_s232_note38_mhd_vehicle_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation
+  - input: entry_is_s232_note38_bus_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 38(c) bus membership supplied by entry preparation
+  - input: entry_is_s232_note33_vehicle_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation
+  - input: entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52
+    grounding: uncaptured
+    uncaptured_scope: transaction qualification for a note-33 vehicle heading listed in notes 50 and 52
+  - input: entry_is_s232_note33_auto_part_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation
+  - input: entry_is_note33_g_automobile_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a note-33(g) candidate is an automobile part
+  - input: entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52
+    grounding: uncaptured
+    uncaptured_scope: importer certification for a note-33 automobile part listed in notes 50 and 52
+  - input: entry_is_note33_auto_part_subject_to_import_adjustment_offset
+    grounding: uncaptured
+    uncaptured_scope: entry-level note-33 automobile-part import-adjustment-offset determination
+  - input: entry_is_s232_note37_cabinet_vanity_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation
+  - input: entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a note-37(f) candidate is a completed cabinet, vanity, or part
+  - input: entry_is_s232_note38_mhd_part_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 38(i) medium/heavy-duty-vehicle-part candidate membership supplied by entry
+      preparation
+  - input: entry_is_note38_i_medium_or_heavy_duty_vehicle_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a note-38(i) candidate is a medium/heavy-duty-vehicle part
+  - input: entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52
+    grounding: uncaptured
+    uncaptured_scope: importer certification for a note-38 vehicle part listed in notes 50 and 52
+  - input: entry_is_note38_mhd_part_subject_to_import_adjustment_offset
+    grounding: uncaptured
+    uncaptured_scope: entry-level note-38 vehicle-part import-adjustment-offset determination
+  - input: entry_is_s232_note39_semiconductor_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 39 semiconductor candidate membership supplied by entry preparation
+  - input: entry_qualifies_for_note39_heading_9903_79_01
+    grounding: uncaptured
+    uncaptured_scope: entry-level technical qualification for semiconductor heading 9903.79.01
+  - input: entry_is_s232_note40_pharmaceutical_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 40 pharmaceutical candidate membership supplied by entry preparation
+  - input: entry_is_note40_patented_pharmaceutical_article
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a note-40 candidate is covered by a valid unexpired U.S. patent
+  - input: entry_is_general_note_29_d_v_textile_or_apparel_good
+    grounding: uncaptured
+    uncaptured_scope: General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated
+      exclusions
+  - input: entry_is_entered_free_of_duty_under_dr_cafta
+    grounding: uncaptured
+    uncaptured_scope: claim and qualification for duty-free DR-CAFTA treatment, including applicable subchapter
+      XXII treatment
   - input: is_china_2024_action_member
     grounding: uncaptured
     uncaptured_scope: 'witness boolean: 2024 China action membership'
@@ -237,31 +353,54 @@ computed:
       partially-encoded: 800
       excluded-with-reason: 0
       pending: 1
+    dr-cafta-general-note-29:
+      encoded: 0
+      partially-encoded: 1
+      excluded-with-reason: 0
+      pending: 92
     fr-instrument-families:
-      encoded: 4
+      encoded: 5
       partially-encoded: 4
       excluded-with-reason: 0
-      pending: 9
+      pending: 8
   burndown:
   - family: 9802-partial-value-rated-lines
     root: hts-rate-provisions
     status: partially-encoded
     blocker: The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than
       derived.
+  - family: notes-50-52-section-232-sector-precedence
+    root: chapter-99-notes
+    status: partially-encoded
+    blocker: Generated schedules derive the notes 50(a)(vi) and 52(f) precedence judgment, but transaction and certification
+      qualifications remain declared entry facts rather than source-derived judgments.
   - family: note-51-section-338
     root: chapter-99-notes
     status: pending
-    blocker: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
+    blocker: The Rev-15 chapter-99 root predates the August 19 section-338 action and contains no note 51; ingest
+      the codified note and reconcile it to the Federal Register-backed composition.
   - family: other-chapter-99-pages
     root: chapter-99-notes
     status: partially-encoded
-    blocker: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
-      every other Chapter-99 note covered.
+    blocker: Generated schedules compose many 9903.01/.02/.05 and sector-precedence surfaces, but no page-level
+      census proves every other chapter-99 note covered.
+  - family: note-29-d-v-textile-apparel-definition
+    root: dr-cafta-general-note-29
+    status: partially-encoded
+    blocker: The note 52(i) exception cites and composes General Note 29(d)(v), but membership still requires the
+      WTO Agreement on Textiles and Clothing annex and a historical HTS concordance and is therefore a declared
+      entry fact.
+  - family: note-29-origin-and-free-duty-remainder
+    root: dr-cafta-general-note-29
+    status: pending
+    blocker: The remaining 92 pages are ingested but their origin and tariff-treatment rules are not encoded; entry
+      under DR-CAFTA free of duty remains a declared transaction fact.
   - family: section-232-non-metal-annexes
     root: fr-instrument-families
     status: pending
-    blocker: Autos/parts, copper, semiconductors, medium/heavy-duty vehicles, and wood proclamation annexes are
-      not encoded (approximately ten annex documents).
+    blocker: Selected codified memberships now support notes 50/52 section-301 precedence, but the automobile/parts,
+      copper, semiconductor, pharmaceutical, medium/heavy-duty-vehicle, and wood section-232 duty actions and their
+      complete proclamation annexes are not composed.
   - family: china-301-original-2018-actions
     root: fr-instrument-families
     status: pending
@@ -269,23 +408,23 @@ computed:
   - family: china-301-2024-action
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and overlay exist, but the action is not fed into the final composition.
-  - family: brazil-301
-    root: fr-instrument-families
-    status: partially-encoded
-    blocker: Membership and headings exist, but the family is not fed into the final composition.
+    blocker: The 2024 action rate is composed, but generated schedules still consume a declared note-31 membership
+      fact because the complete membership table is absent.
   - family: forced-labor-301
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and country tiers exist, but the family is not fed into the final composition.
+    blocker: Country tiers and the entry-level exception wrapper are composed, including note 52(i), but section-232
+      qualifications and both General Note 29(d)(v) and DR-CAFTA free-duty eligibility remain declared facts.
   - family: solar-china
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership is encoded but the action is not fed into the final composition.
+    blocker: The solar-China rate is composed, but generated schedules still consume a declared note-31 membership
+      fact because the complete membership table is absent.
   - family: section-338-instruments
     root: fr-instrument-families
-    status: pending
-    blocker: Blocked on the missing note-51 ingest.
+    status: partially-encoded
+    blocker: The Federal Register-backed section-338 component and entry wrapper are composed, but the later codified
+      note-51 root and complete membership surface remain absent.
   - family: historical-vintages
     root: fr-instrument-families
     status: pending
@@ -293,6 +432,6 @@ computed:
       a reproduced root.
   boundary_frontier:
     complete: true
-    input_count: 28
+    input_count: 55
     inputs: *id001
   closed: false
