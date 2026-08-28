@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: fiit-taxsim-ecps
-updated: '2026-08-27'
+updated: '2026-08-28'
 entries:
 - id: taxsim-2026-eitc-child-machinery-absent
   concept: us:tax/federal-income-tax#eitc
@@ -26617,45 +26617,6 @@ entries:
       tolerance: 0.0
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
-- id: ecps-projection-defaults-eitc-investment-income
-  concept: us:tax/federal-income-tax#eitc
-  kind: amount_difference
-  case_selector:
-    case_ids:
-    - ecps-tax-unit-120774
-    - ecps-tax-unit-144007
-    - ecps-tax-unit-148427
-    - ecps-tax-unit-19690
-    - ecps-tax-unit-67419
-    - ecps-tax-unit-67900
-    - ecps-tax-unit-7267
-    - ecps-tax-unit-7765
-    - ecps-tax-unit-80976
-    - ecps-tax-unit-94670
-    - ecps-tax-unit-96028
-  disposition: bridge_artifact
-  evidence:
-    mechanism: The ECPS lane's tax-unit projection lists eitc_relevant_investment_income
-      in _TAX_UNIT_NUMERIC_DEFAULTS (axiom_oracles/adapters/axiom/tax_projection.py),
-      so the 32(i) disqualified-income input reaches the composed program as zero
-      and axiom's eitc_investment_income_eligible gate always passes. Every selected
-      unit's actual investment income (interest + dividends + positive net capital
-      gain + positive net rent, from the same person facts the projection reads)
-      exceeds the Rev. Proc. 2025-32 $12,200 maximum, so statute allows NO credit
-      — TAXSIM's zero is correct and axiom's grant is a projection-surface artifact.
-      On ecps-tax-unit-67900 (investment income 12,214, just over the limit) TAXSIM
-      also grants 194.68 because its own limit is 2025-projected upward; the row
-      is enrolled here because the axiom-side default is what makes the row exist.
-      Resolves when the ECPS projection computes the input the way the populace
-      lane's project_eitc_relevant_investment_income already does.
-    arithmetic:
-    - expression: '14504'
-      equals: 14504
-      tolerance: 0
-    - expression: '12200'
-      equals: 12200
-      tolerance: 0
-  expires_on_source_change: true
 - id: ecps-projection-dependent-se-income-fica
   concept: us:tax/payroll#employee_fica
   kind: amount_difference
@@ -26780,4 +26741,23 @@ entries:
     - expression: 507.49 - 419.68
       equals: 87.81
       tolerance: 0.01
+  expires_on_source_change: true
+- id: taxsim-2026-eitc-investment-limit-vintage
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_id: ecps-tax-unit-67900
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: TAXSIM's 32(i) disqualified-investment-income limit is 2025-projected
+      upward, so it grants the childless credit to a unit whose investment income
+      of 12,214 exceeds the published Rev. Proc. 2025-32 maximum of 12,200. Axiom
+      denies, correctly, now that the ECPS projection computes eitc_relevant_investment_income
+      from the person facts (the ecps-projection-defaults-eitc-investment-income
+      class this row previously carried was resolved by that projection fix — its
+      other ten rows now match; this row remains because TAXSIM's limit vintage,
+      not the projection, is what grants).
+    arithmetic:
+    - expression: 12214 - 12200
+      equals: 14
+      tolerance: 0
   expires_on_source_change: true

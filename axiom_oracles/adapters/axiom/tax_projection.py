@@ -3539,6 +3539,18 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             any(_eitc_childless_age_eligible(person) for person in people)
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
+        # 32(i) disqualified income, computed the way the populace lane's
+        # project_eitc_relevant_investment_income does (interest + dividends
+        # + rent + positive net capital gain; tax-exempt interest is 0 on
+        # this surface). Leaving it to _TAX_UNIT_NUMERIC_DEFAULTS zeroed the
+        # input and granted EITC to units above the $12,200 limit — the
+        # ecps-projection-defaults-eitc-investment-income class.
+        "eitc_relevant_investment_income": (
+            filer_interest
+            + filer_dividends
+            + filer_rental
+            + max(0.0, filer_short_capital_gains + filer_long_capital_gains)
+        ),
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,

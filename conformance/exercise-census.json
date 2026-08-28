@@ -3895,16 +3895,49 @@
       "bridge_declared": false,
       "bridge_manifest_sha256": null,
       "bridged_through": {},
-      "cases_scanned": 0,
+      "cases_scanned": 956,
       "chunk_manifest": [],
-      "constant_fields": 0,
-      "evidence_fields": {},
+      "constant_fields": 3,
+      "evidence_fields": {
+        "axiom_input_records_count": {
+          "distinct": 8,
+          "state": "varied"
+        },
+        "axiom_relations_count": {
+          "distinct": 14,
+          "state": "varied"
+        },
+        "case_unit": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "dataset": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "household_id": {
+          "distinct": 933,
+          "state": "varied"
+        },
+        "household_weight": {
+          "distinct": 933,
+          "state": "varied"
+        },
+        "population": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "tax_unit_id": {
+          "distinct": 956,
+          "state": "varied"
+        }
+      },
       "evidence_source": "inline",
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-fiit-ecps.json",
-      "report_sha256": "91cea121857db502cc4cc1dc48acae72ac688513ce0a8b8428baeaf43696721d",
-      "varied_fields": 0,
+      "report_sha256": "08609c78e63cd44ad7259b3f860a39e961d84318f9db6c893eba754487e61ae0",
+      "varied_fields": 5,
       "verdict_concepts": {}
     },
     "fl-snap-ecps": {
