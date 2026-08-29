@@ -91,15 +91,15 @@ def test_pinned_sources_capture_final_rulespec_and_general_note_29():
     document = _expected_document(module)
     assert module.validate(document) == []
     assert document["generated_facts"]["rulespec"] == {
-        "commit": "550818779a5fb0618e1374ed33bc471084c0b4ce",
-        "module_count": 414,
+        "commit": "4f591c4267063094cc6da9d590872ea982940b81",
+        "module_count": 415,
         "paths_sha256": (
-            "493113e001ab82a210c28b5a8d100a541905774f410d87861421de1ce87a2cea"
+            "4dcc60251e73e11ec25c0909c57aa523b46a50569bfec964545bb6c6adcef1e3"
         ),
     }
     assert document["generated_facts"]["corpus_roots"]["dr-cafta-general-note-29"] == {
         "path": module.GENERAL_NOTE_29,
-        "commit": "a664e437fafc7784f0a833abd76ddd16ea83686b",
+        "commit": "cc18c703741425a3ebf994a2975cae158bd305d1",
         "sha256": ("3b3de5d98c81bad3cc560fcb738551591d7b7b5c080ca914718047a4a797368b"),
         "version": "2026-08-28-usitc-hts-2026-rev15-general-note-29",
         "declared_count": 93,

@@ -35,12 +35,12 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "conformance/closure/us-tariff-duty.yaml"
 CORPUS = Path.home() / "TheAxiomFoundation/_worktrees/axiom-corpus-gn29-20260828"
-CORPUS_REF = "a664e437fafc7784f0a833abd76ddd16ea83686b"
+CORPUS_REF = "cc18c703741425a3ebf994a2975cae158bd305d1"
 RULESPEC = (
     Path.home()
     / "TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us"
 )
-RULESPEC_REF = "550818779a5fb0618e1374ed33bc471084c0b4ce"
+RULESPEC_REF = "4f591c4267063094cc6da9d590872ea982940b81"
 SCHEDULE = "data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl"
 NOTES = "data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl"
 GENERAL_NOTE_29 = "data/corpus/provisions/us/statute/2026-08-28-usitc-hts-2026-rev15-general-note-29.jsonl"
@@ -56,9 +56,9 @@ GENERAL_NOTE_29_SHA256 = (
 )
 GENERAL_NOTE_29_VERSION = "2026-08-28-usitc-hts-2026-rev15-general-note-29"
 GENERAL_NOTE_29_DECLARED_COUNT = 93
-RULESPEC_MODULE_COUNT = 414
+RULESPEC_MODULE_COUNT = 415
 RULESPEC_PATHS_SHA256 = (
-    "493113e001ab82a210c28b5a8d100a541905774f410d87861421de1ce87a2cea"
+    "4dcc60251e73e11ec25c0909c57aa523b46a50569bfec964545bb6c6adcef1e3"
 )
 STATUSES = ("encoded", "partially-encoded", "excluded-with-reason", "pending")
 MODULE_PREFIXES = (

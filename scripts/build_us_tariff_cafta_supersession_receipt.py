@@ -47,8 +47,12 @@ SELECTED_EXTRACTOR = REPO_ROOT / "scripts/extract_us_tariff_schedule.R"
 
 SCHEMA = "axiom_oracles.us_tariff_schedule.cafta_reference_defect_supersession.v1"
 PREVIEW_SCHEMA = foundation.PREVIEW_SCHEMA
-INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v3"
-EXPECTED_RULESPEC_COMMIT = "550818779a5fb0618e1374ed33bc471084c0b4ce"
+INPUT_CONTRACT_SCHEMA = campaign.INPUT_CONTRACT_SCHEMA
+EVAL_RUN_IDENTITY_SCHEMA = campaign.EVAL_RUN_IDENTITY_SCHEMA
+EVAL_MANIFEST_SCHEMA = campaign.EVAL_MANIFEST_SCHEMA
+COMPARISON_SCHEMA = campaign.COMPARISON_SCHEMA
+REFERENCE_PROVENANCE_SCHEMA = "axiom_oracles.us_tariff_schedule_reference.v1"
+EXPECTED_RULESPEC_COMMIT = "4f591c4267063094cc6da9d590872ea982940b81"
 EXPECTED_CAFTA_UNITS = 17_404
 EXPECTED_CAFTA_SIGNATURES = 8_702
 CAFTA_SELECTOR_ID = "cafta-52i-deferred"
@@ -72,8 +76,8 @@ EXPECTED_ORIGIN_UNITS = {
     "NI": 15_636,
     "SV": 152,
 }
-EXPECTED_YALE_COMMIT = "c4307e514196618afcbf88cf7fd33746417eeabf"
-EXPECTED_YALE_TREE = "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+EXPECTED_YALE_COMMIT = campaign.PREVIEW_YALE_COMMIT
+EXPECTED_YALE_TREE = campaign.PREVIEW_YALE_TREE
 EXPECTED_YALE_FILES = {
     "config/policy_params.yaml": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346",
     "resources/mfn_exemption_shares.csv": "9505d04e441386ac08348de663c151743fdf3c537947cbe7ceab43b4d21381e1",
@@ -118,6 +122,7 @@ TOLERANCE = foundation.TOLERANCE
 EXPECTED_PREVIEW_CAFTA_SNAPSHOT_SHA256 = (
     "531fce05b3c6ac32980fb0e570140ccde0b277d674b6f107724fab76f7ee57c3"
 )
+EXPECTED_DEFINITION = campaign.CAFTA_EXPECTED_DEFINITION
 
 
 def require(condition: bool, message: str) -> None:
@@ -222,7 +227,9 @@ def _validate_preview(
         payload_sha256 == canonical_sha256(without_digest),
         "preview payload digest drift",
     )
-    preview_builder = REPO_ROOT / "scripts/build_us_tariff_preview_disposition_receipt.py"
+    preview_builder = (
+        REPO_ROOT / "scripts/build_us_tariff_preview_disposition_receipt.py"
+    )
     require(
         preview.get("producer", {}).get("script")
         == foundation.file_receipt(preview_builder, relative_to=REPO_ROOT),
@@ -298,7 +305,7 @@ def _validate_input_contract(
     require(
         contract.get("schema") == INPUT_CONTRACT_SCHEMA
         and contract.get("verdict") == "PASS",
-        "declared input contract is not a PASS v3 receipt",
+        "declared input contract is not a current-schema PASS receipt",
     )
     neutral_inputs = contract.get("neutral_boolean_inputs")
     require(
@@ -348,16 +355,12 @@ def _validate_reference_provenance(
     *, selected_receipt: dict[str, Any]
 ) -> dict[str, Any]:
     provenance_file = foundation.file_receipt(PROVENANCE, relative_to=REPO_ROOT)
-    integrity_file = foundation.file_receipt(
-        INTEGRITY_RECEIPT, relative_to=REPO_ROOT
-    )
-    extractor_file = foundation.file_receipt(
-        SELECTED_EXTRACTOR, relative_to=REPO_ROOT
-    )
+    integrity_file = foundation.file_receipt(INTEGRITY_RECEIPT, relative_to=REPO_ROOT)
+    extractor_file = foundation.file_receipt(SELECTED_EXTRACTOR, relative_to=REPO_ROOT)
     provenance = foundation.load_json(PROVENANCE)
     integrity = foundation.load_json(INTEGRITY_RECEIPT)
     require(
-        provenance.get("schema") == "axiom_oracles.us_tariff_schedule_reference.v1"
+        provenance.get("schema") == REFERENCE_PROVENANCE_SCHEMA
         and provenance.get("yale_commit") == EXPECTED_YALE_COMMIT
         and provenance.get("rds_sha256") == EXPECTED_RDS_SHA256
         and provenance.get("extractor_sha256") == extractor_file["sha256"]
@@ -405,9 +408,7 @@ def _extract_yale_defect_source(path: Path) -> dict[str, Any]:
         use_conditioned_start,
     )
     use_conditioned_source = source[use_conditioned_start:use_conditioned_end] + "\n"
-    use_conditioned_sha256 = hashlib.sha256(
-        use_conditioned_source.encode()
-    ).hexdigest()
+    use_conditioned_sha256 = hashlib.sha256(use_conditioned_source.encode()).hexdigest()
     chapter98_start = source.index(
         "  # 6b3. Chapter 98 secondary-classification treatment, ALL authorities."
     )
@@ -447,10 +448,8 @@ def _extract_yale_defect_source(path: Path) -> dict[str, Any]:
         "rule_hit_function_first_line": source[:function_start].count("\n") + 1,
         "rule_hit_use_site_first_line": source[:use_start].count("\n") + 1,
         "statutory_capture_first_line": source[:statutory_start].count("\n") + 1,
-        "use_conditioned_first_line": source[:use_conditioned_start].count("\n")
-        + 1,
-        "chapter98_precapture_first_line": source[:chapter98_start].count("\n")
-        + 1,
+        "use_conditioned_first_line": source[:use_conditioned_start].count("\n") + 1,
+        "chapter98_precapture_first_line": source[:chapter98_start].count("\n") + 1,
         "defect": (
             "the function argument is named condition, but dplyr's data mask "
             "resolves the bare RHS condition to the condition column; therefore "
@@ -487,7 +486,9 @@ def _extract_yale_adapter_source(path: Path) -> dict[str, Any]:
         "\n\n# Build the section_301_brazil",
     )
     receipts = {
-        "rate_and_type_resolvers_sha256": hashlib.sha256(rate_type.encode()).hexdigest(),
+        "rate_and_type_resolvers_sha256": hashlib.sha256(
+            rate_type.encode()
+        ).hexdigest(),
         "exemption_resolver_sha256": hashlib.sha256(exempt.encode()).hexdigest(),
         "authority_builder_sha256": hashlib.sha256(build.encode()).hexdigest(),
     }
@@ -517,7 +518,9 @@ def _validate_tidy_eval_reproduction_output(output: str) -> dict[str, Any]:
     fields: dict[str, str] = {}
     for line in output.splitlines():
         key, separator, value = line.partition("=")
-        require(bool(separator) and key not in fields, "malformed tidy-eval reproduction")
+        require(
+            bool(separator) and key not in fields, "malformed tidy-eval reproduction"
+        )
         fields[key] = value
     require(
         fields
@@ -621,7 +624,9 @@ def _load_yale_defect(
         )
         for row in rows:
             code = row["hts_code"]
-            require(len(code) in {8, 10} and code.isdigit(), "malformed Yale common code")
+            require(
+                len(code) in {8, 10} and code.isdigit(), "malformed Yale common code"
+            )
             common_rules.setdefault(row["condition"], set()).add(code)
 
     patented_pharma: set[str] = set()
@@ -704,13 +709,9 @@ def _revalidate_yale_evidence(yale_root: Path, receipt: dict[str, Any]) -> None:
             relative_to=yale_root,
         )
     require(
-        _extract_yale_defect_source(
-            yale_root / "src/pipeline/06_calculate_rates.R"
-        )
+        _extract_yale_defect_source(yale_root / "src/pipeline/06_calculate_rates.R")
         == receipt["source_proof"]
-        and _extract_yale_adapter_source(
-            yale_root / "src/model/authority_adapter.R"
-        )
+        and _extract_yale_adapter_source(yale_root / "src/model/authority_adapter.R")
         == receipt["adapter_source_proof"]
         and _run_tidy_eval_reproduction()
         == receipt["deterministic_minimal_reproduction"],
@@ -801,6 +802,10 @@ def _validate_campaign_and_rulespec_runtime(
     run_identity: dict[str, Any],
 ) -> tuple[Path, Any, dict[str, Any]]:
     require(
+        run_identity.get("schema") == EVAL_RUN_IDENTITY_SCHEMA,
+        "evaluation run identity schema is stale",
+    )
+    require(
         campaign._campaign_evaluator_identity()
         == run_identity.get("campaign_evaluator"),
         "fresh campaign producer no longer matches evaluation run identity",
@@ -820,7 +825,8 @@ def _validate_campaign_and_rulespec_runtime(
         }
         and rulespec.get("head_commit") == EXPECTED_RULESPEC_COMMIT
         and rulespec.get("dirty") is False
-        and rulespec.get("tracked_worktree_diff_sha256") == hashlib.sha256(b"").hexdigest()
+        and rulespec.get("tracked_worktree_diff_sha256")
+        == hashlib.sha256(b"").hexdigest()
         and rulespec.get("untracked") == [],
         "evaluation RuleSpec receipt is not the exact clean final checkout",
     )
@@ -928,7 +934,9 @@ def _scan_fresh_reference_population(
         slot = row.get("slot")
         matched = row.get("match")
         require(
-            isinstance(case_id, str) and isinstance(slot, str) and isinstance(matched, bool),
+            isinstance(case_id, str)
+            and isinstance(slot, str)
+            and isinstance(matched, bool),
             f"fresh comparison row lacks typed identity/match state at row {rows_scanned}",
         )
         per_slot.setdefault(slot, Counter())["match" if matched else "mismatch"] += 1
@@ -942,10 +950,19 @@ def _scan_fresh_reference_population(
         require(key not in found, f"duplicate fresh CAFTA identity: {key}")
         found.add(key)
         identity = foundation._identity(row, label="fresh CAFTA")
-        require(identity == historical["identity"], f"fresh CAFTA legal identity drift: {key}")
-        require(matched is False, f"CAFTA preview cell no longer has a reference discrepancy: {key}")
+        require(
+            identity == historical["identity"],
+            f"fresh CAFTA legal identity drift: {key}",
+        )
+        require(
+            matched is False,
+            f"CAFTA preview cell no longer has a reference discrepancy: {key}",
+        )
         source_eval = source_eval_units.get(key)
-        require(isinstance(source_eval, dict), f"fresh CAFTA cell lacks source evaluation: {key}")
+        require(
+            isinstance(source_eval, dict),
+            f"fresh CAFTA cell lacks source evaluation: {key}",
+        )
         source_row = source_eval["comparison"]
         current_flags = source_row["context"].get("flags")
         require(
@@ -953,8 +970,12 @@ def _scan_fresh_reference_population(
             and current_flags.get("entry_is_section_232_covered") is False,
             f"fresh CAFTA source record has Section-232 coverage: {key}",
         )
-        actual = foundation._finite_number(row.get("actual"), label="fresh CAFTA actual")
-        expected = foundation._finite_number(row.get("expected"), label="fresh CAFTA expected")
+        actual = foundation._finite_number(
+            row.get("actual"), label="fresh CAFTA actual"
+        )
+        expected = foundation._finite_number(
+            row.get("expected"), label="fresh CAFTA expected"
+        )
         delta = foundation._finite_number(row.get("delta"), label="fresh CAFTA delta")
         require(
             row.get("context") == source_row["context"]
@@ -981,7 +1002,9 @@ def _scan_fresh_reference_population(
             )
         )
         origin_census[identity["iso2"]] += 1
-    require(engine_error_rows == 0, "fresh comparison artifact contains engine-error rows")
+    require(
+        engine_error_rows == 0, "fresh comparison artifact contains engine-error rows"
+    )
     require(
         set(historical_units) == found,
         f"fresh comparison is missing {len(set(historical_units) - found)} CAFTA identities",
@@ -1019,20 +1042,23 @@ def build_receipt(
 ) -> dict[str, Any]:
     producer = foundation.file_receipt(producer_source, relative_to=repo_root)
     preview_file = foundation.file_receipt(preview_receipt_path, relative_to=repo_root)
-    preview, selectors, line_sets, historical_receipt, selected_receipt = _validate_preview(
-        preview_receipt_path
+    preview, selectors, line_sets, historical_receipt, selected_receipt = (
+        _validate_preview(preview_receipt_path)
     )
     reference_provenance = _validate_reference_provenance(
         selected_receipt=selected_receipt
     )
-    historical_units, historical_identities, historical_projections, historical_scanned = (
-        foundation._load_historical_units(
-            path=historical_artifact_path,
-            expected_receipt=historical_receipt,
-            selectors=selectors,
-            line_sets=line_sets,
-            expected_selector_units={CAFTA_SELECTOR_ID: EXPECTED_CAFTA_UNITS},
-        )
+    (
+        historical_units,
+        historical_identities,
+        historical_projections,
+        historical_scanned,
+    ) = foundation._load_historical_units(
+        path=historical_artifact_path,
+        expected_receipt=historical_receipt,
+        selectors=selectors,
+        line_sets=line_sets,
+        expected_selector_units={CAFTA_SELECTOR_ID: EXPECTED_CAFTA_UNITS},
     )
     defect_model, yale_receipt = _load_yale_defect(yale_root)
     historical_defect_rows = [
@@ -1051,7 +1077,9 @@ def build_receipt(
     )
 
     with foundation._manifest_lock(eval_manifest_path):
-        manifest_file = foundation.file_receipt(eval_manifest_path, relative_to=repo_root)
+        manifest_file = foundation.file_receipt(
+            eval_manifest_path, relative_to=repo_root
+        )
         comparison_file = foundation.file_receipt(
             comparison_receipt_path, relative_to=repo_root
         )
@@ -1069,6 +1097,11 @@ def build_receipt(
             preview=preview,
             selected_receipt=selected_receipt,
             historical_units=historical_units,
+        )
+        require(
+            manifest.get("schema") == EVAL_MANIFEST_SCHEMA
+            and comparison.get("schema") == COMPARISON_SCHEMA,
+            "evaluation or comparison schema differs from the current campaign",
         )
         rulespec_root, entry_flags, _entry_flag_producers = (
             _validate_campaign_and_rulespec_runtime(manifest["run_identity"])
@@ -1128,34 +1161,7 @@ def build_receipt(
         "schema": SCHEMA,
         "verdict": "PASS",
         "producer": {"script": producer},
-        "definition": {
-            "bounded_conclusion": (
-                "the 17,404 preview cells are a Yale reference defect caused by "
-                "the pinned tidy-eval name collision under the campaign's explicitly "
-                "neutral false entry facts"
-            ),
-            "real_entry_frontier": (
-                "unchanged: the receipt proves neither GN-29(d)(v) product status nor "
-                "a DR-CAFTA duty-free claim for any actual entry"
-            ),
-            "stable_identity": [
-                "case_id",
-                "slot",
-                "hts10",
-                "hts_line",
-                "iso2",
-                "revision",
-                "interval",
-                "origin_regime",
-                "expected",
-            ],
-            "supersession_condition": (
-                "exact immutable population and fresh identity digest; zero evaluation "
-                "or comparison engine errors; both Axiom entry predicates explicitly "
-                "false; every Yale zero and delta reproduced by the pinned name-collision "
-                "defect; corrected statutory rates equal Axiom on every cell"
-            ),
-        },
+        "definition": EXPECTED_DEFINITION,
         "inputs": {
             "immutable_preview_receipt": preview_file,
             "historical_target_mismatch_artifact": historical_receipt,
@@ -1164,9 +1170,7 @@ def build_receipt(
             "comparison_artifact": comparison["comparison_artifact"],
             "declared_input_contract": input_contract_file,
             "reference_provenance": reference_provenance["provenance"],
-            "reference_integrity_receipt": reference_provenance[
-                "integrity_receipt"
-            ],
+            "reference_integrity_receipt": reference_provenance["integrity_receipt"],
             "selected_panel_extractor": reference_provenance["extractor"],
         },
         "bindings": {
@@ -1281,8 +1285,7 @@ def build_receipt(
     )
     require(
         historical_artifact_path.stat().st_size == historical_receipt["bytes"]
-        and foundation.sha256(historical_artifact_path)
-        == historical_receipt["sha256"],
+        and foundation.sha256(historical_artifact_path) == historical_receipt["sha256"],
         "historical target artifact changed during CAFTA proof",
     )
     _revalidate_yale_evidence(yale_root, yale_receipt)
@@ -1304,7 +1307,9 @@ def main() -> int:
     parser.add_argument("--comparison-receipt", type=Path, default=COMPARISON_RECEIPT)
     parser.add_argument("--yale-root", type=Path, default=DEFAULT_YALE_ROOT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--check", action="store_true", help="compare generated bytes; do not write")
+    parser.add_argument(
+        "--check", action="store_true", help="compare generated bytes; do not write"
+    )
     args = parser.parse_args()
     receipt = build_receipt(
         repo_root=REPO_ROOT,
@@ -1318,10 +1323,14 @@ def main() -> int:
     output = render(receipt)
     if args.check:
         require(args.output.is_file(), f"generated receipt missing: {args.output}")
-        require(args.output.read_text() == output, f"generated receipt drift: {args.output}")
+        require(
+            args.output.read_text() == output, f"generated receipt drift: {args.output}"
+        )
     else:
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.NamedTemporaryFile("w", dir=args.output.parent, delete=False) as target:
+        with tempfile.NamedTemporaryFile(
+            "w", dir=args.output.parent, delete=False
+        ) as target:
             target.write(output)
             temporary = Path(target.name)
         temporary.replace(args.output)

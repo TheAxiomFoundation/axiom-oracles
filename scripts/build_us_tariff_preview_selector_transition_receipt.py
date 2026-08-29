@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Prove fail-closed transitions from historical tariff preview selectors.
 
-The immutable preview receipt records historical mismatch populations.  A
-partially fixed population must not be relabeled in place or treated as fully
-retired.  This producer joins every historical Section-232 identity to the
-current evaluation and comparison, proves the exact match/residual partition,
-and emits current child contracts for the residual only.
+The immutable preview receipt records historical mismatch populations under
+an older campaign flag schema.  This producer joins every historical selector
+identity to the current evaluation and comparison, proves the exact current
+population, and emits fresh child contracts rather than relabeling immutable
+parents in place.  The six Section-232 parents retain their stricter legal
+partition proof; CAFTA reclassification additionally requires its independent
+reference-defect supersession receipt.
 
 The original all-match equivalence producer remains the full-closure guard.
 This producer does not weaken or replace its ``match=true`` requirement.
@@ -15,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import math
 import tempfile
 from collections import Counter, defaultdict
 from functools import lru_cache
@@ -22,10 +25,12 @@ from pathlib import Path
 from typing import Any, Callable
 
 try:
+    from scripts import build_us_tariff_cafta_supersession_receipt as cafta
     from scripts import build_us_tariff_section232_equivalence_receipt as full
     from scripts import build_us_tariff_preview_disposition_receipt as preview_builder
     from scripts import us_tariff_schedule_campaign as campaign
 except ModuleNotFoundError:  # Direct execution from scripts/.
+    import build_us_tariff_cafta_supersession_receipt as cafta
     import build_us_tariff_section232_equivalence_receipt as full
     import build_us_tariff_preview_disposition_receipt as preview_builder
     import us_tariff_schedule_campaign as campaign
@@ -41,6 +46,17 @@ DEFAULT_OUTPUT = (
     REPO_ROOT / "reference/us-tariff-schedule/preview-selector-transition-receipt.json"
 )
 SCHEMA = "axiom_oracles.us_tariff_schedule.preview_selector_transitions.v1"
+CAFTA_SELECTOR_ID = cafta.CAFTA_SELECTOR_ID
+CAFTA_SUPERSESSION_RECEIPT = cafta.DEFAULT_OUTPUT
+
+# Producer-independent snapshot of all 18 immutable preview selectors.  Like
+# the original Section-232 pin, it excludes mutable producer receipts while
+# including the complete selector contracts, line sets, source receipts, and
+# census selected by ``EXPECTED_SELECTOR_UNITS``.
+EXPECTED_PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256 = (
+    "4c6a0074bae1ff88ceeedc8b6e8c0b28eb829670c5a4e1a1edbb210be382dba6"
+)
+EXPECTED_PARENT_IDS = frozenset(preview_builder.EXPECTED_SELECTOR_UNITS)
 
 UNCONDITIONAL_PRECEDENCE_FLAGS = (
     "entry_is_section_232_covered",
@@ -144,6 +160,343 @@ EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10 = frozenset(
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise ValueError(message)
+
+
+def _valid_delta_bound(value: Any, *, selector_id: str) -> dict[str, Any]:
+    require(
+        isinstance(value, dict) and set(value) in ({"sign"}, {"values"}),
+        f"preview selector delta bound is malformed: {selector_id}",
+    )
+    if "sign" in value:
+        require(
+            value["sign"] in {"pos", "neg"},
+            f"preview selector delta sign is malformed: {selector_id}",
+        )
+    else:
+        values = value["values"]
+        require(
+            isinstance(values, list)
+            and bool(values)
+            and all(
+                isinstance(item, (int, float))
+                and not isinstance(item, bool)
+                and math.isfinite(item)
+                for item in values
+            )
+            and values == sorted(set(values)),
+            f"preview selector delta values are malformed: {selector_id}",
+        )
+    return value
+
+
+def _delta_matches(value: float, bound: dict[str, Any]) -> bool:
+    if "sign" in bound:
+        return (
+            value > full.TOLERANCE
+            if bound["sign"] == "pos"
+            else value < -full.TOLERANCE
+        )
+    return any(abs(value - expected) <= full.TOLERANCE for expected in bound["values"])
+
+
+def _validate_preview(
+    path: Path,
+    *,
+    expected_snapshot_sha256: str,
+    expected_selector_units: dict[str, int],
+) -> tuple[
+    dict[str, Any],
+    dict[str, dict[str, Any]],
+    dict[str, frozenset[str]],
+    dict[str, Any],
+    dict[str, Any],
+]:
+    """Validate an immutable preview selector set without §232-only bounds."""
+
+    preview = full.load_json(path)
+    require(
+        preview.get("schema") == full.PREVIEW_SCHEMA
+        and preview.get("verdict") == "PASS",
+        "preview disposition receipt is not a PASS v1 receipt",
+    )
+    without_digest = dict(preview)
+    payload_sha256 = without_digest.pop("receipt_payload_sha256", None)
+    require(
+        payload_sha256 == full.canonical_sha256(without_digest),
+        "preview payload digest drift",
+    )
+    require(
+        full.canonical_sha256(
+            full.preview_section232_snapshot(preview, expected_selector_units)
+        )
+        == expected_snapshot_sha256,
+        "immutable preview all-selector snapshot drift",
+    )
+
+    inputs = preview.get("inputs")
+    require(isinstance(inputs, dict), "preview input receipts are malformed")
+    historical_receipt = full._valid_receipt(
+        inputs.get(full.HISTORICAL_LOGICAL_PATH),
+        label=full.HISTORICAL_LOGICAL_PATH,
+    )
+    selected_receipt = full._valid_receipt(
+        inputs.get(full.SELECTED_LOGICAL_PATH),
+        label=full.SELECTED_LOGICAL_PATH,
+    )
+    require(
+        historical_receipt["path"] == full.HISTORICAL_LOGICAL_PATH
+        and selected_receipt["path"] == full.SELECTED_LOGICAL_PATH,
+        "preview input logical paths drifted",
+    )
+
+    raw_selectors = preview.get("selectors")
+    raw_line_sets = preview.get("line_sets")
+    require(
+        isinstance(raw_selectors, list) and isinstance(raw_line_sets, dict),
+        "preview selectors or line sets are malformed",
+    )
+    selector_fields = {
+        "id",
+        "logical_class",
+        "disposition",
+        "attribution",
+        "expected_units",
+        "expected_signature_count",
+        "expected_signature_population_sha256",
+        "match",
+    }
+    selectors: dict[str, dict[str, Any]] = {}
+    line_sets: dict[str, frozenset[str]] = {}
+    for item in raw_selectors:
+        require(
+            isinstance(item, dict) and set(item) == selector_fields,
+            "preview selector contract fields are malformed",
+        )
+        selector_id = item.get("id")
+        require(
+            isinstance(selector_id, str)
+            and selector_id in expected_selector_units
+            and selector_id not in selectors,
+            f"preview selector id is unexpected or duplicated: {selector_id}",
+        )
+        require(
+            all(
+                isinstance(item.get(field), str) and bool(item[field])
+                for field in ("logical_class", "disposition", "attribution")
+            )
+            and item.get("expected_units") == expected_selector_units[selector_id]
+            and isinstance(item.get("expected_signature_count"), int)
+            and not isinstance(item["expected_signature_count"], bool)
+            and 0 < item["expected_signature_count"] <= item["expected_units"]
+            and isinstance(item.get("expected_signature_population_sha256"), str)
+            and full.HEX64.fullmatch(item["expected_signature_population_sha256"])
+            is not None,
+            f"preview selector ruling or census is malformed: {selector_id}",
+        )
+        match = item.get("match")
+        require(
+            isinstance(match, dict)
+            and set(match) == {"slot", "line_set", "delta"}
+            and match.get("slot") in {"brazil_section_301", "forced_labor_section_301"},
+            f"preview selector match is malformed: {selector_id}",
+        )
+        _valid_delta_bound(match["delta"], selector_id=selector_id)
+        line_set_name = match.get("line_set")
+        line_receipt = raw_line_sets.get(line_set_name)
+        require(
+            isinstance(line_set_name, str)
+            and line_set_name.startswith("preview-1311-")
+            and isinstance(line_receipt, dict)
+            and set(line_receipt)
+            == {"width", "value_count", "values_sha256", "values"},
+            f"preview selector line set is missing or malformed: {selector_id}",
+        )
+        values = line_receipt.get("values")
+        require(
+            line_receipt.get("width") == 10
+            and isinstance(values, list)
+            and values == sorted(set(values))
+            and all(
+                isinstance(value, str) and len(value) == 10 and value.isdigit()
+                for value in values
+            )
+            and line_receipt.get("value_count") == len(values)
+            and line_receipt.get("values_sha256") == full.values_sha256(values)
+            and line_set_name not in line_sets,
+            f"preview selector line-set receipt drifted: {selector_id}",
+        )
+        selectors[selector_id] = item
+        line_sets[line_set_name] = frozenset(values)
+
+    require(
+        set(selectors) == set(expected_selector_units)
+        and len(line_sets) == len(selectors),
+        "preview receipt does not contain exactly the expected selector set",
+    )
+    census = preview.get("census")
+    require(
+        isinstance(census, dict)
+        and census.get("per_selector") == expected_selector_units
+        and census.get("total") == sum(expected_selector_units.values()),
+        "preview selector census disagrees with contracts",
+    )
+    return preview, selectors, line_sets, historical_receipt, selected_receipt
+
+
+def _validated_fresh_flag_names(
+    *, repo_root: Path, run_identity: dict[str, Any]
+) -> tuple[frozenset[str], Path, dict[str, Any]]:
+    """Derive the exact fresh row schema from the receipted input contract."""
+
+    binding = run_identity.get("input_contract")
+    require(
+        isinstance(binding, dict)
+        and set(binding) == {"path", "bytes", "sha256", "schema"}
+        and isinstance(binding.get("path"), str)
+        and bool(binding["path"])
+        and isinstance(binding.get("bytes"), int)
+        and not isinstance(binding["bytes"], bool)
+        and binding["bytes"] >= 0
+        and isinstance(binding.get("sha256"), str)
+        and full.HEX64.fullmatch(binding["sha256"]) is not None
+        and binding.get("schema") == campaign.INPUT_CONTRACT_SCHEMA,
+        "evaluation run input-contract binding is malformed",
+    )
+    contract_path = full._resolve_receipted_path(binding["path"], repo_root)
+    contract_file = full.file_receipt(contract_path, relative_to=repo_root)
+    require(
+        {**contract_file, "schema": binding["schema"]} == binding,
+        "evaluation run input-contract file drift",
+    )
+    contract = full.load_json(contract_path)
+    emitted = contract.get("emitted_entry_flags")
+    dropped = contract.get("expected_dropped_entry_flags")
+    require(
+        contract.get("schema") == campaign.INPUT_CONTRACT_SCHEMA
+        and contract.get("verdict") == "PASS"
+        and isinstance(emitted, list)
+        and all(isinstance(name, str) and name.startswith("entry_") for name in emitted)
+        and emitted == sorted(set(emitted))
+        and isinstance(dropped, list)
+        and dropped == sorted(campaign.EXPECTED_DROPPED_ENTRY_FLAGS)
+        and set(dropped) <= set(emitted)
+        and contract.get("entry_flag_producers")
+        == run_identity.get("entry_flag_producers")
+        and contract.get("reference_assumptions")
+        == run_identity.get("reference_assumptions")
+        and contract.get("rulespec") == run_identity.get("rulespec")
+        and contract.get("engine") == run_identity.get("engine"),
+        "declared input contract does not bind the fresh flag schema",
+    )
+    fresh_flag_names = frozenset(emitted) - frozenset(dropped)
+    require(bool(fresh_flag_names), "receipted fresh flag schema is empty")
+    return fresh_flag_names, contract_path, contract_file
+
+
+def _row_matches_selector(
+    row: dict[str, Any],
+    *,
+    match: dict[str, Any],
+    line_sets: dict[str, frozenset[str]],
+) -> bool:
+    context = row.get("context")
+    if not isinstance(context, dict) or not isinstance(context.get("hts10"), str):
+        return False
+    delta = full._finite_number(row.get("delta"), label="selector delta")
+    return (
+        row.get("slot") == match["slot"]
+        and context["hts10"] in line_sets[match["line_set"]]
+        and _delta_matches(delta, match["delta"])
+    )
+
+
+def _load_historical_units(
+    *,
+    path: Path,
+    expected_receipt: dict[str, Any],
+    selectors: dict[str, dict[str, Any]],
+    line_sets: dict[str, frozenset[str]],
+    expected_selector_units: dict[str, int],
+) -> tuple[
+    dict[tuple[str, str], dict[str, Any]],
+    dict[str, list[dict[str, Any]]],
+    int,
+]:
+    """Load all preview parents, including negative and exact-value deltas."""
+
+    require(
+        path.is_file()
+        and path.stat().st_size == expected_receipt["bytes"]
+        and full.sha256(path) == expected_receipt["sha256"],
+        "historical target mismatch artifact does not match immutable preview",
+    )
+    units: dict[tuple[str, str], dict[str, Any]] = {}
+    identities: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    signature_populations: dict[str, Counter[str]] = defaultdict(Counter)
+    rows_scanned = 0
+    for row in full._iter_jsonl_gzip(path):
+        rows_scanned += 1
+        matches = [
+            selector_id
+            for selector_id, selector in selectors.items()
+            if _row_matches_selector(row, match=selector["match"], line_sets=line_sets)
+        ]
+        require(
+            len(matches) <= 1,
+            f"historical preview selector overlap: {matches}",
+        )
+        if not matches:
+            continue
+        selector_id = matches[0]
+        new_disagreement = row.get("new_disagreement")
+        old_target_class = row.get("old_target_class")
+        require(
+            new_disagreement is None or isinstance(new_disagreement, bool),
+            f"historical preview new-disagreement state is malformed: {row.get('case_id')}",
+        )
+        require(
+            old_target_class is None
+            or (isinstance(old_target_class, str) and bool(old_target_class)),
+            f"historical preview old-target class is malformed: {row.get('case_id')}",
+        )
+        identity = full._identity(row, label="historical")
+        key = full._identity_key(identity)
+        require(key not in units, f"duplicate historical preview identity: {key}")
+        actual = full._finite_number(row.get("actual"), label="historical actual")
+        delta = full._finite_number(row.get("delta"), label="historical delta")
+        require(
+            abs((actual - identity["expected"]) - delta) <= full.TOLERANCE
+            and abs(delta) > full.TOLERANCE,
+            f"historical preview mismatch arithmetic drift: {key}",
+        )
+        context = row.get("context")
+        require(
+            isinstance(context, dict) and isinstance(context.get("flags"), dict),
+            f"historical preview flag vector is malformed: {key}",
+        )
+        signature = campaign.mismatch_signature(row)
+        signature_populations[selector_id][signature] += 1
+        units[key] = {"selector": selector_id, "identity": identity}
+        identities[selector_id].append(identity)
+
+    census = {selector_id: len(identities[selector_id]) for selector_id in selectors}
+    require(
+        census == expected_selector_units,
+        f"historical preview identity census drift: {census}",
+    )
+    require(
+        rows_scanned == sum(expected_selector_units.values()),
+        "historical preview contains unclassified rows",
+    )
+    for selector_id, selector in selectors.items():
+        population = signature_populations[selector_id]
+        require(
+            len(population) == selector["expected_signature_count"]
+            and campaign.signature_population_sha256(population.items())
+            == selector["expected_signature_population_sha256"],
+            f"historical preview signature population drift: {selector_id}",
+        )
+    return units, dict(identities), rows_scanned
 
 
 def _logical_file_receipt(path: Path, *, logical_path: str) -> dict[str, Any]:
@@ -252,8 +605,7 @@ def _verified_yale_annex_classifier(
                 {
                     preview_builder.normalize_code(row.get("hts_prefix", ""))
                     for row in derivative_rows
-                    if (row.get("effective_date") or "1900-01-01")
-                    <= interval_start
+                    if (row.get("effective_date") or "1900-01-01") <= interval_start
                 },
                 key=lambda value: (-len(value), value),
             )
@@ -286,9 +638,7 @@ def _verified_yale_annex_classifier(
                 f"{hts10}: {(winning_prefix, tier, source)}",
             )
             return "annex_proclamation_prefix", winning_prefix
-        derivative_hits = [
-            prefix for prefix in derivative if hts10.startswith(prefix)
-        ]
+        derivative_hits = [prefix for prefix in derivative if hts10.startswith(prefix)]
         require(
             bool(derivative_hits),
             f"Yale annex defect row has no direct or derivative source: {hts10}",
@@ -333,17 +683,11 @@ def _precedence_exempt(flags: dict[str, bool]) -> bool:
         or flags["entry_is_s232_note16_c_ii_derivative_aluminum_member"]
         or (
             flags["entry_is_s232_note16_c_vi_derivative_aluminum_candidate"]
-            and (
-                flags[NOTE16_METAL_CHAPTER_FLAG]
-                or flags[NOTE16_WEIGHT_INPUT]
-            )
+            and (flags[NOTE16_METAL_CHAPTER_FLAG] or flags[NOTE16_WEIGHT_INPUT])
         )
         or (
             flags["entry_is_s232_note16_c_ix_derivative_aluminum_candidate"]
-            and (
-                flags[NOTE16_METAL_CHAPTER_FLAG]
-                or flags[NOTE16_WEIGHT_INPUT]
-            )
+            and (flags[NOTE16_METAL_CHAPTER_FLAG] or flags[NOTE16_WEIGHT_INPUT])
         )
         or (
             flags["entry_is_s232_note33_vehicle_candidate"]
@@ -407,9 +751,7 @@ def _child_flag_vector(pattern: tuple[str, ...]) -> dict[str, bool]:
     return flags
 
 
-def _child_ruling(
-    parent_id: str, pattern: tuple[str, ...]
-) -> dict[str, str]:
+def _child_ruling(parent_id: str, pattern: tuple[str, ...]) -> dict[str, str]:
     require(
         parent_id.startswith("section232-")
         and parent_id.endswith(("-brazil", "-forced-labor")),
@@ -427,12 +769,315 @@ def _child_ruling(
         }
     return {
         "id": f"section232-{family}-{slug}-{country}",
-        "logical_class": (
-            f"section232-{family}-{slug}-conditional-reference-behavior"
-        ),
+        "logical_class": (f"section232-{family}-{slug}-conditional-reference-behavior"),
         "disposition": "explained_residual",
         "attribution": "reference-behavior",
     }
+
+
+def _fresh_rebind_child_ruling(
+    parent_id: str, parent: dict[str, Any]
+) -> dict[str, str]:
+    if parent_id == CAFTA_SELECTOR_ID:
+        return {
+            "id": "cafta-52i-yale-reference-defect",
+            "logical_class": "cafta-52i-yale-reference-defect",
+            "disposition": "upstream_engine_gap",
+            "attribution": "reference-defect",
+        }
+    return {
+        "id": f"{parent_id}-fresh-signature-rebind",
+        "logical_class": parent["logical_class"],
+        "disposition": parent["disposition"],
+        "attribution": parent["attribution"],
+    }
+
+
+def _actual_file_receipt(receipt: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
+    path = full._resolve_receipted_path(receipt["path"], repo_root)
+    relative_to = None if Path(receipt["path"]).is_absolute() else repo_root
+    return full.file_receipt(path, relative_to=relative_to)
+
+
+def _validated_cafta_supersession_receipt(
+    *,
+    path: Path,
+    repo_root: Path,
+    producer_source: Path,
+    preview_file: dict[str, Any],
+    preview_payload_sha256: str,
+    historical_receipt: dict[str, Any],
+    selected_receipt: dict[str, Any],
+    manifest_file: dict[str, Any],
+    comparison_file: dict[str, Any],
+    comparison_artifact: dict[str, Any],
+    manifest: dict[str, Any],
+    comparison: dict[str, Any],
+    historical_identity_population_sha256: str,
+    fresh_identity_population_sha256: str,
+) -> dict[str, Any]:
+    """Validate and reduce the independent CAFTA proof for transition evidence."""
+
+    receipt_file = full.file_receipt(path, relative_to=repo_root)
+    receipt = full.load_json(path)
+    expected_fields = {
+        "schema",
+        "verdict",
+        "producer",
+        "definition",
+        "inputs",
+        "bindings",
+        "axiom_predicate_proof",
+        "yale_reference_defect",
+        "zero_error_proof",
+        "census",
+        "supersession",
+        "receipt_payload_sha256",
+    }
+    require(
+        set(receipt) == expected_fields
+        and receipt.get("schema") == cafta.SCHEMA
+        and receipt.get("verdict") == "PASS",
+        "CAFTA supersession receipt is not a complete PASS receipt",
+    )
+    without_digest = dict(receipt)
+    payload_sha256 = without_digest.pop("receipt_payload_sha256", None)
+    require(
+        isinstance(payload_sha256, str)
+        and full.HEX64.fullmatch(payload_sha256) is not None
+        and payload_sha256 == full.canonical_sha256(without_digest),
+        "CAFTA supersession receipt payload digest drift",
+    )
+    expected_producer = {
+        "script": full.file_receipt(producer_source, relative_to=repo_root)
+    }
+    require(
+        receipt.get("producer") == expected_producer,
+        "CAFTA supersession receipt producer drift",
+    )
+
+    inputs = receipt.get("inputs")
+    expected_input_names = {
+        "immutable_preview_receipt",
+        "historical_target_mismatch_artifact",
+        "evaluation_manifest",
+        "comparison_receipt",
+        "comparison_artifact",
+        "declared_input_contract",
+        "reference_provenance",
+        "reference_integrity_receipt",
+        "selected_panel_extractor",
+    }
+    require(
+        isinstance(inputs, dict) and set(inputs) == expected_input_names,
+        "CAFTA supersession receipt inputs are malformed",
+    )
+    shared_inputs = {
+        "immutable_preview_receipt": preview_file,
+        "historical_target_mismatch_artifact": historical_receipt,
+        "evaluation_manifest": manifest_file,
+        "comparison_receipt": comparison_file,
+        "comparison_artifact": comparison_artifact,
+    }
+    require(
+        all(inputs.get(name) == value for name, value in shared_inputs.items()),
+        "CAFTA supersession receipt is bound to different transition evidence",
+    )
+    for name in expected_input_names - set(shared_inputs):
+        input_receipt = full._valid_receipt(inputs.get(name), label=f"CAFTA {name}")
+        require(
+            _actual_file_receipt(input_receipt, repo_root=repo_root) == input_receipt,
+            f"CAFTA supersession input changed: {name}",
+        )
+
+    bindings = receipt.get("bindings")
+    run_identity = manifest.get("run_identity")
+    chapters = run_identity.get("chapters") if isinstance(run_identity, dict) else None
+    campaign_evaluator = (
+        run_identity.get("campaign_evaluator")
+        if isinstance(run_identity, dict)
+        else None
+    )
+    campaign_source = (
+        campaign_evaluator.get("campaign")
+        if isinstance(campaign_evaluator, dict)
+        else None
+    )
+    require(
+        isinstance(bindings, dict)
+        and isinstance(run_identity, dict)
+        and isinstance(chapters, dict)
+        and bool(chapters)
+        and run_identity.get("selected_population") == selected_receipt
+        and isinstance(campaign_source, dict)
+        and bindings.get("preview_receipt_payload_sha256") == preview_payload_sha256
+        and bindings.get("preview_cafta_snapshot_sha256")
+        == cafta.EXPECTED_PREVIEW_CAFTA_SNAPSHOT_SHA256
+        and bindings.get("rulespec") == run_identity.get("rulespec")
+        and bindings.get("campaign_evaluator") == campaign_evaluator
+        and bindings.get("selected_population_sha256") == selected_receipt["sha256"]
+        and bindings.get("generation_id") == comparison.get("generation_id")
+        and bindings.get("run_identity_sha256") == comparison.get("run_identity_sha256")
+        and bindings.get("evaluation_manifest_sha256")
+        == comparison.get("evaluation_manifest_sha256")
+        and bindings.get("fresh_campaign_classifier_sha256")
+        == campaign_source.get("sha256")
+        and bindings.get("preview_campaign_classifier_sha256")
+        == campaign_source.get("sha256")
+        and bindings.get("campaign_producer_identity_required") is False
+        and bindings.get("evaluation_shard_engine_errors") == 0
+        and bindings.get("observed_evaluation_record_errors") == 0
+        and bindings.get("comparison_receipt_engine_errors") == 0
+        and bindings.get("evaluated_chapters") == len(chapters)
+        and isinstance(bindings.get("evaluated_cases"), int)
+        and not isinstance(bindings["evaluated_cases"], bool)
+        and bindings["evaluated_cases"] > 0
+        and bindings.get("evaluated_cases") == bindings.get("observed_evaluated_cases")
+        and bindings.get("reference_compared_field") == "statutory_rate_s301fl",
+        "CAFTA supersession receipt runtime binding drift",
+    )
+
+    zero_errors = receipt.get("zero_error_proof")
+    require(
+        zero_errors
+        == {
+            "evaluation_shard_engine_errors": 0,
+            "observed_evaluation_record_errors": 0,
+            "comparison_receipt_engine_errors": 0,
+            "comparison_artifact_engine_error_rows": 0,
+        },
+        "CAFTA supersession receipt does not prove zero engine errors",
+    )
+    predicate_proof = receipt.get("axiom_predicate_proof")
+    require(
+        isinstance(predicate_proof, dict)
+        and predicate_proof.get("predicates")
+        == {name: False for name in cafta.CAFTA_INPUTS}
+        and predicate_proof.get("all_joined_actual_case_feeds_false_false") is True
+        and predicate_proof.get("joined_fresh_evaluation_records")
+        == cafta.EXPECTED_CAFTA_UNITS
+        and predicate_proof.get("chapter_contracts_checked") == len(chapters)
+        and predicate_proof.get("contract_sha256")
+        == inputs["declared_input_contract"]["sha256"]
+        and isinstance(predicate_proof.get("actual_case_feed_projection_sha256"), str)
+        and full.HEX64.fullmatch(predicate_proof["actual_case_feed_projection_sha256"])
+        is not None,
+        "CAFTA supersession receipt predicate proof drift",
+    )
+    census = receipt.get("census")
+    historical_rows_scanned = (
+        census.get("historical_artifact_rows_scanned")
+        if isinstance(census, dict)
+        else None
+    )
+    fresh_rows_scanned = (
+        census.get("fresh_comparison_rows_scanned")
+        if isinstance(census, dict)
+        else None
+    )
+    require(
+        isinstance(census, dict)
+        and set(census)
+        == {
+            "historical_artifact_rows_scanned",
+            "fresh_comparison_rows_scanned",
+            "cafta_units",
+            "cafta_signatures",
+            "origin_units",
+        }
+        and isinstance(historical_rows_scanned, int)
+        and not isinstance(historical_rows_scanned, bool)
+        and historical_rows_scanned >= cafta.EXPECTED_CAFTA_UNITS
+        and isinstance(fresh_rows_scanned, int)
+        and not isinstance(fresh_rows_scanned, bool)
+        and fresh_rows_scanned >= cafta.EXPECTED_CAFTA_UNITS
+        and census.get("cafta_units") == cafta.EXPECTED_CAFTA_UNITS
+        and census.get("cafta_signatures") == cafta.EXPECTED_CAFTA_SIGNATURES
+        and census.get("origin_units") == cafta.EXPECTED_ORIGIN_UNITS,
+        "CAFTA supersession receipt census drift",
+    )
+
+    supersession = receipt.get("supersession")
+    supersession_fields = {
+        "authorized_disposition_after_pass",
+        "authorized_attribution_after_pass",
+        "historical_identity_population_sha256",
+        "fresh_identity_population_sha256",
+        "historical_mismatch_projection_sha256",
+        "historical_defect_projection_sha256",
+        "fresh_defect_projection_sha256",
+        "joined_historical_units",
+        "missing_historical_units",
+        "duplicate_historical_identities",
+        "duplicate_fresh_identities",
+        "fresh_mismatching_units",
+        "all_present",
+        "all_unique",
+        "all_predicates_false",
+        "all_yale_defect_zeros_reproduced",
+        "all_corrected_yale_statutory_rates_match_axiom",
+    }
+    projection_hashes = (
+        "historical_mismatch_projection_sha256",
+        "historical_defect_projection_sha256",
+        "fresh_defect_projection_sha256",
+    )
+    require(
+        isinstance(supersession, dict)
+        and set(supersession) == supersession_fields
+        and supersession.get("authorized_disposition_after_pass")
+        == "upstream_engine_gap"
+        and supersession.get("authorized_attribution_after_pass") == "reference-defect"
+        and supersession.get("historical_identity_population_sha256")
+        == historical_identity_population_sha256
+        and supersession.get("fresh_identity_population_sha256")
+        == fresh_identity_population_sha256
+        and historical_identity_population_sha256 == fresh_identity_population_sha256
+        and all(
+            isinstance(supersession.get(name), str)
+            and full.HEX64.fullmatch(supersession[name]) is not None
+            for name in projection_hashes
+        )
+        and supersession.get("historical_defect_projection_sha256")
+        == supersession.get("fresh_defect_projection_sha256")
+        and supersession.get("joined_historical_units") == cafta.EXPECTED_CAFTA_UNITS
+        and supersession.get("fresh_mismatching_units") == cafta.EXPECTED_CAFTA_UNITS
+        and all(
+            supersession.get(name) == 0
+            for name in (
+                "missing_historical_units",
+                "duplicate_historical_identities",
+                "duplicate_fresh_identities",
+            )
+        )
+        and all(
+            supersession.get(name) is True
+            for name in (
+                "all_present",
+                "all_unique",
+                "all_predicates_false",
+                "all_yale_defect_zeros_reproduced",
+                "all_corrected_yale_statutory_rates_match_axiom",
+            )
+        ),
+        "CAFTA supersession authorization or identity proof drift",
+    )
+    definition = receipt.get("definition")
+    yale_defect = receipt.get("yale_reference_defect")
+    require(
+        definition == cafta.EXPECTED_DEFINITION
+        and isinstance(yale_defect, dict)
+        and yale_defect.get("commit") == cafta.EXPECTED_YALE_COMMIT
+        and yale_defect.get("tree") == cafta.EXPECTED_YALE_TREE,
+        "CAFTA supersession receipt lacks bounded defect evidence",
+    )
+    require(
+        full.file_receipt(path, relative_to=repo_root) == receipt_file
+        and full.file_receipt(producer_source, relative_to=repo_root)
+        == expected_producer["script"],
+        "CAFTA supersession receipt or producer changed during validation",
+    )
+    return {"file": receipt_file, "payload": receipt}
 
 
 def _scan_fresh_transitions(
@@ -441,7 +1086,10 @@ def _scan_fresh_transitions(
     comparison: dict[str, Any],
     historical_units: dict[tuple[str, str], dict[str, Any]],
     source_eval_units: dict[tuple[str, str], dict[str, Any]],
+    selectors: dict[str, dict[str, Any]],
+    line_sets: dict[str, frozenset[str]],
     parent_ids: set[str],
+    expected_fresh_flag_names: frozenset[str],
     yale_annex_classifier: Callable[[str, str], tuple[str, str]],
 ) -> tuple[dict[str, dict[str, Any]], dict[str, Any]]:
     found: set[tuple[str, str]] = set()
@@ -456,6 +1104,8 @@ def _scan_fresh_transitions(
             "defect_source_arms": Counter(),
             "defect_source_populations": defaultdict(Counter),
             "defect_source_hts10": defaultdict(set),
+            "fresh_identities": [],
+            "rebind_population": Counter(),
         }
         for parent_id in parent_ids
     }
@@ -483,17 +1133,17 @@ def _scan_fresh_transitions(
         historical = historical_units.get(key)
         if historical is None:
             continue
-        require(key not in found, f"duplicate fresh Section-232 identity: {key}")
+        require(key not in found, f"duplicate fresh preview identity: {key}")
         found.add(key)
         identity = full._identity(row, label="fresh")
         require(
             identity == historical["identity"],
-            f"fresh Section-232 legal identity drift: {key}",
+            f"fresh preview legal identity drift: {key}",
         )
         source_eval = source_eval_units.get(key)
         require(
             isinstance(source_eval, dict),
-            f"fresh Section-232 cell lacks source evaluation: {key}",
+            f"fresh preview cell lacks source evaluation: {key}",
         )
         source_comparison = source_eval["comparison"]
         require(
@@ -511,13 +1161,42 @@ def _scan_fresh_transitions(
             and abs(delta - source_comparison["delta"]) <= tolerance,
             f"fresh comparison arithmetic disagrees with source evaluation: {key}",
         )
-        flags = _typed_flags(row["context"].get("flags"), key=key)
+        parent_id = historical["selector"]
+        state = parent_state[parent_id]
+        raw_flags = row["context"].get("flags")
+        require(
+            isinstance(raw_flags, dict)
+            and set(raw_flags) == expected_fresh_flag_names
+            and all(type(value) is bool for value in raw_flags.values()),
+            f"fresh preview flag schema drift: {key}",
+        )
+        if not parent_id.startswith("section232-"):
+            require(
+                matched is False,
+                f"fresh non-Section-232 selector unexpectedly matches: {key}",
+            )
+            require(
+                abs(delta) > tolerance
+                and _row_matches_selector(
+                    row,
+                    match=selectors[parent_id]["match"],
+                    line_sets=line_sets,
+                ),
+                f"fresh non-Section-232 population escaped its immutable parent: {key}",
+            )
+            signature = campaign.mismatch_signature(row)
+            state["residual"][signature] += 1
+            state["rebind_population"][signature] += 1
+            state["fresh_identities"].append(
+                {"selector": parent_id, "identity": identity}
+            )
+            continue
+
+        flags = _typed_flags(raw_flags, key=key)
         require(
             flags[NOTE16_WEIGHT_INPUT],
             f"fresh Section-232 row lost the receipted Yale metal-weight assumption: {key}",
         )
-        parent_id = historical["selector"]
-        state = parent_state[parent_id]
         if matched:
             require(
                 abs(delta) <= tolerance
@@ -590,7 +1269,7 @@ def _scan_fresh_transitions(
     missing = set(historical_units) - found
     require(
         not missing,
-        f"fresh comparison is missing {len(missing)} historical Section-232 identities",
+        f"fresh comparison is missing {len(missing)} historical preview identities",
     )
     observed_per_slot = {
         slot: dict(counter) for slot, counter in sorted(per_slot.items())
@@ -606,6 +1285,89 @@ def _scan_fresh_transitions(
     }
 
 
+def _fresh_rebind_transition_item(
+    *,
+    parent_id: str,
+    parent: dict[str, Any],
+    state: dict[str, Any],
+    cafta_proof: dict[str, Any] | None,
+) -> tuple[dict[str, Any], Counter[str], str]:
+    residual: Counter[str] = state["residual"]
+    rebind_population: Counter[str] = state["rebind_population"]
+    residual_units = sum(residual.values())
+    require(
+        state["matches"] == 0
+        and residual == rebind_population
+        and residual_units == parent["expected_units"]
+        and not state["patterns"]
+        and not state["child_populations"]
+        and len(state["fresh_identities"]) == residual_units,
+        f"fresh non-Section-232 transition does not conserve: {parent_id}",
+    )
+    require(
+        (parent_id == CAFTA_SELECTOR_ID) == (cafta_proof is not None),
+        f"CAFTA supersession proof presence drift: {parent_id}",
+    )
+    ruling = _fresh_rebind_child_ruling(parent_id, parent)
+    child_units = sum(rebind_population.values())
+    child_digest = campaign.signature_population_sha256(rebind_population.items())
+    child = {
+        **ruling,
+        "parent_id": parent_id,
+        "expected_units": child_units,
+        "expected_signature_count": len(rebind_population),
+        "expected_signature_population_sha256": child_digest,
+        "match": parent["match"],
+    }
+    evidence = {
+        "classification": (
+            "cafta-reference-defect-receipted-fresh-signature"
+            if parent_id == CAFTA_SELECTOR_ID
+            else "fresh-signature-rebind-preserved-ruling"
+        ),
+        "historical_ruling": {
+            field: parent[field]
+            for field in ("logical_class", "disposition", "attribution")
+        },
+        "fresh_ruling": {
+            field: child[field]
+            for field in ("logical_class", "disposition", "attribution")
+        },
+        "child_populations": {
+            ruling["id"]: {
+                "units": child_units,
+                "signature_count": len(rebind_population),
+                "signature_population_sha256": child_digest,
+            }
+        },
+        **(
+            {"cafta_supersession_receipt": cafta_proof}
+            if cafta_proof is not None
+            else {}
+        ),
+    }
+    return (
+        {
+            "parent_id": parent_id,
+            "parent_contract": parent,
+            "status": "superseded",
+            "historical_units": parent["expected_units"],
+            "fresh_matching_units": 0,
+            "fresh_residual_population": {
+                "units": residual_units,
+                "signature_count": len(residual),
+                "signature_population_sha256": (
+                    campaign.signature_population_sha256(residual.items())
+                ),
+            },
+            "children": [child],
+            "evidence": evidence,
+        },
+        rebind_population,
+        ruling["id"],
+    )
+
+
 def _transition_items(
     *,
     selectors: dict[str, dict[str, Any]],
@@ -613,21 +1375,51 @@ def _transition_items(
     expected_parent_patterns: dict[str, frozenset[tuple[str, ...]]],
     expected_fallback_hts10: frozenset[str] | None,
     yale_source_receipt: dict[str, Any],
+    cafta_proof: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     require(
         set(parent_state) == set(selectors),
-        "Section-232 transition parent set drift",
+        "preview transition parent set drift",
     )
     require(
-        set(expected_parent_patterns) <= set(selectors),
+        set(expected_parent_patterns) <= set(selectors)
+        and all(
+            parent_id.startswith("section232-")
+            for parent_id in expected_parent_patterns
+        ),
         "Section-232 expected-pattern parent set drift",
     )
+    require(
+        (CAFTA_SELECTOR_ID in selectors) == (cafta_proof is not None),
+        "CAFTA transition proof coverage drift",
+    )
     transitions: list[dict[str, Any]] = []
+    child_ids = set(selectors)
+    all_child_signatures: set[str] = set()
     all_defect_fallback_hts10: set[str] = set()
     total_defect_units = 0
     for parent_id in sorted(selectors):
         parent = selectors[parent_id]
         state = parent_state[parent_id]
+        if not parent_id.startswith("section232-"):
+            item, population, child_id = _fresh_rebind_transition_item(
+                parent_id=parent_id,
+                parent=parent,
+                state=state,
+                cafta_proof=(cafta_proof if parent_id == CAFTA_SELECTOR_ID else None),
+            )
+            require(
+                child_id not in child_ids,
+                f"preview transition child id collides: {child_id}",
+            )
+            require(
+                not (all_child_signatures & set(population)),
+                f"preview transition child populations overlap: {parent_id}",
+            )
+            child_ids.add(child_id)
+            all_child_signatures.update(population)
+            transitions.append(item)
+            continue
         residual: Counter[str] = state["residual"]
         residual_units = sum(residual.values())
         residual_signatures = len(residual)
@@ -642,15 +1434,16 @@ def _transition_items(
             "child_populations"
         ]
         observed_patterns = frozenset(child_populations)
-        if status == "superseded":
+        if parent_id in expected_parent_patterns:
             require(
-                observed_patterns == expected_parent_patterns.get(parent_id),
+                status == "superseded"
+                and observed_patterns == expected_parent_patterns[parent_id],
                 f"fresh Section-232 transition pattern drift: {parent_id}: "
                 f"{sorted(map(_pattern_name, observed_patterns))}",
             )
         else:
             require(
-                not child_populations and not patterns,
+                status == "retired" and not child_populations and not patterns,
                 f"retired Section-232 parent retains residual patterns: {parent_id}",
             )
         child_union: Counter[str] = Counter()
@@ -669,10 +1462,18 @@ def _transition_items(
         for pattern in sorted(child_populations, key=_pattern_name):
             population = child_populations[pattern]
             ruling = _child_ruling(parent_id, pattern)
-            child_units = sum(population.values())
-            child_digest = campaign.signature_population_sha256(
-                population.items()
+            require(
+                ruling["id"] not in child_ids,
+                f"preview transition child id collides: {ruling['id']}",
             )
+            require(
+                not (all_child_signatures & set(population)),
+                f"preview transition child populations overlap: {parent_id}",
+            )
+            child_ids.add(ruling["id"])
+            all_child_signatures.update(population)
+            child_units = sum(population.values())
+            child_digest = campaign.signature_population_sha256(population.items())
             child_match = {
                 **parent["match"],
                 "line_class": {"flags": _child_flag_vector(pattern)},
@@ -703,7 +1504,8 @@ def _transition_items(
                 "defect_source_populations"
             ]
             require(
-                len(source_identities) == sum(defect_population.values())
+                len(source_identities)
+                == sum(defect_population.values())
                 == sum(source_arms.values()),
                 f"Yale annex defect source proof does not conserve: {parent_id}",
             )
@@ -711,7 +1513,8 @@ def _transition_items(
             per_arm: dict[str, dict[str, Any]] = {}
             for arm, population in sorted(source_populations.items()):
                 require(
-                    arm in {
+                    arm
+                    in {
                         "annex_proclamation_prefix",
                         "legacy_derivative_fallback",
                     }
@@ -808,8 +1611,11 @@ def build_receipt(
     historical_artifact_path: Path = full.HISTORICAL_ARTIFACT,
     eval_manifest_path: Path = full.EVAL_MANIFEST,
     comparison_receipt_path: Path = full.COMPARISON_RECEIPT,
-    expected_preview_snapshot_sha256: str = full.EXPECTED_PREVIEW_SECTION232_SNAPSHOT_SHA256,
-    expected_selector_units: dict[str, int] = full.SECTION232_SELECTOR_UNITS,
+    cafta_receipt_path: Path = CAFTA_SUPERSESSION_RECEIPT,
+    cafta_producer_source: Path = cafta.PRODUCER_SOURCE,
+    expected_preview_snapshot_sha256: str = EXPECTED_PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256,
+    expected_selector_units: dict[str, int] = preview_builder.EXPECTED_SELECTOR_UNITS,
+    expected_parent_ids: frozenset[str] = EXPECTED_PARENT_IDS,
     expected_parent_patterns: dict[
         str, frozenset[tuple[str, ...]]
     ] = EXPECTED_PARENT_PATTERNS,
@@ -820,6 +1626,11 @@ def build_receipt(
     expected_yale_parser_receipt: dict[str, Any] = YALE_PARSER_RECEIPT,
     expected_reference_assumptions: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    require(
+        set(expected_selector_units) == expected_parent_ids
+        and bool(expected_parent_ids),
+        "expected preview transition parent set drift",
+    )
     if expected_reference_assumptions is None:
         expected_reference_assumptions = {
             "yale_note16_metal_weight": (
@@ -828,11 +1639,8 @@ def build_receipt(
         }
     require(
         isinstance(expected_reference_assumptions, dict)
-        and set(expected_reference_assumptions)
-        == {"yale_note16_metal_weight"}
-        and isinstance(
-            expected_reference_assumptions["yale_note16_metal_weight"], dict
-        )
+        and set(expected_reference_assumptions) == {"yale_note16_metal_weight"}
+        and isinstance(expected_reference_assumptions["yale_note16_metal_weight"], dict)
         and bool(expected_reference_assumptions["yale_note16_metal_weight"]),
         "expected reference-assumption identity is malformed",
     )
@@ -847,7 +1655,7 @@ def build_receipt(
     }
     preview_file = full.file_receipt(preview_receipt_path, relative_to=repo_root)
     preview, selectors, line_sets, historical_receipt, selected_receipt = (
-        full._validate_preview(
+        _validate_preview(
             preview_receipt_path,
             expected_snapshot_sha256=expected_preview_snapshot_sha256,
             expected_selector_units=expected_selector_units,
@@ -858,15 +1666,13 @@ def build_receipt(
         == producer["campaign_classifier"],
         "preview receipt is not bound to the current campaign classifier",
     )
-    yale_annex_classifier, yale_source_receipt = (
-        _verified_yale_annex_classifier(
-            yale_root=yale_root,
-            preview=preview,
-            expected_parser_receipt=expected_yale_parser_receipt,
-        )
+    yale_annex_classifier, yale_source_receipt = _verified_yale_annex_classifier(
+        yale_root=yale_root,
+        preview=preview,
+        expected_parser_receipt=expected_yale_parser_receipt,
     )
-    historical_units, _identities, _projections, historical_rows_scanned = (
-        full._load_historical_units(
+    historical_units, historical_identities, historical_rows_scanned = (
+        _load_historical_units(
             path=historical_artifact_path,
             expected_receipt=historical_receipt,
             selectors=selectors,
@@ -904,9 +1710,7 @@ def build_receipt(
         )
         rulespec = manifest["run_identity"].get("rulespec")
         entry_flag_producers = manifest["run_identity"].get("entry_flag_producers")
-        reference_assumptions = manifest["run_identity"].get(
-            "reference_assumptions"
-        )
+        reference_assumptions = manifest["run_identity"].get("reference_assumptions")
         require(
             isinstance(rulespec, dict)
             and bool(rulespec)
@@ -915,14 +1719,60 @@ def build_receipt(
             and reference_assumptions == expected_reference_assumptions,
             "evaluation run lacks RuleSpec, entry-flag, or reference-assumption provenance",
         )
+        (
+            expected_fresh_flag_names,
+            input_contract_path,
+            input_contract_file,
+        ) = _validated_fresh_flag_names(
+            repo_root=repo_root,
+            run_identity=manifest["run_identity"],
+        )
         parent_state, comparison_audit = _scan_fresh_transitions(
             path=artifact_path,
             comparison=comparison,
             historical_units=historical_units,
             source_eval_units=source_eval_units,
+            selectors=selectors,
+            line_sets=line_sets,
             parent_ids=set(selectors),
+            expected_fresh_flag_names=expected_fresh_flag_names,
             yale_annex_classifier=yale_annex_classifier,
         )
+        cafta_proof: dict[str, Any] | None = None
+        if CAFTA_SELECTOR_ID in selectors:
+            cafta_parent = selectors[CAFTA_SELECTOR_ID]
+            require(
+                cafta_parent["expected_units"] == cafta.EXPECTED_CAFTA_UNITS
+                and sum(parent_state[CAFTA_SELECTOR_ID]["rebind_population"].values())
+                == cafta.EXPECTED_CAFTA_UNITS,
+                "fresh CAFTA parent unit census drift",
+            )
+            historical_cafta_digest = full.population_sha256(
+                {
+                    "selector": CAFTA_SELECTOR_ID,
+                    "identity": identity,
+                }
+                for identity in historical_identities[CAFTA_SELECTOR_ID]
+            )
+            fresh_cafta_digest = full.population_sha256(
+                parent_state[CAFTA_SELECTOR_ID]["fresh_identities"]
+            )
+            cafta_proof = _validated_cafta_supersession_receipt(
+                path=cafta_receipt_path,
+                repo_root=repo_root,
+                producer_source=cafta_producer_source,
+                preview_file=preview_file,
+                preview_payload_sha256=preview["receipt_payload_sha256"],
+                historical_receipt=historical_receipt,
+                selected_receipt=selected_receipt,
+                manifest_file=manifest_file,
+                comparison_file=comparison_file,
+                comparison_artifact=comparison["comparison_artifact"],
+                manifest=manifest,
+                comparison=comparison,
+                historical_identity_population_sha256=(historical_cafta_digest),
+                fresh_identity_population_sha256=fresh_cafta_digest,
+            )
         require(
             full.file_receipt(eval_manifest_path, relative_to=repo_root)
             == manifest_file
@@ -932,7 +1782,9 @@ def build_receipt(
             and all(
                 full.file_receipt(Path(receipt["path"])) == receipt
                 for receipt in shard_receipts
-            ),
+            )
+            and full.file_receipt(input_contract_path, relative_to=repo_root)
+            == input_contract_file,
             "evaluation/comparison evidence changed during transition proof",
         )
 
@@ -942,6 +1794,7 @@ def build_receipt(
         expected_parent_patterns=expected_parent_patterns,
         expected_fallback_hts10=expected_fallback_hts10,
         yale_source_receipt=yale_source_receipt,
+        cafta_proof=cafta_proof,
     )
     payload: dict[str, Any] = {
         "schema": SCHEMA,
@@ -980,9 +1833,9 @@ def build_receipt(
         "transitions": transitions,
     }
     require(
-        historical_rows_scanned >= len(historical_units)
+        historical_rows_scanned == len(historical_units)
         and comparison_audit["joined_historical_units"] == len(historical_units),
-        "Section-232 transition scan census is malformed",
+        "preview transition scan census is malformed",
     )
     payload["receipt_payload_sha256"] = full.canonical_sha256(payload)
     require(
@@ -994,7 +1847,14 @@ def build_receipt(
         and full.file_receipt(preview_receipt_path, relative_to=repo_root)
         == preview_file
         and historical_artifact_path.stat().st_size == historical_receipt["bytes"]
-        and full.sha256(historical_artifact_path) == historical_receipt["sha256"],
+        and full.sha256(historical_artifact_path) == historical_receipt["sha256"]
+        and full.file_receipt(input_contract_path, relative_to=repo_root)
+        == input_contract_file
+        and (
+            cafta_proof is None
+            or full.file_receipt(cafta_receipt_path, relative_to=repo_root)
+            == cafta_proof["file"]
+        ),
         "transition producer or preview evidence changed during receipt build",
     )
     return payload
@@ -1011,6 +1871,9 @@ def main() -> int:
         "--comparison-receipt", type=Path, default=full.COMPARISON_RECEIPT
     )
     parser.add_argument(
+        "--cafta-receipt", type=Path, default=CAFTA_SUPERSESSION_RECEIPT
+    )
+    parser.add_argument(
         "--yale-root", type=Path, default=preview_builder.DEFAULT_YALE_ROOT
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -1021,6 +1884,7 @@ def main() -> int:
         historical_artifact_path=args.historical_artifact.resolve(),
         eval_manifest_path=args.eval_manifest.resolve(),
         comparison_receipt_path=args.comparison_receipt.resolve(),
+        cafta_receipt_path=args.cafta_receipt.resolve(),
         yale_root=args.yale_root.resolve(),
     )
     output = full.render(receipt)

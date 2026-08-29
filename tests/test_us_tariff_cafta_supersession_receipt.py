@@ -9,6 +9,48 @@ import pytest
 from scripts import build_us_tariff_cafta_supersession_receipt as producer
 
 
+def test_expected_rulespec_commit_is_completed_clean_tariff_precedence_commit() -> None:
+    assert (
+        producer.EXPECTED_RULESPEC_COMMIT == "4f591c4267063094cc6da9d590872ea982940b81"
+    )
+
+
+def test_campaign_schema_and_yale_provenance_pins_are_current() -> None:
+    assert (
+        producer.INPUT_CONTRACT_SCHEMA
+        == producer.campaign.INPUT_CONTRACT_SCHEMA
+        == "axiom_oracles.us_tariff_schedule.declared_input_contract.v4"
+    )
+    assert (
+        producer.EVAL_RUN_IDENTITY_SCHEMA
+        == producer.campaign.EVAL_RUN_IDENTITY_SCHEMA
+        == "axiom_oracles.us_tariff_schedule.eval_run_identity.v4"
+    )
+    assert (
+        producer.EVAL_MANIFEST_SCHEMA
+        == producer.campaign.EVAL_MANIFEST_SCHEMA
+        == producer.foundation.EVAL_SCHEMA
+        == "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
+    )
+    assert (
+        producer.COMPARISON_SCHEMA
+        == producer.campaign.COMPARISON_SCHEMA
+        == producer.foundation.COMPARISON_SCHEMA
+        == "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
+    )
+    assert producer.EXPECTED_YALE_COMMIT == producer.campaign.PREVIEW_YALE_COMMIT
+    assert producer.EXPECTED_YALE_TREE == producer.campaign.PREVIEW_YALE_TREE
+    provenance = json.loads(producer.PROVENANCE.read_text())
+    assert provenance["schema"] == producer.REFERENCE_PROVENANCE_SCHEMA
+
+
+def test_campaign_runtime_rejects_stale_run_identity_schema() -> None:
+    with pytest.raises(ValueError, match="run identity schema is stale"):
+        producer._validate_campaign_and_rulespec_runtime(
+            {"schema": "axiom_oracles.us_tariff_schedule.eval_run_identity.v3"}
+        )
+
+
 def _identity(*, expected: float = 0.0) -> dict:
     return {
         "case_id": "schedule-" + "a" * 24,
@@ -58,7 +100,9 @@ def _write_gzip(path: Path, rows: list[dict]) -> None:
         with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as zipped:
             for row in rows:
                 zipped.write(
-                    (json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n").encode()
+                    (
+                        json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n"
+                    ).encode()
                 )
 
 
@@ -69,7 +113,9 @@ def test_committed_preview_cafta_snapshot_is_immutable_and_still_open() -> None:
         == producer.EXPECTED_PREVIEW_CAFTA_SNAPSHOT_SHA256
     )
     selector = next(
-        item for item in preview["selectors"] if item["id"] == producer.CAFTA_SELECTOR_ID
+        item
+        for item in preview["selectors"]
+        if item["id"] == producer.CAFTA_SELECTOR_ID
     )
     assert selector["expected_units"] == producer.EXPECTED_CAFTA_UNITS
     assert selector["attribution"] == "axiom-attributed-open"
@@ -103,7 +149,7 @@ def test_input_contract_proves_both_cafta_predicates_false(tmp_path: Path) -> No
         "input_contract": {
             **producer.foundation.file_receipt(path, relative_to=tmp_path),
             "schema": producer.INPUT_CONTRACT_SCHEMA,
-        }
+        },
     }
     _, proof = producer._validate_input_contract(
         repo_root=tmp_path, run_identity=run_identity
@@ -131,9 +177,12 @@ def test_input_contract_proves_both_cafta_predicates_false(tmp_path: Path) -> No
 
 
 def test_tidy_eval_minimal_reproduction_requires_full_and_fta_rows() -> None:
-    assert producer._validate_tidy_eval_reproduction_output(
-        "r_version=4.3.0\ndplyr_version=1.1.2\nselected_conditions=full,fta\n"
-    )["selected_conditions"] == "full,fta"
+    assert (
+        producer._validate_tidy_eval_reproduction_output(
+            "r_version=4.3.0\ndplyr_version=1.1.2\nselected_conditions=full,fta\n"
+        )["selected_conditions"]
+        == "full,fta"
+    )
     with pytest.raises(ValueError, match="name-collision reproduction drift"):
         producer._validate_tidy_eval_reproduction_output(
             "r_version=4.3.0\ndplyr_version=1.1.2\nselected_conditions=full\n"
@@ -185,9 +234,7 @@ def test_yale_defect_replay_requires_zero_and_only_fta_membership() -> None:
 def test_yale_defect_replay_rejects_use_conditioned_paths(field: str) -> None:
     mutant = _defect_model()
     mutant[field] = (
-        {("2230", "42021100")}
-        if field.startswith("country_")
-        else {"42021100"}
+        {("2230", "42021100")} if field.startswith("country_") else {"42021100"}
     )
     with pytest.raises(ValueError, match="non-bug Yale exclusion"):
         producer._replay_yale_defect(
@@ -243,7 +290,9 @@ def test_fresh_reference_population_requires_exact_mismatch_and_defect(
     artifact = tmp_path / "comparison.jsonl.gz"
     _write_gzip(artifact, [row])
     key = (identity["case_id"], identity["slot"])
-    historical_units = {key: {"selector": producer.CAFTA_SELECTOR_ID, "identity": identity}}
+    historical_units = {
+        key: {"selector": producer.CAFTA_SELECTOR_ID, "identity": identity}
+    }
     historical_rows = [
         {
             "selector": producer.CAFTA_SELECTOR_ID,

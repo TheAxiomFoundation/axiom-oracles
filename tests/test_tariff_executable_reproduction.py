@@ -42,11 +42,13 @@ def test_certifier_reproduction_call_uses_pinned_defaults():
     module = _module()
     call = inspect.signature(module.build_reproduction).bind(
         repo_root=REPO_ROOT,
-        rulespec_ref="0" * 40,
     )
     call.apply_defaults()
 
     assert call.arguments["rulespec_repo"] == module.DEFAULT_RULESPEC_ROOT
+    assert call.arguments["rulespec_ref"] == (
+        "4f591c4267063094cc6da9d590872ea982940b81"
+    )
     assert call.arguments["engine_binary"] == module.DEFAULT_ENGINE_BINARY
 
 

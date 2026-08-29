@@ -11,7 +11,9 @@ from pathlib import Path
 import pytest
 import yaml
 
-from axiom_oracles.comparison.dispositions import validate_dispositions as validate_shared
+from axiom_oracles.comparison.dispositions import (
+    validate_dispositions as validate_shared,
+)
 
 from scripts import us_tariff_schedule_campaign as campaign_module
 from scripts.us_tariff_schedule_campaign import (
@@ -62,13 +64,16 @@ def _fake_run_identity(*, marker: str = "a", chapters: tuple[str, ...] = ("01",)
         },
         "engine": {"path": f"/engine/{marker}", "bytes": 1, "sha256": digest},
         "entry_flag_producers": {
-            "tool": {"path": "tools/b16_entry_flags.py", "bytes": 1,
-                     "sha256": digest},
+            "tool": {"path": "tools/b16_entry_flags.py", "bytes": 1, "sha256": digest},
             "dependencies": [],
             "producer_sha256": digest,
         },
-        "input_contract": {"path": "contract.json", "bytes": 1,
-                           "sha256": digest, "schema": "contract"},
+        "input_contract": {
+            "path": "contract.json",
+            "bytes": 1,
+            "sha256": digest,
+            "schema": "contract",
+        },
         "reference_assumptions": {
             "yale_note16_metal_weight": {
                 "path": "reference/assumption.json",
@@ -77,16 +82,16 @@ def _fake_run_identity(*, marker: str = "a", chapters: tuple[str, ...] = ("01",)
             }
         },
         "campaign_evaluator": {
-            "campaign": {"path": "campaign.py", "bytes": 1,
-                         "sha256": digest},
+            "campaign": {"path": "campaign.py", "bytes": 1, "sha256": digest},
             "oracle_sources": [],
-            "python": {"executable": {"path": "/python", "bytes": 1,
-                                      "sha256": digest}, "version": marker},
+            "python": {
+                "executable": {"path": "/python", "bytes": 1, "sha256": digest},
+                "version": marker,
+            },
             "pyyaml_version": marker,
             "producer_sha256": digest,
         },
-        "selected_population": {"path": "selected.gz", "bytes": 1,
-                                "sha256": digest},
+        "selected_population": {"path": "selected.gz", "bytes": 1, "sha256": digest},
         "routing": {"path": "routing.gz", "bytes": 1, "sha256": digest},
         "outputs": list(campaign_module.OUTPUT_NAMES),
         "chapters": {
@@ -116,9 +121,7 @@ def _complete_eval_manifest(
         manifest["shards"][key] = {
             "chapter": chapter,
             "key": key,
-            "run_identity_sha256": campaign_module._run_identity_sha256(
-                run_identity
-            ),
+            "run_identity_sha256": campaign_module._run_identity_sha256(run_identity),
             "generation_id": generation_id,
             "path": str(path),
             "sha256": campaign_module._sha256(path),
@@ -130,30 +133,47 @@ def _complete_eval_manifest(
 
 
 def test_declared_feed_drops_only_retired_exemplar_flags() -> None:
-    feed = {"hts_line": 1, "entry_is_line_a": False, "entry_is_line_b": False,
-            "entry_is_line_c": False, "entry_is_line_d": False, "entry_is_line_e": False}
+    feed = {
+        "hts_line": 1,
+        "entry_is_line_a": False,
+        "entry_is_line_b": False,
+        "entry_is_line_c": False,
+        "entry_is_line_d": False,
+        "entry_is_line_e": False,
+    }
     declared = {"hts_line", "entry_is_line_a", "entry_is_line_b", "entry_is_line_d"}
     filtered, receipt = filter_declared_feed(
-        feed, declared, emitted_flag_names={name for name in feed if name.startswith("entry_")}
+        feed,
+        declared,
+        emitted_flag_names={name for name in feed if name.startswith("entry_")},
     )
     assert set(filtered) == declared
     assert receipt["dropped_entry_flags"] == sorted(EXPECTED_DROPPED_ENTRY_FLAGS)
 
 
 def test_undeclared_input_mutant_fails_filter_assertion() -> None:
-    feed = {"declared": True, "entry_is_line_c": False, "entry_is_line_e": False,
-            "mutant_undeclared": True}
+    feed = {
+        "declared": True,
+        "entry_is_line_c": False,
+        "entry_is_line_e": False,
+        "mutant_undeclared": True,
+    }
     with pytest.raises(ValueError, match="undeclared non-flag inputs"):
         filter_declared_feed(
-            feed, {"declared"}, emitted_flag_names={"entry_is_line_c", "entry_is_line_e"}
+            feed,
+            {"declared"},
+            emitted_flag_names={"entry_is_line_c", "entry_is_line_e"},
         )
 
 
 def test_declared_but_unfed_input_mutant_surfaces_before_default() -> None:
     feed = {"entry_is_line_c": False, "entry_is_line_e": False}
-    with pytest.raises(ValueError, match="declared inputs absent from feed:.*required_neutral_fact"):
+    with pytest.raises(
+        ValueError, match="declared inputs absent from feed:.*required_neutral_fact"
+    ):
         filter_declared_feed(
-            feed, {"required_neutral_fact"},
+            feed,
+            {"required_neutral_fact"},
             emitted_flag_names={"entry_is_line_c", "entry_is_line_e"},
         )
 
@@ -176,11 +196,13 @@ def test_entry_flag_aliases_canonicalize_when_equal() -> None:
 
 
 def test_all_public_entry_prefixes_are_preserved() -> None:
-    flags, _aliases = canonicalize_entry_flags({
-        "entry_loaded_before_deadline": True,
-        "entry_qualifies_for_exception": False,
-        "internal_diagnostic": True,
-    })
+    flags, _aliases = canonicalize_entry_flags(
+        {
+            "entry_loaded_before_deadline": True,
+            "entry_qualifies_for_exception": False,
+            "internal_diagnostic": True,
+        }
+    )
     assert flags == {
         "entry_loaded_before_deadline": True,
         "entry_qualifies_for_exception": False,
@@ -189,10 +211,12 @@ def test_all_public_entry_prefixes_are_preserved() -> None:
 
 def test_entry_flag_alias_disagreement_fails_closed() -> None:
     with pytest.raises(ValueError, match="entry-flag alias disagreement"):
-        canonicalize_entry_flags({
-            "entry_is_brazil_301": True,
-            "entry_is_brazil_301_listed": False,
-        })
+        canonicalize_entry_flags(
+            {
+                "entry_is_brazil_301": True,
+                "entry_is_brazil_301_listed": False,
+            }
+        )
 
 
 def test_entry_flag_alias_without_canonical_fails_closed() -> None:
@@ -203,10 +227,12 @@ def test_entry_flag_alias_without_canonical_fails_closed() -> None:
 @pytest.mark.parametrize("malformed", ["false", 0, 1, None])
 def test_entry_flag_values_must_be_boolean(malformed) -> None:
     with pytest.raises(ValueError, match="entry flags must be boolean"):
-        canonicalize_entry_flags({
-            "entry_is_brazil_301": malformed,
-            "entry_is_brazil_301_listed": True,
-        })
+        canonicalize_entry_flags(
+            {
+                "entry_is_brazil_301": malformed,
+                "entry_is_brazil_301_listed": True,
+            }
+        )
 
 
 def test_case_feed_never_forwards_entry_flag_aliases() -> None:
@@ -231,13 +257,15 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
         {"hts_line": "102294000"},
         entry_flags,
         probe="2026-07-24",
-        case_feed_inputs=campaign_module._case_feed_input_names({
-            "entry_is_brazil_301_listed",
-            "entry_is_forced_labor_301_listed",
-            "entry_is_line_c",
-            "entry_is_line_e",
-            campaign_module.NOTE16_WEIGHT_INPUT,
-        }),
+        case_feed_inputs=campaign_module._case_feed_input_names(
+            {
+                "entry_is_brazil_301_listed",
+                "entry_is_forced_labor_301_listed",
+                "entry_is_line_c",
+                "entry_is_line_e",
+                campaign_module.NOTE16_WEIGHT_INPUT,
+            }
+        ),
     )
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
@@ -256,9 +284,7 @@ def test_yale_note16_weight_assumption_is_explicit_and_receipted() -> None:
     assert receipt["configuration"]["aggregate_share"] == 0.0
     assert receipt["configuration"]["threshold"] == 0.15
     assert receipt["campaign_binding"] == identity["campaign_binding"]
-    assert receipt["campaign_binding"]["input"] == (
-        campaign_module.NOTE16_WEIGHT_INPUT
-    )
+    assert receipt["campaign_binding"]["input"] == (campaign_module.NOTE16_WEIGHT_INPUT)
     assert receipt["campaign_binding"]["value"] is True
     assert "not an observed" in receipt["campaign_binding"]["factual_status"]
 
@@ -266,9 +292,7 @@ def test_yale_note16_weight_assumption_is_explicit_and_receipted() -> None:
 def test_yale_note16_weight_assumption_cannot_be_relabeled_as_fact(
     tmp_path, monkeypatch
 ) -> None:
-    payload = json.loads(
-        campaign_module.YALE_NOTE16_WEIGHT_ASSUMPTION.read_text()
-    )
+    payload = json.loads(campaign_module.YALE_NOTE16_WEIGHT_ASSUMPTION.read_text())
     payload["campaign_binding"]["factual_status"] = "transaction fact"
     payload_without_digest = dict(payload)
     payload_without_digest.pop("receipt_payload_sha256")
@@ -277,9 +301,7 @@ def test_yale_note16_weight_assumption_cannot_be_relabeled_as_fact(
     )
     mutant = tmp_path / "assumption.json"
     mutant.write_text(json.dumps(payload))
-    monkeypatch.setattr(
-        campaign_module, "YALE_NOTE16_WEIGHT_ASSUMPTION", mutant
-    )
+    monkeypatch.setattr(campaign_module, "YALE_NOTE16_WEIGHT_ASSUMPTION", mutant)
     with pytest.raises(ValueError, match="campaign binding drift"):
         campaign_module._yale_note16_weight_assumption()
 
@@ -293,14 +315,15 @@ def test_case_feed_receipts_dr_cafta_inputs_as_neutral_false() -> None:
             "entry_is_line_e": False,
         },
         probe="2026-07-24",
-        case_feed_inputs=campaign_module._case_feed_input_names({
-            "entry_is_line_c", "entry_is_line_e",
-        }),
+        case_feed_inputs=campaign_module._case_feed_input_names(
+            {
+                "entry_is_line_c",
+                "entry_is_line_e",
+            }
+        ),
     )
     assert feed["entry_is_entered_free_of_duty_under_dr_cafta"] is False
-    assert (
-        feed["entry_is_general_note_29_d_v_textile_or_apparel_good"] is False
-    )
+    assert feed["entry_is_general_note_29_d_v_textile_or_apparel_good"] is False
     assert feed["entry_is_within_temporary_surcharge_effective_period"] is False
 
 
@@ -324,14 +347,14 @@ def test_temporary_surcharge_period_fact_tracks_probe(
             "entry_is_line_e": False,
         },
         probe=probe,
-        case_feed_inputs=campaign_module._case_feed_input_names({
-            "entry_is_line_c", "entry_is_line_e",
-        }),
+        case_feed_inputs=campaign_module._case_feed_input_names(
+            {
+                "entry_is_line_c",
+                "entry_is_line_e",
+            }
+        ),
     )
-    assert (
-        feed["entry_is_within_temporary_surcharge_effective_period"]
-        is expected
-    )
+    assert feed["entry_is_within_temporary_surcharge_effective_period"] is expected
 
 
 def test_case_feed_contract_receipts_neutral_cafta_and_all_entry_inputs() -> None:
@@ -344,12 +367,13 @@ def test_case_feed_contract_receipts_neutral_cafta_and_all_entry_inputs() -> Non
         reachable_inputs=supplied,
         emitted_flag_names=emitted,
     )
-    assert "entry_is_entered_free_of_duty_under_dr_cafta" in contract[
-        "case_feed_inputs"
-    ]
-    assert "entry_is_general_note_29_d_v_textile_or_apparel_good" in contract[
-        "declared_entry_inputs"
-    ]
+    assert (
+        "entry_is_entered_free_of_duty_under_dr_cafta" in contract["case_feed_inputs"]
+    )
+    assert (
+        "entry_is_general_note_29_d_v_textile_or_apparel_good"
+        in contract["declared_entry_inputs"]
+    )
     assert contract["missing_declared_entry_inputs"] == []
     assert contract["missing_reachable_inputs"] == []
 
@@ -390,34 +414,38 @@ def test_reachable_input_closure_includes_every_output_version(
     tmp_path: Path,
 ) -> None:
     artifact = tmp_path / "compiled.json"
-    artifact.write_text(json.dumps({
-        "program": {
-            "derived": [
-                {
-                    "name": "campaign_output",
-                    "expr": {"kind": "derived", "name": "helper"},
-                    "versions": [],
-                },
-                {
-                    "name": "helper",
-                    "expr": {"kind": "input", "name": "current_fact"},
-                    "versions": [
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
                         {
-                            "expr": {
-                                "kind": "input_or_else",
-                                "name": "historical_fact",
-                            }
-                        }
-                    ],
-                },
-                {
-                    "name": "unrequested_output",
-                    "expr": {"kind": "input", "name": "irrelevant_fact"},
-                    "versions": [],
-                },
-            ]
-        }
-    }))
+                            "name": "campaign_output",
+                            "expr": {"kind": "derived", "name": "helper"},
+                            "versions": [],
+                        },
+                        {
+                            "name": "helper",
+                            "expr": {"kind": "input", "name": "current_fact"},
+                            "versions": [
+                                {
+                                    "expr": {
+                                        "kind": "input_or_else",
+                                        "name": "historical_fact",
+                                    }
+                                }
+                            ],
+                        },
+                        {
+                            "name": "unrequested_output",
+                            "expr": {"kind": "input", "name": "irrelevant_fact"},
+                            "versions": [],
+                        },
+                    ]
+                }
+            }
+        )
+    )
     assert campaign_module.reachable_inputs_from_artifact(
         artifact, ("campaign_output",)
     ) == {"current_fact", "historical_fact"}
@@ -462,31 +490,38 @@ def test_entry_flag_producer_receipts_dynamic_note_fragments(tmp_path: Path) -> 
 def test_prepare_eval_manifest_prunes_superseded_keys_and_bindings() -> None:
     run_identity = _fake_run_identity(chapters=("01", "02"))
     run_identity_sha256 = campaign_module._run_identity_sha256(run_identity)
-    current = campaign_module._empty_eval_manifest(
-        run_identity, EVAL_GENERATION_ID
-    ) | {
+    current = campaign_module._empty_eval_manifest(run_identity, EVAL_GENERATION_ID) | {
         "comparison_artifact": {"sha256": "a" * 64},
         "comparison_receipt": {"path": "old", "sha256": "b" * 64},
         "shards": {
-            "old-01": {"key": "old-01", "chapter": "01",
-                       "run_identity_sha256": run_identity_sha256,
-                       "generation_id": EVAL_GENERATION_ID},
-            "new-02": {"key": "new-02", "chapter": "02",
-                       "run_identity_sha256": run_identity_sha256,
-                       "generation_id": EVAL_GENERATION_ID},
+            "old-01": {
+                "key": "old-01",
+                "chapter": "01",
+                "run_identity_sha256": run_identity_sha256,
+                "generation_id": EVAL_GENERATION_ID,
+            },
+            "new-02": {
+                "key": "new-02",
+                "chapter": "02",
+                "run_identity_sha256": run_identity_sha256,
+                "generation_id": EVAL_GENERATION_ID,
+            },
         },
     }
     prepared = campaign_module._prepare_eval_manifest(
-        current, {"01": "new-01", "02": "new-02"}, run_identity,
+        current,
+        {"01": "new-01", "02": "new-02"},
+        run_identity,
         EVAL_GENERATION_ID,
     )
-    expected = campaign_module._empty_eval_manifest(
-        run_identity, EVAL_GENERATION_ID
-    )
+    expected = campaign_module._empty_eval_manifest(run_identity, EVAL_GENERATION_ID)
     expected["shards"] = {
-        "new-02": {"key": "new-02", "chapter": "02",
-                   "run_identity_sha256": run_identity_sha256,
-                   "generation_id": EVAL_GENERATION_ID},
+        "new-02": {
+            "key": "new-02",
+            "chapter": "02",
+            "run_identity_sha256": run_identity_sha256,
+            "generation_id": EVAL_GENERATION_ID,
+        },
     }
     assert prepared == expected
 
@@ -495,14 +530,10 @@ def test_prepare_eval_manifest_never_mixes_run_identities(tmp_path) -> None:
     old_identity = _fake_run_identity(marker="a")
     new_identity = _fake_run_identity(marker="b")
     old = _complete_eval_manifest(tmp_path, old_identity)
-    current_keys = campaign_module._current_shard_keys(
-        new_identity, EVAL_GENERATION_ID
-    )
+    current_keys = campaign_module._current_shard_keys(new_identity, EVAL_GENERATION_ID)
     assert campaign_module._prepare_eval_manifest(
         old, current_keys, new_identity, EVAL_GENERATION_ID
-    ) == campaign_module._empty_eval_manifest(
-        new_identity, EVAL_GENERATION_ID
-    )
+    ) == campaign_module._empty_eval_manifest(new_identity, EVAL_GENERATION_ID)
 
 
 def test_fresh_evaluation_publishes_empty_manifest_before_engine(
@@ -520,7 +551,8 @@ def test_fresh_evaluation_publishes_empty_manifest_before_engine(
         campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
     )
     monkeypatch.setattr(
-        campaign_module, "_new_eval_generation_id",
+        campaign_module,
+        "_new_eval_generation_id",
         lambda: EVAL_GENERATION_ID,
     )
 
@@ -532,9 +564,7 @@ def test_fresh_evaluation_publishes_empty_manifest_before_engine(
         return {
             "chapter": chapter,
             "key": expected_key,
-            "run_identity_sha256": campaign_module._run_identity_sha256(
-                run_identity
-            ),
+            "run_identity_sha256": campaign_module._run_identity_sha256(run_identity),
             "generation_id": published["generation_id"],
             "path": str(tmp_path / f"{expected_key}.jsonl.gz"),
             "sha256": "c" * 64,
@@ -553,7 +583,10 @@ def test_fresh_evaluation_publishes_empty_manifest_before_engine(
     )
     assert set(result["shards"]) == {key}
     assert set(result) == {
-        "schema", "run_identity", "run_identity_sha256", "generation_id",
+        "schema",
+        "run_identity",
+        "run_identity_sha256",
+        "generation_id",
         "shards",
     }
 
@@ -583,7 +616,8 @@ def test_interrupted_fresh_evaluation_leaves_manifest_unbound(
         campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
     )
     monkeypatch.setattr(
-        campaign_module, "_new_eval_generation_id",
+        campaign_module,
+        "_new_eval_generation_id",
         lambda: "2" * 32,
     )
 
@@ -615,14 +649,13 @@ def test_inflight_shard_cannot_repopulate_a_new_fresh_generation(
         campaign_module, "_current_run_identity", lambda **_kwargs: run_identity
     )
     monkeypatch.setattr(
-        campaign_module, "_new_eval_generation_id",
+        campaign_module,
+        "_new_eval_generation_id",
         lambda: EVAL_GENERATION_ID,
     )
     replacement_generation = "2" * 32
 
-    def replace_generation(
-        chapter, *, generation_id, expected_key, **_kwargs
-    ):
+    def replace_generation(chapter, *, generation_id, expected_key, **_kwargs):
         with campaign_module._eval_manifest_lock():
             campaign_module._atomic_json(
                 manifest_path,
@@ -633,9 +666,7 @@ def test_inflight_shard_cannot_repopulate_a_new_fresh_generation(
         return {
             "chapter": chapter,
             "key": expected_key,
-            "run_identity_sha256": campaign_module._run_identity_sha256(
-                run_identity
-            ),
+            "run_identity_sha256": campaign_module._run_identity_sha256(run_identity),
             "generation_id": generation_id,
             "path": str(tmp_path / f"{expected_key}.jsonl.gz"),
             "sha256": "c" * 64,
@@ -644,9 +675,7 @@ def test_inflight_shard_cannot_repopulate_a_new_fresh_generation(
             "elapsed_seconds": 0.1,
         }
 
-    monkeypatch.setattr(
-        campaign_module, "_evaluate_chapter", replace_generation
-    )
+    monkeypatch.setattr(campaign_module, "_evaluate_chapter", replace_generation)
     with pytest.raises(ValueError, match="replaced by another run"):
         campaign_module.evaluate_campaign(
             rulespec_root=tmp_path / "rulespec-us",
@@ -656,9 +685,7 @@ def test_inflight_shard_cannot_repopulate_a_new_fresh_generation(
             cache_dir=tmp_path / "cache",
         )
     assert json.loads(manifest_path.read_text()) == (
-        campaign_module._empty_eval_manifest(
-            run_identity, replacement_generation
-        )
+        campaign_module._empty_eval_manifest(run_identity, replacement_generation)
     )
 
 
@@ -681,9 +708,7 @@ def test_interrupted_nonfresh_evaluation_cannot_leave_old_shard_rebound(
         assert invalidated["shards"] == {}
         assert "comparison_artifact" not in invalidated
         assert "comparison_receipt" not in invalidated
-        with pytest.raises(
-            ValueError, match="incomplete or contains stale shards"
-        ):
+        with pytest.raises(ValueError, match="incomplete or contains stale shards"):
             campaign_module.compare_campaign(
                 rulespec_root=tmp_path / "rulespec-us",
                 engine_binary=tmp_path / "engine",
@@ -710,9 +735,9 @@ def test_compare_rebinds_manifest_to_fresh_artifact(tmp_path, monkeypatch) -> No
     comparison_path = tmp_path / "comparison-summary.json"
     manifest_path.parent.mkdir()
     run_identity = _fake_run_identity()
-    manifest_path.write_text(json.dumps(
-        _complete_eval_manifest(tmp_path, run_identity)
-    ))
+    manifest_path.write_text(
+        json.dumps(_complete_eval_manifest(tmp_path, run_identity))
+    )
     monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
     monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
     monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
@@ -739,9 +764,9 @@ def test_compare_cannot_restore_manifest_after_concurrent_fresh_invalidation(
     comparison_path = tmp_path / "comparison-summary.json"
     manifest_path.parent.mkdir()
     run_identity = _fake_run_identity()
-    manifest_path.write_text(json.dumps(
-        _complete_eval_manifest(tmp_path, run_identity)
-    ))
+    manifest_path.write_text(
+        json.dumps(_complete_eval_manifest(tmp_path, run_identity))
+    )
     monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
     monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
     monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
@@ -750,7 +775,8 @@ def test_compare_cannot_restore_manifest_after_concurrent_fresh_invalidation(
     )
     replacement_generation = "2" * 32
     monkeypatch.setattr(
-        campaign_module, "_new_eval_generation_id",
+        campaign_module,
+        "_new_eval_generation_id",
         lambda: replacement_generation,
     )
 
@@ -800,9 +826,7 @@ def test_compare_cannot_restore_manifest_after_concurrent_fresh_invalidation(
     assert isinstance(fresh_errors[0], RuntimeError)
     assert str(fresh_errors[0]) == "fresh interrupted"
     assert json.loads(manifest_path.read_text()) == (
-        campaign_module._empty_eval_manifest(
-            run_identity, replacement_generation
-        )
+        campaign_module._empty_eval_manifest(run_identity, replacement_generation)
     )
 
 
@@ -845,10 +869,12 @@ def test_shard_key_binds_every_live_producer(identity_path) -> None:
     mutant = copy.deepcopy(original)
     mutant[identity_path[0]][identity_path[1]] = "b" * 64
     assert campaign_module._shard_key(
-        chapter="01", run_identity=original,
+        chapter="01",
+        run_identity=original,
         generation_id=EVAL_GENERATION_ID,
     ) != campaign_module._shard_key(
-        chapter="01", run_identity=mutant,
+        chapter="01",
+        run_identity=mutant,
         generation_id=EVAL_GENERATION_ID,
     )
 
@@ -870,10 +896,7 @@ def test_input_contract_rejects_note16_precedence_dependency_mutation(
     tmp_path, monkeypatch
 ) -> None:
     tool = tmp_path / "tools/b16_entry_flags.py"
-    incidence = (
-        tmp_path
-        / "us/policies/usitc/us-tariff-incidence/generated"
-    )
+    incidence = tmp_path / "us/policies/usitc/us-tariff-incidence/generated"
     tool.parent.mkdir(parents=True)
     incidence.mkdir(parents=True)
     tool.write_text(
@@ -895,9 +918,7 @@ def test_input_contract_rejects_note16_precedence_dependency_mutation(
         "_rulespec_root_identity",
         lambda _root: rulespec_identity,
     )
-    _entry_flags, bound_producers = campaign_module._load_entry_flag_tool(
-        tmp_path
-    )
+    _entry_flags, bound_producers = campaign_module._load_entry_flag_tool(tmp_path)
     contract = {
         "schema": campaign_module.INPUT_CONTRACT_SCHEMA,
         "rulespec": rulespec_identity,
@@ -907,17 +928,11 @@ def test_input_contract_rejects_note16_precedence_dependency_mutation(
     }
     contract_path = tmp_path / "input-contract.json"
     contract_path.write_text(json.dumps(contract))
-    monkeypatch.setattr(
-        campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path
-    )
+    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path)
 
     note16.write_text("new\n")
-    _entry_flags, current_producers = campaign_module._load_entry_flag_tool(
-        tmp_path
-    )
-    assert bound_producers["producer_sha256"] != current_producers[
-        "producer_sha256"
-    ]
+    _entry_flags, current_producers = campaign_module._load_entry_flag_tool(tmp_path)
+    assert bound_producers["producer_sha256"] != current_producers["producer_sha256"]
     bound_identity = _fake_run_identity()
     bound_identity["entry_flag_producers"] = bound_producers
     current_identity = copy.deepcopy(bound_identity)
@@ -928,9 +943,9 @@ def test_input_contract_rejects_note16_precedence_dependency_mutation(
     current_manifest = campaign_module._empty_eval_manifest(
         current_identity, EVAL_GENERATION_ID
     )
-    assert bound_manifest["run_identity_sha256"] != current_manifest[
-        "run_identity_sha256"
-    ]
+    assert (
+        bound_manifest["run_identity_sha256"] != current_manifest["run_identity_sha256"]
+    )
     with pytest.raises(
         ValueError, match="declared-input contract entry-flag provenance is stale"
     ):
@@ -951,9 +966,7 @@ def test_campaign_evaluator_identity_binds_adapter_source(
     runner.write_text("old adapter")
     monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(campaign_module, "__file__", str(campaign))
-    monkeypatch.setattr(
-        campaign_module, "CAMPAIGN_EVALUATOR_SOURCES", ("runner.py",)
-    )
+    monkeypatch.setattr(campaign_module, "CAMPAIGN_EVALUATOR_SOURCES", ("runner.py",))
     old = campaign_module._campaign_evaluator_identity()
     runner.write_text("new adapter")
     new = campaign_module._campaign_evaluator_identity()
@@ -966,9 +979,9 @@ def test_downstream_rejects_unbound_comparison_after_interrupted_fresh_run(
 ) -> None:
     run_identity = _fake_run_identity()
     manifest_path = tmp_path / "MANIFEST.json"
-    manifest_path.write_text(json.dumps(
-        _complete_eval_manifest(tmp_path, run_identity)
-    ))
+    manifest_path.write_text(
+        json.dumps(_complete_eval_manifest(tmp_path, run_identity))
+    )
     comparison_path = tmp_path / "comparison-summary.json"
     comparison_path.write_text("{}")
     monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
@@ -979,7 +992,8 @@ def test_downstream_rejects_unbound_comparison_after_interrupted_fresh_run(
     )
     function = (
         campaign_module.classify_campaign
-        if stage == "classify" else campaign_module.build_report
+        if stage == "classify"
+        else campaign_module.build_report
     )
     with pytest.raises(ValueError, match="binding is absent or stale"):
         function(
@@ -1003,7 +1017,8 @@ def test_downstream_rejects_incomplete_current_manifest(
     )
     function = (
         campaign_module.classify_campaign
-        if stage == "classify" else campaign_module.build_report
+        if stage == "classify"
+        else campaign_module.build_report
     )
     with pytest.raises(ValueError, match="incomplete or contains stale shards"):
         function(
@@ -1091,9 +1106,7 @@ def test_engine_environment_cannot_select_an_ambient_checkout(tmp_path) -> None:
         },
     )
     assert "AXIOM_RULESPEC_ROOT" not in env
-    assert env["AXIOM_RULESPEC_REPO_ROOTS"] == str(
-        rulespec_root.resolve().parent
-    )
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"] == str(rulespec_root.resolve().parent)
     assert env["UNCHANGED"] == "yes"
 
 
@@ -1182,9 +1195,7 @@ def test_preview_disposition_line_sets_are_receipted_and_registered(
     contract = _preview_selector_contract(ledger["entries"])
     assert {
         selector_id: selector["match"] for selector_id, selector in contract.items()
-    } == {
-        selector["id"]: selector["match"] for selector in receipt["selectors"]
-    }
+    } == {selector["id"]: selector["match"] for selector in receipt["selectors"]}
 
 
 def test_preview_selector_match_drift_fails_hermetically() -> None:
@@ -1244,14 +1255,18 @@ def test_preview_selector_must_expire_on_source_change() -> None:
         _preview_selector_contract(entries)
 
 
-def test_preview_source_hash_mutation_cannot_self_validate(tmp_path, monkeypatch) -> None:
+def test_preview_source_hash_mutation_cannot_self_validate(
+    tmp_path, monkeypatch
+) -> None:
     receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     first_input = next(iter(receipt["inputs"].values()))
     first_input["sha256"] = "0" * 64
     receipt.pop("receipt_payload_sha256")
-    receipt["receipt_payload_sha256"] = hashlib.sha256(json.dumps(
-        receipt, allow_nan=False, sort_keys=True, separators=(",", ":")
-    ).encode()).hexdigest()
+    receipt["receipt_payload_sha256"] = hashlib.sha256(
+        json.dumps(
+            receipt, allow_nan=False, sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
     mutant = tmp_path / "mutant-preview-receipt.json"
     mutant.write_text(json.dumps(receipt))
     monkeypatch.setattr(campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", mutant)
@@ -1266,9 +1281,11 @@ def test_preview_producer_mutation_cannot_self_validate(
     receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     receipt["producer"][producer_name]["sha256"] = "0" * 64
     receipt.pop("receipt_payload_sha256")
-    receipt["receipt_payload_sha256"] = hashlib.sha256(json.dumps(
-        receipt, allow_nan=False, sort_keys=True, separators=(",", ":")
-    ).encode()).hexdigest()
+    receipt["receipt_payload_sha256"] = hashlib.sha256(
+        json.dumps(
+            receipt, allow_nan=False, sort_keys=True, separators=(",", ":")
+        ).encode()
+    ).hexdigest()
     mutant = tmp_path / "mutant-preview-receipt.json"
     mutant.write_text(json.dumps(receipt))
     monkeypatch.setattr(campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", mutant)
@@ -1282,11 +1299,15 @@ def test_preview_population_digest_rejects_count_preserving_drift() -> None:
         "preview": {
             "expected_units": 5,
             "expected_signature_count": 2,
-            "expected_signature_population_sha256": signature_population_sha256(original),
+            "expected_signature_population_sha256": signature_population_sha256(
+                original
+            ),
         }
     }
     _enforce_preview_selector_population(
-        contract, {signature: "preview" for signature, _ in original}, Counter(dict(original))
+        contract,
+        {signature: "preview" for signature, _ in original},
+        Counter(dict(original)),
     )
     mutant = [("a" * 64, 2), ("c" * 64, 3)]
     with pytest.raises(ValueError, match="signature digest drift"):
@@ -1319,7 +1340,7 @@ def test_active_expiring_preview_population_rejects_zero_and_partial_survival() 
 
 
 def _synthetic_preview_transition(
-    parent_id: str = "section232-annex-brazil",
+    parent_id: str = "aircraft-utilization-proxy-brazil",
 ) -> tuple[
     dict,
     list[dict],
@@ -1333,48 +1354,104 @@ def _synthetic_preview_transition(
     parent = next(
         selector for selector in preview["selectors"] if selector["id"] == parent_id
     )
-    child_id = f"{parent_id}-current-residual"
     population = [("a" * 64, 2), ("b" * 64, 3)]
     population_digest = signature_population_sha256(population)
-    child = {
-        "id": child_id,
-        "parent_id": parent_id,
-        "logical_class": "synthetic-current-residual",
-        "disposition": "axiom_encoding_gap",
-        "attribution": "axiom-attributed-open",
-        "expected_units": 5,
-        "expected_signature_count": 2,
-        "expected_signature_population_sha256": population_digest,
-        "match": copy.deepcopy(parent["match"]),
-    }
-    transition_item = {
-        "parent_id": parent_id,
-        "parent_contract": copy.deepcopy(parent),
-        "status": "superseded",
-        "historical_units": parent["expected_units"],
-        "fresh_matching_units": parent["expected_units"] - 5,
-        "fresh_residual_population": {
-            "units": 5,
-            "signature_count": 2,
-            "signature_population_sha256": population_digest,
-        },
-        "children": [child],
-        "evidence": {"classification": "synthetic-test"},
-    }
+    ordered_selectors = [parent] + [
+        selector for selector in preview["selectors"] if selector["id"] != parent_id
+    ]
+    transitions = []
+    ledger_children = []
+    child_id = ""
+    for selector in ordered_selectors:
+        selector_id = selector["id"]
+        status, expected_children = (
+            campaign_module._expected_preview_transition_semantics(
+                selector_id, selector
+            )
+        )
+        if status == "retired":
+            children = []
+            fresh_matching_units = selector["expected_units"]
+            residual = {
+                "units": 0,
+                "signature_count": 0,
+                "signature_population_sha256": signature_population_sha256([]),
+            }
+        elif selector_id == parent_id:
+            assert len(expected_children) == 1
+            child_id = expected_children[0]["id"]
+            children = [
+                {
+                    **copy.deepcopy(expected_children[0]),
+                    "expected_units": 5,
+                    "expected_signature_count": 2,
+                    "expected_signature_population_sha256": population_digest,
+                }
+            ]
+            fresh_matching_units = selector["expected_units"] - 5
+            residual = {
+                "units": 5,
+                "signature_count": 2,
+                "signature_population_sha256": population_digest,
+            }
+        else:
+            child_count = len(expected_children)
+            allocations = [1] * (child_count - 1) + [
+                selector["expected_units"] - child_count + 1
+            ]
+            children = []
+            for index, (semantic, units) in enumerate(
+                zip(expected_children, allocations, strict=True)
+            ):
+                children.append(
+                    {
+                        **copy.deepcopy(semantic),
+                        "expected_units": units,
+                        "expected_signature_count": 1,
+                        "expected_signature_population_sha256": hashlib.sha256(
+                            f"{selector_id}:{index}".encode()
+                        ).hexdigest(),
+                    }
+                )
+            fresh_matching_units = 0
+            residual = {
+                "units": selector["expected_units"],
+                "signature_count": child_count,
+                "signature_population_sha256": hashlib.sha256(
+                    f"{selector_id}:residual".encode()
+                ).hexdigest(),
+            }
+        transitions.append(
+            {
+                "parent_id": selector_id,
+                "parent_contract": copy.deepcopy(selector),
+                "status": status,
+                "historical_units": selector["expected_units"],
+                "fresh_matching_units": fresh_matching_units,
+                "fresh_residual_population": residual,
+                "children": children,
+                "evidence": {"classification": "synthetic-transition-test"},
+            }
+        )
+        ledger_children.extend(children)
+    assert child_id
+    historical_ids = {selector["id"] for selector in preview["selectors"]}
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = [
         copy.deepcopy(entry)
         for entry in ledger["entries"]
-        if entry["id"] != parent_id
+        if entry["id"] not in historical_ids
     ]
-    entries.append(
+    entries.extend(
         {
-            "id": child_id,
+            "id": child["id"],
+            "logical_class": child["logical_class"],
             "match": copy.deepcopy(child["match"]),
             "disposition": child["disposition"],
             "attribution": child["attribution"],
             "expires_on_source_change": True,
         }
+        for child in ledger_children
     )
     line_set = preview["line_sets"][parent["match"]["line_set"]]
     unit = {
@@ -1389,7 +1466,7 @@ def _synthetic_preview_transition(
     return (
         preview,
         entries,
-        {"transitions": [transition_item]},
+        {"transitions": transitions},
         child_id,
         observed,
         counts,
@@ -1420,12 +1497,19 @@ def test_preview_transition_enrolls_child_and_partitions_parent_exactly(
     active, retired, superseded = _preview_selector_snapshot(
         entries, preview, transition
     )
+    target_parent = transition["transitions"][0]["parent_id"]
 
     assert child_id in active
-    assert not retired
-    assert set(superseded) == {"section232-annex-brazil"}
+    assert set(retired) == campaign_module.TRANSITION_SECTION232_EXPOSED_PARENTS
+    assert set(superseded) == {
+        selector["id"] for selector in preview["selectors"]
+    } - set(retired)
     _enforce_preview_selector_transitions(
-        superseded, observed, counts, classes, engine_errors=0
+        {target_parent: superseded[target_parent]},
+        observed,
+        counts,
+        classes,
+        engine_errors=0,
     )
 
 
@@ -1438,12 +1522,14 @@ def test_preview_transition_rejects_partition_escape_gap_digest_and_errors(
     _active, _retired, superseded = _preview_selector_snapshot(
         entries, preview, transition
     )
+    target_parent = transition["transitions"][0]["parent_id"]
+    target_superseded = {target_parent: superseded[target_parent]}
 
     escaped_observed = {**observed, "c" * 64: _selector_unit()}
     escaped_counts = counts + Counter({"c" * 64: 1})
     with pytest.raises(ValueError, match="child escaped parent"):
         _enforce_preview_selector_transitions(
-            superseded,
+            target_superseded,
             escaped_observed,
             escaped_counts,
             {**classes, "c" * 64: child_id},
@@ -1451,14 +1537,14 @@ def test_preview_transition_rejects_partition_escape_gap_digest_and_errors(
         )
     with pytest.raises(ValueError, match="do not partition parent"):
         _enforce_preview_selector_transitions(
-            superseded,
+            target_superseded,
             observed,
             counts,
             {**classes, "b" * 64: None},
             engine_errors=0,
         )
-    digest_mutant = copy.deepcopy(superseded)
-    digest_mutant["section232-annex-brazil"]["fresh_residual_population"][
+    digest_mutant = copy.deepcopy(target_superseded)
+    digest_mutant[target_parent]["fresh_residual_population"][
         "signature_population_sha256"
     ] = "f" * 64
     with pytest.raises(ValueError, match="signature digest drift"):
@@ -1467,7 +1553,7 @@ def test_preview_transition_rejects_partition_escape_gap_digest_and_errors(
         )
     with pytest.raises(ValueError, match="cannot be proven with engine errors"):
         _enforce_preview_selector_transitions(
-            superseded, observed, counts, classes, engine_errors=1
+            target_superseded, observed, counts, classes, engine_errors=1
         )
 
 
@@ -1480,16 +1566,16 @@ def test_preview_transition_rejects_parent_or_child_contract_drift() -> None:
         next(
             copy.deepcopy(entry)
             for entry in yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"]
-            if entry["id"] == "section232-annex-brazil"
+            if entry["id"] == transition["transitions"][0]["parent_id"]
         )
     )
     with pytest.raises(ValueError, match="transitioned preview parent remains"):
         _preview_selector_snapshot(parent_remains, preview, transition)
 
     child_drift = copy.deepcopy(entries)
-    next(entry for entry in child_drift if entry["id"] == child_id)[
-        "attribution"
-    ] = "reference-behavior"
+    next(entry for entry in child_drift if entry["id"] == child_id)["attribution"] = (
+        "axiom-attributed-open"
+    )
     with pytest.raises(ValueError, match="child attribution drift"):
         _preview_selector_snapshot(child_drift, preview, transition)
 
@@ -1499,6 +1585,104 @@ def test_preview_transition_rejects_parent_or_child_contract_drift() -> None:
         _preview_selector_snapshot(entries, preview, census_drift)
 
 
+@pytest.mark.parametrize(
+    "parent_id",
+    ["section232-annex-brazil", "aircraft-utilization-proxy-brazil"],
+)
+def test_preview_transition_rejects_rehashed_semantic_relabel(
+    parent_id: str,
+) -> None:
+    preview, entries, transition, *_rest = _synthetic_preview_transition()
+    item = next(
+        item for item in transition["transitions"] if item["parent_id"] == parent_id
+    )
+    child = item["children"][0]
+    old_id = child["id"]
+    child["id"] = f"{old_id}-unauthorized"
+    child["disposition"] = "axiom_encoding_gap"
+    ledger_child = next(entry for entry in entries if entry["id"] == old_id)
+    ledger_child["id"] = child["id"]
+    ledger_child["disposition"] = child["disposition"]
+    transition["receipt_payload_sha256"] = campaign_module._canonical_sha256(
+        {"transitions": transition["transitions"]}
+    )
+
+    with pytest.raises(ValueError, match=f"semantics drift: {parent_id}"):
+        _preview_selector_snapshot(entries, preview, transition)
+
+
+def test_preview_transition_child_ledger_logical_class_is_exact() -> None:
+    preview, entries, transition, child_id, *_rest = _synthetic_preview_transition()
+    next(entry for entry in entries if entry["id"] == child_id)["logical_class"] = (
+        "unauthorized-logical-class"
+    )
+    with pytest.raises(ValueError, match="child logical class drift"):
+        _preview_selector_snapshot(entries, preview, transition)
+
+
+@pytest.mark.parametrize(
+    ("field", "mutant"),
+    [
+        ("slot", "forced_labor_section_301"),
+        (
+            "line_set",
+            "preview-1311-section232-annex-forced-labor-hts10",
+        ),
+        ("delta", {"sign": "neg"}),
+    ],
+)
+def test_preview_transition_child_cannot_change_parent_match(
+    field: str, mutant: object
+) -> None:
+    preview, entries, transition, _child_id, *_rest = _synthetic_preview_transition()
+    transition["transitions"][0]["children"][0]["match"][field] = mutant
+    with pytest.raises(ValueError, match="does not preserve parent match"):
+        _preview_selector_snapshot(entries, preview, transition)
+
+
+def test_preview_transition_requires_every_immutable_parent() -> None:
+    preview, entries, transition, *_rest = _synthetic_preview_transition()
+    transition["transitions"].pop()
+    with pytest.raises(ValueError, match="parent coverage is incomplete"):
+        _preview_selector_snapshot(entries, preview, transition)
+
+
+@pytest.mark.parametrize(
+    ("field", "mutant", "message"),
+    [
+        ("expected_units", 6, "unit count drift"),
+        ("expected_signature_count", 3, "signature count drift"),
+        (
+            "expected_signature_population_sha256",
+            "f" * 64,
+            "signature digest drift",
+        ),
+    ],
+)
+def test_preview_transition_rederives_each_child_census(
+    _raw_preview_line_set_membership,
+    field: str,
+    mutant: object,
+    message: str,
+) -> None:
+    preview, entries, transition, _child_id, observed, counts, classes = (
+        _synthetic_preview_transition()
+    )
+    _active, _retired, superseded = _preview_selector_snapshot(
+        entries, preview, transition
+    )
+    target_parent = transition["transitions"][0]["parent_id"]
+    superseded[target_parent]["children"][0][field] = mutant
+    with pytest.raises(ValueError, match=message):
+        _enforce_preview_selector_transitions(
+            {target_parent: superseded[target_parent]},
+            observed,
+            counts,
+            classes,
+            engine_errors=0,
+        )
+
+
 def test_preview_transition_receipt_is_lazy_until_a_child_is_enrolled(
     monkeypatch,
 ) -> None:
@@ -1506,6 +1690,7 @@ def test_preview_transition_receipt_is_lazy_until_a_child_is_enrolled(
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = ledger["entries"]
     comparison: dict = {}
+
     def unexpected_transition_load(*_args):
         raise RuntimeError("transition receipt loaded")
 
@@ -1569,9 +1754,7 @@ def test_classification_inputs_bind_transition_only_after_child_enrollment(
     assert with_transition[
         "preview_selector_transition_receipt_sha256"
     ] == campaign_module._sha256(transition_receipt)
-    assert with_transition[
-        "preview_selector_transition_payload_sha256"
-    ] == "c" * 64
+    assert with_transition["preview_selector_transition_payload_sha256"] == "c" * 64
 
     transition_receipt.write_text(json.dumps({**transition_payload, "drift": True}))
     with pytest.raises(ValueError, match="changed during classification"):
@@ -1584,6 +1767,8 @@ def test_classification_inputs_bind_transition_only_after_child_enrollment(
 
 
 def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
+    immutable_preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    selector_ids = [selector["id"] for selector in immutable_preview["selectors"]]
     scripts = tmp_path / "scripts"
     evidence = tmp_path / "reference/us-tariff-schedule"
     scripts.mkdir(parents=True)
@@ -1601,12 +1786,67 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
     artifact_path = evidence / "comparison.jsonl.gz"
     historical_path = evidence / "historical.jsonl.gz"
     transition_path = evidence / "transition.json"
+    cafta_path = evidence / "cafta.json"
+    selected_path = evidence / "selected.csv.gz"
+    input_contract_path = evidence / "input-contract.json"
+    provenance_path = evidence / "provenance.json"
+    integrity_path = evidence / "integrity.json"
+    extractor_path = scripts / "extract.R"
+    cafta_producer_path = scripts / "build_cafta.py"
+    rscript_path = scripts / "Rscript"
     preview_path.write_text("preview\n")
     historical_path.write_text("historical\n")
+    selected_path.write_text("selected\n")
+    input_contract_path.write_text("input contract\n")
+    provenance_path.write_text("provenance\n")
+    integrity_path.write_text("integrity\n")
+    extractor_path.write_text("# extractor\n")
+    cafta_producer_path.write_text("# cafta producer\n")
+    rscript_path.write_text("# rscript\n")
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(campaign_module, "SELECTED", selected_path)
+    monkeypatch.setattr(campaign_module, "INPUT_CONTRACT_RECEIPT", input_contract_path)
+    monkeypatch.setattr(campaign_module, "CAFTA_REFERENCE_PROVENANCE", provenance_path)
+    monkeypatch.setattr(
+        campaign_module, "CAFTA_REFERENCE_INTEGRITY_RECEIPT", integrity_path
+    )
+    monkeypatch.setattr(
+        campaign_module, "CAFTA_SELECTED_PANEL_EXTRACTOR", extractor_path
+    )
+    monkeypatch.setattr(
+        campaign_module, "CAFTA_SUPERSESSION_PRODUCER", cafta_producer_path
+    )
+    monkeypatch.setattr(campaign_module, "CAFTA_SUPERSESSION_RECEIPT", cafta_path)
+    selected_receipt = campaign_module._file_receipt(
+        selected_path, relative_to=tmp_path
+    )
+    provenance_path.write_text(
+        json.dumps(
+            {
+                "schema": "axiom_oracles.us_tariff_schedule_reference.v1",
+                "yale_commit": campaign_module.PREVIEW_YALE_COMMIT,
+                "rds_path": str(evidence / "rate-timeseries.rds"),
+                "rds_sha256": campaign_module.CAFTA_EXPECTED_RDS_SHA256,
+                "selected_extract_sha256": selected_receipt["sha256"],
+                "extractor_sha256": campaign_module._file_receipt(
+                    extractor_path, relative_to=tmp_path
+                )["sha256"],
+            }
+        )
+    )
+    campaign_source = campaign_module._file_receipt(
+        sources["campaign_classifier"], relative_to=tmp_path
+    )
     manifest = {
         "run_identity": {
             "rulespec": {"content_sha256": "5" * 64},
             "entry_flag_producers": {"producer_sha256": "6" * 64},
+            "campaign_evaluator": {"campaign": campaign_source},
+            "selected_population": selected_receipt,
+            "chapters": {
+                f"{chapter:02d}": {"content_sha256": "8" * 64}
+                for chapter in range(1, 101)
+            },
             "reference_assumptions": {
                 "yale_note16_metal_weight": {
                     "path": "reference/assumption.json",
@@ -1615,7 +1855,7 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
                 }
             },
         },
-        "shards": {"one": {"engine_errors": 0}},
+        "shards": {"one": {"cases": 1, "engine_errors": 0}},
     }
     monkeypatch.setattr(
         campaign_module,
@@ -1627,7 +1867,6 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
     manifest_path.write_text(json.dumps(manifest))
     comparison_path.write_text("comparison\n")
     artifact_path.write_text("artifact\n")
-    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(
         campaign_module, "PREVIEW_SELECTOR_TRANSITION_PRODUCER_SOURCES", sources
     )
@@ -1646,13 +1885,205 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
     }
     preview = {
         "receipt_payload_sha256": "4" * 64,
+        "producer": {"campaign_classifier": campaign_source},
+        "selectors": [{"id": selector_id} for selector_id in selector_ids],
         "inputs": {
             campaign_module.PREVIEW_HISTORICAL_TARGET_PATH: (
-                campaign_module._file_receipt(
-                    historical_path, relative_to=tmp_path
-                )
+                campaign_module._file_receipt(historical_path, relative_to=tmp_path)
             )
         },
+    }
+    transition_inputs = {
+        "immutable_preview_receipt": campaign_module._file_receipt(
+            preview_path, relative_to=tmp_path
+        ),
+        "historical_target_mismatch_artifact": preview["inputs"][
+            campaign_module.PREVIEW_HISTORICAL_TARGET_PATH
+        ],
+        "evaluation_manifest": campaign_module._file_receipt(
+            manifest_path, relative_to=tmp_path
+        ),
+        "comparison_receipt": campaign_module._file_receipt(
+            comparison_path, relative_to=tmp_path
+        ),
+        "comparison_artifact": comparison["comparison_artifact"],
+    }
+    cafta_inputs = {
+        **transition_inputs,
+        "declared_input_contract": campaign_module._file_receipt(
+            input_contract_path, relative_to=tmp_path
+        ),
+        "reference_provenance": campaign_module._file_receipt(
+            provenance_path, relative_to=tmp_path
+        ),
+        "reference_integrity_receipt": campaign_module._file_receipt(
+            integrity_path, relative_to=tmp_path
+        ),
+        "selected_panel_extractor": campaign_module._file_receipt(
+            extractor_path, relative_to=tmp_path
+        ),
+    }
+    identity_sha = "8" * 64
+    defect_sha = "9" * 64
+    cafta_payload = {
+        "schema": campaign_module.CAFTA_SUPERSESSION_SCHEMA,
+        "verdict": "PASS",
+        "producer": {
+            "script": campaign_module._file_receipt(
+                cafta_producer_path, relative_to=tmp_path
+            )
+        },
+        "definition": copy.deepcopy(campaign_module.CAFTA_EXPECTED_DEFINITION),
+        "inputs": cafta_inputs,
+        "bindings": {
+            "preview_receipt_payload_sha256": preview["receipt_payload_sha256"],
+            "preview_cafta_snapshot_sha256": (
+                campaign_module.CAFTA_PREVIEW_SNAPSHOT_SHA256
+            ),
+            "generation_id": comparison["generation_id"],
+            "run_identity_sha256": comparison["run_identity_sha256"],
+            "evaluation_manifest_sha256": comparison["evaluation_manifest_sha256"],
+            "rulespec": manifest["run_identity"]["rulespec"],
+            "campaign_evaluator": manifest["run_identity"]["campaign_evaluator"],
+            "selected_population_sha256": selected_receipt["sha256"],
+            "fresh_campaign_classifier_sha256": campaign_source["sha256"],
+            "preview_campaign_classifier_sha256": campaign_source["sha256"],
+            "campaign_producer_identity_required": False,
+            "campaign_semantic_equivalence_basis": (
+                campaign_module.CAFTA_CAMPAIGN_EQUIVALENCE_BASIS
+            ),
+            "evaluation_shard_engine_errors": 0,
+            "observed_evaluation_record_errors": 0,
+            "comparison_receipt_engine_errors": 0,
+            "evaluated_chapters": 100,
+            "evaluated_cases": 1,
+            "observed_evaluated_cases": 1,
+            "reference_compared_field": "statutory_rate_s301fl",
+            "reference_rds_path": str(evidence / "rate-timeseries.rds"),
+            "reference_rds_sha256": (campaign_module.CAFTA_EXPECTED_RDS_SHA256),
+        },
+        "axiom_predicate_proof": {
+            "predicates": {
+                "entry_is_entered_free_of_duty_under_dr_cafta": False,
+                "entry_is_general_note_29_d_v_textile_or_apparel_good": False,
+            },
+            "all_joined_actual_case_feeds_false_false": True,
+            "joined_fresh_evaluation_records": (campaign_module.CAFTA_EXPECTED_UNITS),
+            "chapter_contracts_checked": 100,
+            "scope": "all campaign cases in all 100 compiled chapters",
+            "contract_sha256": cafta_inputs["declared_input_contract"]["sha256"],
+            "actual_case_feed_projection_sha256": "a" * 64,
+        },
+        "yale_reference_defect": {
+            "commit": campaign_module.PREVIEW_YALE_COMMIT,
+            "tree": campaign_module.PREVIEW_YALE_TREE,
+            "files": {
+                path: {
+                    "path": path,
+                    "bytes": 1,
+                    "sha256": sha256,
+                }
+                for path, sha256 in (campaign_module.CAFTA_YALE_FILE_SHA256.items())
+            },
+            "adapter_source_proof": copy.deepcopy(
+                campaign_module.CAFTA_YALE_ADAPTER_SOURCE_PROOF
+            ),
+            "source_proof": {
+                "rule_hit_function_first_line": 959,
+                "rule_hit_use_site_first_line": 973,
+                "use_conditioned_first_line": 999,
+                "chapter98_precapture_first_line": 2961,
+                "statutory_capture_first_line": 3022,
+                **campaign_module.CAFTA_YALE_SOURCE_PROOF_HASHES,
+                "defect": (
+                    "the function argument is named condition, but dplyr's "
+                    "data mask resolves the bare RHS condition to the condition "
+                    "column; therefore .data$condition %in% condition is true "
+                    "for every nonmissing row"
+                ),
+                "downstream_effect": (
+                    "rule_hit('full') includes condition=fta rows, making "
+                    "country_full_hit true, covered false, and rate_s301fl zero "
+                    "before preference scaling"
+                ),
+                "comparison_surface": (
+                    "statutory_rate_s301fl captures rate_s301fl before the later "
+                    "HS2-country preference scaling; fixing the name collision "
+                    "restores the statutory country-tier rate on the compared "
+                    "surface regardless of utilization share"
+                ),
+            },
+            "deterministic_minimal_reproduction": {
+                "dplyr_version": "1.1.2",
+                "program_sha256": (
+                    "24e1b3c1180acd7b9ce494fa9faaaa52a806d2bd8c228748705da10e2425fa09"
+                ),
+                "r_version": "4.3.0",
+                "result": (
+                    "PASS: rule_hit('full') selected both the full and fta rows "
+                    "under the pinned .data$condition %in% condition expression"
+                ),
+                "rscript": campaign_module._file_receipt(rscript_path),
+                "selected_conditions": "full,fta",
+            },
+        },
+        "zero_error_proof": {
+            "evaluation_shard_engine_errors": 0,
+            "observed_evaluation_record_errors": 0,
+            "comparison_receipt_engine_errors": 0,
+            "comparison_artifact_engine_error_rows": 0,
+        },
+        "census": {
+            "historical_artifact_rows_scanned": (campaign_module.CAFTA_EXPECTED_UNITS),
+            "fresh_comparison_rows_scanned": (campaign_module.CAFTA_EXPECTED_UNITS),
+            "cafta_units": campaign_module.CAFTA_EXPECTED_UNITS,
+            "cafta_signatures": campaign_module.CAFTA_EXPECTED_SIGNATURES,
+            "origin_units": campaign_module.CAFTA_EXPECTED_ORIGIN_UNITS,
+        },
+        "supersession": {
+            "authorized_disposition_after_pass": "upstream_engine_gap",
+            "authorized_attribution_after_pass": "reference-defect",
+            "historical_identity_population_sha256": identity_sha,
+            "fresh_identity_population_sha256": identity_sha,
+            "historical_mismatch_projection_sha256": "b" * 64,
+            "historical_defect_projection_sha256": defect_sha,
+            "fresh_defect_projection_sha256": defect_sha,
+            "joined_historical_units": campaign_module.CAFTA_EXPECTED_UNITS,
+            "missing_historical_units": 0,
+            "duplicate_historical_identities": 0,
+            "duplicate_fresh_identities": 0,
+            "fresh_mismatching_units": campaign_module.CAFTA_EXPECTED_UNITS,
+            "all_present": True,
+            "all_unique": True,
+            "all_predicates_false": True,
+            "all_yale_defect_zeros_reproduced": True,
+            "all_corrected_yale_statutory_rates_match_axiom": True,
+        },
+    }
+    cafta_payload["receipt_payload_sha256"] = campaign_module._canonical_sha256(
+        cafta_payload
+    )
+    cafta_path.write_text(json.dumps(cafta_payload))
+    transitions = [
+        {"parent_id": selector_id, "evidence": {}} for selector_id in selector_ids
+    ]
+    cafta_transition = next(
+        item
+        for item in transitions
+        if item["parent_id"] == campaign_module.CAFTA_PREVIEW_SELECTOR_ID
+    )
+    cafta_transition["children"] = [
+        {
+            "id": "cafta-reference-defect",
+            "disposition": "upstream_engine_gap",
+            "attribution": "reference-defect",
+            "expected_units": campaign_module.CAFTA_EXPECTED_UNITS,
+            "expected_signature_count": (campaign_module.CAFTA_EXPECTED_SIGNATURES),
+        }
+    ]
+    cafta_transition["evidence"]["cafta_supersession_receipt"] = {
+        "file": campaign_module._file_receipt(cafta_path, relative_to=tmp_path),
+        "payload": cafta_payload,
     }
     receipt = {
         "schema": campaign_module.PREVIEW_SELECTOR_TRANSITION_SCHEMA,
@@ -1661,35 +2092,15 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
             name: campaign_module._file_receipt(path, relative_to=tmp_path)
             for name, path in sources.items()
         },
-        "inputs": {
-            "immutable_preview_receipt": campaign_module._file_receipt(
-                preview_path, relative_to=tmp_path
-            ),
-            "historical_target_mismatch_artifact": preview["inputs"][
-                campaign_module.PREVIEW_HISTORICAL_TARGET_PATH
-            ],
-            "evaluation_manifest": campaign_module._file_receipt(
-                manifest_path, relative_to=tmp_path
-            ),
-            "comparison_receipt": campaign_module._file_receipt(
-                comparison_path, relative_to=tmp_path
-            ),
-            "comparison_artifact": comparison["comparison_artifact"],
-        },
+        "inputs": transition_inputs,
         "bindings": {
             "preview_receipt_payload_sha256": preview["receipt_payload_sha256"],
             "generation_id": comparison["generation_id"],
             "run_identity_sha256": comparison["run_identity_sha256"],
-            "evaluation_manifest_sha256": comparison[
-                "evaluation_manifest_sha256"
-            ],
+            "evaluation_manifest_sha256": comparison["evaluation_manifest_sha256"],
             "rulespec": manifest["run_identity"]["rulespec"],
-            "entry_flag_producers": manifest["run_identity"][
-                "entry_flag_producers"
-            ],
-            "reference_assumptions": manifest["run_identity"][
-                "reference_assumptions"
-            ],
+            "entry_flag_producers": manifest["run_identity"]["entry_flag_producers"],
+            "reference_assumptions": manifest["run_identity"]["reference_assumptions"],
         },
         "zero_error_proof": {
             "evaluation_shard_engine_errors": 0,
@@ -1697,7 +2108,7 @@ def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
             "comparison_receipt_engine_errors": 0,
             "comparison_artifact_engine_error_rows": 0,
         },
-        "transitions": [{"synthetic": True}],
+        "transitions": transitions,
     }
     receipt["receipt_payload_sha256"] = campaign_module._canonical_sha256(receipt)
     transition_path.write_text(json.dumps(receipt))
@@ -1708,9 +2119,7 @@ def test_preview_transition_loader_rejects_stale_or_error_backed_receipt(
     tmp_path: Path, monkeypatch
 ) -> None:
     comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
-    receipt = campaign_module._preview_selector_transition_receipt(
-        comparison, preview
-    )
+    receipt = campaign_module._preview_selector_transition_receipt(comparison, preview)
     assert receipt["verdict"] == "PASS"
 
     path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
@@ -1721,6 +2130,224 @@ def test_preview_transition_loader_rejects_stale_or_error_backed_receipt(
     path.write_text(json.dumps(mutant))
     with pytest.raises(ValueError, match="cannot rely on engine errors"):
         campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_omitted_parent(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    mutant = json.loads(path.read_text())
+    mutant["transitions"].pop()
+    mutant.pop("receipt_payload_sha256")
+    mutant["receipt_payload_sha256"] = campaign_module._canonical_sha256(mutant)
+    path.write_text(json.dumps(mutant))
+
+    with pytest.raises(ValueError, match="parent coverage is incomplete"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_cafta_file_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    cafta_path = campaign_module.CAFTA_SUPERSESSION_RECEIPT
+    cafta_path.write_text(cafta_path.read_text() + "\n")
+
+    with pytest.raises(ValueError, match="CAFTA supersession receipt file binding"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def _rewrite_embedded_cafta_receipt(
+    mutate,
+    *,
+    refresh_payload_digest: bool = True,
+) -> None:
+    transition_path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    transition = json.loads(transition_path.read_text())
+    cafta_transition = next(
+        item
+        for item in transition["transitions"]
+        if item["parent_id"] == campaign_module.CAFTA_PREVIEW_SELECTOR_ID
+    )
+    wrapper = cafta_transition["evidence"]["cafta_supersession_receipt"]
+    payload = wrapper["payload"]
+    mutate(payload, cafta_transition)
+    if refresh_payload_digest:
+        payload.pop("receipt_payload_sha256", None)
+        payload["receipt_payload_sha256"] = campaign_module._canonical_sha256(payload)
+    cafta_path = campaign_module.CAFTA_SUPERSESSION_RECEIPT
+    cafta_path.write_text(json.dumps(payload))
+    wrapper["file"] = campaign_module._file_receipt(
+        cafta_path, relative_to=campaign_module.REPO_ROOT
+    )
+    transition.pop("receipt_payload_sha256", None)
+    transition["receipt_payload_sha256"] = campaign_module._canonical_sha256(transition)
+    transition_path.write_text(json.dumps(transition))
+
+
+def test_preview_transition_loader_rejects_tampered_embedded_cafta_payload(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    mutant = json.loads(path.read_text())
+    cafta_transition = next(
+        item
+        for item in mutant["transitions"]
+        if item["parent_id"] == campaign_module.CAFTA_PREVIEW_SELECTOR_ID
+    )
+    cafta_transition["evidence"]["cafta_supersession_receipt"]["payload"]["verdict"] = (
+        "FAIL"
+    )
+    mutant.pop("receipt_payload_sha256")
+    mutant["receipt_payload_sha256"] = campaign_module._canonical_sha256(mutant)
+    path.write_text(json.dumps(mutant))
+
+    with pytest.raises(ValueError, match="embedded CAFTA supersession payload"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda payload, _transition: payload["bindings"].__setitem__(
+                "generation_id", "f" * 32
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: (
+                payload["bindings"].__setitem__("evaluated_cases", 2),
+                payload["bindings"].__setitem__("observed_evaluated_cases", 2),
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: (
+                payload["bindings"].__setitem__("evaluated_cases", 1.0),
+                payload["bindings"].__setitem__("observed_evaluated_cases", 1.0),
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: payload["bindings"].__setitem__(
+                "reference_rds_sha256", "f" * 64
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: payload["bindings"].__setitem__(
+                "campaign_semantic_equivalence_basis", "weaker basis"
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: payload["bindings"].__setitem__(
+                "unchecked", True
+            ),
+            "run binding is stale",
+        ),
+        (
+            lambda payload, _transition: payload.__setitem__(
+                "yale_reference_defect",
+                {
+                    "commit": campaign_module.PREVIEW_YALE_COMMIT,
+                    "tree": campaign_module.PREVIEW_YALE_TREE,
+                },
+            ),
+            "Yale defect proof is malformed",
+        ),
+        (
+            lambda payload, _transition: payload.__setitem__(
+                "definition",
+                {"real_entry_frontier": "weaker rehashed definition"},
+            ),
+            "definition drift",
+        ),
+        (
+            lambda payload, _transition: payload["supersession"].__setitem__(
+                "authorized_disposition_after_pass", "explained_residual"
+            ),
+            "authorization or identity proof drift",
+        ),
+        (
+            lambda payload, _transition: payload["zero_error_proof"].__setitem__(
+                "comparison_artifact_engine_error_rows", 1
+            ),
+            "cannot rely on engine errors",
+        ),
+        (
+            lambda payload, _transition: payload["zero_error_proof"].__setitem__(
+                "comparison_artifact_engine_error_rows", False
+            ),
+            "cannot rely on engine errors",
+        ),
+        (
+            lambda payload, _transition: payload["census"].__setitem__(
+                "cafta_units", float(campaign_module.CAFTA_EXPECTED_UNITS)
+            ),
+            "census drift",
+        ),
+        (
+            lambda payload, _transition: payload["supersession"].__setitem__(
+                "joined_historical_units",
+                float(campaign_module.CAFTA_EXPECTED_UNITS),
+            ),
+            "authorization or identity proof drift",
+        ),
+    ],
+)
+def test_preview_transition_loader_rejects_semantically_tampered_cafta_proof(
+    tmp_path: Path,
+    monkeypatch,
+    mutate,
+    message: str,
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    _rewrite_embedded_cafta_receipt(mutate)
+
+    with pytest.raises(ValueError, match=message):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_cafta_self_digest_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    _rewrite_embedded_cafta_receipt(
+        lambda payload, _transition: payload["definition"].__setitem__(
+            "real_entry_frontier", "tampered"
+        ),
+        refresh_payload_digest=False,
+    )
+
+    with pytest.raises(ValueError, match="payload digest drift"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_cafta_producer_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    producer = campaign_module.CAFTA_SUPERSESSION_PRODUCER
+    producer.write_text(producer.read_text() + "# drift\n")
+
+    with pytest.raises(ValueError, match="producer source drift"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_classification_rechecks_nested_cafta_file(tmp_path: Path, monkeypatch) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    transition = campaign_module._preview_selector_transition_receipt(
+        comparison, preview
+    )
+    cafta_path = campaign_module.CAFTA_SUPERSESSION_RECEIPT
+    cafta_path.write_text(cafta_path.read_text() + "\n")
+
+    with pytest.raises(ValueError, match="changed before classification"):
+        campaign_module._require_current_cafta_transition_file(transition)
 
 
 def test_preview_transition_loader_rejects_reference_assumption_drift(
@@ -1757,8 +2384,7 @@ def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
 ) -> None:
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = [
-        entry for entry in ledger["entries"]
-        if entry["id"] != "cafta-52i-deferred"
+        entry for entry in ledger["entries"] if entry["id"] != "cafta-52i-deferred"
     ]
     receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     active, retired, superseded = _preview_selector_snapshot(entries, receipt)
@@ -1780,9 +2406,7 @@ def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
         _enforce_retired_preview_selectors_absent(
             retired, observed, Counter({"f" * 64: 1}), engine_errors=0
         )
-    _enforce_retired_preview_selectors_absent(
-        retired, {}, Counter(), engine_errors=0
-    )
+    _enforce_retired_preview_selectors_absent(retired, {}, Counter(), engine_errors=0)
     with pytest.raises(ValueError, match="cannot be proven with engine errors"):
         _enforce_retired_preview_selectors_absent(
             retired, {}, Counter(), engine_errors=1
@@ -1801,23 +2425,20 @@ def test_vanished_section_232_selectors_can_retire_without_retiring_cafta(
         "section232-heading-forced-labor",
     }
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = [
-        entry for entry in ledger["entries"] if entry["id"] not in section_232
-    ]
+    entries = [entry for entry in ledger["entries"] if entry["id"] not in section_232]
     preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     active, retired, superseded = _preview_selector_snapshot(entries, preview)
     assert set(retired) == section_232
     assert "cafta-52i-deferred" in active
     assert not superseded
-    _enforce_retired_preview_selectors_absent(
-        retired, {}, Counter(), engine_errors=0
-    )
+    _enforce_retired_preview_selectors_absent(retired, {}, Counter(), engine_errors=0)
 
 
 def test_report_rejects_stale_classification_schema(tmp_path, monkeypatch) -> None:
     comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
     monkeypatch.setattr(
-        campaign_module, "_load_bound_comparison_locked",
+        campaign_module,
+        "_load_bound_comparison_locked",
         lambda **_kwargs: comparison,
     )
     classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
@@ -1848,7 +2469,9 @@ def test_classification_handoff_rejects_stale_input_binding() -> None:
     classification["inputs"] = campaign_module._classification_inputs(comparison)
     classification["inputs"]["disposition_ledger_sha256"] = "0" * 64
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    with pytest.raises(ValueError, match="classification receipt input binding is stale"):
+    with pytest.raises(
+        ValueError, match="classification receipt input binding is stale"
+    ):
         campaign_module._validate_classification_handoff(
             comparison, classification, ledger["entries"]
         )
@@ -1923,20 +2546,32 @@ def test_classification_sidecar_rederives_all_unit_kinds(tmp_path) -> None:
         "interval": ["2026-01-01", "2026-01-02"],
         "iso2": "CA",
     }
-    signature = mismatch_signature({
-        "slot": fields["slot"],
-        "delta": fields["delta"],
-        "context": {
-            key: fields[key]
-            for key in (
-                "flags", "revision", "interval", "origin_regime", "hts10",
-                "hts_line", "iso2",
-            )
-        },
-    })
+    signature = mismatch_signature(
+        {
+            "slot": fields["slot"],
+            "delta": fields["delta"],
+            "context": {
+                key: fields[key]
+                for key in (
+                    "flags",
+                    "revision",
+                    "interval",
+                    "origin_regime",
+                    "hts10",
+                    "hts_line",
+                    "iso2",
+                )
+            },
+        }
+    )
     rows = [
-        {"kind": "component_signature", "signature": signature, "units": 2,
-         "class": "positive-base", "fields": fields},
+        {
+            "kind": "component_signature",
+            "signature": signature,
+            "units": 2,
+            "class": "positive-base",
+            "fields": fields,
+        },
         {"kind": "total_signature_composition", "signatures": [signature], "units": 1},
         {"kind": "engine_errors", "units": 1},
     ]
@@ -1968,17 +2603,24 @@ def test_classification_sidecar_rederives_all_unit_kinds(tmp_path) -> None:
         rederived["_signature_counts"],
     )
     substituted_fields = {**fields, "revision": "different-revision"}
-    substituted_signature = mismatch_signature({
-        "slot": substituted_fields["slot"],
-        "delta": substituted_fields["delta"],
-        "context": {
-            key: substituted_fields[key]
-            for key in (
-                "flags", "revision", "interval", "origin_regime", "hts10",
-                "hts_line", "iso2",
-            )
-        },
-    })
+    substituted_signature = mismatch_signature(
+        {
+            "slot": substituted_fields["slot"],
+            "delta": substituted_fields["delta"],
+            "context": {
+                key: substituted_fields[key]
+                for key in (
+                    "flags",
+                    "revision",
+                    "interval",
+                    "origin_regime",
+                    "hts10",
+                    "hts_line",
+                    "iso2",
+                )
+            },
+        }
+    )
     rows[0]["signature"] = substituted_signature
     rows[0]["fields"] = substituted_fields
     rows[1]["signatures"] = [substituted_signature]
@@ -2002,8 +2644,12 @@ def test_classification_sidecar_rederives_all_unit_kinds(tmp_path) -> None:
     with pytest.raises(ValueError, match="sidecar class does not rederive"):
         campaign_module._rederive_classification_sidecar(
             sidecar,
-            [{"id": "positive-base",
-              "match": {"slot": "base", "delta": {"sign": "pos"}}}],
+            [
+                {
+                    "id": "positive-base",
+                    "match": {"slot": "base", "delta": {"sign": "pos"}},
+                }
+            ],
         )
 
 
@@ -2012,38 +2658,68 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
 ) -> None:
     monkeypatch.setattr(campaign_module, "CACHE_ROOT", tmp_path)
     monkeypatch.setattr(
-        campaign_module, "_routing_dispositions",
+        campaign_module,
+        "_routing_dispositions",
         lambda: {"0101210010": ("free", "free")},
     )
     fields = {
-        "slot": "base", "origin_regime": "regime", "revision": "revision",
-        "delta": 0.25, "disposition": "free", "hts10": "0101210010",
-        "hts_line": "0101210000", "flags": {"entry_is_test": False},
-        "interval": ["2026-01-01", "2026-01-02"], "iso2": "CA",
+        "slot": "base",
+        "origin_regime": "regime",
+        "revision": "revision",
+        "delta": 0.25,
+        "disposition": "free",
+        "hts10": "0101210010",
+        "hts_line": "0101210000",
+        "flags": {"entry_is_test": False},
+        "interval": ["2026-01-01", "2026-01-02"],
+        "iso2": "CA",
     }
-    signature = mismatch_signature({
-        "slot": fields["slot"], "delta": fields["delta"],
-        "context": {
-            key: fields[key]
-            for key in (
-                "flags", "revision", "interval", "origin_regime", "hts10",
-                "hts_line", "iso2",
-            )
-        },
-    })
+    signature = mismatch_signature(
+        {
+            "slot": fields["slot"],
+            "delta": fields["delta"],
+            "context": {
+                key: fields[key]
+                for key in (
+                    "flags",
+                    "revision",
+                    "interval",
+                    "origin_regime",
+                    "hts10",
+                    "hts_line",
+                    "iso2",
+                )
+            },
+        }
+    )
     context = {
         key: fields[key]
         for key in (
-            "flags", "revision", "interval", "origin_regime", "hts10",
-            "hts_line", "iso2",
+            "flags",
+            "revision",
+            "interval",
+            "origin_regime",
+            "hts10",
+            "hts_line",
+            "iso2",
         )
     }
     comparison_rows = [
-        {"case_id": "case-1", "slot": "base", "match": False,
-         "delta": fields["delta"], "context": context},
+        {
+            "case_id": "case-1",
+            "slot": "base",
+            "match": False,
+            "delta": fields["delta"],
+            "context": context,
+        },
         {"case_id": "case-1", "slot": "total", "match": False},
-        {"case_id": "case-2", "slot": "base", "match": False,
-         "delta": fields["delta"], "context": context},
+        {
+            "case_id": "case-2",
+            "slot": "base",
+            "match": False,
+            "delta": fields["delta"],
+            "context": context,
+        },
         {"case_id": "case-3", "slot": "engine_error", "match": False},
         {"case_id": "case-4", "slot": "base", "match": True},
     ]
@@ -2061,8 +2737,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         campaign_module, "_classification_inputs", lambda _comparison, **_kwargs: inputs
     )
     entries = [
-        {"id": "positive-base",
-         "match": {"slot": "base", "delta": {"sign": "pos"}}}
+        {"id": "positive-base", "match": {"slot": "base", "delta": {"sign": "pos"}}}
     ]
     contract = {
         "positive-base": {
@@ -2081,8 +2756,13 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
     sidecar = campaign_module._classification_sidecar_path(inputs)
     sidecar.parent.mkdir(parents=True)
     rows = [
-        {"kind": "component_signature", "signature": signature, "units": 2,
-         "class": "positive-base", "fields": fields},
+        {
+            "kind": "component_signature",
+            "signature": signature,
+            "units": 2,
+            "class": "positive-base",
+            "fields": fields,
+        },
         {"kind": "total_signature_composition", "signatures": [signature], "units": 1},
         {"kind": "engine_errors", "units": 1},
     ]
@@ -2099,7 +2779,8 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         "selector_count": 1,
         "sidecar": {
             "schema": "axiom_oracles.us_tariff_schedule.classification_sidecar.v2",
-            "path": str(sidecar), "sha256": campaign_module._sha256(sidecar),
+            "path": str(sidecar),
+            "sha256": campaign_module._sha256(sidecar),
         },
         "conservation": "PASS",
         **rederived,
@@ -2131,17 +2812,24 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         lambda _entries, *_args: ({}, {}, {}),
     )
     substituted_fields = {**fields, "revision": "fabricated-revision"}
-    substituted_signature = mismatch_signature({
-        "slot": substituted_fields["slot"],
-        "delta": substituted_fields["delta"],
-        "context": {
-            key: substituted_fields[key]
-            for key in (
-                "flags", "revision", "interval", "origin_regime", "hts10",
-                "hts_line", "iso2",
-            )
-        },
-    })
+    substituted_signature = mismatch_signature(
+        {
+            "slot": substituted_fields["slot"],
+            "delta": substituted_fields["delta"],
+            "context": {
+                key: substituted_fields[key]
+                for key in (
+                    "flags",
+                    "revision",
+                    "interval",
+                    "origin_regime",
+                    "hts10",
+                    "hts_line",
+                    "iso2",
+                )
+            },
+        }
+    )
     rows[0]["signature"] = substituted_signature
     rows[0]["fields"] = substituted_fields
     rows[1]["signatures"] = [substituted_signature]
@@ -2154,7 +2842,9 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
     substituted.pop("_observed")
     classification.update(substituted)
     classification["sidecar"]["sha256"] = campaign_module._sha256(sidecar)
-    with pytest.raises(ValueError, match="population is not derived from comparison artifact"):
+    with pytest.raises(
+        ValueError, match="population is not derived from comparison artifact"
+    ):
         campaign_module._validate_classification_handoff(
             comparison, classification, entries
         )
@@ -2162,7 +2852,9 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
 
 def test_cafta_preview_class_remains_axiom_attributed_open() -> None:
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    cafta = next(entry for entry in ledger["entries"] if entry["id"] == "cafta-52i-deferred")
+    cafta = next(
+        entry for entry in ledger["entries"] if entry["id"] == "cafta-52i-deferred"
+    )
     assert cafta["attribution"] == "axiom-attributed-open"
     assert cafta["disposition"] == "axiom_encoding_gap"
 
@@ -2220,11 +2912,19 @@ def test_specific_disposition_routed_to_full_comparison_fails_closed() -> None:
     # full comparison must violate the contract, rather than reaching engine.
     mutant_comparable = {"ad_valorem", "free", "specific"}
     mutant = query_plan("specific") | {
-        "base": "compare" if "specific" in mutant_comparable else "known_not_comparable",
-        "total": "compare" if "specific" in mutant_comparable else "known_not_comparable",
+        "base": "compare"
+        if "specific" in mutant_comparable
+        else "known_not_comparable",
+        "total": "compare"
+        if "specific" in mutant_comparable
+        else "known_not_comparable",
     }
-    with pytest.raises(AssertionError, match="non-ad-valorem query reached shard planning"):
-        assert mutant["base"] != "compare", "non-ad-valorem query reached shard planning"
+    with pytest.raises(
+        AssertionError, match="non-ad-valorem query reached shard planning"
+    ):
+        assert mutant["base"] != "compare", (
+            "non-ad-valorem query reached shard planning"
+        )
 
 
 def test_column2_structural_unavailability_keeps_components() -> None:
@@ -2236,60 +2936,108 @@ def test_column2_structural_unavailability_keeps_components() -> None:
 
 def test_routes_statistical_member_to_rate_line() -> None:
     tables = {"01": {102294000: ("specific", "specific")}}
-    assert route_member("0102294024", tables) == ("01", 102294000, "specific", "specific")
+    assert route_member("0102294024", tables) == (
+        "01",
+        102294000,
+        "specific",
+        "specific",
+    )
 
 
 def test_explicit_unowned_member_routes_to_empty() -> None:
     assert route_member("9802009100", {"98": {}}) == (
-        "98", 9802009100, "empty", "empty"
+        "98",
+        9802009100,
+        "empty",
+        "empty",
     )
 
 
 def _comparison_record() -> dict:
     expected = {
-        "statutory_base_rate": "0.05", "statutory_rate_232": "0",
-        "statutory_rate_ieepa_recip": "0.1", "statutory_rate_ieepa_fent": "0",
-        "statutory_rate_301": "0", "statutory_rate_301_cs": "0",
-        "statutory_rate_s301fl": "0", "statutory_rate_s301br": "0",
-        "statutory_rate_s338": "0", "statutory_rate_s122": "0",
-        "statutory_rate_section_201": "0", "statutory_rate_other": "0",
+        "statutory_base_rate": "0.05",
+        "statutory_rate_232": "0",
+        "statutory_rate_ieepa_recip": "0.1",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_s122": "0",
+        "statutory_rate_section_201": "0",
+        "statutory_rate_other": "0",
     }
     actual = {
-        "mfn_ad_valorem_rate": 0.05, "ieepa_component_rate": 0.1,
-        "section_201_component_rate": 0, "section_122_component_rate": 0,
-        "section_232_aluminum_component_rate": 0, "section_232_steel_component_rate": 0,
-        "section_338_component_rate": 0, "china_section_301_component_rate": 0,
-        "brazil_section_301_component_rate": 0, "forced_labor_section_301_component_rate": 0,
+        "mfn_ad_valorem_rate": 0.05,
+        "ieepa_component_rate": 0.1,
+        "section_201_component_rate": 0,
+        "section_122_component_rate": 0,
+        "section_232_aluminum_component_rate": 0,
+        "section_232_steel_component_rate": 0,
+        "section_338_component_rate": 0,
+        "china_section_301_component_rate": 0,
+        "brazil_section_301_component_rate": 0,
+        "forced_labor_section_301_component_rate": 0,
         "schedule_statutory_stack": 0.15,
     }
-    return {"case_id": "case", "expected": expected, "actual": actual, "engine_errors": [],
-            "plan": query_plan("ad_valorem"), "hts10": "0101210010", "hts_line": "0101210000",
-            "iso2": "CA", "revision": "r1", "interval": ["2026-02-15", "2026-02-19"],
-            "origin_regime": "regime", "flags": {"entry_is_test": False}}
+    return {
+        "case_id": "case",
+        "expected": expected,
+        "actual": actual,
+        "engine_errors": [],
+        "plan": query_plan("ad_valorem"),
+        "hts10": "0101210010",
+        "hts_line": "0101210000",
+        "iso2": "CA",
+        "revision": "r1",
+        "interval": ["2026-02-15", "2026-02-19"],
+        "origin_regime": "regime",
+        "flags": {"entry_is_test": False},
+    }
 
 
 def test_changed_expected_value_mutant_fails() -> None:
     record = _comparison_record()
     assert all(row["match"] for row in compare_record(record))
     record["expected"]["statutory_rate_s122"] = "0.01"
-    assert any(row["slot"] == "section_122" and not row["match"] for row in compare_record(record))
+    assert any(
+        row["slot"] == "section_122" and not row["match"]
+        for row in compare_record(record)
+    )
 
 
 def test_engine_error_surfaces_as_unexplained_comparison() -> None:
     record = _comparison_record() | {"actual": None, "engine_errors": ["boom"]}
-    assert compare_record(record) == [{"case_id": "case", "slot": "engine_error", "match": False,
-                                       "error": ["boom"], "delta": None}]
+    assert compare_record(record) == [
+        {
+            "case_id": "case",
+            "slot": "engine_error",
+            "match": False,
+            "error": ["boom"],
+            "delta": None,
+        }
+    ]
 
 
 def test_stale_and_overlapping_disposition_selectors_fail() -> None:
-    base = {"id": "one", "attribution": "input-comparability", "receipt": "receipt",
-            "reason": "reason", "evidence": {"receipt_type": "instrument",
-                                                "instrument_receipt": "receipt"}}
+    base = {
+        "id": "one",
+        "attribution": "input-comparability",
+        "receipt": "receipt",
+        "reason": "reason",
+        "evidence": {"receipt_type": "instrument", "instrument_receipt": "receipt"},
+    }
     with pytest.raises(ValueError, match="stale"):
         validate_dispositions([base | {"signatures": ["stale"]}], {"live": 1})
     with pytest.raises(ValueError, match="overlapping"):
-        validate_dispositions([base | {"signatures": ["live"]},
-                               (base | {"id": "two", "signatures": ["live"]})], {"live": 1})
+        validate_dispositions(
+            [
+                base | {"signatures": ["live"]},
+                (base | {"id": "two", "signatures": ["live"]}),
+            ],
+            {"live": 1},
+        )
 
 
 def test_campaign_ledger_uses_only_campaign_local_matcher(
@@ -2305,9 +3053,15 @@ def test_campaign_ledger_uses_only_campaign_local_matcher(
 
 def _selector_unit() -> dict:
     return {
-        "slot": "base", "origin_regime": "regime", "revision": "r1", "delta": 0.2,
-        "disposition": "free", "hts10": "0101210010", "hts_line": "0101210000",
-        "flags": {"entry_is_test": False}, "interval": ["2026-01-01", "2026-01-02"],
+        "slot": "base",
+        "origin_regime": "regime",
+        "revision": "r1",
+        "delta": 0.2,
+        "disposition": "free",
+        "hts10": "0101210010",
+        "hts_line": "0101210000",
+        "flags": {"entry_is_test": False},
+        "interval": ["2026-01-01", "2026-01-02"],
         "iso2": "CA",
     }
 
@@ -2316,8 +3070,10 @@ def test_overlapping_structured_selectors_fail_conservation() -> None:
     unit = _selector_unit()
     selectors = [
         {"id": "one", "match": {"slot": "base", "delta": {"sign": "pos"}}},
-        {"id": "two", "match": {"revision": ["r1"], "disposition": ["free"],
-                                  "iso2": ["CA"]}},
+        {
+            "id": "two",
+            "match": {"revision": ["r1"], "disposition": ["free"], "iso2": ["CA"]},
+        },
     ]
     with pytest.raises(ValueError, match="overlapping selectors"):
         matching_class_id("signature", unit, selectors)
@@ -2325,10 +3081,17 @@ def test_overlapping_structured_selectors_fail_conservation() -> None:
 
 def test_universal_structured_selector_fails() -> None:
     with pytest.raises(ValueError, match="universal"):
-        selector_matches(_selector_unit(), {
-            "slot": "any", "origin_regime": "any", "revision": "any", "delta": "any",
-            "disposition": "any", "line_class": "any",
-        })
+        selector_matches(
+            _selector_unit(),
+            {
+                "slot": "any",
+                "origin_regime": "any",
+                "revision": "any",
+                "delta": "any",
+                "disposition": "any",
+                "line_class": "any",
+            },
+        )
 
 
 def test_slot_only_structured_selector_mutant_fails() -> None:
@@ -2337,10 +3100,14 @@ def test_slot_only_structured_selector_mutant_fails() -> None:
 
 
 def test_delta_and_date_are_non_slot_bounds() -> None:
-    assert selector_matches(_selector_unit(), {
-        "slot": "base", "delta": {"values": [0.2]},
-        "date": {"from": "2026-01-01", "through": "2026-01-02"},
-    })
+    assert selector_matches(
+        _selector_unit(),
+        {
+            "slot": "base",
+            "delta": {"values": [0.2]},
+            "date": {"from": "2026-01-01", "through": "2026-01-02"},
+        },
+    )
 
 
 def test_fabricated_structured_selector_field_fails_schema() -> None:
@@ -2350,12 +3117,16 @@ def test_fabricated_structured_selector_field_fails_schema() -> None:
 
 def test_iso2_structured_selector_is_exactly_bounded() -> None:
     assert selector_matches(_selector_unit(), {"slot": "base", "iso2": ["CA", "MX"]})
-    assert not selector_matches(_selector_unit(), {"slot": "base", "iso2": ["CU", "RU"]})
+    assert not selector_matches(
+        _selector_unit(), {"slot": "base", "iso2": ["CU", "RU"]}
+    )
 
 
 def test_nonzero_excluded_column_exposure_fails_x1() -> None:
     with pytest.raises(ValueError, match="X1"):
-        enforce_excluded_exposure({"statutory_rate_301_cs": 1, "statutory_rate_other": 0})
+        enforce_excluded_exposure(
+            {"statutory_rate_301_cs": 1, "statutory_rate_other": 0}
+        )
 
 
 def test_unclassified_signature_fails_computed_conformance() -> None:
