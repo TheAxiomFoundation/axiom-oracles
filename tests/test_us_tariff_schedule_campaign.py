@@ -21,10 +21,13 @@ from scripts.us_tariff_schedule_campaign import (
     PREVIEW_DISPOSITION_LINE_SETS,
     PREVIEW_SELECTOR_COUNT,
     _enforce_preview_selector_population,
+    _enforce_preview_selector_transitions,
     _enforce_retired_preview_selectors_absent,
     _named_line_sets,
     _preview_selector_contract,
     _preview_selector_snapshot,
+    _preview_transition_is_required,
+    _transition_for_entries,
     _case_feed,
     _routing_dispositions,
     canonicalize_entry_flags,
@@ -66,6 +69,13 @@ def _fake_run_identity(*, marker: str = "a", chapters: tuple[str, ...] = ("01",)
         },
         "input_contract": {"path": "contract.json", "bytes": 1,
                            "sha256": digest, "schema": "contract"},
+        "reference_assumptions": {
+            "yale_note16_metal_weight": {
+                "path": "reference/assumption.json",
+                "bytes": 1,
+                "sha256": digest,
+            }
+        },
         "campaign_evaluator": {
             "campaign": {"path": "campaign.py", "bytes": 1,
                          "sha256": digest},
@@ -200,7 +210,10 @@ def test_entry_flag_values_must_be_boolean(malformed) -> None:
 
 
 def test_case_feed_never_forwards_entry_flag_aliases() -> None:
-    def entry_flags(_line, _hts, _iso2):
+    observed_kwargs = {}
+
+    def entry_flags(_line, _hts, _iso2, **kwargs):
+        observed_kwargs.update(kwargs)
         return {
             "entry_is_brazil_301": True,
             "entry_is_brazil_301_listed": True,
@@ -208,6 +221,9 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
             "entry_is_forced_labor_301_listed": False,
             "entry_is_line_c": False,
             "entry_is_line_e": False,
+            campaign_module.NOTE16_WEIGHT_INPUT: kwargs[
+                campaign_module.NOTE16_WEIGHT_INPUT
+            ],
         }
 
     feed, flags = _case_feed(
@@ -220,18 +236,59 @@ def test_case_feed_never_forwards_entry_flag_aliases() -> None:
             "entry_is_forced_labor_301_listed",
             "entry_is_line_c",
             "entry_is_line_e",
+            campaign_module.NOTE16_WEIGHT_INPUT,
         }),
     )
     assert not (set(flags) & set(ENTRY_FLAG_ALIASES))
     assert not (set(feed) & set(ENTRY_FLAG_ALIASES))
     assert feed["entry_is_brazil_301_listed"] is True
+    assert observed_kwargs == {
+        "entry_date": "2026-07-24",
+        campaign_module.NOTE16_WEIGHT_INPUT: True,
+    }
+    assert feed[campaign_module.NOTE16_WEIGHT_INPUT] is True
+
+
+def test_yale_note16_weight_assumption_is_explicit_and_receipted() -> None:
+    receipt = campaign_module._yale_note16_weight_assumption()
+    identity = campaign_module._yale_note16_weight_assumption_identity()
+    assert receipt["verdict"] == "PASS"
+    assert receipt["configuration"]["aggregate_share"] == 0.0
+    assert receipt["configuration"]["threshold"] == 0.15
+    assert receipt["campaign_binding"] == identity["campaign_binding"]
+    assert receipt["campaign_binding"]["input"] == (
+        campaign_module.NOTE16_WEIGHT_INPUT
+    )
+    assert receipt["campaign_binding"]["value"] is True
+    assert "not an observed" in receipt["campaign_binding"]["factual_status"]
+
+
+def test_yale_note16_weight_assumption_cannot_be_relabeled_as_fact(
+    tmp_path, monkeypatch
+) -> None:
+    payload = json.loads(
+        campaign_module.YALE_NOTE16_WEIGHT_ASSUMPTION.read_text()
+    )
+    payload["campaign_binding"]["factual_status"] = "transaction fact"
+    payload_without_digest = dict(payload)
+    payload_without_digest.pop("receipt_payload_sha256")
+    payload["receipt_payload_sha256"] = campaign_module._canonical_sha256(
+        payload_without_digest
+    )
+    mutant = tmp_path / "assumption.json"
+    mutant.write_text(json.dumps(payload))
+    monkeypatch.setattr(
+        campaign_module, "YALE_NOTE16_WEIGHT_ASSUMPTION", mutant
+    )
+    with pytest.raises(ValueError, match="campaign binding drift"):
+        campaign_module._yale_note16_weight_assumption()
 
 
 def test_case_feed_receipts_dr_cafta_inputs_as_neutral_false() -> None:
     feed, _flags = _case_feed(
         {"hts10": "0102294024", "iso2": "CR"},
         {"hts_line": "102294000"},
-        lambda _line, _hts, _iso2: {
+        lambda _line, _hts, _iso2, **_kwargs: {
             "entry_is_line_c": False,
             "entry_is_line_e": False,
         },
@@ -262,7 +319,7 @@ def test_temporary_surcharge_period_fact_tracks_probe(
     feed, _flags = _case_feed(
         {"hts10": "0102294024", "iso2": "CR"},
         {"hts_line": "102294000"},
-        lambda _line, _hts, _iso2: {
+        lambda _line, _hts, _iso2, **_kwargs: {
             "entry_is_line_c": False,
             "entry_is_line_e": False,
         },
@@ -379,9 +436,11 @@ def test_entry_flag_producer_receipts_dynamic_note_fragments(tmp_path: Path) -> 
         "INCIDENCE_DIR = ROOT / "
         "'us/policies/usitc/us-tariff-incidence/generated'\n"
         "MODULES = ('main.yaml',)\n"
-        "def entry_flags(*_args): return {}\n"
+        "NOTE16_ALUMINUM_PRECEDENCE_MODULE = 'note16.yaml'\n"
+        "def entry_flags(*_args, **_kwargs): return {}\n"
     )
     (incidence / "main.yaml").write_text("main\n")
+    (incidence / "note16.yaml").write_text("note16\n")
     note50 = incidence / "note50/page-1.yaml"
     note52 = incidence / "note52/page-2.yaml"
     note50.write_text("note50-v1\n")
@@ -391,6 +450,7 @@ def test_entry_flag_producer_receipts_dynamic_note_fragments(tmp_path: Path) -> 
     _entry_flags, first = campaign_module._load_entry_flag_tool(root)
     assert [item["path"] for item in first["dependencies"]] == [
         "us/policies/usitc/us-tariff-incidence/generated/main.yaml",
+        "us/policies/usitc/us-tariff-incidence/generated/note16.yaml",
         "us/policies/usitc/us-tariff-incidence/generated/note50/page-1.yaml",
         "us/policies/usitc/us-tariff-incidence/generated/note52/page-2.yaml",
     ]
@@ -806,26 +866,80 @@ def test_shard_key_binds_fresh_run_generation() -> None:
     )
 
 
-def test_entry_flag_provenance_binds_live_dependency_content(tmp_path) -> None:
+def test_input_contract_rejects_note16_precedence_dependency_mutation(
+    tmp_path, monkeypatch
+) -> None:
     tool = tmp_path / "tools/b16_entry_flags.py"
-    dependency = (
+    incidence = (
         tmp_path
-        / "us/policies/usitc/us-tariff-incidence/generated/note.yaml"
+        / "us/policies/usitc/us-tariff-incidence/generated"
     )
     tool.parent.mkdir(parents=True)
-    dependency.parent.mkdir(parents=True)
+    incidence.mkdir(parents=True)
     tool.write_text(
         "from pathlib import Path\n"
         "ROOT = Path(__file__).resolve().parents[1]\n"
         "INCIDENCE_DIR = ROOT / 'us/policies/usitc/us-tariff-incidence/generated'\n"
-        "MODULES = ('note.yaml',)\n"
-        "def entry_flags(*_args): return {}\n"
+        "MODULES = ('main.yaml',)\n"
+        "NOTE16_ALUMINUM_PRECEDENCE_MODULE = 'note16.yaml'\n"
+        "def entry_flags(*_args, **_kwargs): return {}\n"
     )
-    dependency.write_text("old")
-    _entry_flags, old = campaign_module._load_entry_flag_tool(tmp_path)
-    dependency.write_text("new")
-    _entry_flags, new = campaign_module._load_entry_flag_tool(tmp_path)
-    assert old["producer_sha256"] != new["producer_sha256"]
+    (incidence / "main.yaml").write_text("main\n")
+    note16 = incidence / "note16.yaml"
+    note16.write_text("old\n")
+    engine = tmp_path / "engine"
+    engine.write_text("engine\n")
+    rulespec_identity = {"content_sha256": "a" * 64}
+    monkeypatch.setattr(
+        campaign_module,
+        "_rulespec_root_identity",
+        lambda _root: rulespec_identity,
+    )
+    _entry_flags, bound_producers = campaign_module._load_entry_flag_tool(
+        tmp_path
+    )
+    contract = {
+        "schema": campaign_module.INPUT_CONTRACT_SCHEMA,
+        "rulespec": rulespec_identity,
+        "engine": campaign_module._file_receipt(engine),
+        "entry_flag_producers": bound_producers,
+        "entry_flag_tool_sha256": bound_producers["tool"]["sha256"],
+    }
+    contract_path = tmp_path / "input-contract.json"
+    contract_path.write_text(json.dumps(contract))
+    monkeypatch.setattr(
+        campaign_module, "INPUT_CONTRACT_RECEIPT", contract_path
+    )
+
+    note16.write_text("new\n")
+    _entry_flags, current_producers = campaign_module._load_entry_flag_tool(
+        tmp_path
+    )
+    assert bound_producers["producer_sha256"] != current_producers[
+        "producer_sha256"
+    ]
+    bound_identity = _fake_run_identity()
+    bound_identity["entry_flag_producers"] = bound_producers
+    current_identity = copy.deepcopy(bound_identity)
+    current_identity["entry_flag_producers"] = current_producers
+    bound_manifest = campaign_module._empty_eval_manifest(
+        bound_identity, EVAL_GENERATION_ID
+    )
+    current_manifest = campaign_module._empty_eval_manifest(
+        current_identity, EVAL_GENERATION_ID
+    )
+    assert bound_manifest["run_identity_sha256"] != current_manifest[
+        "run_identity_sha256"
+    ]
+    with pytest.raises(
+        ValueError, match="declared-input contract entry-flag provenance is stale"
+    ):
+        campaign_module._validated_input_contract(
+            rulespec_root=tmp_path,
+            engine_binary=engine,
+            rulespec_identity=rulespec_identity,
+            engine_receipt=campaign_module._file_receipt(engine),
+        )
 
 
 def test_campaign_evaluator_identity_binds_adapter_source(
@@ -1204,20 +1318,455 @@ def test_active_expiring_preview_population_rejects_zero_and_partial_survival() 
         )
 
 
+def _synthetic_preview_transition(
+    parent_id: str = "section232-annex-brazil",
+) -> tuple[
+    dict,
+    list[dict],
+    dict,
+    str,
+    dict[str, dict],
+    Counter[str],
+    dict[str, str | None],
+]:
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    parent = next(
+        selector for selector in preview["selectors"] if selector["id"] == parent_id
+    )
+    child_id = f"{parent_id}-current-residual"
+    population = [("a" * 64, 2), ("b" * 64, 3)]
+    population_digest = signature_population_sha256(population)
+    child = {
+        "id": child_id,
+        "parent_id": parent_id,
+        "logical_class": "synthetic-current-residual",
+        "disposition": "axiom_encoding_gap",
+        "attribution": "axiom-attributed-open",
+        "expected_units": 5,
+        "expected_signature_count": 2,
+        "expected_signature_population_sha256": population_digest,
+        "match": copy.deepcopy(parent["match"]),
+    }
+    transition_item = {
+        "parent_id": parent_id,
+        "parent_contract": copy.deepcopy(parent),
+        "status": "superseded",
+        "historical_units": parent["expected_units"],
+        "fresh_matching_units": parent["expected_units"] - 5,
+        "fresh_residual_population": {
+            "units": 5,
+            "signature_count": 2,
+            "signature_population_sha256": population_digest,
+        },
+        "children": [child],
+        "evidence": {"classification": "synthetic-test"},
+    }
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = [
+        copy.deepcopy(entry)
+        for entry in ledger["entries"]
+        if entry["id"] != parent_id
+    ]
+    entries.append(
+        {
+            "id": child_id,
+            "match": copy.deepcopy(child["match"]),
+            "disposition": child["disposition"],
+            "attribution": child["attribution"],
+            "expires_on_source_change": True,
+        }
+    )
+    line_set = preview["line_sets"][parent["match"]["line_set"]]
+    unit = {
+        **_selector_unit(),
+        "slot": parent["match"]["slot"],
+        "hts10": line_set["values"][0],
+        "delta": 0.25,
+    }
+    observed = {signature: copy.deepcopy(unit) for signature, _units in population}
+    counts = Counter(dict(population))
+    classes = {signature: child_id for signature in observed}
+    return (
+        preview,
+        entries,
+        {"transitions": [transition_item]},
+        child_id,
+        observed,
+        counts,
+        classes,
+    )
+
+
+@pytest.fixture
+def _raw_preview_line_set_membership(monkeypatch):
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    values = {
+        name: frozenset(receipt["values"])
+        for name, receipt in preview["line_sets"].items()
+    }
+    monkeypatch.setattr(
+        campaign_module,
+        "_line_set_contains",
+        lambda unit, name: unit["hts10"] in values[name],
+    )
+
+
+def test_preview_transition_enrolls_child_and_partitions_parent_exactly(
+    _raw_preview_line_set_membership,
+) -> None:
+    preview, entries, transition, child_id, observed, counts, classes = (
+        _synthetic_preview_transition()
+    )
+    active, retired, superseded = _preview_selector_snapshot(
+        entries, preview, transition
+    )
+
+    assert child_id in active
+    assert not retired
+    assert set(superseded) == {"section232-annex-brazil"}
+    _enforce_preview_selector_transitions(
+        superseded, observed, counts, classes, engine_errors=0
+    )
+
+
+def test_preview_transition_rejects_partition_escape_gap_digest_and_errors(
+    _raw_preview_line_set_membership,
+) -> None:
+    preview, entries, transition, child_id, observed, counts, classes = (
+        _synthetic_preview_transition()
+    )
+    _active, _retired, superseded = _preview_selector_snapshot(
+        entries, preview, transition
+    )
+
+    escaped_observed = {**observed, "c" * 64: _selector_unit()}
+    escaped_counts = counts + Counter({"c" * 64: 1})
+    with pytest.raises(ValueError, match="child escaped parent"):
+        _enforce_preview_selector_transitions(
+            superseded,
+            escaped_observed,
+            escaped_counts,
+            {**classes, "c" * 64: child_id},
+            engine_errors=0,
+        )
+    with pytest.raises(ValueError, match="do not partition parent"):
+        _enforce_preview_selector_transitions(
+            superseded,
+            observed,
+            counts,
+            {**classes, "b" * 64: None},
+            engine_errors=0,
+        )
+    digest_mutant = copy.deepcopy(superseded)
+    digest_mutant["section232-annex-brazil"]["fresh_residual_population"][
+        "signature_population_sha256"
+    ] = "f" * 64
+    with pytest.raises(ValueError, match="signature digest drift"):
+        _enforce_preview_selector_transitions(
+            digest_mutant, observed, counts, classes, engine_errors=0
+        )
+    with pytest.raises(ValueError, match="cannot be proven with engine errors"):
+        _enforce_preview_selector_transitions(
+            superseded, observed, counts, classes, engine_errors=1
+        )
+
+
+def test_preview_transition_rejects_parent_or_child_contract_drift() -> None:
+    preview, entries, transition, child_id, _observed, _counts, _classes = (
+        _synthetic_preview_transition()
+    )
+    parent_remains = copy.deepcopy(entries)
+    parent_remains.append(
+        next(
+            copy.deepcopy(entry)
+            for entry in yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"]
+            if entry["id"] == "section232-annex-brazil"
+        )
+    )
+    with pytest.raises(ValueError, match="transitioned preview parent remains"):
+        _preview_selector_snapshot(parent_remains, preview, transition)
+
+    child_drift = copy.deepcopy(entries)
+    next(entry for entry in child_drift if entry["id"] == child_id)[
+        "attribution"
+    ] = "reference-behavior"
+    with pytest.raises(ValueError, match="child attribution drift"):
+        _preview_selector_snapshot(child_drift, preview, transition)
+
+    census_drift = copy.deepcopy(transition)
+    census_drift["transitions"][0]["fresh_matching_units"] -= 1
+    with pytest.raises(ValueError, match="does not conserve"):
+        _preview_selector_snapshot(entries, preview, census_drift)
+
+
+def test_preview_transition_receipt_is_lazy_until_a_child_is_enrolled(
+    monkeypatch,
+) -> None:
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    entries = ledger["entries"]
+    comparison: dict = {}
+    def unexpected_transition_load(*_args):
+        raise RuntimeError("transition receipt loaded")
+
+    monkeypatch.setattr(
+        campaign_module,
+        "_preview_selector_transition_receipt",
+        unexpected_transition_load,
+    )
+
+    assert not _preview_transition_is_required(entries, preview)
+    assert _transition_for_entries(entries, comparison, preview) is None
+
+    _preview, child_entries, _transition, _child_id, *_rest = (
+        _synthetic_preview_transition()
+    )
+    assert _preview_transition_is_required(child_entries, preview)
+    with pytest.raises(RuntimeError, match="transition receipt loaded"):
+        _transition_for_entries(child_entries, comparison, preview)
+
+
+def test_classification_inputs_bind_transition_only_after_child_enrollment(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison_receipt = tmp_path / "comparison.json"
+    preview_receipt = tmp_path / "preview.json"
+    transition_receipt = tmp_path / "transition.json"
+    ledger = tmp_path / "ledger.yaml"
+    comparison_receipt.write_text("comparison\n")
+    preview = {"receipt_payload_sha256": "b" * 64}
+    preview_receipt.write_text(json.dumps(preview))
+    ledger.write_text("ledger\n")
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_receipt)
+    monkeypatch.setattr(
+        campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", preview_receipt
+    )
+    monkeypatch.setattr(
+        campaign_module,
+        "PREVIEW_SELECTOR_TRANSITION_RECEIPT",
+        transition_receipt,
+    )
+    comparison = {"comparison_artifact": {"sha256": "a" * 64}}
+    without_transition = campaign_module._classification_inputs(
+        comparison, ledger, preview=preview
+    )
+    assert set(without_transition) == {
+        "comparison_artifact_sha256",
+        "comparison_receipt_sha256",
+        "disposition_ledger_sha256",
+        "preview_disposition_receipt_sha256",
+        "preview_disposition_payload_sha256",
+    }
+
+    transition_payload = {"receipt_payload_sha256": "c" * 64}
+    transition_receipt.write_text(json.dumps(transition_payload))
+    with_transition = campaign_module._classification_inputs(
+        comparison,
+        ledger,
+        preview=preview,
+        transition=transition_payload,
+    )
+    assert with_transition[
+        "preview_selector_transition_receipt_sha256"
+    ] == campaign_module._sha256(transition_receipt)
+    assert with_transition[
+        "preview_selector_transition_payload_sha256"
+    ] == "c" * 64
+
+    transition_receipt.write_text(json.dumps({**transition_payload, "drift": True}))
+    with pytest.raises(ValueError, match="changed during classification"):
+        campaign_module._classification_inputs(
+            comparison,
+            ledger,
+            preview=preview,
+            transition=transition_payload,
+        )
+
+
+def _bound_transition_receipt(tmp_path: Path, monkeypatch) -> tuple[dict, dict]:
+    scripts = tmp_path / "scripts"
+    evidence = tmp_path / "reference/us-tariff-schedule"
+    scripts.mkdir(parents=True)
+    evidence.mkdir(parents=True)
+    sources = {
+        "script": scripts / "build_transition.py",
+        "campaign_classifier": scripts / "campaign.py",
+        "full_closure_guard": scripts / "full_closure.py",
+    }
+    for name, path in sources.items():
+        path.write_text(f"# {name}\n")
+    preview_path = evidence / "preview.json"
+    manifest_path = evidence / "MANIFEST.json"
+    comparison_path = evidence / "comparison.json"
+    artifact_path = evidence / "comparison.jsonl.gz"
+    historical_path = evidence / "historical.jsonl.gz"
+    transition_path = evidence / "transition.json"
+    preview_path.write_text("preview\n")
+    historical_path.write_text("historical\n")
+    manifest = {
+        "run_identity": {
+            "rulespec": {"content_sha256": "5" * 64},
+            "entry_flag_producers": {"producer_sha256": "6" * 64},
+            "reference_assumptions": {
+                "yale_note16_metal_weight": {
+                    "path": "reference/assumption.json",
+                    "bytes": 1,
+                    "sha256": "7" * 64,
+                }
+            },
+        },
+        "shards": {"one": {"engine_errors": 0}},
+    }
+    monkeypatch.setattr(
+        campaign_module,
+        "_yale_note16_weight_assumption_identity",
+        lambda: manifest["run_identity"]["reference_assumptions"][
+            "yale_note16_metal_weight"
+        ],
+    )
+    manifest_path.write_text(json.dumps(manifest))
+    comparison_path.write_text("comparison\n")
+    artifact_path.write_text("artifact\n")
+    monkeypatch.setattr(campaign_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        campaign_module, "PREVIEW_SELECTOR_TRANSITION_PRODUCER_SOURCES", sources
+    )
+    monkeypatch.setattr(campaign_module, "PREVIEW_DISPOSITION_LINE_SETS", preview_path)
+    monkeypatch.setattr(campaign_module, "EVAL_MANIFEST", manifest_path)
+    monkeypatch.setattr(campaign_module, "COMPARISON_RECEIPT", comparison_path)
+    monkeypatch.setattr(
+        campaign_module, "PREVIEW_SELECTOR_TRANSITION_RECEIPT", transition_path
+    )
+    comparison = {
+        "generation_id": "1" * 32,
+        "run_identity_sha256": "2" * 64,
+        "evaluation_manifest_sha256": "3" * 64,
+        "engine_errors": 0,
+        "comparison_artifact": campaign_module._file_receipt(artifact_path),
+    }
+    preview = {
+        "receipt_payload_sha256": "4" * 64,
+        "inputs": {
+            campaign_module.PREVIEW_HISTORICAL_TARGET_PATH: (
+                campaign_module._file_receipt(
+                    historical_path, relative_to=tmp_path
+                )
+            )
+        },
+    }
+    receipt = {
+        "schema": campaign_module.PREVIEW_SELECTOR_TRANSITION_SCHEMA,
+        "verdict": "PASS",
+        "producer": {
+            name: campaign_module._file_receipt(path, relative_to=tmp_path)
+            for name, path in sources.items()
+        },
+        "inputs": {
+            "immutable_preview_receipt": campaign_module._file_receipt(
+                preview_path, relative_to=tmp_path
+            ),
+            "historical_target_mismatch_artifact": preview["inputs"][
+                campaign_module.PREVIEW_HISTORICAL_TARGET_PATH
+            ],
+            "evaluation_manifest": campaign_module._file_receipt(
+                manifest_path, relative_to=tmp_path
+            ),
+            "comparison_receipt": campaign_module._file_receipt(
+                comparison_path, relative_to=tmp_path
+            ),
+            "comparison_artifact": comparison["comparison_artifact"],
+        },
+        "bindings": {
+            "preview_receipt_payload_sha256": preview["receipt_payload_sha256"],
+            "generation_id": comparison["generation_id"],
+            "run_identity_sha256": comparison["run_identity_sha256"],
+            "evaluation_manifest_sha256": comparison[
+                "evaluation_manifest_sha256"
+            ],
+            "rulespec": manifest["run_identity"]["rulespec"],
+            "entry_flag_producers": manifest["run_identity"][
+                "entry_flag_producers"
+            ],
+            "reference_assumptions": manifest["run_identity"][
+                "reference_assumptions"
+            ],
+        },
+        "zero_error_proof": {
+            "evaluation_shard_engine_errors": 0,
+            "observed_evaluation_record_errors": 0,
+            "comparison_receipt_engine_errors": 0,
+            "comparison_artifact_engine_error_rows": 0,
+        },
+        "transitions": [{"synthetic": True}],
+    }
+    receipt["receipt_payload_sha256"] = campaign_module._canonical_sha256(receipt)
+    transition_path.write_text(json.dumps(receipt))
+    return comparison, preview
+
+
+def test_preview_transition_loader_rejects_stale_or_error_backed_receipt(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    receipt = campaign_module._preview_selector_transition_receipt(
+        comparison, preview
+    )
+    assert receipt["verdict"] == "PASS"
+
+    path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    mutant = json.loads(path.read_text())
+    mutant["zero_error_proof"]["observed_evaluation_record_errors"] = 1
+    mutant.pop("receipt_payload_sha256")
+    mutant["receipt_payload_sha256"] = campaign_module._canonical_sha256(mutant)
+    path.write_text(json.dumps(mutant))
+    with pytest.raises(ValueError, match="cannot rely on engine errors"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_reference_assumption_drift(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    path = campaign_module.PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    mutant = json.loads(path.read_text())
+    mutant["bindings"].pop("reference_assumptions")
+    mutant.pop("receipt_payload_sha256")
+    mutant["receipt_payload_sha256"] = campaign_module._canonical_sha256(mutant)
+    path.write_text(json.dumps(mutant))
+
+    with pytest.raises(ValueError, match="run binding is stale"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
+def test_preview_transition_loader_rejects_opaque_reference_assumption(
+    tmp_path: Path, monkeypatch
+) -> None:
+    comparison, preview = _bound_transition_receipt(tmp_path, monkeypatch)
+    monkeypatch.setattr(
+        campaign_module,
+        "_yale_note16_weight_assumption_identity",
+        lambda: {"opaque": "replacement"},
+    )
+
+    with pytest.raises(ValueError, match="transition provenance is malformed"):
+        campaign_module._preview_selector_transition_receipt(comparison, preview)
+
+
 def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
-    _without_external_membership_tables,
+    _raw_preview_line_set_membership,
 ) -> None:
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = [
         entry for entry in ledger["entries"]
         if entry["id"] != "cafta-52i-deferred"
     ]
-    active, retired = _preview_selector_snapshot(entries)
+    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    active, retired, superseded = _preview_selector_snapshot(entries, receipt)
     assert "cafta-52i-deferred" not in active
     assert "cafta-52i-deferred" in retired
+    assert not superseded
 
     cafta = retired["cafta-52i-deferred"]
-    receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     hts10 = receipt["line_sets"][cafta["match"]["line_set"]]["values"][0]
     observed = {
         "f" * 64: {
@@ -1240,7 +1789,9 @@ def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
         )
 
 
-def test_vanished_section_232_selectors_can_retire_without_retiring_cafta() -> None:
+def test_vanished_section_232_selectors_can_retire_without_retiring_cafta(
+    _raw_preview_line_set_membership,
+) -> None:
     section_232 = {
         "section232-annex-brazil",
         "section232-annex-forced-labor",
@@ -1253,9 +1804,11 @@ def test_vanished_section_232_selectors_can_retire_without_retiring_cafta() -> N
     entries = [
         entry for entry in ledger["entries"] if entry["id"] not in section_232
     ]
-    active, retired = _preview_selector_snapshot(entries)
+    preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    active, retired, superseded = _preview_selector_snapshot(entries, preview)
     assert set(retired) == section_232
     assert "cafta-52i-deferred" in active
+    assert not superseded
     _enforce_retired_preview_selectors_absent(
         retired, {}, Counter(), engine_errors=0
     )
@@ -1505,7 +2058,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         "preview_disposition_payload_sha256": "d" * 64,
     }
     monkeypatch.setattr(
-        campaign_module, "_classification_inputs", lambda _comparison: inputs
+        campaign_module, "_classification_inputs", lambda _comparison, **_kwargs: inputs
     )
     entries = [
         {"id": "positive-base",
@@ -1523,7 +2076,7 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
     monkeypatch.setattr(
         campaign_module,
         "_preview_selector_snapshot",
-        lambda _entries: (contract, {}),
+        lambda _entries, *_args: (contract, {}, {}),
     )
     sidecar = campaign_module._classification_sidecar_path(inputs)
     sidecar.parent.mkdir(parents=True)
@@ -1573,7 +2126,9 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
         )
     comparison["per_slot"]["base"]["match"] = 1
     monkeypatch.setattr(
-        campaign_module, "_preview_selector_snapshot", lambda _entries: ({}, {})
+        campaign_module,
+        "_preview_selector_snapshot",
+        lambda _entries, *_args: ({}, {}, {}),
     )
     substituted_fields = {**fields, "revision": "fabricated-revision"}
     substituted_signature = mismatch_signature({

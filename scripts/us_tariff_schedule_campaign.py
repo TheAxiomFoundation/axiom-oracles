@@ -47,8 +47,8 @@ ROUTING_RECEIPT = OUT_DIR / "disposition-routing-receipt.json"
 INPUT_CONTRACT_RECEIPT = OUT_DIR / "declared-input-contract-receipt.json"
 EVAL_DIR = OUT_DIR / "eval"
 EVAL_MANIFEST = EVAL_DIR / "MANIFEST.json"
-INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v3"
-EVAL_RUN_IDENTITY_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_run_identity.v3"
+INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v4"
+EVAL_RUN_IDENTITY_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_run_identity.v4"
 EVAL_MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
 COMPARISON_SCHEMA = "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
 COMPARISON_RECEIPT = OUT_DIR / "comparison-summary.json"
@@ -57,10 +57,46 @@ DISPOSITION_LEDGER = REPO_ROOT / "reference/us-tariff-schedule/campaign-disposit
 PREVIEW_DISPOSITION_LINE_SETS = (
     REPO_ROOT / "reference/us-tariff-schedule/preview-disposition-line-sets.json"
 )
+PREVIEW_SELECTOR_TRANSITION_RECEIPT = (
+    REPO_ROOT
+    / "reference/us-tariff-schedule/preview-selector-transition-receipt.json"
+)
 PREVIEW_DISPOSITION_PRODUCER_SOURCES = {
     "script": REPO_ROOT / "scripts/build_us_tariff_preview_disposition_receipt.py",
     "campaign_classifier": Path(__file__).resolve(),
 }
+PREVIEW_SELECTOR_TRANSITION_PRODUCER_SOURCES = {
+    "script": (
+        REPO_ROOT
+        / "scripts/build_us_tariff_preview_selector_transition_receipt.py"
+    ),
+    "campaign_classifier": Path(__file__).resolve(),
+    "full_closure_guard": (
+        REPO_ROOT
+        / "scripts/build_us_tariff_section232_equivalence_receipt.py"
+    ),
+}
+PREVIEW_SELECTOR_TRANSITION_SCHEMA = (
+    "axiom_oracles.us_tariff_schedule.preview_selector_transitions.v1"
+)
+PREVIEW_HISTORICAL_TARGET_PATH = (
+    "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz"
+)
+YALE_NOTE16_WEIGHT_ASSUMPTION = (
+    REPO_ROOT
+    / "reference/us-tariff-schedule/yale-note16-metal-weight-assumption.json"
+)
+YALE_NOTE16_WEIGHT_ASSUMPTION_PRODUCER = (
+    REPO_ROOT / "scripts/build_us_tariff_yale_note16_weight_assumption.py"
+)
+YALE_NOTE16_WEIGHT_ASSUMPTION_SCHEMA = (
+    "axiom_oracles.us_tariff_schedule.yale_note16_weight_assumption.v1"
+)
+NOTE16_WEIGHT_INPUT = (
+    "entry_has_at_least_fifteen_percent_aggregate_"
+    "applicable_listed_metal_weight"
+)
+NOTE16_WEIGHT_REFERENCE_VALUE = True
 PREVIEW_DISPOSITION_INPUT_SHA256 = {
     "reference/us-tariff-schedule/preview-1311/mismatch-taxonomy-receipt.json":
         "3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de",
@@ -77,6 +113,29 @@ PREVIEW_DISPOSITION_INPUT_SHA256 = {
 }
 PREVIEW_YALE_COMMIT = "c4307e514196618afcbf88cf7fd33746417eeabf"
 PREVIEW_YALE_TREE = "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+YALE_NOTE16_WEIGHT_SOURCE_RECEIPTS = {
+    "config/policy_params.yaml": {
+        "path": "config/policy_params.yaml",
+        "bytes": 50577,
+        "sha256": (
+            "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+        ),
+    },
+    "docs/assumptions.md": {
+        "path": "docs/assumptions.md",
+        "bytes": 37812,
+        "sha256": (
+            "e2b65a9641895156c9e3fa1e06c05866e3cfdfb04075b26bee5117c0357f0dbf"
+        ),
+    },
+    "src/pipeline/06_calculate_rates.R": {
+        "path": "src/pipeline/06_calculate_rates.R",
+        "bytes": 179892,
+        "sha256": (
+            "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+        ),
+    },
+}
 PREVIEW_SELECTOR_COUNT = 18
 REPORT_PATH = REPO_ROOT / "conformance/detail/us-tariff-schedule.json"
 WITNESS_REPLAY_RECEIPT = OUT_DIR / "witness-replay-execute-receipt.json"
@@ -265,6 +324,106 @@ def _file_receipt(path: Path, *, relative_to: Path | None = None) -> dict[str, A
     }
 
 
+def _yale_note16_weight_assumption() -> dict[str, Any]:
+    """Validate the explicit Yale point-estimate bridge for Note 16(c).
+
+    The receipt deliberately distinguishes a reference-model assumption from a
+    transaction-level metal-weight fact.  Its boolean is consumed only behind
+    the independently derived Note 16(c)(vi)/(ix) candidate predicates.
+    """
+
+    _require(
+        YALE_NOTE16_WEIGHT_ASSUMPTION.is_file(),
+        "Yale Note 16 metal-weight assumption receipt is missing",
+    )
+    receipt = json.loads(YALE_NOTE16_WEIGHT_ASSUMPTION.read_text())
+    expected_fields = {
+        "schema",
+        "verdict",
+        "producer",
+        "yale_source",
+        "configuration",
+        "model_implementation",
+        "campaign_binding",
+        "receipt_payload_sha256",
+    }
+    _require(
+        isinstance(receipt, dict)
+        and set(receipt) == expected_fields
+        and receipt.get("schema") == YALE_NOTE16_WEIGHT_ASSUMPTION_SCHEMA
+        and receipt.get("verdict") == "PASS",
+        "Yale Note 16 metal-weight assumption receipt is malformed",
+    )
+    received_digest = receipt.get("receipt_payload_sha256")
+    digest_payload = dict(receipt)
+    digest_payload.pop("receipt_payload_sha256", None)
+    _require(
+        received_digest == _canonical_sha256(digest_payload),
+        "Yale Note 16 metal-weight assumption payload digest drift",
+    )
+    _require(
+        receipt.get("producer")
+        == _file_receipt(
+            YALE_NOTE16_WEIGHT_ASSUMPTION_PRODUCER, relative_to=REPO_ROOT
+        ),
+        "Yale Note 16 metal-weight assumption producer drift",
+    )
+    yale_source = receipt.get("yale_source")
+    _require(
+        yale_source
+        == {
+            "commit": PREVIEW_YALE_COMMIT,
+            "tree": PREVIEW_YALE_TREE,
+            "files": YALE_NOTE16_WEIGHT_SOURCE_RECEIPTS,
+        },
+        "Yale Note 16 metal-weight assumption source drift",
+    )
+    _require(
+        receipt.get("configuration")
+        == {
+            "threshold": 0.15,
+            "applies_to": ["annex_1b", "annex_3"],
+            "excludes_chapters": ["72", "73", "74", "76"],
+            "aggregate_share": 0.0,
+        },
+        "Yale Note 16 metal-weight assumption configuration drift",
+    )
+    _require(
+        receipt.get("model_implementation")
+        == {
+            "below_threshold_route_is_share_scaled": True,
+            "route_executes_only_when_aggregate_share_is_positive": True,
+            "baseline_below_threshold_share": 0.0,
+            "baseline_at_or_above_threshold_share": 1.0,
+        },
+        "Yale Note 16 metal-weight assumption implementation drift",
+    )
+    binding = receipt.get("campaign_binding")
+    _require(
+        isinstance(binding, dict)
+        and binding.get("input") == NOTE16_WEIGHT_INPUT
+        and binding.get("value") is NOTE16_WEIGHT_REFERENCE_VALUE
+        and "reference-model assumption only" in binding.get("factual_status", "")
+        and "candidate" in binding.get("scope", ""),
+        "Yale Note 16 metal-weight campaign binding drift",
+    )
+    return receipt
+
+
+def _yale_note16_weight_assumption_identity() -> dict[str, Any]:
+    receipt = _yale_note16_weight_assumption()
+    return {
+        **_file_receipt(
+            YALE_NOTE16_WEIGHT_ASSUMPTION, relative_to=REPO_ROOT
+        ),
+        "schema": receipt["schema"],
+        "receipt_payload_sha256": receipt["receipt_payload_sha256"],
+        "campaign_binding": receipt["campaign_binding"],
+        "yale_commit": receipt["yale_source"]["commit"],
+        "yale_tree": receipt["yale_source"]["tree"],
+    }
+
+
 def _campaign_evaluator_identity() -> dict[str, Any]:
     """Bind the Python implementation that constructs and parses engine runs.
 
@@ -366,6 +525,9 @@ def _load_entry_flag_tool(
     spec.loader.exec_module(module)
     entry_flags = getattr(module, "entry_flags", None)
     module_names = getattr(module, "MODULES", None)
+    note16_aluminum_precedence_module = getattr(
+        module, "NOTE16_ALUMINUM_PRECEDENCE_MODULE", None
+    )
     incidence_dir = getattr(module, "INCIDENCE_DIR", None)
     _require(callable(entry_flags), "entry-flag producer lacks entry_flags")
     _require(
@@ -374,6 +536,11 @@ def _load_entry_flag_tool(
         and all(isinstance(name, str) and name for name in module_names),
         "entry-flag producer MODULES is malformed",
     )
+    _require(
+        isinstance(note16_aluminum_precedence_module, str)
+        and bool(note16_aluminum_precedence_module),
+        "entry-flag producer NOTE16_ALUMINUM_PRECEDENCE_MODULE is malformed",
+    )
     expected_incidence = root / "us/policies/usitc/us-tariff-incidence/generated"
     _require(
         isinstance(incidence_dir, Path)
@@ -381,6 +548,13 @@ def _load_entry_flag_tool(
         "entry-flag producer incidence root escaped the requested checkout",
     )
     dependency_paths = [expected_incidence / name for name in module_names]
+    # b16_entry_flags._note16_aluminum_precedence_tables() loads this
+    # effective-dated table separately from MODULES.  It affects every
+    # Note 16(c) entry classification, so bind it to the same producer digest
+    # that flows through the input contract, run identity, and eval manifest.
+    dependency_paths.append(
+        expected_incidence / note16_aluminum_precedence_module
+    )
     # b16_entry_flags._tables() also consumes every non-test per-page Note 50
     # and Note 52 fragment.  Receipt the exact dynamic inputs, not only the
     # top-level MODULES tuple.
@@ -685,7 +859,14 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
     engine_receipt = _file_receipt(engine_binary)
     entry_flags, entry_flag_producers = _load_entry_flag_tool(rulespec_root)
 
-    raw_emitted = entry_flags(102294000, "0102294024", "CA")
+    reference_assumption = _yale_note16_weight_assumption_identity()
+    raw_emitted = entry_flags(
+        102294000,
+        "0102294024",
+        "CA",
+        entry_date="2026-07-24",
+        **{NOTE16_WEIGHT_INPUT: NOTE16_WEIGHT_REFERENCE_VALUE},
+    )
     emitted, observed_aliases = canonicalize_entry_flags(raw_emitted)
     # The tool also returns incidence diagnostics (``s232_*``, list-specific
     # helpers).  The harness feeds only its public entry-input namespace.
@@ -734,6 +915,9 @@ def build_input_contract_receipt(*, rulespec_root: Path, engine_binary: Path) ->
         "entry_flag_aliases": dict(ENTRY_FLAG_ALIASES),
         "observed_entry_flag_aliases": list(observed_aliases),
         "emitted_entry_flags": sorted(emitted_names),
+        "reference_assumptions": {
+            "yale_note16_metal_weight": reference_assumption,
+        },
         "expected_dropped_entry_flags": sorted(EXPECTED_DROPPED_ENTRY_FLAGS),
         "neutral_boolean_inputs": list(NEUTRAL_BOOLEAN_INPUTS),
         "neutral_boolean_value": False,
@@ -1149,6 +1333,15 @@ def _validated_input_contract(
         contract.get("probe_boolean_inputs") == PROBE_BOOLEAN_INPUT_CONTRACT,
         "declared-input contract probe-input semantics are stale",
     )
+    _require(
+        contract.get("reference_assumptions")
+        == {
+            "yale_note16_metal_weight": (
+                _yale_note16_weight_assumption_identity()
+            )
+        },
+        "declared-input contract reference-assumption semantics are stale",
+    )
     expected_conditionally_unfed = {
         chapter: sorted(inputs)
         for chapter, inputs in CONDITIONALLY_UNFED_INPUTS_BY_CHAPTER.items()
@@ -1263,6 +1456,7 @@ def _current_run_identity(
             **_file_receipt(INPUT_CONTRACT_RECEIPT, relative_to=REPO_ROOT),
             "schema": contract["schema"],
         },
+        "reference_assumptions": contract["reference_assumptions"],
         "campaign_evaluator": _campaign_evaluator_identity(),
         "selected_population": _file_receipt(SELECTED, relative_to=REPO_ROOT),
         "routing": _file_receipt(ROUTING_ROWS, relative_to=REPO_ROOT),
@@ -1350,7 +1544,13 @@ def _case_feed(
     probe: str,
     case_feed_inputs: Iterable[str],
 ) -> tuple[dict[str, Any], dict[str, bool]]:
-    raw_flags = entry_flags(int(route["hts_line"]), row["hts10"], row["iso2"])
+    raw_flags = entry_flags(
+        int(route["hts_line"]),
+        row["hts10"],
+        row["iso2"],
+        entry_date=probe,
+        **{NOTE16_WEIGHT_INPUT: NOTE16_WEIGHT_REFERENCE_VALUE},
+    )
     public_flags, _aliases = canonicalize_entry_flags(raw_flags)
     reserved = (
         CORE_CASE_FEED_INPUTS
@@ -2067,15 +2267,188 @@ def _preview_disposition_receipt() -> dict[str, Any]:
     return preview
 
 
+def _preview_transition_is_required(
+    entries: list[dict[str, Any]], preview: dict[str, Any]
+) -> bool:
+    """Return whether the ledger enrolls a child of a preview selector.
+
+    A missing historical selector is still handled by the ordinary retirement
+    guard.  Transition evidence becomes mandatory only when a new ledger id
+    reuses one of the immutable preview line sets; this keeps evaluation,
+    comparison, and unchanged-ledger classification independent of a future
+    transition receipt.
+    """
+
+    historical_ids = {
+        selector.get("id")
+        for selector in preview.get("selectors", [])
+        if isinstance(selector, dict)
+    }
+    historical_line_sets = (
+        set(preview["line_sets"])
+        if isinstance(preview.get("line_sets"), dict)
+        else set()
+    )
+    for entry in entries:
+        if not isinstance(entry, dict) or entry.get("id") in historical_ids:
+            continue
+        match = entry.get("match")
+        line_set = match.get("line_set") if isinstance(match, dict) else None
+        if line_set in historical_line_sets:
+            return True
+    return False
+
+
+def _preview_selector_transition_receipt(
+    comparison: dict[str, Any], preview: dict[str, Any]
+) -> dict[str, Any]:
+    """Load a current, comparison-bound preview-selector transition receipt."""
+
+    path = PREVIEW_SELECTOR_TRANSITION_RECEIPT
+    _require(path.is_file(), f"preview selector transition receipt is missing: {path}")
+    receipt = json.loads(path.read_text())
+    _require(
+        isinstance(receipt, dict)
+        and set(receipt)
+        == {
+            "schema",
+            "verdict",
+            "producer",
+            "inputs",
+            "bindings",
+            "zero_error_proof",
+            "transitions",
+            "receipt_payload_sha256",
+        }
+        and receipt.get("schema") == PREVIEW_SELECTOR_TRANSITION_SCHEMA
+        and receipt.get("verdict") == "PASS",
+        "preview selector transition receipt is not a PASS v1 receipt",
+    )
+    received_digest = receipt.get("receipt_payload_sha256")
+    digest_payload = dict(receipt)
+    digest_payload.pop("receipt_payload_sha256", None)
+    _require(
+        received_digest == _canonical_sha256(digest_payload),
+        "preview selector transition payload digest drift",
+    )
+    expected_producer = {
+        name: _file_receipt(source, relative_to=REPO_ROOT)
+        for name, source in PREVIEW_SELECTOR_TRANSITION_PRODUCER_SOURCES.items()
+    }
+    _require(
+        receipt.get("producer") == expected_producer,
+        "preview selector transition producer source drift",
+    )
+    artifact_receipt = comparison.get("comparison_artifact")
+    _require(
+        isinstance(artifact_receipt, dict),
+        "comparison artifact receipt is malformed",
+    )
+    expected_inputs = {
+        "immutable_preview_receipt": _file_receipt(
+            PREVIEW_DISPOSITION_LINE_SETS, relative_to=REPO_ROOT
+        ),
+        "historical_target_mismatch_artifact": preview.get("inputs", {}).get(
+            PREVIEW_HISTORICAL_TARGET_PATH
+        ),
+        "evaluation_manifest": _file_receipt(EVAL_MANIFEST, relative_to=REPO_ROOT),
+        "comparison_receipt": _file_receipt(
+            COMPARISON_RECEIPT, relative_to=REPO_ROOT
+        ),
+        "comparison_artifact": artifact_receipt,
+    }
+    _require(
+        receipt.get("inputs") == expected_inputs,
+        "preview selector transition input binding is stale",
+    )
+    manifest = json.loads(EVAL_MANIFEST.read_text())
+    run_identity = manifest.get("run_identity")
+    expected_reference_assumptions = {
+        "yale_note16_metal_weight": _yale_note16_weight_assumption_identity()
+    }
+    _require(
+        isinstance(run_identity, dict)
+        and isinstance(run_identity.get("rulespec"), dict)
+        and isinstance(run_identity.get("entry_flag_producers"), dict)
+        and run_identity.get("reference_assumptions")
+        == expected_reference_assumptions,
+        "evaluation manifest transition provenance is malformed",
+    )
+    expected_bindings = {
+        "preview_receipt_payload_sha256": preview.get("receipt_payload_sha256"),
+        "generation_id": comparison.get("generation_id"),
+        "run_identity_sha256": comparison.get("run_identity_sha256"),
+        "evaluation_manifest_sha256": comparison.get(
+            "evaluation_manifest_sha256"
+        ),
+        "rulespec": run_identity["rulespec"],
+        "entry_flag_producers": run_identity["entry_flag_producers"],
+        "reference_assumptions": expected_reference_assumptions,
+    }
+    _require(
+        receipt.get("bindings") == expected_bindings,
+        "preview selector transition run binding is stale",
+    )
+    shards = manifest.get("shards")
+    _require(
+        isinstance(shards, dict)
+        and bool(shards)
+        and all(
+            isinstance(shard, dict)
+            and isinstance(shard.get("engine_errors"), int)
+            and not isinstance(shard["engine_errors"], bool)
+            and shard["engine_errors"] >= 0
+            for shard in shards.values()
+        ),
+        "evaluation manifest engine-error census is malformed",
+    )
+    evaluation_errors = sum(shard["engine_errors"] for shard in shards.values())
+    _require(
+        comparison.get("engine_errors") == 0
+        and evaluation_errors == 0
+        and receipt.get("zero_error_proof")
+        == {
+            "evaluation_shard_engine_errors": 0,
+            "observed_evaluation_record_errors": 0,
+            "comparison_receipt_engine_errors": 0,
+            "comparison_artifact_engine_error_rows": 0,
+        },
+        "preview selector transition cannot rely on engine errors",
+    )
+    _require(
+        isinstance(receipt.get("transitions"), list)
+        and bool(receipt["transitions"]),
+        "preview selector transition list is malformed",
+    )
+    return receipt
+
+
+def _transition_for_entries(
+    entries: list[dict[str, Any]],
+    comparison: dict[str, Any],
+    preview: dict[str, Any],
+) -> dict[str, Any] | None:
+    if not _preview_transition_is_required(entries, preview):
+        return None
+    return _preview_selector_transition_receipt(comparison, preview)
+
+
 def _preview_selector_snapshot(
-    entries: list[dict[str, Any]], preview: dict[str, Any] | None = None
-) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Bind active and retired selectors to an immutable preview snapshot.
+    entries: list[dict[str, Any]],
+    preview: dict[str, Any] | None = None,
+    transition: dict[str, Any] | None = None,
+) -> tuple[
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+]:
+    """Bind active, retired, and superseded selectors to preview history.
 
     The receipt describes a historical mismatch population, not a requirement
     that every mismatch survive future RuleSpec fixes.  A selector may leave
     the ledger only after its receipted match population vanishes completely;
-    the classifier enforces that transition against fresh comparison evidence.
+    a partially surviving selector needs a separately bound transition receipt
+    whose children exactly partition its fresh residual population.
     """
 
     preview = _preview_disposition_receipt() if preview is None else preview
@@ -2098,8 +2471,7 @@ def _preview_selector_snapshot(
         "id", "logical_class", "disposition", "attribution", "expected_units",
         "expected_signature_count", "expected_signature_population_sha256", "match",
     }
-    contract: dict[str, dict[str, Any]] = {}
-    retired: dict[str, dict[str, Any]] = {}
+    historical: dict[str, dict[str, Any]] = {}
     receipt_ids: set[str] = set()
     for selector in selectors:
         _require(isinstance(selector, dict) and set(selector) == expected_fields,
@@ -2168,7 +2540,205 @@ def _preview_selector_snapshot(
                 and values == sorted(set(values)),
                 f"invalid preview selector delta values: {selector_id}",
             )
+        historical[selector_id] = selector
+    receipt_line_sets = [
+        selector["match"].get("line_set")
+        if isinstance(selector.get("match"), dict) else None
+        for selector in selectors
+    ]
+    _require(
+        len(set(receipt_line_sets)) == len(receipt_line_sets)
+        and set(receipt_line_sets) == set(line_sets),
+        "preview selectors and line sets are not one-to-one",
+    )
+    transition_by_parent: dict[str, dict[str, Any]] = {}
+    child_by_id: dict[str, dict[str, Any]] = {}
+    empty_population_digest = signature_population_sha256([])
+    if transition is not None:
+        raw_transitions = transition.get("transitions")
+        _require(
+            isinstance(raw_transitions, list) and raw_transitions,
+            "preview selector transition list is malformed",
+        )
+        transition_fields = {
+            "parent_id",
+            "parent_contract",
+            "status",
+            "historical_units",
+            "fresh_matching_units",
+            "fresh_residual_population",
+            "children",
+            "evidence",
+        }
+        population_fields = {
+            "units",
+            "signature_count",
+            "signature_population_sha256",
+        }
+        child_fields = {
+            "id",
+            "parent_id",
+            "logical_class",
+            "disposition",
+            "attribution",
+            "expected_units",
+            "expected_signature_count",
+            "expected_signature_population_sha256",
+            "match",
+        }
+        for item in raw_transitions:
+            _require(
+                isinstance(item, dict) and set(item) == transition_fields,
+                "preview selector transition fields are malformed",
+            )
+            parent_id = item.get("parent_id")
+            _require(
+                isinstance(parent_id, str)
+                and parent_id in historical
+                and parent_id not in transition_by_parent,
+                f"preview selector transition parent is invalid: {parent_id}",
+            )
+            parent = historical[parent_id]
+            _require(
+                item.get("parent_contract") == parent,
+                f"preview selector transition parent contract drift: {parent_id}",
+            )
+            _require(
+                item.get("status") in {"retired", "superseded"},
+                f"preview selector transition status is invalid: {parent_id}",
+            )
+            historical_units = item.get("historical_units")
+            fresh_matching_units = item.get("fresh_matching_units")
+            residual = item.get("fresh_residual_population")
+            _require(
+                historical_units == parent["expected_units"]
+                and isinstance(fresh_matching_units, int)
+                and not isinstance(fresh_matching_units, bool)
+                and fresh_matching_units >= 0
+                and isinstance(residual, dict)
+                and set(residual) == population_fields,
+                f"preview selector transition census is malformed: {parent_id}",
+            )
+            residual_units = residual.get("units")
+            residual_signatures = residual.get("signature_count")
+            residual_digest = residual.get("signature_population_sha256")
+            _require(
+                isinstance(residual_units, int)
+                and not isinstance(residual_units, bool)
+                and residual_units >= 0
+                and isinstance(residual_signatures, int)
+                and not isinstance(residual_signatures, bool)
+                and residual_signatures >= 0
+                and isinstance(residual_digest, str)
+                and re.fullmatch(r"[0-9a-f]{64}", residual_digest) is not None
+                and residual_signatures <= residual_units
+                and (
+                    (
+                        residual_units == residual_signatures == 0
+                        and residual_digest == empty_population_digest
+                    )
+                    or (residual_units > 0 and residual_signatures > 0)
+                )
+                and fresh_matching_units + residual_units == historical_units,
+                f"preview selector transition does not conserve: {parent_id}",
+            )
+            children = item.get("children")
+            _require(
+                isinstance(children, list)
+                and isinstance(item.get("evidence"), dict)
+                and bool(item["evidence"]),
+                f"preview selector transition children are malformed: {parent_id}",
+            )
+            child_units = 0
+            for child in children:
+                _require(
+                    isinstance(child, dict) and set(child) == child_fields,
+                    f"preview selector transition child fields are malformed: {parent_id}",
+                )
+                child_id = child.get("id")
+                _require(
+                    isinstance(child_id, str)
+                    and bool(child_id)
+                    and child_id not in historical
+                    and child_id not in child_by_id
+                    and child.get("parent_id") == parent_id,
+                    f"preview selector transition child id is invalid: {child_id}",
+                )
+                _require(
+                    isinstance(child.get("logical_class"), str)
+                    and bool(child["logical_class"])
+                    and isinstance(child.get("disposition"), str)
+                    and bool(child["disposition"])
+                    and isinstance(child.get("attribution"), str)
+                    and bool(child["attribution"]),
+                    f"preview selector transition child ruling is malformed: {child_id}",
+                )
+                _require(
+                    isinstance(child.get("expected_units"), int)
+                    and not isinstance(child["expected_units"], bool)
+                    and child["expected_units"] > 0
+                    and isinstance(child.get("expected_signature_count"), int)
+                    and not isinstance(child["expected_signature_count"], bool)
+                    and child["expected_signature_count"] > 0
+                    and child["expected_signature_count"]
+                    <= child["expected_units"]
+                    and isinstance(
+                        child.get("expected_signature_population_sha256"), str
+                    )
+                    and re.fullmatch(
+                        r"[0-9a-f]{64}",
+                        child["expected_signature_population_sha256"],
+                    )
+                    is not None,
+                    f"preview selector transition child census is malformed: {child_id}",
+                )
+                child_match = child.get("match")
+                _require(
+                    isinstance(child_match, dict)
+                    and child_match
+                    and set(child_match) <= SELECTOR_FIELDS
+                    and any(
+                        field in NON_SLOT_SELECTOR_FIELDS and selector != "any"
+                        for field, selector in child_match.items()
+                    )
+                    and child_match.get("line_set")
+                    == parent["match"]["line_set"],
+                    f"preview selector transition child match is malformed: {child_id}",
+                )
+                child_units += child["expected_units"]
+                child_by_id[child_id] = child
+            if item["status"] == "retired":
+                _require(
+                    residual_units == residual_signatures == 0
+                    and not children,
+                    f"retired preview selector retains a child: {parent_id}",
+                )
+            else:
+                _require(
+                    residual_units > 0
+                    and residual_signatures > 0
+                    and bool(children)
+                    and child_units == residual_units,
+                    f"superseded preview selector child census drift: {parent_id}",
+                )
+            transition_by_parent[parent_id] = item
+
+    contract: dict[str, dict[str, Any]] = {}
+    retired: dict[str, dict[str, Any]] = {}
+    superseded: dict[str, dict[str, Any]] = {}
+    for selector_id, selector in historical.items():
+        transition_item = transition_by_parent.get(selector_id)
         ledger_entry = ledger_by_id.get(selector_id)
+        if transition_item is not None:
+            _require(
+                ledger_entry is None,
+                f"transitioned preview parent remains in ledger: {selector_id}",
+            )
+            if transition_item["status"] == "retired":
+                retired[selector_id] = selector
+            else:
+                superseded[selector_id] = transition_item
+            continue
         if ledger_entry is None:
             retired[selector_id] = selector
             continue
@@ -2181,35 +2751,51 @@ def _preview_selector_snapshot(
         _require(ledger_entry.get("expires_on_source_change") is True,
                  f"preview selector lost source-change expiry: {selector_id}")
         contract[selector_id] = selector
-    receipt_line_sets = [
-        selector["match"].get("line_set")
-        if isinstance(selector.get("match"), dict) else None
-        for selector in selectors
-    ]
-    _require(
-        len(set(receipt_line_sets)) == len(receipt_line_sets)
-        and set(receipt_line_sets) == set(line_sets),
-        "preview selectors and line sets are not one-to-one",
-    )
+
+    for child_id, child in child_by_id.items():
+        ledger_entry = ledger_by_id.get(child_id)
+        _require(
+            ledger_entry is not None,
+            f"preview selector transition child is missing from ledger: {child_id}",
+        )
+        _require(
+            ledger_entry.get("match") == child["match"],
+            f"preview selector transition child match drift: {child_id}",
+        )
+        _require(
+            ledger_entry.get("disposition") == child["disposition"],
+            f"preview selector transition child disposition drift: {child_id}",
+        )
+        _require(
+            ledger_entry.get("attribution") == child["attribution"],
+            f"preview selector transition child attribution drift: {child_id}",
+        )
+        _require(
+            ledger_entry.get("expires_on_source_change") is True,
+            f"preview selector transition child lost source-change expiry: {child_id}",
+        )
+        contract[child_id] = child
+
     for entry_id, entry in ledger_by_id.items():
         match = entry.get("match")
         line_set = match.get("line_set") if isinstance(match, dict) else None
-        if isinstance(line_set, str) and line_set.startswith("preview-1311-"):
-            _require(entry_id in receipt_ids,
+        if line_set in line_sets:
+            _require(entry_id in receipt_ids or entry_id in child_by_id,
                      f"unreceipted preview selector in disposition ledger: {entry_id}")
     census = preview.get("census", {}).get("per_selector")
     _require(
         isinstance(census, dict)
-        and census == {selector_id: selector["expected_units"]
-                       for selector_id, selector in sorted(
-                           {**contract, **retired}.items()
-                       )},
+        and census
+        == {
+            selector_id: selector["expected_units"]
+            for selector_id, selector in sorted(historical.items())
+        },
         "preview selector census does not match selector contracts",
     )
     _require(preview.get("census", {}).get("total") == sum(
         selector["expected_units"] for selector in selectors
     ), "preview selector total does not conserve")
-    return contract, retired
+    return contract, retired, superseded
 
 
 def _preview_selector_contract(
@@ -2217,7 +2803,7 @@ def _preview_selector_contract(
 ) -> dict[str, dict[str, Any]]:
     """Return the still-enrolled portion of the receipted preview snapshot."""
 
-    contract, _retired = _preview_selector_snapshot(entries, preview)
+    contract, _retired, _superseded = _preview_selector_snapshot(entries, preview)
     return contract
 
 
@@ -2286,23 +2872,120 @@ def _enforce_retired_preview_selectors_absent(
         )
 
 
+def _enforce_preview_selector_transitions(
+    superseded: dict[str, dict[str, Any]],
+    observed: dict[str, dict[str, Any]],
+    counts: Counter[str],
+    signature_classes: dict[str, str | None],
+    *,
+    engine_errors: int,
+) -> None:
+    """Require each superseded parent to equal its disjoint child union."""
+
+    _require(
+        not superseded
+        or (
+            isinstance(engine_errors, int)
+            and not isinstance(engine_errors, bool)
+            and engine_errors == 0
+        ),
+        "superseded preview selector partition cannot be proven with engine errors",
+    )
+    for parent_id, transition in superseded.items():
+        parent = transition["parent_contract"]
+        parent_population = {
+            signature: counts[signature]
+            for signature, unit in observed.items()
+            if selector_matches(unit, parent["match"])
+        }
+        expected_parent = transition["fresh_residual_population"]
+        _require(
+            sum(parent_population.values()) == expected_parent["units"],
+            f"superseded preview parent unit count drift: {parent_id}",
+        )
+        _require(
+            len(parent_population) == expected_parent["signature_count"],
+            f"superseded preview parent signature count drift: {parent_id}",
+        )
+        _require(
+            signature_population_sha256(parent_population.items())
+            == expected_parent["signature_population_sha256"],
+            f"superseded preview parent signature digest drift: {parent_id}",
+        )
+        child_ids = {child["id"] for child in transition["children"]}
+        child_population = {
+            signature: counts[signature]
+            for signature, class_id in signature_classes.items()
+            if class_id in child_ids
+        }
+        outside_parent = set(child_population) - set(parent_population)
+        _require(
+            not outside_parent,
+            f"preview selector transition child escaped parent: {parent_id}",
+        )
+        _require(
+            child_population == parent_population,
+            f"preview selector transition children do not partition parent: {parent_id}",
+        )
+
+
 def _classification_inputs(
-    comparison: dict[str, Any], disposition_ledger: Path = DISPOSITION_LEDGER
+    comparison: dict[str, Any],
+    disposition_ledger: Path = DISPOSITION_LEDGER,
+    *,
+    preview: dict[str, Any] | None = None,
+    transition: dict[str, Any] | None = None,
 ) -> dict[str, str]:
-    preview = _preview_disposition_receipt()
+    preview = _preview_disposition_receipt() if preview is None else preview
+    preview_bytes = PREVIEW_DISPOSITION_LINE_SETS.read_bytes()
+    try:
+        preview_on_disk = json.loads(preview_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(
+            "preview disposition receipt changed or is malformed"
+        ) from exc
+    _require(
+        preview_on_disk == preview,
+        "preview disposition receipt changed during classification",
+    )
     artifact = comparison.get("comparison_artifact")
     _require(isinstance(artifact, dict), "comparison artifact receipt is malformed")
     comparison_sha = artifact.get("sha256")
     _require(isinstance(comparison_sha, str) and re.fullmatch(r"[0-9a-f]{64}", comparison_sha),
              "comparison artifact hash is malformed")
     _require(COMPARISON_RECEIPT.is_file(), "comparison receipt is missing")
-    return {
+    inputs = {
         "comparison_artifact_sha256": comparison_sha,
         "comparison_receipt_sha256": _sha256(COMPARISON_RECEIPT),
         "disposition_ledger_sha256": _sha256(disposition_ledger),
-        "preview_disposition_receipt_sha256": _sha256(PREVIEW_DISPOSITION_LINE_SETS),
+        "preview_disposition_receipt_sha256": hashlib.sha256(
+            preview_bytes
+        ).hexdigest(),
         "preview_disposition_payload_sha256": preview["receipt_payload_sha256"],
     }
+    if transition is not None:
+        transition_bytes = PREVIEW_SELECTOR_TRANSITION_RECEIPT.read_bytes()
+        try:
+            transition_on_disk = json.loads(transition_bytes)
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError(
+                "preview selector transition receipt changed or is malformed"
+            ) from exc
+        _require(
+            transition_on_disk == transition,
+            "preview selector transition receipt changed during classification",
+        )
+        inputs.update(
+            {
+                "preview_selector_transition_receipt_sha256": hashlib.sha256(
+                    transition_bytes
+                ).hexdigest(),
+                "preview_selector_transition_payload_sha256": transition[
+                    "receipt_payload_sha256"
+                ],
+            }
+        )
+    return inputs
 
 
 def _classification_sidecar_path(inputs: dict[str, str]) -> Path:
@@ -2589,8 +3272,18 @@ def _validate_classification_handoff(
         == "axiom_oracles.us_tariff_schedule.classification.v2",
         "classification receipt schema is stale",
     )
-    preview_contract, retired_preview_contract = _preview_selector_snapshot(entries)
-    _require(classification.get("inputs") == _classification_inputs(comparison),
+    preview = _preview_disposition_receipt()
+    transition = _transition_for_entries(entries, comparison, preview)
+    (
+        preview_contract,
+        retired_preview_contract,
+        superseded_preview_contract,
+    ) = _preview_selector_snapshot(entries, preview, transition)
+    _require(
+        classification.get("inputs")
+        == _classification_inputs(
+            comparison, preview=preview, transition=transition
+        ),
              "classification receipt input binding is stale")
     entry_ids = [entry.get("id") for entry in entries]
     _require(
@@ -2694,6 +3387,13 @@ def _validate_classification_handoff(
         retired_preview_contract,
         sidecar_observed,
         sidecar_signature_counts,
+        engine_errors=rederived["engine_errors"],
+    )
+    _enforce_preview_selector_transitions(
+        superseded_preview_contract,
+        sidecar_observed,
+        sidecar_signature_counts,
+        sidecar_signature_classes,
         engine_errors=rederived["engine_errors"],
     )
     for field, expected in rederived.items():
@@ -2950,9 +3650,16 @@ def _classify_campaign_locked(
     _require(ledger.get("suite") == "us-tariff-schedule", "wrong disposition suite")
     entries = ledger.get("entries", []) if entries_override is None else entries_override
     if entries_override is None:
-        preview_contract, retired_preview_contract = _preview_selector_snapshot(entries)
+        preview = _preview_disposition_receipt()
+        transition = _transition_for_entries(entries, comparison, preview)
+        (
+            preview_contract,
+            retired_preview_contract,
+            superseded_preview_contract,
+        ) = _preview_selector_snapshot(entries, preview, transition)
     else:
-        preview_contract = retired_preview_contract = None
+        preview = transition = None
+        preview_contract = retired_preview_contract = superseded_preview_contract = None
     selectors = validate_dispositions(entries, observed)
     signature_classes = {
         signature: matching_class_id(signature, unit, selectors)
@@ -2962,6 +3669,13 @@ def _classify_campaign_locked(
         _enforce_preview_selector_population(preview_contract, signature_classes, counts)
         _enforce_retired_preview_selectors_absent(
             retired_preview_contract or {}, observed, counts,
+            engine_errors=engine_errors,
+        )
+        _enforce_preview_selector_transitions(
+            superseded_preview_contract or {},
+            observed,
+            counts,
+            signature_classes,
             engine_errors=engine_errors,
         )
     census: Counter[str] = Counter()
@@ -2983,7 +3697,12 @@ def _classify_campaign_locked(
         derived_total_compositions[" + ".join(class_composition)] += units
     selector_digest = _sha256(disposition_ledger) if entries_override is None else hashlib.sha256(_render(entries).encode()).hexdigest()
     classification_inputs = (
-        _classification_inputs(comparison, disposition_ledger)
+        _classification_inputs(
+            comparison,
+            disposition_ledger,
+            preview=preview,
+            transition=transition,
+        )
         if entries_override is None
         else {
             "comparison_artifact_sha256": comparison["comparison_artifact"]["sha256"],
