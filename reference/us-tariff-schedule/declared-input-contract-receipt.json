@@ -23251,6 +23251,6 @@
     "untracked": []
   },
   "schema": "axiom_oracles.us_tariff_schedule.declared_input_contract.v4",
-  "stage_wall_clock_seconds": 9.839,
+  "stage_wall_clock_seconds": 10.5,
   "verdict": "PASS"
 }

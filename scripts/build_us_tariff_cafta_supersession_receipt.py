@@ -527,6 +527,7 @@ def _validate_tidy_eval_reproduction_output(output: str) -> dict[str, Any]:
         == {
             "r_version": EXPECTED_R_VERSION,
             "dplyr_version": EXPECTED_DPLYR_VERSION,
+            "dplyr_path": campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT["path"],
             "selected_conditions": "full,fta",
         },
         "tidy-eval name-collision reproduction drift",
@@ -534,32 +535,85 @@ def _validate_tidy_eval_reproduction_output(output: str) -> dict[str, Any]:
     return fields
 
 
+def _directory_tree_receipt(path: Path) -> dict[str, Any]:
+    resolved = path.resolve()
+    require(resolved.is_dir(), f"missing runtime package tree: {resolved}")
+    files = sorted(item for item in resolved.rglob("*") if item.is_file())
+    total_bytes = 0
+    manifest = hashlib.sha256()
+    for item in files:
+        size = item.stat().st_size
+        total_bytes += size
+        manifest.update(
+            (
+                f"{item.relative_to(resolved).as_posix()}\t{size}\t"
+                f"{foundation.sha256(item)}\n"
+            ).encode()
+        )
+    return {
+        "path": str(resolved),
+        "file_count": len(files),
+        "bytes": total_bytes,
+        "manifest_sha256": manifest.hexdigest(),
+    }
+
+
 def _run_tidy_eval_reproduction() -> dict[str, Any]:
     rscript_value = shutil.which("Rscript")
     require(rscript_value is not None, "Rscript is required for tidy-eval reproduction")
     rscript = Path(rscript_value).resolve()
-    program = """
-suppressPackageStartupMessages(library(dplyr))
-rule_hit <- function(condition) {
-  rr <- tibble(condition = c('full', 'fta'))
-  rr %>% filter(.data$condition %in% condition)
-}
-selected <- rule_hit('full')$condition
-cat('r_version=', paste(R.version$major, R.version$minor, sep='.'), '\\n', sep='')
-cat('dplyr_version=', as.character(packageVersion('dplyr')), '\\n', sep='')
-cat('selected_conditions=', paste(selected, collapse=','), '\\n', sep='')
-""".strip()
-    completed = subprocess.run(
-        [str(rscript), "-e", program],
-        check=True,
-        capture_output=True,
-        text=True,
+    rscript_receipt = foundation.file_receipt(rscript)
+    require(
+        rscript_receipt == campaign.CAFTA_EXPECTED_RSCRIPT_RECEIPT,
+        "tidy-eval Rscript runtime drift",
     )
+    runtime_receipt = _directory_tree_receipt(
+        Path(campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT["path"])
+    )
+    require(
+        runtime_receipt == campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT,
+        "tidy-eval R runtime tree drift",
+    )
+    dplyr_receipt = _directory_tree_receipt(
+        Path(campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT["path"])
+    )
+    require(
+        dplyr_receipt == campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT,
+        "tidy-eval dplyr runtime drift",
+    )
+    program = campaign.CAFTA_TIDY_EVAL_PROGRAM
+    with tempfile.TemporaryDirectory(prefix="axiom-cafta-r-") as runtime_home:
+        completed = subprocess.run(
+            [str(rscript), "--vanilla", "-e", program],
+            check=True,
+            capture_output=True,
+            text=True,
+            env={
+                "HOME": runtime_home,
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin",
+                "TMPDIR": runtime_home,
+            },
+        )
     require(not completed.stderr, "tidy-eval reproduction emitted stderr")
     fields = _validate_tidy_eval_reproduction_output(completed.stdout)
+    program_sha256 = hashlib.sha256(program.encode()).hexdigest()
+    require(
+        program_sha256 == campaign.CAFTA_EXPECTED_TIDY_EVAL_PROGRAM_SHA256,
+        "tidy-eval reproduction program drift",
+    )
+    require(
+        foundation.file_receipt(rscript) == rscript_receipt
+        and _directory_tree_receipt(Path(runtime_receipt["path"])) == runtime_receipt
+        and _directory_tree_receipt(Path(dplyr_receipt["path"])) == dplyr_receipt,
+        "tidy-eval runtime changed during reproduction",
+    )
     return {
-        "rscript": foundation.file_receipt(rscript),
-        "program_sha256": hashlib.sha256(program.encode()).hexdigest(),
+        "rscript": rscript_receipt,
+        "r_runtime_tree": runtime_receipt,
+        "dplyr_tree": dplyr_receipt,
+        "program_sha256": program_sha256,
         **fields,
         "result": (
             "PASS: rule_hit('full') selected both the full and fta rows under "

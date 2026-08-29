@@ -805,6 +805,7 @@ def _validated_cafta_supersession_receipt(
     repo_root: Path,
     producer_source: Path,
     preview_file: dict[str, Any],
+    preview: dict[str, Any],
     preview_payload_sha256: str,
     historical_receipt: dict[str, Any],
     selected_receipt: dict[str, Any],
@@ -951,6 +952,16 @@ def _validated_cafta_supersession_receipt(
     predicate_proof = receipt.get("axiom_predicate_proof")
     require(
         isinstance(predicate_proof, dict)
+        and set(predicate_proof)
+        == {
+            "actual_case_feed_projection_sha256",
+            "all_joined_actual_case_feeds_false_false",
+            "chapter_contracts_checked",
+            "contract_sha256",
+            "joined_fresh_evaluation_records",
+            "predicates",
+            "scope",
+        }
         and predicate_proof.get("predicates")
         == {name: False for name in cafta.CAFTA_INPUTS}
         and predicate_proof.get("all_joined_actual_case_feeds_false_false") is True
@@ -959,9 +970,10 @@ def _validated_cafta_supersession_receipt(
         and predicate_proof.get("chapter_contracts_checked") == len(chapters)
         and predicate_proof.get("contract_sha256")
         == inputs["declared_input_contract"]["sha256"]
-        and isinstance(predicate_proof.get("actual_case_feed_projection_sha256"), str)
-        and full.HEX64.fullmatch(predicate_proof["actual_case_feed_projection_sha256"])
-        is not None,
+        and predicate_proof.get("scope")
+        == "all campaign cases in all 100 compiled chapters"
+        and predicate_proof.get("actual_case_feed_projection_sha256")
+        == campaign.CAFTA_EXPECTED_ACTUAL_CASE_FEED_PROJECTION_SHA256,
         "CAFTA supersession receipt predicate proof drift",
     )
     census = receipt.get("census")
@@ -985,12 +997,10 @@ def _validated_cafta_supersession_receipt(
             "cafta_signatures",
             "origin_units",
         }
-        and isinstance(historical_rows_scanned, int)
-        and not isinstance(historical_rows_scanned, bool)
-        and historical_rows_scanned >= cafta.EXPECTED_CAFTA_UNITS
-        and isinstance(fresh_rows_scanned, int)
-        and not isinstance(fresh_rows_scanned, bool)
-        and fresh_rows_scanned >= cafta.EXPECTED_CAFTA_UNITS
+        and type(historical_rows_scanned) is int
+        and historical_rows_scanned == preview.get("census", {}).get("total")
+        and type(fresh_rows_scanned) is int
+        and fresh_rows_scanned == campaign._comparison_observation_count(comparison)
         and census.get("cafta_units") == cafta.EXPECTED_CAFTA_UNITS
         and census.get("cafta_signatures") == cafta.EXPECTED_CAFTA_SIGNATURES
         and census.get("origin_units") == cafta.EXPECTED_ORIGIN_UNITS,
@@ -1032,14 +1042,22 @@ def _validated_cafta_supersession_receipt(
         == historical_identity_population_sha256
         and supersession.get("fresh_identity_population_sha256")
         == fresh_identity_population_sha256
+        and historical_identity_population_sha256
+        == campaign.CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256
+        and fresh_identity_population_sha256
+        == campaign.CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256
         and historical_identity_population_sha256 == fresh_identity_population_sha256
         and all(
             isinstance(supersession.get(name), str)
             and full.HEX64.fullmatch(supersession[name]) is not None
             for name in projection_hashes
         )
+        and supersession.get("historical_mismatch_projection_sha256")
+        == campaign.CAFTA_EXPECTED_HISTORICAL_MISMATCH_PROJECTION_SHA256
         and supersession.get("historical_defect_projection_sha256")
-        == supersession.get("fresh_defect_projection_sha256")
+        == campaign.CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
+        and supersession.get("fresh_defect_projection_sha256")
+        == campaign.CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
         and supersession.get("joined_historical_units") == cafta.EXPECTED_CAFTA_UNITS
         and supersession.get("fresh_mismatching_units") == cafta.EXPECTED_CAFTA_UNITS
         and all(
@@ -1065,12 +1083,10 @@ def _validated_cafta_supersession_receipt(
     definition = receipt.get("definition")
     yale_defect = receipt.get("yale_reference_defect")
     require(
-        definition == cafta.EXPECTED_DEFINITION
-        and isinstance(yale_defect, dict)
-        and yale_defect.get("commit") == cafta.EXPECTED_YALE_COMMIT
-        and yale_defect.get("tree") == cafta.EXPECTED_YALE_TREE,
+        definition == cafta.EXPECTED_DEFINITION,
         "CAFTA supersession receipt lacks bounded defect evidence",
     )
+    campaign._validate_cafta_yale_defect_evidence(yale_defect)
     require(
         full.file_receipt(path, relative_to=repo_root) == receipt_file
         and full.file_receipt(producer_source, relative_to=repo_root)
@@ -1545,15 +1561,6 @@ def _transition_items(
             defect_source_proof = {
                 "classification": "pinned-yale-direct-annex-or-derivative-fallback",
                 "units": len(source_identities),
-                "identity_sha256": full.canonical_sha256(source_identities),
-                "identity_fields": [
-                    "case_id",
-                    "slot",
-                    "hts10",
-                    "interval_start",
-                    "arm",
-                    "winning_prefix",
-                ],
                 "per_arm": per_arm,
                 "pinned_yale_source": yale_source_receipt,
             }
@@ -1762,6 +1769,7 @@ def build_receipt(
                 repo_root=repo_root,
                 producer_source=cafta_producer_source,
                 preview_file=preview_file,
+                preview=preview,
                 preview_payload_sha256=preview["receipt_payload_sha256"],
                 historical_receipt=historical_receipt,
                 selected_receipt=selected_receipt,

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import copy
 import gzip
 import hashlib
 import json
+import os
 import subprocess
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -572,7 +574,9 @@ def _synthetic_all_parent_transitions() -> tuple[
     return selectors, states, cafta_receipt
 
 
-def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
+def _cafta_receipt_inputs(
+    root: Path, monkeypatch: pytest.MonkeyPatch
+) -> tuple[dict, dict]:
     root.mkdir(parents=True, exist_ok=True)
 
     def receipted(name: str) -> dict:
@@ -584,6 +588,27 @@ def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
     producer_source = root / "scripts/build_cafta.py"
     producer_source.parent.mkdir(parents=True, exist_ok=True)
     producer_source.write_text("# synthetic CAFTA producer\n")
+    rscript = root / "scripts/Rscript"
+    rscript.write_text("# synthetic pinned Rscript\n")
+    reproduction = {
+        "rscript": producer.file_receipt(rscript),
+        "r_runtime_tree": copy.deepcopy(campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT),
+        "dplyr_tree": copy.deepcopy(campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT),
+        "program_sha256": campaign.CAFTA_EXPECTED_TIDY_EVAL_PROGRAM_SHA256,
+        "r_version": "4.3.0",
+        "dplyr_version": "1.1.2",
+        "dplyr_path": campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT["path"],
+        "selected_conditions": "full,fta",
+        "result": (
+            "PASS: rule_hit('full') selected both the full and fta rows under "
+            "the pinned .data$condition %in% condition expression"
+        ),
+    }
+    monkeypatch.setattr(
+        campaign,
+        "_run_cafta_tidy_eval_reproduction",
+        lambda: copy.deepcopy(reproduction),
+    )
     preview_file = receipted("reference/preview.json")
     historical_receipt = receipted("reference/historical.jsonl.gz")
     selected_receipt = receipted("reference/selected.csv.gz")
@@ -610,8 +635,10 @@ def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
         "generation_id": "1" * 32,
         "run_identity_sha256": "2" * 64,
         "evaluation_manifest_sha256": "3" * 64,
+        "per_slot": {"base": {"match": cafta.EXPECTED_CAFTA_UNITS}},
     }
-    identity_digest = "4" * 64
+    preview = {"census": {"total": cafta.EXPECTED_CAFTA_UNITS}}
+    identity_digest = campaign.CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256
     payload = {
         "schema": cafta.SCHEMA,
         "verdict": "PASS",
@@ -653,13 +680,47 @@ def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
             "joined_fresh_evaluation_records": cafta.EXPECTED_CAFTA_UNITS,
             "chapter_contracts_checked": 1,
             "contract_sha256": extra_inputs["declared_input_contract"]["sha256"],
-            "actual_case_feed_projection_sha256": "6" * 64,
-            "scope": "synthetic all chapters",
+            "actual_case_feed_projection_sha256": (
+                campaign.CAFTA_EXPECTED_ACTUAL_CASE_FEED_PROJECTION_SHA256
+            ),
+            "scope": "all campaign cases in all 100 compiled chapters",
         },
         "yale_reference_defect": {
-            "classification": "synthetic defect",
-            "commit": cafta.EXPECTED_YALE_COMMIT,
-            "tree": cafta.EXPECTED_YALE_TREE,
+            "commit": campaign.PREVIEW_YALE_COMMIT,
+            "tree": campaign.PREVIEW_YALE_TREE,
+            "files": {
+                path: {"path": path, "bytes": 1, "sha256": sha256}
+                for path, sha256 in campaign.CAFTA_YALE_FILE_SHA256.items()
+            },
+            "adapter_source_proof": copy.deepcopy(
+                campaign.CAFTA_YALE_ADAPTER_SOURCE_PROOF
+            ),
+            "source_proof": {
+                "rule_hit_function_first_line": 959,
+                "rule_hit_use_site_first_line": 973,
+                "use_conditioned_first_line": 999,
+                "chapter98_precapture_first_line": 2961,
+                "statutory_capture_first_line": 3022,
+                **campaign.CAFTA_YALE_SOURCE_PROOF_HASHES,
+                "defect": (
+                    "the function argument is named condition, but dplyr's data "
+                    "mask resolves the bare RHS condition to the condition column; "
+                    "therefore .data$condition %in% condition is true for every "
+                    "nonmissing row"
+                ),
+                "downstream_effect": (
+                    "rule_hit('full') includes condition=fta rows, making "
+                    "country_full_hit true, covered false, and rate_s301fl zero "
+                    "before preference scaling"
+                ),
+                "comparison_surface": (
+                    "statutory_rate_s301fl captures rate_s301fl before the later "
+                    "HS2-country preference scaling; fixing the name collision "
+                    "restores the statutory country-tier rate on the compared "
+                    "surface regardless of utilization share"
+                ),
+            },
+            "deterministic_minimal_reproduction": copy.deepcopy(reproduction),
         },
         "zero_error_proof": {
             "evaluation_shard_engine_errors": 0,
@@ -679,9 +740,15 @@ def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
             "authorized_attribution_after_pass": "reference-defect",
             "historical_identity_population_sha256": identity_digest,
             "fresh_identity_population_sha256": identity_digest,
-            "historical_mismatch_projection_sha256": "7" * 64,
-            "historical_defect_projection_sha256": "8" * 64,
-            "fresh_defect_projection_sha256": "8" * 64,
+            "historical_mismatch_projection_sha256": (
+                campaign.CAFTA_EXPECTED_HISTORICAL_MISMATCH_PROJECTION_SHA256
+            ),
+            "historical_defect_projection_sha256": (
+                campaign.CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
+            ),
+            "fresh_defect_projection_sha256": (
+                campaign.CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
+            ),
             "joined_historical_units": cafta.EXPECTED_CAFTA_UNITS,
             "missing_historical_units": 0,
             "duplicate_historical_identities": 0,
@@ -702,6 +769,7 @@ def _cafta_receipt_inputs(root: Path) -> tuple[dict, dict]:
         "repo_root": root,
         "producer_source": producer_source,
         "preview_file": preview_file,
+        "preview": preview,
         "preview_payload_sha256": "5" * 64,
         "historical_receipt": historical_receipt,
         "selected_receipt": selected_receipt,
@@ -959,8 +1027,10 @@ def test_transition_producer_rejects_fresh_flag_schema_drift(
         transition.build_receipt(**build_inputs)
 
 
-def test_cafta_receipt_is_fully_validated_and_embedded(tmp_path: Path) -> None:
-    kwargs, payload = _cafta_receipt_inputs(tmp_path)
+def test_cafta_receipt_is_fully_validated_and_embedded(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    kwargs, payload = _cafta_receipt_inputs(tmp_path, monkeypatch)
 
     embedded = transition._validated_cafta_supersession_receipt(**kwargs)
 
@@ -971,9 +1041,9 @@ def test_cafta_receipt_is_fully_validated_and_embedded(tmp_path: Path) -> None:
 
 
 def test_cafta_receipt_rejects_missing_stale_or_fabricated_proof(
-    tmp_path: Path,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    kwargs, payload = _cafta_receipt_inputs(tmp_path)
+    kwargs, payload = _cafta_receipt_inputs(tmp_path, monkeypatch)
     missing = {**kwargs, "path": tmp_path / "reference/missing-cafta.json"}
     with pytest.raises(ValueError, match="missing receipted file"):
         transition._validated_cafta_supersession_receipt(**missing)
@@ -993,8 +1063,10 @@ def test_cafta_receipt_rejects_missing_stale_or_fabricated_proof(
         transition._validated_cafta_supersession_receipt(**kwargs)
 
 
-def test_cafta_receipt_rejects_rehashed_definition_relabeling(tmp_path: Path) -> None:
-    kwargs, payload = _cafta_receipt_inputs(tmp_path)
+def test_cafta_receipt_rejects_rehashed_definition_relabeling(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    kwargs, payload = _cafta_receipt_inputs(tmp_path, monkeypatch)
     payload["definition"] = {
         **payload["definition"],
         "real_entry_frontier": "all real entries are proven duty-free",
@@ -1005,6 +1077,110 @@ def test_cafta_receipt_rejects_rehashed_definition_relabeling(tmp_path: Path) ->
 
     with pytest.raises(ValueError, match="lacks bounded defect evidence"):
         transition._validated_cafta_supersession_receipt(**kwargs)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        ("actual-case-feed", "predicate proof drift"),
+        ("identity-population", "authorization or identity proof drift"),
+        ("historical-mismatch", "authorization or identity proof drift"),
+        ("defect-projection", "authorization or identity proof drift"),
+        ("historical-census", "census drift"),
+        ("fresh-census", "census drift"),
+        ("runtime-tree", "minimal reproduction drift"),
+        ("fake-rscript", "minimal reproduction drift"),
+    ],
+)
+def test_cafta_receipt_rejects_rehashed_self_asserted_proof_fields(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mutation: str,
+    message: str,
+) -> None:
+    kwargs, payload = _cafta_receipt_inputs(tmp_path, monkeypatch)
+    if mutation == "actual-case-feed":
+        payload["axiom_predicate_proof"]["actual_case_feed_projection_sha256"] = (
+            "e" * 64
+        )
+    elif mutation == "identity-population":
+        payload["supersession"]["historical_identity_population_sha256"] = "e" * 64
+        payload["supersession"]["fresh_identity_population_sha256"] = "e" * 64
+        kwargs["historical_identity_population_sha256"] = "e" * 64
+        kwargs["fresh_identity_population_sha256"] = "e" * 64
+    elif mutation == "historical-mismatch":
+        payload["supersession"]["historical_mismatch_projection_sha256"] = "e" * 64
+    elif mutation == "defect-projection":
+        payload["supersession"]["historical_defect_projection_sha256"] = "e" * 64
+        payload["supersession"]["fresh_defect_projection_sha256"] = "e" * 64
+    elif mutation == "historical-census":
+        payload["census"]["historical_artifact_rows_scanned"] += 1
+    elif mutation == "fresh-census":
+        payload["census"]["fresh_comparison_rows_scanned"] += 1
+    elif mutation == "runtime-tree":
+        payload["yale_reference_defect"]["deterministic_minimal_reproduction"][
+            "r_runtime_tree"
+        ]["bytes"] += 1
+    else:
+        payload["yale_reference_defect"]["deterministic_minimal_reproduction"][
+            "rscript"
+        ] = payload["producer"]["script"]
+    payload.pop("receipt_payload_sha256")
+    payload["receipt_payload_sha256"] = producer.canonical_sha256(payload)
+    _write_json(kwargs["path"], payload)
+
+    with pytest.raises(ValueError, match=message):
+        transition._validated_cafta_supersession_receipt(**kwargs)
+
+
+def test_cafta_tidy_eval_replay_rejects_path_shadow_rscript(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = tmp_path / "Rscript"
+    fake.write_text(
+        "#!/bin/sh\n"
+        "printf 'r_version=4.3.0\\ndplyr_version=1.1.2\\n"
+        "selected_conditions=full,fta\\n'\n"
+    )
+    fake.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{tmp_path}:{os.environ['PATH']}")
+    with pytest.raises(ValueError, match="Rscript runtime drift"):
+        campaign._run_cafta_tidy_eval_reproduction()
+
+
+def test_cafta_tidy_eval_replay_ignores_hostile_r_startup_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    profile = tmp_path / "hostile.Rprofile"
+    profile.write_text('stop("R profile must not execute")\n')
+    monkeypatch.setenv("R_PROFILE_USER", str(profile))
+    monkeypatch.setenv("R_LIBS_USER", str(tmp_path / "untrusted-library"))
+    replay = campaign._run_cafta_tidy_eval_reproduction()
+    assert replay["selected_conditions"] == "full,fta"
+    assert replay["r_runtime_tree"] == campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT
+    assert replay["dplyr_tree"] == campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT
+
+
+def test_cafta_tidy_eval_replay_revalidates_runtime_after_prior_success(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    assert campaign._run_cafta_tidy_eval_reproduction()["result"].startswith("PASS")
+    real_tree_receipt = campaign._directory_tree_receipt
+
+    def drift_runtime(path: Path) -> dict:
+        receipt = real_tree_receipt(path)
+        if str(path) == campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT["path"]:
+            receipt["bytes"] += 1
+        return receipt
+
+    monkeypatch.setattr(
+        campaign,
+        "_directory_tree_receipt",
+        drift_runtime,
+    )
+
+    with pytest.raises(ValueError, match="R runtime tree drift"):
+        campaign._run_cafta_tidy_eval_reproduction()
 
 
 def test_transition_producer_rejects_opaque_reference_assumption(
@@ -1317,6 +1493,12 @@ def test_annex_defect_binds_yale_derivative_fallback_source(
         value for value in receipt["transitions"] if value["parent_id"] == selector_id
     )
     proof = item["evidence"]["yale_annex_defect_source_proof"]
+    assert set(proof) == {
+        "classification",
+        "units",
+        "per_arm",
+        "pinned_yale_source",
+    }
     assert proof["per_arm"]["legacy_derivative_fallback"]["units"] == 1
     assert proof["per_arm"]["legacy_derivative_fallback"]["hts10"] == ["0000000001"]
 

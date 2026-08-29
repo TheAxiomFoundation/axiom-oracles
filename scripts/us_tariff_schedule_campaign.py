@@ -22,6 +22,7 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -32,7 +33,7 @@ from functools import cache
 from collections import Counter
 from datetime import date
 from pathlib import Path
-from typing import Any, Iterable, Iterator
+from typing import Any, Callable, Iterable, Iterator
 
 import yaml
 
@@ -78,6 +79,31 @@ PREVIEW_SELECTOR_TRANSITION_PRODUCER_SOURCES = {
 PREVIEW_SELECTOR_TRANSITION_SCHEMA = (
     "axiom_oracles.us_tariff_schedule.preview_selector_transitions.v1"
 )
+PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256 = (
+    "4c6a0074bae1ff88ceeedc8b6e8c0b28eb829670c5a4e1a1edbb210be382dba6"
+)
+TRANSITION_EXPECTED_PARENT_IDS = frozenset(
+    {
+        "aircraft-utilization-proxy-brazil",
+        "aircraft-utilization-proxy-forced-labor",
+        "cafta-52i-deferred",
+        "chapter98-brazil",
+        "chapter98-forced-labor",
+        "pharma-utilization-proxy-brazil",
+        "pharma-utilization-proxy-forced-labor-035",
+        "pharma-utilization-proxy-forced-labor-non035",
+        "section232-annex-brazil",
+        "section232-annex-forced-labor",
+        "section232-exposed-brazil",
+        "section232-exposed-forced-labor",
+        "section232-heading-brazil",
+        "section232-heading-forced-labor",
+        "yale-hts8-broadening-brazil",
+        "yale-parser-zero-statutory-base",
+        "yale-zero-pharma-brazil",
+        "yale-zero-pharma-forced-labor",
+    }
+)
 CAFTA_SUPERSESSION_RECEIPT = (
     OUT_DIR / "cafta-reference-defect-supersession-receipt.json"
 )
@@ -100,6 +126,60 @@ CAFTA_EXPECTED_ORIGIN_UNITS = {
 }
 CAFTA_PREVIEW_SNAPSHOT_SHA256 = (
     "531fce05b3c6ac32980fb0e570140ccde0b277d674b6f107724fab76f7ee57c3"
+)
+CAFTA_EXPECTED_ACTUAL_CASE_FEED_PROJECTION_SHA256 = (
+    "89a12b14bfd36a845a31ec6d49be68a597a4d5ae038ab75a3215ef046aa0508c"
+)
+CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256 = (
+    "1ceb489cd916d87fd6bedc4797dba33f9562a7a25869e36adde96589aba619f3"
+)
+CAFTA_EXPECTED_HISTORICAL_MISMATCH_PROJECTION_SHA256 = (
+    "f97e554b6c638a66ab994c52668510168490304f52e38523719bef2b26cf2852"
+)
+CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256 = (
+    "d124b93308c27e42cad8cff1d944c63e6f24d67973ea44ea1d623672ade27462"
+)
+CAFTA_EXPECTED_RSCRIPT_RECEIPT = {
+    "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/bin/Rscript",
+    "bytes": 70_912,
+    "sha256": "258c64ed913846b06ab5f6829de9e69a23ce8e515cc6c61a34ece40cb274a49c",
+}
+CAFTA_EXPECTED_R_LIBRARY = (
+    "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library"
+)
+CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT = {
+    "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources",
+    "file_count": 8_300,
+    "bytes": 357_968_262,
+    "manifest_sha256": (
+        "23f7ebbac8578e60c99b7dd808fcb6d268f8b479240e6760383454b32f978641"
+    ),
+}
+CAFTA_EXPECTED_DPLYR_TREE_RECEIPT = {
+    "path": f"{CAFTA_EXPECTED_R_LIBRARY}/dplyr",
+    "file_count": 68,
+    "bytes": 2_618_210,
+    "manifest_sha256": (
+        "647bc333c2efabcc6519b6c16b5b3b90fa6a0c3a2515bdf008318314f30f79fc"
+    ),
+}
+CAFTA_TIDY_EVAL_PROGRAM = f"""
+.libPaths("{CAFTA_EXPECTED_R_LIBRARY}")
+dplyr_path <- normalizePath(find.package("dplyr", lib.loc = .libPaths()[1]), mustWork = TRUE)
+stopifnot(identical(dplyr_path, "{CAFTA_EXPECTED_R_LIBRARY}/dplyr"))
+suppressPackageStartupMessages(library(dplyr, lib.loc = .libPaths()[1]))
+rule_hit <- function(condition) {{
+  rr <- tibble(condition = c("full", "fta"))
+  rr %>% filter(.data$condition %in% condition)
+}}
+selected <- rule_hit("full")$condition
+cat("r_version=", paste(R.version$major, R.version$minor, sep="."), "\\n", sep="")
+cat("dplyr_version=", as.character(packageVersion("dplyr")), "\\n", sep="")
+cat("dplyr_path=", dplyr_path, "\\n", sep="")
+cat("selected_conditions=", paste(selected, collapse=","), "\\n", sep="")
+""".strip()
+CAFTA_EXPECTED_TIDY_EVAL_PROGRAM_SHA256 = (
+    "27f678ccd8f1486fa88b6393ecbbd50cc28d01ae87d2e3e6ab1abfd85b6c0afb"
 )
 CAFTA_REFERENCE_PROVENANCE = OUT_DIR / "provenance.json"
 CAFTA_REFERENCE_INTEGRITY_RECEIPT = OUT_DIR / "integrity-receipt.json"
@@ -229,6 +309,24 @@ TRANSITION_PATTERN_SLUGS = {
 }
 TRANSITION_SECTION232_EXPOSED_PARENTS = frozenset(
     {"section232-exposed-brazil", "section232-exposed-forced-labor"}
+)
+TRANSITION_YALE_PARSER_RECEIPT = {
+    "path": "scripts/parse_annex_products.R",
+    "bytes": 11_189,
+    "sha256": "8d560897f85d60ee2c2e1d3025a6b9bdd7406e67621aed428abe957ad1cf4bb6",
+}
+TRANSITION_YALE_PREVIEW_SOURCE_FILES = (
+    "resources/s232_annex_products.csv",
+    "resources/s232_derivative_products.csv",
+    "src/model/data_loaders.R",
+)
+TRANSITION_YALE_CLASSIFICATION_PRECEDENCE = [
+    "latest-effective direct annex row per normalized prefix",
+    "longest-prefix direct match",
+    "longest-prefix legacy derivative fallback only when direct is absent",
+]
+TRANSITION_EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10 = frozenset(
+    {"9401999030", "9401999040", "9401999085"}
 )
 PREVIEW_HISTORICAL_TARGET_PATH = (
     "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz"
@@ -511,6 +609,30 @@ def _file_receipt(path: Path, *, relative_to: Path | None = None) -> dict[str, A
         "path": rendered_path,
         "bytes": resolved.stat().st_size,
         "sha256": _sha256(resolved),
+    }
+
+
+def _directory_tree_receipt(path: Path) -> dict[str, Any]:
+    """Commit to every regular file in an installed runtime package tree."""
+
+    resolved = path.resolve()
+    _require(resolved.is_dir(), f"missing runtime package tree: {resolved}")
+    files = sorted(item for item in resolved.rglob("*") if item.is_file())
+    total_bytes = 0
+    manifest = hashlib.sha256()
+    for item in files:
+        size = item.stat().st_size
+        total_bytes += size
+        manifest.update(
+            (
+                f"{item.relative_to(resolved).as_posix()}\t{size}\t{_sha256(item)}\n"
+            ).encode()
+        )
+    return {
+        "path": str(resolved),
+        "file_count": len(files),
+        "bytes": total_bytes,
+        "manifest_sha256": manifest.hexdigest(),
     }
 
 
@@ -1588,6 +1710,57 @@ def _atomic_json(path: Path, payload: Any) -> None:
 
 
 @contextmanager
+def _bound_gzip_text_source(
+    path: Path, expected_sha256: str
+) -> Iterator[io.TextIOBase]:
+    """Yield gzip text from the same stable file descriptor that was hashed."""
+
+    def descriptor_sha256(source: io.BufferedReader) -> str:
+        source.seek(0)
+        digest = hashlib.sha256()
+        while chunk := source.read(1024 * 1024):
+            digest.update(chunk)
+        return digest.hexdigest()
+
+    with path.open("rb") as raw:
+        before = os.fstat(raw.fileno())
+        _require(
+            descriptor_sha256(raw) == expected_sha256,
+            "comparison artifact hash mismatch",
+        )
+        raw.seek(0)
+        with gzip.GzipFile(fileobj=raw, mode="rb") as compressed:
+            with io.TextIOWrapper(compressed) as source:
+                yield source
+        after = os.fstat(raw.fileno())
+        stable_fields = ("st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns")
+        _require(
+            all(
+                getattr(before, field) == getattr(after, field)
+                for field in stable_fields
+            )
+            and descriptor_sha256(raw) == expected_sha256,
+            "comparison artifact changed during classification scan",
+        )
+    _require(
+        path.is_file() and _sha256(path) == expected_sha256,
+        "comparison artifact changed after classification scan",
+    )
+
+
+def _install_classification_sidecar(temporary: Path, destination: Path) -> str:
+    """Install exactly the sidecar bytes produced by this classification run."""
+
+    produced_sha256 = _sha256(temporary)
+    temporary.replace(destination)
+    _require(
+        destination.is_file() and _sha256(destination) == produced_sha256,
+        "classification sidecar changed during production",
+    )
+    return produced_sha256
+
+
+@contextmanager
 def _eval_manifest_lock() -> Iterator[None]:
     """Serialize every manifest transition across campaign processes."""
 
@@ -2656,12 +2829,17 @@ def mismatch_signature(row: dict[str, Any]) -> str:
     return hashlib.sha256(_render(signature).encode()).hexdigest()
 
 
-def _routing_dispositions() -> dict[str, tuple[str, str]]:
-    with gzip.open(ROUTING_ROWS, "rt", newline="") as source:
-        return {
-            row["hts10"]: (row["general_disposition"], row["column2_disposition"])
-            for row in csv.DictReader(source)
-        }
+def _routing_dispositions(
+    routing_bytes: bytes | None = None,
+) -> dict[str, tuple[str, str]]:
+    routing_bytes = (
+        ROUTING_ROWS.read_bytes() if routing_bytes is None else routing_bytes
+    )
+    source = io.StringIO(gzip.decompress(routing_bytes).decode())
+    return {
+        row["hts10"]: (row["general_disposition"], row["column2_disposition"])
+        for row in csv.DictReader(source)
+    }
 
 
 def mismatch_unit(
@@ -2795,6 +2973,65 @@ def _membership_rules(path: Path) -> dict[str, tuple[int, frozenset[str]]]:
     return result
 
 
+def _preview_all_selector_snapshot(preview: dict[str, Any]) -> dict[str, Any]:
+    """Project the producer-independent immutable all-selector ruling."""
+
+    raw_selectors = preview.get("selectors")
+    raw_line_sets = preview.get("line_sets")
+    inputs = preview.get("inputs")
+    census = preview.get("census", {}).get("per_selector")
+    _require(
+        isinstance(raw_selectors, list)
+        and isinstance(raw_line_sets, dict)
+        and isinstance(inputs, dict)
+        and isinstance(census, dict),
+        "preview all-selector snapshot inputs are malformed",
+    )
+    selectors = sorted(
+        (
+            item
+            for item in raw_selectors
+            if isinstance(item, dict)
+            and item.get("id") in TRANSITION_EXPECTED_PARENT_IDS
+        ),
+        key=lambda item: item["id"],
+    )
+    line_set_names = {
+        item.get("match", {}).get("line_set")
+        for item in selectors
+        if isinstance(item.get("match"), dict)
+    }
+    _require(
+        len(selectors) == len(TRANSITION_EXPECTED_PARENT_IDS)
+        and {item["id"] for item in selectors} == TRANSITION_EXPECTED_PARENT_IDS
+        and None not in line_set_names
+        and line_set_names <= set(raw_line_sets),
+        "preview all-selector snapshot coverage is malformed",
+    )
+    return {
+        "schema": preview.get("schema"),
+        "inputs": inputs,
+        "yale_sources": preview.get("yale_sources"),
+        "definition": preview.get("definition"),
+        "selectors": selectors,
+        "line_sets": {name: raw_line_sets[name] for name in sorted(line_set_names)},
+        "census": {
+            selector_id: census.get(selector_id)
+            for selector_id in sorted(TRANSITION_EXPECTED_PARENT_IDS)
+        },
+    }
+
+
+def _require_immutable_preview_all_selector_snapshot(
+    preview: dict[str, Any],
+) -> None:
+    _require(
+        _canonical_sha256(_preview_all_selector_snapshot(preview))
+        == PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256,
+        "immutable preview all-selector snapshot drift",
+    )
+
+
 def _preview_disposition_receipt() -> dict[str, Any]:
     preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     _require(
@@ -2844,6 +3081,7 @@ def _preview_disposition_receipt() -> dict[str, Any]:
         and yale_sources.get("tree") == PREVIEW_YALE_TREE,
         "preview Yale source pin drift",
     )
+    _require_immutable_preview_all_selector_snapshot(preview)
     return preview
 
 
@@ -2908,6 +3146,111 @@ def _cafta_transition_evidence(
         "CAFTA supersession evidence wrapper is malformed",
     )
     return cafta_items[0], wrapper
+
+
+def _run_cafta_tidy_eval_reproduction() -> dict[str, Any]:
+    """Independently replay the bounded Yale tidy-eval defect."""
+
+    rscript_value = shutil.which("Rscript")
+    _require(rscript_value is not None, "Rscript is required for CAFTA proof replay")
+    rscript = Path(rscript_value).resolve()
+    rscript_receipt = _file_receipt(rscript)
+    _require(
+        rscript_receipt == CAFTA_EXPECTED_RSCRIPT_RECEIPT,
+        "CAFTA tidy-eval Rscript runtime drift",
+    )
+    runtime_receipt = _directory_tree_receipt(
+        Path(CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT["path"])
+    )
+    _require(
+        runtime_receipt == CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT,
+        "CAFTA tidy-eval R runtime tree drift",
+    )
+    dplyr_receipt = _directory_tree_receipt(
+        Path(CAFTA_EXPECTED_DPLYR_TREE_RECEIPT["path"])
+    )
+    _require(
+        dplyr_receipt == CAFTA_EXPECTED_DPLYR_TREE_RECEIPT,
+        "CAFTA tidy-eval dplyr runtime drift",
+    )
+    with tempfile.TemporaryDirectory(prefix="axiom-cafta-r-") as runtime_home:
+        completed = subprocess.run(
+            [str(rscript), "--vanilla", "-e", CAFTA_TIDY_EVAL_PROGRAM],
+            check=True,
+            capture_output=True,
+            text=True,
+            env={
+                "HOME": runtime_home,
+                "LANG": "C",
+                "LC_ALL": "C",
+                "PATH": "/usr/bin:/bin",
+                "TMPDIR": runtime_home,
+            },
+        )
+    _require(not completed.stderr, "CAFTA tidy-eval replay emitted stderr")
+    fields: dict[str, str] = {}
+    for line in completed.stdout.splitlines():
+        key, separator, value = line.partition("=")
+        _require(
+            bool(separator) and key not in fields,
+            "malformed CAFTA tidy-eval replay",
+        )
+        fields[key] = value
+    _require(
+        fields
+        == {
+            "r_version": "4.3.0",
+            "dplyr_version": "1.1.2",
+            "dplyr_path": CAFTA_EXPECTED_DPLYR_TREE_RECEIPT["path"],
+            "selected_conditions": "full,fta",
+        },
+        "CAFTA tidy-eval replay drift",
+    )
+    program_sha256 = hashlib.sha256(CAFTA_TIDY_EVAL_PROGRAM.encode()).hexdigest()
+    _require(
+        program_sha256 == CAFTA_EXPECTED_TIDY_EVAL_PROGRAM_SHA256,
+        "CAFTA tidy-eval replay program drift",
+    )
+    _require(
+        _file_receipt(rscript) == rscript_receipt
+        and _directory_tree_receipt(Path(runtime_receipt["path"])) == runtime_receipt
+        and _directory_tree_receipt(Path(dplyr_receipt["path"])) == dplyr_receipt,
+        "CAFTA tidy-eval runtime changed during replay",
+    )
+    return {
+        "rscript": rscript_receipt,
+        "r_runtime_tree": runtime_receipt,
+        "dplyr_tree": dplyr_receipt,
+        "program_sha256": program_sha256,
+        **fields,
+        "result": (
+            "PASS: rule_hit('full') selected both the full and fta rows under "
+            "the pinned .data$condition %in% condition expression"
+        ),
+    }
+
+
+def _comparison_observation_count(comparison: dict[str, Any]) -> int:
+    """Return the exact row census represented by comparison per-slot counts."""
+
+    per_slot = comparison.get("per_slot")
+    _require(
+        isinstance(per_slot, dict) and bool(per_slot),
+        "comparison per-slot census is malformed",
+    )
+    total = 0
+    for slot, counts in per_slot.items():
+        _require(
+            isinstance(slot, str)
+            and bool(slot)
+            and isinstance(counts, dict)
+            and bool(counts)
+            and set(counts) <= {"match", "mismatch"}
+            and all(type(units) is int and units >= 0 for units in counts.values()),
+            f"comparison per-slot census is malformed: {slot}",
+        )
+        total += sum(counts.values())
+    return total
 
 
 def _validate_cafta_yale_defect_evidence(value: Any) -> None:
@@ -2993,38 +3336,10 @@ def _validate_cafta_yale_defect_evidence(value: Any) -> None:
         "CAFTA supersession Yale source proof drift",
     )
 
-    reproduction = value.get("deterministic_minimal_reproduction")
     _require(
-        isinstance(reproduction, dict)
-        and set(reproduction)
-        == {
-            "dplyr_version",
-            "program_sha256",
-            "r_version",
-            "result",
-            "rscript",
-            "selected_conditions",
-        }
-        and reproduction.get("dplyr_version") == "1.1.2"
-        and reproduction.get("r_version") == "4.3.0"
-        and reproduction.get("program_sha256")
-        == "24e1b3c1180acd7b9ce494fa9faaaa52a806d2bd8c228748705da10e2425fa09"
-        and reproduction.get("selected_conditions") == "full,fta"
-        and reproduction.get("result")
-        == (
-            "PASS: rule_hit('full') selected both the full and fta rows under "
-            "the pinned .data$condition %in% condition expression"
-        ),
+        value.get("deterministic_minimal_reproduction")
+        == _run_cafta_tidy_eval_reproduction(),
         "CAFTA supersession Yale minimal reproduction drift",
-    )
-    rscript = reproduction.get("rscript")
-    _require(
-        isinstance(rscript, dict)
-        and set(rscript) == {"path", "bytes", "sha256"}
-        and isinstance(rscript.get("path"), str)
-        and Path(rscript["path"]).is_absolute()
-        and _file_receipt(Path(rscript["path"])) == rscript,
-        "CAFTA supersession Yale R runtime receipt drift",
     )
 
 
@@ -3282,11 +3597,8 @@ def _validate_cafta_transition_evidence(
         == "all campaign cases in all 100 compiled chapters"
         and predicate_proof.get("contract_sha256")
         == expected_inputs["declared_input_contract"]["sha256"]
-        and isinstance(predicate_proof.get("actual_case_feed_projection_sha256"), str)
-        and re.fullmatch(
-            r"[0-9a-f]{64}", predicate_proof["actual_case_feed_projection_sha256"]
-        )
-        is not None,
+        and predicate_proof.get("actual_case_feed_projection_sha256")
+        == CAFTA_EXPECTED_ACTUAL_CASE_FEED_PROJECTION_SHA256,
         "CAFTA supersession actual-predicate proof drift",
     )
     census = receipt.get("census")
@@ -3311,9 +3623,9 @@ def _validate_cafta_transition_evidence(
             "origin_units",
         }
         and type(historical_rows_scanned) is int
-        and historical_rows_scanned >= CAFTA_EXPECTED_UNITS
+        and historical_rows_scanned == preview.get("census", {}).get("total")
         and type(fresh_rows_scanned) is int
-        and fresh_rows_scanned >= CAFTA_EXPECTED_UNITS
+        and fresh_rows_scanned == _comparison_observation_count(comparison)
         and type(census.get("cafta_units")) is int
         and census.get("cafta_units") == CAFTA_EXPECTED_UNITS
         and type(census.get("cafta_signatures")) is int
@@ -3363,9 +3675,15 @@ def _validate_cafta_transition_evidence(
             for name in identity_hashes
         )
         and supersession.get("historical_identity_population_sha256")
-        == supersession.get("fresh_identity_population_sha256")
+        == CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256
+        and supersession.get("fresh_identity_population_sha256")
+        == CAFTA_EXPECTED_IDENTITY_POPULATION_SHA256
+        and supersession.get("historical_mismatch_projection_sha256")
+        == CAFTA_EXPECTED_HISTORICAL_MISMATCH_PROJECTION_SHA256
         and supersession.get("historical_defect_projection_sha256")
-        == supersession.get("fresh_defect_projection_sha256")
+        == CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
+        and supersession.get("fresh_defect_projection_sha256")
+        == CAFTA_EXPECTED_DEFECT_PROJECTION_SHA256
         and type(supersession.get("joined_historical_units")) is int
         and supersession.get("joined_historical_units") == CAFTA_EXPECTED_UNITS
         and type(supersession.get("fresh_mismatching_units")) is int
@@ -3583,11 +3901,7 @@ def _preview_selector_transition_receipt(
         isinstance(transitions, list) and bool(transitions),
         "preview selector transition list is malformed",
     )
-    expected_parent_ids = {
-        selector.get("id")
-        for selector in preview.get("selectors", [])
-        if isinstance(selector, dict)
-    }
+    expected_parent_ids = TRANSITION_EXPECTED_PARENT_IDS
     parent_ids = [
         item.get("parent_id") if isinstance(item, dict) else None
         for item in transitions
@@ -3627,6 +3941,251 @@ def _transition_flag_vector(pattern: tuple[str, ...]) -> dict[str, bool]:
     flags.update({name: False for name in TRANSITION_NOTE16_MEMBERSHIP_FLAGS})
     flags[NOTE16_WEIGHT_INPUT] = True
     return flags
+
+
+def _transition_pattern_name(pattern: tuple[str, ...]) -> str:
+    return "+".join(pattern) if pattern else "none"
+
+
+def _expected_transition_yale_source_receipt(
+    preview: dict[str, Any],
+) -> dict[str, Any]:
+    """Rebuild the producer's exact pinned Yale annex-source identity."""
+
+    yale_sources = preview.get("yale_sources")
+    source_files = yale_sources.get("files") if isinstance(yale_sources, dict) else None
+    _require(
+        isinstance(yale_sources, dict)
+        and set(yale_sources) == {"commit", "tree", "files"}
+        and yale_sources.get("commit") == PREVIEW_YALE_COMMIT
+        and yale_sources.get("tree") == PREVIEW_YALE_TREE
+        and isinstance(source_files, dict),
+        "preview Yale annex source identity is malformed",
+    )
+    files: dict[str, dict[str, Any]] = {}
+    for logical_path in TRANSITION_YALE_PREVIEW_SOURCE_FILES:
+        receipt = source_files.get(logical_path)
+        _require(
+            isinstance(receipt, dict)
+            and set(receipt) == {"bytes", "sha256"}
+            and type(receipt.get("bytes")) is int
+            and receipt["bytes"] > 0
+            and isinstance(receipt.get("sha256"), str)
+            and re.fullmatch(r"[0-9a-f]{64}", receipt["sha256"]) is not None,
+            f"preview Yale annex source receipt drift: {logical_path}",
+        )
+        files[logical_path] = {"path": logical_path, **receipt}
+    files[TRANSITION_YALE_PARSER_RECEIPT["path"]] = dict(TRANSITION_YALE_PARSER_RECEIPT)
+    return {
+        "commit": PREVIEW_YALE_COMMIT,
+        "tree": PREVIEW_YALE_TREE,
+        "files": dict(sorted(files.items())),
+        "classification_precedence": list(TRANSITION_YALE_CLASSIFICATION_PRECEDENCE),
+    }
+
+
+def _validate_section232_transition_evidence(
+    item: dict[str, Any],
+    expected_children: list[dict[str, Any]],
+    preview: dict[str, Any],
+) -> frozenset[str]:
+    """Authenticate producer evidence for every transition parent."""
+
+    parent_id = item["parent_id"]
+    if not parent_id.startswith("section232-"):
+        parent = item["parent_contract"]
+        children = item["children"]
+        evidence = item["evidence"]
+        _require(
+            item["status"] == "superseded" and len(children) == 1,
+            f"non-Section-232 transition shape drift: {parent_id}",
+        )
+        child = children[0]
+        expected_evidence = {
+            "classification": (
+                "cafta-reference-defect-receipted-fresh-signature"
+                if parent_id == CAFTA_PREVIEW_SELECTOR_ID
+                else "fresh-signature-rebind-preserved-ruling"
+            ),
+            "historical_ruling": {
+                field: parent[field]
+                for field in ("logical_class", "disposition", "attribution")
+            },
+            "fresh_ruling": {
+                field: child[field]
+                for field in ("logical_class", "disposition", "attribution")
+            },
+            "child_populations": {
+                child["id"]: {
+                    "units": child["expected_units"],
+                    "signature_count": child["expected_signature_count"],
+                    "signature_population_sha256": child[
+                        "expected_signature_population_sha256"
+                    ],
+                }
+            },
+        }
+        if parent_id == CAFTA_PREVIEW_SELECTOR_ID:
+            wrapper = evidence.get("cafta_supersession_receipt")
+            _require(
+                isinstance(wrapper, dict)
+                and set(wrapper) == {"file", "payload"}
+                and isinstance(wrapper.get("file"), dict)
+                and isinstance(wrapper.get("payload"), dict),
+                "CAFTA transition evidence wrapper is malformed",
+            )
+            expected_evidence["cafta_supersession_receipt"] = wrapper
+        _require(
+            evidence == expected_evidence,
+            f"non-Section-232 transition evidence drift: {parent_id}",
+        )
+        return frozenset()
+    evidence = item["evidence"]
+    is_annex = "-annex-" in parent_id
+    has_annex_defect = is_annex and item["status"] == "superseded"
+    evidence_fields = {
+        "current_precedence_true_units",
+        "current_precedence_false_units",
+        "candidate_pattern_units",
+        "child_populations",
+        "classification",
+    }
+    if has_annex_defect:
+        evidence_fields.add("yale_annex_defect_source_proof")
+    _require(
+        isinstance(evidence, dict) and set(evidence) == evidence_fields,
+        f"Section-232 transition evidence fields drift: {parent_id}",
+    )
+    _require(
+        type(evidence.get("current_precedence_true_units")) is int
+        and evidence["current_precedence_true_units"] == item["fresh_matching_units"]
+        and type(evidence.get("current_precedence_false_units")) is int
+        and evidence["current_precedence_false_units"]
+        == item["fresh_residual_population"]["units"],
+        f"Section-232 transition evidence census drift: {parent_id}",
+    )
+
+    if item["status"] == "retired":
+        patterns: tuple[tuple[str, ...], ...] = ()
+        expected_classification = "fully-fixed-exposed"
+    elif is_annex:
+        patterns = TRANSITION_ANNEX_PATTERNS
+        expected_classification = (
+            "disjoint-reference-defect-and-conditional-reference-behavior"
+        )
+    else:
+        patterns = TRANSITION_HEADING_PATTERNS
+        expected_classification = "disjoint-conditional-reference-behavior"
+    actual_children = {child["id"]: child for child in item["children"]}
+    expected_pattern_units = {
+        _transition_pattern_name(pattern): actual_children[child["id"]][
+            "expected_units"
+        ]
+        for pattern, child in zip(patterns, expected_children, strict=True)
+    }
+    expected_child_populations = {
+        expected_child["id"]: {
+            "candidate_pattern": _transition_pattern_name(pattern),
+            "units": actual_children[expected_child["id"]]["expected_units"],
+            "signature_count": actual_children[expected_child["id"]][
+                "expected_signature_count"
+            ],
+            "signature_population_sha256": actual_children[expected_child["id"]][
+                "expected_signature_population_sha256"
+            ],
+        }
+        for pattern, expected_child in zip(patterns, expected_children, strict=True)
+    }
+    _require(
+        evidence.get("classification") == expected_classification
+        and evidence.get("candidate_pattern_units") == expected_pattern_units
+        and evidence.get("child_populations") == expected_child_populations,
+        f"Section-232 transition evidence ruling drift: {parent_id}",
+    )
+    if not has_annex_defect:
+        return frozenset()
+
+    defect_child_id = next(
+        child["id"]
+        for pattern, child in zip(patterns, expected_children, strict=True)
+        if not pattern
+    )
+    defect_child = actual_children[defect_child_id]
+    proof = evidence.get("yale_annex_defect_source_proof")
+    proof_fields = {
+        "classification",
+        "units",
+        "per_arm",
+        "pinned_yale_source",
+    }
+    _require(
+        isinstance(proof, dict)
+        and set(proof) == proof_fields
+        and proof.get("classification")
+        == "pinned-yale-direct-annex-or-derivative-fallback"
+        and type(proof.get("units")) is int
+        and proof["units"] == defect_child["expected_units"]
+        and proof.get("pinned_yale_source")
+        == _expected_transition_yale_source_receipt(preview),
+        f"Section-232 annex Yale source proof drift: {parent_id}",
+    )
+    per_arm = proof.get("per_arm")
+    allowed_arms = {
+        "annex_proclamation_prefix",
+        "legacy_derivative_fallback",
+    }
+    _require(
+        isinstance(per_arm, dict) and bool(per_arm) and set(per_arm) <= allowed_arms,
+        f"Section-232 annex Yale source arms drift: {parent_id}",
+    )
+    arm_units = 0
+    arm_signatures = 0
+    fallback_hts10: set[str] = set()
+    for arm, population in per_arm.items():
+        _require(
+            isinstance(population, dict)
+            and set(population)
+            == {
+                "units",
+                "signature_count",
+                "signature_population_sha256",
+                "hts10",
+            }
+            and type(population.get("units")) is int
+            and population["units"] > 0
+            and type(population.get("signature_count")) is int
+            and 0 < population["signature_count"] <= population["units"]
+            and isinstance(population.get("signature_population_sha256"), str)
+            and re.fullmatch(
+                r"[0-9a-f]{64}",
+                population["signature_population_sha256"],
+            )
+            is not None
+            and isinstance(population.get("hts10"), list)
+            and bool(population["hts10"])
+            and population["hts10"] == sorted(set(population["hts10"]))
+            and all(
+                isinstance(hts10, str) and re.fullmatch(r"[0-9]{10}", hts10) is not None
+                for hts10 in population["hts10"]
+            )
+            and len(population["hts10"]) <= population["units"],
+            f"Section-232 annex Yale source-arm census drift: {parent_id}: {arm}",
+        )
+        arm_units += population["units"]
+        arm_signatures += population["signature_count"]
+        if arm == "legacy_derivative_fallback":
+            fallback_hts10.update(population["hts10"])
+    _require(
+        arm_units == defect_child["expected_units"]
+        and arm_signatures == defect_child["expected_signature_count"]
+        and (
+            len(per_arm) > 1
+            or next(iter(per_arm.values()))["signature_population_sha256"]
+            == defect_child["expected_signature_population_sha256"]
+        ),
+        f"Section-232 annex Yale source proof does not conserve: {parent_id}",
+    )
+    return frozenset(fallback_hts10)
 
 
 def _expected_preview_transition_semantics(
@@ -3727,6 +4286,7 @@ def _preview_selector_snapshot(
     """
 
     preview = _preview_disposition_receipt() if preview is None else preview
+    _require_immutable_preview_all_selector_snapshot(preview)
     selectors = preview.get("selectors")
     _require(
         isinstance(selectors, list) and len(selectors) == PREVIEW_SELECTOR_COUNT,
@@ -3884,6 +4444,7 @@ def _preview_selector_snapshot(
             "match",
         }
         transition_child_count = 0
+        annex_fallback_hts10: set[str] = set()
         for item in raw_transitions:
             _require(
                 isinstance(item, dict) and set(item) == transition_fields,
@@ -4049,6 +4610,11 @@ def _preview_selector_snapshot(
                 and actual_semantics == expected_semantics,
                 f"preview selector transition semantics drift: {parent_id}",
             )
+            annex_fallback_hts10.update(
+                _validate_section232_transition_evidence(
+                    item, expected_children, preview
+                )
+            )
             transition_child_count += len(children)
             transition_by_parent[parent_id] = item
         _require(
@@ -4058,6 +4624,11 @@ def _preview_selector_snapshot(
         _require(
             transition_child_count == 30,
             "preview selector transition child census is not exactly 30",
+        )
+        _require(
+            annex_fallback_hts10
+            == TRANSITION_EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10,
+            "Section-232 annex Yale derivative-fallback population drift",
         )
 
     contract: dict[str, dict[str, Any]] = {}
@@ -4310,6 +4881,46 @@ def _enforce_preview_selector_transitions(
                 classified_population == population,
                 f"preview selector transition child classification drift: {child_id}",
             )
+            if child["logical_class"] == "section232-annex-yale-reference-defect":
+                arm_populations: dict[str, Counter[str]] = {
+                    "annex_proclamation_prefix": Counter(),
+                    "legacy_derivative_fallback": Counter(),
+                }
+                arm_hts10: dict[str, set[str]] = {
+                    name: set() for name in arm_populations
+                }
+                for signature, units in population.items():
+                    hts10 = observed[signature].get("hts10")
+                    _require(
+                        isinstance(hts10, str)
+                        and re.fullmatch(r"[0-9]{10}", hts10) is not None,
+                        f"Section-232 annex defect child HTS10 drift: {child_id}",
+                    )
+                    arm = (
+                        "legacy_derivative_fallback"
+                        if hts10 in TRANSITION_EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10
+                        else "annex_proclamation_prefix"
+                    )
+                    arm_populations[arm][signature] = units
+                    arm_hts10[arm].add(hts10)
+                actual_per_arm = {
+                    arm: {
+                        "units": sum(arm_population.values()),
+                        "signature_count": len(arm_population),
+                        "signature_population_sha256": (
+                            signature_population_sha256(arm_population.items())
+                        ),
+                        "hts10": sorted(arm_hts10[arm]),
+                    }
+                    for arm, arm_population in sorted(arm_populations.items())
+                    if arm_population
+                }
+                proof = transition["evidence"]["yale_annex_defect_source_proof"]
+                _require(
+                    proof["per_arm"] == actual_per_arm,
+                    "Section-232 annex Yale source-arm population does not "
+                    f"rederive: {child_id}",
+                )
             overlap = set(matched_child_population) & set(population)
             _require(
                 not overlap,
@@ -4328,6 +4939,7 @@ def _classification_inputs(
     *,
     preview: dict[str, Any] | None = None,
     transition: dict[str, Any] | None = None,
+    routing_sha256: str | None = None,
 ) -> dict[str, str]:
     preview = _preview_disposition_receipt() if preview is None else preview
     preview_bytes = PREVIEW_DISPOSITION_LINE_SETS.read_bytes()
@@ -4348,12 +4960,33 @@ def _classification_inputs(
         "comparison artifact hash is malformed",
     )
     _require(COMPARISON_RECEIPT.is_file(), "comparison receipt is missing")
+    comparison_bytes = COMPARISON_RECEIPT.read_bytes()
+    try:
+        comparison_on_disk = json.loads(comparison_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("comparison receipt changed or is malformed") from exc
+    _require(
+        comparison_on_disk == comparison,
+        "comparison receipt changed during classification",
+    )
+    _require(ROUTING_ROWS.is_file(), "disposition routing artifact is missing")
+    current_routing_sha256 = _sha256(ROUTING_ROWS)
+    routing_sha256 = (
+        current_routing_sha256 if routing_sha256 is None else routing_sha256
+    )
+    _require(
+        isinstance(routing_sha256, str)
+        and re.fullmatch(r"[0-9a-f]{64}", routing_sha256) is not None
+        and current_routing_sha256 == routing_sha256,
+        "disposition routing changed during classification",
+    )
     inputs = {
         "comparison_artifact_sha256": comparison_sha,
-        "comparison_receipt_sha256": _sha256(COMPARISON_RECEIPT),
+        "comparison_receipt_sha256": hashlib.sha256(comparison_bytes).hexdigest(),
         "disposition_ledger_sha256": _sha256(disposition_ledger),
         "preview_disposition_receipt_sha256": hashlib.sha256(preview_bytes).hexdigest(),
         "preview_disposition_payload_sha256": preview["receipt_payload_sha256"],
+        "routing_rows_sha256": routing_sha256,
     }
     if transition is not None:
         transition_bytes = PREVIEW_SELECTOR_TRANSITION_RECEIPT.read_bytes()
@@ -4379,6 +5012,51 @@ def _classification_inputs(
             }
         )
     return inputs
+
+
+def _override_classification_inputs(
+    comparison: dict[str, Any],
+    selector_digest: str,
+    *,
+    routing_sha256: str | None = None,
+) -> dict[str, str]:
+    """Bind every mutable source used by an override classification."""
+
+    artifact = comparison.get("comparison_artifact")
+    _require(isinstance(artifact, dict), "comparison artifact receipt is malformed")
+    artifact_sha256 = artifact.get("sha256")
+    _require(
+        isinstance(artifact_sha256, str)
+        and re.fullmatch(r"[0-9a-f]{64}", artifact_sha256) is not None,
+        "comparison artifact hash is malformed",
+    )
+    _require(COMPARISON_RECEIPT.is_file(), "comparison receipt is missing")
+    comparison_bytes = COMPARISON_RECEIPT.read_bytes()
+    try:
+        comparison_on_disk = json.loads(comparison_bytes)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError("comparison receipt changed or is malformed") from exc
+    _require(
+        comparison_on_disk == comparison,
+        "comparison receipt changed during classification",
+    )
+    _require(ROUTING_ROWS.is_file(), "disposition routing artifact is missing")
+    current_routing_sha256 = _sha256(ROUTING_ROWS)
+    routing_sha256 = (
+        current_routing_sha256 if routing_sha256 is None else routing_sha256
+    )
+    _require(
+        isinstance(routing_sha256, str)
+        and re.fullmatch(r"[0-9a-f]{64}", routing_sha256) is not None
+        and current_routing_sha256 == routing_sha256,
+        "disposition routing changed during classification",
+    )
+    return {
+        "comparison_artifact_sha256": artifact_sha256,
+        "comparison_receipt_sha256": hashlib.sha256(comparison_bytes).hexdigest(),
+        "override_selector_sha256": selector_digest,
+        "routing_rows_sha256": routing_sha256,
+    }
 
 
 def _classification_sidecar_path(inputs: dict[str, str]) -> Path:
@@ -4455,15 +5133,25 @@ def _classification_population_from_aggregates(
 
 
 def _audit_comparison_artifact(
-    artifact: Path, routes: dict[str, tuple[str, str]] | None = None
+    artifact: Path,
+    *,
+    expected_sha256: str,
+    expected_routing_sha256: str,
+    routes: dict[str, tuple[str, str]] | None = None,
 ) -> dict[str, Any]:
-    routes = _routing_dispositions() if routes is None else routes
+    if routes is None:
+        routing_bytes = ROUTING_ROWS.read_bytes()
+        _require(
+            hashlib.sha256(routing_bytes).hexdigest() == expected_routing_sha256,
+            "disposition routing changed during comparison audit",
+        )
+        routes = _routing_dispositions(routing_bytes)
     state = _population_state()
     per_slot: dict[str, Counter[str]] = {}
     engine_errors = 0
     active_case: str | None = None
     active_signatures: list[str] = []
-    with gzip.open(artifact, "rt") as source:
+    with _bound_gzip_text_source(artifact, expected_sha256) as source:
         for line in source:
             try:
                 row = json.loads(line)
@@ -4872,7 +5560,11 @@ def _validate_classification_handoff(
         == classification["inputs"]["comparison_artifact_sha256"],
         "comparison artifact is absent or has drifted",
     )
-    artifact_audit = _audit_comparison_artifact(artifact_path)
+    artifact_audit = _audit_comparison_artifact(
+        artifact_path,
+        expected_sha256=classification["inputs"]["comparison_artifact_sha256"],
+        expected_routing_sha256=classification["inputs"]["routing_rows_sha256"],
+    )
     _require(
         comparison.get("per_slot") == artifact_audit["per_slot"],
         "comparison per-slot census does not rederive from artifact",
@@ -5141,6 +5833,102 @@ def matching_class_id(
     return matches[0] if matches else None
 
 
+def _require_current_classification_publication(
+    *,
+    comparison: dict[str, Any],
+    disposition_ledger: Path,
+    entries: list[dict[str, Any]],
+    preview: dict[str, Any],
+    transition: dict[str, Any] | None,
+    classification_inputs: dict[str, str],
+    artifact: Path,
+    sidecar: Path,
+    sidecar_sha256: str,
+    rulespec_root: Path | None = None,
+    engine_binary: Path | None = None,
+) -> None:
+    """Revalidate every mutable classification input immediately before publish."""
+
+    if rulespec_root is not None or engine_binary is not None:
+        _require(
+            rulespec_root is not None and engine_binary is not None,
+            "classification run-identity revalidation is incomplete",
+        )
+        current_comparison = _load_bound_comparison_locked(
+            rulespec_root=rulespec_root,
+            engine_binary=engine_binary,
+        )
+        _require(
+            current_comparison == comparison,
+            "bound comparison changed before classification publication",
+        )
+    current_ledger = yaml.safe_load(disposition_ledger.read_text())
+    _require(
+        isinstance(current_ledger, dict)
+        and current_ledger.get("suite") == "us-tariff-schedule"
+        and current_ledger.get("entries") == entries,
+        "classification disposition ledger changed before publication",
+    )
+    current_preview = _preview_disposition_receipt()
+    _require(
+        current_preview == preview,
+        "preview disposition receipt changed before classification publication",
+    )
+    current_transition = _transition_for_entries(entries, comparison, current_preview)
+    _require(
+        current_transition == transition,
+        "preview selector transition changed before classification publication",
+    )
+    current_inputs = _classification_inputs(
+        comparison,
+        disposition_ledger,
+        preview=current_preview,
+        transition=current_transition,
+        routing_sha256=classification_inputs.get("routing_rows_sha256"),
+    )
+    _require(
+        current_inputs == classification_inputs,
+        "classification inputs changed before publication",
+    )
+    _require(
+        artifact.is_file()
+        and _sha256(artifact) == comparison["comparison_artifact"]["sha256"],
+        "comparison artifact changed before classification publication",
+    )
+    _require(
+        sidecar.is_file() and _sha256(sidecar) == sidecar_sha256,
+        "classification sidecar changed before publication",
+    )
+
+
+def _publish_classification_receipt(
+    receipt: dict[str, Any], require_current: Callable[[], None]
+) -> None:
+    """Publish only while the receipt's complete mutable input set stays current."""
+
+    require_current()
+    rendered = _render(receipt)
+    published = False
+    try:
+        _atomic_json(CLASSIFICATION_RECEIPT, receipt)
+        published = True
+        _require(
+            CLASSIFICATION_RECEIPT.is_file()
+            and CLASSIFICATION_RECEIPT.read_text() == rendered,
+            "classification receipt changed during publication",
+        )
+        require_current()
+        _require(
+            CLASSIFICATION_RECEIPT.is_file()
+            and CLASSIFICATION_RECEIPT.read_text() == rendered,
+            "classification receipt changed during publication",
+        )
+    except Exception:
+        if published and CLASSIFICATION_RECEIPT.is_file():
+            CLASSIFICATION_RECEIPT.unlink()
+        raise
+
+
 def classify_campaign(
     *,
     rulespec_root: Path = RULESPEC_US_ROOT,
@@ -5175,11 +5963,15 @@ def _classify_campaign_locked(
     observed: dict[str, dict[str, Any]] = {}
     counts: Counter[str] = Counter()
     total_signature_compositions: Counter[tuple[str, ...]] = Counter()
-    routes = _routing_dispositions()
+    routing_bytes = ROUTING_ROWS.read_bytes()
+    routing_sha256 = hashlib.sha256(routing_bytes).hexdigest()
+    routes = _routing_dispositions(routing_bytes)
     engine_errors = 0
     active_case: str | None = None
     active_signatures: list[str] = []
-    with gzip.open(artifact, "rt") as source:
+    with _bound_gzip_text_source(
+        artifact, comparison["comparison_artifact"]["sha256"]
+    ) as source:
         for line in source:
             row = json.loads(line)
             case_id = row.get("case_id")
@@ -5272,12 +6064,14 @@ def _classify_campaign_locked(
             disposition_ledger,
             preview=preview,
             transition=transition,
+            routing_sha256=routing_sha256,
         )
         if entries_override is None
-        else {
-            "comparison_artifact_sha256": comparison["comparison_artifact"]["sha256"],
-            "override_selector_sha256": selector_digest,
-        }
+        else _override_classification_inputs(
+            comparison,
+            selector_digest,
+            routing_sha256=routing_sha256,
+        )
     )
     digest = hashlib.sha256(
         (comparison["comparison_artifact"]["sha256"] + selector_digest).encode()
@@ -5347,7 +6141,7 @@ def _classify_campaign_locked(
                     + "\n"
                 ).encode()
             )
-    temporary.replace(sidecar)
+    produced_sidecar_sha256 = _install_classification_sidecar(temporary, sidecar)
     mismatch_total = (
         sum(counts.values())
         + sum(total_signature_compositions.values())
@@ -5381,11 +6175,51 @@ def _classify_campaign_locked(
         "sidecar": {
             "schema": "axiom_oracles.us_tariff_schedule.classification_sidecar.v2",
             "path": str(sidecar),
-            "sha256": _sha256(sidecar),
+            "sha256": produced_sidecar_sha256,
         },
         "conservation": "PASS",
     }
-    _atomic_json(CLASSIFICATION_RECEIPT, receipt)
+    if entries_override is None:
+
+        def require_current_publication() -> None:
+            _require_current_classification_publication(
+                comparison=comparison,
+                disposition_ledger=disposition_ledger,
+                entries=entries,
+                preview=preview,
+                transition=transition,
+                classification_inputs=classification_inputs,
+                artifact=artifact,
+                sidecar=sidecar,
+                sidecar_sha256=receipt["sidecar"]["sha256"],
+                rulespec_root=rulespec_root,
+                engine_binary=engine_binary,
+            )
+
+    else:
+
+        def require_current_publication() -> None:
+            current_comparison = _load_bound_comparison_locked(
+                rulespec_root=rulespec_root,
+                engine_binary=engine_binary,
+            )
+            _require(
+                current_comparison == comparison
+                and _override_classification_inputs(
+                    current_comparison,
+                    selector_digest,
+                    routing_sha256=classification_inputs["routing_rows_sha256"],
+                )
+                == classification_inputs
+                and artifact.is_file()
+                and _sha256(artifact)
+                == current_comparison["comparison_artifact"]["sha256"]
+                and sidecar.is_file()
+                and _sha256(sidecar) == receipt["sidecar"]["sha256"],
+                "override classification inputs changed before publication",
+            )
+
+    _publish_classification_receipt(receipt, require_current_publication)
     return receipt
 
 

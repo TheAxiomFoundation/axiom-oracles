@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -179,14 +180,51 @@ def test_input_contract_proves_both_cafta_predicates_false(tmp_path: Path) -> No
 def test_tidy_eval_minimal_reproduction_requires_full_and_fta_rows() -> None:
     assert (
         producer._validate_tidy_eval_reproduction_output(
-            "r_version=4.3.0\ndplyr_version=1.1.2\nselected_conditions=full,fta\n"
+            "r_version=4.3.0\ndplyr_version=1.1.2\n"
+            f"dplyr_path={producer.campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT['path']}\n"
+            "selected_conditions=full,fta\n"
         )["selected_conditions"]
         == "full,fta"
     )
     with pytest.raises(ValueError, match="name-collision reproduction drift"):
         producer._validate_tidy_eval_reproduction_output(
-            "r_version=4.3.0\ndplyr_version=1.1.2\nselected_conditions=full\n"
+            "r_version=4.3.0\ndplyr_version=1.1.2\n"
+            f"dplyr_path={producer.campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT['path']}\n"
+            "selected_conditions=full\n"
         )
+
+
+def test_tidy_eval_minimal_reproduction_rejects_path_shadow_rscript(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake = tmp_path / "Rscript"
+    fake.write_text(
+        "#!/bin/sh\n"
+        "printf 'r_version=4.3.0\\ndplyr_version=1.1.2\\n"
+        "selected_conditions=full,fta\\n'\n"
+    )
+    fake.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{tmp_path}:{os.environ['PATH']}")
+
+    with pytest.raises(ValueError, match="Rscript runtime drift"):
+        producer._run_tidy_eval_reproduction()
+
+
+def test_tidy_eval_minimal_reproduction_ignores_hostile_r_startup_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    profile = tmp_path / "hostile.Rprofile"
+    profile.write_text('stop("R profile must not execute")\n')
+    monkeypatch.setenv("R_PROFILE_USER", str(profile))
+    monkeypatch.setenv("R_LIBS_USER", str(tmp_path / "untrusted-library"))
+
+    replay = producer._run_tidy_eval_reproduction()
+    assert replay["selected_conditions"] == "full,fta"
+    assert (
+        replay["r_runtime_tree"]
+        == producer.campaign.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT
+    )
+    assert replay["dplyr_tree"] == producer.campaign.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT
 
 
 def test_yale_defect_replay_requires_zero_and_only_fta_membership() -> None:
