@@ -1644,7 +1644,7 @@
       "axiom_rules_engine_sha": "bb4b5684870547756078a62f1866a77c5b56f7f3",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-28T22:29:51Z",
+    "generated_at": "2026-08-29T16:49:34Z",
     "generated_by": "scripts/run_comparison.py::uk-child-benefit-ukmod",
     "oracle": {
       "euromod_country": "UK",
