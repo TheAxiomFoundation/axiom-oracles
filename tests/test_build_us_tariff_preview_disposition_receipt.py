@@ -3,10 +3,53 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
 from scripts import build_us_tariff_preview_disposition_receipt as builder
+
+
+def test_preview_root_defaults_to_repo_local_inputs() -> None:
+    args = builder.parse_args([])
+
+    assert args.preview_root == builder.PREVIEW
+    assert builder.resolve_input_paths(args.preview_root) == {
+        path: path for path in builder.EXPECTED_HASHES
+    }
+
+
+def test_preview_root_redirects_only_preview_inputs(tmp_path: Path) -> None:
+    args = builder.parse_args(["--preview-root", str(tmp_path)])
+    resolved = builder.resolve_input_paths(args.preview_root)
+
+    assert {
+        logical: physical
+        for logical, physical in resolved.items()
+        if logical in builder.PREVIEW_INPUTS
+    } == {
+        logical: tmp_path / logical.name for logical in builder.PREVIEW_INPUTS
+    }
+    assert resolved[builder.SELECTED_INTERVALS] == builder.SELECTED_INTERVALS
+
+
+def test_external_preview_input_keeps_logical_receipt_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    logical_path = builder.TARGET_MISMATCH
+    physical_path = tmp_path / logical_path.name
+    physical_path.write_bytes(b"pinned preview input\n")
+    monkeypatch.setitem(
+        builder.EXPECTED_HASHES, logical_path, builder.sha256(physical_path)
+    )
+
+    receipt = builder.input_receipt(physical_path, logical_path=logical_path)
+
+    assert receipt == {
+        "path": builder.relative(logical_path),
+        "bytes": physical_path.stat().st_size,
+        "sha256": builder.sha256(physical_path),
+    }
 
 
 def _new_row(**overrides):

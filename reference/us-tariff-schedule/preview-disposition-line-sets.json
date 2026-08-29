@@ -12858,12 +12858,12 @@
       "sha256": "8fb3f36c9ec79c3809409e90e9ccf698a614ef250e41350dd2a0482dad48a3b6"
     },
     "script": {
-      "bytes": 38288,
+      "bytes": 39948,
       "path": "scripts/build_us_tariff_preview_disposition_receipt.py",
-      "sha256": "65129b397e50471d8c686e74e0b3b2230e764075e9202bd595eace835fe8e420"
+      "sha256": "dfc1299319dd4d1bd0c0d79f8a04ab6b733875150655bd0d50aa7aad8af7b518"
     }
   },
-  "receipt_payload_sha256": "a2d11b0798e2c4ccb8253f9ef29772bee9e594a99771622a1a33047715a117fe",
+  "receipt_payload_sha256": "f026dbe36618950a9002f669319ffb305d425f8752df10cbb87907e6812737f9",
   "schema": "axiom_oracles.us_tariff_schedule.preview_disposition_line_sets.v1",
   "selectors": [
     {
