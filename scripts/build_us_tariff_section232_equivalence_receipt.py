@@ -656,6 +656,11 @@ def _validate_eval_and_comparison_bindings(
                 source_eval_units[historical_key] = {
                     "selector": historical_units[historical_key]["selector"],
                     "identity": identity,
+                    "evaluation_record": {
+                        "chapter": chapter,
+                        "probe": record.get("probe"),
+                        "country": record.get("country"),
+                    },
                     "comparison": source_row,
                     "projection": {
                         "selector": historical_units[historical_key]["selector"],

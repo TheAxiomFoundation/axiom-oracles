@@ -31,6 +31,14 @@ conformance until its statutory behavior is encoded.
 - C6 RuleSpec surface: commit
   `3357f7dc710d18861b1fefdff115e2434e67b988`, tree
   `c3d530c72344310aa2fdfcebe5aec286b1ad4869`.
+- Final conditional RuleSpec surface: commit
+  `550818779a5fb0618e1374ed33bc471084c0b4ce`, including
+  `us/policies/cbp/us-tariff-duty/composition.yaml`'s
+  `forced_labor_dr_cafta_exception_applies` rule and its generated chapter
+  compositions.
+- DR-CAFTA General Note 29 corpus: Axiom corpus commit
+  `a664e437fafc7784f0a833abd76ddd16ea83686b`,
+  `data/corpus/provisions/us/statute/2026-08-28-usitc-hts-2026-rev15-general-note-29.jsonl`.
 
 ## Section 232 interplay: positive statutory authority
 
@@ -144,15 +152,45 @@ Of the 120 neighboring-child units, 24 also carry positive Note-50/52 authority
 and therefore remain Axiom-attributed-open. The other 96 have no note-text
 authority and are a bounded reference defect.
 
-## CAFTA 52(i): deferred encoding, still open
+## CAFTA 52(i): conditional rule encoded; preview attribution still open
 
 Rev-15 Note 52(i), corpus line 576/page-566, says:
 
 > As provided in heading 9903.05.95, the additional duties imposed by headings 9903.05.33, 9903.05.34, 9903.05.37, 9903.05.40, 9903.05.42 and 9903.05.58 shall not apply to a textile or apparel good as defined in subdivision (d)(v) of general note 29 of the HTSUS which is the product of Costa Rica, the Dominican Republic, El Salvador, Guatemala, Honduras or Nicaragua, entered free of duty under the Dominican Republic-Central America-United States Free Trade Agreement, including any treatment set forth in subchapter XXII of chapter 98 of the HTSUS.
 
-The C6/#1311 commit message (`3357f7dc`) explicitly records: “note 52(i)
-CAFTA remains a deferred output pending GN 29 ingest.” Encoding also requires
-an entry-level DR-CAFTA duty-free claim/eligibility fact; origin and product
-membership alone do not prove the statutory condition. The exact 17,404 units
-are consequently `axiom-attributed-open` and must continue to count against
-conformance until GN-29 scope and the claim fact are encoded and wired.
+The C6/#1311 commit message (`3357f7dc`) recorded Note 52(i) as deferred. That
+encoding gap is superseded by RuleSpec commit `55081877`. The rule now requires
+all three statutory conditions: one of the six enumerated origins,
+`entry_is_general_note_29_d_v_textile_or_apparel_good`, and
+`entry_is_entered_free_of_duty_under_dr_cafta`. The GN-29 corpus at
+`a664e437` supplies the cited source text. Both non-origin predicates remain
+explicit entry facts: the rule does not infer them from origin or HTS alone.
+
+The fresh campaign deliberately supplies both predicates as neutral `false`.
+That is the correct non-exempt certificate assumption. Yale commit `c4307e51`
+nevertheless zeros the 17,404 preview cells because `rule_hit` at
+`src/pipeline/06_calculate_rates.R:959-967` has a tidy-eval name collision:
+inside `filter(.data$condition %in% condition)`, the bare right-hand
+`condition` resolves to the data column rather than the function argument.
+Consequently `rule_hit('full')` includes the `condition=fta` rows,
+`country_full_hit` becomes true, and `covered` becomes false at lines 973-976.
+All 17,404 preview cells are `condition=fta` members and have no intended
+country-full, common-full, patented-pharma, or positive Section-232 exclusion.
+
+The compared Yale field is `statutory_rate_s301fl`, captured from
+`rate_s301fl` at line 3030 before the later preference-utilization scaling at
+lines 3066-3069. With the one-token `.env$condition` correction, the six
+origins retain their configured statutory country-tier rate: `0.10` for
+Guatemala, Honduras, and El Salvador; `0.125` for Costa Rica, the Dominican
+Republic, and Nicaragua. Those corrected values equal Axiom's false/false
+result on every historical preview cell; the bug instead produces Yale zero.
+
+Reclassification requires a PASS post-comparison supersession receipt that
+preserves the exact 17,404-unit population and digest, proves zero engine
+errors, binds both neutral-false predicates, reproduces the tidy-eval defect,
+and proves the corrected pre-scaling statutory value equals Axiom on every
+fresh cell. Until that proof passes, `cafta-52i-deferred` remains
+operationally `axiom-attributed-open`. This is a fail-closed evidence status,
+not a claim that the final RuleSpec still lacks Note 52(i). Separately, the
+real-entry frontier remains open: neither the campaign nor the preview proves
+GN-29(d)(v) status or a DR-CAFTA duty-free claim for any actual entry.

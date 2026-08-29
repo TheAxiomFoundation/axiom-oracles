@@ -62,17 +62,19 @@ entries:
       slot: forced_labor_section_301
     disposition: axiom_encoding_gap
     attribution: axiom-attributed-open
-    receipt: C6/#1311 records Note 52(i) as deferred pending GN 29 ingest; the note additionally conditions relief
-      on an actual DR-CAFTA duty-free entry. The preview exact join contains 17,404 units.
-    reason: GN-29(d)(v) scope and a DR-CAFTA duty-free claim/eligibility fact remain unencoded and unwired.
+    receipt: RuleSpec 55081877 encodes Note 52(i) with both entry predicates. Yale c430's tidy-eval name collision
+      treats condition=fta rows as country-full exclusions and zeros the 17,404-unit preview class; the corrected
+      pre-scaling statutory rate matches Axiom. The class remains fail-closed pending a fresh PASS receipt.
+    reason: A bounded Yale reference defect is identified, but operational attribution awaits the post-comparison
+      exact-population and zero-error proof; real-entry GN-29(d)(v) and duty-free-claim facts remain explicit.
     expires_on_source_change: true
     evidence:
-      mechanism: 'Rev-15 Note 52(i), #1311 deferred-output note, GN-29 scope, and entry-level claim prerequisite'
+      mechanism: 'Rev-15 Note 52(i), final conditional RuleSpec, neutral-false entry facts, and Yale tidy-eval condition name collision'
       sources:
       - reference/us-tariff-schedule/output-semantics-ruling.md
       - reference/us-tariff-schedule/preview-disposition-line-sets.json
-      receipt_type: statutory-condition-and-deferred-encoding
-      instrument_receipt: hts-rev15-note52i-c6-1311-deferred
+      receipt_type: conditional-encoding-with-pending-reference-defect-supersession
+      instrument_receipt: hts-rev15-note52i-yale-c430-condition-mask-defect-pending
   - id: chapter98-brazil
     concept: us:policies/cbp/us-tariff-schedule#brazil_section_301
     kind: signature_class
