@@ -30,8 +30,6 @@ ratchets:
   unexplained_max: 0
 - suite: az-tanf-ecps
   unexplained_max: 0
-- suite: be-article-51-forfait
-  unexplained_max: 0
 - suite: be-birth-leave
   unexplained_max: 0
 - suite: be-cadastral-income-indexation
@@ -42,59 +40,21 @@ ratchets:
   unexplained_max: 0
 - suite: be-employer-ssc
   unexplained_max: 0
-- suite: be-family-birth-allowance
-  unexplained_max: 0
-- suite: be-family-child-benefit-base
-  unexplained_max: 0
-- suite: be-family-child-benefit-brussels-same-age-household
-  unexplained_max: 0
-- suite: be-family-child-benefit-income-list
-  unexplained_max: 0
-- suite: be-family-child-benefit-social-supplement
-  unexplained_max: 0
-- suite: be-family-child-benefit-wallonia-social-supplement
-  unexplained_max: 0
 - suite: be-flemish-jobbonus
   unexplained_max: 0
 - suite: be-flemish-social-protection-premium
   unexplained_max: 0
 - suite: be-local-municipal-pit
   unexplained_max: 0
-- suite: be-marital-quotient
-  unexplained_max: 0
 - suite: be-maternity-leave
-  unexplained_max: 0
-- suite: be-pensioner-contributions
-  unexplained_max: 0
-- suite: be-pensioner-pit
-  unexplained_max: 0
-- suite: be-property-tax
   unexplained_max: 0
 - suite: be-regional-pit-surcharge
   unexplained_max: 0
-- suite: be-replacement-income-pit
-  unexplained_max: 0
 - suite: be-self-employed-ssc
-  unexplained_max: 0
-- suite: be-self-employment-pit
   unexplained_max: 0
 - suite: be-social-assistance
   unexplained_max: 0
 - suite: be-special-social-security-contribution
-  unexplained_max: 0
-- suite: be-study-allowance
-  unexplained_max: 0
-- suite: be-unemployment
-  unexplained_max: 0
-- suite: be-work-bonus-credit
-  unexplained_max: 0
-- suite: be-worker-disposable-income-list
-  unexplained_max: 0
-- suite: be-worker-pit
-  unexplained_max: 0
-- suite: be-worker-ssc
-  unexplained_max: 0
-- suite: be-worker-tax-income-list
   unexplained_max: 0
 - suite: ca-capi-limits
   unexplained_max: 0

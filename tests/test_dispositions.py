@@ -303,21 +303,6 @@ def test_seeded_dispositions_files_are_schema_valid() -> None:
         load_dispositions(path, repo_root=REPO_ROOT)
 
 
-def test_seeded_wallonia_suite_shows_raw_below_explained() -> None:
-    suite = "be-family-child-benefit-wallonia-social-supplement"
-    report = _load_dashboard_report(suite)
-    dispositions = load_dispositions(
-        DISPOSITIONS_DIR / f"{suite}.yaml", repo_root=REPO_ROOT
-    )
-    merged = apply_dispositions(report, dispositions)
-    block = merged["summary"]["dispositioned"]
-    assert block["raw_match_rate"] == 25
-    assert block["explained_rate"] == 100
-    assert block["raw_match_rate"] < block["explained_rate"]
-    assert block["unexplained_count"] == 0
-    assert block["counts"]["explained_residual"] == 6
-
-
 def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
     reports = []
     for path in sorted(DASHBOARD_DATA_DIR.glob("axiom-euromod-be-*.json")):
@@ -333,12 +318,8 @@ def test_seeded_belgium_lane_rollup_covers_every_mismatch() -> None:
     rollup = dispositioned_rollup(reports)
     assert rollup["comparison_count"] > 0
     assert rollup["raw_match_rate"] < rollup["explained_rate"]
-    # Every BE mismatch is classified (none unexplained). explained_rate is now
-    # 100: the be-pensioner-contributions suite that once carried the tscpe_be
-    # axiom_encoding_gap residuals (the article 191 health-floor and article 68
-    # solidarity base-table gaps, rulespec-be#89) now matches EUROMOD exactly
-    # (6/6), so no BE mismatch remains to classify. raw_match_rate stays below
-    # explained because other BE suites still carry dispositioned residuals.
+    # Every current BE mismatch is classified (none unexplained). Retired
+    # non-documentary aggregate suites do not contribute to this live rollup.
     assert rollup["unexplained_count"] == 0
     assert rollup["explained_rate"] == 100
 

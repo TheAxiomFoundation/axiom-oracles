@@ -14,17 +14,16 @@ Schema (``axiom_oracles.dispositions.v1``)
 A dispositions file classifies mismatch rows of exactly one suite::
 
     schema: axiom_oracles.dispositions.v1
-    suite: be-worker-ssc
+    suite: be-employer-ssc
     entries:
-      - id: work-bonus-january-2025-timing
-        concept: be:...#belgium_worker_work_bonus_..._total_reduction
-        case_id: be-worker-ssc-30k          # or case_selector: {...}
+      - id: stale-company-closing-fund-rates
+        concept: be:...#belgium_employer_social_security_ordinary_worker_contribution
+        case_id: be-employer-ssc-30k        # or case_selector: {...}
         disposition: upstream_engine_gap
         evidence:
           mechanism: >-
-            EUROMOD BE_2025 applies the February-onward 2025 work-bonus
-            table to all 12 months; the statutory path weights January
-            separately.
+            EUROMOD BE_2025 uses stale company-closing-fund rates while
+            the documentary RuleSpec path uses the official 2025 rates.
           arithmetic:
             - expression: "3398.52 - 3386.87"
               equals: 11.65

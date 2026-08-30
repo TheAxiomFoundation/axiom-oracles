@@ -8,25 +8,25 @@ The on-disk shape of ``grids/<jurisdiction>.yaml``::
       suites_module: axiom_oracles.suites
       extractor: scripts/extract_grids.py
     case_sets:
-      be-worker-pit:                     # a named case set (== a suite name)
-        description: Single-worker Belgium PIT cases ...
+      be-employer-ssc:                   # a named case set (== a suite name)
+        description: Single-worker Belgium employer-SSC cases ...
         locale: BE
         entity: Person                   # default Axiom query entity for the set
         entity_id: head
         outputs:                         # oracle-neutral output concept ids
-          - be:statutes/.../pipeline#belgium_pit_pilot_...
+          - be:regulations/.../employer_contributions#belgium_employer_...
         cases:
-          - id: be-worker-pit-10k
+          - id: be-employer-ssc-30k
             period: "2025"
-            scenario: single-worker-pit
+            scenario: single-worker-employer-ssc
             parameters:                  # typed, oracle-neutral scenario inputs
-              yearly_earned_income: 10000
+              yearly_earned_income: 30000
             entities:                    # optional; only when the set varies it
               - id: head
                 kind: person
                 age: 35
                 relation: HeadOfHousehold
-                yearly_earned_income: 10000
+                yearly_earned_income: 30000
 
 ``parameters`` are the oracle-neutral scenario values a suite already keeps in
 case metadata (income, child age, region, single-parent flag, ...). ``entities``

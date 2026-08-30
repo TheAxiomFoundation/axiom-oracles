@@ -1,12 +1,17 @@
 # Belgium Axiom↔EUROMOD per-record validation — July 6, 2026
 
+> Historical report. Its non-documentary PIT pipelines are no longer active;
+> the preserved scorecard is excluded from current dashboard loaders and lives
+> under `dashboard/public/data/historical/retired-documentary-boundary/`.
+
 Upgrades the Belgium cross-engine evidence from aggregate agreement (€643 on
 €20.9B employee SSC over an identical population) to **per-record** agreement,
 and extends it to a nonlinear program (personal income tax with the Article 87
 marital quotient). Ladder rungs 1 + 2 of axiom-rules-engine#77.
 
-The machine-readable scorecard with full per-record distributions and config
-pins is `dashboard/public/data/be-euromod-per-record-scorecard.json`.
+The historical machine-readable scorecard with full per-record distributions
+and config pins is
+`dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/be-euromod-per-record-scorecard.json`.
 
 ## Why per-record
 

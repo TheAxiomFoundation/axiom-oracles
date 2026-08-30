@@ -57,7 +57,7 @@ SEED_DATA = "dashboard/public/data"
 BE_ROLLUP = "axiom_oracles/data/euromod_be_coverage.json"
 #: A BE report with NO dispositions file: the merge never rewrites it, but it
 #: still feeds the rollup — so perturbing it drifts the rollup and nothing else.
-BE_REPORT = "dashboard/public/data/axiom-euromod-be-article-51-forfait.json"
+BE_REPORT = "dashboard/public/data/axiom-euromod-be-capital-income-tax.json"
 NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
 NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
 NZ_EXECUTABLE_RECEIPT = "conformance/executable/nz-treasury-incomeexplorer.json"
@@ -135,7 +135,7 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
 _PERTURBED_SUITES = (
     "nc-income-tax-liability",
     "mi-income-tax-liability",
-    "be-article-51-forfait",
+    "be-capital-income-tax",
 )
 
 
@@ -417,7 +417,7 @@ def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
     doc["summary"]["mismatch_count"] += 1
     path.write_text(json.dumps(doc, indent=2) + "\n")
 
-    result = _run_script(clone, "be-article-51-forfait")
+    result = _run_script(clone, "be-capital-income-tax")
     assert result.returncode == 0, result.stderr
 
     verify = _assert_origin_tip_green(origin, tmp_path)

@@ -114,15 +114,6 @@
       "source": "comparisons/az-tanf-ecps.yaml"
     },
     {
-      "suite": "be-article-51-forfait",
-      "name": "be-article-51-forfait",
-      "report": "axiom-euromod-be-article-51-forfait.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-article-51-forfait.yaml"
-    },
-    {
       "suite": "be-capital-income-tax",
       "name": "be-capital-income-tax",
       "report": "axiom-euromod-be-capital-income-tax.json",
@@ -150,33 +141,6 @@
       "source": "comparisons/be-local-municipal-pit.yaml"
     },
     {
-      "suite": "be-marital-quotient",
-      "name": "be-marital-quotient",
-      "report": "axiom-euromod-be-marital-quotient.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-marital-quotient.yaml"
-    },
-    {
-      "suite": "be-pensioner-contributions",
-      "name": "be-pensioner-contributions",
-      "report": "axiom-euromod-be-pensioner-contributions.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-pensioner-contributions.yaml"
-    },
-    {
-      "suite": "be-pensioner-pit",
-      "name": "be-pensioner-pit",
-      "report": "axiom-euromod-be-pensioner-pit.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-pensioner-pit.yaml"
-    },
-    {
       "suite": "be-regional-pit-surcharge",
       "name": "be-regional-pit-surcharge",
       "report": "axiom-euromod-be-regional-pit-surcharge.json",
@@ -184,42 +148,6 @@
         "TheAxiomFoundation/rulespec-be"
       ],
       "source": "comparisons/be-regional-pit-surcharge.yaml"
-    },
-    {
-      "suite": "be-replacement-income-pit",
-      "name": "be-replacement-income-pit",
-      "report": "axiom-euromod-be-replacement-income-pit.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-replacement-income-pit.yaml"
-    },
-    {
-      "suite": "be-self-employment-pit",
-      "name": "be-self-employment-pit",
-      "report": "axiom-euromod-be-self-employment-pit.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-self-employment-pit.yaml"
-    },
-    {
-      "suite": "be-study-allowance",
-      "name": "be-study-allowance",
-      "report": "axiom-euromod-be-study-allowance.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-study-allowance.yaml"
-    },
-    {
-      "suite": "be-work-bonus-credit",
-      "name": "be-work-bonus-credit",
-      "report": "axiom-euromod-be-work-bonus-credit.json",
-      "repos": [
-        "TheAxiomFoundation/rulespec-be"
-      ],
-      "source": "comparisons/be-work-bonus-credit.yaml"
     },
     {
       "suite": "ca-capi-limits",

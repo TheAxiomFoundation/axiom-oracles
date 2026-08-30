@@ -19,14 +19,10 @@ into ``conformance/compositions/<jur>.yaml`` and a CI ``--check`` fails if the
 committed record drifts from the suites — so the record cannot silently diverge
 from what actually runs.
 
-The composition for every committed EUROMOD-lane BE suite is a **single**
-top-level RuleSpec module (which transitively imports its own stages); the one
-exception is ``be-worker-ssc``, whose three outputs span two modules
-(``employee_contributions`` + ``work_bonus``). The marital-quotient suite still
-imports only ``couple_pit_oracle_pipeline``, but now records the related Person
-input rows, spouse-to-TaxUnit relation, and record-targeted bridges that let the
-module run its transitively imported worker stages (see ``conformance/README.md``
-§ "Recorded program compositions").
+The composition for every committed EUROMOD-lane BE suite is a direct
+documentary RuleSpec surface. Comparator-shaped pipelines, generated annual
+aggregates, aggregate income lists, and region routers are composed outside RuleSpec (see
+``conformance/README.md`` § "Recorded program compositions").
 """
 
 from __future__ import annotations
@@ -222,8 +218,8 @@ class ResolvedComposition:
     def single_program_path(self) -> Path | None:
         """The lone concrete program file, when the composition is one module.
 
-        Multi-module compositions (only ``be-worker-ssc`` today) have no single
-        file — callers fall back to the import-set the harness composes.
+        Multi-module compositions have no single file — callers fall back to
+        the import-set the harness composes.
         """
         if len(self.program_paths) == 1:
             return self.program_paths[0]

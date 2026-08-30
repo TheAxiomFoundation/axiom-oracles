@@ -33,26 +33,27 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         coverage["coverage_summary"]["full_household_disposable_income_parity"] is False
     )
     assert coverage["coverage_summary"]["rule_percentage"] is None
-    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 24
-    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 17
+    assert coverage["coverage_summary"]["current_oracle_output_targets"] == 10
+    assert coverage["coverage_summary"]["live_verified_oracle_output_targets"] == 10
     assert coverage["coverage_summary"]["prepared_oracle_output_targets"] == 0
-    assert outputs["bun_s"]["status"] == "live_oracle_dispositioned"
+    assert outputs["bun_s"]["status"] == (
+        "not_mapped_non_documentary_composition_removed"
+    )
     assert outputs["tscee_s"]["status"] == (
-        "live_oracle_verified_gross_regular_worker_slice"
+        "documentary_output_available_no_current_oracle"
     )
     assert outputs["tsceerd_s"]["status"] == (
-        "live_oracle_compared_with_known_2025_timing_residual"
+        "not_mapped_removed_non_documentary_annual_aggregate"
     )
     assert outputs["tscee_net_s"]["status"] == (
-        "live_oracle_compared_with_known_2025_timing_residual"
+        "documentary_output_available_no_current_oracle"
     )
     assert (
         outputs["tscer_s"]["status"]
         == "live_oracle_compared_with_known_2025_employer_parameter_residual"
     )
-    assert (
-        outputs["tin_s"]["status"]
-        == "live_oracle_compared_worker_pilot_with_known_article_289ter1_residual"
+    assert outputs["tin_s"]["status"] == (
+        "not_mapped_non_documentary_composition_removed"
     )
     assert (
         outputs["bsa_s"]["status"]
@@ -84,15 +85,15 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
     )
     assert (
         outputs["tprhm_s"]["status"]
-        == "live_oracle_verified_high_cadastral_income_no_reductions"
+        == "not_mapped_removed_non_documentary_aggregate"
     )
     assert (
         outputs["bchba_s"]["status"]
-        == "live_oracle_verified_brussels_flanders_wallonia_with_known_dg_birth_allowance_issue"
+        == "not_mapped_removed_non_documentary_cross_region_aggregate"
     )
     assert (
         outputs["bch_s"]["status"]
-        == "live_oracle_verified_one_child_base_and_brussels_same_age_household_with_known_dg_and_pre_2020_wallonia_issues"
+        == "not_mapped_removed_non_documentary_household_aggregates"
     )
     assert (
         outputs["bmact_s"]["status"]
@@ -102,23 +103,25 @@ def test_belgium_euromod_inventory_does_not_claim_full_parity() -> None:
         outputs["bpact_s"]["status"]
         == "live_oracle_verified_father_newborn_with_pbe_switch"
     )
-    assert (
-        outputs["bed_s"]["status"]
-        == "live_oracle_verified_flanders_higher_secondary_and_wallonia_batched"
-    )
-    assert outputs["bch_s"]["additional_rulespec_outputs"] == [
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement",
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement",
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
-    ]
-    assert outputs["ils_tax"]["status"] == "live_oracle_verified_worker_pit_pilot"
-    assert outputs["ils_ben"]["status"] == "live_oracle_verified_family_benefit_pilot"
-    assert (
-        outputs["ils_dispy"]["status"]
-        == "live_oracle_verified_worker_pit_sic_pilot"
+    assert outputs["bed_s"]["status"] == ("not_mapped_non_documentary_routing_removed")
+    assert "additional_rulespec_outputs" not in outputs["bch_s"]
+    assert outputs["ils_tax"]["status"] == "not_mapped_external_aggregate"
+    assert outputs["ils_ben"]["status"] == "not_mapped_external_aggregate"
+    assert outputs["ils_dispy"]["status"] == "not_mapped_external_aggregate"
+    assert all(
+        outputs[name]["rulespec_output"] is None
+        for name in {
+            "tin_s",
+            "bun_s",
+            "bed_s",
+            "ils_tax",
+            "ils_ben",
+            "ils_dispy",
+            "tsceerd_s",
+            "tprhm_s",
+            "bchba_s",
+            "bch_s",
+        }
     )
 
 
@@ -138,6 +141,19 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
     )
 
     assert dashboard == issues
+    retired = json.loads(
+        (
+            ROOT
+            / "dashboard/public/data/historical/retired-documentary-boundary"
+            / "retired-euromod-issues.json"
+        ).read_text()
+    )
+    current_ids = {entry["id"] for entry in issues["entries"]}
+    retired_ids = {entry["id"] for entry in retired["entries"]}
+    assert len(current_ids) == 18
+    assert len(retired_ids) == 11
+    assert current_ids.isdisjoint(retired_ids)
+    assert len(current_ids | retired_ids) == 29
     assert issues["entries"][0]["id"] == (
         "jrc-euromod-4-be-training-data-income-list-prep"
     )
@@ -147,31 +163,9 @@ def test_euromod_issue_ledger_is_packaged_and_mirrored() -> None:
         entry["id"] for entry in issues["entries"] if entry["jurisdiction"] == "BE"
     } >= {
         "euromod-be-2025-employer-ssc-company-closing-fund-rates",
-        "euromod-be-2025-pit-work-bonus-credit-uncapped-ab",
         "euromod-be-2025-self-employed-main-rate",
         "euromod-be-2025-self-employed-threshold-allowance",
         "euromod-be-2025-special-contribution-article-108-schedule",
-        "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation",
-        "euromod-be-2025-dg-child-benefit-zero",
-        "euromod-be-2025-dg-birth-allowance-zero",
         "euromod-be-2025-flemish-jobbonus-stale-parameters",
         "euromod-be-2025-cadastral-income-rounding",
     }
-    wallonia_issue = next(
-        entry
-        for entry in issues["entries"]
-        if entry["id"]
-        == "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation"
-    )
-    assert (
-        wallonia_issue["statutory_evidence"]["indexed_2025_rulespec_module"]
-        == "be/statutes/family_benefits/child_benefit_base_2025.yaml"
-    )
-    assert (
-        wallonia_issue["statutory_evidence"]["unindexed_statutory_rulespec_module"]
-        == "be-wal/statutes/family_benefits/amounts.yaml"
-    )
-    assert all(
-        "2025-indexed Article 13" in case["note"]
-        for case in wallonia_issue["observed_with"]["cases"]
-    )

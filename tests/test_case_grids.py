@@ -67,7 +67,7 @@ def test_expected_jurisdictions_present() -> None:
     "jurisdiction,expected_sets,expected_cases",
     [
         ("us", 3, 84),
-        ("be", 33, 142),
+        ("be", 14, 50),
         ("de", 1, 13),
         ("uk", 26, 143),
         ("dk", 3, 10),
@@ -329,13 +329,15 @@ def test_every_registered_suite_has_a_grid_case_set() -> None:
 
 
 def test_resolve_qualified_case_set_reference() -> None:
-    grid, case_set = resolve_grid_case_set("be:be-worker-pit")
+    grid, case_set = resolve_grid_case_set("be:be-article-51-forfait")
     assert grid.jurisdiction == "be"
-    assert case_set.name == "be-worker-pit"
+    assert case_set.name == "be-article-51-forfait"
     assert [c.id for c in case_set.cases] == [
-        "be-worker-pit-10k",
-        "be-worker-pit-30k",
-        "be-worker-pit-60k",
+        "be-article-51-forfait-12k",
+        "be-article-51-forfait-22k",
+        "be-article-51-forfait-27k",
+        "be-article-51-forfait-35k",
+        "be-article-51-forfait-60k",
     ]
 
 

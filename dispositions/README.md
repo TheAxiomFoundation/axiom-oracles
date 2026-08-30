@@ -16,12 +16,12 @@ matches the `suite` field of the comparison report. Schema
 
 ```yaml
 schema: axiom_oracles.dispositions.v1
-suite: be-worker-ssc
+suite: be-employer-ssc
 updated: "2026-07-05"
 entries:
-  - id: work-bonus-january-2025-timing
-    concept: be:regulations/...#belgium_worker_work_bonus_..._total_reduction
-    case_id: be-worker-ssc-30k        # or case_selector: {case_ids: [...]} /
+  - id: stale-company-closing-fund-rates
+    concept: be:regulations/...#belgium_employer_social_security_ordinary_worker_contribution
+    case_id: be-employer-ssc-30k      # or case_selector: {case_ids: [...]} /
                                       #    {case_id_prefix: "..."}
     kind: amount_difference           # optional mismatch-kind filter
     disposition: upstream_engine_gap

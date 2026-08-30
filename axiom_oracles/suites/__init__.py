@@ -7,23 +7,10 @@ from .be_social_assistance import (
     be_elderly_income_support_cases,
     be_social_assistance_cases,
 )
-from .be_study_allowance import be_study_allowance_cases
-from .be_family_benefits import (
-    be_family_birth_allowance_cases,
-    be_family_child_benefit_brussels_same_age_household_cases,
-    be_family_child_benefit_base_cases,
-    be_family_child_benefit_income_list_cases,
-    be_family_child_benefit_social_supplement_cases,
-    be_family_child_benefit_wallonia_social_supplement_cases,
-)
 from .be_flemish_jobbonus import be_flemish_jobbonus_cases
 from .be_flemish_social_protection import be_flemish_social_protection_premium_cases
 from .be_maternity_leave import be_maternity_leave_cases
-from .be_pensioner_contributions import be_pensioner_contributions_cases
-from .be_property_tax import (
-    be_cadastral_income_indexation_cases,
-    be_property_tax_cases,
-)
+from .be_property_tax import be_cadastral_income_indexation_cases
 from .be_regional_local_capital import (
     be_capital_income_tax_cases,
     be_local_municipal_pit_cases,
@@ -33,19 +20,9 @@ from .be_self_employed import be_self_employed_ssc_cases
 from .be_special_social_security import (
     be_special_social_security_contribution_cases,
 )
-from .be_unemployment import be_unemployment_cases
 from .be_worker import (
     be_article_51_forfait_cases,
     be_employer_ssc_cases,
-    be_marital_quotient_cases,
-    be_pensioner_pit_cases,
-    be_pit_work_bonus_credit_cases,
-    be_replacement_income_pit_cases,
-    be_self_employment_pit_cases,
-    be_worker_disposable_income_list_cases,
-    be_worker_pit_cases,
-    be_worker_ssc_cases,
-    be_worker_tax_income_list_cases,
 )
 from .dk_child_youth_benefit import (
     dk_child_youth_benefit_2023_cases,
@@ -100,39 +77,20 @@ def available_suites() -> tuple[str, ...]:
         "ca-cra-pdoc",
         "nyc-basic",
         "nyc-synthetic",
-        "be-worker-pit",
         "be-article-51-forfait",
-        "be-work-bonus-credit",
-        "be-marital-quotient",
-        "be-pensioner-pit",
-        "be-self-employment-pit",
-        "be-replacement-income-pit",
-        "be-worker-tax-income-list",
-        "be-worker-disposable-income-list",
-        "be-worker-ssc",
         "be-employer-ssc",
         "be-self-employed-ssc",
         "be-special-social-security-contribution",
         "be-birth-leave",
         "be-maternity-leave",
-        "be-family-birth-allowance",
-        "be-family-child-benefit-base",
-        "be-family-child-benefit-income-list",
-        "be-family-child-benefit-social-supplement",
-        "be-family-child-benefit-brussels-same-age-household",
-        "be-family-child-benefit-wallonia-social-supplement",
         "be-flemish-jobbonus",
         "be-cadastral-income-indexation",
-        "be-property-tax",
         "be-regional-pit-surcharge",
         "be-local-municipal-pit",
         "be-capital-income-tax",
         "be-flemish-social-protection-premium",
         "be-social-assistance",
         "be-elderly-income-support",
-        "be-study-allowance",
-        "be-unemployment",
-        "be-pensioner-contributions",
         "dk-child-youth-benefit",
         "dk-child-youth-benefit-2023",
         "dk-child-youth-benefit-couple",
@@ -176,26 +134,8 @@ def load_suite(name: str):
         return nyc_basic_cases()
     if name == "nyc-synthetic":
         return nyc_synthetic_cases()
-    if name == "be-worker-pit":
-        return be_worker_pit_cases()
     if name == "be-article-51-forfait":
         return be_article_51_forfait_cases()
-    if name == "be-work-bonus-credit":
-        return be_pit_work_bonus_credit_cases()
-    if name == "be-marital-quotient":
-        return be_marital_quotient_cases()
-    if name == "be-pensioner-pit":
-        return be_pensioner_pit_cases()
-    if name == "be-self-employment-pit":
-        return be_self_employment_pit_cases()
-    if name == "be-replacement-income-pit":
-        return be_replacement_income_pit_cases()
-    if name == "be-worker-tax-income-list":
-        return be_worker_tax_income_list_cases()
-    if name == "be-worker-disposable-income-list":
-        return be_worker_disposable_income_list_cases()
-    if name == "be-worker-ssc":
-        return be_worker_ssc_cases()
     if name == "be-employer-ssc":
         return be_employer_ssc_cases()
     if name == "be-self-employed-ssc":
@@ -206,24 +146,10 @@ def load_suite(name: str):
         return be_birth_leave_cases()
     if name == "be-maternity-leave":
         return be_maternity_leave_cases()
-    if name == "be-family-birth-allowance":
-        return be_family_birth_allowance_cases()
-    if name == "be-family-child-benefit-base":
-        return be_family_child_benefit_base_cases()
-    if name == "be-family-child-benefit-income-list":
-        return be_family_child_benefit_income_list_cases()
-    if name == "be-family-child-benefit-social-supplement":
-        return be_family_child_benefit_social_supplement_cases()
-    if name == "be-family-child-benefit-brussels-same-age-household":
-        return be_family_child_benefit_brussels_same_age_household_cases()
-    if name == "be-family-child-benefit-wallonia-social-supplement":
-        return be_family_child_benefit_wallonia_social_supplement_cases()
     if name == "be-flemish-jobbonus":
         return be_flemish_jobbonus_cases()
     if name == "be-cadastral-income-indexation":
         return be_cadastral_income_indexation_cases()
-    if name == "be-property-tax":
-        return be_property_tax_cases()
     if name == "be-regional-pit-surcharge":
         return be_regional_pit_surcharge_cases()
     if name == "be-local-municipal-pit":
@@ -236,12 +162,6 @@ def load_suite(name: str):
         return be_social_assistance_cases()
     if name == "be-elderly-income-support":
         return be_elderly_income_support_cases()
-    if name == "be-study-allowance":
-        return be_study_allowance_cases()
-    if name == "be-unemployment":
-        return be_unemployment_cases()
-    if name == "be-pensioner-contributions":
-        return be_pensioner_contributions_cases()
     if name == "dk-child-youth-benefit":
         return dk_child_youth_benefit_cases()
     if name == "dk-child-youth-benefit-2023":
@@ -316,33 +236,15 @@ __all__ = [
     "be_capital_income_tax_cases",
     "be_elderly_income_support_cases",
     "be_employer_ssc_cases",
-    "be_family_birth_allowance_cases",
-    "be_family_child_benefit_brussels_same_age_household_cases",
-    "be_family_child_benefit_base_cases",
-    "be_family_child_benefit_income_list_cases",
-    "be_family_child_benefit_social_supplement_cases",
-    "be_family_child_benefit_wallonia_social_supplement_cases",
     "be_flemish_jobbonus_cases",
     "be_flemish_social_protection_premium_cases",
     "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
-    "be_pensioner_contributions_cases",
-    "be_pensioner_pit_cases",
-    "be_pit_work_bonus_credit_cases",
     "be_cadastral_income_indexation_cases",
-    "be_property_tax_cases",
     "be_regional_pit_surcharge_cases",
     "be_self_employed_ssc_cases",
-    "be_self_employment_pit_cases",
     "be_special_social_security_contribution_cases",
     "be_social_assistance_cases",
-    "be_study_allowance_cases",
-    "be_unemployment_cases",
-    "be_replacement_income_pit_cases",
-    "be_worker_disposable_income_list_cases",
-    "be_worker_pit_cases",
-    "be_worker_ssc_cases",
-    "be_worker_tax_income_list_cases",
     "dk_child_youth_benefit_cases",
     "de_worker_dual_oracle_cases",
     "load_suite",

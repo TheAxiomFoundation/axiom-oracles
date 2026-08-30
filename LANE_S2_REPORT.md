@@ -1,5 +1,11 @@
 # Lane S2 — Belgian merged-pipeline suites
 
+> Historical report. The merged-pipeline suites below were retired from the
+> active surface at the documentary-concept boundary. Their committed dashboard
+> evidence moved to
+> `dashboard/public/data/historical/retired-documentary-boundary/` and current
+> loaders do not recurse into that archive.
+
 Run date: 2026-08-22 (Europe/Brussels). Worktree:
 `~/TheAxiomFoundation/_cape-prep/oracles-suites`; branch:
 `be-suites-pensions-selfemp-unemployment`. This lane had no successful network
@@ -328,9 +334,9 @@ The canonical committed dashboard reports have this provenance:
 
 ```sh
 jq -s 'map({suite,generated_by:.provenance.generated_by,run_kind:.provenance.run_kind,rulespec:.provenance.rulespecs[0].sha,engine:.provenance.engine.axiom_rules_engine_sha,binary_sha256:.provenance.engine.binary_sha256,oracle:.provenance.oracle,error_count:.summary.error_count,unexplained:.summary.dispositioned.unexplained_count})' \
-  dashboard/public/data/axiom-euromod-be-pensioner-pit.json \
-  dashboard/public/data/axiom-euromod-be-self-employment-pit.json \
-  dashboard/public/data/axiom-euromod-be-replacement-income-pit.json
+  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-pensioner-pit.json \
+  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-self-employment-pit.json \
+  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-replacement-income-pit.json
 ```
 
 All three report rows returned RuleSpec `b105e2b3a3086ddd2de447d58a9b951346870dd1`,
@@ -342,13 +348,13 @@ EUROMOD `J2.0+/BE_2025/BE_2024_c1_2015_03_e2`, `error_count=0`, and
 Canonical report hashes:
 
 ```sh
-shasum -a 256 dashboard/public/data/axiom-euromod-be-{pensioner-pit,self-employment-pit,replacement-income-pit}.json
+shasum -a 256 dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-{pensioner-pit,self-employment-pit,replacement-income-pit}.json
 ```
 
 ```text
-85f225f912bd964684e1192c2c6452f934585364f0865499eb436b84dcaffadb  dashboard/public/data/axiom-euromod-be-pensioner-pit.json
-3e1e6949a65708530ab29e062f3c32242c8f926540597de3e23e11f6067b9662  dashboard/public/data/axiom-euromod-be-self-employment-pit.json
-b45f3fe27e7fcd47924a48b7b0ded305707bd190908d4534fd5a02cae801a73c  dashboard/public/data/axiom-euromod-be-replacement-income-pit.json
+85f225f912bd964684e1192c2c6452f934585364f0865499eb436b84dcaffadb  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-pensioner-pit.json
+3e1e6949a65708530ab29e062f3c32242c8f926540597de3e23e11f6067b9662  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-self-employment-pit.json
+b45f3fe27e7fcd47924a48b7b0ded305707bd190908d4534fd5a02cae801a73c  dashboard/public/data/historical/retired-documentary-boundary/report-artifacts/axiom-euromod-be-replacement-income-pit.json
 ```
 
 The conventional dated full reports also remain locally as reproducibility
