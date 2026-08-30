@@ -95,7 +95,7 @@ semantics; the rows are ours.
   `euromod-be-2025-bed-study-allowance-batch-position-contamination`).
 - **Take-up neutralization**: where a benefit's solo draw still marks
   non-take (UKMOD Pension Credit) or take-up rates could drift under the
-  solo draw (Belgium `bed_s`), pin the take-up constants to 1.0 with
+  solo draw, pin the take-up constants to 1.0 with
   `euromod_constant_overrides` (comparison parameter → env
   `EUROMOD_CONSTANT_OVERRIDES`, `$name=value` pairs). The worker patches
   the DefConst values into the system XML on the model overlay; the
@@ -110,9 +110,10 @@ semantics; the rows are ours.
 2. **Suites**: a `<cc>-worker-*` synthetic suite (mirror
    `suites/be_worker.py`) over an income grid that exercises the encoded
    brackets/caps; explicit `axiom_inputs` pin the supplied boundaries.
-3. **Composed pipeline**: rulespec stage boundaries are supplied inputs by
-   convention, so end-to-end liability comparisons need a composed
-   `pilot_worker_oracle_pipeline`-style module on the rulespec side.
+3. **External composition**: RuleSpec may expose only concepts stated in public
+   policy documents. Compose end-to-end liability, routing, income-list, and
+   behavioral surfaces in the oracle or application layer from those
+   documentary outputs; never add a comparator-shaped RuleSpec module.
 4. **Issue ledger**: engine/model findings go in
    `axiom_oracles/data/euromod_issues.json` (dashboard panel reads it);
    encoding findings go on the `rulespec-<cc>` repo with the exact

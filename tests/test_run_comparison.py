@@ -1593,7 +1593,7 @@ def test_euromod_synthetic_runner_forwards_extra_template_columns(
         {
             "axiom_rules_repo": str(engine_repo),
             "parameters": {
-                "suite": "be-replacement-income-pit",
+                "suite": "be-social-assistance",
                 "period": 2025,
                 "sample_size": 0,
                 "euromod_model_root": str(model_root),

@@ -4,8 +4,11 @@ _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts
   --check. covered_min may only rise; unexplained_max and axiom_attributed_open_max may only fall. Re-pin
   with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the gate refuses regressions.
 ratchets:
+# Scope rebaseline: the documentary hard cut retired six pipeline bindings plus
+# five aggregate-output bindings. Article 51 awaits its signed canonical migration
+# and a fresh receipted run.
 - jurisdiction: be
-  covered_min: 23
+  covered_min: 12
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 23

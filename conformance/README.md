@@ -266,17 +266,10 @@ runner uses, the `--check` gate and `tests/test_conformance.py`
 (`test_recorded_imports_match_the_cli_runner_derivation`) tie it to the real run
 path — it cannot describe a program the harness would not compile.
 
-**Most BE compositions are a single top-level module** (it transitively imports
-its own stages); only `be-worker-ssc` spans two (`employee_contributions` +
-`work_bonus`, its three outputs). `be-marital-quotient` likewise imports the
-single top-level `couple_pit_oracle_pipeline`, but its suite now supplies two
-related `Person` records beneath the queried `TaxUnit`: EUROMOD `yem` and
-`yemeq_s` bridge to spouse A's worker inputs, spouse B carries zero worker
-amounts, and the composition records both role facts and spouse→tax-unit
-relations. Its published dispositions predate the repaired rulespec-be#118
-pipeline and remain attached to the current committed 0/3 publication until a
-canonical comparison refresh replaces those observed mismatch rows; a
-supervised worktree validation is not itself a disposition-retirement event.
+**Every current BE composition is a single documentary module.** Comparator-shaped
+PIT, generated annual aggregates, routing, and income-list compositions are not
+conformance programs: those joins belong in this layer and must not be exported
+as atomic RuleSpec concepts.
 
 ### CLI convenience
 

@@ -133,204 +133,6 @@ concepts:
         name: kindergeld.betrag_m
         scope: *de_country_scope
 
-  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
-    description: Belgium worker PIT before withholding
-    category: tax
-    comparison: amount
-    tolerance: 15
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_pilot_federal_and_local_tax_before_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tin_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding:
-    description: Belgium single-earner married-couple PIT before withholding (Article 87 marital quotient)
-    category: tax
-    comparison: amount
-    tolerance: 15
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_couple_federal_and_local_tax_before_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tin_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding:
-    description: Belgium pension and replacement-income PIT before withholding
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_pensioner_federal_and_local_tax_before_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tin_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding:
-    description: Belgium pensioner annual health and solidarity withholding
-    category: social_contributions
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_pensioner_annual_social_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tscpe_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits:
-    description: Belgium Articles 147--153 pension-income tax reduction
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_pensioner_replacement_reduction_after_limits
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tintcri_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits:
-    description: Belgium Articles 147--153 unemployment-income tax reduction
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_replacement_unemployment_reduction_after_limits
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tintcri_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits:
-    description: Belgium Articles 147--153 sickness/invalidity tax reduction
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_replacement_sickness_invalidity_reduction_after_limits
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tintcri_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding:
-    description: Belgium self-employment PIT before withholding
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tin_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income:
-    description: Belgium combined worker and self-employment taxable income
-    category: tax
-    comparison: amount
-    tolerance: 0.01
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: il_taxabley
-        scope:
-          type: country
-          geoid: BE
-
   be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions:
     description: Belgium employee social-security contribution before worker reductions
     category: social_contributions
@@ -350,29 +152,6 @@ concepts:
           geoid: BE
       euromod:
         name: tscee_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction:
-    description: Belgium employee social-security work-bonus reduction
-    category: social_contributions
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_worker_work_bonus_full_year_equal_monthly_total_reduction
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tsceerd_s
         scope:
           type: country
           geoid: BE
@@ -442,29 +221,6 @@ concepts:
           geoid: BE
       euromod:
         name: tscse_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/social_security/non_labour_income_contributions#belgium_pensioner_total_annual_health_and_solidarity_withholding:
-    description: Belgium pensioner health/disability and solidarity contribution
-    category: social_contributions
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pensioner_total_annual_health_and_solidarity_withholding
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tscpe_s
         scope:
           type: country
           geoid: BE
@@ -584,29 +340,6 @@ concepts:
           type: country
           geoid: DK
 
-  be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes:
-    description: Belgium immovable withholding gross tax with supplied local centimes
-    category: tax
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-BRU, BE-VLG, BE-WAL]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_immovable_withholding_gross_tax_after_supplied_local_centimes
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tprhm_s
-        scope:
-          type: country
-          geoid: BE
-
   be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed:
     description: Belgium indexed cadastral income for immovable withholding
     category: tax
@@ -626,190 +359,6 @@ concepts:
           geoid: BE
       euromod:
         name: khooo_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount:
-    description: Belgium regional birth allowance
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-BRU, BE-VLG, BE-WAL, BE-DG]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_family_benefits_birth_allowance_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bchba_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount:
-    description: Belgium child benefit base amount
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-BRU, BE-VLG, BE-WAL, BE-DG]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_family_benefits_child_benefit_base_2025_annual_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bch_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement:
-    description: Belgium Brussels child benefit with Article 9 social supplement
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-BRU]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bch_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement:
-    description: Belgium Brussels same-age child household child benefit with Article 9 social supplement
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-BRU]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bch_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement:
-    description: Belgium Wallonia child benefit with Article 13 social supplement
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-WAL]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bch_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:policies/euromod_benefit_income_list#belgium_euromod_ils_ben_family_benefit_pilot_annual_amount:
-    description: Belgium EUROMOD ils_ben family-benefit pilot aggregate
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_euromod_ils_ben_family_benefit_pilot_annual_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: ils_ben
-        scope:
-          type: country
-          geoid: BE
-
-  be:policies/euromod_tax_income_list#belgium_euromod_ils_tax_worker_pit_pilot_annual_amount:
-    description: Belgium EUROMOD ils_tax worker PIT pilot aggregate
-    category: taxes
-    comparison: amount
-    tolerance: 15
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_euromod_ils_tax_worker_pit_pilot_annual_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: ils_tax
-        scope:
-          type: country
-          geoid: BE
-
-  be:policies/euromod_disposable_income_list#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount:
-    description: Belgium EUROMOD ils_dispy worker PIT and social-insurance pilot aggregate
-    category: disposable_income
-    comparison: amount
-    tolerance: 15
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: ils_dispy
         scope:
           type: country
           geoid: BE
@@ -883,7 +432,7 @@ concepts:
           type: country
           geoid: BE
 
-  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_worker_forfait_professional_expenses:
+  be:statutes/income_tax/professional_expenses/article_51_forfaits#belgium_pit_article_51_employee_forfait_professional_expenses:
     description: Belgium Article 51 employee professional-expense forfait (tintace)
     category: tax
     comparison: amount
@@ -896,35 +445,12 @@ concepts:
       geoid: BE
     targets:
       axiom:
-        name: belgium_pit_pilot_worker_forfait_professional_expenses
+        name: belgium_pit_article_51_employee_forfait_professional_expenses
         scope:
           type: country
           geoid: BE
       euromod:
         name: tintace_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit:
-    description: Belgium Article 289ter/1 low-wage work-bonus tax credit (tintcly)
-    category: tax
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: tintcly_s
         scope:
           type: country
           geoid: BE
@@ -952,29 +478,6 @@ concepts:
           type: country
           geoid: BE
 
-  be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount:
-    description: Belgium study allowance, region-routed to the Flemish or French-Community amount
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE, BE-VLG, BE-WAL]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_study_allowance_annual_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bed_s
-        scope:
-          type: country
-          geoid: BE
-
   be:statutes/income_guarantee_for_elderly/payable_amount#belgium_grapa_income_guarantee_for_elderly_annual_amount:
     description: Belgium income guarantee for elderly people
     category: benefits
@@ -994,29 +497,6 @@ concepts:
           geoid: BE
       euromod:
         name: bsaoa_s
-        scope:
-          type: country
-          geoid: BE
-
-  be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount:
-    description: Belgium ordinary unemployment benefit (monthly)
-    category: benefits
-    comparison: amount
-    tolerance: 1
-    relative_tolerance: 0.001
-    priority: high
-    locales: [BE]
-    scope:
-      type: country
-      geoid: BE
-    targets:
-      axiom:
-        name: belgium_unemployment_ordinary_pilot_monthly_payable_amount
-        scope:
-          type: country
-          geoid: BE
-      euromod:
-        name: bun_s
         scope:
           type: country
           geoid: BE

@@ -57,10 +57,11 @@ BE_COVERAGE_SOURCES = (
     DASHBOARD_DATA_DIR / "euromod-be-coverage.json",
 )
 BE_ROLLUP_NOTE = (
-    "Raw = exact per-comparison matches across the committed be-* dashboard "
-    "suites. Explained adds mismatches carrying a schema-validated "
-    "disposition (explained residuals, upstream engine gaps, bridge "
-    "artifacts) from dispositions/<suite>.yaml."
+    "Raw = exact per-comparison matches across current top-level be-* dashboard "
+    "suites. Reports archived under dashboard/public/data/historical are "
+    "evidence only and are excluded. Explained adds mismatches carrying a "
+    "schema-validated disposition (explained residuals, upstream engine gaps, "
+    "bridge artifacts) from active dispositions/<suite>.yaml."
 )
 
 

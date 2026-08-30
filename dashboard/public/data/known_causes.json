@@ -14,19 +14,6 @@
    "suite": "be-employer-ssc"
   },
   {
-   "concept": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
-   "description": "The 10k Belgium worker PIT residual is the filed JRC EUROMOD BE_2025 Article 289ter/1 issue: BE_2025 computes the refundable low-wage work-bonus tax credit from pre-cap i_tsceerdA_s/i_tsceerdB_s, while the source-backed RuleSpec caps the A/B credit bases by the employee Article 38 contribution before reductions because CIR 92 Article 289ter/1 refers to reductions actually granted. The 30k and 60k worker cases still match.",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12",
-   "kind": "amount_difference",
-   "label": "EUROMOD BE_2025 PIT credit uses uncapped work-bonus A/B amounts",
-   "suite": "be-worker-pit"
-  },
-  {
    "concept": "us:statutes/7/2014/u#snap_benefit",
    "description": "65 of 896 MA households differ on benefit amount. Two causes: PolicyEngine imputes MA TAFDC/TANF into SNAP unearned income while Axiom projects only observed ECPS income facts, and PE pays households through a categorical/BBCE path whose TANF-service and authorization facts are not yet available to Axiom's projection. Utilities are not a driver: the FY 2026 heating/cooling SUA is encoded at $914/month and matches PE in every traced residual.",
    "drivers": [
@@ -460,59 +447,6 @@
    "kind": "eligibility_left_only",
    "label": "Household-unit and income-definition edges",
    "suite": "medicaid-magi-co-ecps"
-  },
-  {
-   "concept": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
-   "description": "The 30k Belgium worker residual is the open JRC EUROMOD BE_2025 timing issue: EUROMOD appears to apply the February-through-December ONSS worker work-bonus table to all 12 months, while Axiom applies the separate January 2025 statutory table for one month and the February table for 11 months.",
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
-   "kind": "amount_difference",
-   "label": "EUROMOD applies the February 2025 work-bonus table to January",
-   "suite": "be-worker-ssc"
-  },
-  {
-   "concept": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
-   "description": "The net employee-contribution residual is exactly the opposite side of the worker work-bonus residual. The gross 13.07% employee contribution before reductions matches EUROMOD exactly; only the reduction timing differs.",
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
-   "kind": "amount_difference",
-   "label": "Downstream of the EUROMOD work-bonus timing issue",
-   "suite": "be-worker-ssc"
-  },
-  {
-   "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement",
-   "description": "The six older-child residuals are the open JRC EUROMOD BE_2025 transition issue: age-0 new-system Wallonia Article 13 cases match exactly, but pre-2020 children receive an extra annualized 2025-indexed Article 13 supplement in EUROMOD. These residual amounts use the applied 2025 RuleSpec surface in be/statutes/family_benefits/child_benefit_base_2025.yaml and the AVIQ 2025 amount table: 31.09 EUR/month for the middle-income supplement and 68.39 EUR/month for the low-income supplement. The raw Walloon Decree Article 13 statutory amounts remain 25 and 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml before indexation. Walloon Articles 120, 123, and 128 keep pre-2020 LGAF amounts and bar cumulation with decree supplements.",
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9",
-   "kind": "amount_difference",
-   "label": "EUROMOD cumulates indexed Wallonia Article 13 supplement on pre-2020 children",
-   "suite": "be-family-child-benefit-wallonia-social-supplement"
-  },
-  {
-   "concept": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
-   "description": "The four German-speaking Community base child-benefit residuals are filed upstream: BE_2025 bch_be returns zero for drgn1=4, while source-backed RuleSpec returns the statutory DG amount of 1,946.55 EUR/year in each entitled one-child case. Brussels, Flanders, and Wallonia base cases still match exactly, so the mismatch is isolated to the missing drgn1=4 bch_be branch.",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
-   "kind": "amount_difference",
-   "label": "EUROMOD BE_2025 has no DG child-benefit branch",
-   "suite": "be-family-child-benefit-base"
-  },
-  {
-   "concept": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
-   "description": "The German-speaking Community newborn residual is filed upstream: BE_2025 bchba_be returns zero for drgn1=4, while source-backed RuleSpec returns the official DG birth premium of 1,376.16 EUR. The same suite still matches Brussels, Flanders, and Wallonia exactly; the mismatch is isolated to the missing drgn1=4 bchba_be branch.",
-   "engines": {
-    "left": "euromod",
-    "right": "axiom"
-   },
-   "fix_owner": "euromod-upstream",
-   "issue_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
-   "kind": "amount_difference",
-   "label": "EUROMOD BE_2025 has no DG birth-allowance branch",
-   "suite": "be-family-birth-allowance"
   },
   {
    "concept": "be:statutes/property_tax/cadastral_income_indexation#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed",

@@ -2,7 +2,7 @@
   "created_at": "2026-07-05",
   "jurisdiction": "be",
   "purpose": "Coverage inventory for the EUROMOD Belgium BE_2025 model surface against Belgium RuleSpec. EUROMOD is an executable comparison oracle, not legal authority; statutory and regulatory RuleSpec modules must still cite upstream Belgian law.",
-  "coverage_claim": "Current Axiom coverage has twenty-two EUROMOD-facing output concepts: gross employee SSC tscee_s is live-verified for the regular worker statutory slice; employee work-bonus reduction tsceerd_s and derived net SSC tscee_net_s run live with Belgium-specific synthetic labour inputs and expose a narrow 2025 timing residual; employer SSC tscer_s live-compares ordinary private-sector commercial employer cases and exposes EUROMOD issue #11 because BE_2025 uses stale company-closing-fund rates relative to the official ONSS 2025 FFE workbook; PIT tin_s has a composed single-worker pilot that nets ordinary employee SSC before Article 51 forfait expenses, applies the Article 5/2 autonomy factor, computes Article 289ter/1 work-bonus credit amounts from encoded ONSS full-year equal-month work-bonus A/B amounts capped by personal contributions actually granted, treats the Article 289ter/1 credit as refundable under CIR 92 Articles 290 and 304, and live-compares 10k, 30k, and 60k full-year equal-month worker cases: 30k and 60k match, while 10k exposes EUROMOD issue #12 because BE_2025 uses uncapped A/B credit bases; the household tax income-list aggregate ils_tax live-verifies a narrow worker-PIT pilot for the 30k and 60k worker cases, while capital-income-tax and property-tax composition remain open; self-employed social contributions tscse_s live-verifies for main-activity floor, first-bracket, high-income, and capped cases after bridging EUROMOD's uprated yse into Axiom, and exposes filed EUROMOD threshold-allowance residuals for secondary and post-pension cases; special social-security contribution tsceesp_s bridges EUROMOD's returned il_taxabley base into the Article 108 household contribution and live-verifies the low and middle single-worker statutory slice while exposing a filed EUROMOD Article 108 schedule issue for high-income single and joint-assessment cases; Flemish care/social-protection premium tci_s is live-verified for ordinary and reduced-premium adult Flanders cases using Article 68 plus official Statbel health-index values; Flemish jobbonus bwkrg_s is live-compared for seven worker cases: a matching Brussels non-resident zero case, a matching tiny part-time suppression case, and five visible full-time/half-time residuals tracked as EUROMOD issue #10 because BE_2025 uses older jobbonus thresholds, a 600 EUR maximum, and no 2025 fixed top-up; indexed cadastral income khooo_s live-compares CIR 92 Article 518 indexation and exposes EUROMOD issue #14 because BE_2025 tprhm_be leaves the indexed cadastral-income product unrounded; immovable withholding tprhm_s is live-verified for high-cadastral-income no-reduction Flanders, Brussels, and Wallonia cases after bridging EUROMOD's returned annual khooo_s into Axiom and using supplied local centimes; maternity leave bmact_s live-verifies the ordinary employed mother/newborn household slice, including an under-cap path and a high-wage Article 113 cap path, with EUROMOD extension switch PBE=on, mapping the encoded Article 216 first-30-day 82 percent and after-30-day 75 percent rest-period amount to EUROMOD after bridging annualized yem into uncapped daily remuneration as yem / 312 and supplying the BE_2025 Article 113 cap input for the capped case; birth-leave bpact_s live-verifies the father/newborn household slice, including an under-cap path and a high-wage Article 87 cap path, with the same PBE switch and yem / 312 bridge plus supplied BE_2025 Article 87 cap input; regional birth allowance bchba_s is live-verified for Brussels first/multiple and later-child amounts, Flanders first/later amounts, and Wallonia first/later amounts, while the German-speaking Community newborn case exposes EUROMOD issue #13 because BE_2025 bchba_be returns zero for drgn1=4; monthly child benefit bch_s live-verifies for a one-child high-income base-amount slice in Brussels, Flanders, and Wallonia across age and higher-education branches, and live-compares German-speaking Community base cases that expose EUROMOD issue #8 because BE_2025 bch_be returns zero for drgn1=4, plus one-child social-supplement slices for Brussels Article 9 low-income cases covering ages 0, 13, and 18 higher education, same-age Brussels Article 9 household aggregates covering two- and three-child low-income and middle-income cases, and Wallonia new-system Article 13 low- and middle-income age-0 cases, while pre-2020 Wallonia social-supplement cases expose filed EUROMOD transition issue #9; social-integration income support bsa_s live-verifies for isolated adult and single-parent dependent-child no-resources cases using the 2025 current monthly amount bridge; elderly income guarantee bsaoa_s live-verifies for an isolated no-resources senior when the BE_2025 bsaoa_be policy is temporarily switched on in the EUROMOD model XML overlay; the household benefit income-list aggregate ils_ben live-verifies a narrow family-benefit pilot that composes birth allowance and child benefit for four Brussels, Flanders, and Wallonia household cases, while broader benefit-list composition remains open; and the household disposable-income aggregate ils_dispy live-verifies a narrow worker PIT/SIC pilot for 30k and 55k single-worker cases by composing original employment income, the worker PIT pilot, ordinary employee SSC, and the Article 108 special social-security contribution, while full disposable-income composition remains open. The broader BE_2025 model has 43 policy nodes and is not yet covered end-to-end.",
+  "coverage_claim": "Axiom’s active Belgium comparison surface targets only outputs stated in public-policy documents. The documentary hard cut has retired nineteen former suites, including the employee-worker aggregate, pensioner aggregate, cross-region family-benefit aggregates, and supplied-centimes gross property-tax aggregate. Direct documentary employee, pensioner, regional family-benefit, and regional property-tax components may remain encoded without being claimed as live oracle outputs. Any annualization, regional selection, household aggregation, or EUROMOD income-list composition belongs in this external layer and requires a fresh direct comparison before it can become current evidence.",
   "source_artifacts": [
     {
       "kind": "euromod_country_model",
@@ -36,7 +36,7 @@
     "monthly_inputs": true,
     "annualize_outputs": true,
     "axiom_oracles_pr": "https://github.com/TheAxiomFoundation/axiom-oracles/pull/92",
-    "axiom_oracles_local_ref_observed": "codex/be-worker-pit-low-wage-case",
+    "axiom_oracles_local_ref_observed": "fix/documentary-rulespec-boundary",
     "configuration_note": "Live synthetic comparisons use the BE_2024_c1_2015_03_e2 dataset configuration and BE_training_data as the template dataset so EUROMOD's Belgian uprating and policy switches run while synthetic rows retain the training schema."
   },
   "denominator": {
@@ -60,12 +60,13 @@
     }
   },
   "coverage_summary": {
-    "current_oracle_output_targets": 24,
-    "live_verified_oracle_output_targets": 17,
+    "current_oracle_output_targets": 10,
+    "live_verified_oracle_output_targets": 10,
     "prepared_oracle_output_targets": 0,
     "full_household_disposable_income_parity": false,
     "rule_percentage": null,
-    "rule_percentage_note": "No percentage is reported until each BE_2025 policy/function is mapped to RuleSpec modules and marked encoded, composed, oracle-tested, or gap."
+    "rule_percentage_note": "No percentage is reported until each BE_2025 policy/function is mapped to RuleSpec modules and marked encoded, composed, oracle-tested, or gap.",
+    "current_oracle_output_targets_note": "Counts entries in oracle_output_coverage that retain a current top-level comparison report after the documentary-boundary retirements; documentary modules without a current direct report are excluded."
   },
   "oracle_output_coverage": [
     {
@@ -73,27 +74,27 @@
       "meaning": "gross employee social contributions before work-bonus reduction",
       "rulespec_output": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions",
       "rulespec_module": "be/regulations/social_security/workers/employee_contributions.yaml",
-      "status": "live_oracle_verified_gross_regular_worker_slice",
-      "evidence": "The RuleSpec Article 38 before-reductions bridge and the axiom-oracles EUROMOD Belgium live comparison both compute tscee_s as 13.07 percent of EUROMOD gross yem for the 30k and 60k single-worker cases.",
-      "remaining_gap": "Full ONSS contribution bases, special regimes, and household integration remain partial."
+      "status": "documentary_output_available_no_current_oracle",
+      "evidence": "The Article 38 before-reductions output remains documentary, but its former report was archived because the same worker suite required a removed equal-month annual work-bonus aggregate. A fresh isolated direct comparison is required before this output is current evidence.",
+      "remaining_gap": "No current worker report; future comparison must target only direct documentary employee-contribution outputs."
     },
     {
       "euromod_variable": "tsceerd_s",
       "meaning": "employee social-contribution work-bonus reduction",
-      "rulespec_output": "be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction",
-      "rulespec_module": "be/regulations/social_security/workers/work_bonus.yaml",
-      "status": "live_oracle_compared_with_known_2025_timing_residual",
-      "evidence": "The live 30k single-worker comparison bridges EUROMOD yemeq_s into RuleSpec's supplied annual work-bonus reference remuneration. EUROMOD returns 3398.52 while RuleSpec returns 3386.87 because EUROMOD applies the February-onward 2025 work-bonus table to all 12 months and RuleSpec weights January separately from February through December.",
-      "remaining_gap": "Partial-year, part-time, manual-worker, and future month-varying work-bonus mechanics are not yet encoded; the January-vs-February 2025 timing difference is intentionally visible instead of hidden by tolerance."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_removed_non_documentary_annual_aggregate",
+      "evidence": "The former target annualized an equal monthly work-bonus result. That generated annual aggregate is outside the documentary RuleSpec boundary and its report has been archived.",
+      "remaining_gap": "Compare documentary monthly work-bonus outputs directly or annualize them outside Axiom."
     },
     {
       "euromod_variable": "tscee_net_s",
       "meaning": "derived oracle output tscee_s minus tsceerd_s",
       "rulespec_output": "be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution",
       "rulespec_module": "be/regulations/social_security/workers/employee_contributions.yaml",
-      "status": "live_oracle_compared_with_known_2025_timing_residual",
-      "evidence": "The oracle adapter derives tscee_net_s from EUROMOD tscee_s and tsceerd_s so the Axiom after-work-bonus contribution is compared to the same household-level quantity. The 30k residual is -11.65, exactly the inverse of the work-bonus timing residual.",
-      "remaining_gap": "Depends on the work-bonus residual and broader special-regime coverage."
+      "status": "documentary_output_available_no_current_oracle",
+      "evidence": "The ordinary employee-contribution output remains documentary, but its former report was archived because the same worker suite required a removed annual work-bonus aggregate. A fresh isolated direct comparison is required before this output is current evidence.",
+      "remaining_gap": "No current worker report; any work-bonus annualization must remain outside Axiom."
     },
     {
       "euromod_variable": "tscer_s",
@@ -152,43 +153,38 @@
     {
       "euromod_variable": "tprhm_s",
       "meaning": "immovable withholding / advance levy on immovable property",
-      "rulespec_output": "be:statutes/property_tax/gross_withholding_and_supplied_centimes#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes",
-      "rulespec_module": "be/statutes/property_tax/gross_withholding_and_supplied_centimes.yaml",
-      "status": "live_oracle_verified_high_cadastral_income_no_reductions",
-      "evidence": "RuleSpec composes the ordinary Belgium/Flanders regional rates with supplied provincial, agglomeration, and communal additional centimes, routes Flanders, Brussels, and Wallonia with a supplied region input, and maps gross tax after supplied local centimes to EUROMOD tprhm_s. The 2026-07-04 live BE_2025 comparison bridges EUROMOD's returned annual khooo_s cadastral-income base into Axiom and matches all three high-cadastral-income no-reduction cases exactly: Flanders, Brussels, and Wallonia.",
-      "remaining_gap": "Broader immovable-withholding parity still needs cadastral-income determination, Article 518 rounding once EUROMOD issue #14 is resolved, reductions, remissions, exemptions including BE HOME, provincial/agglomeration/communal centime table ingestion, low-income thresholds, taxpayer aggregation, and other property-tax cases. EUROMOD raw khooo_s and tprhm_s are already annual-law amounts and are intentionally not annualized by the adapter."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_removed_non_documentary_aggregate",
+      "evidence": "The former target combined regional property-tax rules with supplied local centimes in a generated gross aggregate. That module and its current report were retired at the documentary boundary.",
+      "remaining_gap": "Keep regional selection and local-centime composition outside Axiom, then compare a surviving documentary output directly."
     },
     {
       "euromod_variable": "bchba_s",
       "meaning": "regional birth allowance",
-      "rulespec_output": "be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount",
-      "rulespec_module": "be/statutes/family_benefits/birth_allowance.yaml",
-      "status": "live_oracle_verified_brussels_flanders_wallonia_with_known_dg_birth_allowance_issue",
-      "evidence": "RuleSpec maps Brussels, Flanders, Wallonia, and the German-speaking Community 2025 birth-allowance amounts to EUROMOD bchba_s using upstream regional/community statutes for entitlement plus official 2025 amount surfaces for indexed amounts. The live BE_2025 synthetic comparison covers Brussels first/multiple birth 1367.74 EUR, Brussels later child 621.70 EUR, Flanders first/later child 1238.78 EUR, Wallonia first/later child 1367.74 EUR, and a German-speaking Community newborn birth premium of 1376.16 EUR. Brussels, Flanders, and Wallonia match exactly; the German-speaking Community case intentionally shows EUROMOD bchba_s = 0 against Axiom 1376.16 because BE_2025 bchba_be has no visible drgn1=4 branch. That residual is filed upstream as ec-jrc/JRC-EUROMOD-software-source-code#13.",
-      "remaining_gap": "Exact German-speaking Community birth-allowance parity is blocked by the filed EUROMOD bchba_be region-scope issue rather than an Axiom statutory encoding gap. Broader family-benefit parity still needs allocation/payment-recipient rules, multiple-birth edge cases beyond the current one-child birth component, statutory payment timing, and expansion of ils_ben beyond the family-benefit pilot."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_removed_non_documentary_cross_region_aggregate",
+      "evidence": "The former target selected and aggregated birth-allowance outputs across regions. The cross-region aggregate and its current report were retired; surviving regional documentary rules are not claimed as a current oracle.",
+      "remaining_gap": "Select a region outside Axiom and obtain a fresh direct target for a surviving documentary regional output."
     },
     {
       "euromod_variable": "bch_s",
       "meaning": "monthly child benefit",
-      "rulespec_output": "be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount",
-      "additional_rulespec_outputs": [
-        "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement",
-        "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement",
-        "be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
-      ],
-      "rulespec_module": "be/statutes/family_benefits/child_benefit_base_2025.yaml",
-      "status": "live_oracle_verified_one_child_base_and_brussels_same_age_household_with_known_dg_and_pre_2020_wallonia_issues",
-      "evidence": "RuleSpec computes 2025 annualized base child-benefit amounts for a one-child, high-income household slice in Brussels, Flanders, Wallonia, and the German-speaking Community, the Brussels Article 9 one-child low-income social supplement and same-age household aggregate branch from upstream Brussels statutory/official amount-table sources, the Wallonia Article 13 one-child new-system social supplement from the Walloon decree plus official AVIQ indexed amount tables, and the Wallonia pre-2020 LGAF low-income transition path from Walloon Articles 120, 123, and 128. axiom-oracles maps those annual amounts to EUROMOD bch_s, uses explicit education-code projection dec=6 for higher-education branches, and bridges EUROMOD il_bch_means into the Article 9 income input for the Brussels same-age household aggregate suite. The 2026-07-04 live BE_2025 synthetic comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches 13/17 base cases, 3/3 Brussels one-child social-supplement cases, 4/4 Brussels same-age household aggregate cases, and 2/8 Wallonia social-supplement cases exactly. The four German-speaking Community base residuals are tracked as ec-jrc/JRC-EUROMOD-software-source-code#8 because EUROMOD returns zero for drgn1=4, while RuleSpec returns the statutory 157 EUR monthly base plus the 62.55 EUR 2025 annual supplement. The six pre-2020 Wallonia social-supplement residuals are tracked as ec-jrc/JRC-EUROMOD-software-source-code#9 because EUROMOD appears to add the decree Article 13 supplement to children that remain under the LGAF transition path. The BE family-benefit oracle sets EUROMOD byr to zero because BE_2025 treats byr as early-retirement pension income, not birth year.",
-      "remaining_gap": "Exact German-speaking Community child-benefit parity is blocked by filed upstream EUROMOD issue #8, and exact Wallonia pre-2020 social-supplement parity is blocked by filed upstream EUROMOD issue #9. Broader child-benefit parity still needs low-income/social supplement branches beyond the Brussels Article 9 same-age and Wallonia Article 13 one-child slices, orphan/disability/single-parent supplements, mixed-age multiple-child rank/composition mechanics, allocation/payment-recipient rules, and expansion of ils_ben beyond the family-benefit pilot."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_removed_non_documentary_household_aggregates",
+      "evidence": "The former targets annualized and aggregated regional child-benefit components, including household and social-supplement rollups. Those generated outputs and all current reports that required them were retired.",
+      "remaining_gap": "Regional selection, annualization, and household aggregation must be composed outside Axiom before a fresh direct comparison."
     },
     {
       "euromod_variable": "tin_s",
       "meaning": "simulated personal income tax",
-      "rulespec_output": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding",
-      "rulespec_module": "be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml",
-      "status": "live_oracle_compared_worker_pilot_with_known_article_289ter1_residual",
-      "evidence": "RuleSpec has a dense-executable worker-remuneration-to-PIT pipeline that composes Article 38 ordinary employee SSC into the PIT professional-income base, then applies Article 51 forfait expenses, Article 130/134 tax, the Article 5/2 autonomy factor, Article 289ter/1 work-bonus credit amounts computed from encoded ONSS full-year equal-month A/B work-bonus amounts capped by employee contributions actually granted, refundable Article 289ter/1 imputation under CIR 92 Articles 290 and 304, and supplied local rates. The 2026-07-04 live synthetic comparison matches the 30k and 60k worker cases within the 15 EUR tolerance. The 10k low-wage refundable-credit case intentionally remains a visible residual: EUROMOD tin_s is -1504.8488879999998 while Axiom returns -724.4815561100447, a -780.367331889955 difference tracked as ec-jrc/JRC-EUROMOD-software-source-code#12 because BE_2025 computes the PIT credit from uncapped i_tsceerdA_s/i_tsceerdB_s instead of the actually granted capped reduction amounts.",
-      "remaining_gap": "This is single-worker PIT pilot comparison, not full household PIT. Exact low-wage PIT parity is blocked by filed EUROMOD issue #12 unless upstream confirms the uncapped interpretation; full parity also needs joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering outside the pilot."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_non_documentary_composition_removed",
+      "evidence": "The former worker-PIT oracle pipeline was removed from atomic RuleSpec because an end-to-end EUROMOD-facing composition is not itself a concept stated in a public-policy document.",
+      "remaining_gap": "Compose documentary statutory outputs into tin_s only in this external conformance or application layer; do not restore an oracle-pipeline concept to atomic RuleSpec."
     },
     {
       "euromod_variable": "bsa_s",
@@ -211,10 +207,10 @@
     {
       "euromod_variable": "bun_s",
       "meaning": "ordinary unemployment benefit (PART SIMULATED; bun_be switched on per run)",
-      "rulespec_output": "be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount",
-      "rulespec_module": "be/regulations/unemployment/pilot_oracle_pipeline.yaml",
-      "status": "live_oracle_dispositioned",
-      "note": "bun_be ships off (PART SIMULATED); switched on via euromod_policy_switch_overrides. EUROMOD bun_s = 0.65 x min(post-uprating prior monthly wage, 3432.38 EUR/month) for the ordinary first spell month (stored /12; bridge annualises x12). The composed RuleSpec pilot returns the RD 25.11.1991 Article 111 A1 daily-cap-bound monthly payable. Four first-month single cases: all dispositioned upstream_engine_gap (EUROMOD stylised monthly highwage cap vs statutory Article 111 daily cap A1, no Article 115 floor, no Article 114 degressivity)."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_non_documentary_composition_removed",
+      "note": "The former unemployment pilot pipeline mixed documentary benefit rules into a comparator-shaped payable output. It has been removed from active comparison configuration; documentary unemployment modules remain available for a future external composition."
     },
     {
       "euromod_variable": "bmact_s",
@@ -237,29 +233,29 @@
     {
       "euromod_variable": "ils_tax",
       "meaning": "standard tax income-list aggregate",
-      "rulespec_output": "be:policies/euromod_tax_income_list#belgium_euromod_ils_tax_worker_pit_pilot_annual_amount",
-      "rulespec_module": "be/policies/euromod_tax_income_list.yaml",
-      "status": "live_oracle_verified_worker_pit_pilot",
-      "remaining_gap": "This is not full tax-list parity. Broader ils_tax coverage still needs capital-income tax, immovable withholding and other wealth/property tax composition, joint assessment, regional/local reductions, and non-worker income categories. Social contributions remain outside ils_tax in EUROMOD and feed disposable income through ils_sicdy.",
-      "evidence": "RuleSpec composes the encoded worker PIT pilot into a narrow EUROMOD ils_tax worker-PIT aggregate with supplied zero capital-income-tax and property-tax components. The live BE_2025 synthetic comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches the 30k and 60k worker cases within the statutory PIT oracle tolerance. The 10k low-wage case remains excluded from the exact ils_tax pilot because the underlying tin_s residual is tracked as ec-jrc/JRC-EUROMOD-software-source-code#12."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_external_aggregate",
+      "remaining_gap": "ils_tax is an EUROMOD reporting aggregate, not a Belgian public-policy concept. Compose it only outside atomic RuleSpec from documentary tax outputs.",
+      "evidence": "The former RuleSpec EUROMOD tax-income-list module and its active suite were retired under the documentary-concept boundary."
     },
     {
       "euromod_variable": "ils_ben",
       "meaning": "standard benefit income-list aggregate",
-      "rulespec_output": "be:policies/euromod_benefit_income_list#belgium_euromod_ils_ben_family_benefit_pilot_annual_amount",
-      "rulespec_module": "be/policies/euromod_benefit_income_list.yaml",
-      "status": "live_oracle_verified_family_benefit_pilot",
-      "remaining_gap": "This is not full benefit-list parity. Broader ils_ben coverage still needs social assistance, GRAPA, unemployment, pensions, disability, leave, jobbonus and other regional/community benefits, payment-recipient allocation, multi-newborn birth-premium aggregation, and composition with benefit interactions beyond the current no-other-benefits family slice.",
-      "evidence": "RuleSpec composes encoded household birth-allowance and child-benefit outputs into a narrow EUROMOD ils_ben family-benefit pilot aggregate. The 2026-07-05 live BE_2025 synthetic comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches 4/4 high- or middle-income family-benefit cases exactly: Brussels age-0 child benefit plus birth allowance, Flanders age-13 child benefit, Wallonia age-0 child benefit plus birth allowance, and Brussels two same-age age-13 children with the Article 9 middle-income supplement. The first probe showed EUROMOD includes bchba_s in ils_ben for age-0 children, so the Axiom aggregate includes the birth component for one-child age-0 cases."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_external_aggregate",
+      "remaining_gap": "ils_ben is an EUROMOD reporting aggregate, not a Belgian public-policy concept. Compose it only outside atomic RuleSpec from documentary benefit outputs.",
+      "evidence": "The former RuleSpec EUROMOD benefit-income-list module and its active suite were retired; the underlying source-backed family-benefit outputs remain active."
     },
     {
       "euromod_variable": "ils_dispy",
       "meaning": "standard disposable-income aggregate",
-      "rulespec_output": "be:policies/euromod_disposable_income_list#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount",
-      "rulespec_module": "be/policies/euromod_disposable_income_list.yaml",
-      "status": "live_oracle_verified_worker_pit_sic_pilot",
-      "remaining_gap": "This is not full disposable-income parity. Broader ils_dispy coverage still needs complete original-income construction, full benefit-list and tax-list composition, self-employed and pensioner social contributions, joint assessment, non-worker income categories, payment-recipient allocation, and household-level interaction ordering.",
-      "evidence": "RuleSpec composes a narrow EUROMOD ils_dispy worker PIT/SIC aggregate as original employment income plus supplied benefits minus the encoded worker PIT pilot, ordinary employee social-security contribution, Article 108 special social-security contribution, and supplied other social-insurance contributions. The live BE_2025 synthetic comparison under dataset BE_2024_c1_2015_03_e2 with template_dataset BE_training_data matches the 30k and 55k single-worker cases within the disposable-income oracle tolerance after bridging EUROMOD's returned yem, yemeq_s, and il_taxabley values into Axiom."
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_external_aggregate",
+      "remaining_gap": "ils_dispy is an EUROMOD reporting aggregate, not a Belgian public-policy concept. Compose it only outside atomic RuleSpec from documentary income, tax, contribution, and benefit outputs.",
+      "evidence": "The former RuleSpec EUROMOD disposable-income-list module and its active suite were retired under the documentary-concept boundary."
     },
     {
       "euromod_variable": "yem",
@@ -272,15 +268,16 @@
     {
       "euromod_variable": "bed_s",
       "meaning": "study allowance (Flemish study grant and school allowance; French-Community allocation d'etudes), region-routed",
-      "rulespec_output": "be:statutes/education/study_allowance_routing#belgium_study_allowance_annual_amount",
-      "rulespec_module": "be/statutes/education/study_allowance_routing.yaml",
-      "status": "live_oracle_verified_flanders_higher_secondary_and_wallonia_batched",
-      "evidence": "The region-routing module selects the Flemish or French-Community study allowance by drgn1. Six single-household BE_2025 cases match bed_s exactly — in one run_cases batch as well as solo, since the adapter runs each household as its own engine run: Flanders higher-education full 3046.30 and intermediate 2092.30, Flanders secondary 1139.56, Wallonia higher-education 869.21, and Flanders and Wallonia above-threshold zeros. The Flemish study grant, Flemish school allowance, and French-Community allocation surfaces supply the routed amounts. BE_2025 also applies a seeded per-household non-take-up lottery to bed_s (active under real dataset-configuration names); per-household engine runs pin every case to the passing solo draw (see euromod_issues.json euromod-be-2025-bed-study-allowance-batch-position-contamination). Brussels' random ninety-ten community split keys on the same draw, so Brussels stays out of scope.",
+      "rulespec_output": null,
+      "rulespec_module": null,
+      "status": "not_mapped_non_documentary_routing_removed",
+      "evidence": "The former region-routing output was removed because that selector was comparison orchestration rather than a concept stated in a public-policy document. Source-backed Flemish and French-Community study-allowance outputs remain encoded.",
       "additional_rulespec_outputs": [
         "be-vlg:statutes/education/study_grant#study_grant_allowance",
         "be-vlg:statutes/education/school_allowance#flanders_school_allowance_amount",
         "be-wal:statutes/education/study_allowance#study_allowance_allocation_amount"
-      ]
+      ],
+      "remaining_gap": "Select and aggregate the applicable documentary Community output in the external conformance or application layer."
     }
   ],
   "domain_coverage": [
@@ -307,14 +304,12 @@
         "be/statutes/income_tax/individual/communal_additions.yaml",
         "be/statutes/income_tax/individual/final_tax.yaml",
         "be/statutes/income_tax/individual/tax_liability_pipeline.yaml",
-        "be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml",
         "be/statutes/income_tax/individual/movable_income.yaml",
         "be/statutes/income_tax/movable_withholding/rates.yaml",
-        "be/statutes/income_tax/benefits/company_car.yaml",
-        "be/policies/euromod_tax_income_list.yaml"
+        "be/statutes/income_tax/benefits/company_car.yaml"
       ],
-      "status": "partial_statutory_coverage_worker_pit_and_ils_tax_worker_pit_pilot_with_known_article_289ter1_residual",
-      "oracle_status": "tin_s worker pilot now compares live against EUROMOD after SSC netting, Article 5/2 autonomy-factor ordering, capped Article 289ter/1 work-bonus credit bases, and Article 289ter/1 refundability; 30k and 60k match, while the 10k low-wage case exposes filed EUROMOD issue #12 because BE_2025 uses uncapped work-bonus A/B bases. This is still not full household parity. ils_tax live-verifies a narrow worker-PIT pilot for 30k and 60k worker cases with supplied zero capital-income-tax and property-tax components. The narrow ils_dispy worker pilot reuses this worker-PIT component inside a disposable-income aggregate for 30k and 55k cases."
+      "status": "partial_statutory_coverage_documentary_outputs_only",
+      "oracle_status": "The Article 51 Python suite now uses only the legacy documentary article_51_forfaits module and direct documentary inputs. It has no current comparison report or conformance binding while the signed canonical page-121/page-122 migration and a fresh run are pending. End-to-end tin_s, marital-quotient, pensioner, replacement-income, self-employment, and EUROMOD income-list compositions have been retired from active atomic-RuleSpec comparison surfaces."
     },
     {
       "domain": "social_contributions",
@@ -338,8 +333,8 @@
         "be/regulations/social_security/self_employed/contributions.yaml",
         "be-vlg/regulations/social_security/flemish_social_protection/premium.yaml"
       ],
-      "status": "partial_statutory_coverage_employee_employer_self_employed_special_and_care_oracle_verified",
-      "oracle_status": "gross tscee_s regular worker slice verifies exactly; tsceerd_s and derived net tscee_net_s compare live with a visible 11.65 work-bonus timing residual at 30k; tscer_s live-compares ordinary private-sector commercial employer cases and exposes EUROMOD employer-SSC parameter issue #11; tscse_s live-verifies exactly for four main-activity self-employed cases after bridging EUROMOD's returned yse into Axiom, while secondary and post-pension residuals are tracked as EUROMOD threshold-allowance issue #6; tsceesp_s live-verifies the low and middle single-worker Article 108 slice after bridging EUROMOD's returned il_taxabley base into Axiom, while high-income single and joint-assessment residuals are tracked as EUROMOD Article 108 schedule issue #7; tci_s live-verifies exactly for ordinary and reduced-premium adult Flanders cases backed by Article 68 and official Statbel health-index values; the narrow ils_dispy worker pilot also composes ordinary employee SSC and the Article 108 special contribution into the household disposable-income aggregate for the matching 30k and 55k cases"
+      "status": "partial_statutory_coverage_employer_self_employed_special_and_care_oracle_verified",
+      "oracle_status": "Current reports cover employer social contributions, self-employed contributions, the Article 108 special contribution, and the Flemish social-protection premium. Documentary employee-contribution, monthly work-bonus, and pensioner contribution components remain encoded, but the worker and pensioner reports were retired because they required generated annual aggregates; they are not current oracle evidence."
     },
     {
       "domain": "family_benefits",
@@ -348,7 +343,6 @@
         "bchba_be"
       ],
       "rulespec_modules": [
-        "be/statutes/family_benefits/regional_routing.yaml",
         "be/statutes/family_benefits/birth_allowance.yaml",
         "be/statutes/family_benefits/guaranteed_family_benefits.yaml",
         "be/statutes/family_benefits/lgaf_amounts.yaml",
@@ -361,11 +355,10 @@
         "be-wal/statutes/family_benefits/eligibility.yaml",
         "be-wal/statutes/family_benefits/amounts.yaml",
         "be-dg/statutes/family_benefits/eligibility.yaml",
-        "be-dg/statutes/family_benefits/amounts.yaml",
-        "be/policies/euromod_benefit_income_list.yaml"
+        "be-dg/statutes/family_benefits/amounts.yaml"
       ],
-      "status": "partial_statutory_coverage_birth_allowance_child_benefit_base_dg_residual_brussels_social_supplement_same_age_household_wallonia_transition_and_ils_ben_family_pilot_oracle_verified",
-      "oracle_status": "bchba_s live-verifies exactly for Brussels first/multiple and later-child newborn cases, Flanders first/later newborn cases, and Wallonia first/later newborn cases; the German-speaking Community newborn case is encoded at 1376.16 EUR and intentionally shows EUROMOD issue #13 because bchba_be returns zero for drgn1=4. bch_s live-verifies for a one-child high-income base-amount slice covering Brussels ages 0, 6, 13, 18 not enrolled, 18 enrolled in higher education; Flanders ages 0, 6, 13, and 18 enrolled in higher education; and Wallonia ages 0, 6, 13, and 18. German-speaking Community base cases at ages 0, 6, 13, and 18 enrolled in higher education are encoded at 1946.55 EUR/year and intentionally show EUROMOD issue #8 because bch_be returns zero for drgn1=4. bch_s also live-verifies exactly for Brussels one-child Article 9 low-income social-supplement cases at ages 0, 13, and 18 higher education, Brussels same-age Article 9 household aggregate cases for two/three low-income children and two middle-income children, and Wallonia new-system Article 13 age-0 low- and middle-income cases; six pre-2020 Wallonia social-supplement residuals are tracked as EUROMOD issue #9. ils_ben live-verifies exactly for a narrow family-benefit pilot covering Brussels and Wallonia age-0 child-benefit-plus-birth-allowance households, a Flanders age-13 child-benefit household, and a Brussels two-child age-13 middle-income Article 9 household."
+      "status": "partial_statutory_component_coverage_no_current_oracle",
+      "oracle_status": "Documentary regional birth-allowance and child-benefit entitlement and amount modules remain encoded. The cross-region, annualized, social-supplement, and household aggregates and their reports were retired, so this domain has no current oracle suite."
     },
     {
       "domain": "social_assistance_and_elderly_income_support",
@@ -402,11 +395,10 @@
         "be/regulations/unemployment/benefit_amount.yaml",
         "be/regulations/unemployment/payable_amount.yaml",
         "be/regulations/pensions/workers/retirement_and_survivor.yaml",
-        "be-vlg/regulations/employment/jobbonus.yaml",
-        "be/regulations/unemployment/pilot_oracle_pipeline.yaml"
+        "be-vlg/regulations/employment/jobbonus.yaml"
       ],
-      "status": "partial_statutory_coverage_unemployment_and_jobbonus_oracle_dispositioned",
-      "oracle_status": "bun_s now live-compares four ordinary first-month single unemployment cases with bun_be switched on per run (BE_2025 ships it off, PART SIMULATED). All four are dispositioned as upstream_engine_gap: EUROMOD computes 0.65 x min(prior monthly wage, a stylised 3432.38 EUR/month highwage cap) with no Article 115 household-status daily floor and no Article 114 degressivity schedule, while the source-backed RuleSpec applies the RD 25.11.1991 Article 111 A1 92.3956 EUR/day cap, the Article 114 first-period 65 percent rate, and the Article 115 floors. bwkrg_s live-compares seven Flemish jobbonus worker cases: the Brussels non-Flanders zero case and tiny part-time suppression case match, while four full-time Flanders cases and one low-wage half-time case expose EUROMOD issue #10 because BE_2025 bwkrg_be uses older jobbonus thresholds, a 600 EUR maximum, and no 2025 fixed top-up. Unemployment, early-retirement, study-allowance, Covid wage-compensation, and broader working-age benefit parity remain unmapped or unverified."
+      "status": "partial_statutory_coverage_documentary_modules_and_jobbonus",
+      "oracle_status": "The source-backed Flemish jobbonus suite remains active. The composed bun_s unemployment pilot was retired; future unemployment comparison must compose documentary legal outputs externally."
     },
     {
       "domain": "leave_disability_and_health_insurance",
@@ -438,15 +430,13 @@
         "be/statutes/property_tax/immovable_withholding.yaml",
         "be/statutes/property_tax/article_15_remission.yaml",
         "be/statutes/property_tax/additional_centimes.yaml",
-        "be/statutes/property_tax/regional_routing.yaml",
-        "be/statutes/property_tax/gross_withholding_and_supplied_centimes.yaml",
         "be-vlg/statutes/property_tax/immovable_withholding.yaml",
         "be-bru/statutes/property_tax/be_home_premium.yaml",
         "be/regulations/vat/rates.yaml",
         "be/statutes/excise/rates.yaml"
       ],
-      "status": "partial_statutory_coverage_khooo_rounding_residual_and_tprhm_oracle_verified",
-      "oracle_status": "khooo_s live-compares CIR 92 Article 518 indexed cadastral income and intentionally shows EUROMOD issue #14 because BE_2025 leaves the 1000 EUR case unrounded at 2244.60 while RuleSpec returns 2245; the 5000 EUR exact-multiple case matches. tprhm_s live-verifies exactly for high-cadastral-income no-reduction Flanders, Brussels, and Wallonia cases after bridging EUROMOD's returned annual khooo_s into Axiom and supplying local centimes. Reductions, remissions, exemptions including BE HOME, and local centime table lookup remain outside this gross bridge."
+      "status": "partial_statutory_coverage_cadastral_indexation_oracle_only",
+      "oracle_status": "khooo_s remains a current direct comparison of CIR 92 Article 518 indexed cadastral income and retains the visible EUROMOD rounding residual. The former gross property-tax report required deleted routing and supplied-centimes aggregate modules and is archived; surviving regional tax components are not claimed as current tprhm_s evidence."
     },
     {
       "domain": "euromod_definitions_outputs_and_uprating",
@@ -467,11 +457,9 @@
         "hhot_switch_be",
         "TransLMA_be"
       ],
-      "rulespec_modules": [
-        "be/policies/euromod_disposable_income_list.yaml"
-      ],
-      "status": "oracle_adapter_support_and_narrow_disposable_income_pilot",
-      "oracle_status": "ILsDef_be standard income-list outputs remain adapter/oracle concepts rather than Belgian legal authority. The narrow ils_dispy worker pilot is RuleSpec-composed from statutory worker PIT, ordinary employee SSC, Article 108 special social-security contribution, and supplied residual components, then live-compared to EUROMOD for 30k and 55k single-worker cases. Full household disposable-income parity remains open."
+      "rulespec_modules": [],
+      "status": "oracle_adapter_support_only",
+      "oracle_status": "EUROMOD standard income-list outputs and uprating machinery are oracle-side comparison concepts. They are not exported from atomic RuleSpec; any aggregate comparison belongs in this external layer."
     }
   ],
   "euromod_policies": [
@@ -779,66 +767,45 @@
   ],
   "next_mapping_work": [
     "Expand leave/disability/health-insurance oracle coverage beyond the current bmact_s employed maternity and bpact_s birth-leave slices to unemployment and self-employed maternity, parental leave bfapl_s, incapacity/disability, upstream Article 113/87 cap-source ingestion, and detailed protection-period scheduling.",
-    "Expand tin_s beyond the single-worker pilot to full household PIT, including joint assessment, dependants, other income categories, regional reductions, withholding tables, local rate ingestion, and final imputation ordering.",
+    "Build any end-to-end tin_s comparison as an external composition of documentary legal outputs; do not add an atomic comparator-shaped PIT concept.",
     "Expand be-flemish-social-protection-premium beyond ordinary and reduced-premium adult Flanders cases to Brussels voluntary affiliation, administrative-affiliation-without-premium, arrears, and sanctions.",
     "Expand be-flemish-jobbonus beyond the current full-time and low-wage/small-payment part-time probes to remaining part-time, partial-year, frontier-worker, and payroll-reconstruction cases; keep the filed EUROMOD stale-parameter residual visible until upstream issue #10 is resolved.",
     "Expand be-self-employed-ssc beyond the current main-activity, secondary, and post-pension oracle cases to student, spouse-helper, starter, survivor-pension, prior-year-income, and expense/loss cases; keep the filed EUROMOD self-employed threshold-allowance residual visible until upstream issue #6 is resolved.",
     "Ingest an upstream current-amount source for GRAPA/IGO indexed amounts so the bsaoa_s suite no longer depends on a supplied EUROMOD current-amount bridge.",
-    "Expand bchba_s and the ils_ben family-benefit pilot beyond the current regional one-newborn and child-benefit slices to allocation/payment-recipient rules, multiple-birth edge cases, statutory payment timing, and multi-newborn birth-premium aggregation; keep the filed EUROMOD German-speaking Community birth-allowance residual visible until upstream issue #13 is resolved.",
-    "Expand bch_s monthly child benefits beyond the current Brussels/Flanders/Wallonia one-child high-income base slice, German-speaking Community base residual slice, Brussels Article 9 one-child and same-age household aggregate slices, and Wallonia one-child Article 13 and pre-2020 transition slices to remaining low-income/social supplements, orphan/disability/single-parent supplements, and mixed-age multi-child rank/composition mechanics; keep the filed EUROMOD German-speaking Community zero-benefit residual and Wallonia pre-2020 supplement-cumulation residual visible until upstream issues #8 and #9 are resolved.",
-    "Expand property-tax oracle coverage beyond the current khooo_s Article 518 indexation slice and high-cadastral-income tprhm_s gross-withholding slice to Article 15 reductions, regional reductions including BE HOME, ownership allocation, and local centime ingestion; keep the filed EUROMOD cadastral-income rounding residual visible until upstream issue #14 is resolved.",
     "Map every euromod_policies entry to RuleSpec modules and mark encoded, composed, oracle-tested, or gap.",
-    "Keep the filed EUROMOD Article 289ter/1 low-wage PIT residual (#12) visible while expanding tin_s beyond the worker pilot; do not claim exact low-wage PIT parity unless upstream resolves or confirms the uncapped interpretation.",
-    "Expand household-level outputs: ils_ben now has a narrow family-benefit pilot, ils_tax has a narrow worker-PIT pilot, and ils_dispy has a narrow worker PIT/SIC disposable-income pilot, while full benefit-list/tax-list/social-contribution/disposable-income composition remains incomplete."
+    "If Article 289ter/1 is compared again, target its documentary legal output directly and keep any EUROMOD engine-order residual in the external disposition layer.",
+    "Compose ils_ben, ils_tax, and ils_dispy only in the external conformance or application layer from documentary outputs; do not encode those oracle aggregates as atomic RuleSpec concepts.",
+    "For future family-benefit comparisons, select the documentary regional output outside Axiom and compare it directly; keep regional routing, annualization, social-supplement rollups, and household aggregation in the external layer.",
+    "For future property-tax comparisons, compose regional selection and local centimes outside Axiom and target a surviving documentary regional output directly; the current property lane covers only cadastral-income indexation."
   ],
   "next_actions": [
     "Extend the PBE-switch leave oracle from bmact_s/bpact_s to parental leave bfapl_s and incapacity/disability slices, and ingest upstream Article 113/87 cap sources so the current high-wage cap cases no longer depend on supplied BE_2025 cap inputs.",
-    "Expand the bch_s, ils_ben, and ils_dispy live oracles from the current family-benefit and single-worker disposable-income pilot slices to remaining supplements, mixed-age rank/composition, allocation/payment-recipient rules, broader benefit-list/tax-list composition, and full household disposable-income ordering while keeping EUROMOD issues #8 and #9 visible.",
     "Expand be-special-social-security-contribution beyond the Article 108 annual assessment oracle cases to Article 109 payroll withholding, Article 110 settlement/refund, special worker categories, and Article 107 income construction from composed PIT variables; keep the filed EUROMOD Article 108 schedule residual visible until upstream issue #7 is resolved.",
-    "Expand tprhm_s from the current supplied-centimes gross bridge to regional reductions and local centime lookup while keeping EUROMOD issue #14 visible for upstream cadastral-income rounding.",
-    "Expand bwkrg_s from the current full-time and low-wage/small-payment part-time Flemish jobbonus probes to remaining part-time and partial-year cases after upstream issue #10 is resolved or a version-specific EUROMOD expectation is documented."
+    "Expand bwkrg_s from the current full-time and low-wage/small-payment part-time Flemish jobbonus probes to remaining part-time and partial-year cases after upstream issue #10 is resolved or a version-specific EUROMOD expectation is documented.",
+    "Obtain fresh direct targets for surviving regional family-benefit outputs before restoring any family-benefit oracle suite; keep all routing and household aggregation external.",
+    "Keep property-tax regional selection and local-centime composition external, and restore tprhm_s coverage only from a fresh direct documentary target."
   ],
   "dispositioned_parity": {
     "suites": [
-      "be-article-51-forfait",
       "be-birth-leave",
       "be-cadastral-income-indexation",
       "be-capital-income-tax",
       "be-elderly-income-support",
       "be-employer-ssc",
-      "be-family-birth-allowance",
-      "be-family-child-benefit-base",
-      "be-family-child-benefit-brussels-same-age-household",
-      "be-family-child-benefit-income-list",
-      "be-family-child-benefit-social-supplement",
-      "be-family-child-benefit-wallonia-social-supplement",
       "be-flemish-jobbonus",
       "be-flemish-social-protection-premium",
       "be-local-municipal-pit",
-      "be-marital-quotient",
       "be-maternity-leave",
-      "be-pensioner-contributions",
-      "be-pensioner-pit",
-      "be-property-tax",
       "be-regional-pit-surcharge",
-      "be-replacement-income-pit",
       "be-self-employed-ssc",
-      "be-self-employment-pit",
       "be-social-assistance",
-      "be-special-social-security-contribution",
-      "be-study-allowance",
-      "be-unemployment",
-      "be-work-bonus-credit",
-      "be-worker-disposable-income-list",
-      "be-worker-pit",
-      "be-worker-ssc",
-      "be-worker-tax-income-list"
+      "be-special-social-security-contribution"
     ],
-    "comparison_count": 156,
-    "match_count": 116,
-    "raw_match_rate": 74.358974,
+    "comparison_count": 45,
+    "match_count": 30,
+    "raw_match_rate": 66.666667,
     "explained_rate": 100,
     "unexplained_count": 0,
-    "note": "Raw = exact per-comparison matches across the committed be-* dashboard suites. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from dispositions/<suite>.yaml."
+    "note": "Raw = exact per-comparison matches across current top-level be-* dashboard suites. Reports archived under dashboard/public/data/historical are evidence only and are excluded. Explained adds mismatches carrying a schema-validated disposition (explained residuals, upstream engine gaps, bridge artifacts) from active dispositions/<suite>.yaml."
   }
 }

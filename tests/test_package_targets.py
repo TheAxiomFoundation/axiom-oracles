@@ -382,38 +382,6 @@ def test_synthetic_population_honors_requested_period_and_sample_size() -> None:
     assert {case.period for case in cases} == {"2024"}
 
 
-def test_euromod_bridge_overwrites_declared_axiom_inputs() -> None:
-    [case] = load_suite("be-worker-ssc")[:1]
-    contribution_input = (
-        "be:regulations/social_security/workers/employee_contributions#input."
-        "belgium_employee_social_security_contribution_base"
-    )
-    reference_input = (
-        "be:regulations/social_security/workers/work_bonus#input."
-        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
-    )
-
-    assert _euromod_to_axiom_bridge_outputs([case]) == ["yem", "yemeq_s"]
-
-    [bridged] = _apply_euromod_to_axiom_input_bridge(
-        [case],
-        [
-            EngineResult(
-                "euromod",
-                case.case_id,
-                {"yem": 31_651.0, "yemeq_s": 27_100.0},
-            )
-        ],
-    )
-
-    assert bridged.metadata["axiom_inputs"][contribution_input] == 31_651.0
-    assert bridged.metadata["axiom_inputs"][reference_input] == 27_100.0
-    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
-        contribution_input: 31_651.0,
-        reference_input: 27_100.0,
-    }
-
-
 def test_euromod_bridge_overwrites_employer_ssc_base() -> None:
     [case] = load_suite("be-employer-ssc")[:1]
     contribution_input = (
@@ -641,7 +609,7 @@ def test_axiom_runner_aliases_qualified_input_refs_to_bare_slots() -> None:
 
 
 def test_euromod_bridge_runs_euromod_before_axiom() -> None:
-    [case] = load_suite("be-worker-ssc")[:1]
+    [case] = load_suite("be-employer-ssc")[:1]
     calls = []
 
     class FakeEuromodRunner:
@@ -651,7 +619,7 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
                 EngineResult(
                     "euromod",
                     cases[0].case_id,
-                    {"tscee_net_s": 4_136.74, "yem": 31_651.0, "yemeq_s": 27_100.0},
+                    {"tscer_s": 8_500.0, "yem": 31_651.0},
                 )
             ]
 
@@ -663,7 +631,7 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
                     "axiom",
                     cases[0].case_id,
                     {
-                        "belgium_employee_social_security_ordinary_worker_contribution": 4_136.74
+                        "belgium_employer_social_security_ordinary_worker_contribution": 8_500.0
                     },
                 )
             ]
@@ -674,12 +642,12 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
         right="euromod",
         left_runner=FakeAxiomRunner(),
         right_runner=FakeEuromodRunner(),
-        concept_ids=(Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,),
+        concept_ids=(Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS,),
     )
 
     assert calls[0] == (
         "euromod",
-        [Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS, "yem", "yemeq_s"],
+        [Concepts.BE_EMPLOYER_SOCIAL_CONTRIBUTIONS, "yem"],
     )
     assert calls[1][0] == "axiom"
     assert list(calls[1][1].values())[0] == 31_651.0

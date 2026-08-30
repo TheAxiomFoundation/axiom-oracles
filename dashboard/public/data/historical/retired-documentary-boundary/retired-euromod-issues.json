@@ -1,0 +1,567 @@
+{
+  "schema": "axiom_oracles.euromod_issues.historical.v1",
+  "_comment": "Historical EUROMOD issue records tied only to Belgium comparison surfaces retired at the documentary-concept boundary. These entries are evidence, not current issue configuration.",
+  "retired_at": "2026-08-30",
+  "entries": [
+    {
+      "id": "euromod-be-real-config-bsa-is-literal-yes",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "not_reproduced_live",
+      "classification": "euromod_engine_or_model_issue",
+      "upstream_url": null,
+      "summary": "Running Belgium BE_2025 under the real SILC dataset configuration names can abort in bsa_be/DefConst/IsLiteral because the literal token yes is parsed as an unknown variable.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "datasets": [
+          "BE_2023_c1_2015_03_e2",
+          "BE_2024_c1_2015_03_e2"
+        ],
+        "euromod_connector": "0.1.20a0",
+        "dotnet": "10.0.301 osx-x64",
+        "reproduction_note": "Not reproduced in the 2026-07-05 live sweep: BE_2025 under BE_2024_c1_2015_03_e2 (same model root, connector, and dotnet) ran clean for the employee-SSC, PIT, and six-household study-allowance tests, while BE_training_data still aborts at parameter preparation (jrc-euromod-4-be-training-data-income-list-prep). The be-study-allowance comparison and the live Belgium tests run under the real configuration name."
+      },
+      "workaround": {
+        "dataset": "BE_training_data",
+        "alternate_dataset": "BE_2025_hhot",
+        "template_dataset": "BE_training_data",
+        "description": "Synthetic household oracle cases run under the bundled training-data schema or the BE_2025_hhot configuration while templating rows from BE_training_data. This reads no licensed SILC records."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-pit-work-bonus-credit-uncapped-ab",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_formula_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/12",
+      "summary": "The Belgium BE_2025 PIT fiscal-expenditure policy tinfe_be appears to compute the refundable Article 289ter/1 low-wage work-bonus credit from uncapped scheduled i_tsceerdA_s and i_tsceerdB_s amounts. CIR 92 Article 289ter/1 bases the credit on the work-bonus A/B reductions actually granted, so the source-backed RuleSpec caps the A/B credit bases by the Article 38 personal contribution before reductions. The live 10k worker case differs by 780.37 EUR while 30k and 60k worker PIT cases still match within tolerance.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "tinfe_be",
+        "suite": "be-worker-pit",
+        "period": "2025",
+        "case_id": "be-worker-pit-10k",
+        "input_monthly_yem": 833.3333333333334,
+        "euromod_returned_yem": 10550.22392834293,
+        "euromod_returned_yemeq_s": 9095.020627881837,
+        "euromod_tin_s": -1504.8488879999998,
+        "axiom_belgium_pit_pilot_federal_and_local_tax_before_withholding": -724.4815561100447,
+        "residual": -780.367331889955,
+        "control_cases": [
+          "be-worker-pit-30k matches within tolerance",
+          "be-worker-pit-60k matches within tolerance"
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml",
+        "corpus_citation_path": "be/statute/fisconetplus/cir92/revenus-2025/page-515",
+        "source_authority": "SPF Finances / FisconetPlus current consolidated CIR 92 text for income year 2025",
+        "source_path": "sources/be/statute/2026-06-30-be-income-tax-consolidated/official-documents/be-cir92-fisconetplus-current-code-2025-income.pdf",
+        "statutory_basis": "CIR 92 Article 289ter/1 bases the credit on 33.14 percent of volet A and 52.54 percent of volet B of the personal social-security contribution reduction actually granted, subject to the indexed 1,540 EUR ceiling.",
+        "rulespec_capping_rules": [
+          "belgium_pit_pilot_article_289ter1_work_bonus_a_tax_credit_base_amount",
+          "belgium_pit_pilot_article_289ter1_work_bonus_b_tax_credit_base_amount"
+        ]
+      },
+      "euromod_xml_observed_formula": {
+        "pit_credit_formula_line_hint": 2404876,
+        "pit_credit_formula": "(i_tsceerdA_s * $tinfe_Red_Rate_LW/100) + (i_tsceerdB_s * $tinfe_Red_Rate_VLW)",
+        "work_bonus_total_formula_line_hint": 2471403,
+        "work_bonus_total_formula": "i_tsceerdA_s+i_tsceerdB_s",
+        "final_reduction_cap_line_hint": 2471188,
+        "cap_note": "The final social-contribution reduction tsceerd_s is capped by the personal contribution due after the A/B scheduled amounts are computed, but tinfe_be reads the pre-cap A/B variables directly."
+      },
+      "workaround": {
+        "description": "Keep the 10k worker PIT residual visible in the household-level oracle report and do not alter RuleSpec away from CIR 92 Article 289ter/1 while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-unemployment-simplified-bun-s",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_pending",
+      "classification": "euromod_model_structural_simplification",
+      "upstream_url": null,
+      "summary": "The Belgium BE_2025 unemployment policy bun_be (labelled PART SIMULATED and shipped switched off) computes bun_s as a stylised proxy rather than the statutory Royal Decree of 25 November 1991 benefit. When switched on for hypothetical cases, bun_s for the ordinary first spell month equals 0.65 x min(post-uprating prior monthly wage, a 3432.38 EUR/month highwage cap) / 12 (the /12 is an internal EUROMOD scaling; the oracle bridge annualises bun_s by x12 to recover a monthly benefit). Three structural differences from the encoded statute: (1) EUROMOD caps the prior MONTHLY wage at a stylised 3432.38 EUR/month highwage figure, while Article 111 caps the prior DAILY wage at 92.3956 EUR/day (limit A1); (2) EUROMOD applies no Article 115 household-status daily minimum floor on the ordinary path in these cases; (3) EUROMOD carries no Article 114 degressivity phase schedule beyond the round period rates. The rate itself (0.65 for the first period) matches Article 114. The composed RuleSpec pilot returns the Article 111 A1 cap-bound monthly payable 1561.48564 EUR (92.3956 x 0.65 x 26), while EUROMOD returns 1645.83-2231.05 EUR across the prior-wage sweep, rising until its highwage cap binds.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bun_be",
+        "policy_switch_override": "bun_be=on",
+        "suite": "be-unemployment",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-unemployment-single-2400",
+            "prior_monthly_wage": 2400,
+            "euromod_post_uprating_prior_monthly_wage": 2532.0537,
+            "euromod_bun_s_annualized_monthly_benefit": 1645.8349,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 84.3493
+          },
+          {
+            "case_id": "be-unemployment-single-2800",
+            "prior_monthly_wage": 2800,
+            "euromod_post_uprating_prior_monthly_wage": 2954.0627,
+            "euromod_bun_s_annualized_monthly_benefit": 1920.1408,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 358.6551
+          },
+          {
+            "case_id": "be-unemployment-single-3200",
+            "prior_monthly_wage": 3200,
+            "euromod_post_uprating_prior_monthly_wage": 3376.0717,
+            "euromod_bun_s_annualized_monthly_benefit": 2194.4466,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 632.9609
+          },
+          {
+            "case_id": "be-unemployment-single-3600",
+            "prior_monthly_wage": 3600,
+            "euromod_post_uprating_prior_monthly_wage": 3798.0806,
+            "euromod_bun_s_annualized_monthly_benefit": 2231.047,
+            "axiom_ordinary_pilot_monthly_payable_amount": 1561.48564,
+            "residual": 669.5614
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/unemployment/pilot_oracle_pipeline.yaml",
+        "composed_from": [
+          "be/regulations/unemployment/benefit_amount.yaml",
+          "be/regulations/unemployment/minimum_daily_amounts.yaml",
+          "be/regulations/unemployment/payable_amount.yaml",
+          "be/regulations/unemployment/household_status.yaml"
+        ],
+        "corpus_citation_paths": [
+          "be/regulation/arrete/1991/11/25/1991013192/article/111",
+          "be/regulation/arrete/1991/11/25/1991013192/article/114",
+          "be/regulation/arrete/1991/11/25/1991013192/article/115"
+        ],
+        "statutory_parameters": {
+          "article_111_a1_daily_wage_cap_eur": 92.3956,
+          "article_114_first_three_months_replacement_rate": 0.65,
+          "article_115_isolated_first_six_months_daily_minimum_eur": 34.94,
+          "compensable_days_per_month": 26
+        },
+        "euromod_xml_observed_parameters": {
+          "refwage_monthly_floor": "2111.89#m",
+          "highwage_monthly_cap": "3432.38#m",
+          "rate_period1": 0.65,
+          "rate_period2": 0.6,
+          "rate_period3": 0.6,
+          "period1_max_isolated": "85.81#s",
+          "period1_min_isolated": "55.29#s",
+          "internal_scaling": "bun_s = accumulated benefit / 12"
+        }
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle report. The RuleSpec pilot follows the Royal Decree of 25 November 1991 Articles 111, 114, and 115; do not alter it toward EUROMOD's simplified bun_be while the structural simplification stands. bun_be must be switched on per run via euromod_policy_switch_overrides because BE_2025 ships it off with unemployment income carried from input data."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-bed-study-allowance-batch-position-contamination",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "root_caused_adapter_resolved",
+      "classification": "euromod_engine_batch_determinism_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/15",
+      "summary": "Root-caused: the Belgium BE_2025 spine's random_be policy seeds one pseudo-random stream (RandSeed seed=1) and draws one uniform per household in dataset order (temp_rand at TAX_UNIT tu_household_be, broadcast per person as temp_rand_ind/temp_rand_ind2); bed_be's non-take-up correction then keeps bed_s only when the household's draw is at or below the 0.31 take-up rate ($bed_FlTakeUp/$bed_FrTakeUp). The correction's Run_Cond !IsUsedDatabase gate matches only be_????_hhot dataset names, so it is active under the real configuration name the dataset-name-gating workaround runs with (BE_2024_c1_2015_03_e2). Draw #1 is 0.283072 and passes, so single-household runs are deterministic and correct; in a shared engine run the household at batch position k consumes draw k (observed draws 2-6: 0.680979, 0.945983, 0.562359, 0.654378, 0.792175 — all above 0.31), zeroing bed_s at every position after the first. Disjoint idperson blocks cannot help: the draw is positional, not id-keyed. The earlier observation that unique idperson blocks 'reduced' the effect was the separate family-relation id-collision bug; this take-up lottery is the residual mechanism. The same positional-draw mechanism explains the 2026-07-05 batch-size-1 integrity audit's identical-household spreads in UKMOD (i_rand_tu): the draw sequence is consumed by row, so identical rows at different positions get different draws.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "note": "Identical single-household runs are stable (four repeated runs of the Wallonia yem=200 case all return 869.21); only multi-household batches were affected, and only through the batch position. Verified by requesting temp_rand_ind2 as an output column: in a six-household run the draws are exactly the seed-1 sequence by position, and after the per-household adapter fix every household reports draw 0.283072.",
+        "draws_seed1_by_batch_position": [
+          0.283072,
+          0.680979,
+          0.945983,
+          0.562359,
+          0.654378,
+          0.792175
+        ]
+      },
+      "counts_as_axiom_gap": false,
+      "workaround": {
+        "description": "Resolved in the adapter: the worker subprocess loads the model once and runs each household as its own engine run, so every case consumes the solo draw sequence exactly like the single-household runs that anchored the suite — results are independent of batch size, order, and composition (regression: tests/test_euromod_adapter.py::TestBatchPositionIsolation hermetically, plus the live six-case single-batch anchors test; live rerun matches all six anchors with every household at draw 0.283072). comparison_batch_size pins are no longer needed for engine-run isolation. The residual fragility (solo correctness riding on draw #1 = 0.283 sitting below the 0.31 take-up rate) is closed too: the adapter now supports constant overrides — the worker patches the named DefConst parameter values into the system XML on the model overlay, because the euromod connector's constantsToOverwrite kwarg silently ignores DefConst constants (verified live: the kwarg at take-up 0.0 changed nothing, the overlay at 0.0 zeroes every bed_s) — and the be-study-allowance comparison pins $bed_FlTakeUp/$bed_FrTakeUp to 1.0, so the engine output is the statutory allowance for any draw. Upstream enhancement filed: household-keyed draws — rand as a function of (seed, idhh, draw counter) instead of a shared positional stream — would make batched runs composition-invariant at any scale (ec-jrc#15; reference implementation validated on UKMOD B1.02 and submitted as ec-jrc PR #16)."
+      }
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-credit-before-communal-addition-order",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/24",
+      "summary": "BE_2025 subtracts the refundable Article 289ter/1 work-bonus credit and the Article 134 §3 child credit from tin_s inside tinfe_be (order 45) before tinmu_be (order 46) computes the communal addition on the post-credit amount; SFL art. 5/3 and CIR 92 arts. 290/304/466/468 calculate the additions on the pre-credit impot total and impute refundable credits afterwards. Understatement = credit x communal rate (63.096 on the yse 25k Flanders case).",
+      "workaround": {
+        "description": "Dispositioned per case as an EUROMOD-side engine-order divergence (rulespec-be self_employed_oracle_pipeline yse 25k fixture pins the statutory order; residual -63.096 decomposed). The merged worker/couple pipelines still mirror EUROMOD's order (rulespec-be#121)."
+      }
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-additional-unemployment-reduction-not-prorated",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/25",
+      "summary": "BE_2025 tinna_be prorates the base unemployment reduction (2,219.27) by the unemployment share of net income (function order 48) but applies the additional 457.23 reduction (function orders 62-64) in full; CIR 92 art. 147, 8 prorates 'les montants vises au 7' - both amounts. Mixed bun 15k + yem 15k: 163.903 vs prorated 96.414; 50.646 of tax after the autonomy factor.",
+      "workaround": {
+        "description": "Dispositioned per case (rulespec-be pensioner_pit_oracle_pipeline unemployment_15k_plus_wage_15k fixture); pure-unemployment cases unaffected and cent-exact."
+      }
+    },
+    {
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_engine_or_model_issue",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data"
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false,
+      "id": "euromod-be-2025-forfait-base-nets-pension-withholding",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/26",
+      "summary": "BE_2025 tintace_be computes the Article 51 lump-sum professional expenses on il_netYem, which subtracts the pensioner health-insurance withholding tscpe_s from employment income; Article 51 with Article 23 §2, 1 nets each category by the contributions that burden that category. Working pensioner 30k + 15k: forfait 4,180.50 vs statutory 4,500; +124.26 of tax after the autonomy factor.",
+      "workaround": {
+        "description": "Dispositioned per case (rulespec-be pensioner_pit_oracle_pipeline mixed_30k_pension_15k_wage fixture; residual decomposed with the work-bonus credit-base mechanism)."
+      }
+    },
+    {
+      "id": "euromod-be-2025-work-bonus-january-timing",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_timing_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/5",
+      "summary": "The Belgium BE_2025 employee work-bonus output appears to apply the February-onward 2025 ONSS work-bonus table to all 12 months in the full-year equal-month worker case. The documentary RuleSpec comparison applies the separate January 2025 table for one month and the February-through-December table for 11 months, producing an 11.65 EUR residual at the 30k synthetic worker case.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_training_data",
+        "template_dataset": "BE_training_data",
+        "suite": "be-worker-ssc",
+        "period": "2025",
+        "case_id": "be-worker-ssc-30k",
+        "euromod_output": {
+          "tsceerd_s": 3398.52,
+          "tscee_net_s": 522.48
+        },
+        "axiom_output": {
+          "belgium_worker_work_bonus_full_year_equal_monthly_total_reduction": 3386.87,
+          "belgium_employee_social_security_ordinary_worker_contribution": 534.13
+        },
+        "residual": 11.65
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/regulations/social_security/workers/work_bonus.yaml",
+        "january_table_rules": [
+          "belgium_worker_work_bonus_january_2025_s1_threshold",
+          "belgium_worker_work_bonus_january_2025_s1bis_threshold",
+          "belgium_worker_work_bonus_january_2025_s2_threshold",
+          "belgium_worker_work_bonus_january_2025_a_monthly_maximum",
+          "belgium_worker_work_bonus_january_2025_b_monthly_maximum"
+        ],
+        "february_to_december_table_rules": [
+          "belgium_worker_work_bonus_s1_threshold",
+          "belgium_worker_work_bonus_s1bis_threshold",
+          "belgium_worker_work_bonus_s2_threshold",
+          "belgium_worker_work_bonus_a_monthly_maximum",
+          "belgium_worker_work_bonus_b_monthly_maximum"
+        ]
+      },
+      "workaround": {
+        "description": "Keep the residual visible in the household-level oracle instead of widening tolerance; PIT uses a 15 EUR tolerance while this timing issue is unresolved."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-wallonia-pre-2020-child-benefit-supplement-cumulation",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_transition_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9",
+      "summary": "The Belgium BE_2025 child-benefit policy bch_be appears to apply the 2025-indexed Walloon Decree Article 13 social supplement to pre-2020 Walloon children. In low-income pre-2020 cases it also appears to retain the legacy LGAF supplement path, so the indexed decree supplement is cumulated on top of LGAF transition amounts contrary to the statutory no-cumulation rule.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bch_be",
+        "output": "bch_s",
+        "suite": "be-family-child-benefit-wallonia-social-supplement",
+        "period": "2025",
+        "cases": [
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-6",
+            "drgn1": 3,
+            "child_age": 6,
+            "euromod_bch_s": 3551.66,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 2730.98,
+            "residual": 820.68,
+            "note": "Residual equals the 2025-indexed Article 13 low-income monthly social supplement, 68.39 EUR, annualized. The unindexed Article 13 amount is 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 68.39 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-13",
+            "drgn1": 3,
+            "child_age": 13,
+            "euromod_bch_s": 3844.78,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 3024.1,
+            "residual": 820.68,
+            "note": "Residual equals the 2025-indexed Article 13 low-income monthly social supplement, 68.39 EUR, annualized. The unindexed Article 13 amount is 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 68.39 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-18",
+            "drgn1": 3,
+            "child_age": 18,
+            "euromod_bch_s": 4088.29,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 3267.61,
+            "residual": 820.68,
+            "note": "Residual equals the 2025-indexed Article 13 low-income monthly social supplement, 68.39 EUR, annualized. The unindexed Article 13 amount is 55 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 68.39 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-age-6",
+            "drgn1": 3,
+            "child_age": 6,
+            "euromod_bch_s": 2108.26,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 1735.18,
+            "residual": 373.08,
+            "note": "Residual equals the 2025-indexed Article 13 middle-income monthly social supplement, 31.09 EUR, annualized. The unindexed Article 13 amount is 25 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 31.09 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-age-13",
+            "drgn1": 3,
+            "child_age": 13,
+            "euromod_bch_s": 2260.88,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 1887.8,
+            "residual": 373.08,
+            "note": "Residual equals the 2025-indexed Article 13 middle-income monthly social supplement, 31.09 EUR, annualized. The unindexed Article 13 amount is 25 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 31.09 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-age-18",
+            "drgn1": 3,
+            "child_age": 18,
+            "euromod_bch_s": 2345.12,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 1972.04,
+            "residual": 373.08,
+            "note": "Residual equals the 2025-indexed Article 13 middle-income monthly social supplement, 31.09 EUR, annualized. The unindexed Article 13 amount is 25 EUR/month in be-wal/statutes/family_benefits/amounts.yaml; 31.09 EUR/month is the applied 2025 amount in be/statutes/family_benefits/child_benefit_base_2025.yaml from the AVIQ 2025 table."
+          }
+        ],
+        "control_cases": [
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-low-income-age-0",
+            "euromod_bch_s": 3158.31,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 3158.31,
+            "residual": 0
+          },
+          {
+            "case_id": "be-family-child-benefit-wallonia-social-supplement-age-0",
+            "euromod_bch_s": 2337.63,
+            "axiom_belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement": 2337.63,
+            "residual": 0
+          }
+        ]
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/family_benefits/child_benefit_base_2025.yaml",
+        "corpus_citation_paths": [
+          "be-wal/statute/decret/2018/02/08/2018201006/article/120",
+          "be-wal/statute/decret/2018/02/08/2018201006/article/123",
+          "be-wal/statute/decret/2018/02/08/2018201006/article/128",
+          "be-wal/guidance/aviq/family-benefits/amount-scale-2025-02/page-1",
+          "be-wal/guidance/aviq/family-benefits/amount-scale-2025-02/page-4",
+          "be-wal/guidance/aviq/family-benefits/amount-scale-2025-02/page-6"
+        ],
+        "article_120": "Pre-2020 children keep the former LGAF amounts and supplements.",
+        "article_123": "The old LGAF Article 42bis supplement for pre-2020 children is tied to the first Article 13 income ceiling.",
+        "article_128": "LGAF supplements do not cumulate with supplements under the decree.",
+        "indexed_2025_rulespec_module": "be/statutes/family_benefits/child_benefit_base_2025.yaml",
+        "unindexed_statutory_rulespec_module": "be-wal/statutes/family_benefits/amounts.yaml",
+        "article_13_amount_surface_note": "The residual notes quote the applied 2025 indexed Article 13 amounts, 68.39 and 31.09 EUR/month, from child_benefit_base_2025.yaml and the AVIQ 2025 amount table. The raw Walloon Decree Article 13 amounts encoded in be-wal/statutes/family_benefits/amounts.yaml are 55 and 25 EUR/month before indexation."
+      },
+      "workaround": {
+        "description": "Keep the six pre-2020 Walloon child-benefit residuals visible in the household-level oracle report and do not alter RuleSpec away from the Walloon transition and no-cumulation provisions while the upstream EUROMOD issue is open. Treat the residual magnitudes as the 2025-indexed Article 13 values from child_benefit_base_2025.yaml, not the raw unindexed Article 13 decree amounts."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-dg-child-benefit-zero",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_region_scope_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
+      "summary": "The Belgium BE_2025 child-benefit policy bch_be returns zero bch_s for synthetic German-speaking Community rows coded as drgn1=4, while the upstream German-speaking Community decree establishes nonzero base child benefit and annual-supplement amounts.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bch_be",
+        "output": "bch_s",
+        "cases": [
+          {
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-0",
+            "drgn1": 4,
+            "child_age": 0,
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
+          },
+          {
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-6",
+            "drgn1": 4,
+            "child_age": 6,
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
+          },
+          {
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-13",
+            "drgn1": 4,
+            "child_age": 13,
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
+          },
+          {
+            "case_id": "be-family-child-benefit-base-german-speaking-community-age-18-higher-education",
+            "drgn1": 4,
+            "child_age": 18,
+            "dec": 6,
+            "euromod_bch_s": 0,
+            "axiom_bch_s": 1946.55
+          }
+        ],
+        "control_regions": {
+          "drgn1_1_brussels": "nonzero bch_s",
+          "drgn1_2_flanders": "nonzero bch_s",
+          "drgn1_3_wallonia": "nonzero bch_s"
+        }
+      },
+      "statutory_evidence": {
+        "corpus_citation_paths": [
+          "be-dg/statute/moniteur/decret-2018-04-23/2018202523/family-benefits/block-1",
+          "be-dg/statute/moniteur/decret-2025-12-22/2026001207/program-decree-2025-ii-family-benefits/block-1"
+        ],
+        "source_urls": [
+          "https://www.ejustice.just.fgov.be/eli/decret/2018/04/23/2018202523/moniteur",
+          "https://www.ejustice.just.fgov.be/eli/decret/2025/12/22/2026001207/moniteur"
+        ],
+        "article_8_base_amount": "157 EUR per month",
+        "article_15_annual_supplement": "52 EUR per year",
+        "article_117_4_2025_annual_supplement": "62.55 EUR for 2025",
+        "article_117_3_index_freeze": "No family-benefit adaptation for 2025 through 2027; skipped adjustments are not carried into later indexation."
+      },
+      "workaround": {
+        "description": "Keep German-speaking Community child-benefit statutory RuleSpec outputs separate from exact EUROMOD parity until BE_2025 documents the supported DG regional coding or implements the DG bch_be branch."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    },
+    {
+      "id": "euromod-be-2025-dg-birth-allowance-zero",
+      "jurisdiction": "BE",
+      "system": "BE_2025",
+      "status": "upstream_filed",
+      "classification": "euromod_model_region_scope_issue",
+      "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
+      "summary": "The Belgium BE_2025 birth-allowance policy bchba_be returns zero bchba_s for a synthetic German-speaking Community newborn row coded as drgn1=4, while the upstream German-speaking Community decree and official amount guidance establish a nonzero birth premium.",
+      "observed_with": {
+        "model_root": "EUROMOD_RELEASES_J2.0+",
+        "country": "BE",
+        "system": "BE_2025",
+        "dataset": "BE_2024_c1_2015_03_e2",
+        "template_dataset": "BE_training_data",
+        "policy": "bchba_be",
+        "suite": "be-family-birth-allowance",
+        "period": "2025",
+        "output": "bchba_s",
+        "case": {
+          "case_id": "be-family-birth-allowance-german-speaking-community-newborn",
+          "drgn1": 4,
+          "child_age": 0,
+          "euromod_bchba_s": 0,
+          "axiom_belgium_family_benefits_birth_allowance_amount": 1376.16,
+          "residual": -1376.16
+        },
+        "control_regions": {
+          "drgn1_1_brussels": "matches bchba_s exactly",
+          "drgn1_2_flanders": "matches bchba_s exactly",
+          "drgn1_3_wallonia": "matches bchba_s exactly"
+        }
+      },
+      "euromod_xml_evidence": {
+        "path_hint": "XMLParam/Countries/BE/BE.xml",
+        "policy": "bchba_be",
+        "observed_birth_allowance_conditions": [
+          "drgn1=1 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=1 & dag=0 & sin01_s < nDepChildrenInTu",
+          "drgn1=2 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=2 & dag=0 & sin01_s < nDepChildrenInTu",
+          "drgn1=3 & dag=0 & sin01_s = nDepChildrenInTu",
+          "drgn1=3 & dag=0 & sin01_s < nDepChildrenInTu"
+        ],
+        "missing_condition": "No equivalent drgn1=4 newborn branch was found in bchba_be."
+      },
+      "statutory_evidence": {
+        "rulespec_module": "be/statutes/family_benefits/birth_allowance.yaml",
+        "corpus_citation_paths": [
+          "be-dg/statute/moniteur/decret-2018-04-23/2018202523/family-benefits/block-1"
+        ],
+        "source_urls": [
+          "https://www.ejustice.just.fgov.be/eli/decret/2018/04/23/2018202523/moniteur",
+          "https://ostbelgienfamilie.be/desktopdefault.aspx/tabid-5886/"
+        ],
+        "article_30_birth_premium": "1144 EUR before indexation",
+        "official_current_birth_premium": "1376.16 EUR per child"
+      },
+      "workaround": {
+        "description": "Keep the German-speaking Community birth-allowance residual visible in the household-level oracle report and do not alter RuleSpec away from the DG statute and official amount surface while the upstream EUROMOD issue is open."
+      },
+      "oracle_scope": "household_level",
+      "counts_as_axiom_gap": false
+    }
+  ]
+}

@@ -461,7 +461,7 @@ class TestSubprocessContract:
                 json.dumps(
                     {
                         "columns": [
-                            "tin_s",
+                            "tintace_s",
                             "tscee_s",
                             "tsceerd_s",
                             "tscse_s",
@@ -472,7 +472,7 @@ class TestSubprocessContract:
                         "missing": [],
                         "idhh": [1],
                         "values": {
-                            "tin_s": [100.0],
+                            "tintace_s": [33.0],
                             "tscee_s": [50.0],
                             "tsceerd_s": [12.0],
                             "tscse_s": [40.0],
@@ -494,7 +494,7 @@ class TestSubprocessContract:
         [result] = runner.run_cases(
             [_single_earner("be-30k", 30_000.0)],
             variables=[
-                Concepts.BE_WORKER_PIT_BEFORE_WITHHOLDING,
+                Concepts.BE_ARTICLE_51_EMPLOYEE_FORFAIT,
                 Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
                 Concepts.BE_SELF_EMPLOYED_SOCIAL_CONTRIBUTIONS,
                 Concepts.BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM,
@@ -505,7 +505,7 @@ class TestSubprocessContract:
         )
 
         assert requested == [
-            "tin_s",
+            "tintace_s",
             "tscee_s",
             "tsceerd_s",
             "tscse_s",
@@ -514,7 +514,7 @@ class TestSubprocessContract:
             "bsaoa_s",
             "yem",
         ]
-        assert result.values["tin_s"] == pytest.approx(1_200.0)
+        assert result.values["tintace_s"] == pytest.approx(396.0)
         assert result.values["tscee_s"] == pytest.approx(600.0)
         assert result.values["tsceerd_s"] == pytest.approx(144.0)
         assert result.values["tscee_net_s"] == pytest.approx(456.0)
@@ -785,14 +785,10 @@ class TestSubprocessContract:
 class TestBatchPositionIsolation:
     """Multi-case batches must give every case its solo-run result.
 
-    EUROMOD-platform models are not row-independent across households:
-    fixed-seed random streams are consumed one draw per household in
-    dataset order, and take-up corrections gate benefits on the draw.
-    Live BE_2025 example (be-study-allowance): draw #1 = 0.283 passes the
-    0.31 take-up rate, every later draw fails, so in a shared engine run
-    only the first batch position kept its ``bed_s`` while identical
-    households at later positions returned 0.0 — regardless of disjoint
-    idperson blocks.
+    EUROMOD-platform models are not necessarily row-independent across
+    households: fixed-seed random streams can be consumed one draw per
+    household in dataset order, and take-up corrections can gate benefits on
+    those draws.
 
     The stub engine below reproduces that lottery hermetically: the
     benefit is nonzero only for the *first* household of each submitted
@@ -1191,54 +1187,6 @@ class TestEuromodBelgiumLive:
             low.values["tin_s"] / low.values["yem"]
         )
         assert high.values["ils_dispy"] > low.values["ils_dispy"]
-
-    def test_study_allowance_batch_matches_the_solo_anchors(self) -> None:
-        """All six bed_s cases in ONE run_cases call must match solo anchors.
-
-        This is the live regression for the batch-position lottery
-        (euromod_issues.json
-        euromod-be-2025-bed-study-allowance-batch-position-contamination):
-        BE_2025's ``random_be`` seeds one uniform draw per household in
-        dataset order and ``bed_be``'s non-take-up correction zeroes
-        ``bed_s`` whenever the draw exceeds 0.31. Draw #1 (0.283) passes,
-        draws #2+ fail, so before per-household engine runs only the first
-        batch position kept its allowance. Runs under the real dataset
-        configuration name because that gate (``!IsUsedDatabase``
-        ``be_????_hhot``) is exactly the live comparison configuration.
-        """
-        from axiom_oracles.suites.be_study_allowance import (
-            be_study_allowance_cases,
-        )
-
-        anchors = {
-            "be-study-allowance-flanders-higher-education-full": 3_046.30,
-            "be-study-allowance-flanders-higher-education-intermediate": 2_092.30,
-            "be-study-allowance-flanders-secondary-full": 1_139.56,
-            "be-study-allowance-wallonia-higher-education": 869.21,
-            "be-study-allowance-flanders-higher-education-above-threshold": 0.0,
-            "be-study-allowance-wallonia-above-threshold": 0.0,
-        }
-        runner = EuromodPlatformRunner(
-            model_root=EUROMOD_MODEL_ROOT_BE,
-            country="BE",
-            system="BE_2025",
-            # The real configuration name from the readiness matrix; the
-            # bundled training name aborts at parameter preparation for BE
-            # (euromod_issues.json jrc-euromod-4-...-income-list-prep).
-            dataset="BE_2024_c1_2015_03_e2",
-            template_dataset="BE_training_data",
-        )
-
-        results = runner.run_cases(
-            be_study_allowance_cases(), variables=["bed_s"]
-        )
-
-        assert [result.household_id for result in results] == list(anchors)
-        for result in results:
-            assert result.errors == ()
-            assert result.values["bed_s"] == pytest.approx(
-                anchors[result.household_id], abs=0.02
-            )
 
 
 class TestExtraColumns:

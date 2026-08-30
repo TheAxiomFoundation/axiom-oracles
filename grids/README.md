@@ -37,7 +37,7 @@ its equivalence check activates automatically once those suites are importable.
 ## How a new oracle adopts a jurisdiction's grid
 
 1. Load the grid: `axiom_oracles.grids.load_grid("be")`.
-2. Take the case set you are validating: `grid.case_set("be-worker-pit")`.
+2. Take the case set you are validating: `grid.case_set("be-employer-ssc")`.
 3. Project each `CaseSpec` into your engine's inputs — the same skeleton fields
    the other engines project. If your engine needs an input the skeleton does
    not carry, that input is a *derived projection*: compute it in your adapter,
@@ -58,7 +58,7 @@ the comparison report joins those values by `case_id`.
 - UK worker income tax runs Axiom, PolicyEngine UK, and UKMOD on
   `uk-worker-pit` — three independent computations of the same liability on the
   same 30k/45k/60k/130k/360k grid.
-- Belgium worker/family surfaces run Axiom and EUROMOD (BE) today; a third
+- Belgium documentary worker/family surfaces run Axiom and EUROMOD (BE) today; a third
   engine adopting `be.yaml` triangulates them without touching the grid.
 
 Majority / discrepancy semantics — how many engines must agree, how a split is

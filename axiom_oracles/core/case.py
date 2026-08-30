@@ -365,49 +365,9 @@ class Concepts:
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"
     )
-    BE_WORKER_PIT_BEFORE_WITHHOLDING = (
-        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
-        "#belgium_pit_pilot_federal_and_local_tax_before_withholding"
-    )
     BE_ARTICLE_51_EMPLOYEE_FORFAIT = (
-        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
-        "#belgium_pit_pilot_worker_forfait_professional_expenses"
-    )
-    BE_ARTICLE_289TER1_WORK_BONUS_CREDIT = (
-        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
-        "#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit"
-    )
-    BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING = (
-        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
-        "#belgium_pit_couple_federal_and_local_tax_before_withholding"
-    )
-    BE_PENSIONER_PIT_BEFORE_WITHHOLDING = (
-        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
-        "#belgium_pit_pensioner_federal_and_local_tax_before_withholding"
-    )
-    BE_PENSIONER_ANNUAL_SOCIAL_WITHHOLDING = (
-        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
-        "#belgium_pit_pensioner_annual_social_withholding"
-    )
-    BE_PENSIONER_REPLACEMENT_REDUCTION = (
-        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
-        "#belgium_pit_pensioner_replacement_reduction_after_limits"
-    )
-    BE_REPLACEMENT_UNEMPLOYMENT_REDUCTION = (
-        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
-        "#belgium_pit_replacement_unemployment_reduction_after_limits"
-    )
-    BE_REPLACEMENT_SICKNESS_INVALIDITY_REDUCTION = (
-        "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline"
-        "#belgium_pit_replacement_sickness_invalidity_reduction_after_limits"
-    )
-    BE_SELF_EMPLOYMENT_PIT_BEFORE_WITHHOLDING = (
-        "be:statutes/income_tax/individual/self_employed_oracle_pipeline"
-        "#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding"
-    )
-    BE_SELF_EMPLOYMENT_COMBINED_TAXABLE_INCOME = (
-        "be:statutes/income_tax/individual/self_employed_oracle_pipeline"
-        "#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income"
+        "be:statutes/income_tax/professional_expenses/article_51_forfaits"
+        "#belgium_pit_article_51_employee_forfait_professional_expenses"
     )
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS = (
         "be:regulations/social_security/workers/employee_contributions"
@@ -416,10 +376,6 @@ class Concepts:
     BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS = (
         "be:regulations/social_security/workers/employee_contributions"
         "#belgium_employee_social_security_article_38_contribution_before_reductions"
-    )
-    BE_EMPLOYEE_WORK_BONUS_REDUCTION = (
-        "be:regulations/social_security/workers/work_bonus"
-        "#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction"
     )
     BE_EMPLOYER_SOCIAL_CONTRIBUTIONS = (
         "be:regulations/social_security/workers/employer_contributions"
@@ -432,10 +388,6 @@ class Concepts:
     BE_INCOME_GUARANTEE_FOR_ELDERLY = (
         "be:statutes/income_guarantee_for_elderly/payable_amount"
         "#belgium_grapa_income_guarantee_for_elderly_annual_amount"
-    )
-    BE_UNEMPLOYMENT_ORDINARY_BENEFIT = (
-        "be:regulations/unemployment/pilot_oracle_pipeline"
-        "#belgium_unemployment_ordinary_pilot_monthly_payable_amount"
     )
     BE_BIRTH_LEAVE_TOTAL_COMPENSATION = (
         "be:regulations/health_insurance/birth_leave/indemnity_rates"
@@ -453,10 +405,6 @@ class Concepts:
         "be:statutes/social_security/special_contribution"
         "#belgium_special_social_security_article_108_annual_contribution"
     )
-    BE_PENSIONER_HEALTH_AND_SOLIDARITY_CONTRIBUTION = (
-        "be:statutes/social_security/non_labour_income_contributions"
-        "#belgium_pensioner_total_annual_health_and_solidarity_withholding"
-    )
     BE_FLEMISH_SOCIAL_PROTECTION_PREMIUM = (
         "be-vlg:regulations/social_security/flemish_social_protection/premium"
         "#flanders_social_protection_annual_premium"
@@ -464,49 +412,9 @@ class Concepts:
     BE_FLEMISH_JOBBONUS = (
         "be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount"
     )
-    BE_IMMOVABLE_WITHHOLDING_GROSS_WITH_SUPPLIED_CENTIMES = (
-        "be:statutes/property_tax/gross_withholding_and_supplied_centimes"
-        "#belgium_immovable_withholding_gross_tax_after_supplied_local_centimes"
-    )
     BE_CADASTRAL_INCOME_INDEXED = (
         "be:statutes/property_tax/cadastral_income_indexation"
         "#belgium_immovable_withholding_taxable_cadastral_income_from_unindexed"
-    )
-    BE_FAMILY_BIRTH_ALLOWANCE = (
-        "be:statutes/family_benefits/birth_allowance"
-        "#belgium_family_benefits_birth_allowance_amount"
-    )
-    BE_FAMILY_CHILD_BENEFIT_BASE = (
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_family_benefits_child_benefit_base_2025_annual_amount"
-    )
-    BE_FAMILY_CHILD_BENEFIT_WITH_SOCIAL_SUPPLEMENT = (
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_brussels_2025_annual_amount_with_social_supplement"
-    )
-    BE_FAMILY_CHILD_BENEFIT_BRUSSELS_SAME_AGE_HOUSEHOLD_WITH_SOCIAL_SUPPLEMENT = (
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_brussels_2025_same_age_children_annual_household_amount_with_social_supplement"
-    )
-    BE_FAMILY_CHILD_BENEFIT_WALLONIA_WITH_SOCIAL_SUPPLEMENT = (
-        "be:statutes/family_benefits/child_benefit_base_2025"
-        "#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement"
-    )
-    BE_STUDY_ALLOWANCE = (
-        "be:statutes/education/study_allowance_routing"
-        "#belgium_study_allowance_annual_amount"
-    )
-    BE_EUROMOD_ILS_BEN_FAMILY_BENEFIT_PILOT = (
-        "be:policies/euromod_benefit_income_list"
-        "#belgium_euromod_ils_ben_family_benefit_pilot_annual_amount"
-    )
-    BE_EUROMOD_ILS_TAX_WORKER_PIT_PILOT = (
-        "be:policies/euromod_tax_income_list"
-        "#belgium_euromod_ils_tax_worker_pit_pilot_annual_amount"
-    )
-    BE_EUROMOD_ILS_DISPY_WORKER_PIT_SIC_PILOT = (
-        "be:policies/euromod_disposable_income_list"
-        "#belgium_euromod_ils_dispy_worker_pit_sic_pilot_annual_amount"
     )
     BE_WORKER_ARTICLE_17_UNCAPPED_COMPONENT_CONTRIBUTION = (
         "be:statutes/social_security/workers/contribution_rates"

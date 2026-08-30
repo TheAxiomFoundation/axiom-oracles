@@ -1996,90 +1996,6 @@ def test_recorded_paths_are_repo_relative_to_the_imports():
             assert path.endswith(".yaml")
 
 
-def test_marital_quotient_records_the_related_person_worker_pipeline():
-    """The suite keeps one top-level couple module but supplies its repaired
-    Person worker stages and spouse relation explicitly.
-
-    The old archaeology assertion pinned ``yem`` to a TaxUnit Article-89
-    boundary. rulespec-be#118 moved that boundary behind two related Person
-    worker records, so the composition must preserve those record identities,
-    their relation tuples, and both record-targeted bridges.
-    """
-    composition = load_composition("be-marital-quotient")
-    assert composition is not None
-    assert composition.entity == "TaxUnit"
-    assert composition.imports == (
-        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline",
-    )
-    # The composition records output-derived top-level imports only; the
-    # repaired couple module owns its worker-stage dependencies transitively.
-    joined = " ".join(composition.imports)
-    assert "employee_contributions" not in joined
-    assert "work_bonus" not in joined
-
-    old_article_89_inputs = {
-        "be:statutes/income_tax/individual/joint_assessment#input."
-        "belgium_pit_spouse_a_professional_income_after_article_89_exclusions",
-        "be:statutes/income_tax/individual/joint_assessment#input."
-        "belgium_pit_spouse_b_professional_income_after_article_89_exclusions",
-    }
-    assert old_article_89_inputs.isdisjoint(composition.supplied_input_boundaries)
-    article_134_selector = (
-        "be:statutes/income_tax/individual/tax_free_amount_tax#input."
-        "belgium_pit_article_134_joint_lower_income_spouse_supplement_"
-        "assignment_reduces_joint_state_tax"
-    )
-    assert article_134_selector in composition.supplied_input_boundaries
-
-    gross_input = (
-        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
-        "belgium_pit_article_23_worker_remuneration"
-    )
-    reference_input = (
-        "be:regulations/social_security/workers/work_bonus#input."
-        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
-    )
-    record_targets = {
-        (record["entity_id"], record["name"])
-        for record in composition.axiom_input_records
-    }
-    assert len(record_targets) == 8
-    assert record_targets >= {
-        ("head", gross_input),
-        ("head", reference_input),
-        ("spouse", gross_input),
-        ("spouse", reference_input),
-    }
-    relation_name = (
-        "be:statutes/income_tax/individual/couple_pit_oracle_pipeline#relation."
-        "belgium_pit_couple_spouse_of_tax_unit"
-    )
-    assert composition.axiom_relations == (
-        {"name": relation_name, "tuple": ("head", "taxunit")},
-        {"name": relation_name, "tuple": ("spouse", "taxunit")},
-    )
-    assert composition.input_bridge == {
-        "yem": {
-            "records": (
-                {
-                    "name": gross_input,
-                    "entity": "Person",
-                    "entity_id": "head",
-                },
-            )
-        },
-        "yemeq_s": {
-            "records": (
-                {
-                    "name": reference_input,
-                    "entity": "Person",
-                    "entity_id": "head",
-                },
-            )
-        },
-    }
-
-
 def test_composition_generically_records_dk_person_targets_and_record_bridge():
     composition = composition_for_suite("dk-child-youth-benefit-couple")
 
@@ -2131,21 +2047,9 @@ def test_composition_preserves_transformed_flat_bridge_specs():
 
 
 def test_composition_row_round_trip_preserves_structural_targets():
-    live = composition_for_suite("be-marital-quotient")
+    live = composition_for_suite("dk-child-youth-benefit-couple")
 
     assert SuiteComposition.from_row(live.to_row()) == live
-
-
-def test_worker_ssc_composition_spans_two_modules():
-    """be-worker-ssc is the one multi-module composition: its three outputs span
-    employee_contributions and work_bonus."""
-    composition = load_composition("be-worker-ssc")
-    assert composition is not None
-    assert composition.imports == (
-        "be:regulations/social_security/workers/employee_contributions",
-        "be:regulations/social_security/workers/work_bonus",
-    )
-    assert len(composition.paths) == 2
 
 
 def test_resolve_suite_program_normalizes_a_rulespec_checkout_root(tmp_path):
@@ -2153,14 +2057,12 @@ def test_resolve_suite_program_normalizes_a_rulespec_checkout_root(tmp_path):
     modules resolve against, and binds the single-module program to a file."""
     workspace = tmp_path
     checkout = workspace / "rulespec-be"
-    module_rel = (
-        "be/statutes/income_tax/individual/couple_pit_oracle_pipeline.yaml"
-    )
+    module_rel = "be/regulations/health_insurance/birth_leave/indemnity_rates.yaml"
     target = checkout / module_rel
     target.parent.mkdir(parents=True)
     target.write_text("format: rulespec/v1\n")
 
-    composition = load_composition("be-marital-quotient")
+    composition = load_composition("be-birth-leave")
     # Pointing straight at the checkout resolves to its parent workspace.
     resolved = composition.resolve(checkout)
     assert resolved.root == workspace
@@ -2176,17 +2078,7 @@ def test_resolve_suite_program_reads_env_and_falls_back(monkeypatch):
     monkeypatch.setenv(AXIOM_RULESPEC_ROOT_ENV, str(Path.home() / "TheAxiomFoundation"))
     assert resolve_suite_program("uk-universal-credit") is None  # no BE record
     monkeypatch.delenv(AXIOM_RULESPEC_ROOT_ENV, raising=False)
-    assert resolve_suite_program("be-marital-quotient") is None  # no root
-
-
-def test_multi_module_composition_has_no_single_program_path(tmp_path):
-    """A 2-module composition offers no single --axiom-program file; callers use
-    the import-set the harness composes."""
-    workspace = tmp_path
-    composition = load_composition("be-worker-ssc")
-    resolved = composition.resolve(workspace)
-    assert resolved.single_program_path is None
-    assert len(resolved.program_paths) == 2
+    assert resolve_suite_program("be-birth-leave") is None  # no root
 
 
 def _run_compositions_check(module) -> int:
@@ -2212,7 +2104,7 @@ def test_compositions_check_fails_on_mutated_commit():
     path = compositions_path("be")
     original = path.read_text()
     # Flip a query entity — a lie about what the harness runs.
-    tampered = original.replace("entity: TaxUnit", "entity: Household", 1)
+    tampered = original.replace("entity: Person", "entity: Household", 1)
     assert tampered != original
     path.write_text(tampered)
     try:
