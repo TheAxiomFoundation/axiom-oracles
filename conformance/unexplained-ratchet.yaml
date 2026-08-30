@@ -131,7 +131,7 @@ ratchets:
 - suite: co-tanf-ecps
   unexplained_max: 0
 - suite: co-tax-intersection-taxsim
-  unexplained_max: 543
+  unexplained_max: 57
 - suite: csfp-parameters
   unexplained_max: 0
 - suite: ct-income-tax-populace
@@ -153,7 +153,7 @@ ratchets:
 - suite: fiit-ecps
   unexplained_max: 0
 - suite: fiit-taxsim-ecps
-  unexplained_max: 45
+  unexplained_max: 3
 - suite: fl-snap-ecps
   unexplained_max: 0
 - suite: fl-tca-standards

@@ -29,18 +29,18 @@
       "components": [],
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
-      "left_weighted_sum": 56299835815.498726,
-      "match_rate": 93.701939,
-      "match_weight": 163888742.31187,
-      "mismatch_count": 5512,
-      "mismatch_weight": 15558515.85801,
+      "left_weighted_sum": 55331240627.878456,
+      "match_rate": 93.796776,
+      "match_weight": 164305814.947179,
+      "mismatch_count": 5429,
+      "mismatch_weight": 15141443.222702,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
       "right_weighted_sum": 4923758899.380239,
-      "weighted_difference": 51376076916.118484,
-      "weighted_match_rate": 91.329756
+      "weighted_difference": 50407481728.498215,
+      "weighted_match_rate": 91.562176
     },
     {
       "category": "tax",
@@ -9823,7 +9823,7 @@
       "case_id": "ecps-tax-unit-77619",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 33.33333333333333,
+      "match_rate": 66.66666666666666,
       "metadata": {
         "axiom_input_records_count": 1215,
         "axiom_relations_count": 29,
@@ -9888,17 +9888,6 @@
         }
       },
       "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#eitc",
-          "description": "Earned Income Tax Credit",
-          "difference": 3902.5361678655227,
-          "kind": "amount_difference",
-          "left": 3902.5361678655227,
-          "parent": "us:tax/federal-income-tax#liability",
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 5
-        },
         {
           "concept": "us:tax/payroll#employee_fica",
           "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
@@ -30361,9 +30350,9 @@
         {
           "concept": "us:tax/federal-income-tax#eitc",
           "description": "Earned Income Tax Credit",
-          "difference": 490.41202797878174,
+          "difference": -96.04,
           "kind": "amount_difference",
-          "left": 586.4520279787818,
+          "left": 0.0,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
           "right": 96.04,
@@ -53825,7 +53814,7 @@
       "case_id": "ecps-tax-unit-2931",
       "left_engine": "axiom",
       "left_errors": [],
-      "match_rate": 33.33333333333333,
+      "match_rate": 66.66666666666666,
       "metadata": {
         "axiom_input_records_count": 916,
         "axiom_relations_count": 20,
@@ -53888,17 +53877,6 @@
         }
       },
       "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#eitc",
-          "description": "Earned Income Tax Credit",
-          "difference": 1266.4917184919398,
-          "kind": "amount_difference",
-          "left": 1266.4917184919398,
-          "parent": "us:tax/federal-income-tax#liability",
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 5
-        },
         {
           "concept": "us:tax/payroll#employee_fica",
           "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
@@ -69805,85 +69783,6 @@
       "right_errors": []
     },
     {
-      "case_id": "ecps-tax-unit-80976",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 66.66666666666666,
-      "metadata": {
-        "axiom_input_records_count": 617,
-        "axiom_relations_count": 9,
-        "case_unit": "tax_unit",
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_id": 3247,
-        "household_summary": {
-          "ages": [
-            64
-          ],
-          "household_size": 1,
-          "yearly_earned_income_per_person": [
-            2090.73
-          ],
-          "yearly_earned_income_total": 2090.73
-        },
-        "household_weight": 0.007712847087532282,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "25009",
-          "type": "census_county"
-        },
-        "tax_unit_id": 80976,
-        "taxsim_input": {
-          "childcare": 0.0,
-          "dep13": 0,
-          "dep17": 0,
-          "dep18": 0,
-          "depx": 0,
-          "dividends": 0.0,
-          "gssi": 0.0,
-          "idtl": 2,
-          "intrec": 14504.0361328125,
-          "ltcg": 0.0,
-          "mortgage": 0.0,
-          "mstat": 1,
-          "nonprop": 0,
-          "otheritem": 0.0,
-          "otherprop": 0.0,
-          "page": 64,
-          "pensions": 126.46663665771484,
-          "proptax": 0.0,
-          "psemp": 0.0,
-          "pui": 0.0,
-          "pwages": 2090.73046875,
-          "rentpaid": 0.0,
-          "sage": 0,
-          "scorp": 0,
-          "ssemp": 0,
-          "state": 22,
-          "stcg": 0.0,
-          "sui": 0,
-          "swages": 0,
-          "taxsimid": 3840,
-          "transfers": 0,
-          "year": 2026
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#eitc",
-          "description": "Earned Income Tax Credit",
-          "difference": 159.940880859375,
-          "kind": "amount_difference",
-          "left": 159.940880859375,
-          "parent": "us:tax/federal-income-tax#liability",
-          "relative_tolerance": 0,
-          "right": 0.0,
-          "tolerance": 5
-        }
-      ],
-      "right_engine": "taxsim",
-      "right_errors": []
-    },
-    {
       "case_id": "ecps-tax-unit-80982",
       "left_engine": "axiom",
       "left_errors": [],
@@ -70287,93 +70186,6 @@
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
           "right": 14742.27,
-          "tolerance": 5
-        }
-      ],
-      "right_engine": "taxsim",
-      "right_errors": []
-    },
-    {
-      "case_id": "ecps-tax-unit-81018",
-      "left_engine": "axiom",
-      "left_errors": [],
-      "match_rate": 66.66666666666666,
-      "metadata": {
-        "axiom_input_records_count": 1514,
-        "axiom_relations_count": 40,
-        "case_unit": "tax_unit",
-        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
-        "household_id": 3283,
-        "household_summary": {
-          "ages": [
-            48,
-            48,
-            17,
-            12
-          ],
-          "household_size": 4,
-          "yearly_earned_income_per_person": [
-            29626.45,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "yearly_earned_income_total": 29626.45
-        },
-        "household_weight": 7943.0849609375,
-        "population": "enhanced-cps",
-        "scope": {
-          "geoid": "25025",
-          "type": "census_county"
-        },
-        "tax_unit_id": 81018,
-        "taxsim_input": {
-          "age1": 17,
-          "age2": 12,
-          "childcare": 0.0,
-          "dep13": 1,
-          "dep17": 1,
-          "dep18": 2,
-          "depx": 2,
-          "dividends": 0.0,
-          "gssi": 0.0,
-          "idtl": 2,
-          "intrec": 0.0,
-          "ltcg": 0.0,
-          "mortgage": 0.0,
-          "mstat": 2,
-          "nonprop": 0,
-          "otheritem": 0.0,
-          "otherprop": 20000.0,
-          "page": 48,
-          "pensions": 0.0,
-          "proptax": 0.0,
-          "psemp": 0.0,
-          "pui": 0.0,
-          "pwages": 29626.451171875,
-          "rentpaid": 0.0,
-          "sage": 48,
-          "scorp": 0,
-          "ssemp": 0.0,
-          "state": 22,
-          "stcg": 0.0,
-          "sui": 0.0,
-          "swages": 0.0,
-          "taxsimid": 3882,
-          "transfers": 0,
-          "year": 2026
-        }
-      },
-      "mismatches": [
-        {
-          "concept": "us:tax/federal-income-tax#eitc",
-          "description": "Earned Income Tax Credit",
-          "difference": 3426.965383203125,
-          "kind": "amount_difference",
-          "left": 3426.965383203125,
-          "parent": "us:tax/federal-income-tax#liability",
-          "relative_tolerance": 0,
-          "right": 0.0,
           "tolerance": 5
         }
       ],
@@ -79791,6 +79603,338 @@
       ],
       "right_engine": "taxsim",
       "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-4389",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 66.66666666666666,
+      "metadata": {
+        "axiom_input_records_count": 1514,
+        "axiom_relations_count": 42,
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 3705,
+        "household_summary": {
+          "ages": [
+            35,
+            10,
+            4,
+            0
+          ],
+          "household_size": 4,
+          "yearly_earned_income_per_person": [
+            32799.3,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 32799.3
+        },
+        "household_weight": 296.5413513183594,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "44007",
+          "type": "census_county"
+        },
+        "tax_unit_id": 4389,
+        "taxsim_input": {
+          "age1": 10,
+          "age2": 4,
+          "age3": 0,
+          "childcare": 0.0,
+          "dep13": 3,
+          "dep17": 3,
+          "dep18": 3,
+          "depx": 3,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 1,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 35,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 32799.30078125,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 40,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 4389,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": 6354.70125546875,
+          "kind": "amount_difference",
+          "left": 6354.70125546875,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-81536",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 66.66666666666666,
+      "metadata": {
+        "axiom_input_records_count": 916,
+        "axiom_relations_count": 18,
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 3716,
+        "household_summary": {
+          "ages": [
+            54,
+            50
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            252188.53,
+            0.0
+          ],
+          "yearly_earned_income_total": 252188.53
+        },
+        "household_weight": 539.7437744140625,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "44009",
+          "type": "census_county"
+        },
+        "tax_unit_id": 81536,
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 394.9672546386719,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 86.33354949951172,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 2,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 54,
+          "pensions": 23867.8984375,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 252188.53125,
+          "rentpaid": 0.0,
+          "sage": 50,
+          "scorp": 0,
+          "ssemp": 0.0,
+          "state": 40,
+          "stcg": 0.0,
+          "sui": 0.0,
+          "swages": 0.0,
+          "taxsimid": 4400,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/payroll#employee_fica",
+          "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
+          "difference": 4196.692640624999,
+          "kind": "amount_difference",
+          "left": 19292.422640624998,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 15095.73,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-81543",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 66.66666666666666,
+      "metadata": {
+        "axiom_input_records_count": 617,
+        "axiom_relations_count": 9,
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 3721,
+        "household_summary": {
+          "ages": [
+            71
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "household_weight": 1377.8411865234375,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "44007",
+          "type": "census_county"
+        },
+        "tax_unit_id": 81543,
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 42518.390625,
+          "idtl": 2,
+          "intrec": 287.77850341796875,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 1,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 71,
+          "pensions": 30791.412109375,
+          "proptax": 0.0,
+          "psemp": 271.3453063964844,
+          "pui": 0.0,
+          "pwages": 0.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 40,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 4407,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/payroll#employee_fica",
+          "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
+          "difference": -38.34,
+          "kind": "amount_difference",
+          "left": 0.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 38.34,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-tax-unit-4408",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 66.66666666666666,
+      "metadata": {
+        "axiom_input_records_count": 1215,
+        "axiom_relations_count": 29,
+        "case_unit": "tax_unit",
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_id": 3722,
+        "household_summary": {
+          "ages": [
+            52,
+            51,
+            17
+          ],
+          "household_size": 3,
+          "yearly_earned_income_per_person": [
+            54665.5,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 54665.5
+        },
+        "household_weight": 229.83267211914062,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "44005",
+          "type": "census_county"
+        },
+        "tax_unit_id": 4408,
+        "taxsim_input": {
+          "age1": 17,
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 1,
+          "depx": 1,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 1.1511139869689941,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 2,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 52,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 1.0020354986190796,
+          "pui": 0.0,
+          "pwages": 54665.50390625,
+          "rentpaid": 0.0,
+          "sage": 51,
+          "scorp": 0,
+          "ssemp": 0.0,
+          "state": 40,
+          "stcg": 0.0,
+          "sui": 1852.91064453125,
+          "swages": 0.0,
+          "taxsimid": 4408,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": 374.3812814973593,
+          "kind": "amount_difference",
+          "left": 374.3812814973593,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
     }
   ],
   "concepts": [
@@ -79829,10 +79973,10 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 954,
+    "shown_case_rows": 956,
     "shown_mismatches": 1000,
     "total_case_rows": 87519,
-    "total_mismatches": 26312
+    "total_mismatches": 26229
   },
   "engines": {
     "left": "axiom",
@@ -82415,29 +82559,12 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 134.18006191625977,
-      "kind": "amount_difference",
-      "left": 134.18006191625977,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-77619",
-      "concept": "us:tax/federal-income-tax#eitc",
-      "description": "Earned Income Tax Credit",
-      "difference": 3902.5361678655227,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "taxsim-2026-eitc-child-machinery-absent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "bridge_artifact",
+        "id": "ecps-projection-dependent-se-income-fica"
       },
       "kind": "amount_difference",
-      "left": 3902.5361678655227,
+      "left": 134.18006191625977,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -87785,14 +87912,14 @@
       "case_id": "ecps-tax-unit-1705",
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
-      "difference": 490.41202797878174,
+      "difference": -96.04,
       "disposition": {
         "disposition": "upstream_engine_gap",
         "id": "taxsim-2026-eitc-childless-schedule-applied-to-units-with-children",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
       "kind": "amount_difference",
-      "left": 586.4520279787818,
+      "left": 0.0,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
@@ -89550,6 +89677,10 @@
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": 107.34405084069824,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "ecps-projection-dependent-se-income-fica"
+      },
       "kind": "amount_difference",
       "left": 107.34405084069824,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94015,27 +94146,6 @@
     {
       "ages": null,
       "case_id": "ecps-tax-unit-2931",
-      "concept": "us:tax/federal-income-tax#eitc",
-      "description": "Earned Income Tax Credit",
-      "difference": 1266.4917184919398,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "taxsim-2026-eitc-child-machinery-absent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
-      },
-      "kind": "amount_difference",
-      "left": 1266.4917184919398,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-2931",
       "concept": "us:tax/payroll#employee_fica",
       "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
       "difference": -458.9859491593018,
@@ -98235,22 +98345,6 @@
     },
     {
       "ages": null,
-      "case_id": "ecps-tax-unit-80976",
-      "concept": "us:tax/federal-income-tax#eitc",
-      "description": "Earned Income Tax Credit",
-      "difference": 159.940880859375,
-      "kind": "amount_difference",
-      "left": 159.940880859375,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
       "case_id": "ecps-tax-unit-80982",
       "concept": "us:tax/federal-income-tax#standard_deduction",
       "description": "Federal standard deduction",
@@ -98350,27 +98444,6 @@
       "pregnant_head": null,
       "relative_tolerance": 0,
       "right": 14742.27,
-      "scenario": null,
-      "tolerance": 5,
-      "yearly_earned_income": null
-    },
-    {
-      "ages": null,
-      "case_id": "ecps-tax-unit-81018",
-      "concept": "us:tax/federal-income-tax#eitc",
-      "description": "Earned Income Tax Credit",
-      "difference": 3426.965383203125,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "taxsim-2026-eitc-child-machinery-absent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
-      },
-      "kind": "amount_difference",
-      "left": 3426.965383203125,
-      "parent": "us:tax/federal-income-tax#liability",
-      "pregnant_head": null,
-      "relative_tolerance": 0,
-      "right": 0.0,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -100831,6 +100904,90 @@
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-4389",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": 6354.70125546875,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-child-machinery-absent",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 6354.70125546875,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-81536",
+      "concept": "us:tax/payroll#employee_fica",
+      "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
+      "difference": 4196.692640624999,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-uncapped-oasdi-flat-765-wage-only",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1214"
+      },
+      "kind": "amount_difference",
+      "left": 19292.422640624998,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 15095.73,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-81543",
+      "concept": "us:tax/payroll#employee_fica",
+      "description": "Employee-side FICA plus self-employment tax (TAXSIM tfica scope)",
+      "difference": -38.34,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-seca-medicare-rate-only-1402b2-gate",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
+      },
+      "kind": "amount_difference",
+      "left": 0.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 38.34,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-4408",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": 374.3812814973593,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-child-machinery-absent",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 374.3812814973593,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
     }
   ],
   "population": "enhanced-cps",
@@ -100843,7 +101000,7 @@
       "axiom_rules_engine_sha": "0c39023e0d0b82aee9ec561f37a1b73547b66d86",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-08-23T18:42:11Z",
+    "generated_at": "2026-08-28T12:56:15Z",
     "generated_by": "scripts/run_comparison.py::fiit-taxsim-ecps",
     "oracle": {
       "name": "taxsim",
@@ -100854,7 +101011,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "c8951033abf872d2c1b6670fae634623842bb307"
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
       }
     ],
     "run_kind": "manual",
@@ -100869,37 +101026,37 @@
   "summary": {
     "comparison_count": 262557,
     "dispositioned": {
-      "assignment_sha256": "37fca01ca2c929ab11126a89cec4e0a1a15f11927ff59cf50d8a324665342739",
+      "assignment_sha256": "9c036b633d5558d9ac3e49104c2bb6beaf0608c004c1f15d0514c5a189ad6d65",
       "counts": {
-        "axiom_encoding_gap": 18449,
-        "bridge_artifact": 15,
-        "explained_residual": 2318,
+        "axiom_encoding_gap": 18460,
+        "bridge_artifact": 30,
+        "explained_residual": 2319,
         "unexplained": 0,
-        "upstream_engine_gap": 5485
+        "upstream_engine_gap": 5417
       },
       "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.982861,
+      "explained_rate": 99.998857,
       "orphaned_entries": [],
-      "raw_match_rate": 89.978557,
+      "raw_match_rate": 90.010169,
       "schema_version": "axiom_oracles.dispositions.v1",
       "source_report": {
-        "path": "reports/axiom-taxsim-fiit-ecps-verify-2026-08-23.json",
-        "sha256": "796c3fc15af78c9311ba967e3a3e7eaea2398180f1e834199843c1748bba8842"
+        "path": "reports/axiom-taxsim-fiit-ecps-verify-2026-08-28.json",
+        "sha256": "7a5cf2ff0e2f9901f376be915a0120591f86c2eae3b97d879e09a1793a1d0ddb"
       },
-      "unexplained_count": 45
+      "unexplained_count": 3
     },
     "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 236245,
-    "mismatch_count": 26312,
+    "errors_by_engine": {},
+    "match_count": 236328,
+    "mismatch_count": 26229,
     "mismatches_by_concept": [
       {
         "count": 18475,
         "value": "us:tax/payroll#employee_fica"
       },
       {
-        "count": 5512,
+        "count": 5429,
         "value": "us:tax/federal-income-tax#eitc"
       },
       {
@@ -100909,22 +101066,22 @@
     ],
     "mismatches_by_kind": [
       {
-        "count": 26312,
+        "count": 26229,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 26312,
+        "count": 26229,
         "value": null
       }
     ],
     "stored_mismatch_example_count": 1000,
     "weighted": {
       "comparison_weight": 538341774.50967,
-      "match_rate": 89.697581,
-      "match_weight": 482879548.099516,
-      "mismatch_weight": 55462226.410139
+      "match_rate": 89.775054,
+      "match_weight": 483296620.734825,
+      "mismatch_weight": 55045153.77483
     }
   }
 }

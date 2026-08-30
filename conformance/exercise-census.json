@@ -3293,10 +3293,10 @@
         }
       },
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 723,
+      "inline_cases_not_counted": 688,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
-      "report_sha256": "004b3dfda30650a44f85d4e2b7b006d117cdf63de1bdeb210bc6a6403524733b",
+      "report_sha256": "e30fe7e422ab3db0df74c3fb2234e4a02569d104b7d47291be456ba3da55589d",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3895,7 +3895,7 @@
       "bridge_declared": false,
       "bridge_manifest_sha256": null,
       "bridged_through": {},
-      "cases_scanned": 954,
+      "cases_scanned": 956,
       "chunk_manifest": [],
       "constant_fields": 3,
       "evidence_fields": {
@@ -3916,11 +3916,11 @@
           "state": "constant"
         },
         "household_id": {
-          "distinct": 931,
+          "distinct": 933,
           "state": "varied"
         },
         "household_weight": {
-          "distinct": 931,
+          "distinct": 933,
           "state": "varied"
         },
         "population": {
@@ -3928,7 +3928,7 @@
           "state": "constant"
         },
         "tax_unit_id": {
-          "distinct": 954,
+          "distinct": 956,
           "state": "varied"
         }
       },
@@ -3936,7 +3936,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-fiit-ecps.json",
-      "report_sha256": "e81a398549bc19b2cddd96afb9966808ce88d6605d34738a46ecf96159a73193",
+      "report_sha256": "08609c78e63cd44ad7259b3f860a39e961d84318f9db6c893eba754487e61ae0",
       "varied_fields": 5,
       "verdict_concepts": {}
     },
