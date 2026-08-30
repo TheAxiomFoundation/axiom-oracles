@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import sys
 from pathlib import Path
@@ -13,6 +14,36 @@ import yaml
 
 REPO = Path(__file__).parents[1]
 SCRIPT = REPO / "scripts" / "us_tariff_closure.py"
+NOTE16_INPUT_SCOPES = {
+    "entry_is_s232_note16_c_ii_derivative_aluminum_member": "note 16(c)(ii)",
+    "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": "note 16(c)(vi)",
+    "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": "note 16(c)(ix)",
+    "entry_is_s232_note16_metal_chapter": "chapter 72, 73, 74, or 76",
+    "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": "real-entry determination",
+}
+EXPECTED_MISSING_INPUTS = [
+    "cbp_agrees_chapter_98_entry_is_appropriate",
+    "entry_is_9802_excepted_entry",
+    "entry_is_china_301_2024_action",
+    "entry_is_china_301_list123",
+    "entry_is_china_301_list4a",
+    "entry_is_china_301_solar",
+    "entry_is_entered_free_of_duty_under_usmca",
+    "entry_is_humanitarian_donation_article",
+    "entry_is_informational_material_article",
+    "entry_is_line_a",
+    "entry_is_line_b",
+    "entry_is_line_d",
+    "entry_is_personal_use_accompanied_baggage",
+    "entry_is_properly_claimed_chapter_98_entry",
+    "entry_is_section_122_exempt",
+    "entry_is_section_201_cspv",
+    "entry_is_section_232_aluminum",
+    "entry_is_section_232_steel",
+    "entry_loaded_and_in_transit_before_july_24_2026",
+    "hts_line",
+    "resolved_non_ad_valorem_column2_rate",
+]
 
 
 def _module():
@@ -71,6 +102,197 @@ def test_frontier_cannot_change_under_a_complete_label():
     document["computed"]["boundary_frontier"]["inputs"].pop()
     with pytest.raises(ValueError, match="boundary frontier inputs changed"):
         module.validate_artifact(document)
+
+
+def test_frontier_honestly_lists_unclassified_reachable_inputs():
+    module = _module()
+    document = _expected_document(module)
+    assert module.validate_artifact(document).closed is False
+    frontier = document["computed"]["boundary_frontier"]
+    assert frontier["complete"] is False
+    assert frontier["input_count"] == 60
+    assert frontier["required_input_count"] == 58
+    assert frontier["missing_input_count"] == 21
+    assert frontier["missing_inputs"] == EXPECTED_MISSING_INPUTS
+    inventory = document["committed_decisions"]["audited_input_inventory"]
+    assert inventory["rulespec_ref"] == "4f591c4267063094cc6da9d590872ea982940b81"
+    assert inventory["engine_sha256"] == (
+        "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
+    )
+    assert inventory["inputs_sha256"] == (
+        "10c812c01fd7c46b309d9cde66b30b6020acef05a5c9c8f0b97fb3e32ae773b1"
+    )
+    assert set(frontier["missing_inputs"]) == set(inventory["inputs"]) - {
+        row["input"] for row in frontier["inputs"]
+    }
+
+
+def test_note16_entry_facts_are_scoped_and_uncaptured():
+    module = _module()
+    document = _expected_document(module)
+    frontier = {
+        row["input"]: row for row in document["computed"]["boundary_frontier"]["inputs"]
+    }
+    for name, scope in NOTE16_INPUT_SCOPES.items():
+        assert frontier[name]["grounding"] == "uncaptured"
+        assert scope in frontier[name]["uncaptured_scope"]
+        assert name in module.AUDITED_REACHABLE_INPUTS
+    threshold = frontier[
+        "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight"
+    ]["uncaptured_scope"]
+    assert "Yale-model assumption" in threshold
+    assert "not actual-entry proof" in threshold
+
+
+@pytest.mark.parametrize("missing", NOTE16_INPUT_SCOPES)
+def test_omitting_note16_scope_cannot_make_frontier_complete(monkeypatch, missing):
+    module = _module()
+    monkeypatch.setattr(
+        module,
+        "INPUTS",
+        [(name, scope) for name, scope in module.INPUTS if name != missing],
+    )
+    document = _expected_document(module)
+    frontier = document["computed"]["boundary_frontier"]
+    assert missing in frontier["missing_inputs"]
+    assert frontier["missing_input_count"] == 22
+    assert frontier["complete"] is False
+    assert module.validate_artifact(document).closed is False
+    frontier["complete"] = True
+    with pytest.raises(ValueError, match="frontier completeness is not derived"):
+        module.validate_artifact(document)
+
+
+def test_empty_scope_does_not_classify_a_reachable_input(monkeypatch):
+    module = _module()
+    missing = next(iter(NOTE16_INPUT_SCOPES))
+    monkeypatch.setattr(
+        module,
+        "INPUTS",
+        [(name, "" if name == missing else scope) for name, scope in module.INPUTS],
+    )
+    frontier = _expected_document(module)["computed"]["boundary_frontier"]
+    assert missing in frontier["missing_inputs"]
+    assert frontier["complete"] is False
+
+
+def test_unclassified_inputs_keep_closure_open_without_policy_burndown(monkeypatch):
+    module = _module()
+    decisions = copy.deepcopy(module.DECISIONS)
+    for row in decisions:
+        if row["status"] in {"pending", "partially-encoded"}:
+            row["status"] = "encoded"
+    monkeypatch.setattr(module, "DECISIONS", decisions)
+    document = _expected_document(module)
+    assert document["computed"]["burndown"] == []
+    assert document["computed"]["boundary_frontier"]["complete"] is False
+    assert module.validate_artifact(document).closed is False
+    document["computed"]["closed"] = True
+    with pytest.raises(ValueError, match="computed.closed is not derived"):
+        module.validate_artifact(document)
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("rulespec_ref", "0" * 40),
+        ("engine_sha256", "0" * 64),
+        ("inputs_sha256", "0" * 64),
+        ("input_count", 57),
+        ("inputs", []),
+        ("promised_outputs", {"witness": [], "schedule": []}),
+    ],
+)
+def test_audited_inventory_pin_cannot_be_rewritten(field, value):
+    module = _module()
+    document = _expected_document(module)
+    document["committed_decisions"]["audited_input_inventory"][field] = value
+    with pytest.raises(ValueError, match="committed closure decisions changed"):
+        module.validate_artifact(document)
+
+
+def test_coordinated_inventory_omission_cannot_self_validate():
+    module = _module()
+    document = _expected_document(module)
+    frontier = document["computed"]["boundary_frontier"]
+    inventory = document["committed_decisions"]["audited_input_inventory"]
+    inventory["inputs"] = [
+        name for name in inventory["inputs"] if name not in frontier["missing_inputs"]
+    ]
+    inventory["input_count"] = len(inventory["inputs"])
+    inventory["inputs_sha256"] = hashlib.sha256(
+        ("\n".join(inventory["inputs"]) + "\n").encode()
+    ).hexdigest()
+    frontier.update(
+        complete=True,
+        required_input_count=inventory["input_count"],
+        missing_input_count=0,
+        missing_inputs=[],
+    )
+    with pytest.raises(ValueError, match="frontier missing inputs are not derived"):
+        module.validate_artifact(document)
+
+
+def test_audited_required_input_values_cannot_drift(monkeypatch):
+    module = _module()
+    monkeypatch.setattr(
+        module, "AUDITED_REACHABLE_INPUTS", module.AUDITED_REACHABLE_INPUTS[:-1]
+    )
+    with pytest.raises(
+        ValueError, match="audited reachable-input inventory pin changed"
+    ):
+        _expected_document(module)
+
+
+def test_compiled_reachability_includes_all_versions_but_not_unused_imports():
+    module = _module()
+    program = {
+        "derived": [
+            {
+                "name": "promised",
+                "versions": [
+                    {"expr": {"kind": "derived", "name": "historical_rule"}},
+                    {"expr": {"kind": "derived", "name": "current_rule"}},
+                ],
+            },
+            {"name": "historical_rule", "expr": {"kind": "input", "name": "old_fact"}},
+            {
+                "name": "current_rule",
+                "expr": {
+                    "kind": "input_or_else",
+                    "name": "optional_fact",
+                    "default": False,
+                },
+            },
+            {"name": "unused_import", "expr": {"kind": "input", "name": "unused_fact"}},
+        ]
+    }
+    assert module._reachable_inputs_from_program(program, ["promised"]) == {
+        "old_fact",
+        "optional_fact",
+    }
+    with pytest.raises(ValueError, match="missing or duplicate outputs"):
+        module._reachable_inputs_from_program(program, ["absent_output"])
+
+
+def test_input_inventory_reproduction_rejects_unpinned_engine(monkeypatch):
+    module = _module()
+    monkeypatch.setattr(module, "_git", lambda *_: module.RULESPEC_REF.encode())
+    with pytest.raises(ValueError, match="input inventory engine source pin drift"):
+        module.reproduce_input_inventory(engine_binary=SCRIPT)
+
+
+def test_build_cannot_skip_compiler_input_inventory_reproduction(monkeypatch):
+    module = _module()
+    monkeypatch.setattr(module, "_blob_facts", lambda *_: ([], {}))
+    monkeypatch.setattr(module, "_git", lambda *_: module.RULESPEC_REF.encode())
+
+    def reject_inventory(**_):
+        raise ValueError("compiler inventory verification failed")
+
+    monkeypatch.setattr(module, "reproduce_input_inventory", reject_inventory)
+    with pytest.raises(ValueError, match="compiler inventory verification failed"):
+        module.build()
 
 
 def test_declared_corpus_roots_reconcile():
@@ -208,16 +430,40 @@ def test_coordinated_closed_ledger_mutation_cannot_self_validate():
             Path.home()
             / "TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us/.git"
         ).exists()
+        and (
+            Path.home()
+            / "TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
+        ).is_file()
     ),
-    reason="needs the local pinned corpus and RuleSpec Git object stores",
+    reason="needs the local pinned corpus and RuleSpec Git object stores and engine",
 )
-def test_full_reproduction_uses_pinned_git_objects(tmp_path):
+def test_full_reproduction_uses_pinned_git_objects(tmp_path, monkeypatch):
     module = _module()
+    compiled_paths = []
+    real_run = module.subprocess.run
+
+    def record_compile(command, *args, **kwargs):
+        if command[1] == "compile":
+            compiled_path = Path(command[command.index("--program") + 1])
+            assert module.RULESPEC not in compiled_path.parents
+            assert command[command.index("--output") + 1] == "/dev/stdout"
+            compiled_paths.append(compiled_path)
+        return real_run(command, *args, **kwargs)
+
+    monkeypatch.setattr(module.subprocess, "run", record_compile)
     artifact = tmp_path / "us-tariff-duty.yaml"
     artifact.write_text(module.serialize(_expected_document(module)))
     result = module.verify_artifact(artifact_path=artifact)
     assert result.valid, result.errors
     assert result.document == result.expected
+    assert len(compiled_paths) == 101
+    assert all(not path.exists() for path in compiled_paths)
+    assert result.expected["committed_decisions"]["audited_input_inventory"][
+        "inputs"
+    ] == (list(module.AUDITED_REACHABLE_INPUTS))
+    assert result.expected["computed"]["boundary_frontier"]["missing_inputs"] == (
+        EXPECTED_MISSING_INPUTS
+    )
     assert (
         result.expected["generated_facts"]["corpus_roots"]["hts-rate-provisions"][
             "commit"

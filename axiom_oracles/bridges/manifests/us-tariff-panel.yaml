@@ -1,4 +1,4 @@
-# Strict experiment boundary for the committed 122-family tariff witness.
+# Strict experiment boundary for the committed tariff-panel witness.
 schema: axiom_oracles.bridge_manifest.v1
 suite: us-tariff-panel
 program: us/tariff-witness
@@ -55,6 +55,10 @@ completeness:
   status: verified
   source: committed_exercise_receipt
   receipt: axiom_oracles/bridges/exercise_receipts/us-tariff-panel.json
-  note: The committed report contains all 122 family rows; its receipt flattens
-    their HTS, country and probe-date ledgers and declares the eleven neutral
-    optional inputs exactly as the harness supplies them by compiled default.
+  note: The committed report stores 122 aggregate family rows representing a
+    conserved total of 39,600 reported comparison units. Its receipt binds
+    those rows and inventories their grouped HTS, country and probe-date
+    ledgers; the eleven neutral optional inputs are declared exactly as the
+    harness supplies them by compiled default. No exact case-ID population or
+    group-to-case trace is committed, so this is aggregate evidence and does
+    not establish per-case exercise.

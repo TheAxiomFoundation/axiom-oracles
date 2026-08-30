@@ -1166,6 +1166,33 @@ def test_mismatch_signature_preserves_selector_dimensions() -> None:
     assert mismatch_signature(row) != mismatch_signature(other_iso2)
 
 
+def _historical_preview_entries(preview: dict | None = None) -> list[dict]:
+    """Isolate the immutable 18-parent ruling from the evolving live ledger."""
+
+    if preview is None:
+        preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
+    campaign_module._require_immutable_preview_all_selector_snapshot(preview)
+    receipt_path = "reference/us-tariff-schedule/preview-disposition-line-sets.json"
+    return [
+        {
+            **copy.deepcopy(selector),
+            "concept": (
+                "us:policies/cbp/us-tariff-schedule#" + selector["match"]["slot"]
+            ),
+            "kind": "signature_class",
+            "receipt": "Immutable historical preview selector contract.",
+            "reason": "Test fixture preserves the receipted historical ruling.",
+            "expires_on_source_change": True,
+            "evidence": {
+                "sources": [receipt_path],
+                "receipt_type": "immutable-preview-selector-contract",
+                "instrument_receipt": f"{receipt_path}#selector={selector['id']}",
+            },
+        }
+        for selector in preview["selectors"]
+    ]
+
+
 @pytest.fixture
 def _without_external_membership_tables(monkeypatch):
     """Keep structural receipt tests independent of a RuleSpec checkout."""
@@ -1191,16 +1218,184 @@ def test_preview_disposition_line_sets_are_receipted_and_registered(
     registered = _named_line_sets()
     assert names <= set(registered)
     assert all(registered[name][0][0] == 10 for name in names)
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    contract = _preview_selector_contract(ledger["entries"])
+    contract = _preview_selector_contract(_historical_preview_entries(receipt))
     assert {
         selector_id: selector["match"] for selector_id, selector in contract.items()
     } == {selector["id"]: selector["match"] for selector in receipt["selectors"]}
 
 
-def test_preview_selector_match_drift_fails_hermetically() -> None:
+@pytest.fixture
+def _current_ledger_enrollment(monkeypatch):
+    """Authenticate committed receipts without replaying bulk data or R.
+
+    The production loader still checks small-file hashes, source/run bindings,
+    zero-error censuses, and the independent embedded CAFTA proof. Its large
+    selected-population receipt and recorded R result are fixture inputs, not a
+    claim that this test reran either producer or the full campaign.
+    """
+
+    manifest = json.loads(campaign_module.EVAL_MANIFEST.read_text())
+    selected_path = campaign_module.SELECTED
+    selected_receipt = copy.deepcopy(manifest["run_identity"]["selected_population"])
+    cafta = json.loads(campaign_module.CAFTA_SUPERSESSION_RECEIPT.read_text())
+    replay = cafta["yale_reference_defect"]["deterministic_minimal_reproduction"]
+    assert (
+        replay["program_sha256"]
+        == campaign_module.CAFTA_EXPECTED_TIDY_EVAL_PROGRAM_SHA256
+    )
+    assert (
+        replay["r_runtime_tree"]
+        == campaign_module.CAFTA_EXPECTED_R_RUNTIME_TREE_RECEIPT
+    )
+    assert replay["dplyr_tree"] == campaign_module.CAFTA_EXPECTED_DPLYR_TREE_RECEIPT
+    assert replay["selected_conditions"] == "full,fta"
+    real_sha256 = campaign_module._sha256
+    real_file_receipt = campaign_module._file_receipt
+
+    def receipt_sha256(path):
+        if path == selected_path:
+            return selected_receipt["sha256"]
+        assert path.suffix != ".gz", "live enrollment must not scan bulk artifacts"
+        return real_sha256(path)
+
+    def file_receipt(path, *, relative_to=None):
+        if path == selected_path:
+            assert relative_to == campaign_module.REPO_ROOT
+            return copy.deepcopy(selected_receipt)
+        return real_file_receipt(path, relative_to=relative_to)
+
+    monkeypatch.setattr(campaign_module, "_sha256", receipt_sha256)
+    monkeypatch.setattr(campaign_module, "_file_receipt", file_receipt)
+    monkeypatch.setattr(
+        campaign_module,
+        "_run_cafta_tidy_eval_reproduction",
+        lambda: copy.deepcopy(replay),
+    )
+    entries = yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"]
+    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
+    preview = campaign_module._preview_disposition_receipt()
+    assert _preview_transition_is_required(entries, preview)
+    transition = _transition_for_entries(entries, comparison, preview)
+    assert transition is not None and transition["verdict"] == "PASS"
+    return entries, comparison, preview, transition
+
+
+def test_current_ledger_enrolls_exact_receipted_fresh_children(
+    _current_ledger_enrollment,
+) -> None:
+    entries, _comparison, preview, transition = _current_ledger_enrollment
+    active, retired, superseded = _preview_selector_snapshot(
+        entries, preview, transition
+    )
+    unrelated_ids = {
+        "non-metal-232-family",
+        "vintage-revision-232",
+        "s122-gn6-lines",
+        "s122-ch98",
+        "s122-unconditional-exempt-lines",
+        "s122-entry-status-lines",
+        "column2-gn3b",
+        "vintage-revision-301",
+        "vintage-revision-301-removed-lines",
+        "legal-date-boundary-ieepa",
+        "reciprocal-vintage-ieepa",
+        "s201-stale-proxy",
+    }
+    causal_proof_ids = {
+        "section232-steel-scope-projection-brazil",
+        "section232-steel-scope-projection-forced-labor",
+        "yale-html-statutory-base-parser-defect",
+        "section232-russia-aluminum-membership-vintage",
+    }
+    by_id = {entry["id"]: entry for entry in entries}
+    children = {
+        child["id"]: child
+        for parent in transition["transitions"]
+        for child in parent["children"]
+    }
+    historical_ids = {selector["id"] for selector in preview["selectors"]}
+    assert len(entries) == len(by_id) == 46
+    assert len(children) == len(active) == 30
+    assert set(by_id) == set(children) | unrelated_ids | causal_proof_ids
+    assert not historical_ids.intersection(by_id)
+    assert set(retired) == {
+        "section232-exposed-brazil",
+        "section232-exposed-forced-labor",
+    }
+    assert set(superseded) == historical_ids - set(retired)
+    assert active == children
+    for child_id, child in children.items():
+        entry = by_id[child_id]
+        assert {field: entry[field] for field in child} == child
+        assert all(type(entry[field]) is type(value) for field, value in child.items())
+        assert entry["expires_on_source_change"] is True
+        assert entry["evidence"]["transition"] == {
+            "parent_id": child["parent_id"],
+            "child_id": child_id,
+            "receipt_payload_sha256": transition["receipt_payload_sha256"],
+        }
+    assert sum(child["expected_units"] for child in children.values()) == sum(
+        parent["fresh_residual_population"]["units"]
+        for parent in transition["transitions"]
+    )
+    with pytest.raises(ValueError, match="unreceipted preview selector"):
+        _preview_selector_contract(entries, preview)
+
+
+def test_current_ledger_retires_superseded_causes_and_enrolls_exact_replays() -> None:
+    from scripts import us_tariff_publication as publication
+
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = copy.deepcopy(ledger["entries"])
+    contracts, evidence = publication._proof_contracts(
+        publication._Snapshot(campaign_module.REPO_ROOT)
+    )
+    entries, base_ids = publication._validate_enrollment(ledger, contracts)
+    assert len(entries) == 46 and len(base_ids) == 42
+    assert not publication.RETIRED_BASE_IDS.intersection(entries)
+    assert len(evidence) == 2
+    assert {
+        name: (
+            entry["expected_units"],
+            entry["expected_signature_count"],
+            entry["attribution"],
+        )
+        for name, entry in entries.items()
+        if name in contracts
+    } == {
+        "section232-steel-scope-projection-brazil": (6, 3, "input-comparability"),
+        "section232-steel-scope-projection-forced-labor": (
+            108,
+            54,
+            "input-comparability",
+        ),
+        "yale-html-statutory-base-parser-defect": (5709, 3114, "reference-defect"),
+        "section232-russia-aluminum-membership-vintage": (
+            24,
+            12,
+            "input-comparability",
+        ),
+    }
+
+
+def test_current_ledger_requires_authenticated_transition_receipt(
+    _current_ledger_enrollment, tmp_path: Path, monkeypatch
+) -> None:
+    entries, comparison, preview, transition = _current_ledger_enrollment
+    path = tmp_path / "transition.json"
+    monkeypatch.setattr(campaign_module, "PREVIEW_SELECTOR_TRANSITION_RECEIPT", path)
+    with pytest.raises(ValueError, match="transition receipt is missing"):
+        _transition_for_entries(entries, comparison, preview)
+    mutant = copy.deepcopy(transition)
+    mutant["verdict"] = "FAIL"
+    mutant.pop("receipt_payload_sha256")
+    mutant["receipt_payload_sha256"] = campaign_module._canonical_sha256(mutant)
+    path.write_text(json.dumps(mutant))
+    with pytest.raises(ValueError, match="not a PASS v1 receipt"):
+        _transition_for_entries(entries, comparison, preview)
+
+
+def test_preview_selector_match_drift_fails_hermetically() -> None:
+    entries = _historical_preview_entries()
     entries[0]["match"]["delta"] = {"sign": "neg"}
     with pytest.raises(ValueError, match="preview selector match drift"):
         _preview_selector_contract(entries)
@@ -1209,7 +1404,7 @@ def test_preview_selector_match_drift_fails_hermetically() -> None:
 @pytest.mark.parametrize("missing_field", ["slot", "delta"])
 def test_preview_selector_requires_exact_match_bounds(missing_field: str) -> None:
     preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
-    entries = copy.deepcopy(yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"])
+    entries = _historical_preview_entries(preview)
     selector = preview["selectors"][0]
     ledger_entry = next(entry for entry in entries if entry["id"] == selector["id"])
     selector["match"].pop(missing_field)
@@ -1228,8 +1423,7 @@ def test_preview_selector_requires_exact_match_bounds(missing_field: str) -> Non
 def test_preview_selector_ruling_cannot_be_relabeled(
     field: str, mutant: str, message: str
 ) -> None:
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = copy.deepcopy(ledger["entries"])
+    entries = _historical_preview_entries()
     entry = next(item for item in entries if item["id"] == "section232-exposed-brazil")
     entry[field] = mutant
     with pytest.raises(ValueError, match=message):
@@ -1237,8 +1431,7 @@ def test_preview_selector_ruling_cannot_be_relabeled(
 
 
 def test_unreceipted_preview_selector_is_rejected() -> None:
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = copy.deepcopy(ledger["entries"])
+    entries = _historical_preview_entries()
     mutant = copy.deepcopy(entries[0])
     mutant["id"] = "unreceipted-preview-selector"
     mutant["match"]["delta"] = {"values": [0.123456]}
@@ -1248,8 +1441,7 @@ def test_unreceipted_preview_selector_is_rejected() -> None:
 
 
 def test_preview_selector_must_expire_on_source_change() -> None:
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = copy.deepcopy(ledger["entries"])
+    entries = _historical_preview_entries()
     entries[0]["expires_on_source_change"] = False
     with pytest.raises(ValueError, match="lost source-change expiry"):
         _preview_selector_contract(entries)
@@ -1542,24 +1734,18 @@ def _synthetic_preview_transition(
         )
         ledger_children.extend(children)
     assert child_id
-    historical_ids = {selector["id"] for selector in preview["selectors"]}
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+    historical_entries = {
+        entry["id"]: entry for entry in _historical_preview_entries(preview)
+    }
     entries = [
-        copy.deepcopy(entry)
-        for entry in ledger["entries"]
-        if entry["id"] not in historical_ids
-    ]
-    entries.extend(
         {
-            "id": child["id"],
-            "logical_class": child["logical_class"],
-            "match": copy.deepcopy(child["match"]),
-            "disposition": child["disposition"],
-            "attribution": child["attribution"],
+            **copy.deepcopy(historical_entries[child["parent_id"]]),
+            **copy.deepcopy(child),
+            "receipt": "In-memory synthetic transition contract for this test.",
             "expires_on_source_change": True,
         }
         for child in ledger_children
-    )
+    ]
     line_set = preview["line_sets"][parent["match"]["line_set"]]
     unit = {
         **_selector_unit(),
@@ -1918,7 +2104,7 @@ def test_preview_transition_rejects_parent_or_child_contract_drift() -> None:
     parent_remains.append(
         next(
             copy.deepcopy(entry)
-            for entry in yaml.safe_load(DISPOSITION_LEDGER.read_text())["entries"]
+            for entry in _historical_preview_entries(preview)
             if entry["id"] == transition["transitions"][0]["parent_id"]
         )
     )
@@ -2111,8 +2297,7 @@ def test_preview_transition_receipt_is_lazy_until_a_child_is_enrolled(
     monkeypatch,
 ) -> None:
     preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = ledger["entries"]
+    entries = _historical_preview_entries(preview)
     comparison: dict = {}
 
     def unexpected_transition_load(*_args):
@@ -3095,9 +3280,10 @@ def test_preview_transition_loader_rejects_opaque_reference_assumption(
 def test_retired_preview_selector_must_be_absent_from_fresh_evidence(
     _raw_preview_line_set_membership,
 ) -> None:
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     entries = [
-        entry for entry in ledger["entries"] if entry["id"] != "cafta-52i-deferred"
+        entry
+        for entry in _historical_preview_entries()
+        if entry["id"] != "cafta-52i-deferred"
     ]
     receipt = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     active, retired, superseded = _preview_selector_snapshot(entries, receipt)
@@ -3137,8 +3323,11 @@ def test_vanished_section_232_selectors_can_retire_without_retiring_cafta(
         "section232-heading-brazil",
         "section232-heading-forced-labor",
     }
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = [entry for entry in ledger["entries"] if entry["id"] not in section_232]
+    entries = [
+        entry
+        for entry in _historical_preview_entries()
+        if entry["id"] not in section_232
+    ]
     preview = json.loads(PREVIEW_DISPOSITION_LINE_SETS.read_text())
     active, retired, superseded = _preview_selector_snapshot(entries, preview)
     assert set(retired) == section_232
@@ -3147,102 +3336,227 @@ def test_vanished_section_232_selectors_can_retire_without_retiring_cafta(
     _enforce_retired_preview_selectors_absent(retired, {}, Counter(), engine_errors=0)
 
 
-def test_report_rejects_stale_classification_schema(tmp_path, monkeypatch) -> None:
-    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
+@pytest.fixture
+def _bound_classification_handoff(tmp_path: Path, monkeypatch):
+    """A passing, two-row handoff after isolated preview/transition enrollment.
+
+    Enrollment authentication has separate historical, synthetic, and live-ledger
+    tests. Here only those upstream stages are substituted; input hashes, sidecar
+    rederivation, population conservation, and the comparison scan stay real.
+    """
+
+    entries = [
+        {
+            "id": "fixture-fresh-child",
+            "match": {"slot": "base", "delta": {"sign": "pos"}},
+        },
+        {
+            "id": "fixture-other",
+            "match": {"slot": "base", "delta": {"sign": "neg"}},
+        },
+    ]
+    fields = _selector_unit()
+    context = {
+        key: value
+        for key, value in fields.items()
+        if key not in {"slot", "delta", "disposition"}
+    }
+    row = {
+        "slot": fields["slot"],
+        "delta": fields["delta"],
+        "context": context,
+        "match": False,
+    }
+    signature = mismatch_signature(row)
+    contract = {
+        "fixture-fresh-child": {
+            "expected_units": 2,
+            "expected_signature_count": 1,
+            "expected_signature_population_sha256": signature_population_sha256(
+                [(signature, 2)]
+            ),
+        }
+    }
+    preview = {"receipt_payload_sha256": "a" * 64}
+    transition = {"transitions": []}
+    transition["receipt_payload_sha256"] = campaign_module._canonical_sha256(transition)
+    ledger_path = tmp_path / "ledger.yaml"
+    ledger_path.write_text(
+        yaml.safe_dump({"suite": "us-tariff-schedule", "entries": entries})
+    )
+    preview_path = tmp_path / "preview.json"
+    preview_path.write_text(json.dumps(preview))
+    transition_path = tmp_path / "transition.json"
+    transition_path.write_text(json.dumps(transition))
+    routing_path = tmp_path / "routing.csv.gz"
+    with gzip.open(routing_path, "wt") as target:
+        target.write("hts10,general_disposition,column2_disposition\n")
+        target.write(f"{fields['hts10']},free,free\n")
+    artifact_path = tmp_path / "comparison.jsonl.gz"
+    with gzip.open(artifact_path, "wt") as target:
+        for index in range(2):
+            target.write(json.dumps({**row, "case_id": f"case-{index}"}) + "\n")
+    comparison = {
+        "comparison_artifact": campaign_module._file_receipt(artifact_path),
+        "per_slot": {"base": {"mismatch": 2}},
+        "engine_errors": 0,
+    }
+    comparison_path = tmp_path / "comparison.json"
+    comparison_path.write_text(json.dumps(comparison))
+    for name, path in {
+        "CACHE_ROOT": tmp_path / "cache",
+        "DISPOSITION_LEDGER": ledger_path,
+        "PREVIEW_DISPOSITION_LINE_SETS": preview_path,
+        "PREVIEW_SELECTOR_TRANSITION_RECEIPT": transition_path,
+        "COMPARISON_RECEIPT": comparison_path,
+        "ROUTING_ROWS": routing_path,
+        "EVAL_MANIFEST": tmp_path / "eval/MANIFEST.json",
+    }.items():
+        monkeypatch.setattr(campaign_module, name, path)
+    monkeypatch.setattr(
+        campaign_module, "_preview_disposition_receipt", lambda: preview
+    )
+    monkeypatch.setattr(
+        campaign_module,
+        "_transition_for_entries",
+        lambda _entries, _comparison, _preview: transition,
+    )
+    monkeypatch.setattr(
+        campaign_module,
+        "_preview_selector_snapshot",
+        lambda _entries, *_args: (contract, {}, {}),
+    )
+    real_classification_inputs = campaign_module._classification_inputs
+
+    def bound_inputs(comparison, **kwargs):
+        # The production function's default ledger Path is bound at definition.
+        return real_classification_inputs(comparison, ledger_path, **kwargs)
+
+    monkeypatch.setattr(campaign_module, "_classification_inputs", bound_inputs)
+    inputs = bound_inputs(comparison, preview=preview, transition=transition)
+    sidecar = campaign_module._classification_sidecar_path(inputs)
+    sidecar.parent.mkdir(parents=True)
+    with gzip.open(sidecar, "wt") as target:
+        target.write(
+            json.dumps(
+                {
+                    "kind": "component_signature",
+                    "signature": signature,
+                    "units": 2,
+                    "class": "fixture-fresh-child",
+                    "fields": fields,
+                }
+            )
+            + "\n"
+        )
+        target.write(json.dumps({"kind": "engine_errors", "units": 0}) + "\n")
+    rederived = campaign_module._rederive_classification_sidecar(sidecar, entries)
+    classification = {
+        "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
+        "inputs": inputs,
+        "selector_count": len(entries),
+        "sidecar": {
+            "schema": "axiom_oracles.us_tariff_schedule.classification_sidecar.v2",
+            "path": str(sidecar),
+            "sha256": campaign_module._sha256(sidecar),
+        },
+        "conservation": "PASS",
+        **{key: value for key, value in rederived.items() if not key.startswith("_")},
+    }
+    # Every negative test starts from a receipt that passes the complete handoff.
+    campaign_module._validate_classification_handoff(
+        comparison, classification, entries
+    )
+    return comparison, classification, entries
+
+
+def test_report_rejects_stale_classification_schema(
+    tmp_path, monkeypatch, _bound_classification_handoff
+) -> None:
+    comparison, classification, _entries = _bound_classification_handoff
     monkeypatch.setattr(
         campaign_module,
         "_load_bound_comparison_locked",
         lambda **_kwargs: comparison,
     )
-    classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
     classification["schema"] = "axiom_oracles.us_tariff_schedule.classification.v1"
     stale = tmp_path / "classification-receipt.json"
     stale.write_text(json.dumps(classification))
     monkeypatch.setattr(campaign_module, "CLASSIFICATION_RECEIPT", stale)
+    monkeypatch.setattr(campaign_module, "OUT_DIR", tmp_path)
+    routing_receipt = tmp_path / "routing-receipt.json"
+    monkeypatch.setattr(campaign_module, "ROUTING_RECEIPT", routing_receipt)
+    for path in (
+        routing_receipt,
+        tmp_path / "quotient-receipt.json",
+        tmp_path / "full-exposure.json",
+    ):
+        path.write_text("{}")
     with pytest.raises(ValueError, match="classification receipt schema is stale"):
         campaign_module.build_report()
 
 
-def test_classification_handoff_rejects_unknown_legacy_classes() -> None:
-    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
-    classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
-    classification["schema"] = "axiom_oracles.us_tariff_schedule.classification.v2"
-    classification["inputs"] = campaign_module._classification_inputs(comparison)
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
+def test_classification_handoff_rejects_unknown_legacy_classes(
+    _bound_classification_handoff,
+) -> None:
+    comparison, classification, entries = _bound_classification_handoff
+    units = classification["class_census"].pop("fixture-fresh-child")
+    classification["class_census"]["aircraft-utilization-proxy-brazil"] = units
     with pytest.raises(ValueError, match="unknown or malformed class census"):
         campaign_module._validate_classification_handoff(
-            comparison, classification, ledger["entries"]
+            comparison, classification, entries
         )
 
 
-def test_classification_handoff_rejects_stale_input_binding() -> None:
-    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
-    classification = json.loads(campaign_module.CLASSIFICATION_RECEIPT.read_text())
-    classification["schema"] = "axiom_oracles.us_tariff_schedule.classification.v2"
-    classification["inputs"] = campaign_module._classification_inputs(comparison)
+def test_classification_handoff_rejects_stale_input_binding(
+    _bound_classification_handoff,
+) -> None:
+    comparison, classification, entries = _bound_classification_handoff
     classification["inputs"]["disposition_ledger_sha256"] = "0" * 64
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     with pytest.raises(
         ValueError, match="classification receipt input binding is stale"
     ):
         campaign_module._validate_classification_handoff(
-            comparison, classification, ledger["entries"]
+            comparison, classification, entries
         )
 
 
-def test_classification_handoff_rejects_preview_census_reassignment() -> None:
-    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    classification = {
-        "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
-        "inputs": campaign_module._classification_inputs(comparison),
-        "mismatches": 395_330,
-        "classified": 395_330,
-        "unexplained": 0,
-        "engine_errors": comparison["engine_errors"],
-        "class_census": {
-            "aircraft-utilization-proxy-brazil": 1,
-            "non-metal-232-family": 395_329,
-        },
-        "derived_total_units": 0,
-        "derived_total_compositions": {},
-        "selector_count": len(ledger["entries"]),
-        "groups": {},
-    }
+def test_classification_handoff_rejects_preview_census_reassignment(
+    _bound_classification_handoff,
+) -> None:
+    comparison, classification, entries = _bound_classification_handoff
+    classification["class_census"] = {"fixture-fresh-child": 1, "fixture-other": 1}
     with pytest.raises(ValueError, match="preview-selector census is stale"):
         campaign_module._validate_classification_handoff(
-            comparison, classification, ledger["entries"]
+            comparison, classification, entries
         )
 
 
-def test_classification_handoff_requires_rederivable_sidecar() -> None:
-    comparison = json.loads(campaign_module.COMPARISON_RECEIPT.read_text())
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    contract = campaign_module._preview_selector_contract(ledger["entries"])
-    class_census = {
-        selector_id: selector["expected_units"]
-        for selector_id, selector in contract.items()
-    }
-    mismatch_total = sum(
-        slot.get("mismatch", 0) for slot in comparison["per_slot"].values()
-    )
-    class_census["non-metal-232-family"] = mismatch_total - sum(class_census.values())
-    classification = {
-        "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
-        "inputs": campaign_module._classification_inputs(comparison),
-        "mismatches": mismatch_total,
-        "classified": mismatch_total,
-        "unexplained": 0,
-        "engine_errors": comparison["engine_errors"],
-        "class_census": class_census,
-        "derived_total_units": 0,
-        "derived_total_compositions": {},
-        "selector_count": len(ledger["entries"]),
-        "groups": {},
-    }
+def test_classification_handoff_requires_transition_input_binding(
+    _bound_classification_handoff,
+) -> None:
+    comparison, classification, entries = _bound_classification_handoff
+    for field in (
+        "preview_selector_transition_receipt_sha256",
+        "preview_selector_transition_payload_sha256",
+    ):
+        classification["inputs"].pop(field)
+    with pytest.raises(
+        ValueError, match="classification receipt input binding is stale"
+    ):
+        campaign_module._validate_classification_handoff(
+            comparison, classification, entries
+        )
+
+
+def test_classification_handoff_requires_rederivable_sidecar(
+    _bound_classification_handoff,
+) -> None:
+    comparison, classification, entries = _bound_classification_handoff
+    classification.pop("sidecar")
     with pytest.raises(ValueError, match="classification sidecar receipt is stale"):
         campaign_module._validate_classification_handoff(
-            comparison, classification, ledger["entries"]
+            comparison, classification, entries
         )
 
 
@@ -3565,12 +3879,47 @@ def test_classification_handoff_accepts_rederived_v2_sidecar(
 
 
 def test_cafta_preview_class_remains_axiom_attributed_open() -> None:
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
     cafta = next(
-        entry for entry in ledger["entries"] if entry["id"] == "cafta-52i-deferred"
+        entry
+        for entry in _historical_preview_entries()
+        if entry["id"] == "cafta-52i-deferred"
     )
     assert cafta["attribution"] == "axiom-attributed-open"
     assert cafta["disposition"] == "axiom_encoding_gap"
+
+
+def test_current_cafta_child_requires_passed_bounded_reference_defect_proof(
+    _current_ledger_enrollment,
+) -> None:
+    entries, _comparison, _preview, transition = _current_ledger_enrollment
+    cafta = next(
+        entry for entry in entries if entry["id"] == "cafta-52i-yale-reference-defect"
+    )
+    parent = next(
+        item
+        for item in transition["transitions"]
+        if item["parent_id"] == campaign_module.CAFTA_PREVIEW_SELECTOR_ID
+    )
+    proof = parent["evidence"]["cafta_supersession_receipt"]["payload"]
+    assert proof["verdict"] == "PASS"
+    assert cafta["attribution"] == "reference-defect"
+    assert cafta["disposition"] == "upstream_engine_gap"
+    assert cafta["parent_id"] == campaign_module.CAFTA_PREVIEW_SELECTOR_ID
+    assert cafta["expected_units"] == proof["supersession"]["fresh_mismatching_units"]
+    assert (
+        cafta["expected_signature_count"]
+        == parent["children"][0]["expected_signature_count"]
+    )
+    assert (
+        cafta["evidence"]["cafta_supersession_receipt_payload_sha256"]
+        == proof["receipt_payload_sha256"]
+    )
+    assert proof["axiom_predicate_proof"]["predicates"] == {
+        "entry_is_entered_free_of_duty_under_dr_cafta": False,
+        "entry_is_general_note_29_d_v_textile_or_apparel_good": False,
+    }
+    assert proof["definition"] == campaign_module.CAFTA_EXPECTED_DEFINITION
+    assert "proves neither" in cafta["reason"]
 
 
 PREVIEW_TARGET_MISMATCH = (
@@ -3595,8 +3944,7 @@ def test_preview_dispositions_select_exact_395330_population(
             signature = mismatch_signature(row)
             counts[signature] += 1
             observed.setdefault(signature, mismatch_unit(row, routes))
-    ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    selectors = validate_dispositions(ledger["entries"], observed)
+    selectors = validate_dispositions(_historical_preview_entries(), observed)
     census: Counter[str] = Counter()
     unexplained = 0
     for signature, unit in observed.items():
@@ -3754,13 +4102,23 @@ def test_stale_and_overlapping_disposition_selectors_fail() -> None:
         )
 
 
-def test_campaign_ledger_uses_only_campaign_local_matcher(
+def test_campaign_structured_ledger_entries_use_only_campaign_local_matcher(
     _without_external_membership_tables,
 ) -> None:
     ledger = yaml.safe_load(DISPOSITION_LEDGER.read_text())
-    entries = ledger["entries"]
-    assert any(entry.get("match") for entry in entries)
-    assert validate_dispositions(entries, {}) == entries
+    # This structural fixture checks campaign-only matching vocabulary.
+    # Exact-signature enrollment and stale signatures have separate tests.
+    entries = [entry for entry in ledger["entries"] if entry.get("match")]
+    assert entries
+    observed = {
+        "structural-validation": {
+            **_selector_unit(),
+            "flags": campaign_module._transition_flag_vector(()),
+        }
+    }
+    assert validate_dispositions(entries, observed) == entries
+    with pytest.raises(ValueError, match="line_class references unknown flag"):
+        validate_dispositions(entries, {})
     shared_errors = validate_shared(ledger)
     assert any("unknown keys: ['match']" in error for error in shared_errors)
 

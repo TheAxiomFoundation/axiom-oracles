@@ -22,16 +22,15 @@ bindings:
     inputs: [hts_number, hts_line, country_of_origin, entry_date, origin_regime]
     source: >-
       selected-interval row plus disposition routing; entry_date is the
-      inclusive clipped endpoint probe and origin_regime is committed context
-      carried into every comparison row
+      inclusive clipped endpoint execution-period probe and origin_regime is
+      committed context carried into every comparison row. These two context
+      fields are not additional flat _case_feed keys.
     audit: read
   - kind: projected
     inputs:
       - entry_is_brazil_301_listed
-      - entry_is_china_301_2024_action
       - entry_is_china_301_list123
       - entry_is_china_301_list4a
-      - entry_is_china_301_solar
       - entry_is_forced_labor_301_listed
       - entry_is_line_a
       - entry_is_line_b
@@ -42,9 +41,72 @@ bindings:
       - entry_is_section_232_covered
       - entry_is_section_232_steel
     source_function: >-
-      pinned rulespec-us tools/b16_entry_flags.py followed by the compiled
-      declared-input filter; entry_is_line_c and entry_is_line_e are emitted
-      but intentionally dropped because no generated chapter declares them
+      pinned rulespec-us tools/b16_entry_flags.py::entry_flags HTS/rate-line,
+      country-membership and witness-line projections, followed by
+      scripts/us_tariff_schedule_campaign.py::canonicalize_entry_flags and
+      the compiled declared-input filter
+    note: >-
+      The declared-input contract binds the producer and its exact generated
+      table dependencies. entry_is_line_c and entry_is_line_e are emitted but
+      intentionally dropped because no generated chapter declares them;
+      historical Brazil and forced-labor aliases are removed before feeding.
+    audit: read
+  - kind: projected
+    inputs:
+      - entry_is_s232_note16_c_ii_derivative_aluminum_member
+      - entry_is_s232_note16_c_ix_derivative_aluminum_candidate
+      - entry_is_s232_note16_c_vi_derivative_aluminum_candidate
+    source: >-
+      rulespec-us us/policies/usitc/us-tariff-incidence/generated/note16-232-aluminum-precedence.yaml
+    source_function: >-
+      pinned rulespec-us tools/b16_entry_flags.py::_note16_member and
+      _note16_aluminum_precedence_tables, exposed by entry_flags
+    note: >-
+      These projections select the list version active on the probe date and
+      apply the official statistical-successor mapping from 2026-07-01.
+      Subdivisions (vi) and (ix) supply candidate membership, not observed
+      metal-weight qualification; that assumption is declared separately.
+    audit: read
+  - kind: projected
+    input: entry_is_s232_note16_metal_chapter
+    source_function: pinned rulespec-us tools/b16_entry_flags.py::entry_flags
+    note: >-
+      Computed from the HTS two-digit prefix being one of 72, 73, 74, or 76;
+      this is chapter membership, not a transaction-level metal-weight fact.
+    audit: read
+  - kind: projected
+    inputs:
+      - entry_is_s232_copper_additional_member
+      - entry_is_s232_copper_primary_member
+      - entry_is_s232_note33_auto_part_candidate
+      - entry_is_s232_note33_vehicle_candidate
+      - entry_is_s232_note37_cabinet_vanity_candidate
+      - entry_is_s232_note37_softwood_member
+      - entry_is_s232_note37_upholstered_wood_furniture_member
+      - entry_is_s232_note38_bus_member
+      - entry_is_s232_note38_mhd_part_candidate
+      - entry_is_s232_note38_mhd_vehicle_member
+      - entry_is_s232_note39_semiconductor_candidate
+      - entry_is_s232_note40_pharmaceutical_candidate
+    source: >-
+      rulespec-us us/policies/usitc/us-tariff-incidence/generated/note50-52-232-sector-precedence.yaml
+    source_function: >-
+      pinned rulespec-us tools/b16_entry_flags.py::_member and _tables,
+      exposed through S232_PRECEDENCE_MEMBERSHIP_FLAGS by entry_flags
+    note: >-
+      This table is the codified USITC Revision 15 state effective 2026-08-03,
+      after the analysis window; it is not a historical-vintage panel.
+      HTS incidence and candidate membership do not establish the separate
+      declared article, certification, offset, or patent-status facts.
+    audit: read
+  - kind: projected
+    input: entry_is_within_temporary_surcharge_effective_period
+    source: us:policies/usitc/us-tariff-duty/overlays/section-122/proclamation#temporary_import_surcharge_applies
+    source_function: scripts/us_tariff_schedule_campaign.py::_probe_boolean_inputs
+    note: >-
+      Computed from whether the execution-period probe date is within
+      2026-02-24 through 2026-07-23 inclusive; not an independently observed
+      entry-qualification fact.
     audit: read
   - kind: constant
     inputs:
@@ -52,18 +114,74 @@ bindings:
       - cbp_agrees_chapter_98_entry_is_appropriate
       - entry_is_9802_excepted_entry
       - entry_is_chapter_98_subchapter_xxiii_entry
+      - entry_is_entered_free_of_duty_under_dr_cafta
       - entry_is_entered_free_of_duty_under_usmca
+      - entry_is_general_note_29_d_v_textile_or_apparel_good
       - entry_is_humanitarian_donation_article
       - entry_is_informational_material_article
       - entry_is_personal_use_accompanied_baggage
       - entry_is_properly_claimed_chapter_98_entry
       - entry_is_usmca_duty_free_entry
       - entry_loaded_and_in_transit_before_july_24_2026
+    value: false
+    source_function: scripts/us_tariff_schedule_campaign.py::_case_feed NEUTRAL_BOOLEAN_INPUTS
     reason: >-
       Neutral entry facts are deliberately false for every case. This includes
       no GN6/Chapter-98 utilization or appropriateness, no partial-value or
-      transit treatment, and no USMCA preference eligibility or claim. These
-      are construction constants, not exercised transaction dimensions.
+      transit treatment, no USMCA preference eligibility or claim, and neither
+      a DR-CAFTA duty-free entry claim nor GN-29(d)(v) product status. These are
+      construction constants, not observed facts or exercised transaction
+      dimensions; the CAFTA discrepancy proof does not establish real-entry
+      eligibility.
+    audit: read
+  - kind: constant
+    inputs:
+      - entry_is_note33_auto_part_subject_to_import_adjustment_offset
+      - entry_is_note33_g_automobile_part
+      - entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part
+      - entry_is_note38_i_medium_or_heavy_duty_vehicle_part
+      - entry_is_note38_mhd_part_subject_to_import_adjustment_offset
+      - entry_is_note40_patented_pharmaceutical_article
+      - entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52
+      - entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52
+      - entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52
+      - entry_qualifies_for_note39_heading_9903_79_01
+    value: false
+    source_function: >-
+      pinned rulespec-us tools/b16_entry_flags.py::entry_flags keyword defaults,
+      returned unchanged by declared_s232_precedence_facts;
+      scripts/us_tariff_schedule_campaign.py::_case_feed leaves these arguments unset
+    reason: >-
+      Every case receives false by construction. The declared-fact source
+      catalog S232_PRECEDENCE_DECLARED_FACT_SOURCES distinguishes these legal
+      article, certification, offset, and patent-status determinations from
+      HTS incidence. No affirmative qualification or actual transaction fact
+      is inferred from a candidate flag or an engine output.
+    audit: read
+  - kind: constant
+    inputs:
+      - entry_is_china_301_2024_action
+      - entry_is_china_301_solar
+    value: false
+    source_function: pinned rulespec-us tools/b16_entry_flags.py::entry_flags
+    reason: >-
+      The entry-flag producer hard-codes both flags false. They are not
+      projections from case facts, and this suite does not exercise their
+      affirmative branches or establish their absence for actual entries.
+    audit: read
+  - kind: constant
+    input: entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight
+    value: true
+    source: reference/us-tariff-schedule/yale-note16-metal-weight-assumption.json
+    source_function: scripts/us_tariff_schedule_campaign.py::_case_feed
+    factual_status: reference-model assumption only; not an observed or inferred transaction-level metal-weight fact
+    interpretation: reproduce Yale's point-estimate baseline in which zero of the scoped import share is below the 15-percent threshold
+    scope: RuleSpec Note 16(c)(vi)/(ix) candidate membership; the input has no effect outside those candidate branches
+    reason: >-
+      The campaign explicitly overrides the entry preparer's false default
+      with this receipted true reference assumption. It is not a varying input,
+      proof of any actual entry's metal content, or authority to infer other
+      entry-qualification facts.
     audit: read
 
 completeness:
@@ -71,8 +189,13 @@ completeness:
   source: committed_exercise_receipt
   receipt: axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json
   note: >-
-    The receipt was computed in one pass over all 19,118,619 locally present,
-    hash-verified shard records. Committed MANIFEST.json content-addresses all
-    100 shards and comparison-summary.json commits the comparison artifact
-    hash; raw shard bodies remain external and are not claimed as repository
-    files.
+    Verification requires exact field-name agreement with the committed
+    exercise receipt. Its producer scans the hash-verified shard records and
+    reconstructs campaign-owned neutral/probe values from the bound source
+    and input contract. The catalog includes 58 flat case-feed keys plus the
+    execution-period probe and origin-regime context. Source binding kinds do
+    not predeclare measured variation or full policy-branch coverage; measured
+    field cardinalities come only from the receipt. Committed MANIFEST.json
+    content-addresses all 100 shards and comparison-summary.json commits the
+    comparison artifact hash; raw shard bodies remain external and are not
+    claimed as repository files.

@@ -2,34 +2,34 @@
 schema: axiom_oracles.closure.ledger.v1
 program:
   id: us/tariff-duty
-  rulespec_ref: 550818779a5fb0618e1374ed33bc471084c0b4ce
+  rulespec_ref: 4f591c4267063094cc6da9d590872ea982940b81
 generated_facts:
   corpus_roots:
     hts-rate-provisions:
       path: data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl
-      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
+      commit: cc18c703741425a3ebf994a2975cae158bd305d1
       sha256: 6c8d07d21a1e3f2233197c1b2f96169f01a1a768dd2509a71c0fdb03d4a99d14
       version: 2026-08-09-usitc-hts-2026-rev15-full-schedule
       declared_count: 29845
     chapter-99-notes:
       path: data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl
-      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
+      commit: cc18c703741425a3ebf994a2975cae158bd305d1
       sha256: 0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8
       version: 2026-08-04-usitc-hts-2026-rev15-notes
       declared_count: 805
     dr-cafta-general-note-29:
       path: data/corpus/provisions/us/statute/2026-08-28-usitc-hts-2026-rev15-general-note-29.jsonl
-      commit: a664e437fafc7784f0a833abd76ddd16ea83686b
+      commit: cc18c703741425a3ebf994a2975cae158bd305d1
       sha256: 3b3de5d98c81bad3cc560fcb738551591d7b7b5c080ca914718047a4a797368b
       version: 2026-08-28-usitc-hts-2026-rev15-general-note-29
       declared_count: 93
     fr-instrument-families:
       derived_from: composition source_verification plus overlays
-      rulespec_commit: 550818779a5fb0618e1374ed33bc471084c0b4ce
+      rulespec_commit: 4f591c4267063094cc6da9d590872ea982940b81
   rulespec:
-    commit: 550818779a5fb0618e1374ed33bc471084c0b4ce
-    module_count: 414
-    paths_sha256: 493113e001ab82a210c28b5a8d100a541905774f410d87861421de1ce87a2cea
+    commit: 4f591c4267063094cc6da9d590872ea982940b81
+    module_count: 415
+    paths_sha256: 4dcc60251e73e11ec25c0909c57aa523b46a50569bfec964545bb6c6adcef1e3
 committed_decisions:
   ledger:
   - root: hts-rate-provisions
@@ -254,6 +254,25 @@ committed_decisions:
   - input: entry_is_section_232_covered
     grounding: uncaptured
     uncaptured_scope: entry-preparation determination of existing aluminum or steel section-232 coverage
+  - input: entry_is_s232_note16_c_ii_derivative_aluminum_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation
+  - input: entry_is_s232_note16_c_vi_derivative_aluminum_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation;
+      candidate status alone does not establish the listed-metal-weight qualification
+  - input: entry_is_s232_note16_c_ix_derivative_aluminum_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation;
+      candidate status alone does not establish the listed-metal-weight qualification
+  - input: entry_is_s232_note16_metal_chapter
+    grounding: uncaptured
+    uncaptured_scope: entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight
+      exception
+  - input: entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight
+    grounding: uncaptured
+    uncaptured_scope: real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable
+      listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof
   - input: entry_is_s232_copper_primary_member
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation
@@ -341,6 +360,80 @@ committed_decisions:
   - input: section_338_reduced_duty_base_share
     grounding: uncaptured
     uncaptured_scope: note-51 partial-value share supplied by the declarant
+  audited_input_inventory:
+    rulespec_ref: 4f591c4267063094cc6da9d590872ea982940b81
+    engine_sha256: 674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7
+    method: committed audit of all-version compiled dependencies; reproduced by --generate and --check
+    module_scope:
+    - us/policies/cbp/us-tariff-duty/composition.yaml
+    - us/policies/cbp/us-tariff-schedule/generated/ch*/ch*.yaml
+    promised_outputs:
+      witness:
+      - us_tariff_duty
+      schedule:
+      - schedule_statutory_stack
+    schedule_composition_count: 100
+    input_count: 58
+    inputs_sha256: 10c812c01fd7c46b309d9cde66b30b6020acef05a5c9c8f0b97fb3e32ae773b1
+    inputs:
+    - cbp_agrees_chapter_98_entry_is_appropriate
+    - country_of_origin
+    - customs_value
+    - entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight
+    - entry_is_9802_excepted_entry
+    - entry_is_brazil_301_listed
+    - entry_is_china_301_2024_action
+    - entry_is_china_301_list123
+    - entry_is_china_301_list4a
+    - entry_is_china_301_solar
+    - entry_is_entered_free_of_duty_under_dr_cafta
+    - entry_is_entered_free_of_duty_under_usmca
+    - entry_is_forced_labor_301_listed
+    - entry_is_general_note_29_d_v_textile_or_apparel_good
+    - entry_is_humanitarian_donation_article
+    - entry_is_informational_material_article
+    - entry_is_line_a
+    - entry_is_line_b
+    - entry_is_line_d
+    - entry_is_note33_auto_part_subject_to_import_adjustment_offset
+    - entry_is_note33_g_automobile_part
+    - entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part
+    - entry_is_note38_i_medium_or_heavy_duty_vehicle_part
+    - entry_is_note38_mhd_part_subject_to_import_adjustment_offset
+    - entry_is_note40_patented_pharmaceutical_article
+    - entry_is_personal_use_accompanied_baggage
+    - entry_is_properly_claimed_chapter_98_entry
+    - entry_is_s232_copper_additional_member
+    - entry_is_s232_copper_primary_member
+    - entry_is_s232_note16_c_ii_derivative_aluminum_member
+    - entry_is_s232_note16_c_ix_derivative_aluminum_candidate
+    - entry_is_s232_note16_c_vi_derivative_aluminum_candidate
+    - entry_is_s232_note16_metal_chapter
+    - entry_is_s232_note33_auto_part_candidate
+    - entry_is_s232_note33_vehicle_candidate
+    - entry_is_s232_note37_cabinet_vanity_candidate
+    - entry_is_s232_note37_softwood_member
+    - entry_is_s232_note37_upholstered_wood_furniture_member
+    - entry_is_s232_note38_bus_member
+    - entry_is_s232_note38_mhd_part_candidate
+    - entry_is_s232_note38_mhd_vehicle_member
+    - entry_is_s232_note39_semiconductor_candidate
+    - entry_is_s232_note40_pharmaceutical_candidate
+    - entry_is_section_122_exempt
+    - entry_is_section_201_cspv
+    - entry_is_section_232_aluminum
+    - entry_is_section_232_covered
+    - entry_is_section_232_steel
+    - entry_loaded_and_in_transit_before_july_24_2026
+    - entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52
+    - entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52
+    - entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52
+    - entry_qualifies_for_note39_heading_9903_79_01
+    - hts_line
+    - hts_number
+    - is_postal_shipment
+    - resolved_non_ad_valorem_column2_rate
+    - shipment_value
 computed:
   counts_by_status_per_root:
     hts-rate-provisions:
@@ -431,7 +524,31 @@ computed:
     blocker: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not
       a reproduced root.
   boundary_frontier:
-    complete: true
-    input_count: 55
+    complete: false
+    input_count: 60
     inputs: *id001
+    required_input_count: 58
+    missing_input_count: 21
+    missing_inputs:
+    - cbp_agrees_chapter_98_entry_is_appropriate
+    - entry_is_9802_excepted_entry
+    - entry_is_china_301_2024_action
+    - entry_is_china_301_list123
+    - entry_is_china_301_list4a
+    - entry_is_china_301_solar
+    - entry_is_entered_free_of_duty_under_usmca
+    - entry_is_humanitarian_donation_article
+    - entry_is_informational_material_article
+    - entry_is_line_a
+    - entry_is_line_b
+    - entry_is_line_d
+    - entry_is_personal_use_accompanied_baggage
+    - entry_is_properly_claimed_chapter_98_entry
+    - entry_is_section_122_exempt
+    - entry_is_section_201_cspv
+    - entry_is_section_232_aluminum
+    - entry_is_section_232_steel
+    - entry_loaded_and_in_transit_before_july_24_2026
+    - hts_line
+    - resolved_non_ad_valorem_column2_rate
   closed: false

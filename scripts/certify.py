@@ -200,6 +200,7 @@ PROGRAMS: dict[str, dict] = {
                 "producer": "scripts/us_tariff_closure.py",
                 "contract": "us_tariff_closure_v1",
                 "include_burndown": True,
+                "include_blockers": True,
             },
             "executable": {
                 "artifact": "conformance/executable/us-tariff-witness.json",
@@ -515,15 +516,28 @@ def _tariff_schedule_suite_verdict(
     ):
         defects.append(f"{entry['suite']}: nonempty open classes require OPEN scope")
     axiom_open = sum(axiom_open_classes.values())
+    publication_evidence = []
+    validated_report_sha256 = None
+    if derived_conformant and axiom_open == 0 and not defects:
+        try:
+            # Mandatory for a clean tariff leg, not selected by a class name or
+            # an optional ledger marker that a malformed report could remove.
+            publication_evidence, validated_report_sha256 = (
+                _validate_tariff_publication(report, entry)
+            )
+            if sha256_of(report_path) != validated_report_sha256:
+                raise ValueError("report changed after publication proof validation")
+        except (ValueError, OSError, ImportError) as exc:
+            defects.append(f"{entry['suite']}: causal publication proof failed: {exc}")
     clean = derived_conformant and axiom_open == 0 and not defects
     evidence = [
         {
             "claim": f"suite:{entry['suite']}",
             "mode": "computed",
             "artifact": entry["report"],
-            "sha256": sha256_of(report_path),
+            "sha256": validated_report_sha256 or sha256_of(report_path),
         }
-    ]
+    ] + publication_evidence
     return (
         {
             "suite": entry["suite"],
@@ -541,9 +555,21 @@ def _tariff_schedule_suite_verdict(
             "evidence_cases": total,
             "report_defects": defects,
             "clean": clean,
+            # Private build-time state: carry the scope from the exact report
+            # object whose publication proof and content hash were validated.
+            # build_certificate removes this before emitting the certificate.
+            "_validated_scope": copy.deepcopy(scope),
         },
         evidence,
         defects,
+    )
+
+
+def _validate_tariff_publication(report: dict, entry: dict) -> tuple[list[dict], str]:
+    from us_tariff_publication import validate_publication
+
+    return validate_publication(
+        report, repo_root=REPO_ROOT, report_path=entry["report"]
     )
 
 
@@ -1277,9 +1303,7 @@ def _producer_closed_verdict(
         # malformed, not as a zero count (launch-audit delta r2 finding).
         and not isinstance(_dependency_block.get("open_dependency_count"), bool)
         and isinstance(_dependency_block.get("law_derived_inputs"), list)
-        and isinstance(
-            _dependency_block.get("instruments_bearing_on_computed"), list
-        )
+        and isinstance(_dependency_block.get("instruments_bearing_on_computed"), list)
         and isinstance(_dependency_block.get("closed"), bool)
         and _dependency_block["open_dependency_count"]
         == len(_dependency_block["law_derived_inputs"])
@@ -1321,6 +1345,59 @@ def _producer_closed_verdict(
         }
     if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
         value = False
+    closure_blockers: list[str] = []
+    if config.get("include_blockers") and not value:
+        if _instrument_frontier_summary.get("complete") is not True:
+            requirement = _instrument_frontier_summary.get("requirement")
+            closure_blockers.append(
+                "closed: "
+                + (
+                    requirement
+                    if isinstance(requirement, str) and requirement
+                    else "the instrument frontier is incomplete"
+                )
+            )
+        if _dependency_summary.get("closed") is not True:
+            requirement = _dependency_summary.get("requirement")
+            closure_blockers.append(
+                "closed: "
+                + (
+                    requirement
+                    if isinstance(requirement, str) and requirement
+                    else "the law-derived dependency frontier is open"
+                )
+            )
+        boundary = (
+            _computed_block.get("boundary_frontier")
+            if isinstance(_computed_block, dict)
+            else None
+        )
+        missing_inputs = (
+            boundary.get("missing_inputs") if isinstance(boundary, dict) else None
+        )
+        if isinstance(missing_inputs, list) and missing_inputs:
+            closure_blockers.append(
+                f"closed: {len(missing_inputs)} compiler-required input(s) lack "
+                "exact source scope: " + ", ".join(missing_inputs)
+            )
+        burndown = (
+            _computed_block.get("burndown")
+            if isinstance(_computed_block, dict)
+            else None
+        )
+        if isinstance(burndown, list):
+            for row in burndown:
+                if not isinstance(row, dict):
+                    continue
+                closure_blockers.append(
+                    "closed: "
+                    f"{row.get('root')}/{row.get('family')} is {row.get('status')}: "
+                    f"{row.get('blocker')}"
+                )
+        if not closure_blockers:
+            closure_blockers.append(
+                "closed: the validated closure producer reports an open frontier"
+            )
     evidence.append(
         {
             "claim": f"closed:{program}",
@@ -1349,6 +1426,9 @@ def _producer_closed_verdict(
             "citation_root_count": scoped.get("citation_root_count"),
             "by_status": scoped.get("by_status"),
             "denominator_ratchet": scoped.get("denominator_ratchet"),
+            **(
+                {"blockers": closure_blockers} if config.get("include_blockers") else {}
+            ),
         }
 
     computed = document.get("computed")
@@ -1374,6 +1454,7 @@ def _producer_closed_verdict(
             else {}
         ),
         "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
+        **({"blockers": closure_blockers} if config.get("include_blockers") else {}),
     }
 
 
@@ -1490,7 +1571,7 @@ def _producer_executable_verdict(
         "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
         "compiled_artifacts": [
             {
-                "program": row.get("program"),
+                "program": row.get("program") or row.get("module"),
                 "sha256": row.get("sha256"),
             }
             for row in document.get("compiled_artifacts") or []
@@ -2365,9 +2446,13 @@ def build_certificate(
         _de_census_row(program, evidence) if spec.get("de_census_program") else None
     )
     legs = []
+    validated_scopes: dict[str, dict] = {}
     all_defects: list[str] = []
     for entry in spec["suites"]:
         leg, evs, defects = _suite_verdict(entry)
+        validated_scope = leg.pop("_validated_scope", None)
+        if isinstance(validated_scope, dict):
+            validated_scopes[entry["suite"]] = validated_scope
         legs.append(leg)
         evidence.extend(evs)
         all_defects.extend(defects)
@@ -2487,12 +2572,7 @@ def build_certificate(
         ]
         if len(scope_entries) != 1:
             raise ValueError(f"{program}: scope_from_suite must name exactly one suite")
-        scope_report = _load(
-            _repo_artifact_path(scope_entries[0]["report"], label=f"{program} scope")
-        )
-        raw_scope = (
-            scope_report.get("scope") if isinstance(scope_report, dict) else None
-        )
+        raw_scope = copy.deepcopy(validated_scopes.get(scope_suite))
         required_scope = {
             "trajectory_quotient_label",
             "limitation",
@@ -2508,9 +2588,9 @@ def build_certificate(
             raise ValueError(f"{program}: scope lacks axiom-attributed-open classes")
         scope = raw_scope
         scope["certificate_premise"] = (
-            "S1 zero unexplained means every mismatch is classified; it does not "
-            "close axiom-attributed-open classes. Those open units independently "
-            "make the conformant premise false."
+            "S1 zero unexplained means every mismatch is classified. The "
+            "conformant premise independently requires the report's "
+            "axiom-attributed-open class set to be empty."
         )
     # ONE rulespec commit across producer-computed premises. The closure
     # ledger and the executable receipt each verify their OWN recorded pin
@@ -2660,8 +2740,8 @@ def build_certificate(
             "defect to file."
             + (
                 " For the tariff certificate, S1 zero unexplained records complete "
-                "classification, while axiom-attributed-open units independently "
-                "block the computed conformant premise."
+                "classification, while the computed conformant premise "
+                "independently requires zero axiom-attributed-open units."
                 if program == "us/tariff-duty"
                 else ""
             )

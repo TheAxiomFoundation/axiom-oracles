@@ -8,11 +8,13 @@ shelter values are indistinguishable on the scoreboard — which is how a
 program, and how mis-readings of suite breadth go uncorrected in both
 directions.
 
-This script makes exercise a committed, checkable artifact. For every suite
-with committed per-case evidence (inline ``cases`` or
+This script makes exercise a committed, checkable artifact. For suites with
+committed per-case evidence (inline ``cases`` or
 ``dashboard/public/data/cases/<suite>/chunk-*.json``), it counts distinct
-values per evidence field and per verdict concept across all cases, and writes
-``conformance/exercise-census.json``.
+values per evidence field and per verdict concept across all cases. Large
+campaign receipts can also contribute a row; an aggregate-only receipt is
+marked explicitly and can never satisfy the per-case exercise premise. The
+result is written to ``conformance/exercise-census.json``.
 
 Reading a row, three states matter per field:
 
@@ -32,12 +34,14 @@ Reading a row, three states matter per field:
 
 v1 scope, stated plainly: most suites commit *stage evidence* (gross income,
 net income, shelter deduction, ...), not raw input records, so this measures
-variation in the evidence the suite chose to keep. A suite with no committed
-per-case evidence appears with ``cases_scanned: 0`` — that absence is a
-finding, not a skip.  Census generation makes one lightweight pass over every
-suite's chunks and checks only index identity plus cardinality.  It never
-claims full verdict reconciliation; certification performs the strict row and
-verdict validation for the suites in its program registry.
+variation in the evidence the suite chose to keep. A suite with neither
+committed per-case nor explicitly bounded aggregate evidence appears with
+``cases_scanned: 0`` — that absence is a finding, not a skip. Aggregate rows
+remain ``per_case_evidence_committed: false`` and ``exercised: false``. Census
+generation makes one lightweight pass over every suite's chunks and checks
+only index identity plus cardinality. It never claims full verdict
+reconciliation; certification performs the strict row and verdict validation
+for the suites in its program registry.
 
 Modes::
 
@@ -80,6 +84,122 @@ SCHEMA = "axiom_oracles.exercise_census.v1"
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
 EXERCISE_RECEIPT_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "exercise_receipts"
 EXERCISE_RECEIPT_SCHEMA = "axiom_oracles.committed_exercise_receipt.v1"
+
+
+def _repo_evidence_file(raw: object, label: str) -> Path:
+    """Resolve a receipt-controlled path without permitting repository escape."""
+
+    if not isinstance(raw, str) or not raw:
+        raise ValueError(f"{label}: missing repository-relative path")
+    relative = Path(raw)
+    if relative.is_absolute() or ".." in relative.parts or relative.as_posix() != raw:
+        raise ValueError(f"{label}: invalid repository-relative path {raw!r}")
+    root = REPO_ROOT.resolve()
+    path = (root / relative).resolve()
+    try:
+        path.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(f"{label}: path escaped the repository") from exc
+    probe = root
+    for part in relative.parts:
+        probe /= part
+        if probe.is_symlink():
+            raise ValueError(f"{label}: symlinked evidence path is not allowed")
+    if not path.is_file():
+        raise ValueError(f"{label}: evidence file is missing")
+    return path
+
+
+def _validate_panel_group_aggregate(
+    receipt: dict, report: dict, *, receipt_name: str
+) -> None:
+    """Reconcile stored panel groups without promoting them to exact cases."""
+
+    cases = receipt.get("cases")
+    comparison_units = receipt.get("comparison_units")
+    groups = report.get("cases")
+    group_count = receipt.get("case_groups")
+    scope = report.get("scope")
+    if (
+        receipt.get("evidence_mode") != "committed-group-aggregate-census"
+        or receipt.get("population_commitment") != "grouped-aggregate-only"
+        or type(cases) is not int
+        or cases <= 0
+        or type(comparison_units) is not int
+        or comparison_units <= 0
+        or type(group_count) is not int
+        or group_count <= 0
+        or cases != group_count
+        or report.get("case_count") != comparison_units
+        or not isinstance(scope, dict)
+        or scope.get("comparison_units") != comparison_units
+        or not isinstance(groups, list)
+        or len(groups) != cases
+    ):
+        raise ValueError(f"{receipt_name}: panel aggregate census drifted")
+
+    case_ids: set[str] = set()
+    hts_numbers: set[str] = set()
+    countries: set[str] = set()
+    probe_dates: set[str] = set()
+    expanded = 0
+    for index, group in enumerate(groups):
+        if not isinstance(group, dict):
+            raise ValueError(f"{receipt_name}: panel group {index} is malformed")
+        case_id = group.get("case_id")
+        hts_number = group.get("hts_number")
+        group_countries = group.get("countries")
+        group_dates = group.get("probe_dates")
+        units = group.get("unit_count")
+        if (
+            not isinstance(case_id, str)
+            or not case_id
+            or case_id in case_ids
+            or not isinstance(hts_number, str)
+            or not hts_number
+            or not isinstance(group_countries, list)
+            or not group_countries
+            or len(group_countries) != len(set(group_countries))
+            or any(not isinstance(value, str) or not value for value in group_countries)
+            or not isinstance(group_dates, list)
+            or not group_dates
+            or len(group_dates) != len(set(group_dates))
+            or any(not isinstance(value, str) or not value for value in group_dates)
+            or type(units) is not int
+            or units <= 0
+        ):
+            raise ValueError(f"{receipt_name}: panel group {index} is malformed")
+        case_ids.add(case_id)
+        hts_numbers.add(hts_number)
+        countries.update(group_countries)
+        probe_dates.update(group_dates)
+        expanded += units
+    if expanded != comparison_units:
+        raise ValueError(f"{receipt_name}: panel group units do not conserve")
+    fields = receipt.get("evidence_fields")
+    expected = {
+        "hts_number": len(hts_numbers),
+        "country_of_origin": len(countries),
+        "entry_date": len(probe_dates),
+    }
+    if not isinstance(fields, dict) or any(
+        not isinstance(fields.get(name), dict)
+        or fields[name].get("distinct") != distinct
+        for name, distinct in expected.items()
+    ):
+        raise ValueError(f"{receipt_name}: panel grouped field census drifted")
+
+
+def _receipt_commits_per_case_evidence(receipt: dict, fields: dict) -> bool:
+    """Return whether a receipt commits exact cases rather than aggregates."""
+
+    cases = receipt.get("cases")
+    return (
+        bool(fields)
+        and type(cases) is int
+        and cases > 0
+        and receipt.get("evidence_mode") != "committed-group-aggregate-census"
+    )
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
@@ -602,20 +722,89 @@ def _unified_view_fields(
     return normalized, receipt
 
 
+def _current_tariff_bridge_audit(tariff, snapshots) -> tuple[bool, tuple[Path, ...]]:
+    """Do not reuse an import-time clean verdict for newly read tariff bytes."""
+    spec = importlib.util.spec_from_file_location(
+        "_census_tariff_bridge",
+        Path(__file__).with_name("validate_bridge_manifests.py"),
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.REPO_ROOT = REPO_ROOT.resolve()
+    module.DATA_DIR = module.REPO_ROOT / "dashboard/public/data"
+    module.MANIFEST_DIR = module.REPO_ROOT / "axiom_oracles/bridges/manifests"
+    manifest_paths = tuple(sorted(module.MANIFEST_DIR.glob("*.yaml")))
+    manifests = {}
+    for manifest_path in manifest_paths:
+        snapshot = tariff._snapshot_file(manifest_path, keep_body=True)
+        previous = snapshots.get(manifest_path)
+        if previous is not None:
+            tariff._require(
+                previous.identity == snapshot.identity
+                and previous.sha256 == snapshot.sha256,
+                f"evidence changed: {manifest_path}",
+            )
+            snapshot = previous
+        snapshots[manifest_path] = snapshot
+        manifests[manifest_path] = tariff._load_yaml(
+            snapshot, f"bridge manifest {manifest_path.name}"
+        )
+    path = module.REPO_ROOT / tariff.BRIDGE_REL
+    manifest = manifests[path]
+    errors, findings = module.validate(path, manifest)
+    collisions = module.global_collisions(manifests)
+    tariff._require(
+        tuple(sorted(module.MANIFEST_DIR.glob("*.yaml"))) == manifest_paths,
+        "bridge manifest set changed while auditing",
+    )
+    return (
+        manifest.get("strict") is True
+        and not errors
+        and not findings
+        and not collisions,
+        manifest_paths,
+    )
+
+
 def _committed_exercise_rows() -> dict[str, dict]:
     """Load hash-bound campaign receipts that are too large for chunk storage."""
     rows: dict[str, dict] = {}
+    tariff_guard = None
     for path in sorted(EXERCISE_RECEIPT_DIR.glob("*.json")):
-        receipt = strict_json_loads(path.read_text())
-        if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+        receipt_bytes = path.read_bytes()
+        receipt = strict_json_loads(receipt_bytes.decode())
+        if (
+            not isinstance(receipt, dict)
+            or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA
+        ):
             raise ValueError(f"{path.name}: unsupported committed exercise receipt")
         suite = receipt.get("suite")
         report_name = receipt.get("report")
         if not isinstance(suite, str) or not suite or not isinstance(report_name, str):
             raise ValueError(f"{path.name}: receipt lacks suite/report identity")
-        report_path = REPO_ROOT / report_name
-        if not report_path.is_file():
-            raise ValueError(f"{path.name}: receipt report is missing")
+        if suite in rows:
+            raise ValueError(
+                f"{path.name}: duplicate committed exercise suite {suite!r}"
+            )
+        tariff = None
+        tariff_snapshots = None
+        if suite == "us-tariff-schedule":
+            from scripts import build_us_tariff_exercise_receipt as tariff
+
+            tariff_snapshots = tariff.validate_committed_receipt(
+                receipt, repo_root=REPO_ROOT
+            )
+            expected_receipt_sha = tariff_snapshots[
+                REPO_ROOT.resolve() / tariff.RECEIPT_REL
+            ].sha256
+            if hashlib.sha256(receipt_bytes).hexdigest() != expected_receipt_sha:
+                raise ValueError(
+                    f"{path.name}: exercise receipt changed while validating"
+                )
+        report_path = _repo_evidence_file(report_name, f"{path.name}: receipt report")
+        report = strict_json_loads(report_path.read_text())
+        if not isinstance(report, dict) or report.get("suite") != suite:
+            raise ValueError(f"{path.name}: receipt report suite drifted")
         report_sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
         if receipt.get("report_sha256") != report_sha:
             raise ValueError(f"{path.name}: receipt report sha256 drifted")
@@ -623,48 +812,86 @@ def _committed_exercise_rows() -> dict[str, dict]:
         if not isinstance(artifacts, list) or not artifacts:
             raise ValueError(f"{path.name}: receipt has no evidence artifacts")
         for artifact in artifacts:
-            if not isinstance(artifact, dict) or not isinstance(artifact.get("path"), str):
+            if not isinstance(artifact, dict) or not isinstance(
+                artifact.get("path"), str
+            ):
                 raise ValueError(f"{path.name}: malformed evidence artifact")
-            artifact_path = REPO_ROOT / artifact["path"]
-            if not artifact_path.is_file() or artifact.get("sha256") != hashlib.sha256(
-                artifact_path.read_bytes()
-            ).hexdigest():
+            artifact_path = _repo_evidence_file(
+                artifact["path"], f"{path.name}: evidence artifact"
+            )
+            if (
+                artifact.get("sha256")
+                != hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+            ):
                 raise ValueError(f"{path.name}: evidence artifact drifted")
         fields = receipt.get("evidence_fields")
         if not isinstance(fields, dict) or not fields:
             raise ValueError(f"{path.name}: receipt has no evidence fields")
         normalized: dict[str, dict] = {}
+        cases = receipt.get("cases")
+        if type(cases) is not int or cases <= 0:
+            raise ValueError(f"{path.name}: receipt has no positive case count")
+        distinct_denominator = cases
+        if suite == "us-tariff-panel":
+            distinct_denominator = receipt.get("comparison_units")
+            if type(distinct_denominator) is not int or distinct_denominator <= 0:
+                raise ValueError(
+                    f"{path.name}: panel receipt has no positive comparison-unit count"
+                )
         for name, field in sorted(fields.items()):
-            if not isinstance(field, dict):
+            if not isinstance(name, str) or not name or not isinstance(field, dict):
                 raise ValueError(f"{path.name}: malformed field {name!r}")
             distinct = field.get("distinct")
             state = field.get("state")
-            expected = (
-                "varied"
-                if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
-                else "constant" if distinct == 1 else None
-            )
+            if type(distinct) is not int or not 1 <= distinct <= distinct_denominator:
+                raise ValueError(
+                    f"{path.name}: field {name!r} has invalid distinct count"
+                )
+            expected = "varied" if distinct > 1 else "constant"
             if state != expected:
                 raise ValueError(f"{path.name}: field {name!r} state/count disagree")
             normalized[str(name)] = {"distinct": distinct, "state": state}
-        cases = receipt.get("cases")
-        if isinstance(cases, bool) or not isinstance(cases, int) or cases <= 0:
-            raise ValueError(f"{path.name}: receipt has no positive case count")
         varied = sum(field["state"] == "varied" for field in normalized.values())
         bridge_audited = MANIFEST_STRICT_CLEAN.get(suite, False)
-        per_case_evidence = bool(normalized) and cases > 0
+        bridge_manifest_sha = MANIFEST_STRICT_AUDIT.get(suite, {}).get(
+            "manifest_sha256"
+        )
+        grouped_aggregate = suite == "us-tariff-panel"
+        if grouped_aggregate:
+            _validate_panel_group_aggregate(receipt, report, receipt_name=path.name)
+        if tariff is not None:
+            bridge_audited, bridge_paths = _current_tariff_bridge_audit(
+                tariff, tariff_snapshots
+            )
+            bridge_manifest_sha = tariff_snapshots[
+                REPO_ROOT.resolve() / tariff.BRIDGE_REL
+            ].sha256
+            tariff_guard = (tariff, tariff_snapshots, bridge_paths)
+        per_case_evidence = _receipt_commits_per_case_evidence(receipt, normalized)
         rows[suite] = {
             "cases_scanned": cases,
+            **(
+                {
+                    "comparison_units": receipt["comparison_units"],
+                    "population_commitment": "grouped-aggregate-only",
+                }
+                if grouped_aggregate
+                else {}
+            ),
             "report": report_name,
             "report_sha256": report_sha,
             "binding": "bound",
             "binding_defects": [],
-            "reconciliation": "content-addressed-receipt",
+            "reconciliation": (
+                "content-addressed-group-aggregate-receipt"
+                if grouped_aggregate
+                else "content-addressed-receipt"
+            ),
             "evidence_source": receipt.get("evidence_mode"),
             "inline_cases_not_counted": 0,
             "chunk_manifest": artifacts,
             "evidence_receipt": str(path.relative_to(REPO_ROOT)),
-            "evidence_receipt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "evidence_receipt_sha256": hashlib.sha256(receipt_bytes).hexdigest(),
             "evidence_fields": normalized,
             "per_case_evidence_committed": per_case_evidence,
             "verdict_concepts": {},
@@ -678,12 +905,19 @@ def _committed_exercise_rows() -> dict[str, dict]:
             # per-case evidence is committed and its complete bridge/input
             # boundary is strict-clean. Constants remain honest scope limits.
             "exercised": bridge_audited and per_case_evidence,
-            "bridge_manifest_sha256": (
-                MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
-                if MANIFEST_STRICT_CLEAN.get(suite, False)
-                else None
-            ),
+            "bridge_manifest_sha256": (bridge_manifest_sha if bridge_audited else None),
         }
+    if tariff_guard is not None:
+        tariff, snapshots, bridge_paths = tariff_guard
+        tariff._require_current(snapshots)
+        tariff._require(
+            tuple(
+                sorted((REPO_ROOT / "axiom_oracles/bridges/manifests").glob("*.yaml"))
+            )
+            == bridge_paths,
+            "bridge manifest set changed while auditing",
+        )
+        tariff._require_current(snapshots)
     return rows
 
 
@@ -711,14 +945,31 @@ def build_census() -> dict:
             suites[suite]["contested_reports"] = sorted(paths)
     # Large supervised campaigns commit bounded, hash-bound census receipts
     # instead of duplicating millions of raw rows into dashboard chunks.
-    suites.update(_committed_exercise_rows())
+    for suite, row in _committed_exercise_rows().items():
+        if suite in suites:
+            existing = suites[suite]
+            if not (
+                existing.get("report") == row.get("report")
+                and existing.get("evidence_source") == "inline"
+                and not existing.get("evidence_fields")
+                and not existing.get("per_case_evidence_committed")
+            ):
+                raise ValueError(
+                    f"{suite}: committed receipt collides with independently "
+                    "derived report evidence"
+                )
+        suites[suite] = row
     return {
         "schema": SCHEMA,
         "_comment": (
             "Generated by scripts/exercise_census.py — do not hand-edit. "
             "Per suite: distinct-value counts across committed per-case "
-            "evidence. 'constant' means no evidence of variation exists in "
-            "the suite, not that the dimension is untested elsewhere; "
+            "evidence or explicitly bounded aggregate evidence. For an "
+            "aggregate-only row, cases_scanned counts stored groups, "
+            "comparison_units records the represented aggregate total, and "
+            "per_case_evidence_committed remains false. 'constant' means no "
+            "evidence of variation exists in the suite, not that the "
+            "dimension is untested elsewhere; "
             "'bridged_through' lists dimensions satisfied by construction "
             "(declared per audited bridge). cases_scanned: 0 means the suite "
             "commits no per-case rows; nonzero cases with zero evidence "
@@ -736,12 +987,14 @@ def build_census() -> dict:
 
 def render_markdown(census: dict) -> str:
     lines = [
-        "| suite | cases | varied | constant | bridge audited |",
-        "|---|---:|---:|---:|---|",
+        "| suite | stored cases/groups | represented units | varied | constant | bridge audited |",
+        "|---|---:|---:|---:|---:|---|",
     ]
     for suite, row in sorted(census["suites"].items()):
         lines.append(
-            f"| {suite} | {row['cases_scanned']} | {row['varied_fields']} "
+            f"| {suite} | {row['cases_scanned']} "
+            f"| {row.get('comparison_units', row['cases_scanned'])} "
+            f"| {row['varied_fields']} "
             f"| {row['constant_fields']} | "
             f"{'yes' if row['bridge_audited'] else 'no'} |"
         )

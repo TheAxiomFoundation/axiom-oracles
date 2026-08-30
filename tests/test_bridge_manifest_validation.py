@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import copy
+import json
+from collections import Counter
 from pathlib import Path
 
 import yaml
 
 from axiom_oracles import suites
+from scripts import build_us_tariff_exercise_receipt as tariff_exercise
+from scripts import us_tariff_schedule_campaign as tariff_campaign
 from scripts import validate_bridge_manifests as validator
 
 
@@ -16,6 +20,203 @@ MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
 def _manifest(name: str) -> tuple[Path, dict]:
     path = MANIFEST_DIR / name
     return path, yaml.safe_load(path.read_text())
+
+
+def _tariff_input_contract() -> dict:
+    path = (
+        REPO_ROOT / "reference/us-tariff-schedule/declared-input-contract-receipt.json"
+    )
+    return json.loads(path.read_text())
+
+
+def _input_bindings(manifest: dict) -> dict[str, dict]:
+    result: dict[str, dict] = {}
+    for binding in manifest["bindings"]:
+        names = binding.get("inputs", [binding.get("input")])
+        for name in names:
+            assert isinstance(name, str) and name
+            assert name not in result, f"duplicate binding for {name}"
+            result[name] = binding
+    return result
+
+
+def test_tariff_schedule_manifest_matches_frozen_input_catalog() -> None:
+    """Reconcile source metadata without scanning the running eval shards."""
+    _path, manifest = _manifest("us-tariff-schedule.yaml")
+    contract = _tariff_input_contract()
+    flag_catalog, neutrals, probes = tariff_exercise._input_catalog(
+        contract, tariff_campaign, expected_chapter_count=100
+    )
+    expected = set(flag_catalog) | set(neutrals) | set(probes)
+    expected.update(tariff_exercise.MAPPED_FIELDS)
+    bindings = _input_bindings(manifest)
+
+    assert set(bindings) == expected
+    assert len(bindings) == 60
+    assert {len(chapter["case_feed_inputs"]) for chapter in contract["chapters"]} == {
+        58
+    }
+    assert set(
+        tariff_exercise.MAPPED_FIELDS
+    ) - tariff_campaign.CORE_CASE_FEED_INPUTS == {
+        "entry_date",
+        "origin_regime",
+    }
+    assert {
+        name for name, binding in bindings.items() if binding["kind"] == "mapped"
+    } == set(tariff_exercise.MAPPED_FIELDS)
+    # These are provenance-kind counts, not measured distinct-value counts.
+    assert Counter(binding["kind"] for binding in bindings.values()) == {
+        "mapped": 5,
+        "projected": 29,
+        "constant": 26,
+    }
+    assert all(binding["audit"] == "read" for binding in bindings.values())
+    assert all(
+        type(binding.get("value")) is bool
+        for binding in manifest["bindings"]
+        if binding["kind"] == "constant"
+    )
+
+
+def test_tariff_panel_unit_reassignment_stays_aggregate_only() -> None:
+    """A conserved group-count transfer is not an exact case commitment."""
+
+    receipt = json.loads(
+        (
+            REPO_ROOT / "axiom_oracles/bridges/exercise_receipts/us-tariff-panel.json"
+        ).read_text()
+    )
+    report = json.loads(
+        (
+            REPO_ROOT / "dashboard/public/data/axiom-yale-us-tariff-panel.json"
+        ).read_text()
+    )
+    report["cases"][0]["unit_count"] += 1
+    report["cases"][1]["unit_count"] -= 1
+
+    assert (
+        validator._validate_panel_group_receipt("us-tariff-panel.yaml", receipt, report)
+        == []
+    )
+    assert receipt["population_commitment"] == "grouped-aggregate-only"
+    assert receipt["cases"] == len(report["cases"]) == 122
+    assert (
+        receipt["comparison_units"]
+        == sum(row["unit_count"] for row in report["cases"])
+        == 39_600
+    )
+
+
+def test_tariff_schedule_note16_assumption_is_a_bounded_true_constant() -> None:
+    _path, manifest = _manifest("us-tariff-schedule.yaml")
+    bindings = _input_bindings(manifest)
+    reference = _tariff_input_contract()["reference_assumptions"][
+        "yale_note16_metal_weight"
+    ]
+    expected = reference["campaign_binding"]
+    binding = bindings[expected["input"]]
+
+    assert expected["value"] is True
+    assert binding["kind"] == "constant"
+    assert binding["value"] is True
+    assert binding["source"] == reference["path"]
+    assert binding["source_function"] == (
+        "scripts/us_tariff_schedule_campaign.py::_case_feed"
+    )
+    for field in ("factual_status", "interpretation", "scope"):
+        assert binding[field] == expected[field]
+
+
+def test_tariff_schedule_false_facts_are_construction_constants() -> None:
+    _path, manifest = _manifest("us-tariff-schedule.yaml")
+    bindings = _input_bindings(manifest)
+    contract = _tariff_input_contract()
+    qualification_inputs = {
+        "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
+        "entry_is_note33_g_automobile_part",
+        "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
+        "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
+        "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
+        "entry_is_note40_patented_pharmaceutical_article",
+        "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
+        "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
+        "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
+        "entry_qualifies_for_note39_heading_9903_79_01",
+    }
+    hardcoded_false = {
+        "entry_is_china_301_2024_action",
+        "entry_is_china_301_solar",
+    }
+    false_inputs = (
+        set(contract["neutral_boolean_inputs"]) | qualification_inputs | hardcoded_false
+    )
+    constants = {
+        name for name, binding in bindings.items() if binding["kind"] == "constant"
+    }
+    assert constants == false_inputs | {tariff_campaign.NOTE16_WEIGHT_INPUT}
+    for name in false_inputs:
+        assert bindings[name]["kind"] == "constant"
+        assert bindings[name]["value"] is False
+    for name in qualification_inputs:
+        assert "entry_flags keyword defaults" in bindings[name]["source_function"]
+        assert "declared_s232_precedence_facts" in bindings[name]["source_function"]
+        assert "actual transaction fact" in bindings[name]["reason"]
+    for name in contract["neutral_boolean_inputs"]:
+        assert bindings[name]["source_function"] == (
+            "scripts/us_tariff_schedule_campaign.py::_case_feed NEUTRAL_BOOLEAN_INPUTS"
+        )
+    for name in hardcoded_false:
+        assert "hard-codes both flags false" in bindings[name]["reason"]
+
+
+def test_tariff_schedule_projections_preserve_source_vintage_and_probe_scope() -> None:
+    _path, manifest = _manifest("us-tariff-schedule.yaml")
+    bindings = _input_bindings(manifest)
+    dated_note16 = {
+        "entry_is_s232_note16_c_ii_derivative_aluminum_member",
+        "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
+        "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
+    }
+    sector_membership = {
+        "entry_is_s232_copper_additional_member",
+        "entry_is_s232_copper_primary_member",
+        "entry_is_s232_note33_auto_part_candidate",
+        "entry_is_s232_note33_vehicle_candidate",
+        "entry_is_s232_note37_cabinet_vanity_candidate",
+        "entry_is_s232_note37_softwood_member",
+        "entry_is_s232_note37_upholstered_wood_furniture_member",
+        "entry_is_s232_note38_bus_member",
+        "entry_is_s232_note38_mhd_part_candidate",
+        "entry_is_s232_note38_mhd_vehicle_member",
+        "entry_is_s232_note39_semiconductor_candidate",
+        "entry_is_s232_note40_pharmaceutical_candidate",
+    }
+    for name in dated_note16:
+        binding = bindings[name]
+        assert binding["kind"] == "projected"
+        assert binding["source"].endswith("/note16-232-aluminum-precedence.yaml")
+        assert "_note16_member" in binding["source_function"]
+        assert "probe date" in binding["note"]
+        assert "2026-07-01" in binding["note"]
+    for name in sector_membership:
+        binding = bindings[name]
+        assert binding["kind"] == "projected"
+        assert binding["source"].endswith("/note50-52-232-sector-precedence.yaml")
+        assert "2026-08-03" in binding["note"]
+        assert "not a historical-vintage panel" in binding["note"]
+    metal_chapter = bindings["entry_is_s232_note16_metal_chapter"]
+    assert metal_chapter["kind"] == "projected"
+    assert "72, 73, 74, or 76" in metal_chapter["note"]
+    for name, expected in _tariff_input_contract()["probe_boolean_inputs"].items():
+        binding = bindings[name]
+        assert binding["kind"] == "projected"
+        assert binding["source"] == expected["source_rule"]
+        assert binding["source_function"] == (
+            "scripts/us_tariff_schedule_campaign.py::_probe_boolean_inputs"
+        )
+        assert expected["effective_from"] in binding["note"]
+        assert expected["effective_through"] in binding["note"]
 
 
 def test_committed_dk_manifests_are_record_and_period_clean() -> None:

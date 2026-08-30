@@ -143,913 +143,913 @@
   ],
   "compiled_artifacts": [
     {
-      "byte_count": 1675088,
+      "byte_count": 1690432,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-duty/composition.yaml",
       "program_spec": "programs/us/us-tariff-duty/fy-2026.yaml",
       "program_spec_sha256": "0b6df925464d6fd37ce44efd327bbf519242e83ef9c1df15b9a253ff3d766c60",
-      "sha256": "83bf30365e7b2f21f3cea309f87ffc13953f7a81b437661c19525ecdfc15ff4a",
-      "source_sha256": "0745c24a9c7ca8cd54d28bf4da5ea474f479a866daf59d4890824a2f79c82c02"
+      "sha256": "35e17146171ff23841d8f3d6f8e2d6ad955842ca3942234244f8495bc00649dd",
+      "source_sha256": "0dafe611b0680a64c7b20364bf0f9d2fd71c6e58036f30f088f8d07653d66a56"
     },
     {
-      "byte_count": 1670096,
+      "byte_count": 1728540,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch01.yaml",
       "program_spec_sha256": "816ba4dcc16ddf65e0406add39b012a1b03ccb4c5f09643d8bdece41c45430ed",
-      "sha256": "ad7ed6d1e634359dabfafa1a23128393a10f22c2b22ca40ac8d6bd10ef2929f5",
-      "source_sha256": "889fc60e0b04dc206d4aa343948d050e73f126235b1a32847bf771001818b2f6"
+      "sha256": "7d9c6b322529d2b3ee658462d0986edf03c2b80aceb49b8b97ef9d804eca7c43",
+      "source_sha256": "a420c2a69ce5e88e4bea621f30394efc53220b647eca611e7655a84d4d08300e"
     },
     {
-      "byte_count": 1693426,
+      "byte_count": 1751870,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch02/ch02.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch02.yaml",
       "program_spec_sha256": "38b85482c511af0734321f7cf977a42efd0400d8b44252ed8be7025f3c353996",
-      "sha256": "86e4e4e5dd593f21ee71e9c7ee0a0b29e91132c5760dcf0ea2b6dd979de596ec",
-      "source_sha256": "b81b0d311819c32066d970ccd1594e5caf3170623846fc4a201ceea4506f42de"
+      "sha256": "aab54da097e1551e5889ded1402aea35b9ce887e623d408b80113b88c50bb858",
+      "source_sha256": "92217f6d20528370447281c161b3475f4242b4bfa1d511e3cb63620e6f919ae6"
     },
     {
-      "byte_count": 1762717,
+      "byte_count": 1821161,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch03/ch03.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch03.yaml",
       "program_spec_sha256": "32c52ec954b76ef66b785eae6a13494571f2201107d81cec67313cd9a9ad3f53",
-      "sha256": "b066836ae63b00864f3ead566658b7ceac82e0187b0192e32aa7d47b9a6c2b03",
-      "source_sha256": "3ce950f390cb3f8f16f384c29f6f53b1e743d0c069ab7d07456aa7413421c7c3"
+      "sha256": "7ec30eb9e02ad67dc01d94e5b8381ec9ad5b03291794ffe5e1bdca469f533f79",
+      "source_sha256": "570e681d21e9537ebcbbeb3724b3ae6068cd4a113f19e9e711f1cbb0a2c5f498"
     },
     {
-      "byte_count": 1744386,
+      "byte_count": 1802830,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch04/ch04.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch04.yaml",
       "program_spec_sha256": "d2f5b3230e32f3a959d1559d2154a2297d6b8f242557c538b103b919018317e3",
-      "sha256": "7c4df1ae7fe80932dbeffd9efde1a91f1410db2d6c9a5e9560f8cfaef6369e89",
-      "source_sha256": "4051925897328efec121fba7e98970ea4f3a05f337852add6da350c2e23c48c0"
+      "sha256": "2a9919ae2cab60cee5bc158b639e37f07c4e02236c265f802ec7f635ad9626ba",
+      "source_sha256": "43a9714c1841387f5a7d645dbca15c4f5ce8706af6e799b96f56ca558a965021"
     },
     {
-      "byte_count": 1665501,
+      "byte_count": 1723945,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch05/ch05.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch05.yaml",
       "program_spec_sha256": "0542fda635a4c9217b5fb09e9c4ada1e696a2a09006f32c1c57217d858331217",
-      "sha256": "9815e67888241b006dda4abe373fe7b04b5790ae557c71a2be663f606ba20e8c",
-      "source_sha256": "dc96b77cae87315c93a212701de5b869ba734ee7278e70d273b1cd7307b85b8c"
+      "sha256": "e749e016be0266e0c94a8587fde5dfa7ee26d0739cbf8f9e5e603b8d85945fe1",
+      "source_sha256": "919b5227b4b1fdf339902bb55ab3acb84314313b7346ff6a0c370080c3a1190b"
     },
     {
-      "byte_count": 1668559,
+      "byte_count": 1727003,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch06/ch06.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch06.yaml",
       "program_spec_sha256": "fe20ee9e75a18dd28ebad81b149f9151fd3f62dd487f586fd2c4a01a0a9a1500",
-      "sha256": "43bbb1ab6449f63701e1074dbf10716cbe8d4918dec4d9d993008ae624ef9039",
-      "source_sha256": "834ec1acd593f2afa13f401fd1d18e9d5c98814a3ae4a2b45e2f2a6915f6107f"
+      "sha256": "3961d9c3dd530f18114388f1c9777321611a5e48c7b5bb173f19ebd19ada6618",
+      "source_sha256": "3a9326961bdc040dadaa124bf64394949fc7dd43755fcfff8d7713c44f7838fe"
     },
     {
-      "byte_count": 1719967,
+      "byte_count": 1778411,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch07/ch07.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch07.yaml",
       "program_spec_sha256": "5247643ad4c6b745e11f1310ecada499b16b82677a2b6dc91f710fe9bbb5b725",
-      "sha256": "1d6c32f77ce76ca91b4c92eae4c5d03ec5018e7a862e6f1f1934d18567363831",
-      "source_sha256": "33593c8a9f87bbb040766f5e0b32a966a14cd6724a6c417d4860f592a21bdd97"
+      "sha256": "e009b9f643f1ea5d4e28f845a29c3b10b56ab314fcf3c7357efe29e7ba7a5ca9",
+      "source_sha256": "df98e03cfe11d0af0b085448564a37b5fa4b21152ae64f208dee48d7515effe5"
     },
     {
-      "byte_count": 1697681,
+      "byte_count": 1756125,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch08/ch08.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch08.yaml",
       "program_spec_sha256": "f499d8f3672b618d4e5c9f8f3059d775329a7d62877e802bfb12bf58ab01f1be",
-      "sha256": "3da345d5826b41ef94b0b42ed8db26854e7610325999c26af1a4657cbf34305f",
-      "source_sha256": "bc33613273447ca7d6c93b3c863555a60547ffaece2bd0aa1273941be630a562"
+      "sha256": "8f57283d0eb155188bd1aca706067c8e01c10940ae55edd4d910f385d85c30f3",
+      "source_sha256": "306b56d5e1c27ddc0f5b32ef7c7e1fa763700a89c92cc5991b2559042571cd20"
     },
     {
-      "byte_count": 1678949,
+      "byte_count": 1737393,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch09/ch09.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch09.yaml",
       "program_spec_sha256": "18b79af564d26b8490c64f3703a3b4f602bdef6502b3a64a3a86c9b977d44044",
-      "sha256": "2d25ae64b969d5f8a82bcf49dd5699ac7c2be6116efaa863ad83ce98377ca7f7",
-      "source_sha256": "a9d3814c8c4bf1bb57f205c8f1339ffaf094d61b76dc49f47979f5cb39419b6f"
+      "sha256": "6005e65696cbba57eff2479e64f4c48ba0f3840b187f1fb1a2a7efc08d32c6a0",
+      "source_sha256": "26d6303d6ebc8fae6dd281d1ddb877c38f29c2a53aec9cf6dd12e6d1961aca0c"
     },
     {
-      "byte_count": 1665336,
+      "byte_count": 1723780,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch10/ch10.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch10.yaml",
       "program_spec_sha256": "82e7210d0a8fe449ccef9ca4c5496521a9460262f302f503e68aadaad8ac38e6",
-      "sha256": "2de5bf0bec5b88cfbb6b35378fac00d16215ad9285b9d8eafd9ec9241cdb8467",
-      "source_sha256": "0cbc44478615744f1dd16486e5752def12cd815e589f65727961161415fcce84"
+      "sha256": "fd662f584632bcbb1fefdfff1cf8e494778ae04fee697e8f6f6ae31c3fb15e6e",
+      "source_sha256": "91f8b55c58244faaf79360a65428c77a102bf40dd4e14a4a687b246bded40f9f"
     },
     {
-      "byte_count": 1669348,
+      "byte_count": 1727792,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch11/ch11.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch11.yaml",
       "program_spec_sha256": "e495d770a31d6f58b65b1dfd2a56fc4df9bae1b423f3391b97d49991f6a63107",
-      "sha256": "0085feb2da12b1f6894775ba3d5c9c9211e8ecdfecc005e5d9cec97cf20302ff",
-      "source_sha256": "79d9dc39adb1ff948032d058d39744c85469d2c020b323496757b66054b3edc4"
+      "sha256": "85104670386d8e7f108900cf3c69f10f26a484d6ef8039a0e386ac8aeb74515f",
+      "source_sha256": "8a771c0c3fe545cd21150748b31a2c40ece987b82ed7efc087af7f03521c2d5c"
     },
     {
-      "byte_count": 1681020,
+      "byte_count": 1739464,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch12/ch12.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch12.yaml",
       "program_spec_sha256": "e8dbe2762035cb7771e13a9563f14ef6a227db71e368d1bc33079e49255c8950",
-      "sha256": "cc6ee93224993f6cd4e445e43b1944458ed3401e34b6efaaa15748477685e416",
-      "source_sha256": "1d8f7f00077ceb3c017b8dcaed9094801d379f78eaa356898876e6eecaab2697"
+      "sha256": "7a8bd136756efdd79a59c40cfc217cafc2208d66a326fa73580d8011f909ede7",
+      "source_sha256": "99d6c6cf49896248c48d1d52ea462f3cec025de9a27432bd7b52d0c57e7b30db"
     },
     {
-      "byte_count": 1662274,
+      "byte_count": 1720718,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch13/ch13.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch13.yaml",
       "program_spec_sha256": "3ac5793c6dd9c4ca3f1ffc09e850f47ec09aa5879ffa42ab538e7ae0d1966ce3",
-      "sha256": "9d23f0b51d204e67694d367fcc6ba28cac4f4f19df3b040af7469f1e250dc29e",
-      "source_sha256": "ea45ac35fcc7eb18b3977d6e95e2d845b1a68a1e343443257f36459ea776e663"
+      "sha256": "3b07f63d10ac43dac110b872b6d6b9bcd03ce54bda5cda725d64d45f9092d2f1",
+      "source_sha256": "0cdbabe4bd21b0854ec3ec12f3676d96d657c8a65da32945885f4ca7496b98b5"
     },
     {
-      "byte_count": 1660921,
+      "byte_count": 1719365,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch14/ch14.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch14.yaml",
       "program_spec_sha256": "742932a1a8b870535309dff1b4e8d482aabd27b9139d9f8e927413f06af33a07",
-      "sha256": "473f8249721d73fce4ddc8aa6ade9f0375726c19da4136fff88cd42076e98cc3",
-      "source_sha256": "0cf3277da96e1500e35210e89e316a1a08229c3514f04223790f3f0045c35cdd"
+      "sha256": "e844dbc65b5b6cb945069d966db42268fb1b040bf25b045c99b60c2b2d379e3d",
+      "source_sha256": "78e5877aba7cc5100d77b69eb41ac089893c9c52743a9b82de9559ab15963c5a"
     },
     {
-      "byte_count": 1681621,
+      "byte_count": 1740065,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch15/ch15.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch15.yaml",
       "program_spec_sha256": "cf34ec95f9e68cb5d9b8c60d2910b34687e9f0d604a5ee8fcd0b9c69b8acd29d",
-      "sha256": "2bc610aea2b1e19075fd01c39c1fd51bf15c154ad5b0606ff0e506a222672d98",
-      "source_sha256": "cb64af02b9020f22525987aed31e2f7af3df122ce0f7203a520d2295f3bf1afc"
+      "sha256": "3adf3fa9a24ab860e84ccaa7fa524ae2ff73ae5696757a1fb3fe4ce25e5ab235",
+      "source_sha256": "d7ad4aee148654737719287cd75914bccf21509ac741923399d21f6fd914f4d8"
     },
     {
-      "byte_count": 1707260,
+      "byte_count": 1765704,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch16/ch16.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch16.yaml",
       "program_spec_sha256": "aea5dbfb7727aa927f1e55a089ce9aa10613d6eee46b77760df1552b18a25bb4",
-      "sha256": "56e573e92c718702cbda2e146dcb3b4a58a2398a719455a571025de5aeb3a19c",
-      "source_sha256": "930d1ca74f1875105d2ea218743e94350fef6c831205272e99a7f68bce0a5e60"
+      "sha256": "e85adad11048c213e7aba57861e47f764a634c03cfe215ea06d2e31a944ff561",
+      "source_sha256": "659b98e1cda7a14e9992e3964f77f3f4fb34509229c184274e76ca6d90364147"
     },
     {
-      "byte_count": 1679782,
+      "byte_count": 1738226,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch17/ch17.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch17.yaml",
       "program_spec_sha256": "cb1130c5b444509ebd6cde316debb887c0d73d8bf64dd167f94cdf3d5c62a538",
-      "sha256": "dce7fde22a7337c2d27f57971f6aa011006a5867dd3b6e76995681ed89b9009d",
-      "source_sha256": "493cbe2482b84f744f847e9d3ae67dc9e2f5185796e318c87ab9462b7e991dc1"
+      "sha256": "084888dba67c0e0ec582312fefd9335cb41c0c646fc293c63816897a984629c1",
+      "source_sha256": "ce130845f917023192d967f47fd0e8b0935dc8e46e66c57abcc1bb8a70172d73"
     },
     {
-      "byte_count": 1684200,
+      "byte_count": 1742644,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch18/ch18.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch18.yaml",
       "program_spec_sha256": "c52c3fe7b493972c24f83253ca623981ba8ec5cbb2129e2eb07fc88f20db3761",
-      "sha256": "385e46cdd5ee5b923b223e105f88514e2e49ffd731f1022b43f10952ea101cb0",
-      "source_sha256": "86725514ce431029d572f943833a3c21c07cab10b5443dc308ab5f6ea493c782"
+      "sha256": "9b31e203282e0b80c45df4e9d0c87903b3167c5a4b5e53038981851027d6e737",
+      "source_sha256": "b720cc0edd3212901a62666541f1499b7c3b073eaf24cd16ebd28a3b85bd1a0c"
     },
     {
-      "byte_count": 1688113,
+      "byte_count": 1746557,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch19/ch19.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch19.yaml",
       "program_spec_sha256": "25f9bb91a865ca1158c83c2fe62a8f461c5c50343603b0594f5538005c33baa4",
-      "sha256": "81927702b8875515eae8cf43493bf981601f9900b63fc4d7cbb34cc44d3a7fb1",
-      "source_sha256": "3ce1db68258a917ebb780a38ae4aabadf30cba8bb1a211603b5c6164a66a2ff8"
+      "sha256": "4b8b15f94f7f7bc19e86fb8927d0945b48204c498b014493c5d9d330e1eb0b79",
+      "source_sha256": "8f282c1c5173a07908ced2c1e75f86e8bf508fc3f0f7d87a62f23598ab401007"
     },
     {
-      "byte_count": 1722403,
+      "byte_count": 1780847,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch20/ch20.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch20.yaml",
       "program_spec_sha256": "966dc235a8799131d3c53c02149ea96cc9f5681a3e4706fe1cc8bef55ea67173",
-      "sha256": "bd0c477a96fe74f00d0958670692a333e9c4b3425c9da989203fa706a17c8716",
-      "source_sha256": "4ddd6cfdc669d38a13cbe3b14dbe6c38a5b2479b59d66639edaa2f187b7e3009"
+      "sha256": "dff5cb3e6a4248b33b653ddee9ca624b97a6b1722cdafe3c29c565601a30b4c4",
+      "source_sha256": "5b9e85998b042fed5e82fe79f920a9165d4fcfc34990091d658c15878c40d25d"
     },
     {
-      "byte_count": 1688670,
+      "byte_count": 1747114,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch21/ch21.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch21.yaml",
       "program_spec_sha256": "64926e1cadf6e55ef423539234ee2343430dffe958053759c1be12077283f5ae",
-      "sha256": "b3081e33c3e571399a712aacb134eaf31141b2e9c097f7f1697cb0f4f9ec02c4",
-      "source_sha256": "20e54752ddd1246aff247c744b84b08975eba67b6cc339317d001953318644eb"
+      "sha256": "37eb2cf12eadc1010e1f47dc59c1b7ec7226a28ba65ac0004bbac72d4ea81e6f",
+      "source_sha256": "b9d7ea8e049be6d71808cac04336342a030f01491c9604ef2e2fa9226544bfd2"
     },
     {
-      "byte_count": 1678742,
+      "byte_count": 1737186,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch22.yaml",
       "program_spec_sha256": "eb407fc6c53ab571a213fa28bcb2bc9b15ef1e6539fb2f80f095e1b9ef7d7e9e",
-      "sha256": "068e76888820a7670649e61f08f4ae4e16dbfcbae451e0c56a9c2bb139ebe6f9",
-      "source_sha256": "18d54261e90d0f3da5401fcda7c6872a42062fe49ab104eb42e562ed1dc24a0d"
+      "sha256": "5a897c83a05e633aba1381db7510a82a54cf0196527d7c8b5c5ce9ba2472d213",
+      "source_sha256": "92d1109939f555a808225b2344f25bce0ba0f303dc8b1c84925d93aab29291f7"
     },
     {
-      "byte_count": 1669398,
+      "byte_count": 1727842,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch23/ch23.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch23.yaml",
       "program_spec_sha256": "d600a9814b6b3325c36560e2c2d279654cdfd604a5defda1e40d5fc04e7718e1",
-      "sha256": "3a1ecf2f2bd62d26185bd9532e4165194456ac0638ee3cba2911122af10446db",
-      "source_sha256": "adb1e5cec3eed1f02a4498a2bc9ea861a06e0c8878cfa2ea8150f2c9518fd829"
+      "sha256": "708b8ad30aec4c3af15f5e72a93e83b8db4aa8883851be6a860c0e38c4f9ade9",
+      "source_sha256": "decf3e8f54bd33af89600e730e7fd4e37f142e3e1a83bd3f0bcdbe0a62e635f0"
     },
     {
-      "byte_count": 1677465,
+      "byte_count": 1735909,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch24/ch24.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch24.yaml",
       "program_spec_sha256": "c3d8e18c5b114dfdad866cdb297d96f5f79138c7c4dd870bb9603c5de1dedd86",
-      "sha256": "e681d2bcf58bacb59ddfa36827e04e15093be571ac4350ca19d976e2f5ff8927",
-      "source_sha256": "c953bdd753136033ac8f863146ec3c7b42b52e8df9f4b24f54fcc1561436ecb6"
+      "sha256": "25821203fbedf60c352d5b8de222a0d0099b9243334e64791d164e42f84aebe4",
+      "source_sha256": "66e35a65c77d57a2fc3622f902c4e062ba85d117940bc1b6046e73fbf092ca5f"
     },
     {
-      "byte_count": 1688120,
+      "byte_count": 1746564,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch25/ch25.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch25.yaml",
       "program_spec_sha256": "929cb6e0dc34ece156206d12f00c6fc49fec8c6cf0ebe9ca19211fa10f7d603f",
-      "sha256": "3ab7a34af2502f14d806450ae73afc354124c7862908f25846ff1d5559996cfb",
-      "source_sha256": "15f133f89a7fcb193850b28eb1580869f1001eee0b506a4c18546197c4ef84fa"
+      "sha256": "acf0ecfc47202ded26dcd5d500b4e6b79702d81cf0e44a4b6373f0fe96174e90",
+      "source_sha256": "42a2a4db79c531b66074391b52977fa743745886c02336c985a2fe1642eeaa9e"
     },
     {
-      "byte_count": 1674792,
+      "byte_count": 1733236,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch26/ch26.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch26.yaml",
       "program_spec_sha256": "f9dacd608fad338e656f52dac5c9839cf995e47face1075e8fbf89cf3233a4b5",
-      "sha256": "240a504908216af79aba8b7caaddecc3ee2a88893d63b0e0599388ec35980161",
-      "source_sha256": "8555df8a5c64f142437562d58de103710ac4f6a83fb68ae0c34c015b96dd039a"
+      "sha256": "375f5f0dd20b27f37d3e4b8c79695142d5cef1d7533c554d96e1b041e76dbf03",
+      "source_sha256": "a56d355287c1c2e55a0795ae71775fc024d0bda7267720acd51defead130da33"
     },
     {
-      "byte_count": 1683455,
+      "byte_count": 1741899,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch27/ch27.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch27.yaml",
       "program_spec_sha256": "f8e75aa785ccacb599656c2930d88b6899c085d58e9e48a2b8c9c1905176ed0f",
-      "sha256": "66fe08382c24f4ef697d90ee9a3101d2509b07773dfbb2a434df6d05c0439979",
-      "source_sha256": "26e56c1f58b1be7149658dc420fb6f5f1a30276e084fbbf0bcfcb2ff49bc575c"
+      "sha256": "95201673be7d02870dd4c1cd9a1d75fa34e7d59374a1d40d5eb5159f9fac6f98",
+      "source_sha256": "93861a42265be15248446705084d0688eab240c7384365aa08ebcbc41f14a497"
     },
     {
-      "byte_count": 1780894,
+      "byte_count": 1839338,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch28/ch28.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch28.yaml",
       "program_spec_sha256": "5b3ffa7f3eb52c80ec9cb04cc447b8203f31a7afafbb1e8e30ecbe91b627912f",
-      "sha256": "25e07d518fc183e6f6e61d204d957ac59ea1443c7fa99a228b398f87834dbeee",
-      "source_sha256": "4202b99971dfac88b1cfeb38b2e5645bec2de4604bbb7a2808e10ae9a73f0e6f"
+      "sha256": "6ba16b61ce669bae2cc3169c8cddb7d5f0b906a5b3dcb21903a82190a631ca1d",
+      "source_sha256": "07b443dee9ad2ba1fbb6f380fb9e2b013b46052454e42c0230c41d293722d7ee"
     },
     {
-      "byte_count": 2066430,
+      "byte_count": 2124874,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch29/ch29.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch29.yaml",
       "program_spec_sha256": "11a53467b99dd6aaa7466575a4c2c03895fb6f43195d73f825307b8c925922eb",
-      "sha256": "458d53e9e8b4bc820f68cf1a4c38a6b0bd529b9e117f3e5a69dab5a1212e4cb5",
-      "source_sha256": "6b113f3eb5d922a23ab6c366b8ea866e5aef52b622db625aa9c13e5caaede023"
+      "sha256": "ed4d550da9d5867069a758b8d2017033ca1fcfb8dcfbe8c24cb42ba5b8d907fa",
+      "source_sha256": "66168546dca7e043d1614033d232e97c565f1b37c25e171ad2fa87f619709f20"
     },
     {
-      "byte_count": 1682055,
+      "byte_count": 1740499,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch30/ch30.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch30.yaml",
       "program_spec_sha256": "210cd9327ad8ba4eb0636351e3949b754816caf076a725db0b76001179d710ee",
-      "sha256": "e12a7841035080a555de6a5e4b01411d51b877d9a5328a6936fa1076040a35c2",
-      "source_sha256": "5a86a1f5615b28847e752d20c93169f66765c7370fc178c72deec81c8bb964ca"
+      "sha256": "3c4f18ebff0b440e4972858baaaf51ff840a79c86480893582b8a0347f363c94",
+      "source_sha256": "a01607d27b97d34b22cf022edec1a37417ba87a914afc5e295bc231ea8869ca1"
     },
     {
-      "byte_count": 1666964,
+      "byte_count": 1725408,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch31/ch31.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch31.yaml",
       "program_spec_sha256": "eb20d15234aaed7a01132f3d34860dfc0d90ce3cce54bd38b5d812ef918e5644",
-      "sha256": "079645c105b2d0558a0ee869a78340b3df519b20c363347313a371143acd3b5e",
-      "source_sha256": "155ef6d8d9f48d5a681d47a171702174ad66c1825ec1fb44a4e25bb8b009b630"
+      "sha256": "a0caf16942101797eef59773a4e6d955d10bdb0059db5d7ace712037352fb86d",
+      "source_sha256": "84c6e34d8ea878338e75a9a428255bf963fb5cbd0a7a2805c0745f7f4eec068c"
     },
     {
-      "byte_count": 1704652,
+      "byte_count": 1763096,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch32/ch32.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch32.yaml",
       "program_spec_sha256": "f32f6e5fe78d862df499fc019857bb3c4c426d24796d4811b3790f97f9e18129",
-      "sha256": "8b04b240c997e88f74e865d8b7a3e52829bcf4a648f253954f19814cfd4751a7",
-      "source_sha256": "d96e49cd829cdd908b09aa9cd315cd6ae3cbfb1e0fb9ac3a317a2c55d1cede42"
+      "sha256": "2d43e004dd7c32066821a68acc1e366249dc29ad4ea13f66f244d868136a3269",
+      "source_sha256": "92dcaffb365b41b7e506b59d9768fd1d2a623dcd42973a86cba5433f11aa71a5"
     },
     {
-      "byte_count": 1674582,
+      "byte_count": 1733026,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch33/ch33.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch33.yaml",
       "program_spec_sha256": "4d4edc6b13ba8746395c4042c6c57ddf79e007ace21725f19da843f465d274da",
-      "sha256": "88b1c4a90ac02819f86bd8a6b5e422a24eb39517b9e000f75d3ba185cee99552",
-      "source_sha256": "9cebae2c8f6d9162f4c4b194bf1194e5763960fabc6068ac8d4dc010f936acaa"
+      "sha256": "539ce7b2ef92c803a8c46923eb266d73e29afd9581f5cf006e0d578b0f45163d",
+      "source_sha256": "bfd83dc715b4250b7f339fda4c2757abf2c39ffd383055c1e962736be511ec5c"
     },
     {
-      "byte_count": 1673314,
+      "byte_count": 1731758,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch34/ch34.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch34.yaml",
       "program_spec_sha256": "8b8f9e0164ceed711a25c4a0bc2ab00e823048d0de0135dfc890d73b2e59849a",
-      "sha256": "3f3439fb85b6914f89d9cf53d2d9a86004fa6294286167a1fc400a65b60cd988",
-      "source_sha256": "10d0c51bc93d60b82598a54c51c60fb3eafdd74e36e993efa9248477aa49a1a4"
+      "sha256": "ae8a42d47864e718197eb09f426605d5436d559fa4666fe40d9cccebfd3fbbbe",
+      "source_sha256": "0691833cc318cc556884b91ce56c7106bed6bf165b440ae314c2dadb3e3c37cc"
     },
     {
-      "byte_count": 1665051,
+      "byte_count": 1723495,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch35/ch35.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch35.yaml",
       "program_spec_sha256": "c33648bb65c2210ea82db24f6be6da2a0431d186c04a78909953f1ed83a9d1da",
-      "sha256": "63c4893991c0d69aa56f484e4d047385cb782ee95feb478de27de85794ca97f4",
-      "source_sha256": "efe5f8c3084b24baa1f5cbdea45aa070a215fa845f21a7831d0be2963c9c33cc"
+      "sha256": "8b0d5ec1e270f2b17c58a7fabb17a165d55b7af40da8d293e0c964f422bd025f",
+      "source_sha256": "9eb568322b43899b624b0e269887fed776853b36188edbde2021a528241307b1"
     },
     {
-      "byte_count": 1663639,
+      "byte_count": 1722083,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch36/ch36.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch36.yaml",
       "program_spec_sha256": "d49bd5bd2a6e4c07db59f1736ec76ec70f5ff18cf30f7b140d6395a49978e164",
-      "sha256": "546851b36006933a2da5363cf90d35fcc2093d7cbbc495ae2effb0b1a8349792",
-      "source_sha256": "46e4a6619d9775009cdb44c6b3d8e4545d64e4881c0f7ef0bf4dcdef48608ef8"
+      "sha256": "c2324639a405e00cae1f1472209215e4a53b7303966e699664312347be8a1b41",
+      "source_sha256": "f877801a32607f78957bf144c636da37a20da7c25792c184110c7a5d363bf6ef"
     },
     {
-      "byte_count": 1672444,
+      "byte_count": 1730888,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch37/ch37.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch37.yaml",
       "program_spec_sha256": "5cb45d0638918fb3adafb0eaa87402d71bcf1b0a4431796766c46f20f19fabf7",
-      "sha256": "9412c7de788705d4186a9548ad242bb1051142b27de5a2d2eca45758be280ed3",
-      "source_sha256": "fe2c78e0ba29b7451fe9715e65d2501b24b3555650ff40aacdf14a6ddd87d14e"
+      "sha256": "89b09f3df194d98e5addfe2bb19eafd4ff67e34678c3c3375e1765558815429a",
+      "source_sha256": "6f1e723f538d07d49c3213c42065400d23d7333976fbc19375e6cbb070cfc526"
     },
     {
-      "byte_count": 1734624,
+      "byte_count": 1793068,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch38/ch38.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch38.yaml",
       "program_spec_sha256": "b31d0334f6f61f8e29373d6b6be2a6c13d8201d265187c856e1c42ac6e22b9a8",
-      "sha256": "53a0977d3f18339e8c6de566e221caae487a5e7ced788790b1defad2e0b4bcc7",
-      "source_sha256": "9b5e0cce6369df9095f1d4066fa929d092a26a2ad568db08fd7dfe29aaf1cd7d"
+      "sha256": "dabd879f5d2ad521991494a37fd7886a51565e80ea7d810c5fa6633902da4de8",
+      "source_sha256": "c16d7c3cb32ffadfa6dd805060dc9b56f98662edac5b0cfe09912f9b9594d872"
     },
     {
-      "byte_count": 1760511,
+      "byte_count": 1818955,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch39/ch39.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch39.yaml",
       "program_spec_sha256": "71946cfffa935ba26dc9c8e001e65818eb2df31659a64dbc9d4e6a5fbcc2fa11",
-      "sha256": "3b55a3c5430aaa5a8ec99405afabd963498b343b005efdf809e3f179bfcbb4a4",
-      "source_sha256": "71cce18ced811161c35c7b3ddd0e0f2ae2e6eb54c93add4281641b0a550abe63"
+      "sha256": "9983ac75af22d3b97d2e945d3a7b3b9a30c49356dccbafdd8a1197060b8fb23e",
+      "source_sha256": "44f9963d83c63c8f70d442aa400514c3ca52f54f7d3a8185a4b406b47673a0e5"
     },
     {
-      "byte_count": 1721284,
+      "byte_count": 1779728,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch40/ch40.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch40.yaml",
       "program_spec_sha256": "dd1198fd4bac8fb05825f9aaea11277efa4b12c1da8b88b8e15f2c5c7f83a03c",
-      "sha256": "0a7d666c33bf2e2bab8946c2b663df18eaffb5899eb97efe3c72b8f92863b260",
-      "source_sha256": "2e4f6e7f71527fa96b49cb98c2ecb39fdf0118febd0f81ce9c7e83b53f00932d"
+      "sha256": "9db1b4f4ad830fdeb15331a10a002fde8affef557dd5cefe0e1d56e620d366c4",
+      "source_sha256": "efb02c03f3cdf1c81e127b7ef4cc84c58d9f0ab65fb261e0f64bb1e7b5a41090"
     },
     {
-      "byte_count": 1711985,
+      "byte_count": 1770429,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch41/ch41.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch41.yaml",
       "program_spec_sha256": "8b510d8a6c61651ebc2a3a56a7d8936817e1213b01a305706308f17e3e538336",
-      "sha256": "9fbdcb2a9f8ca075949de964906577450732ccd243375ecdbad7e23070315245",
-      "source_sha256": "33c7607227ec295c5b4b6229e845f8711490a14e5b34b37bf4df7a6348699270"
+      "sha256": "3d96b476753c39552864274708abb83e3293b59eb84e157e5a5aba13b1b8da9f",
+      "source_sha256": "c255cf2f42b51b0e22ec91688df59695dc6dd83a5112b465b25e84cf0bd151dc"
     },
     {
-      "byte_count": 1696767,
+      "byte_count": 1755211,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch42/ch42.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch42.yaml",
       "program_spec_sha256": "c59590725a03a4625e461c9940a0b8d20ca1ccdd02ff5b7a7b161b79ec1a6bb6",
-      "sha256": "09608dab7ce1ae3e57f7cb4510a3dd39b2e3c41ba2fa709fc49bed329dfaa373",
-      "source_sha256": "7cfc53d032b0f152a92f90366724ee30c869b4bbd870fb246e85469da4c9e229"
+      "sha256": "e0eb0eb52d231907387fe644d51957e8d0b62cb0b4f70e7ad09136d5fe8221d1",
+      "source_sha256": "bb6a5bcfe66ded486509ac54765ade2e4594dc9422b3c24ff83a320393870b2a"
     },
     {
-      "byte_count": 1665991,
+      "byte_count": 1724435,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch43/ch43.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch43.yaml",
       "program_spec_sha256": "bf2a19d0c67c3337198bc85e7286af6cb130098c8b13fd11826277dbfd6dc460",
-      "sha256": "a00b122d7f29a51ef1b1f5a4a61bc195171c1279167c495ef87c21d0c4f99b25",
-      "source_sha256": "dff94678ae06de15c96c532b3be80bffe3b7b473a2604cb7c6073da419e4e4e6"
+      "sha256": "925af66d7e5ac51572b9b51d6501a4c72368c3f00d01fc75030c81df2784ced5",
+      "source_sha256": "8bf0f53308cbb78ce05bc52b48401767be232b43610a164e1b126473d3f42e84"
     },
     {
-      "byte_count": 1763286,
+      "byte_count": 1821730,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch44/ch44.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch44.yaml",
       "program_spec_sha256": "b8ad1a122621577a6ff7625695885466af115b0ac0205029f983bfa4552a02b1",
-      "sha256": "b6b40a3de5f5c631b0d489c8854fd62ef4670f7549f5e7fb22e60da0b9e7769f",
-      "source_sha256": "32497bb1c98427575c94999c059d722a94e59be06561769ffb8841af4ccf907d"
+      "sha256": "344157a12fd69c2d8b655deabd0b2690a02cbd947de4dff8e12b93f163ca9e56",
+      "source_sha256": "2189b0875def5c6577436711487bd408ee36b3fbc933112c43b2d82594e7a7f1"
     },
     {
-      "byte_count": 1663559,
+      "byte_count": 1722003,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch45/ch45.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch45.yaml",
       "program_spec_sha256": "11ade04ea98744cf84ae94c2d747110cf0fa1477f4750c50ab20a715c32be877",
-      "sha256": "f2472b598bcb273f990816bfc003a3870fd2fe39f477f96eb703c000317ff164",
-      "source_sha256": "144089fd18877beb3c296dfb4c1a755c5fb85012b0ff70fd53ccebb461804eb0"
+      "sha256": "7d66daca8bbfc70879d70e0758e2f45b869863aafca424cb66079d65bd19f019",
+      "source_sha256": "c59907c8c4111597d83545dfb91a18a9e18ebea38af9bc86bd29d2007cb8464a"
     },
     {
-      "byte_count": 1678440,
+      "byte_count": 1736884,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch46/ch46.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch46.yaml",
       "program_spec_sha256": "dc2945f9149241f797d83f6bd99b6ba250c3686025b83f4d6fe4bfdde402a4e7",
-      "sha256": "5f733749e208efbfda8b38c341bd6b44e5a1a38f9f3e1eaab7d46183ec13cce3",
-      "source_sha256": "7fdc329bd30e1c865add9d626c9aa8f2b96ed5d6df031d0deb47e60fd0328f06"
+      "sha256": "ebfeb409c7f621c400232be1deffcccc378aa9e39e2282fcb7fd35735b021375",
+      "source_sha256": "6579b34d1657ac225be8d0f737f2dc0e69d97eda949bfedb5a27543212c16bd1"
     },
     {
-      "byte_count": 1665644,
+      "byte_count": 1724088,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch47/ch47.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch47.yaml",
       "program_spec_sha256": "6739984198068839d2d46902b083ec25eea1d2077d40c6e32ade59160a10e46a",
-      "sha256": "69087908ff2943a4c7a8977e960c22e4ce90b5306e6ea6654a756542f6906d25",
-      "source_sha256": "15a9f8ad2a2c0c2548349b482e58475cf82571ba48ee1870cb2495ceb941a65d"
+      "sha256": "18ec6c57fb943c3cd1fea68509a14441a68dcb14cd854d8f02fe4ccbb43323f5",
+      "source_sha256": "3aa4a6026befb057943e1fa02d6624f76b15be742f13dd7ecfc766ac942d7d26"
     },
     {
-      "byte_count": 1756652,
+      "byte_count": 1815096,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch48/ch48.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch48.yaml",
       "program_spec_sha256": "c967457d4802c63df3277131d3fd6d7a2a89d77204d4905b6eec943cf41373c6",
-      "sha256": "fba8f96789110e14f6a86c3256509357f6645913e2387c11e293887d73c54fe6",
-      "source_sha256": "d7b92b1764ab8a3bd5cee9c2ca539624d14ad25344e6c751ba0a84a5495f5d00"
+      "sha256": "fbc8f3b6d5d468d7f8bc7044b1cc75952de004feed4c8fc438766af842426514",
+      "source_sha256": "48d90444428ab934afe852e41f11ddcce4da0d7f26e3cf2943d89cc0a3d57eaa"
     },
     {
-      "byte_count": 1668412,
+      "byte_count": 1726856,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch49/ch49.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch49.yaml",
       "program_spec_sha256": "a84740a61a5a9530aebfac577aa9ce58d86690a9194df2a041193754f9442eda",
-      "sha256": "7ff1d22c19c0a26aa1e7600560f9ad85f0fcf603957a79fea173a092e20a56f8",
-      "source_sha256": "e7e6c539fe405cd851eea8756c0734eee2dd3f6f24b9ee13caac092a29d641a6"
+      "sha256": "4de12c7ee4b28f831f5fdb8973c0f6799cbc13343721289c9cacc834eb6db872",
+      "source_sha256": "abf36031ca74a741782f4a90df8c9b6e1a63ff0a0e3022ba0344d4368186e685"
     },
     {
-      "byte_count": 1662294,
+      "byte_count": 1720738,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch50/ch50.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch50.yaml",
       "program_spec_sha256": "97458b0bafd2eeb8f2ed5aaaf06d4fa4d1d024f3130c94a60b46abd992e062d8",
-      "sha256": "4929ef5e9069f1ff1d3131de2b5a570b91ec5a2a782044a11bcee38bd309e5f6",
-      "source_sha256": "c772b75dcf33035fd63d187e12669efd746bb55e00c04fc5b93a1db8af7019f9"
+      "sha256": "135cda16388128d9e60e15a7a8dee2ee01d787b9a6b8de74d1c212f293b4aab7",
+      "source_sha256": "4ab5b9b65183597123ccbc99578cb3051341aac2dc268cbff5e796426b1708f3"
     },
     {
-      "byte_count": 1694993,
+      "byte_count": 1753437,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch51/ch51.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch51.yaml",
       "program_spec_sha256": "46dfb359201ff5794d23a16eac889a667b530b78e97e54419139524baabe7023",
-      "sha256": "1495550921fa1f4d6a27c84df36bc45dcd78b54f925653296904d5047fb98788",
-      "source_sha256": "98fe1a0febc66faaa8abe25e64b6c15b26e668062e143bc23681b369ead37689"
+      "sha256": "6397800a4e573f1c66b1b75b8eb2ba2061a85e35c110c7dca8dbe6c9e1b49194",
+      "source_sha256": "7ca116a5044edb94203d54860765b84981aae9dee4a006b895cf5b25b771b373"
     },
     {
-      "byte_count": 1761455,
+      "byte_count": 1819899,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch52/ch52.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch52.yaml",
       "program_spec_sha256": "001e439973069d8fe3b2f6c4da540b7888cd1af2d3b244175a6e006b823f9d61",
-      "sha256": "34110ad15bbd4b546f8fb32b5d42e8cf5d768af6d1bf71ae1f76d296fdcae453",
-      "source_sha256": "942ff051c9d05a852dbe5e1be4f2b45a958541d33e7f234c18062b6cefeffaad"
+      "sha256": "441577f863190cdb4341bb8dfc545c7ba12ed1e658aca51564e1eae6bca2f59b",
+      "source_sha256": "337842ed827890e9aa2f22bd5aef4d692a8ddac572527e33575eeda2d3d635c3"
     },
     {
-      "byte_count": 1669938,
+      "byte_count": 1728382,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch53/ch53.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch53.yaml",
       "program_spec_sha256": "6130b76d5f942d75af3a387e8248f4a59471ab96c398536cf97254926ed5f978",
-      "sha256": "4cc5b335b550403fe95604bcc2b0af76f3d4e0ce89689778bba26344fcf6f0c0",
-      "source_sha256": "ae1258fd5313e5904760a517cd3aa6d29cf7830c8ab02bd5c4baee3e97661f1f"
+      "sha256": "23701fa271858c86bb30356b490216ac8d5c6bf0845bb4ea8b570cfcac86a31e",
+      "source_sha256": "0c0ebf8110b517051467b3d36187a7d5ae49820bbe89fc8b28918e8318d03ae2"
     },
     {
-      "byte_count": 1713461,
+      "byte_count": 1771905,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch54/ch54.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch54.yaml",
       "program_spec_sha256": "18dae2752fc1c6cda6017b636171dd24140f7605c988ba363fce0634bcbb16d0",
-      "sha256": "2a35ae105f09762cd383c0a48d6d825348cd66a81555c00b10e4b86b2d346dad",
-      "source_sha256": "3fdb38f54f4690f300f40de018945e080d1314181b51c08f17f159abba40b0a6"
+      "sha256": "eeae29cc641c5f117a7789efa42b9ff55bff54d79344ffa7630d4b87fff6ef80",
+      "source_sha256": "6acd5d9efe0eff48eff06f6f1eaeb9002b80dcd74f240d67001b7ef9db36b390"
     },
     {
-      "byte_count": 1717037,
+      "byte_count": 1775481,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch55/ch55.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch55.yaml",
       "program_spec_sha256": "09036b1d20076f142f24d4051214ae0c79a285c5279e226ef2631bfa270ef012",
-      "sha256": "eca68e488dbbfafb52d2cbcfd96164a311fc289e44b29f9351a2d52b6439d8ab",
-      "source_sha256": "a1124ff9bc790b3deb0b839ea3c6bcb0765f3bfd0d133a1d34fb960c49309eda"
+      "sha256": "c4289de9463d0c61f94872d9ca5a884c628af7810aca6eaf3ffce332d01d8ad9",
+      "source_sha256": "5f3441d08e2ce53d7777f0ed90a4ad197b5ebcd6d6d82859cdadbaf68831810a"
     },
     {
-      "byte_count": 1680568,
+      "byte_count": 1739012,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch56/ch56.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch56.yaml",
       "program_spec_sha256": "ef3cb0cab9e30d2c74419756be5da72e3a1e5c0de4a74109c5c2ffe1d3c59820",
-      "sha256": "03d1917507ef1b2dd4da88802db0991e4bcea7ffd6eaa26ab3d37e5a20194135",
-      "source_sha256": "1f79048ad28f338fff16d1fd5cbecf2c89e1db88d73c3693576c70915bc70564"
+      "sha256": "4da1934609668f1091cef48d670f255e87d6ff188f37e9ba55c1bfcf0fba5177",
+      "source_sha256": "7cbe4a254a46493f8137d3b8b7c9979253e0738f9856ecbdee380de23e073ed6"
     },
     {
-      "byte_count": 1679158,
+      "byte_count": 1737602,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch57/ch57.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch57.yaml",
       "program_spec_sha256": "641804a62001633016a1e7f2fd06189517e77678d20abb94385a3a7e8bbdb6c7",
-      "sha256": "901bb8b9ea846e5bf4f63854b0c6e2ae4631d012316d87efe26a9775406709c3",
-      "source_sha256": "094356dda51b84f5cb305e6cf28a2185e43c2d5b4c0801c16c2e06e612741314"
+      "sha256": "a6c0416c2bab2fbbca4f6bcef47eae8bb827e697011dc68dcdf410d193447a39",
+      "source_sha256": "6b91b3ae5adb320e88382f4780cec664021048ead25d44c994e7ba8105760543"
     },
     {
-      "byte_count": 1688391,
+      "byte_count": 1746835,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch58/ch58.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch58.yaml",
       "program_spec_sha256": "ab3cc185ed5c0407a34c32868f11b944866947d2f4ba8da3ba4521a7409d64f1",
-      "sha256": "4e1c80b11dab331c3a05a132a6313ff9b3674bdb9741cb5a817bec17b868691b",
-      "source_sha256": "65139027229e57c1edde41a7800864ecb57c43fd4054c5e68a875330b9e6bab4"
+      "sha256": "75875daba31cca47a94555d0e56d478d997faa0109ee259981ee84b7f0816a3b",
+      "source_sha256": "42f8e054e68e042a762a60a7deb7a8b30d598c4fcfefc1294b861c7e469bcbb9"
     },
     {
-      "byte_count": 1683323,
+      "byte_count": 1741767,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch59/ch59.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch59.yaml",
       "program_spec_sha256": "1fa4dae041a70bc9bda227d824fae45fdd6f970c462841d1088b483c29f64d54",
-      "sha256": "7be6184b759169796533399913bce2efceca9aca0633df032ae50b8fd56d3776",
-      "source_sha256": "4e7a9a302761032e7dd3d77b8c46403435c8350188c2da3b11ebe2a09aa920bb"
+      "sha256": "9b8877c229647e9ab40378d51764eca94a8d3483065d1eba16e43adce6777b34",
+      "source_sha256": "c00619a2ea87ae228300758f32fa0e5edc28fdbdb96c4910e0338d5b53f93b8c"
     },
     {
-      "byte_count": 1684123,
+      "byte_count": 1742567,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch60/ch60.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch60.yaml",
       "program_spec_sha256": "9a7985b0885dbb32fe81e7b418a7577af42be2be6d7a90a4a2ead0c5c25e82db",
-      "sha256": "8c77143bb370496900d4d95258c2e1684b83961b9703469e947b63a58ade2a9b",
-      "source_sha256": "7e5f93efa0b35023ad6af596033e6d8e6e6b37845253dc219fa9ff80b4d56410"
+      "sha256": "97f2f3146ab9f54137200dd89bfacd25c260c8627a8e95b41c74bede845a62bf",
+      "source_sha256": "1fd96b4345360d18bec658beafa2c343b14ea01de26f219b0a126e281aac4045"
     },
     {
-      "byte_count": 1766930,
+      "byte_count": 1825374,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch61/ch61.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch61.yaml",
       "program_spec_sha256": "aa810de0d94031d4e19a6d83ef2504ef4e36d9ead3a541cdb40288fe8234fcea",
-      "sha256": "73f001a1c472f8af9f696045c4bca8a5a9e8b68f4ee8f6eced2294d17d2ec5c1",
-      "source_sha256": "6eac0bb84d39482c9a5cf42b0f8871e50ce833e83cde0f38b7105779ae8859e3"
+      "sha256": "1c2f46f26233431154cd0553535df9b6473bc238c9c11545c5240ae5d5c835da",
+      "source_sha256": "2cc5fbe5fed92f7a16d1a5814664f3f5f6ab8771c49c58ba3496b35c36511d25"
     },
     {
-      "byte_count": 1828049,
+      "byte_count": 1886493,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch62/ch62.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch62.yaml",
       "program_spec_sha256": "2bc8a2126e467d312448c9218e8b1a9b46b207faac689acd76bea775da1baef9",
-      "sha256": "323cf7d0135b6870b10f08c36923055302249f96b78c781dd2dab8691a63e896",
-      "source_sha256": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca"
+      "sha256": "f2b86a0511b145512f2790853b6b775ac6e8a9a0518af4352f9b9639622d3806",
+      "source_sha256": "f428dcb047ae6a8b8cfb0f6cdf55fb0a9690d2b1c474169b8bb8a3c5ca5b0033"
     },
     {
-      "byte_count": 1701432,
+      "byte_count": 1759876,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch63/ch63.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch63.yaml",
       "program_spec_sha256": "edb127ed361d233ef28606bbcb9890db8155a29b2eaf8cd59d34bd141dd75caa",
-      "sha256": "2ef9acf5a7ffb542b4fb13eb2bcf650e9aa682071468a2f50d4d58791ab5deb5",
-      "source_sha256": "0974afb8bcf8be71d53d46f7b0f3a76587d7fc01b7d9584d04706e95ed7fcd3a"
+      "sha256": "6cd3c997a2cd1e2f71eab5a11857e64cf3b05769618dc90a47ce0ed20bef4cd2",
+      "source_sha256": "98006c5dc0bc41832658d33873316d8dffc761844a8fc334baaf5237bfc8dcd3"
     },
     {
-      "byte_count": 1719643,
+      "byte_count": 1778087,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch64/ch64.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch64.yaml",
       "program_spec_sha256": "2673450c21611bd2a29093aa00f3258425be29021997584d3cf25f22a18b4ba6",
-      "sha256": "193c4762c903555437504280f59feb2b92dcfeb8896c942b9826deeeb032ef91",
-      "source_sha256": "0e8283c5c53025f3d29bd0b3e7da5a2a9a10ce6340e903b44a165014a527721d"
+      "sha256": "5445015a02cc85f7d1a80a7502cf259a57ad175c89ebf246621e41a73382613d",
+      "source_sha256": "34c52f1cb4e28d6895904c593c757f72935b9d0f6a5a0c5c68054c4a3a107296"
     },
     {
-      "byte_count": 1666831,
+      "byte_count": 1725275,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch65/ch65.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch65.yaml",
       "program_spec_sha256": "1c07ddb558fda1e4d65ee791c28042d979d6752abbcfa6dd7a935a9831fc1adc",
-      "sha256": "5ff88758df763ceb7b773b85ffa506dcf84b193929b080f3739f5b553ccd9a0b",
-      "source_sha256": "8d24fc58dc9faa577d493146f2db5c6a4ce406590069ba1bdf83507cad350005"
+      "sha256": "06de7aac184d2ffb2cece8d1bfd739fded45be7219cac6c8c603e609efd9a7d0",
+      "source_sha256": "7c2cd879d1736ee1798e87b43b8110e6140580cdd889ad7613def353b324c5d6"
     },
     {
-      "byte_count": 1660074,
+      "byte_count": 1718518,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch66/ch66.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch66.yaml",
       "program_spec_sha256": "d5bdaed9e200da2789ff9761f87da8a245299b780009e55c45ade87e7981130a",
-      "sha256": "98108cbe02d3f26268b351592e5bb27e4ccdc0c2db9edee12d1f7cc367a2fe8b",
-      "source_sha256": "5ff7477933f283459c43cf7073a14464bbe0773c4d7469cbd631f4844060d878"
+      "sha256": "c7bf597df9ea99a45d02f8630aed8bc25850e692a27bb394bf85c0813df6244c",
+      "source_sha256": "6633b8c8e59d7a7099eee1a505bf4e39a0bfe3abfa0eca1ec588b27c8ce3420a"
     },
     {
-      "byte_count": 1662343,
+      "byte_count": 1720787,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch67/ch67.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch67.yaml",
       "program_spec_sha256": "9399797aad416d46851f930b187d5d27ca0c382aab8aec7ee2f672d0ecc16173",
-      "sha256": "e7495b31c38a5fe510aabec028cfbb48277ae272d4401652c78cf1eae1e37889",
-      "source_sha256": "110ff551b9a92c1f830bdc661c68f1aed7cd9e5034801c10ad475826b58e22db"
+      "sha256": "d3238dd25bb3f976d839e208b7ef2e61c042f64d8760bb072c5e8a706c7630a8",
+      "source_sha256": "772c329f13e078089c9374384b588c8ebefd540f58851725519d757a7913efaa"
     },
     {
-      "byte_count": 1686417,
+      "byte_count": 1744861,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch68/ch68.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch68.yaml",
       "program_spec_sha256": "4c178e1c40ae85367c9db46a91fd14671aaea7f64281f34de1127f663378f7a1",
-      "sha256": "fb5cf7ecfcca43680d747fcf0083b0f96ddaf783ad47fca033e301dc02d1bf18",
-      "source_sha256": "a0140bb28e5c6c2aa2cd11c0208dac89e242c658c75954a20447145bc9328298"
+      "sha256": "ea9b4b5d5dfcd115195d11dc69f07ca55b1f1acf15495b89da5a2581f2ba7748",
+      "source_sha256": "cd12c4ddca84d547f2c4138d695636e449809ed26287f350ff98d9204428656f"
     },
     {
-      "byte_count": 1694026,
+      "byte_count": 1752470,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch69/ch69.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch69.yaml",
       "program_spec_sha256": "ac1e713003316cf95b6e98666bf49b49291b4bb5f284291d604a4569c1c8f6b3",
-      "sha256": "9cf4e92f1045d08c3a6a202ebdd3687943df2d79383861bdd9b0d24c7a4d1fee",
-      "source_sha256": "8526501ca78421294d97191583dc600b306a15149dd335815613804894cdac71"
+      "sha256": "d6b13f184956e8d90db35636f16ae5df0c986179c8f9f63897db8b4af1b4bdac",
+      "source_sha256": "1a1d4cf2de3de961415004c30abd84ed8dcdb0b71563ef2affa0055b5792071d"
     },
     {
-      "byte_count": 1744575,
+      "byte_count": 1803019,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch70/ch70.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch70.yaml",
       "program_spec_sha256": "354ba9e68d2a43a00ff497271084e1ce8031a2924f2ed950262f135e896c0322",
-      "sha256": "ccac014372b1ee4c02f7a8570c6612dd353efa3043e987ec444ebb8981e5f37a",
-      "source_sha256": "226297491693946e203fc9fe7f07791fde8357f455d4cfb674e899e26139b48b"
+      "sha256": "046a9710a488e69363f5d5a53dac51c2c30313ca44b707e852ce7794c64b0a23",
+      "source_sha256": "1ba15e3a39a9c78120c90a2a88fb9e93445b7d4f801ce83aa857394ff45344ba"
     },
     {
-      "byte_count": 1705065,
+      "byte_count": 1763509,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch71/ch71.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch71.yaml",
       "program_spec_sha256": "4eaa95bcabea2fab662634e88032a8a5347483b4730bd2add34607593f4d06e5",
-      "sha256": "40d485233c9d0f28b55c267c937383fabec2abb7f79e05916121c3adcdffaab9",
-      "source_sha256": "9cc3120f3d1c56d3c4118dbd8fe4c94cf68a479bbef9d7201221f01225e10205"
+      "sha256": "528df9419138a474870958e6b1afeef4c7f34c2efad76dd5af4313ecd9e856ff",
+      "source_sha256": "a1ca6449f76d60db2af509515427ce8a285f0fad97d4421d505d46671496ea96"
     },
     {
-      "byte_count": 1769037,
+      "byte_count": 1827481,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch72/ch72.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch72.yaml",
       "program_spec_sha256": "c93280915cd956421e872f4b804b0522eb3a443166d5dd4dcd6ae8ebdc61df0c",
-      "sha256": "d50152b48ae85f491845912e64a96b180aff8dab1d09bcfebb653657bc7ffff5",
-      "source_sha256": "000e157deae4a74f28b3a60971237d1b4c63b8f99322cdf16b09982a5b1ecd4e"
+      "sha256": "01951090ca451fb300e356c8dc5b4685f17e759b5e57031bbb7cbab4907a1f8c",
+      "source_sha256": "b53a84a43826c5a433d864390de9ab669375fe6becafe6721cf2ce0682e75036"
     },
     {
-      "byte_count": 1768534,
+      "byte_count": 1826978,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch73/ch73.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch73.yaml",
       "program_spec_sha256": "61a4f0712da532bab4ec3d52ccb82cc3923508f8c09c056705e1173a737f2057",
-      "sha256": "439b8d213a6d12b82766c8859e9f488d4c048a8630a7b93c1518763644a3b42e",
-      "source_sha256": "728679a3d2472158d7e3a8c3329b51c0b034ba609ef97ce8efee8d54b1b9f2b7"
+      "sha256": "2b2f1713d797649e376cdf911a806f997f61dbda8d67708793c5b4cae6d75f29",
+      "source_sha256": "cc90c6876f705fdc1a40db687789fe53827adfad47aca02832cd0698ec30e586"
     },
     {
-      "byte_count": 1697416,
+      "byte_count": 1755860,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch74/ch74.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch74.yaml",
       "program_spec_sha256": "df689a48bd05142f55b2aecf2b40fa2a0ab44c5b8414023e7797d8a0da7afae8",
-      "sha256": "a53a169ae102cb70d585317f60e39461707826b07e8d1d360ab385178c55be01",
-      "source_sha256": "2a1642e354440029f8a25aaaa14585e8e443cc5af9566b9c93cccbba4400f683"
+      "sha256": "0d75eee4fd3b0ad53ecfedddada10504d0f67a6d8128cd6f0272d7fcae9334ff",
+      "source_sha256": "772674d4ccbd2f8fc59bbe8726b2824566f8aea3533bd697df077b80e23a9c1e"
     },
     {
-      "byte_count": 1668805,
+      "byte_count": 1727249,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch75/ch75.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch75.yaml",
       "program_spec_sha256": "5c45e2e87f8c297ab1f94a48b97a3f6d5a29a9039e9b52a9d0e298842de4076f",
-      "sha256": "56ebd3c24789c44ffa906bc69cfe5d9b0b3bab3a6c8e5545b71c83f65ba3f6f0",
-      "source_sha256": "5424bf696e83d33035ba5d601ca5b5b076d47e1aa6b761e905de88e18d0a3581"
+      "sha256": "36b863d25f78becca26789995012a4cb2ed8bc8968b3b94e4e3d5fd35bf55c51",
+      "source_sha256": "308f80aaf3ba0109b1d2f43c525ffb970d88a019290326fcdd3c6a6ccec99bbb"
     },
     {
-      "byte_count": 1688289,
+      "byte_count": 1746733,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch76/ch76.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch76.yaml",
       "program_spec_sha256": "448f8db72785bc9076ed0b6111e3037a3f3dfa572b10e79fea310dd42811be61",
-      "sha256": "79ef9a2e245c20b629a24d69505cdff887ceb690e2542b611843ba6b88525132",
-      "source_sha256": "d9a094a31d5bc94d6456d6b6e58e569b8a765c7304de651e5a6bbecfec1aed21"
+      "sha256": "b95c0c8b6df705fdcf60f78c97c80c387caac9a2333d87776c1d520b319b209a",
+      "source_sha256": "79dd0dd234a6ea24b5707a26a57420fee07f5a691a8484b5a30c3c158d029a0c"
     },
     {
-      "byte_count": 1661015,
+      "byte_count": 1719459,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch78/ch78.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch78.yaml",
       "program_spec_sha256": "7dea234f3143940d3ecb5d28eb19c1d5975e618aaddd5b6fc8b0c050ff674c61",
-      "sha256": "2bfb558b5f4276b8776d3e4cf1cc007b424b38a6f2ee7b09aba99c1e8b5b5b6d",
-      "source_sha256": "15dddbbc38f92a35590a45f432ace2d1c8c5726ca6faa576bac37630d8a45226"
+      "sha256": "371d4501c6486e4e229a2b8902a175b266b8173d9431e082cde61c880672abcc",
+      "source_sha256": "f56ea2f74beeff74414108bbdad947b18724dad0a98b53bbe90e63b52278d11a"
     },
     {
-      "byte_count": 1661938,
+      "byte_count": 1720382,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch79/ch79.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch79.yaml",
       "program_spec_sha256": "4668ed3c819218f3063fcae3884f26637335f02feb314e6d0bbc4726fb5b02f8",
-      "sha256": "55cd3a041a51d1b8119e8e282034187f214a8d89b681df209d4aa43828002f81",
-      "source_sha256": "463b936851a2abd3b9bcc2d70e8ab46f7a8b09e6474d429f53ca20e10936e5dc"
+      "sha256": "bc5772c0224534c73c9e06ce3cb8f9701273eba83ff47d87d5dabf8f4434c3c9",
+      "source_sha256": "40c91b0d8f2179f5b069891dfd5bd71a38bc4b5dfcb70c3263ac4995348d39bd"
     },
     {
-      "byte_count": 1660972,
+      "byte_count": 1719416,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch80/ch80.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch80.yaml",
       "program_spec_sha256": "b33478f919efcff23efb012ad9d8b8de585500a34b001c1a2c956d311f1b0b68",
-      "sha256": "82bc9ad77ab855e964fdfcd994cc9c57dd07f4e42d06592187524baae608cb3d",
-      "source_sha256": "34996b6ceb9c41c6ffe40b676544f57286f6ff25ff6be8c6a25f0d580c0783ef"
+      "sha256": "4fc2beca9026c74c41f690a0576dcb8a95c134714c8d5a0c90fd4257bb005621",
+      "source_sha256": "c84dd06fc4d3d21027c7eaf669714519f3d42965653b6331d4a10c382f7ff24b"
     },
     {
-      "byte_count": 1688909,
+      "byte_count": 1747353,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch81/ch81.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch81.yaml",
       "program_spec_sha256": "1c2f78a9e0b4e5879bc0feb1c1fa95ed17dd5bf6160726700ef4e1b0c42ca029",
-      "sha256": "e99e5eb5fa5a27fbb23d1625ad476aad2ac878a5187b3c4d52d5bc178be3869f",
-      "source_sha256": "199acfe465f5ad50519e63fa221977d0dec866929d2a6dc8d2fdbbd20ce9bde3"
+      "sha256": "d6ff57db259423ff47ea630201ef7ea9102080e044cf13b40bb7813d9c8ce7ad",
+      "source_sha256": "21d77a8e3a241f9fc10af46b8720dc33a6a7373dc623db1805c2f168a6bd18c9"
     },
     {
-      "byte_count": 1707665,
+      "byte_count": 1766109,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch82/ch82.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch82.yaml",
       "program_spec_sha256": "bc7fac646c1667e6ed1cb0f474ac78092408a7baa053e48fd11cae1e56522ab7",
-      "sha256": "7dae44b0347d343faa07fb695f793bd634f692593e748e0dd997cc77e63619ca",
-      "source_sha256": "e6d4dc8a83480fd721a4943a6dbb30a5708ec83e3767be54ce7a4d84507d408f"
+      "sha256": "127570069824406e1a2d27e225575b9eaca1984e7e6b5ea0c47e874d210991fa",
+      "source_sha256": "4d63aa8c71d907a7bba784f533e516fa8475aa1452c860ac5533519ffc774eae"
     },
     {
-      "byte_count": 1683069,
+      "byte_count": 1741513,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch83/ch83.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch83.yaml",
       "program_spec_sha256": "66301c6c6fb9fb6b78796871fc661676ee4a0b70115de740c447b0613819d32e",
-      "sha256": "17c98b15f41ca975484e793c4c22d526b5dfe713e434e21b6622fdcaa53cf453",
-      "source_sha256": "3b28b0d2d50cd8010566800d85aea6511f3bb194ef98e1e58fbca24323c23199"
+      "sha256": "70c824db09931f93160ebe8603ff5a31652e72f1d9b25f57056c0de0092f04cd",
+      "source_sha256": "d9e7ec187fc2581c44c016428b191f2b6fad9176c0e8fe32eacb47adbd6b085a"
     },
     {
-      "byte_count": 2030639,
+      "byte_count": 2089083,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch84/ch84.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch84.yaml",
       "program_spec_sha256": "9b4b79208a1c02ed850243844f122d2656e2d0e5a4ffdf98a927e8c11ae1593b",
-      "sha256": "d6e6bbaa8759812d80b2a1a9fe4b042f1769efbf3dc52371e3037141fe2f9831",
-      "source_sha256": "6b6b500ec468654020d3ffe0513818f27e0a6936309885a83a5a942e06b0c141"
+      "sha256": "12abd001a0a4195cca4172ef2e2992ce684a039c47a02b07c0fefdaa8ecc701f",
+      "source_sha256": "f4407275a7c27bbc724f5e0d74de8a0a9a315a8cc39505a3634ce4a5a539c73d"
     },
     {
-      "byte_count": 1939670,
+      "byte_count": 1998114,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch85/ch85.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch85.yaml",
       "program_spec_sha256": "ac11f9dfb1ad212f5787f0d4ca48a4fbbe7d108a5dd20d972a374e8a59b4972a",
-      "sha256": "6d9d72b23bc8a5e21c5dc49e9c06f76ddf513f92675e535371ecdfdebdb693da",
-      "source_sha256": "2c2ab6ff0f8c280424a1a7ea00f3c4c855ffc857e4214dfd2512401f0c799e16"
+      "sha256": "0dba687900fff7a47a5d9db414bee2585b5a505089aa1745f4755a5c0cf08277",
+      "source_sha256": "02f0623d0f9c941ffc297c3919d17ce254baa775edac89c42f576c475fce5268"
     },
     {
-      "byte_count": 1670882,
+      "byte_count": 1729326,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch86/ch86.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch86.yaml",
       "program_spec_sha256": "1dbae89043bab6883ef63f4d5025b7e86a4f2e8d082cf428414b6fb80f358e1e",
-      "sha256": "8403a9280740e3c51299e731df753dc8dcb7d1e80069c501c323d5fc0d924d15",
-      "source_sha256": "2ffcb67e312fd11f634e42e311e52f8534d8a4137c404c2fa1ece9506b3a6dcf"
+      "sha256": "450931114ed5b6b3ce9ad96005fd367fcce5ddbd672794b8c8bac7e854f0d2de",
+      "source_sha256": "41716d07dd98c8204ce0e0d0df13d0e1f735ace7ee5334bc15734a4520c82ee8"
     },
     {
-      "byte_count": 1752815,
+      "byte_count": 1811259,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch87/ch87.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch87.yaml",
       "program_spec_sha256": "c6704d86c7c5fb48df50055aa5118f6aa63c151b4c174efda2f3d3a33844fede",
-      "sha256": "be2268fb9d2e844f474ea8c51e7374eb1d25f321fca7b79c79f41b15d812a805",
-      "source_sha256": "6f82988b649ec2b103397c67e286a69f46c00fcddee564400c1c605adf851f1e"
+      "sha256": "93cf24f36c061c33f383f48580f38d0be35a377bf1a35cd5c4124dd5a0820f11",
+      "source_sha256": "0f6c7419e50b9578835fd887cc0fe14ee26b0e12942b1eb5583c95e4a501290f"
     },
     {
-      "byte_count": 1669018,
+      "byte_count": 1727462,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch88/ch88.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch88.yaml",
       "program_spec_sha256": "41267d00cd5ec35e483420d2dac33a2e09ab494239d702b39a5f4a53485db4d7",
-      "sha256": "f3e3c6a5605e350cd540513556c46177306ac792078009f3d9b4647ce59846d5",
-      "source_sha256": "c7431254a1599722d6eb7010cbf9cf50d76d5348bab185d77717338d299b91fc"
+      "sha256": "77f407b0910414b45996a0f2055461987e4be27a36c8c6d651b0eec3fcb797c4",
+      "source_sha256": "6198ec734ec12ead10abefe3da890a11b10a6a72fd9941e19a9af24d3ae5f775"
     },
     {
-      "byte_count": 1670870,
+      "byte_count": 1729314,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch89/ch89.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch89.yaml",
       "program_spec_sha256": "be805057add0cb71120841bfa8b05ed785ebc77d2e417515bfa29cae87e1ad5f",
-      "sha256": "6502fda60ce2f3c6296778ad22ccc06e9e6a66ccab996e21806092c8c417084b",
-      "source_sha256": "fadae4210125dfa381d8d677cef5d17600d05d16a74ce60727a7102c2bfedcdc"
+      "sha256": "fd73296ac75225bb78ce90cb0e747022cc8f7856f929275238274da04172f0b6",
+      "source_sha256": "f1b90f68d298ad917b866b9c22f8826ecc594b73162d22636def7c64b43cd499"
     },
     {
-      "byte_count": 1791864,
+      "byte_count": 1850308,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch90/ch90.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch90.yaml",
       "program_spec_sha256": "92a0234496a48e096c49fee418181cfa2690bcff5311160e44da9cc774859fbd",
-      "sha256": "8d8d6ac0f447b887743fcba707a282d4dc453bea8a37ce5ede0dec5cd6117148",
-      "source_sha256": "a609b16bc9c95dc5b319a4fdf45ce003792835f9f791fea5016353f2dd7fec65"
+      "sha256": "08ce34f02ef3ff450f758c98af407667d30efcc4da24fef9c4d421404a0d58fc",
+      "source_sha256": "cb182b8e65662d23caa03b8e3e58c1fe6f659eb87882f1a0d940dc18a07498f1"
     },
     {
-      "byte_count": 1707082,
+      "byte_count": 1765526,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch91/ch91.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch91.yaml",
       "program_spec_sha256": "f969468fe0597bee2b2f68041382698c3d98b955b175e320981078881e4eef14",
-      "sha256": "65bf68157a85a5a5ca0922d9527b21362203332af6a767684db17caffebc2242",
-      "source_sha256": "6a229594fd1b02ace0f603971feba526fa31ddf26f816d507a1854dee010d3bf"
+      "sha256": "eb0c36d7de14f9fb30753e1c44d38d88ecaa017e62fba21eefb29e6dd7a7ea6c",
+      "source_sha256": "365ce683586745acc0a0a045896e5d9987e14ae0d141fa084eefc22e407cc9a7"
     },
     {
-      "byte_count": 1674835,
+      "byte_count": 1733279,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch92/ch92.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch92.yaml",
       "program_spec_sha256": "9d5dbc61c1575ba41f6d9668b79cd906c92563a1cc6418cd28b57bc31cd25b36",
-      "sha256": "8591612a2c15c019e45c4539c4d95934a8c9bd462ae725154c6d10e66500f25c",
-      "source_sha256": "f9914d7a95e1a05605d7b71d0c605883e7ad4785488cee9ba6b99bb8ab44a51e"
+      "sha256": "41793ecade903344c62db779af95e50a19edf14157d4c9884811e2ea9ea5b9c4",
+      "source_sha256": "2497cf0fd44a476fc5b0510fda3601db2d83757e7228e66a5da7d1f44e0d8338"
     },
     {
-      "byte_count": 1670869,
+      "byte_count": 1729313,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch93/ch93.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch93.yaml",
       "program_spec_sha256": "e41dc61c216a8e2095e6f30c35cd9e3ee4d880ff4914007337ee6cfdd21dd301",
-      "sha256": "113234cf7df7c0b030aee9f684ab8111259b6b9f1dfbd735c63f51b8ffa20023",
-      "source_sha256": "682fdec4e1c6b51c62a275b70778ec65c7271cfbf292fa7497b7f868e64e6a4f"
+      "sha256": "2ba62a59f31fe4b841505586f451a540ee30b87032141346cad561650fb26c8c",
+      "source_sha256": "94cd946e95c2f5dc006314f8e760d0aae0d7f14bcfd51133116ae5de3f60e600"
     },
     {
-      "byte_count": 1706470,
+      "byte_count": 1764914,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch94/ch94.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch94.yaml",
       "program_spec_sha256": "dc21217786084fd5de89eecdcc909920a4083b00ef2b0c44b6b7b3355deb4f96",
-      "sha256": "4485448f60f26992ff8c9f005eebff2c2243b82b0105cbd444076f7bd4699323",
-      "source_sha256": "38beb674441da532e00bb444f84e321cd8243d5e644d7167cd3cfee3b42e9eb3"
+      "sha256": "ba3ef3bd731102a277fbeb0e25c163444876f1c18a784cca215dad9bca83033d",
+      "source_sha256": "fea9f4bca8a6f56aaebed265cd01c9f4060e85d306aacf5e2909a42b8affc60c"
     },
     {
-      "byte_count": 1694299,
+      "byte_count": 1752743,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch95/ch95.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch95.yaml",
       "program_spec_sha256": "eb6789c434595bb8cf48bc4ece6042aa7ca08d670e01a3231bddc20b4a64ad63",
-      "sha256": "5b557e1eb6b3bae18293f987c09942abab8f3712c6f0c1219d805f547f891ac3",
-      "source_sha256": "ff073d0dfd1168d6389fd336cb0ec0508fdfe491b54257590ad3ed38de79bd08"
+      "sha256": "75af28be4548099ef64401bec5fe37c7c99f4a236fa90a6ea3b2de7296b1c88b",
+      "source_sha256": "95449992c10bfe3d6587f61ea5f8b7c64f5f0916085b2a3aa6a29528aeaccfec"
     },
     {
-      "byte_count": 1708573,
+      "byte_count": 1767017,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch96/ch96.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch96.yaml",
       "program_spec_sha256": "2965f6a0b8b4f7e116f1e2769434c316b7fc0955221de1c5ad9474d1a43716cc",
-      "sha256": "a98554ecd2929349dc2ecef4774faea297c80899b420c1c06bc54cbe83fcab29",
-      "source_sha256": "89cce0ef80dc8a07dbe2152d6ca3d29e6258c0649f3212ffbaa19d746deab158"
+      "sha256": "f0611dc50ab3c7190ad36cb8c3b460e8d567d2fb31b8e560d2e235ffccd9379f",
+      "source_sha256": "7ea7a97b1a84a0c11e70eb11a672d3b792f4a8da217adecaa4b2cc2ecd3f1874"
     },
     {
-      "byte_count": 1664764,
+      "byte_count": 1723208,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch97/ch97.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch97.yaml",
       "program_spec_sha256": "7cdf31f7d29f3d94c0f69cb2d53f1a79193bcc05a54eb81cc490550cee4aa584",
-      "sha256": "ae619e9869630eb0c23423f9de7a25b20135878d9f68e8472481e6d9a92a3056",
-      "source_sha256": "f447ebde3015985951e631d00944337ad9ff62162a04e3bccb9ffcb6ee488e03"
+      "sha256": "3d2af4af5ab58aabed73a7d87d7e71db1f5dda59726c41d703679075deabd7a8",
+      "source_sha256": "72e4187e307d599690cec031d1067d766127126b4b78823c430b7f25096fcb8f"
     },
     {
-      "byte_count": 1714993,
+      "byte_count": 1773437,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch98/ch98.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch98.yaml",
       "program_spec_sha256": "1d17b26c0e6d18a6786fa419ca3b4a30342ce572a6e0e37a18c189c8c346f517",
-      "sha256": "41ec47b44322f6f05a7a604255bf8006b7a4b3117c8db4bf74a856a91de6dd8c",
-      "source_sha256": "c372dfffc35c5e171f20127a0075eac145fd938d5e59b65bc0a20cdf23c83c4e"
+      "sha256": "597c6a9d305e05234baeee8e0b2efd045a635f347c72ebc6f458ac0d3185e7a0",
+      "source_sha256": "f1ae33070b4db9506d51daff37a78752cfa08091f5d3504fc6e0ceeb42116f95"
     },
     {
-      "byte_count": 1938620,
+      "byte_count": 1997068,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch99a/ch99a.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch99a.yaml",
       "program_spec_sha256": "8cb2c527f5c85e28ea784d6d126e2025f4a742ef3bb15b44d302a23fffa8b427",
-      "sha256": "1bb2178dd554afe01e73b2005c168e9dd6589ebf8731ebd4ebb58a02267f4761",
-      "source_sha256": "39a1f1ffc8fe0b7bf5f4f108179d821c6c2396fd741b9353219db07a35e64431"
+      "sha256": "13badfd90807c03e4151b03cfa410b34b81feada3a138274b440540826519869",
+      "source_sha256": "54b4a431d2d34577f1750a43fc22c48bdef593a6088a706f79a1d6e44ae172e0"
     },
     {
-      "byte_count": 1938207,
+      "byte_count": 1996655,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch99b/ch99b.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch99b.yaml",
       "program_spec_sha256": "0efd2e25eb1dcbe1c0330c2e45a499ba4035a838dff6b883b80b8a2e1eccf2ce",
-      "sha256": "1708cf951395d74c9dad573ba0a8659a421617d2cbaf4da108b7679a43054989",
-      "source_sha256": "e6086ebf5bef2c92acb554a17d1a35c055108ab87062799e8b001d36b898238b"
+      "sha256": "88541433ebe9d0b1042740ecac1fbf2694c391e6598e6802a97c61cb6d584862",
+      "source_sha256": "226b6ce2a2391901613055f28e4698dc0103a8c8b531b6db3fa561997a7cdfad"
     },
     {
-      "byte_count": 1800932,
+      "byte_count": 1859380,
       "compile_contract": "compile --program <absolute module path> --output <artifact>",
       "module": "us/policies/cbp/us-tariff-schedule/generated/ch99c/ch99c.yaml",
       "program_spec": "programs/us/us-tariff-schedule/ch99c.yaml",
       "program_spec_sha256": "a921d7520a7191b6fc18d25896a79bb1915caf28a423067495da6ef2d75848a6",
-      "sha256": "072377251f5d01fa6ddc3d559f9c88f49d989a34f4b6c4150d2c3bc9d7249f14",
-      "source_sha256": "b1982def129a9a25fb2ad9bb5211f2c9a03c1b4db6cc20cde7f900875a0dc10d"
+      "sha256": "868f6ddcab8173d970e8e4954741f0d33dcf996511db6febb39f97fa3a408787",
+      "source_sha256": "f63fd4a3f74b3246b3594a0829e8b7998c89c39c51c6fead5e194f57fb033aec"
     }
   ],
   "engine": {
@@ -1064,9 +1064,9 @@
   },
   "program": "us/tariff-witness",
   "rulespec": {
-    "ref": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df",
+    "ref": "4f591c4267063094cc6da9d590872ea982940b81",
     "repo": "TheAxiomFoundation/rulespec-us",
-    "sha": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
+    "sha": "4f591c4267063094cc6da9d590872ea982940b81"
   },
   "schema": "axiom_oracles.executable_reproduction.v1",
   "selection": {

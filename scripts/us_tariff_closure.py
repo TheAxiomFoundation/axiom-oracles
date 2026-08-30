@@ -12,20 +12,26 @@ program result for the stated reason; ``pending`` can affect it and is not
 encoded.  A declared corpus root is the complete, versioned source population
 whose denominator is promised here, not merely citations selected by modules.
 
-The boundary-input frontier contains every entry fact consumed by the program.
-An uncaptured input is legitimate only when its external semantic scope is
-named. ``--check`` re-censuses both repositories and requires byte-identical
-output. ``closed`` is true only when there are no partial/pending families, all
-root populations reconcile, and the complete input frontier is classified.
+The boundary-input frontier is complete only when every entry fact reachable
+from the promised outputs has a named external semantic scope. Missing scopes
+are explicit and keep the frontier incomplete. ``--check`` re-censuses both
+repositories, reproduces the committed input inventory with the pinned engine,
+and requires byte-identical output. ``closed`` is true only when there are no
+partial/pending families, all root populations reconcile, and the complete
+input frontier is classified.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
+import os
 import subprocess
 import sys
+import tarfile
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -65,6 +71,82 @@ MODULE_PREFIXES = (
     "us/policies/usitc/us-tariff-duty/",
     "us/policies/cbp/us-tariff-",
     "us/policies/usitc/us-tariff-incidence/",
+)
+INPUT_INVENTORY_ENGINE = (
+    Path.home()
+    / "TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
+)
+INPUT_INVENTORY_ENGINE_SHA256 = (
+    "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
+)
+WITNESS_MODULE = "us/policies/cbp/us-tariff-duty/composition.yaml"
+SCHEDULE_MODULE_PREFIX = "us/policies/cbp/us-tariff-schedule/generated/"
+# Audited from the pinned compiler's all-version dependency closure of the
+# witness's us_tariff_duty and all 100 chapters' schedule_statutory_stack.
+# Unreachable imported support rules and derived references are not inputs.
+# build() independently reproduces this inventory from immutable Git objects.
+AUDITED_REACHABLE_INPUTS = (
+    "cbp_agrees_chapter_98_entry_is_appropriate",
+    "country_of_origin",
+    "customs_value",
+    "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
+    "entry_is_9802_excepted_entry",
+    "entry_is_brazil_301_listed",
+    "entry_is_china_301_2024_action",
+    "entry_is_china_301_list123",
+    "entry_is_china_301_list4a",
+    "entry_is_china_301_solar",
+    "entry_is_entered_free_of_duty_under_dr_cafta",
+    "entry_is_entered_free_of_duty_under_usmca",
+    "entry_is_forced_labor_301_listed",
+    "entry_is_general_note_29_d_v_textile_or_apparel_good",
+    "entry_is_humanitarian_donation_article",
+    "entry_is_informational_material_article",
+    "entry_is_line_a",
+    "entry_is_line_b",
+    "entry_is_line_d",
+    "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
+    "entry_is_note33_g_automobile_part",
+    "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
+    "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
+    "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
+    "entry_is_note40_patented_pharmaceutical_article",
+    "entry_is_personal_use_accompanied_baggage",
+    "entry_is_properly_claimed_chapter_98_entry",
+    "entry_is_s232_copper_additional_member",
+    "entry_is_s232_copper_primary_member",
+    "entry_is_s232_note16_c_ii_derivative_aluminum_member",
+    "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
+    "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
+    "entry_is_s232_note16_metal_chapter",
+    "entry_is_s232_note33_auto_part_candidate",
+    "entry_is_s232_note33_vehicle_candidate",
+    "entry_is_s232_note37_cabinet_vanity_candidate",
+    "entry_is_s232_note37_softwood_member",
+    "entry_is_s232_note37_upholstered_wood_furniture_member",
+    "entry_is_s232_note38_bus_member",
+    "entry_is_s232_note38_mhd_part_candidate",
+    "entry_is_s232_note38_mhd_vehicle_member",
+    "entry_is_s232_note39_semiconductor_candidate",
+    "entry_is_s232_note40_pharmaceutical_candidate",
+    "entry_is_section_122_exempt",
+    "entry_is_section_201_cspv",
+    "entry_is_section_232_aluminum",
+    "entry_is_section_232_covered",
+    "entry_is_section_232_steel",
+    "entry_loaded_and_in_transit_before_july_24_2026",
+    "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
+    "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
+    "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
+    "entry_qualifies_for_note39_heading_9903_79_01",
+    "hts_line",
+    "hts_number",
+    "is_postal_shipment",
+    "resolved_non_ad_valorem_column2_rate",
+    "shipment_value",
+)
+AUDITED_REACHABLE_INPUTS_SHA256 = (
+    "10c812c01fd7c46b309d9cde66b30b6020acef05a5c9c8f0b97fb3e32ae773b1"
 )
 
 
@@ -348,6 +430,26 @@ INPUTS = [
         "entry-preparation determination of existing aluminum or steel section-232 coverage",
     ),
     (
+        "entry_is_s232_note16_c_ii_derivative_aluminum_member",
+        "HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
+        "HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+    ),
+    (
+        "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
+        "HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+    ),
+    (
+        "entry_is_s232_note16_metal_chapter",
+        "entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight exception",
+    ),
+    (
+        "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
+        "real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof",
+    ),
+    (
         "entry_is_s232_copper_primary_member",
         "HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation",
     ),
@@ -477,6 +579,182 @@ def _blob_facts(
     }
 
 
+def _audited_input_inventory() -> dict[str, Any]:
+    digest = hashlib.sha256(
+        ("\n".join(AUDITED_REACHABLE_INPUTS) + "\n").encode()
+    ).hexdigest()
+    if len(AUDITED_REACHABLE_INPUTS) != 58 or digest != AUDITED_REACHABLE_INPUTS_SHA256:
+        raise ValueError("audited reachable-input inventory pin changed")
+    return {
+        "rulespec_ref": RULESPEC_REF,
+        "engine_sha256": INPUT_INVENTORY_ENGINE_SHA256,
+        "method": "committed audit of all-version compiled dependencies; reproduced by --generate and --check",
+        "module_scope": [WITNESS_MODULE, SCHEDULE_MODULE_PREFIX + "ch*/ch*.yaml"],
+        "promised_outputs": {
+            "witness": ["us_tariff_duty"],
+            "schedule": ["schedule_statutory_stack"],
+        },
+        "schedule_composition_count": 100,
+        "input_count": 58,
+        "inputs_sha256": digest,
+        "inputs": list(AUDITED_REACHABLE_INPUTS),
+    }
+
+
+def _reachable_inputs_from_program(
+    program: Mapping[str, Any], outputs: Sequence[str]
+) -> set[str]:
+    """Traverse compiled dependencies, not fixture keys or bare source tokens."""
+    derived = program.get("derived")
+    if not isinstance(derived, list) or any(
+        not isinstance(rule, Mapping) or not isinstance(rule.get("name"), str)
+        for rule in derived
+    ):
+        raise ValueError("compiled input inventory has malformed derived rules")
+    by_name = {rule["name"]: rule for rule in derived}
+    if len(by_name) != len(derived) or not set(outputs) <= by_name.keys():
+        raise ValueError("compiled input inventory has missing or duplicate outputs")
+    inputs: set[str] = set()
+    visited: set[str] = set()
+
+    def visit_expression(node: Any) -> None:
+        if isinstance(node, list):
+            for item in node:
+                visit_expression(item)
+        elif isinstance(node, Mapping):
+            kind = node.get("kind")
+            if kind in {"input", "input_or_else"}:
+                name = node.get("name")
+                if not isinstance(name, str) or not name:
+                    raise ValueError("compiled input inventory has an unnamed input")
+                inputs.add(name)
+            elif kind == "derived":
+                name = node.get("name")
+                if not isinstance(name, str) or name not in by_name:
+                    raise ValueError("compiled input inventory has an unresolved rule")
+                visit_rule(name)
+            for value in node.values():
+                visit_expression(value)
+
+    def visit_rule(name: str) -> None:
+        if name in visited:
+            return
+        visited.add(name)
+        rule = by_name[name]
+        visit_expression(rule.get("expr"))
+        versions = rule.get("versions", [])
+        if not isinstance(versions, list) or any(
+            not isinstance(version, Mapping) for version in versions
+        ):
+            raise ValueError("compiled input inventory has malformed versions")
+        for version in versions:
+            visit_expression(version.get("expr"))
+
+    for output in outputs:
+        visit_rule(output)
+    return inputs
+
+
+def reproduce_input_inventory(
+    *,
+    rulespec_root: Path = RULESPEC,
+    rulespec_ref: str = RULESPEC_REF,
+    engine_binary: Path = INPUT_INVENTORY_ENGINE,
+) -> tuple[str, ...]:
+    """Recheck the audited input union using an immutable Git export and Axiom."""
+    audit = _audited_input_inventory()
+    commit = (
+        _git(rulespec_root, "rev-parse", "--verify", f"{rulespec_ref}^{{commit}}")
+        .decode()
+        .strip()
+    )
+    if commit != audit["rulespec_ref"]:
+        raise ValueError("input inventory RuleSpec source pin drift")
+    engine_binary = engine_binary.resolve()
+    engine_bytes = engine_binary.read_bytes()
+    engine_digest = hashlib.sha256(engine_bytes).hexdigest()
+    if engine_digest != audit["engine_sha256"]:
+        raise ValueError("input inventory engine source pin drift")
+    paths = (
+        _git(rulespec_root, "ls-tree", "-r", "--name-only", commit)
+        .decode()
+        .splitlines()
+    )
+    chapters = sorted(
+        path
+        for path in paths
+        if path.startswith(SCHEDULE_MODULE_PREFIX)
+        and path.endswith(".yaml")
+        and not path.endswith(".test.yaml")
+    )
+    if len(chapters) != audit["schedule_composition_count"]:
+        raise ValueError("input inventory schedule composition count changed")
+    programs = [
+        (WITNESS_MODULE, "programs/us/us-tariff-duty/fy-2026.yaml", "witness")
+    ] + [
+        (path, f"programs/us/us-tariff-schedule/{Path(path).stem}.yaml", "schedule")
+        for path in chapters
+    ]
+    inputs: set[str] = set()
+    with tempfile.TemporaryDirectory(prefix="tariff-closure-input-inventory-") as raw:
+        snapshot = Path(raw) / "rulespec-us"
+        snapshot.mkdir()
+        # Execute the exact bytes just hashed, not a live path that could be
+        # replaced between compilations while retaining the same final hash.
+        snapshot_engine = Path(raw) / "axiom-rules-engine"
+        snapshot_engine.write_bytes(engine_bytes)
+        snapshot_engine.chmod(0o700)
+        archive_bytes = _git(rulespec_root, "archive", "--format=tar", commit)
+        try:
+            with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode="r:") as archive:
+                archive.extractall(snapshot, filter="data")
+        except tarfile.TarError as exc:
+            raise ValueError(f"input inventory Git export failed: {exc}") from exc
+        env = dict(os.environ)
+        env.pop("AXIOM_RULESPEC_ROOT", None)
+        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(snapshot.parent)
+        for module_path, spec_path, kind in programs:
+            spec = yaml.safe_load((snapshot / spec_path).read_text())
+            outputs = spec.get("outputs") if isinstance(spec, Mapping) else None
+            if outputs != audit["promised_outputs"][kind]:
+                raise ValueError(
+                    f"input inventory promised outputs changed: {spec_path}"
+                )
+            result = subprocess.run(
+                [
+                    str(snapshot_engine),
+                    "compile",
+                    "--program",
+                    str(snapshot / module_path),
+                    "--output",
+                    "/dev/stdout",
+                ],
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+            if result.returncode:
+                raise ValueError(
+                    f"input inventory compile failed for {module_path}: {result.stderr.strip()}"
+                )
+            # The pinned CLI appends a human-readable compile summary after JSON.
+            payload, _ = json.JSONDecoder().raw_decode(result.stdout)
+            program = payload.get("program") if isinstance(payload, Mapping) else None
+            if not isinstance(program, Mapping):
+                raise ValueError("compiled input inventory has no program")
+            inputs.update(_reachable_inputs_from_program(program, outputs))
+    if hashlib.sha256(engine_binary.read_bytes()).hexdigest() != engine_digest:
+        raise ValueError("input inventory engine changed during compilation")
+    observed = tuple(sorted(inputs))
+    if observed != AUDITED_REACHABLE_INPUTS:
+        raise ValueError(
+            "compiled reachable-input inventory changed: "
+            f"missing={sorted(set(AUDITED_REACHABLE_INPUTS) - inputs)}, "
+            f"unexpected={sorted(inputs - set(AUDITED_REACHABLE_INPUTS))}"
+        )
+    return observed
+
+
 def _decision_state(
     source_counts: Mapping[str, int],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
@@ -505,16 +783,29 @@ def _decision_state(
         {"input": name, "grounding": "uncaptured", "uncaptured_scope": scope}
         for name, scope in INPUTS
     ]
-    decisions = {"ledger": ledger, "input_grounding": frontier}
+    audited_inventory = _audited_input_inventory()
+    scoped_inputs = {
+        name for name, scope in INPUTS if isinstance(scope, str) and scope.strip()
+    }
+    missing_inputs = sorted(set(audited_inventory["inputs"]) - scoped_inputs)
+    decisions = {
+        "ledger": ledger,
+        "input_grounding": frontier,
+        "audited_input_inventory": audited_inventory,
+    }
     computed = {
         "counts_by_status_per_root": counts,
         "burndown": pending,
         "boundary_frontier": {
-            "complete": True,
+            "complete": not missing_inputs,
             "input_count": len(frontier),
             "inputs": frontier,
+            "required_input_count": len(audited_inventory["inputs"]),
+            "missing_input_count": len(missing_inputs),
+            "missing_inputs": missing_inputs,
         },
         "closed": not pending
+        and not missing_inputs
         and all(sum(values.values()) > 0 for values in counts.values()),
     }
     return decisions, computed
@@ -526,6 +817,7 @@ def build(
     corpus_ref: str = CORPUS_REF,
     rulespec_root: Path = RULESPEC,
     rulespec_ref: str = RULESPEC_REF,
+    engine_binary: Path = INPUT_INVENTORY_ENGINE,
 ) -> dict[str, Any]:
     schedule, sf = _blob_facts(corpus_root, corpus_ref, SCHEDULE)
     notes, nf = _blob_facts(corpus_root, corpus_ref, NOTES)
@@ -564,6 +856,11 @@ def build(
         if p.endswith(".yaml")
         and not p.endswith(".test.yaml")
         and p.startswith(MODULE_PREFIXES)
+    )
+    reproduce_input_inventory(
+        rulespec_root=rulespec_root,
+        rulespec_ref=rs_commit,
+        engine_binary=engine_binary,
     )
     source_counts = {
         "rated-minus-9802": len(rated) - len(r9802),
@@ -654,14 +951,28 @@ def validate(doc: dict[str, Any]) -> list[str]:
         for row in ledger
     ):
         errors.append("invalid status or missing reason")
-    should_close = not any(
+    expected_frontier = expected_computed["boundary_frontier"]
+    should_close = expected_frontier["complete"] and not any(
         r.get("status") in ("pending", "partially-encoded") for r in ledger
     )
     if computed.get("closed") != should_close:
         errors.append("computed.closed is not derived")
     frontier = computed.get("boundary_frontier", {})
-    if not frontier.get("complete") or frontier.get("input_count") != len(INPUTS):
-        errors.append("boundary frontier incomplete")
+    if not isinstance(frontier, Mapping):
+        errors.append("boundary frontier is malformed")
+        frontier = {}
+    if (
+        type(frontier.get("complete")) is not bool
+        or frontier.get("complete") != expected_frontier["complete"]
+    ):
+        errors.append("boundary frontier completeness is not derived")
+    if frontier.get("input_count") != len(INPUTS):
+        errors.append("boundary frontier input count changed")
+    if any(
+        frontier.get(key) != expected_frontier[key]
+        for key in ("required_input_count", "missing_input_count", "missing_inputs")
+    ):
+        errors.append("boundary frontier missing inputs are not derived")
     expected_inputs = [
         {"input": name, "grounding": "uncaptured", "uncaptured_scope": scope}
         for name, scope in INPUTS
@@ -724,8 +1035,9 @@ def verify_artifact(
     corpus_ref: str = CORPUS_REF,
     rulespec_root: Path = RULESPEC,
     rulespec_ref: str = RULESPEC_REF,
+    engine_binary: Path = INPUT_INVENTORY_ENGINE,
 ) -> VerificationResult:
-    """Re-derive a committed ledger from the exact pinned Git objects."""
+    """Re-derive a ledger from pinned Git objects and engine input reachability."""
 
     document: dict[str, Any] | None = None
     expected: dict[str, Any] | None = None
@@ -738,6 +1050,7 @@ def verify_artifact(
             corpus_ref=corpus_ref,
             rulespec_root=rulespec_root,
             rulespec_ref=rulespec_ref,
+            engine_binary=engine_binary,
         )
         if document != expected:
             errors.append("closure artifact drift; run --generate")
@@ -756,6 +1069,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     p.add_argument("--corpus-ref", default=CORPUS_REF)
     p.add_argument("--rulespec-root", type=Path, default=RULESPEC)
     p.add_argument("--rulespec-ref", default=RULESPEC_REF)
+    p.add_argument("--engine-binary", type=Path, default=INPUT_INVENTORY_ENGINE)
     args = p.parse_args(argv)
     try:
         expected = build(
@@ -763,8 +1077,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             corpus_ref=args.corpus_ref,
             rulespec_root=args.rulespec_root,
             rulespec_ref=args.rulespec_ref,
+            engine_binary=args.engine_binary,
         )
-    except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError, KeyError, json.JSONDecodeError, yaml.YAMLError) as exc:
         print(f"closure ledger error: {exc}", file=sys.stderr)
         return 1
     errors = validate(expected)
@@ -780,7 +1095,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"closure ledger error: {e}", file=sys.stderr)
         return 1
     print(
-        f"closure ledger up to date: closed={str(expected['computed']['closed']).lower()}"
+        f"closure ledger up to date: closed={str(expected['computed']['closed']).lower()}, "
+        f"frontier_complete={str(expected['computed']['boundary_frontier']['complete']).lower()}, "
+        f"missing_inputs={expected['computed']['boundary_frontier']['missing_input_count']}"
     )
     return 0
 
