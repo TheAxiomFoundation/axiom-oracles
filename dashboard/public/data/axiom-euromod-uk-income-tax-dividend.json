@@ -442,10 +442,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "axiom_rules_engine_sha": "b06df40d76edc801773fed4a5c6a6fff53327484",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-27T22:27:29Z",
+    "generated_at": "2026-08-30T12:04:13Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-dividend-ukmod",
     "oracle": {
       "euromod_country": "UK",

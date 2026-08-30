@@ -1917,3 +1917,49 @@ def test_axiom_tax_projection_rejects_external_itemization_status() -> None:
 
     with pytest.raises(RuntimeError, match="must not include itemization status"):
         attach_axiom_tax_inputs_to_case(case)
+
+
+def test_axiom_tax_projection_computes_eitc_disqualified_investment_income() -> None:
+    """32(i)'s input is computed from filer investment income, never defaulted.
+
+    Leaving eitc_relevant_investment_income to _TAX_UNIT_NUMERIC_DEFAULTS
+    zeroed the disqualified-income gate and granted EITC to units above the
+    $12,200 limit (the ecps-projection-defaults-eitc-investment-income
+    class): interest + dividends + rent + positive net capital gain.
+    """
+    case = Case(
+        case_id="eitc-invest",
+        period="2026",
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 3_000,
+                    Concepts.INTEREST_INCOME: 1_000,
+                    Concepts.QUALIFIED_DIVIDEND_INCOME: 2_000,
+                    Concepts.RENTAL_INCOME: 500,
+                    Concepts.LONG_TERM_CAPITAL_GAINS: 12_000,
+                    Concepts.SHORT_TERM_CAPITAL_GAINS: -2_000,
+                },
+            ),
+        ),
+    )
+
+    projected = attach_axiom_tax_inputs_to_case(case)
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+
+    # 1,000 + 2,000 + 500 + max(0, 12,000 - 2,000) = 13,500 — over the
+    # $12,200 Rev. Proc. 2025-32 maximum, so the composed 32(i) gate must
+    # actually see it.
+    assert by_key[
+        (
+        "tax_unit",
+        "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
+    )
+    ] == 13_500

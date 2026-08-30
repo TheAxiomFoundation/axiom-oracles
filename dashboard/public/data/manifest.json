@@ -226,6 +226,7 @@
     "axiom-euromod-dk-child-youth-benefit-couple.json",
     "axiom-euromod-be-pensioner-pit.json",
     "axiom-euromod-be-self-employment-pit.json",
-    "axiom-euromod-be-replacement-income-pit.json"
+    "axiom-euromod-be-replacement-income-pit.json",
+    "axiom-taxsim-fiit-ecps.json"
   ]
 }
