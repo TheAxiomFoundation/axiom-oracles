@@ -104851,6 +104851,10 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 391991.66648441553,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided"
+      },
       "kind": "amount_difference",
       "left": 271176171.4464844,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106550,6 +106554,10 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 32302355.997656256,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided"
+      },
       "kind": "amount_difference",
       "left": 136544573.84765625,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108454,6 +108462,10 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 400637.9360937476,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided"
+      },
       "kind": "amount_difference",
       "left": 86884522.29609375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -120040,17 +120052,17 @@
       "counts": {
         "axiom_encoding_gap": 313,
         "bridge_artifact": 278,
-        "explained_residual": 546,
+        "explained_residual": 549,
         "unexplained": 7,
         "upstream_engine_gap": 920
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 99.500416,
+      "explained_rate": 99.525396,
       "orphaned_entries": [],
       "raw_match_rate": 82.373022,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 60
+      "unexplained_count": 57
     },
     "error_count": 0,
     "errors_by_engine": {},

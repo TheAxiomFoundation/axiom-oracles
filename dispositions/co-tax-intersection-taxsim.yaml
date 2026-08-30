@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-tax-intersection-taxsim
-updated: '2026-08-27'
+updated: '2026-08-28'
 entries:
 - id: taxsim-2026-ctc-child-credit-machinery-absent
   concept: us:tax/federal-income-tax#ctc
@@ -3621,4 +3621,41 @@ entries:
       equals: 316.69
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: se-loss-461l-cap-vintage-two-sided
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-154480
+    - ecps-tax-unit-155431
+    - ecps-tax-unit-156922
+  disposition: explained_residual
+  evidence:
+    mechanism: "Dual parameter-vintage defect on the section 461(l) excess-business-loss\n\
+      limitation, fully characterized and favoring neither engine. On every\nselected\
+      \ row the taxable-income residual reproduces to the dollar as the\nunit's\
+      \ aggregate business loss (negative SE income net of positive rental)\nminus\
+      \ a 461(l)-shaped cap that the axiom leg applies and TAXSIM does not:\n\n\
+      \  ecps-tax-unit-155431: 32,912,356.00 - 610,000 = 32,302,356.00\n  ecps-tax-unit-156922:\
+      \  1,010,637.94 - 610,000 =    400,637.94\n  ecps-tax-unit-154480: (710,192.62\
+      \ - 13,201 rental) - 305,000 = 391,991.67\n\nNeither side matches 2026 statute:\
+      \ TAXSIM deducts the FULL loss (its module\ncarries no 461(l) limitation at\
+      \ all), while the caps the axiom leg applies\n- 305,000 single / 610,000 joint\
+      \ - are the 2024 inflation-adjusted values,\nnot 2026's (no 461 encoding exists\
+      \ in the pinned rulespec-us checkout to\ncarry the current amounts; the cap\
+      \ arrives through the projection surface).\nThe residual is therefore a fully\
+      \ named two-sided vintage artifact: it\nresolves when TAXSIM adds the limitation\
+      \ and the axiom-side cap is sourced\nfrom a 2026-vintage 461(l) encoding.\
+      \ Until then the arithmetic above is the\ncomplete accounting of each row."
+    arithmetic:
+    - expression: 32912356.00 - 610000
+      equals: 32302356.0
+      tolerance: 0.5
+    - expression: 1010637.94 - 610000
+      equals: 400637.94
+      tolerance: 0.5
+    - expression: 710192.62 - 13201 - 305000
+      equals: 391991.62
+      tolerance: 1
   expires_on_source_change: true
