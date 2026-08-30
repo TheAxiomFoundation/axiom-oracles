@@ -197,7 +197,7 @@ PROGRAMS: dict[str, dict] = {
         "computed": {
             "closed": {
                 "artifact": "conformance/closure/us-tariff-duty.yaml",
-                "producer": "scripts/closure_ledger.py",
+                "producer": "scripts/us_tariff_closure.py",
                 "contract": "us_tariff_closure_v1",
                 "include_burndown": True,
             },
@@ -1183,64 +1183,16 @@ def _producer_closed_verdict(
     if not isinstance(document, dict):
         raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
-    if config.get("contract") == "us_tariff_closure_v1":
-        if verify_producer:
-            raise ValueError(
-                f"{artifact_ref}: full producer verification must be run with "
-                "the C3 tariff producer checkout"
-            )
-        computed = document.get("computed")
-        decisions = (document.get("committed_decisions") or {}).get("ledger")
-        if not isinstance(computed, dict) or not isinstance(decisions, list):
-            raise ValueError(f"{artifact_ref} has malformed tariff closure blocks")
-        open_rows = [
-            row
-            for row in decisions
-            if isinstance(row, dict)
-            and row.get("status") in ("pending", "partially-encoded")
-        ]
-        expected_burndown = [
-            {
-                "family": row.get("family"),
-                "root": row.get("root"),
-                "status": row.get("status"),
-                "blocker": row.get("reason"),
-            }
-            for row in open_rows
-        ]
-        frontier = computed.get("boundary_frontier")
-        derived_closed = not open_rows
-        if computed.get("closed") is not derived_closed:
-            raise ValueError(f"{artifact_ref} computed.closed is fabricated")
-        if computed.get("burndown") != expected_burndown:
-            raise ValueError(f"{artifact_ref} burndown is not derived from the ledger")
-        if not isinstance(frontier, dict) or frontier.get("complete") is not True:
-            raise ValueError(f"{artifact_ref} boundary frontier is incomplete")
-
-        class _TariffSummary:
-            closed = derived_closed
-            non_encoded_reasons_complete = all(
-                isinstance(row, dict)
-                and isinstance(row.get("reason"), str)
-                and bool(row["reason"])
-                for row in decisions
-            )
-
-        summary = _TariffSummary()
-    else:
-        try:
-            summary = (
-                producer.validate_artifact(document, repo_root=REPO_ROOT)
-                if artifact_path.suffix == ".json"
-                else producer.validate_artifact(document)
-            )
-        except ValueError as exc:
-            raise ValueError(
-                f"{artifact_ref} failed closure validation: {exc}"
-            ) from exc
+    try:
+        summary = (
+            producer.validate_artifact(document, repo_root=REPO_ROOT)
+            if artifact_path.suffix == ".json"
+            else producer.validate_artifact(document)
+        )
+    except ValueError as exc:
+        raise ValueError(f"{artifact_ref} failed closure validation: {exc}") from exc
     if (
         verify_producer
-        and config.get("contract") != "us_tariff_closure_v1"
         and config.get("external_verification") != "hermetic_program_scoped"
     ):
         try:

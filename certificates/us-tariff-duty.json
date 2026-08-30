@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "fe6031c063f7e0404322f4041df58d02d07109925b3fdd71a315861fb0f4d3ac"
+      "sha256": "0dbb81bf6a84283243cd32c7a7ab42611f26d5e078b990c67b5b47c73ecc3102"
     },
     {
       "artifact": "conformance/detail/us-tariff-schedule.json",
@@ -25,7 +25,7 @@
       "artifact": "conformance/closure/us-tariff-duty.yaml",
       "claim": "closed:us/tariff-duty",
       "mode": "computed",
-      "sha256": "69c93a2d4f252ed1afbb9b2149c38c22bbf636166b284b48177e6f1c0104a8bb",
+      "sha256": "dea1502374b7c5f7a9d0d5e09845f4af619a8d6392147ce550f35c1f78d0ee5a",
       "verification": "producer_artifact_validation"
     },
     {

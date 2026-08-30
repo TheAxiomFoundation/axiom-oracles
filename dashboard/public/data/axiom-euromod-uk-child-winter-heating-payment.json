@@ -165,10 +165,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+      "axiom_rules_engine_sha": "bb4b5684870547756078a62f1866a77c5b56f7f3",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-26T20:19:57Z",
+    "generated_at": "2026-08-30T05:34:29Z",
     "generated_by": "scripts/run_comparison.py::uk-child-winter-heating-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",

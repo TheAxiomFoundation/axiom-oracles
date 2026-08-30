@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import inspect
 import json
 from pathlib import Path
 
@@ -35,6 +36,18 @@ def test_committed_tariff_receipt_validates_hermetically():
         "executable": True,
     }
     assert document["rulespec"]["ref"] == document["rulespec"]["sha"]
+
+
+def test_certifier_reproduction_call_uses_pinned_defaults():
+    module = _module()
+    call = inspect.signature(module.build_reproduction).bind(
+        repo_root=REPO_ROOT,
+        rulespec_ref="0" * 40,
+    )
+    call.apply_defaults()
+
+    assert call.arguments["rulespec_repo"] == module.DEFAULT_RULESPEC_ROOT
+    assert call.arguments["engine_binary"] == module.DEFAULT_ENGINE_BINARY
 
 
 def test_changed_certified_value_fails_closed():
