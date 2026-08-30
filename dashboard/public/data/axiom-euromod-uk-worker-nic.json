@@ -352,10 +352,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "bb4b5684870547756078a62f1866a77c5b56f7f3",
+      "axiom_rules_engine_sha": "b06df40d76edc801773fed4a5c6a6fff53327484",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-30T05:34:29Z",
+    "generated_at": "2026-08-30T12:18:28Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-nic-ukmod",
     "oracle": {
       "euromod_country": "UK",
