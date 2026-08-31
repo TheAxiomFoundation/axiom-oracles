@@ -3363,30 +3363,69 @@ entries:
     - ecps-tax-unit-136404
     - ecps-tax-unit-58696
     - ecps-tax-unit-59285
-  disposition: unexplained
+  disposition: upstream_engine_gap
   evidence:
-    mechanism: 'Documented open investigation, mirroring co-state-open-rows-axiom-pe-divergent
+    mechanism: 'Formerly the open-investigation rows blocked on triangulation; both
 
-      in co-state-income-tax-taxsim: these are exactly the units where the
+      blockers are now closed. (1) The axiom-vs-PolicyEngine divergence on all
 
-      credit-stack triangulation FAILS because the unit appears in the 31-row
+      seven units is dispositioned bridge_artifact per row in
 
-      axiom-vs-PolicyEngine mismatch set for the same 1,201-unit population, so
+      axiom-policyengine-co-state-income-tax-ecps (the PE-leg input-projection
 
-      axiom''s own Colorado value is not independently corroborated and the TAXSIM
+      differences), so the axiom Colorado value stands as the attributed
 
-      residual cannot be attributed to TAXSIM. Known TAXSIM-side ingredients
+      reference. (2) A fresh idtl=2 rerun of the pinned binary now reproduces
 
-      (childless-EITC coupling, mstat=1-with-dependents auto-HoH projection,
+      ALL SEVEN TAXSIM values to the cent from freshly projected input rows -
 
-      auto-itemized state income tax) are catalogued in the sibling entry; these
+      including 135552, which previously failed from the persisted row - and
 
-      rows stay unexplained until the axiom-vs-PolicyEngine divergence on these
+      each decomposes exactly as siitax = staxbc - sctc - sptcr - 0.5 x v25:
 
-      units is closed, which makes the triangulation decidable.'
+      135552: 0 - 2,528.67 - 41.20 = -2,569.87; 135799: 974.42 - 1,657.50 -
+
+      20.60 = -703.68; 135880: -20.60 - 0.5 x 351.40 = -196.30; 136208:
+
+      10,317.46 - 37.82 = 10,279.64; 136404: 237.16 - 2,134.82 - 20.60 =
+
+      -1,918.26; 58696: -2,528.67 - 41.20 - 0.5 x 664 = -2,901.87; 59285:
+
+      18,429.21 - 63.86 = 18,365.35. The members are the catalogued
+
+      TAXSIM-side ingredients: the Colorado EITC coupling of the 2026
+
+      childless-schedule federal EITC (dispositioned
+
+      taxsim-2026-eitc-childless-schedule-applied; 58696: 0.5 x 664 = 332 vs
+
+      axiom 0.5 x 6,997.18), the CO child-credit and family-affordability
+
+      vintage (dispositioned taxsim-co-refundable-credit-vintage), the
+
+      mstat=1-with-dependents auto-HoH standard deduction (136208), and
+
+      TAXSIM''s automatic itemization of its own computed state income tax
+
+      (59285). Axiom''s Colorado stack reproduces the encoded 2026 statute on
+
+      these units per the full-evidence chain.'
     arithmetic:
-    - expression: 31 - 31
-      equals: 0
+    - expression: 974.42 - 1657.50 - 20.60
+      equals: -703.68
+      tolerance: 0.02
+    - expression: 0 - 2528.67 - 41.20
+      equals: -2569.87
+      tolerance: 0.02
+    - expression: -20.60 - 0.5 * 351.40
+      equals: -196.30
+      tolerance: 0.02
+    - expression: 0.5 * 664.0
+      equals: 332.0
+      tolerance: 0.001
+    sources:
+    - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
 - id: taxsim-2026-amt-parameter-vintage
@@ -3658,4 +3697,498 @@ entries:
     - expression: 710192.62 - 13201 - 305000
       equals: 391991.62
       tolerance: 1
+  expires_on_source_change: true
+- id: taxsim-qbid-seca-member-composite-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135586
+    - ecps-tax-unit-58620
+    - ecps-tax-unit-58643
+    - ecps-tax-unit-58645
+    - ecps-tax-unit-58942
+    - ecps-tax-unit-59264
+    - ecps-tax-unit-136114
+    - ecps-tax-unit-136327
+    - ecps-tax-unit-136399
+    - ecps-tax-unit-136429
+    - ecps-tax-unit-154724
+    - ecps-tax-unit-155406
+    - ecps-tax-unit-156147
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156651
+    - ecps-tax-unit-157013
+    - ecps-tax-unit-157251
+    - ecps-tax-unit-157317
+    - ecps-tax-unit-157868
+    - ecps-tax-unit-161870
+    - ecps-tax-unit-161979
+    - ecps-tax-unit-163020
+    - ecps-tax-unit-164227
+    - ecps-tax-unit-164548
+    - ecps-tax-unit-164633
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Full-evidence member decomposition: on every selected row the
+
+      taxable-income residual equals, to the cent, the sum of exactly two named
+
+      members (per-row table in the receipt). (1) QBID member - TAXSIM''s
+
+      2026-05-21 module takes 20% of (psemp+ssemp net of its SE ALD) with no
+
+      section 199A(b)(3) wage/UBIA limitation and no H.R.1 section 70105 $400
+
+      minimum, while axiom applies the statutory phase-in
+
+      pr = clamp((TI_before_QBID - 403,500 joint / 201,750 single) / (150,000
+
+      / 75,000)) and the $400 floor - e.g. ecps-tax-unit-58620: axiom 0.2 x
+
+      9,312.44 x (1 - 0.690530) = 576.38 with pr = (507,079.43 - 403,500) /
+
+      150,000, TAXSIM 1,862.49 = 0.2 x 9,312.45; rows where the QBI bases
+
+      differ additionally carry the dispositioned rental-in-QBI bridge
+
+      convention (taxsim-qbid-rental-convention-taxable-income). (2) SECA-ALD
+
+      member - reproduced per row by isolated wages+SE synthetic probes of the
+
+      pinned binary: TAXSIM deducts half of the section 1401(b)(2) additional
+
+      Medicare tax, which section 164(f)(1) excludes (probe w=0, se=810,431:
+
+      ALD 24,759.23 = 22,291.28 statutory + 0.5 x 0.009 x (748,433 - 200,000)),
+
+      and the deliberate PolicyEngine-matching bridge OASDI base 186,000 vs
+
+      the official 184,500 (rulespec-us us/policies/ssa/contribution-and-
+
+      benefit-base/2026) yields exactly 0.5 x 0.124 x 1,500 = 93.00 on
+
+      wage-straddling rows. Axiom''s ALD equals the statutory formula at the
+
+      bridge base on every row. Fully characterized, favoring neither engine
+
+      overall.'
+    arithmetic:
+    - expression: 0.2 * 9312.44 * (1 - 0.690530)
+      equals: 576.38
+      tolerance: 0.05
+    - expression: 22291.28 + 0.5 * 0.009 * (748433 - 200000)
+      equals: 24759.23
+      tolerance: 0.02
+    - expression: 0.5 * 0.124 * 1500
+      equals: 93.0
+      tolerance: 0.001
+    - expression: 400 - 0.2 * 1096.33
+      equals: 180.73
+      tolerance: 0.01
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-input-gssi-earners-scope-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-58950
+    - ecps-tax-unit-59011
+    - ecps-tax-unit-59151
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Harness input-scope difference, reconciled to the cent per row: the
+
+      TAXSIM projection sums gssi over head+spouse only
+
+      (axiom_oracles/adapters/taxsim/projection.py, earners = [head] +
+
+      [spouse]), while the axiom projection sums social-security benefits over
+
+      every unit member. Each unit has a third member receiving benefits that
+
+      TAXSIM never sees; both engines then apply the identical section 86
+
+      85%-cap inclusion, so the AGI member is exactly 0.85 x (missing
+
+      benefits): 58950 0.85 x 14,771.48 = 12,555.75; 59011 0.85 x 17,868.72 =
+
+      15,188.41 (gssi sent was 0 - all benefits belong to the non-earner);
+
+      59151 0.85 x 23,091.88 = 19,628.10. The residual closes with the H.R.1
+
+      section 70103 senior-deduction phaseout knock-on of the shifted MAGI
+
+      (58950: 0.06 x 158.32 = 9.50 - only axiom''s MAGI crosses 150,000;
+
+      59151: two eligible seniors phase at 6% each, 2 x 0.06 x 19,628.10 =
+
+      2,355.37). Not an engine defect on either side.'
+    arithmetic:
+    - expression: 0.85 * 14771.48
+      equals: 12555.76
+      tolerance: 0.02
+    - expression: 0.85 * 17868.72
+      equals: 15188.41
+      tolerance: 0.02
+    - expression: 0.85 * 23091.88 + 2 * 0.06 * 19628.10
+      equals: 21983.47
+      tolerance: 0.05
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: se-loss-461l-cap-vintage-two-sided-extension
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-154504
+    - ecps-tax-unit-159221
+    - ecps-tax-unit-162440
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Completes se-loss-461l-cap-vintage-two-sided: synthetic probes of the
+
+      pinned binary establish that TAXSIM does apply a section 461(l)-shaped
+
+      cap - at its own projected 332,389.95 single / 664,779.90 joint,
+
+      treating net positive capital gain as business gross income
+
+      (dollar-for-dollar allowance increase) - while the axiom leg caps the
+
+      aggregate business loss (negative SE net of positive rental) at the
+
+      2024-vintage 305,000/610,000 with no capital-gain offset. Neither cap
+
+      matches 2026 statute; the members reconcile each row to the dollar:
+
+      162440 (single, net gain 211,350.64): TAXSIM allows 332,389.95 +
+
+      211,350.64 = 543,740.59 vs axiom 305,000 -> AGI member 238,740.59, and
+
+      the row closes with the itemize-choice member (axiom itemizes SALT
+
+      17,415.41 > std 16,100 while TAXSIM takes the standard deduction):
+
+      238,740.60 - 1,315.41 = 237,425.19. 154504 (single, net capital LOSS
+
+      capped -3,000 on both sides): 332,389.95 - 3,000 - 305,000 = 24,389.95.
+
+      159221 (joint): axiom disallows (646,072.38 - 33,808.42 rental) -
+
+      610,000 = 2,263.96; TAXSIM''s 664,779.90 cap exceeds the loss so it
+
+      allows it in full.'
+    arithmetic:
+    - expression: 332389.95 + 211350.64 - 305000 - 1315.41
+      equals: 237425.18
+      tolerance: 0.5
+    - expression: 332389.95 - 3000 - 305000
+      equals: 24389.95
+      tolerance: 0.1
+    - expression: 646072.38 - 33808.42 - 610000
+      equals: 2263.96
+      tolerance: 0.1
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-blindness-63f-and-qbid-composite-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135959
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Composite of two dispositioned member classes, reconciling to the
+
+      cent: the section 63(f) blindness increment the TAXSIM input format
+
+      cannot carry (taxsim-input-lacks-blindness-column-63f-increments: axiom
+
+      standard deduction 37,150 = 35,500 aged-joint + 1,650 blindness vs
+
+      TAXSIM v13 35,500) plus the QBID machinery member (TAXSIM qbid 0 vs
+
+      axiom''s 6,731.31 = 0.2 x 33,656.56 on a QBI base its module excludes,
+
+      the dispositioned rental-in-QBI convention): 6,731.31 + 1,650.00 =
+
+      8,381.31 = the committed residual.'
+    arithmetic:
+    - expression: 6731.31 + 1650.0
+      equals: 8381.31
+      tolerance: 0.02
+    - expression: 37150 - 35500
+      equals: 1650
+      tolerance: 0.001
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-auto-hoh-and-qbid-composite-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-136208
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Composite of two named members reconciling to the cent: TAXSIM
+
+      promotes mstat=1-with-dependents to head-of-household (v13 24,150 vs the
+
+      single 16,100 the harness''s filing-status projection encodes - the same
+
+      auto-HoH ingredient catalogued in the state-lane entries), a standard-
+
+      deduction member of +8,050 toward axiom, minus the QBID floor member
+
+      (axiom grants the H.R.1 section 70105 minimum-anchored 474.66 that
+
+      TAXSIM''s module lacks): 8,050.00 - 474.66 = 7,575.34 = the committed
+
+      residual.'
+    arithmetic:
+    - expression: 24150 - 16100
+      equals: 8050
+      tolerance: 0.001
+    - expression: 8050.0 - 474.66
+      equals: 7575.34
+      tolerance: 0.01
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-auto-itemized-salt-contents-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-59285
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Itemized-deduction contents convention, reconciled to the cent: both
+
+      engines itemize (each side''s itemized total exceeds the 16,100 single
+
+      standard deduction), but TAXSIM auto-includes its own computed state
+
+      income tax in the SALT deduction (v17 18,352.57) while the bridge feeds
+
+      axiom the unit''s withheld state income tax (itemized 17,457.14). The
+
+      residual is exactly the contents difference: 18,352.57 - 17,457.14 =
+
+      895.43. The same auto-itemized-state-tax ingredient catalogued in the
+
+      state-lane entries.'
+    arithmetic:
+    - expression: 18352.57 - 17457.14
+      equals: 895.43
+      tolerance: 0.01
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: amt-partiii-routing-vs-taxsim-amt-vintage
+  concept: us:tax/federal-income-tax#amt
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-58555
+    - ecps-tax-unit-58687
+    - ecps-tax-unit-156467
+    - ecps-tax-unit-156922
+    - ecps-tax-unit-156992
+    - ecps-tax-unit-157643
+    - ecps-tax-unit-158759
+    - ecps-tax-unit-158883
+    - ecps-tax-unit-159302
+    - ecps-tax-unit-160366
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Two-sided composite of established classes, with the axiom side
+
+      reproduced exactly on every row from its own audited full-evidence
+
+      worksheet: axiom AMT = max(0, Part III tentative tax - (section 1(h) +
+
+      1(j) regular tax)), where the bridge''s Part III grants the
+
+      capital-gain stack the full 0%/15% brackets - the dispositioned
+
+      capgains-worksheet-bucket-routing convention, which cancels between TMT
+
+      and regular tax except on the ordinary-income slice (e.g. 158759:
+
+      11,931,443.35 - 11,924,224.62 = 7,218.73; 158883: 11,890,305.10 -
+
+      11,858,887.59 = 31,417.51; identity holds within $0.01 on all ten
+
+      rows, receipt attached). The engines agree on AMTI to the cent
+
+      (amti_axiom == v26 on every captured row). TAXSIM''s v27 departs per
+
+      its dispositioned pre-OBBBA AMT parameter vintage
+
+      (taxsim-2026-amt-parameter-vintage) compounded with its capital-gains
+
+      bracket vintage (taxsim-2026-capgains-bracket-set-vintage); on
+
+      156992 that vintage''s exemption-phaseout geometry zeroes the AMT
+
+      entirely (v27 = 0 vs axiom 2,020.68). Fully characterized, favoring
+
+      neither engine.'
+    arithmetic:
+    - expression: 11931443.35 - 11924224.62
+      equals: 7218.73
+      tolerance: 0.02
+    - expression: 11890305.10 - 11858887.59
+      equals: 31417.51
+      tolerance: 0.02
+    - expression: 170034.91 - 155338.13
+      equals: 14696.78
+      tolerance: 0.02
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-136212
+    - ecps-tax-unit-136408
+    - ecps-tax-unit-136417
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Liability faces of the dispositioned TAXSIM 2026 credit-machinery
+
+      classes, reconciled member-by-member from the full-evidence chain: on
+
+      each row tax-before-credits and the nonrefundable-CTC-used member agree
+
+      with TAXSIM to the cent, and the residual is exactly the EITC-with-
+
+      children member (taxsim-2026-eitc-with-children-absent; TAXSIM v25 = 0
+
+      on all three) plus the refundable-CTC member
+
+      (taxsim-2026-ctc-machinery-absent-refundable-arm; TAXSIM actc = 0):
+
+      136212: 206.25 - 206.25 - 7,469.02 - 4,829.72 = -12,298.74 (refundable
+
+      arm = 0.15 x (34,698.15 - 2,500) = 4,829.72, four qualifying children);
+
+      136408: -7,848.92 - 4,571.13 = -12,420.06 (tbc 77.42 fully absorbed by
+
+      the nonrefundable arm on both sides); 136417: 126.86 - 126.86 -
+
+      4,034.39 - 1,700.00 = -5,734.39 (refundable arm at the section
+
+      24(d)(1)(A) 1,700 per-child cap, one qualifying child). TAXSIM fiitax
+
+      = 0.00 on all three.'
+    arithmetic:
+    - expression: 206.25 - 206.25 - 7469.02 - 4829.72
+      equals: -12298.74
+      tolerance: 0.02
+    - expression: 0.15 * (34698.15 - 2500)
+      equals: 4829.72
+      tolerance: 0.05
+    - expression: 126.86 - 126.86 - 4034.39 - 1700.0
+      equals: -5734.39
+      tolerance: 0.02
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-2026-ctc-machinery-absent-extension
+  concept: us:tax/federal-income-tax#ctc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-59182
+    - ecps-tax-unit-136212
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Extension of the dispositioned TAXSIM 2026 child-credit machinery
+
+      classes to two remaining rows, axiom reproducing 2026 statute exactly:
+
+      59182 - two qualifying children with AGI 406,139.54 over the 400,000
+
+      section 24(h) threshold, 2 x 2,200 - 50 x ceil(6,139.54 / 1,000) =
+
+      4,400 - 350 = 4,050.00 vs TAXSIM v22 386.05 (pre-TCJA-vintage
+
+      machinery); 136212 - refundable arm with four qualifying children,
+
+      0.15 x (34,698.15 - 2,500) = 4,829.72 under the 4 x 1,700 refundable
+
+      cap, vs TAXSIM v22 206.25, actc 0.'
+    arithmetic:
+    - expression: 2 * 2200 - 7 * 50
+      equals: 4050
+      tolerance: 0.001
+    - expression: 0.15 * (34698.15 - 2500)
+      equals: 4829.72
+      tolerance: 0.05
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: axiom-eitc-phaseout-income-se-loss-not-netted
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135880
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Axiom-side earned-income measure defect, reconciled to the cent:
+
+      both engines apply the identical childless schedule (7.65% phase-in,
+
+      664 maximum, phase-out from 10,860), but the bridge''s earned_income
+
+      input feeding section 32(a)(2)(B) phase-out income does not net the
+
+      unit''s 1,122.78 self-employment loss (pwages 16,011.53, psemp
+
+      -1,122.78), while section 32(c)(2)(A)(ii) defines earned income
+
+      through net earnings from self-employment - a loss nets. Axiom phases
+
+      out on max(AGI, 16,011.53) = 16,011.53; TAXSIM on max(14,946.30,
+
+      14,888.75) = 14,946.30. Credit difference = 0.0765 x (16,011.53 -
+
+      14,946.30) = 81.49 = the committed residual (269.91 vs 351.40).
+
+      Classified as our own bridge defect; visible until the projection nets
+
+      SE losses into the section 32 earned-income input.'
+    arithmetic:
+    - expression: 0.0765 * (16011.53 - 14946.30)
+      equals: 81.49
+      tolerance: 0.02
+    - expression: 664 - 0.0765 * (16011.53 - 10860)
+      equals: 269.91
+      tolerance: 0.05
+    - expression: 664 - 0.0765 * (14946.30 - 10860)
+      equals: 351.40
+      tolerance: 0.05
+    sources:
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true

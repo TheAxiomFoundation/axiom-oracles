@@ -26761,3 +26761,95 @@ entries:
       equals: 14
       tolerance: 0
   expires_on_source_change: true
+- id: taxsim-childless-schedule-and-axiom-earned-netting-composite-eitc
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-134692
+    - ecps-tax-unit-85537
+  disposition: explained_residual
+  evidence:
+    mechanism: 'Two-sided composite reproduced to the cent from a fresh idtl=2 rerun
+
+      of the pinned binary plus the full-evidence axiom chain, on units with a
+
+      qualifying child AND a self-employment loss. TAXSIM side: its
+
+      dispositioned childless-schedule machinery
+
+      (taxsim-2026-eitc-childless-schedule-applied-to-units-with-children)
+
+      pays the childless curve on its own AGI - 134692: 664 - 0.0765 x
+
+      (19,185.18 - 10,860) = 27.12 = v25 exactly; 85537 (joint): 664 -
+
+      0.0765 x (26,072.18 - 18,140.05) = 57.19 = v25 exactly at its
+
+      projected joint childless phase-out start. Axiom side: the bridge''s
+
+      earned_income input does not net the SE loss (section 32(c)(2)(A)(ii)
+
+      nets net earnings from self-employment), so phase-out income uses
+
+      unnetted wages - 134692: 0.1598 x (54,361.79 - 23,890) = 4,869.39 >
+
+      4,427 maximum, credit 0; 85537: 0.1598 x (83,386.76 - 31,160) far
+
+      exceeds the maximum, credit 0 - where netting would leave both units
+
+      inside the with-children schedule. Each side''s value is exactly
+
+      reproduced by its named mechanism; the residual is their difference.'
+    arithmetic:
+    - expression: 664 - 0.0765 * (19185.18 - 10860)
+      equals: 27.12
+      tolerance: 0.05
+    - expression: 664 - 0.0765 * (26072.18 - 18140.05)
+      equals: 57.19
+      tolerance: 0.05
+    - expression: 0.1598 * (54361.79 - 23890)
+      equals: 4869.39
+      tolerance: 0.05
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: axiom-eitc-earned-income-se-loss-not-netted
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-132330
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Axiom-side earned-income measure defect, both sides reproduced
+
+      exactly: the unit has wages 1,998.41 and a self-employment loss of
+
+      2,259.09, so statutory section 32(c)(2) earned income nets to -260.68
+
+      and no credit is allowed - which is TAXSIM''s 0.00. The bridge''s
+
+      earned_income input does not net the loss, leaving axiom with earned
+
+      income 1,998.41 and the childless credit min(0.0765 x 1,998.41, 664 -
+
+      0.0765 x (19,417.57 - 10,860)) = min(152.88, 9.35) = 9.35, the
+
+      committed axiom value to the cent (phase-out income = AGI 19,417.57,
+
+      identical in both engines). Same root as
+
+      axiom-eitc-phaseout-income-se-loss-not-netted in
+
+      co-tax-intersection-taxsim; visible until the projection nets SE
+
+      losses into the section 32 earned-income input.'
+    arithmetic:
+    - expression: 664 - 0.0765 * (19417.57 - 10860)
+      equals: 9.35
+      tolerance: 0.05
+    - expression: 1998.41 - 2259.09
+      equals: -260.68
+      tolerance: 0.01
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
