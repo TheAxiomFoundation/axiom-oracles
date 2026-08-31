@@ -2197,7 +2197,7 @@
       "inline_cases_not_counted": 4,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-be-work-bonus-credit.json",
-      "report_sha256": "6c83fe543d9677c1084b5e5c2f1ba4634b6bb11e50240a5c5611f7a56aece168",
+      "report_sha256": "a04d41bad4619324d08e901c77592109da92bacd6c0697d29b3f5ed189b5b427",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
