@@ -243,7 +243,7 @@
       "axiom_rules_engine_sha": "fb735bf47a32a4e8af1ecc144c9a1ab382da984b",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-30T21:16:45Z",
+    "generated_at": "2026-08-31T05:49:56Z",
     "generated_by": "scripts/run_comparison.py::be-capital-income-tax",
     "oracle": {
       "euromod_country": "BE",
