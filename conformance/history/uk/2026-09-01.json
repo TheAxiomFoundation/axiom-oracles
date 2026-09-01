@@ -1,0 +1,14 @@
+{
+  "schema": "axiom_oracles.conformance_snapshot.v1",
+  "date": "2026-09-01",
+  "jurisdiction": "uk",
+  "oracle": "UKMOD_PUBLIC_B2026.03/UK_2026",
+  "policies_in_scope": 21,
+  "covered": 21,
+  "covered_pct": 100.0,
+  "excluded": 46,
+  "unexplained_total": 0,
+  "axiom_attributed_open": 0,
+  "temporal_debt": null,
+  "conformant": true
+}
