@@ -6391,7 +6391,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-08-31T14:11:15Z",
+    "generated_at": "2026-09-01T11:50:56Z",
     "generated_by": "scripts/run_comparison.py::ca-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
