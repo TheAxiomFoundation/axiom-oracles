@@ -3407,9 +3407,11 @@ entries:
 
       TAXSIM''s automatic itemization of its own computed state income tax
 
-      (59285). Axiom''s Colorado stack reproduces the encoded 2026 statute on
+      (59285). Axiom''s Colorado value is the attributed reference here
 
-      these units per the full-evidence chain.'
+      because the PE divergence is dispositioned, not because it was
+
+      independently hand-verified against statute on these units.'
     arithmetic:
     - expression: 974.42 - 1657.50 - 20.60
       equals: -703.68
