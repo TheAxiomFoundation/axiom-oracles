@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "a6f373459e4d19b8552733d6fc15cc7a79aab22d960803c77de2a4cd64335645"
+      "sha256": "43529aae7d8e1d3dd106453f8a2ab41e7bfc6f9ced4848ae58d4ba230755e1a3"
     },
     {
       "artifact": "conformance/detail/us-tariff-schedule.json",
