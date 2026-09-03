@@ -78469,7 +78469,7 @@
       "description": "State income tax liability",
       "difference": -3047.88,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -79137,6 +79137,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1271.6264633162064,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 151923.61353668378,
       "parent": "us:tax/federal-income-tax#liability",
@@ -82039,6 +82044,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": 3596.9976754760737,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 14696.777675476074,
       "parent": "us:tax/federal-income-tax#liability",
@@ -83901,6 +83911,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 1314.683261006372,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 506503.04326100636,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84651,6 +84666,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2479.648909561278,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 335557.88109043875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -84751,6 +84771,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -2867.5422167968754,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12310.577783203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -85626,7 +85651,7 @@
       "description": "State income tax liability",
       "difference": 212.97618457031245,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -86566,6 +86591,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -2939.8740661621105,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 15117.615933837891,
       "parent": "us:tax/federal-income-tax#liability",
@@ -86793,7 +86823,7 @@
       "description": "State income tax liability",
       "difference": -1183.41203125,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -87651,6 +87681,11 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "difference": -81.49176708984373,
+      "disposition": {
+        "disposition": "axiom_encoding_gap",
+        "id": "axiom-eitc-phaseout-income-se-loss-not-netted",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 269.90823291015624,
       "parent": "us:tax/federal-income-tax#liability",
@@ -87668,7 +87703,7 @@
       "description": "State income tax liability",
       "difference": 109.82294177246095,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -89840,6 +89875,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -8381.309097656253,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-blindness-63f-and-qbid-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 138323.39090234376,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92740,6 +92780,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 1711.24406849363,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 197459.50406849364,
       "parent": "us:tax/federal-income-tax#liability",
@@ -92902,6 +92947,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 12565.02151252587,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-input-gssi-earners-scope-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 109386.35151252587,
       "parent": "us:tax/federal-income-tax#liability",
@@ -93527,6 +93577,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1298.7836718750004,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 5195.136328125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -94215,6 +94270,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 15188.406894531247,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-input-gssi-earners-scope-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 81386.31689453125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96117,6 +96177,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 7575.338027312653,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-hoh-and-qbid-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 265921.63802731264,
       "parent": "us:tax/federal-income-tax#liability",
@@ -96155,7 +96220,7 @@
       "description": "State income tax liability",
       "difference": 503.90207320175614,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -96278,6 +96343,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -12298.740086080517,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -12298.740086080517,
       "parent": null,
@@ -96315,6 +96385,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 4623.472559206641,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-extension",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4829.722559206641,
       "parent": "us:tax/federal-income-tax#liability",
@@ -98376,6 +98451,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 21983.46897412109,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-input-gssi-earners-scope-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 152582.36897412108,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99353,6 +99433,11 @@
       "concept": "us:tax/federal-income-tax#ctc",
       "description": "Child Tax Credit value",
       "difference": 3663.95,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-machinery-absent-extension",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 4050.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -99789,6 +99874,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -180.73222878966772,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 66004.40777121033,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101790,6 +101880,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -74.40338225002051,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 163799.66661775,
       "parent": "us:tax/federal-income-tax#liability",
@@ -101910,6 +102005,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -4819.531279296876,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 243244.13872070314,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102178,7 +102278,7 @@
       "description": "State income tax liability",
       "difference": -740.4946158630371,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -102303,6 +102403,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -12420.05763359375,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -12420.05763359375,
       "parent": null,
@@ -102529,6 +102634,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -5734.386230856267,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": -5734.386230856267,
       "parent": null,
@@ -102733,6 +102843,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 895.4266552734189,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-auto-itemized-salt-contents-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 395395.94665527344,
       "parent": "us:tax/federal-income-tax#liability",
@@ -102792,7 +102907,7 @@
       "description": "State income tax liability",
       "difference": -727.0904125976558,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-intersection-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -103126,6 +103241,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": -1371.5413669132831,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 45387.24863308672,
       "parent": "us:tax/federal-income-tax#liability",
@@ -104953,6 +105073,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 24389.949375003576,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided-extension",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 107588271.609375,
       "parent": "us:tax/federal-income-tax#liability",
@@ -105403,6 +105528,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 139270.87086175382,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 131600258.47086175,
       "parent": "us:tax/federal-income-tax#liability",
@@ -106455,6 +106585,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 2248.6273822784424,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 122596049.69738227,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107361,6 +107496,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 45137.06824798323,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 10491779.878247984,
       "parent": "us:tax/federal-income-tax#liability",
@@ -107978,6 +108118,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 28.505108028650284,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 93590554.84510803,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108014,6 +108159,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -10638.524949035645,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 12915.445050964356,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108197,6 +108347,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 54781.870431661606,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 94087117.52043167,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108502,6 +108657,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -3273.0300000000007,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6440.0,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108685,6 +108845,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": 2020.6825958251952,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2020.6825958251952,
       "parent": "us:tax/federal-income-tax#liability",
@@ -108845,6 +109010,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 95158.92389256274,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 3697194.9938925626,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109007,6 +109177,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 98.85368389636278,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 64493749.1336839,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109252,6 +109427,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 288676.3860438168,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 80351089.02604382,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109661,6 +109841,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -3273.0259667968758,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 6717.994033203125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -109862,6 +110047,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 41546.31333363801,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 61101430.88333364,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111326,6 +111516,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -3273.0313671875,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 7218.7286328125,
       "parent": "us:tax/federal-income-tax#liability",
@@ -111633,6 +111828,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -3421.2533410644537,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 31417.50665893555,
       "parent": "us:tax/federal-income-tax#liability",
@@ -112456,6 +112656,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 2263.9568749964237,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided-extension",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 42968778.546875,
       "parent": "us:tax/federal-income-tax#liability",
@@ -112637,6 +112842,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -2052.2766068267824,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 2479.653393173218,
       "parent": "us:tax/federal-income-tax#liability",
@@ -114310,6 +114520,11 @@
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
       "difference": -2840.36389419797,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 23843.26610580203,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116027,6 +116242,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 73939.10697633028,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 35564276.22697633,
       "parent": "us:tax/federal-income-tax#liability",
@@ -116271,6 +116491,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 44397.66710417718,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 31194750.457104176,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117096,6 +117321,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 237425.18516796877,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "se-loss-461l-cap-vintage-two-sided-extension",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 394489.46516796877,
       "parent": "us:tax/federal-income-tax#liability",
@@ -117587,6 +117817,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 37893.91486778855,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 30006393.384867787,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119513,6 +119748,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 34.91674989834428,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 27627693.1267499,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119757,6 +119997,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 159377.93699687347,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 11932232.156996874,
       "parent": "us:tax/federal-income-tax#liability",
@@ -119856,6 +120101,11 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "difference": 4193224.922633186,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "taxsim-qbid-seca-member-composite-taxable-income",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
       "kind": "amount_difference",
       "left": 20622243.972633187,
       "parent": "us:tax/federal-income-tax#liability",
@@ -120050,19 +120300,19 @@
     "comparison_count": 12010,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 313,
-        "bridge_artifact": 278,
-        "explained_residual": 549,
-        "unexplained": 7,
-        "upstream_engine_gap": 920
+        "axiom_encoding_gap": 314,
+        "bridge_artifact": 281,
+        "explained_residual": 590,
+        "unexplained": 0,
+        "upstream_engine_gap": 932
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 99.525396,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 82.373022,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 57
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": {},
