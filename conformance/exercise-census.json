@@ -8360,7 +8360,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-child-winter-heating-payment.json",
-      "report_sha256": "21577addfcd2e42be4359bc6ae93cfef09414bb50d92ee4be3c5fc40e886c0c6",
+      "report_sha256": "7e0af1676ce9a739229e488f422aab01ae64d8cd7e66961bb761d879a28e394c",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
