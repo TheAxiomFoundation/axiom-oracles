@@ -595,7 +595,7 @@
       "axiom_rules_engine_sha": "fb735bf47a32a4e8af1ecc144c9a1ab382da984b",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-03T04:45:26Z",
+    "generated_at": "2026-09-03T16:34:55Z",
     "generated_by": "scripts/run_comparison.py::uk-statutory-paternity-pay-ukmod",
     "oracle": {
       "euromod_country": "UK",
