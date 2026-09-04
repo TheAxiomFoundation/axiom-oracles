@@ -666,7 +666,10 @@ generated_facts:
   measurement_basis:
     work_inventory:
       certificate_path: certificates/de-kindergeld.json
-      certificate_sha256: f4c4566a795649c47c42940337dc91242a4973b2e9cb4950f7bc95ee9236febf
+      certificate_premises_sha256: fe4f57cd891dee5a7afe84e6e98cb15459322fc25fc4b0ede194a4151103a347
+      certificate_premises:
+      - conformant
+      - executable
       oracle_target: 2
       captured_oracle_legs:
       - id: axiom-euromod

@@ -3,7 +3,9 @@
   "blockers": [
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
-    "executable reproduction receipt pending"
+    "executable reproduction receipt pending",
+    "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
@@ -68,7 +70,14 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "f291a6fe3fd11e26c04a2e5e8015642cd5c3e9b8e59ce7b31d5c56ee6e494e1f"
+      "sha256": "eea77bac75e1df7b69672dcef37abfb3d29bcd683df72f1148466cba30d738a2"
+    },
+    {
+      "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
+      "claim": "closed:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "5769e380b7ed65e4b8e301c6e926d77c948beb59e5a3c67cc09b77a778c74959",
+      "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
@@ -82,11 +91,140 @@
   "schema": "axiom_oracles.program_certificate.v1",
   "verdicts": {
     "closed": {
+      "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+        "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
+      "boundary_frontier": {
+        "complete": false,
+        "input_count": 9,
+        "inputs": [
+          {
+            "id": "de-uhv-leaf-b329e1f74fcb6509",
+            "input": "child_allowances_under_sections_31_and_32_6_1_are_increased",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_before_whole_euro_rounding"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.child_allowances_under_sections_31_and_32_6_1_are_increased"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-33186f8d485351af",
+            "input": "child_is_in_first_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_first_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_first_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-02d260d2633b6285",
+            "input": "child_is_in_second_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_second_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_second_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-b14840d10f0c7741",
+            "input": "child_is_in_third_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_third_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_third_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-9795bf040172cda9",
+            "input": "correspondingly_increased_kindergeld_amount",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_before_whole_euro_rounding"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.correspondingly_increased_kindergeld_amount"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-746953df348f3e70",
+            "input": "first_child_kindergeld",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "advance_maintenance_amount"
+            ],
+            "slots": [
+              "de:statutes/uhvorschg/2#input.first_child_kindergeld"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-8c5debf5377085b9",
+            "input": "minimum_maintenance_for_age_stage",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "advance_maintenance_amount"
+            ],
+            "slots": [
+              "de:statutes/uhvorschg/2#input.minimum_maintenance_for_age_stage"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-28c8b07ec06f361f",
+            "input": "month_is_on_or_after_first_qualifying_month",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_payable_for_month"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.month_is_on_or_after_first_qualifying_month"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-9dcc1cbc40e7ed0b",
+            "input": "month_is_on_or_before_last_qualifying_month",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_payable_for_month"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.month_is_on_or_before_last_qualifying_month"
+            ],
+            "status": "pending"
+          }
+        ],
+        "law_derived_count": 0,
+        "pending": [
+          "child_allowances_under_sections_31_and_32_6_1_are_increased",
+          "child_is_in_first_age_stage_under_section_1612a",
+          "child_is_in_second_age_stage_under_section_1612a",
+          "child_is_in_third_age_stage_under_section_1612a",
+          "correspondingly_increased_kindergeld_amount",
+          "first_child_kindergeld",
+          "minimum_maintenance_for_age_stage",
+          "month_is_on_or_after_first_qualifying_month",
+          "month_is_on_or_before_last_qualifying_month"
+        ],
+        "pending_count": 9,
+        "unclassified_count": 9
+      },
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 1,
@@ -138,18 +276,69 @@
       ],
       "dependency_closure": {
         "closed": false,
-        "missing": true,
-        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+        "instruments_bearing_on_computed": [],
+        "law_derived_inputs": [],
+        "open_dependency_count": 9,
+        "unclassified_inputs": [
+          "child_allowances_under_sections_31_and_32_6_1_are_increased",
+          "child_is_in_first_age_stage_under_section_1612a",
+          "child_is_in_second_age_stage_under_section_1612a",
+          "child_is_in_third_age_stage_under_section_1612a",
+          "correspondingly_increased_kindergeld_amount",
+          "first_child_kindergeld",
+          "minimum_maintenance_for_age_stage",
+          "month_is_on_or_after_first_qualifying_month",
+          "month_is_on_or_before_last_qualifying_month"
+        ]
       },
       "evidence_roots": [],
       "instrument_frontier": {
         "complete": false,
-        "missing": true,
-        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this closure declares none"
+        "counts": {
+          "classified-with-reason": 0,
+          "encoded": 0,
+          "excluded-with-reason": 0,
+          "pending": 21,
+          "total": 21
+        },
+        "instrument_count": 21,
+        "pending": [
+          "de-uhv-instr-11739679bb0a1df4",
+          "de-uhv-instr-1808736a82828a59",
+          "de-uhv-instr-1a53a8fa58131ff1",
+          "de-uhv-instr-2079e2162cee1404",
+          "de-uhv-instr-2a29967484296d20",
+          "de-uhv-instr-2b0a8f983f861591",
+          "de-uhv-instr-333ba26c32e038d3",
+          "de-uhv-instr-3875634198c25414",
+          "de-uhv-instr-4e1f544ea66cccdf",
+          "de-uhv-instr-703d3b12aaab39f8",
+          "de-uhv-instr-73cb585362978769",
+          "de-uhv-instr-7aa5943b5f0a6e6c",
+          "de-uhv-instr-8939b62ab3b44a39",
+          "de-uhv-instr-906e7387d896596c",
+          "de-uhv-instr-a303758d3667d729",
+          "de-uhv-instr-a66a4cb13aaf0599",
+          "de-uhv-instr-a9efdae38748dd9f",
+          "de-uhv-instr-b96e03076e143e8e",
+          "de-uhv-instr-c795a7af57079afc",
+          "de-uhv-instr-db7693cd9f018ff4",
+          "de-uhv-instr-guidance"
+        ],
+        "supplemental_count": null
       },
       "mode": "computed",
+      "non_encoded_reasons_complete": true,
       "pending_citations": 1,
       "pending_money_atoms": null,
+      "provision_counts": {
+        "classified-with-reason": 0,
+        "encoded": 0,
+        "excluded-with-reason": 0,
+        "partially-encoded": 0,
+        "pending": 12,
+        "total": 12
+      },
       "resolution_mode": "computed",
       "root_node_count": 1,
       "root_nodes": [
