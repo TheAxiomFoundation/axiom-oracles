@@ -1641,10 +1641,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "fb735bf47a32a4e8af1ecc144c9a1ab382da984b",
+      "axiom_rules_engine_sha": "d142c645917817cf590e036fb99f99b2d4780e1a",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-03T21:10:18Z",
+    "generated_at": "2026-09-04T11:48:14Z",
     "generated_by": "scripts/run_comparison.py::uk-child-benefit-ukmod",
     "oracle": {
       "euromod_country": "UK",
