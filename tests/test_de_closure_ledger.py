@@ -780,3 +780,50 @@ def test_check_is_hermetic_for_all_and_each_artifact(
     assert str(missing_root) in note
     assert "committed bytes remain binding" in note
     assert "no-op clean" in note
+
+
+def test_work_inventory_binds_certificate_premises_not_the_ledger_derived_verdict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The certificate embeds this ledger's SHA-256 as closure evidence once
+    certify consumes it through the central producer gate, so the ledger may
+    bind only the premises it reads (conformant, executable). MUTANTS: a
+    changed closed verdict or evidence list leaves the binding untouched; a
+    changed conformant premise moves it."""
+
+    module = _load_script()
+    program = "de/kindergeld"
+    committed_path = Path(module.CERTIFICATE_PATHS[program])
+    committed = json.loads(committed_path.read_text())
+    document = module.load_document(Path(module.ARTIFACT_PATHS[program]))
+    facts = document["generated_facts"]
+    inventory = facts["measurement_basis"]["work_inventory"]
+    assert inventory["certificate_premises"] == ["conformant", "executable"]
+    assert "certificate_sha256" not in inventory
+
+    def basis_for(certificate: dict) -> dict:
+        path = tmp_path / "certificate.json"
+        path.write_text(json.dumps(certificate))
+        monkeypatch.setitem(module.CERTIFICATE_PATHS, program, path)
+        monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+        return module._measurement_basis(
+            program,
+            document["program"],
+            facts["rulespec_modules"],
+            facts["leaf_frontier"],
+        )["work_inventory"]
+
+    baseline = basis_for(committed)["certificate_premises_sha256"]
+    assert baseline == inventory["certificate_premises_sha256"]
+
+    mutated_closed = copy.deepcopy(committed)
+    mutated_closed["verdicts"]["closed"] = {"value": True, "forged": True}
+    mutated_closed["evidence"] = []
+    mutated_closed["blockers"] = []
+    assert basis_for(mutated_closed)["certificate_premises_sha256"] == baseline
+
+    mutated_premise = copy.deepcopy(committed)
+    mutated_premise["verdicts"]["conformant"]["value"] = not committed["verdicts"][
+        "conformant"
+    ]["value"]
+    assert basis_for(mutated_premise)["certificate_premises_sha256"] != baseline

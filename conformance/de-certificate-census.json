@@ -16,8 +16,8 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+        "closed: instrument frontier incomplete — 28 of 28 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 8 open dependencies (4 law-derived inputs, 4 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
       "certificate_status": "pending",
@@ -116,7 +116,9 @@
         "no comparison record has been declared",
         "de/regulation/bsv-2018/1: encoding and 2025 temporal evidence pending",
         "de/statute/sgb-6/168: signature pending",
-        "executable reproduction receipt pending"
+        "executable reproduction receipt pending",
+        "closed: instrument frontier incomplete — 11 of 11 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 1 open dependencies (0 law-derived inputs, 1 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-rv-employee-contribution.json",
       "certificate_status": "pending",
@@ -177,7 +179,9 @@
       "blockers": [
         "no comparison record has been declared",
         "de/statute/uhvorschg/2: final-amount encoding remains partial",
-        "executable reproduction receipt pending"
+        "executable reproduction receipt pending",
+        "closed: instrument frontier incomplete — 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-unterhaltsvorschuss.json",
       "certificate_status": "pending",

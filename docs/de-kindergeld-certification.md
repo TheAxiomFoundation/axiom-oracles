@@ -3,9 +3,16 @@
 The committed certificate computes `certified: no` under CERTIFIED.md v3.
 Three premises compute true — conformant (both live Axiom pair legs),
 exercised (13-household variation), executable (the signed EStG 66 module
-replayed in pinned release v0.2.2) — and `closed` computes false with two
-named requirements: no subordinate-instrument frontier (oracles#491) and no
-typed-leaf dependency-closure ledger (CERTIFIED.md v3). The honest scope of
+replayed in pinned release v0.2.2) — and `closed` computes false from the
+all-pending v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`,
+#503), consumed through the same central gate (`scripts/closure_gate.py`)
+that judges every other closure artifact: the instrument frontier has 28 of
+28 candidates pending (oracles#491) and the dependency closure has 8 open
+dependencies — 4 law-derived and 4 unclassified leaves (CERTIFIED.md v3).
+The exact-citation-path summary (`closure/de/summary.json`) contributes only
+its source-universe and signature fields; nothing DE-specific decides the
+premise, and a forged ledger fails the producer's exact rederivation before
+it reaches the gate. The honest scope of
 the positive evidence is narrow: one encoded output root, the EStG 66
 per-child amount parameter, reproduced against two oracles across 13 cases
 (22 of the 26 comparisons are zero-children zeros); household Kindergeld is

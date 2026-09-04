@@ -1,5 +1,27 @@
 # DE measured-discovery ledger progress
 
+## Stabilization sprint (2026-09-04, Pavel owning)
+
+- oracles#498 fixed: certificates recompute on macOS (per-target engine
+  pins; the receipt still binds the producing x86_64-linux archive).
+- DE routed through the central producer gate: `PROGRAMS["de/*"]` declare
+  the v3 ledgers as `computed.closed` producers; `scripts/closure_gate.py`
+  is the one v3 gate (frontier complete, dependency closure well-formed and
+  closed, `unclassified_inputs` counted as open) for DK/NZ/tariff/DE alike;
+  the unconditional DE fail-closed block in `certify.py` is retired and the
+  DE census derives its closure blockers from the same gate. Verdicts
+  unchanged (all three DE programs `certified: no`), blockers now measured.
+- Hash cycle broken: the ledgers' `work_inventory` now binds
+  `certificate_premises_sha256` over the conformant and executable verdicts
+  it reads, not the whole certificate file — the certificate embeds the
+  ledger's own SHA-256 as closure evidence, so whole-file binding had no
+  fixpoint. Regenerating either side now converges in one pass.
+- Remaining sprint items: single claim-surface digest bound across all four
+  premises; import / root-reachable dependency-edge traversal; successful
+  subject-query result capture and pagination; corpus citation scan (#611);
+  program-scoped dependency attribution (the NZ #493 adjudication question,
+  which kindergeld also needs to certify alone).
+
 ## Current lane (2026-08-21)
 
 - Worktree: `oracles-de-discovery`, branch `feat/de-discovery-ledgers`, starting

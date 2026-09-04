@@ -27,6 +27,11 @@ UNIFIED_PATH = (
 UNIFIED_GENERATOR = REPO_ROOT / "scripts" / "de_unified_comparison.py"
 CLOSURE_SOURCE_PATH = REPO_ROOT / "closure" / "de" / "source.json"
 EXECUTABLE_GENERATOR = REPO_ROOT / "scripts" / "de_executable.py"
+LEDGER_GENERATOR = REPO_ROOT / "scripts" / "de_closure_ledger.py"
+LEDGER_DIR = REPO_ROOT / "conformance" / "closure"
+if str(REPO_ROOT / "scripts") not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import closure_gate  # noqa: E402
 EXECUTABLE_MANIFEST_PATH = (
     REPO_ROOT / "conformance" / "executable" / "de-kindergeld-manifest.json"
 )
@@ -306,6 +311,29 @@ def _rederived_unified() -> dict:
     return expected
 
 
+def _ledger_closure_blockers(program: str) -> list[str]:
+    """The central v3 gate's blockers for a program's committed discovery
+    ledger — the same lines certify.py puts on the certificate, derived from
+    the hermetically validated ledger rather than typed here."""
+
+    spec = importlib.util.spec_from_file_location("_de_census_ledger", LEDGER_GENERATOR)
+    if spec is None or spec.loader is None:
+        raise DECensusError("cannot load the DE closure ledger verifier")
+    module = importlib.util.module_from_spec(spec)
+    # dataclass decorators resolve their module through sys.modules.
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    path = LEDGER_DIR / f"{program.replace('/', '-')}.yaml"
+    if not path.is_file():
+        raise DECensusError(f"{program}: discovery ledger is missing")
+    try:
+        document = module.load_document(path)
+        module.validate_artifact(document)
+    except (OSError, ValueError) as exc:
+        raise DECensusError(f"{program}: discovery ledger is invalid: {exc}") from exc
+    return closure_gate.gate(document.get("computed"))[3]
+
+
 def _rederived_executable() -> dict:
     spec = importlib.util.spec_from_file_location(
         "_de_census_executable", EXECUTABLE_GENERATOR
@@ -562,17 +590,15 @@ def build(declarations: dict | None = None) -> dict:
     for program, declaration in declarations.items():
         blockers: list[str]
         if program == "de/kindergeld":
-            # The executable premise computes, but CERTIFIED.md v3 closure
-            # does not: no instrument frontier, no typed-leaf ledger. The
-            # census must never call this certificate ready while the
-            # certificate itself computes certified=no.
-            blockers = list(executable.get("blockers") or []) + [
-                "closed: closure must disposition the act's subordinate "
-                "instruments (oracles#491); this closure declares none",
-                "closed: closure must type every leaf and encode every "
-                "law-derived dependency (CERTIFIED.md v3); this closure "
-                "declares no dependency-closure block",
-            ]
+            # The executable premise computes; CERTIFIED.md v3 closure is
+            # judged by the central gate over the committed discovery ledger
+            # (all-pending frontier, open dependency closure). The census
+            # must never call this certificate ready while the certificate
+            # itself computes certified=no, and it carries the gate's own
+            # blocker lines so the two cannot disagree.
+            blockers = list(executable.get("blockers") or []) + _ledger_closure_blockers(
+                program
+            )
         elif program == "de/rv-employee-contribution":
             blockers = [
                 "no comparison record has been declared",
@@ -593,6 +619,8 @@ def build(declarations: dict | None = None) -> dict:
             )
             if estg_dependency.get("signature_state") != "signed":
                 blockers.insert(2, "de/statute/estg/66: signed 2025 dependency pending")
+        if program != "de/kindergeld":
+            blockers.extend(_ledger_closure_blockers(program))
         rows[program] = {
             **declaration,
             "certificate_path": f"certificates/{program.replace('/', '-')}.json",
