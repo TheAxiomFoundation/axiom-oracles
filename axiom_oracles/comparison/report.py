@@ -5,7 +5,12 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .comparator import HouseholdComparison, VariableComparison
+from .comparator import (
+    HouseholdComparison,
+    VariableComparison,
+    require_same_ids,
+    require_unique_ids,
+)
 from .mappings import ProgramMapping
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
@@ -90,6 +95,9 @@ class ComparisonReportAccumulator:
         self.locales = set(locales)
         self.scope = scope
         self.mappings = list(mappings)
+        require_unique_ids(
+            [mapping.concept_id for mapping in self.mappings], "mapping concepts"
+        )
         self._mappings_by_id = {
             mapping.concept_id: mapping for mapping in self.mappings
         }
@@ -111,6 +119,7 @@ class ComparisonReportAccumulator:
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
         self._right_engine: str | None = None
+        self._seen_case_ids: set[int | str] = set()
 
     @property
     def case_count(self) -> int:
@@ -121,11 +130,59 @@ class ComparisonReportAccumulator:
         cases: list[Case],
         comparisons: list[HouseholdComparison],
     ) -> None:
+        # Validate before mutating counters or appending rows: a partial batch
+        # must never replace the submitted-case denominator with its survivors.
+        case_ids = [case.case_id for case in cases]
+        comparison_ids = [item.household_id for item in comparisons]
+        require_unique_ids(case_ids, "submitted case IDs")
+        require_unique_ids(comparison_ids, "comparison household IDs")
+        require_same_ids(case_ids, comparison_ids, "comparison household IDs")
+        repeated = self._seen_case_ids.intersection(case_ids)
+        if repeated:
+            raise ValueError(
+                f"Case IDs repeated across batches: {sorted(repeated, key=repr)[:10]!r}"
+            )
         cases_by_id = {case.case_id: case for case in cases}
+        engine_pair = (
+            (self._left_engine, self._right_engine)
+            if self._left_engine is not None
+            else _engine_pair(comparisons)
+        )
+        for item in comparisons:
+            if (item.left_engine, item.right_engine) != engine_pair:
+                raise ValueError("Comparison engine pair changed within the report")
+            if not item.comparisons:
+                raise ValueError(
+                    f"No output comparisons for submitted case {item.household_id!r}"
+                )
+            actual_outputs = [value.variable for value in item.comparisons]
+            require_unique_ids(actual_outputs, "compared output concepts")
+            case = cases_by_id[item.household_id]
+            available_outputs = [
+                mapping.concept_id
+                for mapping in self.mappings
+                if mapping.target_for_engine(item.left_engine)
+                and mapping.target_for_engine(item.right_engine)
+            ]
+            expected_outputs = list(case.outputs) if case.outputs else available_outputs
+            unsupported = set(expected_outputs) - set(available_outputs)
+            if unsupported:
+                raise ValueError(
+                    f"Unmapped requested outputs for case {item.household_id!r}: "
+                    f"{sorted(unsupported)!r}"
+                )
+            require_unique_ids(expected_outputs, "requested output concepts")
+            require_same_ids(
+                expected_outputs,
+                actual_outputs,
+                f"output concepts for case {item.household_id!r}",
+            )
+
+        self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
 
-        self._case_count += len(comparisons)
+        self._case_count += len(cases)
         self._match_count += sum(item.match_count for item in comparisons)
         self._mismatch_count += sum(item.mismatch_count for item in comparisons)
 

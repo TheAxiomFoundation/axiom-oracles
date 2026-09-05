@@ -23,6 +23,7 @@ import sys
 import tempfile
 import time
 from collections import Counter
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -2310,6 +2311,10 @@ def _run_gettsim_synthetic_compare(runner: dict, output: Path) -> None:
     selected_concepts = set(params.get("concepts") or ()) or {
         output_id for case in cases for output_id in case.outputs
     }
+    if params.get("concepts"):
+        cases = [
+            replace(case, outputs=tuple(params["concepts"])) for case in cases
+        ]
     mappings = comparable_mappings(
         "euromod",
         "gettsim",
