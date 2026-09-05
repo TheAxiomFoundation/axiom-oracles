@@ -118,6 +118,17 @@ def test_zero_sum_components_are_present_values():
 
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
+def test_missing_sum_component_does_not_hide_another_non_finite_component(value):
+    mapping = replace(
+        MAPPING, targets={"axiom": ["a", "b"], "policyengine": "amount"}
+    )
+    with pytest.raises(ValueError, match="Non-finite component 'a'"):
+        Comparator([mapping]).compare(
+            [result("axiom", 1, {"a": value})], [result("policyengine", 1)]
+        )
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
 @pytest.mark.parametrize("kind", ["amount", "eligibility"])
 @pytest.mark.parametrize("side", ["left", "right"])
 def test_non_finite_values_are_explicit_errors(value, kind, side):

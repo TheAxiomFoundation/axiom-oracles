@@ -153,9 +153,22 @@ class Comparator:
     def _mapped_value(self, mapping: ProgramMapping, result: EngineResult) -> Value:
         key = self._mapping_key(mapping, result.engine)
         if isinstance(key, list):
-            if not key or any(result.get(item) is None for item in key):
+            numbers: list[float | None] = []
+            for item in key:
+                value = result.get(item)
+                if value is None:
+                    numbers.append(None)
+                    continue
+                number = self._to_number(value)
+                if not isfinite(number):
+                    raise ValueError(
+                        f"Non-finite component {item!r} from {result.engine!r} "
+                        f"for household {result.household_id!r}"
+                    )
+                numbers.append(number)
+            if not key or any(number is None for number in numbers):
                 return None
-            return sum(self._to_number(result.get(item)) for item in key)
+            return sum(number for number in numbers if number is not None)
         if key is None:
             return None
         return result.get(key)
