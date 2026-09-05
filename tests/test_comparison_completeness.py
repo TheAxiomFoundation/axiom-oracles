@@ -1,9 +1,9 @@
 from dataclasses import replace
+import json
 
 import pytest
 from click.testing import CliRunner
 
-from axiom_oracles.cli import _filter_comparisons_for_case_outputs
 from axiom_oracles.comparison.comparator import Comparator, HouseholdComparison
 from axiom_oracles.comparison.mappings import ProgramMapping
 from axiom_oracles.comparison.report import (
@@ -119,9 +119,7 @@ def test_zero_sum_components_are_present_values():
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf")])
 def test_missing_sum_component_does_not_hide_another_non_finite_component(value):
-    mapping = replace(
-        MAPPING, targets={"axiom": ["a", "b"], "policyengine": "amount"}
-    )
+    mapping = replace(MAPPING, targets={"axiom": ["a", "b"], "policyengine": "amount"})
     with pytest.raises(ValueError, match="Non-finite component 'a'"):
         Comparator([mapping]).compare(
             [result("axiom", 1, {"a": value})], [result("policyengine", 1)]
@@ -143,6 +141,25 @@ def test_empty_comparison_is_not_perfect_agreement():
     assert HouseholdComparison(1, "axiom", "policyengine").match_rate == 0
     with pytest.raises(ValueError, match="No comparable mappings"):
         Comparator([]).compare([result("axiom", 1)], [result("policyengine", 1)])
+
+
+def test_empty_report_is_inspectable_but_has_no_agreement():
+    acc = accumulator()
+    acc.add_batch([], [])
+    report = acc.to_dict()
+    direct_report = build_comparison_report(
+        suite_name="completeness",
+        population="fixture",
+        locales=set(),
+        scope=None,
+        cases=[],
+        mappings=[MAPPING],
+        comparisons=[],
+    )
+    assert report == direct_report
+    assert report["case_count"] == 0
+    assert report["summary"]["comparison_count"] == 0
+    assert report["summary"]["weighted"]["match_rate"] == 0
 
 
 def test_duplicate_mapping_concepts_are_rejected():
@@ -228,7 +245,10 @@ def test_report_requires_every_requested_output_exactly_once(defect):
         accumulator().add_batch(cases, [row])
 
 
-def test_case_specific_requested_outputs_preserve_their_explicit_scope():
+@pytest.mark.parametrize(
+    "unrequested", [None, float("nan"), float("inf"), -float("inf")]
+)
+def test_case_specific_requested_outputs_preserve_their_explicit_scope(unrequested):
     other = replace(
         MAPPING,
         standard="test:other",
@@ -239,8 +259,15 @@ def test_case_specific_requested_outputs_preserve_their_explicit_scope():
         Case(case_id=2, period="2026", outputs=("test:other",)),
     ]
     rows = Comparator([MAPPING, other]).compare(
-        [result("axiom", 1), result("axiom", 2, {"other": 20})],
-        [result("policyengine", 1), result("policyengine", 2, {"other": 20})],
+        [
+            result("axiom", 1, {"amount": 10, "other": unrequested}),
+            result("axiom", 2, {"amount": unrequested, "other": 20}),
+        ],
+        [
+            result("policyengine", 1, {"amount": 10, "other": unrequested}),
+            result("policyengine", 2, {"amount": unrequested, "other": 20}),
+        ],
+        outputs_by_case={case.case_id: case.outputs for case in cases},
     )
     report = build_comparison_report(
         suite_name="scoped",
@@ -249,24 +276,54 @@ def test_case_specific_requested_outputs_preserve_their_explicit_scope():
         scope=None,
         cases=cases,
         mappings=[MAPPING, other],
-        comparisons=_filter_comparisons_for_case_outputs(cases, rows),
+        comparisons=rows,
     )
     assert report["case_count"] == 2
     assert report["summary"]["comparison_count"] == 2
     assert report["summary"]["match_count"] == 2
 
 
-def test_cli_fails_cleanly_without_writing_a_partial_report(monkeypatch, tmp_path):
+@pytest.mark.parametrize(
+    "outputs_by_case,reason",
+    [
+        ({}, "unexpected \\[1\\]"),
+        ({1: ("test:amount",), 2: ("test:amount",)}, "missing \\[2\\]"),
+        ({1: ()}, "No comparable mappings"),
+        ({1: ("test:amount", "test:amount")}, "Duplicate requested"),
+        ({1: ("test:other",)}, "Unmapped requested"),
+    ],
+)
+def test_case_output_contract_is_checked_before_values(outputs_by_case, reason):
+    with pytest.raises(ValueError, match=reason):
+        Comparator([MAPPING]).compare(
+            [result("axiom", 1, {"amount": float("nan")})],
+            [result("policyengine", 1)],
+            outputs_by_case=outputs_by_case,
+        )
+
+
+@pytest.mark.parametrize("scenario", ["missing_case", "unrequested_non_finite"])
+def test_cli_validates_case_coverage_and_requested_values(
+    scenario, monkeypatch, tmp_path
+):
     import importlib
 
     cli_module = importlib.import_module("axiom_oracles.cli")
-    cases = [Case(case_id=1, period="2026"), Case(case_id=2, period="2026")]
+    cases = [
+        Case(case_id=1, period="2026", outputs=("test:amount",)),
+        Case(case_id=2, period="2026", outputs=("test:amount",)),
+    ]
+    other = replace(
+        MAPPING,
+        standard="test:other",
+        targets={"axiom": "other", "policyengine": "other"},
+    )
     monkeypatch.setattr(cli_module, "_load_population_cases", lambda **kwargs: cases)
     monkeypatch.setattr(
         cli_module, "_echo_resolved_axiom_composition", lambda *args: None
     )
     monkeypatch.setattr(
-        cli_module, "comparable_mappings", lambda *args, **kwargs: [MAPPING]
+        cli_module, "comparable_mappings", lambda *args, **kwargs: [MAPPING, other]
     )
     monkeypatch.setattr(
         cli_module, "_prepare_cases_for_engines", lambda batch, *args, **kwargs: batch
@@ -277,8 +334,15 @@ def test_cli_fails_cleanly_without_writing_a_partial_report(monkeypatch, tmp_pat
             self.engine = engine
 
         def run_cases(self, batch, variables):
-            ids = [1, 2] if self.engine == "axiom" else [1]
-            return [result(self.engine, key) for key in ids]
+            ids = (
+                [1]
+                if scenario == "missing_case" and self.engine == "policyengine"
+                else [1, 2]
+            )
+            return [
+                result(self.engine, key, {"amount": 10, "other": float("nan")})
+                for key in ids
+            ]
 
     monkeypatch.setattr(
         cli_module, "_build_runner", lambda engine, *args, **kwargs: Runner(engine)
@@ -294,7 +358,14 @@ def test_cli_fails_cleanly_without_writing_a_partial_report(monkeypatch, tmp_pat
             str(output),
         ],
     )
-    assert run.exit_code == 1, run.output
-    assert "Invalid comparison results" in run.output
-    assert "missing [2]" in run.output
-    assert not output.exists()
+    if scenario == "missing_case":
+        assert run.exit_code == 1, run.output
+        assert "Invalid comparison results" in run.output
+        assert "missing [2]" in run.output
+        assert not output.exists()
+    else:
+        assert run.exit_code == 0, run.output
+        report = json.loads(output.read_text())
+        assert report["case_count"] == 2
+        assert report["summary"]["comparison_count"] == 2
+        assert report["summary"]["match_count"] == 2

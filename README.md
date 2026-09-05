@@ -209,9 +209,12 @@ mismatch; a summed target requires every component, including explicit zeroes.
 Duplicate or unpaired result IDs and non-finite values raise `ValueError` instead
 of producing a partial agreement report. The report accumulator also checks that
 each submitted case and each requested output appears exactly once, including
-case IDs across streaming batches. Case-specific output selections remain scoped
-to `Case.outputs`; an empty comparison is not a successful case. The CLI reports
-these validation failures and does not write the incomplete report. This validates
+case IDs across streaming batches. The CLI scopes value validation to `Case.outputs`
+before comparing, so unrequested values cannot invalidate a case. Direct comparator
+callers can supply the same scope through `outputs_by_case`; otherwise their selected
+mappings define the requested surface. An empty comparison is not a successful case.
+The CLI reports these validation failures and does not write the incomplete report.
+This validates
 comparison completeness, not the independence or authority of either engine.
 
 TAXSIM and PRD are exposed as package adapters rather than separate comparison

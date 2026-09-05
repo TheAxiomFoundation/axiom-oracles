@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from math import isclose, isfinite
 
@@ -57,23 +57,47 @@ class Comparator:
         self,
         left_results: list[EngineResult],
         right_results: list[EngineResult],
+        *,
+        outputs_by_case: Mapping[int | str, Sequence[str]] | None = None,
     ) -> list[HouseholdComparison]:
+        """Compare selected mappings, optionally scoped to each case's outputs."""
         left_ids = [result.household_id for result in left_results]
         right_ids = [result.household_id for result in right_results]
         require_unique_ids(left_ids, "left result household IDs")
         require_unique_ids(right_ids, "right result household IDs")
         require_same_ids(left_ids, right_ids, "right result household IDs")
+        if outputs_by_case is not None:
+            require_same_ids(list(outputs_by_case), left_ids, "result household IDs")
         right_by_id = {result.household_id: result for result in right_results}
         comparisons: list[HouseholdComparison] = []
 
         for left in left_results:
             right = right_by_id[left.household_id]
 
-            variable_comparisons = [
-                self.compare_mapping(mapping, left, right)
+            mappings = [
+                mapping
                 for mapping in self.mappings
                 if self._has_engine_target(mapping, left.engine)
                 and self._has_engine_target(mapping, right.engine)
+            ]
+            if outputs_by_case is not None:
+                requested = outputs_by_case[left.household_id]
+                require_unique_ids(requested, "requested output concepts")
+                unsupported = set(requested) - {
+                    mapping.concept_id for mapping in mappings
+                }
+                if unsupported:
+                    raise ValueError(
+                        f"Unmapped requested outputs for case {left.household_id!r}: "
+                        f"{sorted(unsupported)!r}"
+                    )
+                mappings = [
+                    mapping
+                    for mapping in mappings
+                    if mapping.concept_id in requested
+                ]
+            variable_comparisons = [
+                self.compare_mapping(mapping, left, right) for mapping in mappings
             ]
             if not variable_comparisons:
                 raise ValueError(

@@ -811,9 +811,12 @@ def compare(
                 try:
                     accumulator.add_batch(
                         accumulator_cases,
-                        _filter_comparisons_for_case_outputs(
-                            accumulator_cases,
-                            comparator.compare(left_results, right_results),
+                        comparator.compare(
+                            left_results,
+                            right_results,
+                            outputs_by_case={
+                                case.case_id: case.outputs for case in accumulator_cases
+                            },
                         ),
                     )
                 except ValueError as exc:
