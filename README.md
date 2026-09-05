@@ -203,6 +203,17 @@ The report also includes a `schema_version`, left/right engine names, concept
 tolerances and priorities, and `mismatches_by_kind` so downstream apps can render
 the same report without duplicating comparison logic.
 
+Comparison mappings define the requested output surface, independently of which
+values the engines return. A missing value on either or both sides remains a
+mismatch; a summed target requires every component, including explicit zeroes.
+Duplicate or unpaired result IDs and non-finite values raise `ValueError` instead
+of producing a partial agreement report. The report accumulator also checks that
+each submitted case and each requested output appears exactly once, including
+case IDs across streaming batches. Case-specific output selections remain scoped
+to `Case.outputs`; an empty comparison is not a successful case. The CLI reports
+these validation failures and does not write the incomplete report. This validates
+comparison completeness, not the independence or authority of either engine.
+
 TAXSIM and PRD are exposed as package adapters rather than separate comparison
 systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
 period, geography, age, relation, and earned-income facts, while still accepting

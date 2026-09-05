@@ -808,13 +808,18 @@ def compare(
                         left_results if left == "axiom" else right_results,
                         concept_ids,
                     )
-                accumulator.add_batch(
-                    accumulator_cases,
-                    _filter_comparisons_for_case_outputs(
+                try:
+                    accumulator.add_batch(
                         accumulator_cases,
-                        comparator.compare(left_results, right_results),
-                    ),
-                )
+                        _filter_comparisons_for_case_outputs(
+                            accumulator_cases,
+                            comparator.compare(left_results, right_results),
+                        ),
+                    )
+                except ValueError as exc:
+                    raise click.ClickException(
+                        f"Invalid comparison results: {exc}"
+                    ) from exc
 
             if not accumulator.case_count:
                 raise click.ClickException(
