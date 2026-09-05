@@ -2972,7 +2972,7 @@
       "axiom_rules_engine_sha": "d142c645917817cf590e036fb99f99b2d4780e1a",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-04T20:53:18Z",
+    "generated_at": "2026-09-05T04:42:21Z",
     "generated_by": "scripts/run_comparison.py::uk-universal-credit-ukmod",
     "oracle": {
       "euromod_country": "UK",
