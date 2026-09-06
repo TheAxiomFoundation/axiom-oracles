@@ -13,6 +13,31 @@ an attested external multiplication by child count. The clean historical
 EUROMOD-to-GETTSIM aggregate is a source-source conservation crosscheck; it
 is not per-case oracle evidence and cannot satisfy either Axiom leg.
 
+## Standing decisions (2026-09-04)
+
+Recorded by Pavel Makarchuk against the #502 decision list; both were
+preregistered choices the measured-discovery sprint left open for an owner.
+
+1. **Spine denominator: EStG §§62–78 inclusive, confirmed.** The ledger's
+   `spine_scope` (`conformance/closure/de-kindergeld.yaml`, ordinals 62–78,
+   18 spine rows) is the certified spine. The narrower §§62–66 branch is
+   retired and would need a new, narrower program name to reopen. No
+   discovery reads had begun, so the preregistration ordering in
+   `de-kg-instr-004` holds.
+2. **Candidate: de/kindergeld, chosen with a recorded strategic-demo
+   premium.** On the #503 measured denominators kindergeld loses on cost
+   (18 spine rows / 28 candidate instruments / 4 law-derived leaves versus
+   3 / 11 / 0 for rv-employee-contribution and 12 / 21 / 0 for
+   unterhaltsvorschuss). It is chosen anyway because it is the program with
+   live dual-oracle legs, a signed executable module, and the public
+   Kindergeld demo surface; the premium is the difference between those
+   denominators and is accepted knowingly, per step 3 of #502.
+
+Neither decision touches `committed_decisions` in the ledger, which the
+hermetic checker requires to stay empty until dispositions begin. The
+bearing-vs-classify calls on DA-KG headings and the BKGG / EStG §31
+interplay remain open and need native reading.
+
 ## Landing the evidence bundle
 
 The reviewed RuleSpec-DE pin lives in both registered leg configs:
@@ -119,8 +144,10 @@ Instrument frontier (`de-kg-instr-*`):
 - `de-kg-instr-003` EStG §31 (Familienleistungsausgleich) — the
   Günstigerprüfung interplay with §32(6) allowances.
 - `de-kg-instr-004` EStG §§67–78 spine-denominator decision — application,
-  award changes, payment restrictions. Whether the certified spine is
-  §§62–66 only or §§62–78 must be preregistered BEFORE discovery runs.
+  award changes, payment restrictions. DECIDED 2026-09-04: the certified
+  spine is §§62–78 inclusive (see "Standing decisions" above); §§67–78 rows
+  stay in the frontier as pending spine provisions to disposition, not as an
+  open scope question.
 - `de-kg-instr-005` registry/search/citation discovery receipts — the
   sha-bound snapshot of the official link graph plus mandatory
   subject-search and citation-scan channels (frontier rows enter as pending

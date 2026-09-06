@@ -1,5 +1,19 @@
 # DE measured-discovery ledger progress
 
+## Decisions (2026-09-04)
+
+- Spine denominator for de/kindergeld confirmed as EStG §§62–78 inclusive,
+  as preregistered in the ledger's `spine_scope`. The §§62–66 branch is
+  retired.
+- Candidate choice (issue #502 step 3): de/kindergeld, with an explicit
+  strategic-demo premium recorded over the cheaper rv-employee-contribution
+  and unterhaltsvorschuss ledgers. Rationale and denominators in
+  `docs/de-kindergeld-certification.md`, "Standing decisions".
+- Still open: bearing-vs-classify calls on DA-KG headings and BKGG / EStG
+  §31 (native reading), and the #502 step-1 stabilization sprint that the
+  dk/d3 lane owns. The certificate stays at `certified: no`; these decisions
+  change scope, not evidence.
+
 ## Current lane (2026-08-21)
 
 - Worktree: `oracles-de-discovery`, branch `feat/de-discovery-ledgers`, starting
