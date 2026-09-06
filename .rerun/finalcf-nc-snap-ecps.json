@@ -1,0 +1,48 @@
+{
+  "ecps-28618": {
+    "forcings": {
+      "medical": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      },
+      "se": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      },
+      "se+medical": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      },
+      "tanf": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      },
+      "tanf+medical": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      },
+      "tanf+se+medical": {
+        "is_snap_eligible": true,
+        "snap": 92.89990234375,
+        "snap_gross_income": 5907.01708984375,
+        "snap_net_income": 4427.23291015625
+      }
+    },
+    "unforced": {
+      "is_snap_eligible": true,
+      "snap": 92.89990234375,
+      "snap_gross_income": 5907.01708984375,
+      "snap_net_income": 4427.23291015625
+    }
+  }
+}

@@ -1,0 +1,37 @@
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traceback (most recent call last):
+  File "<stdin>", line 17, in <module>
+  File "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/axiom_oracles/populations/populace_us.py", line 174, in load_populace_us_cases
+    ).load_cases(
+      ~~~~~~~~~~^
+        scope=scope,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        case_unit=case_unit,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/axiom_oracles/populations/populace_us.py", line 199, in load_cases
+    sim = self._build_microsimulation(dataset)
+  File "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/axiom_oracles/populations/populace_us.py", line 272, in _build_microsimulation
+    import policyengine as pe
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/__init__.py", line 40, in <module>
+    from policyengine.tax_benefit_models import us as us
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/__init__.py", line 44, in <module>
+    from .household import calculate_household
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/household.py", line 52, in <module>
+    from .model import us_latest
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py", line 465, in <module>
+    us_latest = PolicyEngineUSLatest()
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/common/model_version.py", line 114, in __init__
+    data_certification = certify_data_release_compatibility(
+        self.country_code,
+    ...<3 lines>...
+        ),
+    )
+  File "/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/provenance/manifest.py", line 456, in certify_data_release_compatibility
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: Data release manifest is not certified for the runtime model version 1.767.3 in country 'us'.

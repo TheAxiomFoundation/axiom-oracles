@@ -1,0 +1,669 @@
+suite: ca-snap-ecps
+entries:
+- id: pe-medical-imputation-counterfactual-56919
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-56919
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      204 versus January PolicyEngine 280). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      204.4; its absolute delta from Axiom, 0.399994, is within the unchanged suite
+      tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine
+      imputes allowable medical expenses for the elderly/disabled member, feeding
+      an excess medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 204.4 - 204
+      equals: 0.399994
+      tolerance: 0.399995
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 204.0
+    right: 280.0
+    difference: 76.0
+- id: tanf-zero-counterfactual-57173
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-57173
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      994 versus January PolicyEngine 748.6). Forcing the aggregate and state TANF
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      994; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine
+      computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397
+      counterfactual class).
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 994 - 994
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 994.0
+    right: 748.5999755859375
+    difference: -245.4000244140625
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-57912-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-57912
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only; its 33 benefit against
+      PolicyEngine's January 0.0 is the same aggregation artifact.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 33.0
+    right: 0.0
+    difference: -33.0
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-57912-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-57912
+  kind: eligibility_left_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-58676-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-58676
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only; its 24 benefit against
+      PolicyEngine's January 0.0 is the same aggregation artifact.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 0.0
+    difference: -24.0
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-58676-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-58676
+  kind: eligibility_left_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: tanf-zero-counterfactual-58946
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-58946
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      534 versus January PolicyEngine 350). Forcing the aggregate and state TANF
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      534.2; its absolute delta from Axiom, 0.199951, is within the unchanged suite
+      tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface
+      while PolicyEngine computes state TANF endogenously and counts it as SNAP
+      unearned income (axiom-oracles#397 counterfactual class).
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 534.2 - 534
+      equals: 0.199951
+      tolerance: 0.199952
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 534.0
+    right: 350.0
+    difference: -184.0
+- id: pe-medical-imputation-counterfactual-59946
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-59946
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      0 versus January PolicyEngine 135.5). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. Axiom receives zero medical-expense input while PolicyEngine imputes
+      allowable medical expenses for the elderly/disabled member, feeding an excess
+      medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 0 - 0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 135.5
+    difference: 135.5
+- id: pe-medical-imputation-counterfactual-59946-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-59946
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      0 versus January PolicyEngine 135.5). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. Axiom receives zero medical-expense input while PolicyEngine imputes
+      allowable medical expenses for the elderly/disabled member, feeding an excess
+      medical deduction the bridge never projects to Axiom. The same intervention
+      sets January PolicyEngine eligibility to False, matching Axiom's persisted
+      verdict.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 0 - 0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: tanf-zero-counterfactual-60816
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-60816
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      361 versus January PolicyEngine 283.9). Forcing the aggregate and state TANF
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      361.3; its absolute delta from Axiom, 0.299988, is within the unchanged suite
+      tolerance 7.0. The comparison bridge zeroes TANF on the Axiom input surface
+      while PolicyEngine computes state TANF endogenously and counts it as SNAP
+      unearned income (axiom-oracles#397 counterfactual class).
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 361.3 - 361
+      equals: 0.299988
+      tolerance: 0.299989
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 361.0
+    right: 283.89996337890625
+    difference: -77.10003662109375
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-61658-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-61658
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only; its 298 benefit against
+      PolicyEngine's January 0.0 is the same aggregation artifact.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 0.0
+    difference: -298.0
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-61658-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-61658
+  kind: eligibility_left_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: tanf-zero-counterfactual-61665
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-61665
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      785 versus January PolicyEngine 529.7). Forcing the aggregate and state TANF
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      785; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine
+      computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397
+      counterfactual class).
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 785 - 785
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 529.7000122070312
+    difference: -255.29998779296875
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-62891-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-62891
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only; its 612 benefit against
+      PolicyEngine's January 0.0 is the same aggregation artifact.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 612.0
+    right: 0.0
+    difference: -612.0
+- id: ca-pe-annual-eligibility-aggregation-2026-08-12-62891-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-62891
+  kind: eligibility_left_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. The direct January 2026 simulation of
+      the identical Case is ineligible with zero SNAP under every income-forcing
+      counterfactual (medical, TANF, self-employment, and their combinations), so
+      no January income surface reproduces the committed PolicyEngine verdict. The
+      committed eligibility boolean is the comparison adapter's year-shaped output-dataset
+      value — an any-month aggregation across calendar 2026 (the household qualifies
+      in some non-January month, e.g. after the October 1 COLA) — while the month-defined
+      benefit is January's. Axiom evaluates January only.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: true
+    right: false
+- id: ca-bbce-tail-2026-08-12-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-59311
+    - ecps-61082
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-59311: categorical=True, net_test=True,
+      gross_test=False, January PE 23.84; ecps-61082: categorical=True, net_test=True,
+      gross_test=False, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+  expires_on_source_change: true
+  kind: eligibility_right_only
+- id: ca-bbce-tail-2026-08-12-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_selector:
+    case_ids:
+    - ecps-59311
+    - ecps-61082
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-59311: categorical=True, net_test=True,
+      gross_test=False, January PE 23.84; ecps-61082: categorical=True, net_test=True,
+      gross_test=False, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+  expires_on_source_change: true
+  kind: amount_difference
+unresolved:
+- case_id: ecps-57335
+  report:
+    axiom_benefit: 1183.0
+    axiom_eligible: null
+    pe_benefit: 708.0999755859375
+    pe_eligible: null
+  january:
+    snap: 708.0999755859375
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 708.0999755859375
+      elig: true
+    se:
+      snap: 708.0999755859375
+      elig: true
+    se+medical:
+      snap: 708.0999755859375
+      elig: true
+    tanf:
+      snap: 980.7999877929688
+      elig: true
+    tanf+medical:
+      snap: 980.7999877929688
+      elig: true
+    tanf+se+medical:
+      snap: 980.7999877929688
+      elig: true
+  imputed:
+    tanf: 10911.8642578125
+- case_id: ecps-57437
+  report:
+    axiom_benefit: null
+    axiom_eligible: false
+    pe_benefit: null
+    pe_eligible: true
+  january:
+    snap: 0.0
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 0.0
+      elig: false
+    se:
+      snap: 0.0
+      elig: false
+    se+medical:
+      snap: 0.0
+      elig: false
+    tanf:
+      snap: 0.0
+      elig: false
+    tanf+medical:
+      snap: 0.0
+      elig: false
+    tanf+se+medical:
+      snap: 0.0
+      elig: false
+  imputed: {}
+- case_id: ecps-58805
+  report:
+    axiom_benefit: 930.0
+    axiom_eligible: null
+    pe_benefit: 543.4000244140625
+    pe_eligible: null
+  january:
+    snap: 543.4000244140625
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 543.4000244140625
+      elig: true
+    se:
+      snap: 543.4000244140625
+      elig: true
+    se+medical:
+      snap: 543.4000244140625
+      elig: true
+    tanf:
+      snap: 681.699951171875
+      elig: true
+    tanf+medical:
+      snap: 681.699951171875
+      elig: true
+    tanf+se+medical:
+      snap: 681.699951171875
+      elig: true
+  imputed:
+    tanf: 5531.6513671875
+- case_id: ecps-60285
+  report:
+    axiom_benefit: 785.0
+    axiom_eligible: null
+    pe_benefit: 523.4000244140625
+    pe_eligible: null
+  january:
+    snap: 523.4000244140625
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 523.4000244140625
+      elig: true
+    se:
+      snap: 523.4000244140625
+      elig: true
+    se+medical:
+      snap: 523.4000244140625
+      elig: true
+    tanf:
+      snap: 743.0
+      elig: true
+    tanf+medical:
+      snap: 743.0
+      elig: true
+    tanf+se+medical:
+      snap: 743.0
+      elig: true
+  imputed:
+    tanf: 8778.4052734375
+- case_id: ecps-60408
+  report:
+    axiom_benefit: null
+    axiom_eligible: false
+    pe_benefit: null
+    pe_eligible: true
+  january:
+    snap: 0.0
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 0.0
+      elig: false
+    se:
+      snap: 0.0
+      elig: false
+    se+medical:
+      snap: 0.0
+      elig: false
+    tanf:
+      snap: 0.0
+      elig: false
+    tanf+medical:
+      snap: 0.0
+      elig: false
+    tanf+se+medical:
+      snap: 0.0
+      elig: false
+  imputed: {}
+- case_id: ecps-61042
+  report:
+    axiom_benefit: 0.0
+    axiom_eligible: false
+    pe_benefit: 170.79998779296875
+    pe_eligible: true
+  january:
+    snap: 170.79998779296875
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 170.79998779296875
+      elig: true
+    se:
+      snap: 170.79998779296875
+      elig: true
+    se+medical:
+      snap: 170.79998779296875
+      elig: true
+    tanf:
+      snap: 170.79998779296875
+      elig: true
+    tanf+medical:
+      snap: 170.79998779296875
+      elig: true
+    tanf+se+medical:
+      snap: 170.79998779296875
+      elig: true
+  imputed: {}

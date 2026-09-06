@@ -1,0 +1,106 @@
+== al-snap-ecps (2 households)
+  ecps-36581 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-37422 [imputed:none?] ax=0.0/False pe=0.00/True 
+== ca-snap-ecps (18 households)
+  ecps-56919 [imputed:medical_expense_health_insurance_premiums] ax=204.0/None pe=280.00/None 
+  ecps-57173 [imputed:tanf] ax=994.0/None pe=748.60/None 
+  ecps-57335 [manual] ax=1183.0/None pe=708.10/None 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=3008.68 net=1583.81 ages=[31, 15, 13, 9, 3]
+     imputed={'tanf': 10911.9} forced_snap=980.7999877929688
+  ecps-57437 [manual] ax=None/False pe=?/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2259.91 net=1776.51 ages=[35, 37]
+  ecps-57912 [manual] ax=33.0/True pe=0.00/False 
+     live: elig=False cat=False net_ok=False gross_ok=False gross=3648.20 net=1966.33 ages=[24]
+  ecps-58676 [manual] ax=24.0/True pe=0.00/False 
+     live: elig=False cat=False net_ok=False gross_ok=False gross=4373.24 net=2545.59 ages=[31]
+  ecps-58805 [manual] ax=930.0/None pe=543.40/None 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2971.03 net=1502.02 ages=[38, 18, 3, 2]
+     imputed={'tanf': 5531.7} forced_snap=681.699951171875
+  ecps-58946 [imputed:tanf] ax=534.0/None pe=350.00/None 
+  ecps-59311 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=True gross_ok=False
+  ecps-59946 [imputed:medical_expense_health_insurance_premiums] ax=0.0/False pe=135.50/True 
+  ecps-60285 [manual] ax=785.0/None pe=523.40/None 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2098.47 net=872.08 ages=[28, 11, 7]
+     imputed={'tanf': 8778.4} forced_snap=743.0
+  ecps-60408 [manual] ax=None/False pe=?/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=4111.42 net=3157.99 ages=[48, 53, 25, 15, 10]
+  ecps-60816 [imputed:tanf] ax=361.0/None pe=283.90/None 
+  ecps-61042 [manual] ax=0.0/False pe=170.80/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1705.76 net=424.76 ages=[58]
+  ecps-61082 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=True gross_ok=False
+  ecps-61658 [manual] ax=298.0/True pe=0.00/False 
+     live: elig=False cat=False net_ok=False gross_ok=False gross=3550.99 net=1887.79 ages=[30]
+  ecps-61665 [imputed:tanf] ax=785.0/None pe=529.70/None 
+  ecps-62891 [manual] ax=612.0/True pe=0.00/False 
+     live: elig=False cat=False net_ok=False gross_ok=False gross=5140.01 net=3296.81 ages=[38, 49, 16, 12, 6]
+== fl-snap-ecps (12 households)
+  ecps-31418 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-32197 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=False
+  ecps-32401 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-32629 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-32834 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-32979 [bbce] ax=0.0/False pe=32.40/True cat=True net_ok=True gross_ok=False
+  ecps-33045 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-33139 [manual] ax=116.0/True pe=103.00/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=859.54 net=650.54 ages=[31]
+  ecps-33182 [manual] ax=0.0/False pe=23.84/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1977.07 net=1768.07 ages=[80, 48]
+  ecps-33616 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=False
+  ecps-33897 [manual] ax=275.0/True pe=243.40/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=458.03 net=182.23 ages=[43]
+  ecps-33930 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=False
+== ga-snap-ecps (14 households)
+  ecps-29868 [minors] ax=0.0/False pe=298.00/True 
+  ecps-29875 [minors] ax=0.0/False pe=166.00/True 
+  ecps-29878 [manual] ax=127.0/True pe=280.30/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=776.90 net=59.35 ages=[65]
+  ecps-30033 [manual] ax=207.0/True pe=249.70/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=509.09 net=161.13 ages=[56]
+  ecps-30573 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-30605 [manual] ax=318.0/True pe=113.90/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2768.68 net=2237.33 ages=[65, 13, 12]
+     imputed={'pension_income': 13883.5} forced_snap=376.9999694824219
+  ecps-30736 [manual] ax=693.0/True pe=785.00/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=514.71 net=0.00 ages=[80, 85, 56]
+  ecps-30843 [manual] ax=24.0/True pe=75.70/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1705.66 net=741.28 ages=[61]
+  ecps-31013 [manual] ax=199.0/True pe=222.40/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=537.97 net=252.97 ages=[75]
+  ecps-31017 [manual] ax=24.0/True pe=151.30/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1487.91 net=489.32 ages=[70]
+  ecps-31073 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-31306 [manual] ax=0.0/False pe=241.90/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=3474.53 net=2507.53 ages=[32, 32, 14, 13]
+  ecps-71017 [manual] ax=83.0/True pe=306.90/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1750.24 net=797.24 ages=[42, 42]
+  ecps-71437 [manual] ax=130.0/True pe=278.40/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1972.25 net=892.10 ages=[35, 35]
+== ma-snap-ecps (8 households)
+  ecps-2328 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-2354 [imputed:tanf] ax=1183.0/True pe=1173.10/True 
+  ecps-2364 [manual] ax=36.0/True pe=23.84/True 
+     live: elig=True cat=True net_ok=True gross_ok=False gross=1904.89 net=1153.51 ages=[53]
+  ecps-2367 [imputed:tanf] ax=785.0/True pe=710.60/True 
+  ecps-2401 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-3075 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=False
+  ecps-3161 [manual] ax=546.0/True pe=324.90/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2050.23 net=737.90 ages=[53, 28]
+     imputed={'pension_income': 3042.7} forced_snap=400.79998779296875
+  ecps-69871 [bbce] ax=0.0/False pe=68.70/True cat=True net_ok=True gross_ok=False
+== nc-snap-ecps (6 households)
+  ecps-27181 [bbce] ax=0.0/False pe=0.00/True cat=True net_ok=False gross_ok=True
+  ecps-27266 [imputed:tanf] ax=506.0/True pe=487.20/True 
+  ecps-27947 [bbce] ax=0.0/False pe=0.00/True cat=True net_ok=False gross_ok=True
+  ecps-28179 [bbce] ax=0.0/False pe=0.00/True cat=True net_ok=False gross_ok=False
+  ecps-28260 [bbce] ax=0.0/False pe=0.00/True cat=True net_ok=False gross_ok=True
+  ecps-28618 [manual] ax=389.0/True pe=92.90/True 
+     live: elig=True cat=True net_ok=False gross_ok=False gross=5907.02 net=4427.23 ages=[28, 9, 7, 5, 0, 29]
+== sc-snap-ecps (6 households)
+  ecps-28770 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-28842 [manual] ax=0.0/False pe=23.84/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=1526.94 net=1317.94 ages=[74]
+  ecps-29194 [imputed:tanf] ax=139.0/True pe=4.40/True 
+  ecps-29229 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-29602 [bbce] ax=0.0/False pe=23.84/True cat=True net_ok=False gross_ok=True
+  ecps-29732 [manual] ax=138.0/True pe=0.00/True 
+     live: elig=True cat=True net_ok=True gross_ok=True gross=2954.56 net=2154.65 ages=[31, 1, 35]

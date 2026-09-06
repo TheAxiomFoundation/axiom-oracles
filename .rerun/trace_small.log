@@ -1,0 +1,21 @@
+===== TRACE al-snap-ecps 19:44:54
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 1 households / 1 unexplained rows to .rerun/trace-al-snap-ecps.json
+===== rc=0 19:55:08
+===== TRACE sc-snap-ecps 19:55:08
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 2 households / 2 unexplained rows to .rerun/trace-sc-snap-ecps.json
+===== rc=0 19:59:27
+===== TRACE nc-snap-ecps 19:59:27
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 2 households / 2 unexplained rows to .rerun/trace-nc-snap-ecps.json
+===== rc=0 20:03:29
+===== TRACE ma-snap-ecps 20:03:29
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 2 households / 3 unexplained rows to .rerun/trace-ma-snap-ecps.json
+===== rc=0 20:07:32
+TRACE-SMALL-DONE

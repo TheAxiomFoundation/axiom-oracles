@@ -1,0 +1,31 @@
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_reconcile_ca_snap_423_dispositions.py:17: in _current_inputs
+    expanded = reconciliation._expanded_dispositions(current_entries)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+scripts/reconcile_ca_snap_423_dispositions.py:765: in _expanded_dispositions
+    _require(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False
+message = 'current dispositions must expand to 510 rows, got 493'
+
+    def _require(condition: bool, message: str) -> None:
+        if not condition:
+>           raise ReconciliationError(message)
+E           scripts.reconcile_ca_snap_423_dispositions.ReconciliationError: current dispositions must expand to 510 rows, got 493
+
+scripts/reconcile_ca_snap_423_dispositions.py:420: ReconciliationError
+=========================== short test summary info ============================
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_rejected_snapshot_hashes_reject_byte_drift[dispositions/ca-snap-ecps.yaml-rejected PUB 275 snapshot source sha256 mismatch]
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_rejected_snapshot_hashes_reject_byte_drift[dashboard/public/data/axiom-policyengine-ca-snap-ecps.json-rejected PUB 275 snapshot CA report sha256 mismatch]
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_rejected_snapshot_hashes_reject_byte_drift[dashboard/public/data/dispositions/ca-snap-ecps.json-rejected PUB 275 snapshot served CA dispositions sha256 mismatch]
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_repository_reconciles_exact_partition_and_current_compact_schema
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_equal_count_partition_swap_fails_identity_digest
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_compact_checker_rejects_retired_output_schema
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_compact_checker_rejects_silent_annotation
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_compact_checker_requires_merged_only_vanished_households[ecps-59082]
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_compact_checker_requires_merged_only_vanished_households[ecps-62506]
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_kept_requested_month_digest_rejects_self_consistent_pin_tampering
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_full_drift_receipt_digest_catches_current_pin_tampering
+11 failed, 56 passed in 7.21s
+TARGETED-DONE

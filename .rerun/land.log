@@ -1,0 +1,44 @@
+=== attempt 1: waiting for quiet main
+main moved -> 25e9d1e960c8c720d88db40705c4900b68b9327a
+main moved -> 00bd53fcbb0b7e89dbb97d878a0135a52dc92c26
+main moved -> d7953c4cabfc3408617681c68877a8ef6cd06e11
+main moved -> 52d9e266090664030b8fb57371eb5487f3006001
+main moved -> a225f2b470904b849e8ac07c4556a285f48dfb88
+main moved -> 93cb22a79a56df5456ce23411645a8d9a8c1899f
+main moved -> e16ff32224ecaf7f80878f213378c1ee19f18de9
+main moved -> 144c26cc70fc9be957eda73f36648952ae221282
+main moved -> 32ab642a7a84fa65af6cfa532fd47f5ad5786505
+main moved -> 39e49238594c029deb23c21973c18bd70806cd0b
+main moved -> ca9ea5f7d8699805ef53ed13e698db0924c68e4d
+=== quiet window; running round
+Auto-merging certificates/dk-boerne-og-ungeydelse.json
+Auto-merging certificates/us-co-snap.json
+Auto-merging conformance/exercise-census.json
+Auto-merging dashboard/public/data/freshness.json
+Auto-merging dashboard/public/data/overview.json
+ROUND-PUSHED 60a7e323c
+=== waiting for CI
+tick 1 pass=1 fail=0 mergeable=MERGEABLE
+tick 2 pass=1 fail=0 mergeable=MERGEABLE
+tick 3 pass=1 fail=0 mergeable=MERGEABLE
+tick 4 pass=1 fail=0 mergeable=MERGEABLE
+tick 5 pass=1 fail=0 mergeable=MERGEABLE
+tick 6 pass=1 fail=0 mergeable=MERGEABLE
+tick 7 pass=1 fail=0 mergeable=MERGEABLE
+tick 8 pass=1 fail=0 mergeable=MERGEABLE
+tick 9 pass=1 fail=0 mergeable=MERGEABLE
+tick 10 pass=1 fail=0 mergeable=MERGEABLE
+tick 11 pass=1 fail=0 mergeable=MERGEABLE
+tick 12 pass=1 fail=0 mergeable=MERGEABLE
+tick 13 pass=1 fail=0 mergeable=MERGEABLE
+tick 14 pass=1 fail=0 mergeable=MERGEABLE
+tick 15 pass=1 fail=0 mergeable=MERGEABLE
+tick 16 pass=1 fail=0 mergeable=MERGEABLE
+tick 17 pass=1 fail=0 mergeable=MERGEABLE
+tick 18 pass=1 fail=0 mergeable=MERGEABLE
+tick 19 pass=1 fail=0 mergeable=MERGEABLE
+tick 20 pass=1 fail=0 mergeable=MERGEABLE
+tick 21 pass=1 fail=0 mergeable=MERGEABLE
+tick 22 pass=2 fail=0 mergeable=MERGEABLE
+MERGED
+LAND-DONE

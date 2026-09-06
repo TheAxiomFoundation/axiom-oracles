@@ -1,0 +1,17 @@
+Dispositions are consistent with the committed dashboard data
+Dispositions are consistent with the committed dashboard data
+emitted 91 disposition artifacts -> /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/dispositions
+wrote ca-snap-ecps: 7101 cases in 15 chunks
+Wrote conformance/scoreboard.json + 5 detail file(s) (5 jurisdictions).
+Re-pinned conformance/ratchet.yaml (5 jurisdiction(s)) to the current scoreboard where it improved.
+conformance ratchet OK: 5 jurisdiction(s), no invariant regressed
+Re-pinned conformance/unexplained-ratchet.yaml (132 suites).
+unexplained ratchet OK: 132 suites gated, 644 unexplained within pinned ceilings
+wrote overview.json: 221 reports, 7.1 MB
+overview OK: 221 reports bundled
+Wrote dashboard/public/data/freshness.json: 220 suites, 34 executable surfaces
+vacuous-gate OK: 141 configs oracle-backed; 220 suites, 34 executable surfaces, 68 suite(s) awaiting provenance
+affected_map OK: 177 suites, 189 suite-repo edges
+All checks passed!
+209 passed, 3 skipped in 16.38s
+POSTMERGE-DONE

@@ -1,0 +1,48 @@
+{
+  "ecps-36581": {
+    "forced": {
+      "is_snap_eligible": true,
+      "snap": 23.84000015258789,
+      "snap_earned_income": 0.0,
+      "snap_excess_medical_expense_deduction": 0.0,
+      "snap_excess_shelter_expense_deduction": 0.0,
+      "snap_gross_income": 2219.156494140625,
+      "snap_net_income": 2010.156494140625,
+      "snap_unearned_income": 2219.156494140625
+    },
+    "imputed_sources": {},
+    "unforced": {
+      "is_snap_eligible": true,
+      "snap": 23.84000015258789,
+      "snap_earned_income": 0.0,
+      "snap_excess_medical_expense_deduction": 0.0,
+      "snap_excess_shelter_expense_deduction": 0.0,
+      "snap_gross_income": 2219.156494140625,
+      "snap_net_income": 2010.156494140625,
+      "snap_unearned_income": 2219.156494140625
+    }
+  },
+  "ecps-37422": {
+    "forced": {
+      "is_snap_eligible": false,
+      "snap": 0.0,
+      "snap_earned_income": 1639.9652099609375,
+      "snap_excess_medical_expense_deduction": 0.0,
+      "snap_excess_shelter_expense_deduction": 0.0,
+      "snap_gross_income": 1854.825927734375,
+      "snap_net_income": 1317.8328857421875,
+      "snap_unearned_income": 214.86068725585938
+    },
+    "imputed_sources": {},
+    "unforced": {
+      "is_snap_eligible": false,
+      "snap": 0.0,
+      "snap_earned_income": 1639.9652099609375,
+      "snap_excess_medical_expense_deduction": 0.0,
+      "snap_excess_shelter_expense_deduction": 0.0,
+      "snap_gross_income": 1854.825927734375,
+      "snap_net_income": 1317.8328857421875,
+      "snap_unearned_income": 214.86068725585938
+    }
+  }
+}

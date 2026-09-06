@@ -1,0 +1,11 @@
+FAILED tests/test_reconcile_ca_snap_423_dispositions.py::test_full_drift_receipt_digest_catches_current_pin_tampering
+19 failed, 2388 passed, 75 skipped in 34277.04s (9:31:17)
+Dispositions are consistent with the committed dashboard data
+case-artifacts OK: 8 suites, 2179 mismatch rows, 2179 annotated, 0 silent classifications
+unexplained ratchet OK: 131 suites gated, 644 unexplained within pinned ceilings
+overview OK: 220 reports bundled
+vacuous-gate OK: 140 configs oracle-backed; 219 suites, 34 executable surfaces, 68 suite(s) awaiting provenance
+conformance scoreboard OK: 5 jurisdiction(s), 4 conformant
+rule_verification OK: 23033 rules, 99.4% grounded, 97.8% manifest-backed, 34/130 executable surfaces (commit 6f202f43c710)
+registry OK
+GATES-DONE

@@ -1,0 +1,61 @@
+suite: ma-snap-ecps
+entries:
+- id: ma-se-netting-2026-08-12-2364-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-2364
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 23.84 with net income 1153.51; Axiom''s persisted net income is 871.51
+      under its round-30-percent-up election. Flat self-employment netting asymmetry:
+      the populace projection feeds Axiom''s earned income with self-employment
+      scaled by 0.6 while PolicyEngine counts the gross amount (January PolicyEngine
+      earned 588.445 versus Axiom''s input 353.07 = 0.6 x 588.445).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 298 - 262 - 36
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 353.07 - 0.6 * 588.445
+      equals: 0.002776
+      tolerance: 0.02
+    sources:
+    - dashboard/public/data/axiom-policyengine-ma-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 36.0
+    right: 23.84000015258789
+    difference: -12.15999984741211
+- id: ma-se-netting-2026-08-12-3161-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-3161
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 324.9 with net income 737.897. Self-employment income enters the two
+      engines on different surfaces (the projection''s flat 0.6 netting versus PolicyEngine''s
+      expense-based treatment): January PolicyEngine earned 1796.67 versus Axiom''s
+      projected earned input 1796.67.'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 324.9 - 546
+      equals: -221.100006
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ma-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 546.0
+    right: 324.8999938964844
+    difference: -221.10000610351562
+unresolved: []

@@ -1,0 +1,13 @@
+Dispositions are consistent with the committed dashboard data
+exercise census up to date
+certificate drifted for us-co/snap — regenerate with `uv run python scripts/certify.py`
+Wrote conformance/scoreboard.json + 6 detail file(s) (6 jurisdictions).
+conformance scoreboard OK: 6 jurisdiction(s), 4 conformant
+conformance ratchet OK: 6 jurisdiction(s), no invariant regressed
+unexplained ratchet OK: 134 suites gated, 644 unexplained within pinned ceilings
+wrote overview.json: 223 reports, 7.2 MB
+overview OK: 223 reports bundled
+Wrote dashboard/public/data/freshness.json: 222 suites, 34 executable surfaces
+vacuous-gate OK: 143 configs oracle-backed; 222 suites, 34 executable surfaces, 68 suite(s) awaiting provenance
+conformance burn-down OK: 6 series, 137 point(s)
+MERGE2-DONE

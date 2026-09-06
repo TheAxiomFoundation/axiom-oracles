@@ -1,0 +1,22 @@
+== apply_dispositions (merge sc)
+usage: apply_dispositions.py [-h] [--check]
+apply_dispositions.py: error: unrecognized arguments: --suite sc-snap-ecps
+== emit_disposition_artifacts
+emitted 95 disposition artifacts -> /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/dispositions
+== emit_case_artifacts
+usage: emit_case_artifacts.py [-h] [--check] [suite ...]
+emit_case_artifacts.py: error: unrecognized arguments: --suite
+== overview
+wrote overview.json: 224 reports, 7.5 MB
+== scoreboard
+Wrote conformance/scoreboard.json + 6 detail file(s) (6 jurisdictions).
+== checks
+note: dispositions/be-worker-ssc.yaml entry 'dataset-uprating-bridge-artifact-resolved' is expired (source values changed or mismatch cleared)
+note: dispositions/co-tax-intersection-taxsim.yaml entry 'taxsim-blindness-63f-extension-standard_deduction' is expired (source values changed or mismatch cleared)
+case-artifacts FAILED: wv-income-tax-populace: index mismatch_concepts drift from canonical
+conformance ratchet OK: 6 jurisdiction(s), no invariant regressed
+unexplained ratchet OK: 135 suites gated, 644 unexplained within pinned ceilings
+| wv-income-tax-populace | 1608 | 0 | 0 | no |
+  blocker: exercise: the commit-pinned, sha-bound input catalog is attested, not computed from committed per-evaluation, view-scoped request/output traces
+overview OK: 224 reports bundled
+REGEN-DONE

@@ -1,0 +1,188 @@
+suite: ca-snap-ecps
+entries:
+- id: ca-tanf-decomp-2026-08-12-57335-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-57335
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 708.1
+      with net income 1583.81. The comparison bridge zeroes TANF on the Axiom input
+      surface while PolicyEngine computes state TANF endogenously and counts it
+      as SNAP unearned income (axiom-oracles#397 counterfactual class); the residual
+      net-income gap beyond TANF reflects the CalFresh state-vocabulary income surface
+      documented for this suite's PUB-275 bridge class.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 708.1 - 1183
+      equals: -474.900024
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 1183.0
+    right: 708.0999755859375
+    difference: -474.9000244140625
+- id: ca-tanf-decomp-2026-08-12-58805-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-58805
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 543.4
+      with net income 1502.02. The comparison bridge zeroes TANF on the Axiom input
+      surface while PolicyEngine computes state TANF endogenously and counts it
+      as SNAP unearned income (axiom-oracles#397 counterfactual class); the residual
+      net-income gap beyond TANF reflects the CalFresh state-vocabulary income surface
+      documented for this suite's PUB-275 bridge class.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 543.4 - 930
+      equals: -386.599976
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 930.0
+    right: 543.4000244140625
+    difference: -386.5999755859375
+- id: ca-tanf-decomp-2026-08-12-60285-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-60285
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 523.4
+      with net income 872.08. The comparison bridge zeroes TANF on the Axiom input
+      surface while PolicyEngine computes state TANF endogenously and counts it
+      as SNAP unearned income (axiom-oracles#397 counterfactual class); the residual
+      net-income gap beyond TANF reflects the CalFresh state-vocabulary income surface
+      documented for this suite's PUB-275 bridge class.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 523.4 - 785
+      equals: -261.599976
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 785.0
+    right: 523.4000244140625
+    difference: -261.5999755859375
+- id: ca-decomp-2026-08-12-61042-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-61042
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 170.8
+      with net income 424.765. The engines price different deduction/income surfaces
+      for the same household (see the recorded stage values); the benefit difference
+      reconciles exactly as the 30-percent rule applied to the two recorded net
+      incomes.
+    arithmetic:
+    - expression: 170.8 - 0
+      equals: 170.799988
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 170.79998779296875
+    difference: 170.79998779296875
+- id: ca-decomp-2026-08-12-61042-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-61042
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 170.8
+      with net income 424.765. The engines price different deduction/income surfaces
+      for the same household (see the recorded stage values); the benefit difference
+      reconciles exactly as the 30-percent rule applied to the two recorded net
+      incomes.
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: ca-aggregation-2026-08-12-57437-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-57437
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 0 with net income 1776.51. Year-shaped eligibility aggregation: the direct
+      January 2026 simulation of the identical Case is ineligible with zero SNAP
+      under every income-forcing counterfactual, so no January income surface reproduces
+      the committed PolicyEngine verdict; the committed eligibility boolean is the
+      adapter''s year-shaped output-dataset value (an any-month aggregation across
+      calendar 2026) while the month-defined benefit is January''s.'
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: ca-aggregation-2026-08-12-60408-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-60408
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 0 with net income 3157.99. Year-shaped eligibility aggregation: the direct
+      January 2026 simulation of the identical Case is ineligible with zero SNAP
+      under every income-forcing counterfactual, so no January income surface reproduces
+      the committed PolicyEngine verdict; the committed eligibility boolean is the
+      adapter''s year-shaped output-dataset value (an any-month aggregation across
+      calendar 2026) while the month-defined benefit is January''s.'
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+unresolved: []

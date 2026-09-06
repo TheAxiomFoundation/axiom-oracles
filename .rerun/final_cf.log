@@ -1,0 +1,31 @@
+ecps-37422 unforced 0.0 False | medical=0.0/False tanf=0.0/False se=0.0/False tanf+medical=0.0/False se+medical=0.0/False tanf+se+medical=0.0/False
+ecps-28842 unforced 23.84 True | medical=23.84/True tanf=23.84/True se=23.84/True tanf+medical=23.84/True se+medical=23.84/True tanf+se+medical=23.84/True
+ecps-29732 unforced 0.0 False | medical=0.0/False tanf=0.0/False se=0.0/False tanf+medical=0.0/False se+medical=0.0/False tanf+se+medical=0.0/False
+ecps-28618 unforced 92.9 True | medical=92.9/True tanf=92.9/True se=92.9/True tanf+medical=92.9/True se+medical=92.9/True tanf+se+medical=92.9/True
+ecps-2364 unforced 23.84 True | medical=23.84/True tanf=23.84/True se=163.9/True tanf+medical=23.84/True se+medical=163.9/True tanf+se+medical=163.9/True
+ecps-3161 unforced 324.9 True | medical=324.9/True tanf=324.9/True se=324.9/True tanf+medical=324.9/True se+medical=324.9/True tanf+se+medical=324.9/True
+error: Request failed after 3 retries in 5.0s
+  Caused by: Failed to fetch: `https://pypi.org/simple/click/`
+  Caused by: error sending request for url (https://pypi.org/simple/click/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+error: Request failed after 3 retries in 5.2s
+  Caused by: Failed to fetch: `https://pypi.org/simple/requests/`
+  Caused by: error sending request for url (https://pypi.org/simple/requests/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+error: Request failed after 3 retries in 4.4s
+  Caused by: Failed to fetch: `https://pypi.org/simple/policyengine-core/`
+  Caused by: error sending request for url (https://pypi.org/simple/policyengine-core/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+error: Request failed after 3 retries in 14.7s
+  Caused by: Failed to fetch: `https://pypi.org/simple/requests/`
+  Caused by: error sending request for url (https://pypi.org/simple/requests/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+FINAL-CF-DONE

@@ -1,0 +1,14 @@
+Downloading blosc2 (4.6MiB)
+ Downloaded blosc2
+Installed 101 packages in 989ms
+/Users/maxghenis/.cache/uv/archive-v0/Ihx7_DOTdO02FTw-WlGAT/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+/Users/maxghenis/.cache/uv/archive-v0/Ihx7_DOTdO02FTw-WlGAT/lib/python3.14/site-packages/IPython/core/interactiveshell.py:3141: SyntaxWarning: 'return' in a 'finally' block
+  return result
+01 ecps-37422 {"age": 62, "yearly_earned_income": 19679.58, "qualified_dividend_income": 2573.72, "interest_income": 4.6, "ssi_countable_resources": 9871.31}
+25 ecps-2364 {"age": 53, "disabled": 1, "medicaid": 1, "qualified_dividend_income": 11135.3, "interest_income": 4662.01, "short_term_capital_gains": -774.77, "long_term_capital_gains": 452706.41, "self_employment_income": 7061.34, "ssi_countable_resources": 62.63}
+12 ecps-33139 {"age": 31, "dividend_income": 1000.0, "qualified_dividend_income": 9314.43, "long_term_capital_gains": 32225.17, "self_employment_income": -1176.89, "ssi_countable_resources": 1303501.5}
+12 ecps-33182 {"age": 80, "dividend_income": 2000.0, "qualified_dividend_income": 5199.97, "interest_income": 6216.02, "short_term_capital_gains": -20925.17, "long_term_capital_gains": -3891.95, "social_security_benefits": 10308.88, "ssi_countable_resources": 7619.76}
+12 ecps-33182 {"age": 48}
+12 ecps-33897 {"age": 43, "disabled": 1, "qualified_dividend_income": 1488.21, "short_term_capital_gains": -4828.88, "long_term_capital_gains": 1945.12, "self_employment_income": 4008.14}
+FACTS2-DONE

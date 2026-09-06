@@ -1,0 +1,45 @@
+===== START al-snap-ecps 07:54:48 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running al-snap-ecps: Alabama SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-al-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+Dashboard copy truncated: 35/35 mismatches, 27/1444 case rows (full report under reports/).
+===== DONE al-snap-ecps exit=0 08:04:40
+===== START sc-snap-ecps 08:04:40 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running sc-snap-ecps: South Carolina SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-sc-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+Dashboard copy truncated: 175/175 mismatches, 112/1283 case rows (full report under reports/).
+===== DONE sc-snap-ecps exit=0 09:47:16
+===== START nc-snap-ecps 09:47:16 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running nc-snap-ecps: North Carolina SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-nc-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-nc-snap-ecps.json
+Dashboard copy truncated: 67/67 mismatches, 62/1854 case rows (full report under reports/).
+===== DONE nc-snap-ecps exit=0 12:25:55
+===== START ma-snap-ecps 12:25:55 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running ma-snap-ecps: Massachusetts SNAP — Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-ma-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-ma-snap-ecps.json
+Dashboard copy truncated: 390/390 mismatches, 272/1632 case rows (full report under reports/).
+===== DONE ma-snap-ecps exit=0 12:33:28
+===== START fl-snap-ecps 12:33:28 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running fl-snap-ecps: Florida SNAP -- Axiom vs PolicyEngine
+axiom_program: path does not exist: /Users/maxghenis/_axiom-worktrees/us-tanf-wave3/rulespec-us/programs/us-fl/snap/fy-2026.yaml
+===== DONE fl-snap-ecps exit=1 12:33:28
+===== START ga-snap-ecps 12:33:28 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running ga-snap-ecps: Georgia SNAP -- Axiom vs PolicyEngine
+axiom_program: path does not exist: /Users/maxghenis/_axiom-worktrees/us-tanf-wave3/rulespec-us/programs/us-ga/snap/fy-2026.yaml
+===== DONE ga-snap-ecps exit=1 12:33:28
+===== START ny-snap-ecps 12:33:28 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running ny-snap-ecps: New York SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-ny-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+Dashboard copy truncated: 213/213 mismatches, 150/3187 case rows (full report under reports/).
+===== DONE ny-snap-ecps exit=0 12:41:49
+===== START ca-snap-ecps 12:41:49 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/edc62ea5/rulespec-us
+Running ca-snap-ecps: California SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-ca-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-ca-snap-ecps.json
+Dashboard copy truncated: 484/484 mismatches, 362/7101 case rows (full report under reports/).
+===== DONE ca-snap-ecps exit=0 13:15:48
+ALL-FIXED-RERUNS-COMPLETE

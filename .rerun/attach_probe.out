@@ -1,0 +1,4 @@
+/Users/maxghenis/.cache/uv/archive-v0/Ihx7_DOTdO02FTw-WlGAT/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+RECORD: axiom:fl-snap-compiled#input.snap_total_monthly_unearned_income {'kind': 'decimal', 'value': '859.54'}
+ATTACH-PROBE-DONE

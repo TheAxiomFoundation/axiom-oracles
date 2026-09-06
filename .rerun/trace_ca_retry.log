@@ -1,0 +1,3 @@
+    "outputs": _values_by_suffix(case["o"], AXIOM_OUTPUT_SUFFIXES),
+                                 ~~~~^^^^^
+KeyError: 'o'

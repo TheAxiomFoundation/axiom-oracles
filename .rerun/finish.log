@@ -1,0 +1,19 @@
+note: dispositions/co-tax-intersection-taxsim.yaml entry 'taxsim-blindness-63f-extension-standard_deduction' is expired (source values changed or mismatch cleared)
+Dispositions are consistent with the committed dashboard data
+wrote al-snap-ecps: 1444 cases in 3 chunks
+wrote sc-snap-ecps: 1283 cases in 3 chunks
+wrote nc-snap-ecps: 1854 cases in 4 chunks
+wrote ma-snap-ecps: 1632 cases in 4 chunks
+wrote fl-snap-ecps: 3968 cases in 8 chunks
+wrote ga-snap-ecps: 1897 cases in 4 chunks
+wrote ny-snap-ecps: 3187 cases in 7 chunks
+wrote ca-snap-ecps: 7101 cases in 15 chunks
+Re-pinned conformance/unexplained-ratchet.yaml (131 suites).
+wrote overview.json: 220 reports, 7.1 MB
+overview OK: 220 reports bundled
+vacuous-gate FAILED: freshness.json is stale (suite/surface set or report timestamps changed); run `uv run scripts/check_vacuous_gate.py`
+unexplained ratchet OK: 131 suites gated, 644 unexplained within pinned ceilings
+conformance/scoreboard.json is stale; run `uv run scripts/conformance_scoreboard.py` (a universe or a comparison report changed).
+affected_map OK: 176 suites, 188 suite-repo edges
+Found 1 error.
+FINISH-SEQ-DONE

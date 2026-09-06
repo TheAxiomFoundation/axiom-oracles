@@ -1,0 +1,34 @@
+suite: nc-snap-ecps
+entries:
+- id: nc-se-netting-2026-08-12-28618-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-28618
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 92.8999 with net income 4427.23; Axiom''s persisted net income is 3437.26
+      under its round-30-percent-up election. Self-employment income enters the
+      two engines on different surfaces (the projection''s flat 0.6 netting versus
+      PolicyEngine''s expense-based treatment): January PolicyEngine earned 5903.92
+      versus Axiom''s projected earned input 4666.16.'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 1421 - 1032 - 389
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 1421 - 0.3 * 4427 - 92.8999
+      equals: 9.8e-05
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-nc-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 389.0
+    right: 92.89990234375
+    difference: -296.10009765625
+unresolved: []

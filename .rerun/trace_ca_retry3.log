@@ -1,0 +1,3 @@
+  us_latest = PolicyEngineUSLatest()
+Traced 18 households / 26 unexplained rows to .rerun/trace-ca-snap-ecps.json
+CA-TRACE-RETRY-DONE

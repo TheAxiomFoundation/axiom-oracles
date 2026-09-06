@@ -1,0 +1,27 @@
+ecps-4756: unforced snap=36.0999755859375 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=23.84000015258789 elig=True
+ecps-4766: unforced snap=60.399993896484375 elig=True | imputed={'pension_income': 145.76, 'medical_expense_health_insurance_premiums': 2434.8} | forced snap=23.84000015258789 elig=True
+ecps-4813: unforced snap=221.1999969482422 elig=True | imputed={} | forced snap=221.1999969482422 elig=True
+ecps-5104: unforced snap=490.0999755859375 elig=True | imputed={} | forced snap=490.0999755859375 elig=True
+ecps-5469: unforced snap=141.6999969482422 elig=True | imputed={} | forced snap=141.6999969482422 elig=True
+ecps-5471: unforced snap=126.09999084472656 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=50.49998474121094 elig=True
+ecps-5777: unforced snap=96.69999694824219 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=23.84000015258789 elig=True
+ecps-6134: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-6540: unforced snap=153.09999084472656 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=77.49998474121094 elig=True
+ecps-6798: unforced snap=138.6999969482422 elig=True | imputed={} | forced snap=138.6999969482422 elig=True
+ecps-7001: unforced snap=0.0 elig=True | imputed={'pension_income': 583.03, 'tanf': 1508.87} | forced snap=0.0 elig=False
+ecps-70930: unforced snap=23.84000015258789 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=0.0 elig=False
+wrote .rerun/unforced-ny-snap-ecps.json
+Traced 12 households / 22 unexplained rows to .rerun/trace-fl-snap-ecps.json
+ecps-32197: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32401: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32629: unforced snap=23.84000015258789 elig=True | imputed={'pension_income': 2863.11, 'medical_expense_health_insurance_premiums': 4869.6} | forced snap=23.84000015258789 elig=True
+ecps-32834: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32979: unforced snap=32.39996337890625 elig=True | imputed={} | forced snap=32.39996337890625 elig=True
+ecps-33045: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33139: unforced snap=102.99998474121094 elig=True | imputed={} | forced snap=102.99998474121094 elig=True
+ecps-33182: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33616: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33897: unforced snap=243.39999389648438 elig=True | imputed={} | forced snap=243.39999389648438 elig=True
+ecps-33930: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+wrote .rerun/unforced-fl-snap-ecps.json
+RETRACE2-DONE

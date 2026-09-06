@@ -1,0 +1,21 @@
+===== TRACE fl-snap-ecps 19:46:45
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/IPython/core/interactiveshell.py:3141: SyntaxWarning: 'return' in a 'finally' block
+  return result
+Traced 6 households / 6 unexplained rows to .rerun/trace-fl-snap-ecps.json
+===== rc=0 19:55:10
+===== TRACE ga-snap-ecps 19:55:10
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 12 households / 14 unexplained rows to .rerun/trace-ga-snap-ecps.json
+===== rc=0 19:59:26
+===== TRACE ny-snap-ecps 19:59:26
+/Users/maxghenis/.cache/uv/archive-v0/r2KSxALH6z3g_OE5kC5pH/lib/python3.14/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Traced 11 households / 12 unexplained rows to .rerun/trace-ny-snap-ecps.json
+===== rc=0 20:03:04
+===== TRACE ca-snap-ecps 20:03:04
+    for row in case["mismatches"] + case["matches"]
+                                    ~~~~^^^^^^^^^^^
+KeyError: 'matches'
+===== rc=0 20:03:37
+TRACE-BIG-DONE

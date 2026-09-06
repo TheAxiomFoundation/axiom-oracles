@@ -1,0 +1,24 @@
+=== attempt 1
+tick 1 pass=0 fail=0 mergeable=UNKNOWN
+tick 2 pass=0 fail=0 mergeable=CONFLICTING
+conflict -> merging origin/main (-X ours) and regenerating
+Auto-merging certificates/dk-boerne-og-ungeydelse.json
+Auto-merging certificates/us-co-snap.json
+Auto-merging conformance/exercise-census.json
+Auto-merging dashboard/public/data/overview.json
+pushed 0ea58da80
+=== attempt 2
+tick 1 pass=0 fail=0 mergeable=CONFLICTING
+conflict -> merging origin/main (-X ours) and regenerating
+Auto-merging certificates/dk-boerne-og-ungeydelse.json
+Auto-merging certificates/us-co-snap.json
+Auto-merging conformance/exercise-census.json
+Auto-merging dashboard/public/data/overview.json
+pushed cd2c00697
+=== attempt 3
+tick 1 pass=0 fail=0 mergeable=CONFLICTING
+conflict -> merging origin/main (-X ours) and regenerating
+Auto-merging certificates/dk-boerne-og-ungeydelse.json
+Auto-merging certificates/us-co-snap.json
+Auto-merging conformance/exercise-census.json
+Auto-merging dashboard/public/data/overview.json

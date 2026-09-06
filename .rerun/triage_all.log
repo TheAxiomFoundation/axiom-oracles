@@ -1,0 +1,76 @@
+===== TRIAGE al-snap-ecps 14:12:04
+  return result
+Traced 2 households / 3 unexplained rows to .rerun/trace-al-snap-ecps.json
+ecps-36581: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-37422: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+wrote .rerun/unforced-al-snap-ecps.json
+===== TRIAGE sc-snap-ecps 14:17:57
+  us_latest = PolicyEngineUSLatest()
+Traced 6 households / 10 unexplained rows to .rerun/trace-sc-snap-ecps.json
+ecps-28770: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-28842: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-29194: unforced snap=4.39996337890625 elig=True | imputed={'tanf': 5425.18} | forced snap=140.0 elig=True
+ecps-29229: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-29602: unforced snap=23.84000015258789 elig=True | imputed={'pension_income': 12079.71} | forced snap=303.0 elig=True
+ecps-29732: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+wrote .rerun/unforced-sc-snap-ecps.json
+===== TRIAGE nc-snap-ecps 14:23:17
+  us_latest = PolicyEngineUSLatest()
+Traced 6 households / 6 unexplained rows to .rerun/trace-nc-snap-ecps.json
+ecps-27181: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-27266: unforced snap=487.20001220703125 elig=True | imputed={'tanf': 792.28} | forced snap=507.0 elig=True
+ecps-27947: unforced snap=0.0 elig=False | imputed={'medical_expense_health_insurance_premiums': 4869.6} | forced snap=0.0 elig=False
+ecps-28179: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-28260: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-28618: unforced snap=92.89990234375 elig=True | imputed={} | forced snap=92.89990234375 elig=True
+wrote .rerun/unforced-nc-snap-ecps.json
+===== TRIAGE ma-snap-ecps 14:28:22
+  us_latest = PolicyEngineUSLatest()
+Traced 8 households / 12 unexplained rows to .rerun/trace-ma-snap-ecps.json
+ecps-2328: unforced snap=23.84000015258789 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=23.84000015258789 elig=True
+ecps-2354: unforced snap=1173.0999755859375 elig=True | imputed={'tanf': 15280.0} | forced snap=1183.0 elig=True
+ecps-2364: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-2367: unforced snap=710.5999755859375 elig=True | imputed={'tanf': 11810.85} | forced snap=785.0 elig=True
+ecps-2401: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-3075: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-3161: unforced snap=324.8999938964844 elig=True | imputed={'pension_income': 3042.7} | forced snap=400.79998779296875 elig=True
+ecps-69871: unforced snap=68.69998168945312 elig=True | imputed={} | forced snap=68.69998168945312 elig=True
+wrote .rerun/unforced-ma-snap-ecps.json
+===== TRIAGE fl-snap-ecps 14:33:26
+  us_latest = PolicyEngineUSLatest()
+Traced 12 households / 22 unexplained rows to .rerun/trace-fl-snap-ecps.json
+ecps-31418: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32197: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32401: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32629: unforced snap=23.84000015258789 elig=True | imputed={'pension_income': 2863.11, 'medical_expense_health_insurance_premiums': 4869.6} | forced snap=23.84000015258789 elig=True
+ecps-32834: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-32979: unforced snap=32.39996337890625 elig=True | imputed={} | forced snap=32.39996337890625 elig=True
+ecps-33045: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33139: unforced snap=102.99998474121094 elig=True | imputed={} | forced snap=102.99998474121094 elig=True
+ecps-33182: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33616: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-33897: unforced snap=243.39999389648438 elig=True | imputed={} | forced snap=243.39999389648438 elig=True
+ecps-33930: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+wrote .rerun/unforced-fl-snap-ecps.json
+===== TRIAGE ga-snap-ecps 14:38:27
+  us_latest = PolicyEngineUSLatest()
+Traced 14 households / 18 unexplained rows to .rerun/trace-ga-snap-ecps.json
+ecps-29868: unforced snap=298.0 elig=True | imputed={} | forced snap=298.0 elig=True
+ecps-29875: unforced snap=166.0 elig=True | imputed={} | forced snap=166.0 elig=True
+ecps-29878: unforced snap=280.29998779296875 elig=True | imputed={} | forced snap=280.29998779296875 elig=True
+ecps-30033: unforced snap=249.6999969482422 elig=True | imputed={} | forced snap=249.6999969482422 elig=True
+ecps-30573: unforced snap=23.84000015258789 elig=True | imputed={'pension_income': 1949.52} | forced snap=23.84000015258789 elig=True
+ecps-30605: unforced snap=113.89996337890625 elig=True | imputed={'pension_income': 13883.46} | forced snap=376.9999694824219 elig=True
+ecps-30736: unforced snap=785.0 elig=True | imputed={} | forced snap=785.0 elig=True
+ecps-30843: unforced snap=75.69999694824219 elig=True | imputed={} | forced snap=75.69999694824219 elig=True
+ecps-31013: unforced snap=222.39999389648438 elig=True | imputed={} | forced snap=222.39999389648438 elig=True
+ecps-31017: unforced snap=151.29998779296875 elig=True | imputed={} | forced snap=151.29998779296875 elig=True
+ecps-31073: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-31306: unforced snap=241.89996337890625 elig=True | imputed={} | forced snap=241.89996337890625 elig=True
+ecps-71017: unforced snap=306.8999938964844 elig=True | imputed={} | forced snap=306.8999938964844 elig=True
+ecps-71437: unforced snap=278.3999938964844 elig=True | imputed={} | forced snap=278.3999938964844 elig=True
+wrote .rerun/unforced-ga-snap-ecps.json
+===== TRIAGE ny-snap-ecps 14:49:34
+  Caused by: dns error
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+TRIAGE-ALL-DONE

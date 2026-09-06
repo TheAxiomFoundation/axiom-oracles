@@ -1,0 +1,80 @@
+/Users/maxghenis/.cache/uv/archive-v0/y6Kq87J0uyTmd7r_3SwlW/lib/python3.13/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Comparing batch 1/19 (100 case(s))...
+Comparing batch 2/19 (100 case(s))...
+Comparing batch 3/19 (100 case(s))...
+Comparing batch 4/19 (100 case(s))...
+Comparing batch 5/19 (100 case(s))...
+Comparing batch 6/19 (100 case(s))...
+Comparing batch 7/19 (100 case(s))...
+Comparing batch 8/19 (100 case(s))...
+Comparing batch 9/19 (100 case(s))...
+Comparing batch 10/19 (100 case(s))...
+Comparing batch 11/19 (100 case(s))...
+Comparing batch 12/19 (100 case(s))...
+Comparing batch 13/19 (100 case(s))...
+Comparing batch 14/19 (100 case(s))...
+Comparing batch 15/19 (100 case(s))...
+Comparing batch 16/19 (100 case(s))...
+Comparing batch 17/19 (100 case(s))...
+Comparing batch 18/19 (100 case(s))...
+Comparing batch 19/19 (54 case(s))...
+Population enhanced-cps / suite nyc-synthetic (1854 cases, locales: )
+Concepts: 2; comparisons: 3708; mismatches: 67
+Mismatches:
+ecps-27147: SNAP benefit amount 0.0 != 148.59999084472656
+ecps-27147: SNAP eligibility False != True
+ecps-27158: SNAP benefit amount 1183.0 != 1161.699951171875
+ecps-27162: SNAP eligibility False != True
+ecps-27171: SNAP benefit amount 785.0 != 760.4000244140625
+ecps-27181: SNAP eligibility False != True
+ecps-27222: SNAP eligibility True != False
+ecps-27236: SNAP benefit amount 333.0 != 298.5
+ecps-27250: SNAP eligibility True != False
+ecps-27256: SNAP eligibility True != False
+ecps-27266: SNAP benefit amount 506.0 != 487.20001220703125
+ecps-27288: SNAP benefit amount 298.0 != 280.8999938964844
+ecps-27289: SNAP benefit amount 24.0 != 61.29998779296875
+ecps-27290: SNAP eligibility False != True
+ecps-27344: SNAP benefit amount 704.0 != 651.7999877929688
+ecps-27362: SNAP benefit amount 167.0 != 218.49993896484375
+ecps-27443: SNAP benefit amount 889.0 != 667.2999877929688
+ecps-27449: SNAP eligibility False != True
+ecps-27513: SNAP benefit amount 76.0 != 23.84000015258789
+ecps-27542: SNAP benefit amount 206.0 != 159.699951171875
+ecps-27574: SNAP eligibility True != False
+ecps-27596: SNAP eligibility False != True
+ecps-27597: SNAP benefit amount 0.0 != 69.69999694824219
+ecps-27597: SNAP eligibility False != True
+ecps-27615: SNAP eligibility False != True
+ecps-27628: SNAP benefit amount 546.0 != 516.2999877929688
+ecps-27629: SNAP eligibility False != True
+ecps-27653: SNAP benefit amount 24.0 != 0.0
+ecps-27653: SNAP eligibility True != False
+ecps-27668: SNAP benefit amount 359.0 != 0.0
+ecps-27735: SNAP benefit amount 785.0 != 766.0999755859375
+ecps-27752: SNAP eligibility False != True
+ecps-27796: SNAP benefit amount 298.0 != 260.5
+ecps-27798: SNAP benefit amount 785.0 != 766.0999755859375
+ecps-27802: SNAP benefit amount 395.0 != 254.39999389648438
+ecps-27876: SNAP eligibility False != True
+ecps-27877: SNAP benefit amount 994.0 != 971.7999877929688
+ecps-27882: SNAP benefit amount 24.0 != 0.0
+ecps-27886: SNAP benefit amount 230.0 != 76.39990234375
+ecps-27947: SNAP eligibility False != True
+ecps-27957: SNAP benefit amount 785.0 != 766.0999755859375
+ecps-27981: SNAP benefit amount 85.0 != 0.0
+ecps-27995: SNAP benefit amount 228.0 != 140.5
+ecps-28003: SNAP benefit amount 1421.0 != 1400.5999755859375
+ecps-28023: SNAP benefit amount 1421.0 != 1406.0
+ecps-28066: SNAP benefit amount 944.0 != 928.5999755859375
+ecps-28069: SNAP benefit amount 108.0 != 0.0
+ecps-28096: SNAP benefit amount 785.0 != 766.0999755859375
+ecps-28105: SNAP benefit amount 546.0 != 537.9000244140625
+ecps-28179: SNAP eligibility False != True
+... 17 additional mismatches omitted; use --output for the full JSON report.
+Running nc-snap-ecps: North Carolina SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-nc-snap-ecps-0-2026-08-07.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-nc-snap-ecps.json
+Dashboard copy truncated: 67/67 mismatches, 62/1854 case rows (full report under reports/).

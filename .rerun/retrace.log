@@ -1,0 +1,3 @@
+Traced 12 households / 13 unexplained rows to .rerun/trace-ny-snap-ecps.json
+  Caused by: failed to lookup address information: nodename nor servname provided, or not known
+RETRACE-DONE

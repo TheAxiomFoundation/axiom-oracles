@@ -1,0 +1,121 @@
+suite: fl-snap-ecps
+entries:
+- id: fl-negative-se-2026-08-12-33139-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-33139
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 103 with net income 650.536; Axiom''s persisted net income is 603.7 under
+      its round-30-percent-up election. Negative self-employment pass-through: the
+      projection''s 0.6-scaled self-employment loss reaches Axiom as negative earned
+      income (-58.84), offsetting unearned income, while PolicyEngine floors earned
+      income at zero (January earned 0).'
+    arithmetic:
+    - expression: 298 - 182 - 116
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 650 - 103
+      equals: 1.5e-05
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 116.0
+    right: 102.99998474121094
+    difference: -13.000015258789062
+- id: fl-se-netting-2026-08-12-33897-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-33897
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 243.4 with net income 182.227; Axiom''s persisted net income is 75.43
+      under its round-30-percent-up election. Flat self-employment netting asymmetry:
+      the populace projection feeds Axiom''s earned income with self-employment
+      scaled by 0.6 while PolicyEngine counts the gross amount (January PolicyEngine
+      earned 334.012 versus Axiom''s input 200.41 = 0.6 x 334.012).'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 298 - 23 - 275
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 182 - 243.4
+      equals: 6.0e-06
+      tolerance: 0.51
+    - expression: 200.41 - 0.6 * 334.012
+      equals: 0.002914
+      tolerance: 0.02
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 275.0
+    right: 243.39999389648438
+    difference: -31.600006103515625
+- id: fl-bbce-min-2026-08-12-33182-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-33182
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 23.84 with net income 1768.07; Axiom''s persisted net income is 1768.07
+      under its round-30-percent-up election. Broad-based categorical eligibility
+      tail: January PolicyEngine confers categorical eligibility (meets_snap_categorical_eligibility=True)
+      and pays the one/two-person minimum benefit although the household''s net
+      income exceeds the federal limit the composed program applies, so Axiom is
+      ineligible with zero benefit. Axiom-side modeling boundary (BBCE not in the
+      composed program).'
+    arithmetic:
+    - expression: 23.84 - 0
+      equals: 23.84
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 23.84000015258789
+    difference: 23.84000015258789
+- id: fl-bbce-min-2026-08-12-33182-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-33182
+  kind: eligibility_right_only
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 23.84 with net income 1768.07; Axiom''s persisted net income is 1768.07
+      under its round-30-percent-up election. Broad-based categorical eligibility
+      tail: January PolicyEngine confers categorical eligibility (meets_snap_categorical_eligibility=True)
+      and pays the one/two-person minimum benefit although the household''s net
+      income exceeds the federal limit the composed program applies, so Axiom is
+      ineligible with zero benefit. Axiom-side modeling boundary (BBCE not in the
+      composed program).'
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+unresolved: []

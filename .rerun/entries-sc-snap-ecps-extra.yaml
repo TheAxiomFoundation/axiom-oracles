@@ -1,0 +1,86 @@
+suite: sc-snap-ecps
+entries:
+- id: sc-bbce-min-2026-08-12-28842-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-28842
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 23.84 with net income 1317.94; Axiom''s persisted net income is 1317.94
+      under its round-30-percent-up election. Broad-based categorical eligibility
+      tail: January PolicyEngine confers categorical eligibility (meets_snap_categorical_eligibility=True)
+      and pays the one/two-person minimum benefit although the household''s net
+      income exceeds the federal limit the composed program applies, so Axiom is
+      ineligible with zero benefit. Axiom-side modeling boundary (BBCE not in the
+      composed program).'
+    arithmetic:
+    - expression: 23.84 - 0
+      equals: 23.84
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 23.84000015258789
+    difference: 23.84000015258789
+- id: sc-bbce-min-2026-08-12-28842-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-28842
+  kind: eligibility_right_only
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 23.84 with net income 1317.94; Axiom''s persisted net income is 1317.94
+      under its round-30-percent-up election. Broad-based categorical eligibility
+      tail: January PolicyEngine confers categorical eligibility (meets_snap_categorical_eligibility=True)
+      and pays the one/two-person minimum benefit although the household''s net
+      income exceeds the federal limit the composed program applies, so Axiom is
+      ineligible with zero benefit. Axiom-side modeling boundary (BBCE not in the
+      composed program).'
+    arithmetic:
+    - expression: 0.0 - 0.0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: sc-pe-cat-gross-gate-2026-08-12-29732-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29732
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 0 with
+      net income 2154.65; Axiom's persisted net income is 2155.56 under its round-30-percent-up
+      election. January PolicyEngine records meets_snap_categorical_eligibility=True
+      yet is_snap_eligible=False with meets_snap_gross_income_test=False — on this
+      household PolicyEngine still gates eligibility on the 130-percent gross test
+      despite the categorical flag — while the composed program's encoded South
+      Carolina family-independence screen (its persisted household_income_at_or_below_family_independence_fpl_limit=true)
+      waives the gross test, leaving Axiom eligible and paying its recorded allotment.
+    arithmetic:
+    - expression: 785 - 647 - 138
+      equals: 0.0
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 138.0
+    right: 0.0
+    difference: -138.0
+unresolved: []

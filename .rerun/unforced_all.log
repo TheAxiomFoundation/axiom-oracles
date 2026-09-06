@@ -1,0 +1,73 @@
+===== UNFORCED al-snap-ecps 20:04:17
+  us_latest = PolicyEngineUSLatest()
+ecps-69224: unforced snap=0.0 elig=False | imputed={'dividend_income': 9636583.0, 'medical_expense_health_insurance_premiums': 2434.8} | forced snap=34.5999755859375 elig=True
+wrote .rerun/unforced-al-snap-ecps.json
+===== rc=0 20:08:04
+===== UNFORCED sc-snap-ecps 20:08:04
+  us_latest = PolicyEngineUSLatest()
+ecps-29149: unforced snap=725.5 elig=True | imputed={'ssi': 994.0, 'dividend_income': 1488.21} | forced snap=994.0 elig=True
+ecps-29732: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+wrote .rerun/unforced-sc-snap-ecps.json
+===== rc=0 20:13:31
+===== UNFORCED ga-snap-ecps 20:14:06
+  us_latest = PolicyEngineUSLatest()
+ecps-29868: unforced snap=298.0 elig=True | imputed={} | forced snap=298.0 elig=True
+ecps-29875: unforced snap=166.0 elig=True | imputed={} | forced snap=166.0 elig=True
+ecps-29878: unforced snap=173.5 elig=True | imputed={'ssi': 237.1, 'dividend_income': 1418.17} | forced snap=298.0 elig=True
+ecps-29938: unforced snap=56.49998474121094 elig=True | imputed={'ssi': 545.65, 'dividend_income': 5620.17} | forced snap=298.0 elig=True
+ecps-30489: unforced snap=56.79998779296875 elig=True | imputed={'ssi': 266.7, 'dividend_income': 8789.18} | forced snap=298.0 elig=True
+ecps-30605: unforced snap=113.89996337890625 elig=True | imputed={'pension_income': 13883.46} | forced snap=94.699951171875 elig=True
+ecps-30843: unforced snap=75.69999694824219 elig=True | imputed={} | forced snap=75.69999694824219 elig=True
+ecps-31013: unforced snap=56.49998474121094 elig=True | imputed={'ssi': 476.03} | forced snap=222.39999389648438 elig=True
+ecps-31017: unforced snap=151.29998779296875 elig=True | imputed={} | forced snap=151.29998779296875 elig=True
+ecps-67847: unforced snap=0.0 elig=False | imputed={'dividend_income': 482354.38} | forced snap=546.0 elig=True
+ecps-71017: unforced snap=306.8999938964844 elig=True | imputed={'dividend_income': 332.66} | forced snap=315.29998779296875 elig=True
+ecps-71437: unforced snap=278.3999938964844 elig=True | imputed={'dividend_income': 105.05} | forced snap=282.5999755859375 elig=True
+wrote .rerun/unforced-ga-snap-ecps.json
+===== rc=0 20:35:08
+===== UNFORCED ny-snap-ecps 20:36:07
+  us_latest = PolicyEngineUSLatest()
+ecps-4813: unforced snap=221.1999969482422 elig=True | imputed={'dividend_income': 770.37} | forced snap=240.39999389648438 elig=True
+ecps-5104: unforced snap=351.1999816894531 elig=True | imputed={'ssi': 517.04} | forced snap=584.0 elig=True
+ecps-5196: unforced snap=255.10000610351562 elig=True | imputed={'ssi': 891.16, 'dividend_income': 1295.62} | forced snap=298.0 elig=True
+ecps-5469: unforced snap=141.6999969482422 elig=True | imputed={} | forced snap=141.6999969482422 elig=True
+ecps-6134: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-65322: unforced snap=0.0 elig=False | imputed={'pension_income': 309.74, 'dividend_income': 623996.75} | forced snap=23.84000015258789 elig=True
+ecps-66401: unforced snap=0.0 elig=False | imputed={'dividend_income': 46712216.0} | forced snap=0.0 elig=False
+ecps-6692: unforced snap=236.8000030517578 elig=True | imputed={'dividend_income': 892.92} | forced snap=254.5 elig=True
+ecps-6798: unforced snap=138.6999969482422 elig=True | imputed={} | forced snap=138.6999969482422 elig=True
+ecps-7001: unforced snap=0.0 elig=True | imputed={'pension_income': 583.03, 'tanf': 1508.87} | forced snap=0.0 elig=False
+ecps-7277: unforced snap=0.0 elig=False | imputed={'dividend_income': 167606.17} | forced snap=622.2999877929688 elig=True
+wrote .rerun/unforced-ny-snap-ecps.json
+===== rc=0 20:52:13
+===== UNFORCED nc-snap-ecps 20:52:23
+  us_latest = PolicyEngineUSLatest()
+ecps-28618: unforced snap=92.89990234375 elig=True | imputed={} | forced snap=92.89990234375 elig=True
+ecps-74179: unforced snap=0.0 elig=False | imputed={'pension_income': 4299.87, 'dividend_income': 191716.17, 'medical_expense_health_insurance_premiums': 4869.6} | forced snap=423.6000061035156 elig=True
+wrote .rerun/unforced-nc-snap-ecps.json
+===== rc=0 21:42:01
+===== UNFORCED ma-snap-ecps 21:42:03
+  us_latest = PolicyEngineUSLatest()
+ecps-3161: unforced snap=324.8999938964844 elig=True | imputed={'pension_income': 3042.7} | forced snap=400.79998779296875 elig=True
+ecps-75035: unforced snap=0.0 elig=False | imputed={'dividend_income': 9472.0} | forced snap=0.0 elig=False
+wrote .rerun/unforced-ma-snap-ecps.json
+===== rc=0 21:50:35
+===== UNFORCED ca-snap-ecps 21:50:35
+  us_latest = PolicyEngineUSLatest()
+ecps-57335: unforced snap=708.0999755859375 elig=True | imputed={'tanf': 10911.86} | forced snap=980.7999877929688 elig=True
+ecps-57912: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-58676: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-58805: unforced snap=543.4000244140625 elig=True | imputed={'tanf': 5531.65} | forced snap=681.699951171875 elig=True
+ecps-58918: unforced snap=80.39999389648438 elig=True | imputed={'ssi': 88.19, 'dividend_income': 6530.61} | forced snap=365.0999755859375 elig=True
+ecps-59112: unforced snap=23.84000015258789 elig=True | imputed={'dividend_income': 2661.27} | forced snap=30.399993896484375 elig=True
+ecps-59211: unforced snap=159.29998779296875 elig=True | imputed={'ssi': 359.97, 'dividend_income': 11945.83} | forced snap=546.0 elig=True
+ecps-59794: unforced snap=420.29998779296875 elig=True | imputed={'ssi': 539.73, 'dividend_income': 5691.24} | forced snap=546.0 elig=True
+ecps-60285: unforced snap=523.4000244140625 elig=True | imputed={'tanf': 8778.41} | forced snap=743.0 elig=True
+ecps-60545: unforced snap=0.0 elig=False | imputed={'dividend_income': 11888.15} | forced snap=0.0 elig=False
+ecps-60816: unforced snap=0.0 elig=True | imputed={'ssi': 994.0, 'tanf': 5055.04} | forced snap=361.29998779296875 elig=True
+ecps-61658: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-62026: unforced snap=0.0 elig=False | imputed={'dividend_income': 29939.24} | forced snap=401.0 elig=True
+ecps-62891: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+wrote .rerun/unforced-ca-snap-ecps.json
+===== rc=0 21:57:10
+UNFORCED-ALL-DONE

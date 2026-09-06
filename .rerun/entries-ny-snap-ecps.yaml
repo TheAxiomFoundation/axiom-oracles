@@ -1,0 +1,408 @@
+suite: ny-snap-ecps
+entries:
+- id: pe-medical-imputation-counterfactual-4756
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-4756
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      24 versus January PolicyEngine 36.1). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      23.84; its absolute delta from Axiom, 0.16, is within the unchanged suite
+      tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine
+      imputes allowable medical expenses for the elderly/disabled member, feeding
+      an excess medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 23.84 - 24
+      equals: -0.16
+      tolerance: 0.160001
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 36.0999755859375
+    difference: 12.0999755859375
+- id: endogenous-income-stack-counterfactual-4766
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-4766
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      24 versus January PolicyEngine 60.4). Forcing the endogenously derived medical_expense_health_insurance_premiums,
+      pension_income inputs to zero in the direct requested-month simulation produces
+      January SNAP 23.84; its absolute delta from Axiom, 0.16, is within the unchanged
+      suite tolerance 7.0. PolicyEngine derives these sources endogenously on the
+      requested-month path while the projected Case carries none of them, so the
+      engines price different income surfaces.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 23.84 - 24
+      equals: -0.16
+      tolerance: 0.160001
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 60.399993896484375
+    difference: 36.399993896484375
+- id: pe-medical-imputation-counterfactual-5471
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5471
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      50 versus January PolicyEngine 126.1). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      50.5; its absolute delta from Axiom, 0.499985, is within the unchanged suite
+      tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine
+      imputes allowable medical expenses for the elderly/disabled member, feeding
+      an excess medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 50.5 - 50
+      equals: 0.499985
+      tolerance: 0.499986
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 50.0
+    right: 126.09999084472656
+    difference: 76.09999084472656
+- id: pe-medical-imputation-counterfactual-5777
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5777
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      24 versus January PolicyEngine 96.7). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      23.84; its absolute delta from Axiom, 0.16, is within the unchanged suite
+      tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine
+      imputes allowable medical expenses for the elderly/disabled member, feeding
+      an excess medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 23.84 - 24
+      equals: -0.16
+      tolerance: 0.160001
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 96.69999694824219
+    difference: 72.69999694824219
+- id: pe-medical-imputation-counterfactual-6540
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-6540
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      77 versus January PolicyEngine 153.1). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      77.5; its absolute delta from Axiom, 0.499985, is within the unchanged suite
+      tolerance 7.0. Axiom receives zero medical-expense input while PolicyEngine
+      imputes allowable medical expenses for the elderly/disabled member, feeding
+      an excess medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 77.5 - 77
+      equals: 0.499985
+      tolerance: 0.499986
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 77.0
+    right: 153.09999084472656
+    difference: 76.09999084472656
+- id: pe-medical-imputation-counterfactual-70930
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-70930
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      0 versus January PolicyEngine 23.84). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. Axiom receives zero medical-expense input while PolicyEngine imputes
+      allowable medical expenses for the elderly/disabled member, feeding an excess
+      medical deduction the bridge never projects to Axiom.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 0 - 0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 23.84000015258789
+    difference: 23.84000015258789
+- id: pe-medical-imputation-counterfactual-70930-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-70930
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      0 versus January PolicyEngine 23.84). Forcing the imputed medical-expense
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      0; its absolute delta from Axiom, 0.0, is within the unchanged suite tolerance
+      7.0. Axiom receives zero medical-expense input while PolicyEngine imputes
+      allowable medical expenses for the elderly/disabled member, feeding an excess
+      medical deduction the bridge never projects to Axiom. The same intervention
+      sets January PolicyEngine eligibility to False, matching Axiom's persisted
+      verdict.
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/436
+    arithmetic:
+    - expression: 0 - 0
+      equals: 0.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+unresolved:
+- case_id: ecps-4813
+  report:
+    axiom_benefit: 298.0
+    axiom_eligible: true
+    pe_benefit: 221.1999969482422
+    pe_eligible: true
+  january:
+    snap: 221.1999969482422
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 221.1999969482422
+      elig: true
+    se:
+      snap: 221.1999969482422
+      elig: true
+    se+medical:
+      snap: 221.1999969482422
+      elig: true
+    tanf:
+      snap: 221.1999969482422
+      elig: true
+    tanf+medical:
+      snap: 221.1999969482422
+      elig: true
+    tanf+se+medical:
+      snap: 221.1999969482422
+      elig: true
+  imputed: {}
+- case_id: ecps-5104
+  report:
+    axiom_benefit: 574.0
+    axiom_eligible: true
+    pe_benefit: 490.0999755859375
+    pe_eligible: true
+  january:
+    snap: 490.0999755859375
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 490.0999755859375
+      elig: true
+    se:
+      snap: 701.0
+      elig: true
+    se+medical:
+      snap: 701.0
+      elig: true
+    tanf:
+      snap: 490.0999755859375
+      elig: true
+    tanf+medical:
+      snap: 490.0999755859375
+      elig: true
+    tanf+se+medical:
+      snap: 701.0
+      elig: true
+  imputed: {}
+- case_id: ecps-5469
+  report:
+    axiom_benefit: 298.0
+    axiom_eligible: true
+    pe_benefit: 141.6999969482422
+    pe_eligible: true
+  january:
+    snap: 141.6999969482422
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: false
+  ladder:
+    medical:
+      snap: 141.6999969482422
+      elig: true
+    se:
+      snap: 141.6999969482422
+      elig: true
+    se+medical:
+      snap: 141.6999969482422
+      elig: true
+    tanf:
+      snap: 141.6999969482422
+      elig: true
+    tanf+medical:
+      snap: 141.6999969482422
+      elig: true
+    tanf+se+medical:
+      snap: 141.6999969482422
+      elig: true
+  imputed: {}
+- case_id: ecps-6134
+  report:
+    axiom_benefit: 103.0
+    axiom_eligible: true
+    pe_benefit: 0.0
+    pe_eligible: true
+  january:
+    snap: 0.0
+    eligible: true
+    cat: true
+    net_ok: false
+    gross_ok: false
+  ladder:
+    medical:
+      snap: 0.0
+      elig: false
+    se:
+      snap: 0.0
+      elig: false
+    se+medical:
+      snap: 0.0
+      elig: false
+    tanf:
+      snap: 0.0
+      elig: false
+    tanf+medical:
+      snap: 0.0
+      elig: false
+    tanf+se+medical:
+      snap: 0.0
+      elig: false
+  imputed: {}
+- case_id: ecps-6798
+  report:
+    axiom_benefit: 230.0
+    axiom_eligible: true
+    pe_benefit: 138.6999969482422
+    pe_eligible: true
+  january:
+    snap: 138.6999969482422
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 138.6999969482422
+      elig: true
+    se:
+      snap: 138.6999969482422
+      elig: true
+    se+medical:
+      snap: 138.6999969482422
+      elig: true
+    tanf:
+      snap: 138.6999969482422
+      elig: true
+    tanf+medical:
+      snap: 138.6999969482422
+      elig: true
+    tanf+se+medical:
+      snap: 138.6999969482422
+      elig: true
+  imputed: {}
+- case_id: ecps-7001
+  report:
+    axiom_benefit: 637.0
+    axiom_eligible: true
+    pe_benefit: 0.0
+    pe_eligible: true
+  january:
+    snap: 0.0
+    eligible: true
+    cat: true
+    net_ok: false
+    gross_ok: false
+  ladder:
+    medical:
+      snap: 0.0
+      elig: true
+    se:
+      snap: 0.0
+      elig: false
+    se+medical:
+      snap: 0.0
+      elig: false
+    tanf:
+      snap: 0.0
+      elig: false
+    tanf+medical:
+      snap: 0.0
+      elig: false
+    tanf+se+medical:
+      snap: 0.0
+      elig: false
+  imputed:
+    pension_income: 583.0326538085938
+    tanf: 1508.87353515625

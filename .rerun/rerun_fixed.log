@@ -1,0 +1,7 @@
+===== START al-snap-ecps 07:43:49 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us
+Running al-snap-ecps: Alabama SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-al-snap-ecps-0-2026-08-05.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-al-snap-ecps.json
+Dashboard copy truncated: 94/94 mismatches, 73/1444 case rows (full report under reports/).
+===== DONE al-snap-ecps exit=0 07:50:43
+===== START sc-snap-ecps 07:50:43 pin=/Users/maxghenis/TheAxiomFoundation/_oracle-pins/c13cdf7d/rulespec-us

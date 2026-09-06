@@ -1,0 +1,168 @@
+suite: ny-snap-ecps
+entries:
+- id: ny-decomp-2026-08-12-4813-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-4813
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 221.2
+      with net income 256.628. The engines price different deduction/income surfaces
+      for the same household (see the recorded stage values); the benefit difference
+      reconciles exactly as the 30-percent rule applied to the two recorded net
+      incomes.
+    arithmetic:
+    - expression: 221.2 - 298
+      equals: -76.800003
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 221.1999969482422
+    difference: -76.80000305175781
+- id: ny-se-netting-2026-08-12-5104-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5104
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 490.1 with net income 984; Axiom''s persisted net income is 702.57 under
+      its round-30-percent-up election. Self-employment income enters the two engines
+      on different surfaces (the projection''s flat 0.6 netting versus PolicyEngine''s
+      expense-based treatment): January PolicyEngine earned 1125.19 versus Axiom''s
+      projected earned input 890.72.'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 785 - 211 - 574
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 785 - 0.3 * 983 - 490.1
+      equals: 2.4e-05
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 574.0
+    right: 490.0999755859375
+    difference: -83.9000244140625
+- id: ny-decomp-2026-08-12-5469-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-5469
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 141.7
+      with net income 521.475. The engines price different deduction/income surfaces
+      for the same household (see the recorded stage values); the benefit difference
+      reconciles exactly as the 30-percent rule applied to the two recorded net
+      incomes.
+    arithmetic:
+    - expression: 141.7 - 298
+      equals: -156.300003
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 298.0
+    right: 141.6999969482422
+    difference: -156.3000030517578
+- id: ny-decomp-2026-08-12-6798-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-6798
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: Exact-household requested-month replay on PolicyEngine 4.18.9 / PolicyEngine-US
+      1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes SNAP 138.7
+      with net income 531.881; Axiom's persisted net income is 224.3 under its round-30-percent-up
+      election. The engines price different deduction/income surfaces for the same
+      household (see the recorded stage values); the benefit difference reconciles
+      exactly as the 30-percent rule applied to the two recorded net incomes.
+    arithmetic:
+    - expression: 298 - 68 - 230
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 531 - 138.7
+      equals: 3.0e-06
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 230.0
+    right: 138.6999969482422
+    difference: -91.30000305175781
+- id: ny-aggregation-2026-08-12-6134-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-6134
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 0 with net income 3596.56; Axiom''s persisted net income is 3596.95 under
+      its round-30-percent-up election. Year-shaped eligibility aggregation: the
+      direct January 2026 simulation of the identical Case is ineligible with zero
+      SNAP under every income-forcing counterfactual, so no January income surface
+      reproduces the committed PolicyEngine verdict; the committed eligibility boolean
+      is the adapter''s year-shaped output-dataset value (an any-month aggregation
+      across calendar 2026) while the month-defined benefit is January''s.'
+    arithmetic:
+    - expression: 1183 - 1080 - 103
+      equals: 0.0
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 103.0
+    right: 0.0
+    difference: -103.0
+- id: ny-aggregation-2026-08-12-7001-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-7001
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 0 with net income 4780.44; Axiom''s persisted net income is 492.61 under
+      its round-30-percent-up election. Year-shaped eligibility aggregation: the
+      direct January 2026 simulation of the identical Case is ineligible with zero
+      SNAP under every income-forcing counterfactual, so no January income surface
+      reproduces the committed PolicyEngine verdict; the committed eligibility boolean
+      is the adapter''s year-shaped output-dataset value (an any-month aggregation
+      across calendar 2026) while the month-defined benefit is January''s.'
+    arithmetic:
+    - expression: 785 - 148 - 637
+      equals: 0.0
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-ny-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 637.0
+    right: 0.0
+    difference: -637.0
+unresolved: []

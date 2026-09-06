@@ -1,0 +1,335 @@
+suite: ga-snap-ecps
+entries:
+- id: ga-drift-2026-08-12-29878-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29878
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 280.3 with net income 59.3498; Axiom''s persisted net income is 567.9
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 508.55
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 298 - 171 - 127
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 59 - 280.3
+      equals: 1.2e-05
+      tolerance: 0.51
+    - expression: 508.55 - 0
+      equals: 508.550079
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 127.0
+    right: 280.29998779296875
+    difference: 153.29998779296875
+- id: ga-drift-2026-08-12-30033-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-30033
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 249.7 with net income 161.128; Axiom''s persisted net income is 300.09
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 138.965
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 298 - 91 - 207
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 161 - 249.7
+      equals: 3.0e-06
+      tolerance: 0.51
+    - expression: 138.965 - 0
+      equals: 138.964508
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 207.0
+    right: 249.6999969482422
+    difference: 42.69999694824219
+- id: ga-drift-2026-08-12-30736-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-30736
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 785 with net income 0; Axiom''s persisted net income is 305.71 under
+      its round-30-percent-up election. Unmapped state-vocabulary shelter input
+      (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 2420.19
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 785 - 92 - 693
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 785 - 0.3 * 0 - 785
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 2420.19 - 0
+      equals: 2420.194824
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 693.0
+    right: 785.0
+    difference: 92.0
+- id: ga-drift-2026-08-12-30843-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-30843
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 75.7 with net income 741.276; Axiom''s persisted net income is 1155.66
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 414.271
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 298 - 0.3 * 741 - 75.7
+      equals: 3.0e-06
+      tolerance: 0.51
+    - expression: 414.271 - 0
+      equals: 414.270813
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 75.69999694824219
+    difference: 51.69999694824219
+- id: ga-drift-2026-08-12-31013-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-31013
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 222.4 with net income 252.971; Axiom''s persisted net income is 328.97
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 76
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 298 - 99 - 199
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 298 - 0.3 * 252 - 222.4
+      equals: 6.0e-06
+      tolerance: 0.51
+    - expression: 76 - 0
+      equals: 76.000046
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 199.0
+    right: 222.39999389648438
+    difference: 23.399993896484375
+- id: ga-drift-2026-08-12-31017-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-31017
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 151.3 with net income 489.324; Axiom''s persisted net income is 1278.91
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 789.591
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 298 - 0.3 * 489 - 151.3
+      equals: 1.2e-05
+      tolerance: 0.51
+    - expression: 789.591 - 0
+      equals: 789.590576
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 24.0
+    right: 151.29998779296875
+    difference: 127.29998779296875
+- id: ga-drift-2026-08-12-31306-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-31306
+  kind: eligibility_right_only
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 241.9 with net income 2507.53; Axiom''s persisted net income is 3251.53
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 744
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 994 - 0.3 * 2507 - 241.9
+      equals: 3.7e-05
+      tolerance: 0.51
+    - expression: 744 - 0
+      equals: 744.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: ga-drift-2026-08-12-71017-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-71017
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 306.9 with net income 797.241; Axiom''s persisted net income is 1541.24
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 744
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 546 - 463 - 83
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 546 - 0.3 * 797 - 306.9
+      equals: 6.0e-06
+      tolerance: 0.51
+    - expression: 744 - 0
+      equals: 744.0
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 83.0
+    right: 306.8999938964844
+    difference: 223.89999389648438
+- id: ga-drift-2026-08-12-71437-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-71437
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 278.4 with net income 892.102; Axiom''s persisted net income is 1386.25
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 493.313
+      from the same household''s Enhanced CPS housing cost.'
+    arithmetic:
+    - expression: 546 - 416 - 130
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 546 - 0.3 * 892 - 278.4
+      equals: 6.0e-06
+      tolerance: 0.51
+    - expression: 493.313 - 0
+      equals: 493.313477
+      tolerance: 1.0e-06
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 130.0
+    right: 278.3999938964844
+    difference: 148.39999389648438
+- id: ga-drift-se-2026-08-12-30605-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-30605
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+  evidence:
+    mechanism: 'Exact-household requested-month replay on PolicyEngine 4.18.9 /
+      PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. January PolicyEngine computes
+      SNAP 113.9 with net income 2237.33; Axiom''s persisted net income is 1556.45
+      under its round-30-percent-up election. Unmapped state-vocabulary shelter
+      input (the composed us-ga/snap/fy-2026 program derives snap_total_allowable_shelter_expenses
+      from the state-manual input monthly_allowable_shelter_costs, which no populace
+      mapping rule matches, so the generic projector defaults it to zero): Axiom
+      computes a 0 excess-shelter deduction while January PolicyEngine deducts 0
+      from the same household''s Enhanced CPS housing cost. Self-employment income
+      enters the two engines on different surfaces (the projection''s flat 0.6 netting
+      versus PolicyEngine''s expense-based treatment): January PolicyEngine earned
+      1611.72 versus Axiom''s projected earned input 759.49.'
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/433
+    arithmetic:
+    - expression: 785 - 467 - 318
+      equals: 0.0
+      tolerance: 0.51
+    - expression: 785 - 0.3 * 2237 - 113.9
+      equals: 3.7e-05
+      tolerance: 0.51
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 318.0
+    right: 113.89996337890625
+    difference: -204.10003662109375
+unresolved: []

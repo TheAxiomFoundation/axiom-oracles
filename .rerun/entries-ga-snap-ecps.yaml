@@ -1,0 +1,488 @@
+suite: ga-snap-ecps
+entries:
+- id: pe-lone-minor-child-earnings-29868-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29868
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence:
+    mechanism: 'Reverified on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core
+      3.30.3. Exact-household requested-month replay: PolicyEngine''s January snap_earned_income
+      is 0 for this all-minor household (ages [13]) although the projected Case
+      carries the member''s wages — PolicyEngine excludes all earnings of an imputed
+      K-12 member age 17 or younger without requiring the co-resident-parent or
+      parental-control condition in 7 CFR 273.9(c)(7). The sole-minor household
+      is valid under 273.1(a)(1), but its wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit while PolicyEngine
+      pays 298 (January replay 298).'
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    arithmetic:
+    - expression: 298 - 298
+      equals: 0.0
+      tolerance: 0.01
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 298.0
+    difference: 298.0
+- id: pe-lone-minor-child-earnings-29868-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-29868
+  kind: eligibility_right_only
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence:
+    mechanism: 'Reverified on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core
+      3.30.3. Exact-household requested-month replay: PolicyEngine''s January snap_earned_income
+      is 0 for this all-minor household (ages [13]) although the projected Case
+      carries the member''s wages — PolicyEngine excludes all earnings of an imputed
+      K-12 member age 17 or younger without requiring the co-resident-parent or
+      parental-control condition in 7 CFR 273.9(c)(7). The sole-minor household
+      is valid under 273.1(a)(1), but its wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit while PolicyEngine
+      pays 298 (January replay 298).'
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    arithmetic:
+    - expression: 298 - 298
+      equals: 0.0
+      tolerance: 0.01
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: pe-lone-minor-child-earnings-29875-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-29875
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence:
+    mechanism: 'Reverified on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core
+      3.30.3. Exact-household requested-month replay: PolicyEngine''s January snap_earned_income
+      is 0 for this all-minor household (ages [16]) although the projected Case
+      carries the member''s wages — PolicyEngine excludes all earnings of an imputed
+      K-12 member age 17 or younger without requiring the co-resident-parent or
+      parental-control condition in 7 CFR 273.9(c)(7). The sole-minor household
+      is valid under 273.1(a)(1), but its wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit while PolicyEngine
+      pays 166 (January replay 166).'
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    arithmetic:
+    - expression: 166 - 166
+      equals: 0.0
+      tolerance: 0.01
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 166.0
+    difference: 166.0
+- id: pe-lone-minor-child-earnings-29875-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_id: ecps-29875
+  kind: eligibility_right_only
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9157
+  evidence:
+    mechanism: 'Reverified on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core
+      3.30.3. Exact-household requested-month replay: PolicyEngine''s January snap_earned_income
+      is 0 for this all-minor household (ages [16]) although the projected Case
+      carries the member''s wages — PolicyEngine excludes all earnings of an imputed
+      K-12 member age 17 or younger without requiring the co-resident-parent or
+      parental-control condition in 7 CFR 273.9(c)(7). The sole-minor household
+      is valid under 273.1(a)(1), but its wages count under 273.9(b)(1)(i), so Axiom
+      correctly fails the income gate and returns zero benefit while PolicyEngine
+      pays 166 (January replay 166).'
+    upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/9157
+    arithmetic:
+    - expression: 166 - 166
+      equals: 0.0
+      tolerance: 0.01
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.1(a)(1)
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(c)(7)
+  expires_on_source_change: true
+  pinned:
+    left: false
+    right: true
+- id: ga-bbce-tail-2026-08-12-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-30573
+    - ecps-31073
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-30573: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-31073: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+  expires_on_source_change: true
+  kind: eligibility_right_only
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+- id: ga-bbce-tail-2026-08-12-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_selector:
+    case_ids:
+    - ecps-30573
+    - ecps-31073
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-30573: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-31073: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+  expires_on_source_change: true
+  kind: amount_difference
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+unresolved:
+- case_id: ecps-29878
+  report:
+    axiom_benefit: 127.0
+    axiom_eligible: true
+    pe_benefit: 280.29998779296875
+    pe_eligible: true
+  january:
+    snap: 280.29998779296875
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 280.29998779296875
+      elig: true
+    se:
+      snap: 280.29998779296875
+      elig: true
+    se+medical:
+      snap: 280.29998779296875
+      elig: true
+    tanf:
+      snap: 280.29998779296875
+      elig: true
+    tanf+medical:
+      snap: 280.29998779296875
+      elig: true
+    tanf+se+medical:
+      snap: 280.29998779296875
+      elig: true
+  imputed: {}
+- case_id: ecps-30033
+  report:
+    axiom_benefit: 207.0
+    axiom_eligible: true
+    pe_benefit: 249.6999969482422
+    pe_eligible: true
+  january:
+    snap: 249.6999969482422
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 249.6999969482422
+      elig: true
+    se:
+      snap: 249.6999969482422
+      elig: true
+    se+medical:
+      snap: 249.6999969482422
+      elig: true
+    tanf:
+      snap: 249.6999969482422
+      elig: true
+    tanf+medical:
+      snap: 249.6999969482422
+      elig: true
+    tanf+se+medical:
+      snap: 249.6999969482422
+      elig: true
+  imputed: {}
+- case_id: ecps-30605
+  report:
+    axiom_benefit: 318.0
+    axiom_eligible: true
+    pe_benefit: 113.89996337890625
+    pe_eligible: true
+  january:
+    snap: 113.89996337890625
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 113.89996337890625
+      elig: true
+    se:
+      snap: 164.29998779296875
+      elig: true
+    se+medical:
+      snap: 113.89996337890625
+      elig: true
+    tanf:
+      snap: 113.89996337890625
+      elig: true
+    tanf+medical:
+      snap: 113.89996337890625
+      elig: true
+    tanf+se+medical:
+      snap: 113.89996337890625
+      elig: true
+  imputed:
+    pension_income: 13883.46484375
+- case_id: ecps-30736
+  report:
+    axiom_benefit: 693.0
+    axiom_eligible: true
+    pe_benefit: 785.0
+    pe_eligible: true
+  january:
+    snap: 785.0
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 785.0
+      elig: true
+    se:
+      snap: 785.0
+      elig: true
+    se+medical:
+      snap: 785.0
+      elig: true
+    tanf:
+      snap: 785.0
+      elig: true
+    tanf+medical:
+      snap: 785.0
+      elig: true
+    tanf+se+medical:
+      snap: 785.0
+      elig: true
+  imputed: {}
+- case_id: ecps-30843
+  report:
+    axiom_benefit: 24.0
+    axiom_eligible: true
+    pe_benefit: 75.69999694824219
+    pe_eligible: true
+  january:
+    snap: 75.69999694824219
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 75.69999694824219
+      elig: true
+    se:
+      snap: 75.69999694824219
+      elig: true
+    se+medical:
+      snap: 75.69999694824219
+      elig: true
+    tanf:
+      snap: 75.69999694824219
+      elig: true
+    tanf+medical:
+      snap: 75.69999694824219
+      elig: true
+    tanf+se+medical:
+      snap: 75.69999694824219
+      elig: true
+  imputed: {}
+- case_id: ecps-31013
+  report:
+    axiom_benefit: 199.0
+    axiom_eligible: true
+    pe_benefit: 222.39999389648438
+    pe_eligible: true
+  january:
+    snap: 222.39999389648438
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 222.39999389648438
+      elig: true
+    se:
+      snap: 222.39999389648438
+      elig: true
+    se+medical:
+      snap: 222.39999389648438
+      elig: true
+    tanf:
+      snap: 222.39999389648438
+      elig: true
+    tanf+medical:
+      snap: 222.39999389648438
+      elig: true
+    tanf+se+medical:
+      snap: 222.39999389648438
+      elig: true
+  imputed: {}
+- case_id: ecps-31017
+  report:
+    axiom_benefit: 24.0
+    axiom_eligible: true
+    pe_benefit: 151.29998779296875
+    pe_eligible: true
+  january:
+    snap: 151.29998779296875
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 151.29998779296875
+      elig: true
+    se:
+      snap: 151.29998779296875
+      elig: true
+    se+medical:
+      snap: 151.29998779296875
+      elig: true
+    tanf:
+      snap: 151.29998779296875
+      elig: true
+    tanf+medical:
+      snap: 151.29998779296875
+      elig: true
+    tanf+se+medical:
+      snap: 151.29998779296875
+      elig: true
+  imputed: {}
+- case_id: ecps-31306
+  report:
+    axiom_benefit: 0.0
+    axiom_eligible: false
+    pe_benefit: 241.89996337890625
+    pe_eligible: true
+  january:
+    snap: 241.89996337890625
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 241.89996337890625
+      elig: true
+    se:
+      snap: 241.89996337890625
+      elig: true
+    se+medical:
+      snap: 241.89996337890625
+      elig: true
+    tanf:
+      snap: 241.89996337890625
+      elig: true
+    tanf+medical:
+      snap: 241.89996337890625
+      elig: true
+    tanf+se+medical:
+      snap: 241.89996337890625
+      elig: true
+  imputed: {}
+- case_id: ecps-71017
+  report:
+    axiom_benefit: 83.0
+    axiom_eligible: true
+    pe_benefit: 306.8999938964844
+    pe_eligible: true
+  january:
+    snap: 306.8999938964844
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 306.8999938964844
+      elig: true
+    se:
+      snap: 306.8999938964844
+      elig: true
+    se+medical:
+      snap: 306.8999938964844
+      elig: true
+    tanf:
+      snap: 306.8999938964844
+      elig: true
+    tanf+medical:
+      snap: 306.8999938964844
+      elig: true
+    tanf+se+medical:
+      snap: 306.8999938964844
+      elig: true
+  imputed: {}
+- case_id: ecps-71437
+  report:
+    axiom_benefit: 130.0
+    axiom_eligible: true
+    pe_benefit: 278.3999938964844
+    pe_eligible: true
+  january:
+    snap: 278.3999938964844
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 278.3999938964844
+      elig: true
+    se:
+      snap: 278.3999938964844
+      elig: true
+    se+medical:
+      snap: 278.3999938964844
+      elig: true
+    tanf:
+      snap: 278.3999938964844
+      elig: true
+    tanf+medical:
+      snap: 278.3999938964844
+      elig: true
+    tanf+se+medical:
+      snap: 278.3999938964844
+      elig: true
+  imputed: {}

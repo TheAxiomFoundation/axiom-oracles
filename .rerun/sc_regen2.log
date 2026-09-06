@@ -1,0 +1,43 @@
+== apply_dispositions (merge all)
+Validated 95 dispositions files
+Updated dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+Dispositions are consistent with the committed dashboard data
+rc=0
+== emit_case_artifacts sc
+wrote sc-snap-ecps: 1283 cases in 3 chunks
+rc=0
+== emit_disposition_artifacts
+emitted 95 disposition artifacts -> /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/dispositions
+== overview
+wrote overview.json: 224 reports, 7.5 MB
+== scoreboard
+Wrote conformance/scoreboard.json + 6 detail file(s) (6 jurisdictions).
+== apply --check
+Validated 95 dispositions files
+Dispositions are consistent with the committed dashboard data
+rc=0
+== case-artifacts --check (sc only)
+case-artifacts FAILED: sc-snap-ecps: 108 served mismatch value row(s) drift; examples=[('ecps-28671', 'us:statutes/7/2014/u#snap_benefit'), ('ecps-28685', 'us:statutes/7/2014/u#snap_benefit'), ('ecps-28690', 'us:statutes/7/2014/u#snap_benefit'), ('ecps-28700', 'us:statutes/7/2014/u#snap_benefit'), ('ecps-28714', 'us:statutes/7/2014/u#snap_benefit')]
+rc=1
+== case-artifacts --check (all, informational)
+case-artifacts FAILED: wv-income-tax-populace: index mismatch_concepts drift from canonical
+rc=1
+== ratchets
+conformance ratchet OK: 6 jurisdiction(s), no invariant regressed
+unexplained ratchet OK: 135 suites gated, 644 unexplained within pinned ceilings
+== census/certify
+| wv-income-tax-populace | 1608 | 0 | 0 | no |
+  blocker: exercise: the commit-pinned, sha-bound input catalog is attested, not computed from committed per-evaluation, view-scoped request/output traces
+== overview --check
+overview OK: 224 reports bundled
+ M certificates/dk-boerne-og-ungeydelse.json
+ M certificates/us-co-snap.json
+ M conformance/exercise-census.json
+ M dashboard/public/data/axiom-policyengine-sc-snap-ecps.json
+ M dashboard/public/data/cases/sc-snap-ecps/chunk-0.json
+ M dashboard/public/data/cases/sc-snap-ecps/chunk-1.json
+ M dashboard/public/data/cases/sc-snap-ecps/chunk-2.json
+ M dashboard/public/data/dispositions/sc-snap-ecps.json
+ M dashboard/public/data/overview.json
+ M dispositions/sc-snap-ecps.yaml
+REGEN2-DONE

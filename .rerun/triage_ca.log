@@ -1,0 +1,22 @@
+    raise ValueError(f"{case['case_id']} lacks a benefit outcome row")
+ValueError: ecps-57437 lacks a benefit outcome row
+ecps-56919: unforced snap=280.0 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=204.39999389648438 elig=True
+ecps-57173: unforced snap=748.5999755859375 elig=True | imputed={'tanf': 16992.0} | forced snap=994.0 elig=True
+ecps-57335: unforced snap=708.0999755859375 elig=True | imputed={'tanf': 10911.86} | forced snap=980.7999877929688 elig=True
+ecps-57437: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-57912: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-58676: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-58805: unforced snap=543.4000244140625 elig=True | imputed={'tanf': 5531.65} | forced snap=681.699951171875 elig=True
+ecps-58946: unforced snap=350.0 elig=True | imputed={'tanf': 7374.6} | forced snap=534.199951171875 elig=True
+ecps-59311: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-59946: unforced snap=135.5 elig=True | imputed={'medical_expense_health_insurance_premiums': 2434.8} | forced snap=0.0 elig=False
+ecps-60285: unforced snap=523.4000244140625 elig=True | imputed={'tanf': 8778.41} | forced snap=743.0 elig=True
+ecps-60408: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-60816: unforced snap=283.89996337890625 elig=True | imputed={'tanf': 3099.04} | forced snap=361.29998779296875 elig=True
+ecps-61042: unforced snap=170.79998779296875 elig=True | imputed={} | forced snap=170.79998779296875 elig=True
+ecps-61082: unforced snap=23.84000015258789 elig=True | imputed={} | forced snap=23.84000015258789 elig=True
+ecps-61658: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+ecps-61665: unforced snap=529.7000122070312 elig=True | imputed={'tanf': 14100.0} | forced snap=785.0 elig=True
+ecps-62891: unforced snap=0.0 elig=False | imputed={} | forced snap=0.0 elig=False
+wrote .rerun/unforced-ca-snap-ecps.json
+CA-TRIAGE-DONE

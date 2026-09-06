@@ -1,0 +1,80 @@
+/Users/maxghenis/.cache/uv/archive-v0/y6Kq87J0uyTmd7r_3SwlW/lib/python3.13/site-packages/policyengine/tax_benefit_models/us/model.py:465: UserWarning: Installed policyengine-us version (1.767.3) does not match the bundled policyengine.py manifest (1.752.2). Calculations will run against the installed version, but dataset compatibility is not guaranteed. To silence this warning, install the version pinned by the manifest.
+  us_latest = PolicyEngineUSLatest()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Comparing batch 1/19 (100 case(s))...
+Comparing batch 2/19 (100 case(s))...
+Comparing batch 3/19 (100 case(s))...
+Comparing batch 4/19 (100 case(s))...
+Comparing batch 5/19 (100 case(s))...
+Comparing batch 6/19 (100 case(s))...
+Comparing batch 7/19 (100 case(s))...
+Comparing batch 8/19 (100 case(s))...
+Comparing batch 9/19 (100 case(s))...
+Comparing batch 10/19 (100 case(s))...
+Comparing batch 11/19 (100 case(s))...
+Comparing batch 12/19 (100 case(s))...
+Comparing batch 13/19 (100 case(s))...
+Comparing batch 14/19 (100 case(s))...
+Comparing batch 15/19 (100 case(s))...
+Comparing batch 16/19 (100 case(s))...
+Comparing batch 17/19 (100 case(s))...
+Comparing batch 18/19 (100 case(s))...
+Comparing batch 19/19 (97 case(s))...
+Population enhanced-cps / suite nyc-synthetic (1897 cases, locales: )
+Concepts: 2; comparisons: 3794; mismatches: 222
+Mismatches:
+ecps-29773: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29773: SNAP eligibility False != True
+ecps-29788: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29788: SNAP eligibility False != True
+ecps-29791: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29791: SNAP eligibility False != True
+ecps-29794: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29794: SNAP eligibility False != True
+ecps-29803: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29803: SNAP eligibility False != True
+ecps-29810: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29810: SNAP eligibility False != True
+ecps-29815: SNAP benefit amount 360.0 != 509.8999938964844
+ecps-29825: SNAP benefit amount 1467.0 != 1432.699951171875
+ecps-29843: SNAP benefit amount 785.0 != 763.7000122070312
+ecps-29844: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29844: SNAP eligibility False != True
+ecps-29854: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29854: SNAP eligibility False != True
+ecps-29863: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29863: SNAP eligibility False != True
+ecps-29864: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29864: SNAP eligibility False != True
+ecps-29868: SNAP benefit amount 0.0 != 298.0
+ecps-29868: SNAP eligibility False != True
+ecps-29870: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29870: SNAP eligibility False != True
+ecps-29875: SNAP benefit amount 0.0 != 166.0
+ecps-29875: SNAP eligibility False != True
+ecps-29878: SNAP benefit amount 127.0 != 280.29998779296875
+ecps-29884: SNAP benefit amount 521.0 != 451.5
+ecps-29889: SNAP benefit amount 546.0 != 538.2000122070312
+ecps-29900: SNAP benefit amount 998.0 != 1126.9000244140625
+ecps-29907: SNAP benefit amount 181.0 != 190.60000610351562
+ecps-29915: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29915: SNAP eligibility False != True
+ecps-29936: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29936: SNAP eligibility False != True
+ecps-29957: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-29957: SNAP eligibility False != True
+ecps-29966: SNAP benefit amount 994.0 != 904.2999877929688
+ecps-29968: SNAP benefit amount 146.0 != 298.0
+ecps-30001: SNAP benefit amount 463.0 != 488.5999755859375
+ecps-30005: SNAP benefit amount 342.0 != 453.79998779296875
+ecps-30021: SNAP benefit amount 994.0 != 961.9000244140625
+ecps-30033: SNAP benefit amount 207.0 != 249.6999969482422
+ecps-30041: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-30041: SNAP eligibility False != True
+ecps-30058: SNAP benefit amount 0.0 != 23.84000015258789
+ecps-30058: SNAP eligibility False != True
+... 172 additional mismatches omitted; use --output for the full JSON report.
+Running ga-snap-ecps: Georgia SNAP -- Axiom vs PolicyEngine
+Wrote: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/reports/axiom-policyengine-ga-snap-ecps-0-2026-08-07.json
+Wrote dashboard report: /Users/maxghenis/TheAxiomFoundation/axiom-oracles/.claude/worktrees/amazing-zhukovsky-51fce0/dashboard/public/data/axiom-policyengine-ga-snap-ecps.json
+Dashboard copy truncated: 222/222 mismatches, 141/1897 case rows (full report under reports/).

@@ -1,0 +1,92 @@
+suite: nc-snap-ecps
+entries:
+- id: tanf-zero-counterfactual-27266
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_id: ecps-27266
+  kind: amount_difference
+  disposition: bridge_artifact
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+  evidence:
+    mechanism: Exact-household requested-month counterfactual on PolicyEngine 4.18.9
+      / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3. The committed comparison
+      adapter replayed over the same Case projection reproduces the report pin (Axiom
+      506 versus January PolicyEngine 487.2). Forcing the aggregate and state TANF
+      inputs to zero in the direct requested-month simulation produces January SNAP
+      507; its absolute delta from Axiom, 1.0, is within the unchanged suite tolerance
+      7.0. The comparison bridge zeroes TANF on the Axiom input surface while PolicyEngine
+      computes state TANF endogenously and counts it as SNAP unearned income (axiom-oracles#397
+      counterfactual class).
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
+    arithmetic:
+    - expression: 507 - 506
+      equals: 1.0
+      tolerance: 1.000001
+    sources:
+    - dashboard/public/data/axiom-policyengine-nc-snap-ecps.json
+    - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-273#p-273.9(b)(2)(i)
+    - axiom_oracles/adapters/policyengine/runner.py
+  expires_on_source_change: true
+  pinned:
+    left: 506.0
+    right: 487.20001220703125
+    difference: -18.79998779296875
+- id: nc-bbce-tail-2026-08-12-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-27181
+    - ecps-27947
+    - ecps-28179
+    - ecps-28260
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-27181: categorical=True, net_test=False,
+      gross_test=True, January PE 0; ecps-27947: categorical=True, net_test=False,
+      gross_test=True, January PE 0; ecps-28179: categorical=True, net_test=False,
+      gross_test=False, January PE 0; ecps-28260: categorical=True, net_test=False,
+      gross_test=True, January PE 0.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-nc-snap-ecps.json
+  expires_on_source_change: true
+  kind: eligibility_right_only
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
+unresolved:
+- case_id: ecps-28618
+  report:
+    axiom_benefit: 389.0
+    axiom_eligible: true
+    pe_benefit: 92.89990234375
+    pe_eligible: true
+  january:
+    snap: 92.89990234375
+    eligible: true
+    cat: true
+    net_ok: false
+    gross_ok: false
+  ladder:
+    medical:
+      snap: 92.89990234375
+      elig: true
+    se:
+      snap: 92.89990234375
+      elig: true
+    se+medical:
+      snap: 92.89990234375
+      elig: true
+    tanf:
+      snap: 92.89990234375
+      elig: true
+    tanf+medical:
+      snap: 92.89990234375
+      elig: true
+    tanf+se+medical:
+      snap: 92.89990234375
+      elig: true
+  imputed: {}

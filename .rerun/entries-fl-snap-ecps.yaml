@@ -1,0 +1,173 @@
+suite: fl-snap-ecps
+entries:
+- id: fl-bbce-tail-2026-08-12-eligibility
+  concept: us:statutes/7/2014/o#snap_eligible
+  case_selector:
+    case_ids:
+    - ecps-31418
+    - ecps-32197
+    - ecps-32401
+    - ecps-32629
+    - ecps-32834
+    - ecps-32979
+    - ecps-33045
+    - ecps-33616
+    - ecps-33930
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-31418: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32197: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84; ecps-32401: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32629: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32834: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32979: categorical=True, net_test=True,
+      gross_test=False, January PE 32.4; ecps-33045: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-33616: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84; ecps-33930: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+  expires_on_source_change: true
+  kind: eligibility_right_only
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1183
+- id: fl-bbce-tail-2026-08-12-benefit
+  concept: us:statutes/7/2014/u#snap_benefit
+  case_selector:
+    case_ids:
+    - ecps-31418
+    - ecps-32197
+    - ecps-32401
+    - ecps-32629
+    - ecps-32834
+    - ecps-32979
+    - ecps-33045
+    - ecps-33616
+    - ecps-33930
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: 'Reverified per-row on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3
+      / PolicyEngine-Core 3.30.3 via exact-household requested-month replay: for
+      every selected row January PolicyEngine grants broad-based categorical eligibility
+      (meets_snap_categorical_eligibility=True) while a standard federal income
+      test fails, and pays the resulting benefit (one/two-person minimums where
+      net income leaves no normal allotment). The composed program applies only
+      the standard federal tests, so Axiom is ineligible with zero benefit. Axiom-side
+      modeling boundary. Per-row flags: ecps-31418: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32197: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84; ecps-32401: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32629: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32834: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-32979: categorical=True, net_test=True,
+      gross_test=False, January PE 32.4; ecps-33045: categorical=True, net_test=False,
+      gross_test=True, January PE 23.84; ecps-33616: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84; ecps-33930: categorical=True, net_test=False,
+      gross_test=False, January PE 23.84.'
+    sources:
+    - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
+  expires_on_source_change: true
+  kind: amount_difference
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1183
+unresolved:
+- case_id: ecps-33139
+  report:
+    axiom_benefit: 116.0
+    axiom_eligible: true
+    pe_benefit: 102.99998474121094
+    pe_eligible: true
+  january:
+    snap: 102.99998474121094
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 102.99998474121094
+      elig: true
+    se:
+      snap: 102.99998474121094
+      elig: true
+    se+medical:
+      snap: 102.99998474121094
+      elig: true
+    tanf:
+      snap: 102.99998474121094
+      elig: true
+    tanf+medical:
+      snap: 102.99998474121094
+      elig: true
+    tanf+se+medical:
+      snap: 102.99998474121094
+      elig: true
+  imputed: {}
+- case_id: ecps-33182
+  report:
+    axiom_benefit: 0.0
+    axiom_eligible: false
+    pe_benefit: 23.84000015258789
+    pe_eligible: true
+  january:
+    snap: 23.84000015258789
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 23.84000015258789
+      elig: true
+    se:
+      snap: 23.84000015258789
+      elig: true
+    se+medical:
+      snap: 23.84000015258789
+      elig: true
+    tanf:
+      snap: 23.84000015258789
+      elig: true
+    tanf+medical:
+      snap: 23.84000015258789
+      elig: true
+    tanf+se+medical:
+      snap: 23.84000015258789
+      elig: true
+  imputed: {}
+- case_id: ecps-33897
+  report:
+    axiom_benefit: 275.0
+    axiom_eligible: true
+    pe_benefit: 243.39999389648438
+    pe_eligible: true
+  january:
+    snap: 243.39999389648438
+    eligible: true
+    cat: true
+    net_ok: true
+    gross_ok: true
+  ladder:
+    medical:
+      snap: 243.39999389648438
+      elig: true
+    se:
+      snap: 298.0
+      elig: true
+    se+medical:
+      snap: 298.0
+      elig: true
+    tanf:
+      snap: 243.39999389648438
+      elig: true
+    tanf+medical:
+      snap: 243.39999389648438
+      elig: true
+    tanf+se+medical:
+      snap: 298.0
+      elig: true
+  imputed: {}

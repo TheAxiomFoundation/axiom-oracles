@@ -1,0 +1,10 @@
+Wrote conformance/scoreboard.json + 6 detail file(s) (6 jurisdictions).
+wrote overview.json: 223 reports, 7.2 MB
+Wrote dashboard/public/data/freshness.json: 222 suites, 34 executable surfaces
+| wv-income-tax-populace | 1608 | 0 | 0 | no |
+  blocker: exercise: census incomplete (missing per-case evidence or unaudited bridge) for at least one suite
+Dispositions are consistent with the committed dashboard data
+conformance ratchet OK: 6 jurisdiction(s), no invariant regressed
+unexplained ratchet OK: 134 suites gated, 644 unexplained within pinned ceilings
+conformance burn-down OK: 6 series, 143 point(s)
+MERGE4-DONE

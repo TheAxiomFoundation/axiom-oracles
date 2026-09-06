@@ -1,0 +1,12 @@
+| wv-income-tax-populace | 1608 | 0 | 0 | no |
+exercise census up to date
+1 manifest(s): 0 error(s), 4 finding(s)
+certificate drifted for us-co/snap — regenerate with `uv run python scripts/certify.py`
+Grids up to date.
+Suggestions up to date.
+closure universes OK: 3 roots, 1156 provisions, 290 pending, closed=false
+conformance compositions[be] OK: 23 covered suite(s)
+conformance burn-down OK: 5 series, 135 point(s)
+rule_verification OK: 23048 rules, 99.3% grounded, 97.5% manifest-backed, 34/130 executable surfaces (commit 3f193a1aaf43)
+state-tax-populace contract OK: 43 jurisdictions, 32 ready, 11 blocked, 134 explicit inputs, 0 explicit relations
+NEWGATES-DONE
