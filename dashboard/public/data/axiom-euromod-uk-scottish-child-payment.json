@@ -674,10 +674,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "d142c645917817cf590e036fb99f99b2d4780e1a",
+      "axiom_rules_engine_sha": "1f824237d43c1234d88fea60c8ac2fa7b9b9da4c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-06T15:36:05Z",
+    "generated_at": "2026-09-06T20:37:24Z",
     "generated_by": "scripts/run_comparison.py::uk-scottish-child-payment-ukmod",
     "oracle": {
       "euromod_country": "UK",
