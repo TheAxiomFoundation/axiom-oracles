@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -5490,3 +5491,173 @@ def test_de_release_process_does_not_inherit_ambient_environment(monkeypatch):
         "TZ",
         "SYSTEMROOT",
     }
+
+
+# ---------------------------------------------------------------------------
+# oracles#498 — per-target engine pins: the producing pin stays the binding;
+# a sibling-target verifier may only replay a sha-pinned asset of the same
+# release, and only the binary's own SHA-256 is allowed to differ.
+# ---------------------------------------------------------------------------
+
+
+def test_de_engine_platform_pins_cover_the_release_and_match_the_producing_pin():
+    executable = _load("de_executable")
+    pins = executable.ENGINE_PLATFORM_PINS
+    assert set(pins) == {
+        "x86_64-unknown-linux-gnu",
+        "aarch64-unknown-linux-gnu",
+        "x86_64-apple-darwin",
+        "aarch64-apple-darwin",
+    }
+    producing = pins[executable.ENGINE_PIN["target"]]
+    for field in ("asset", "archive_sha256", "binary_in_archive"):
+        assert producing[field] == executable.ENGINE_PIN[field]
+    shas = [pin["archive_sha256"] for pin in pins.values()]
+    assert len(set(shas)) == len(shas)
+    for target, pin in pins.items():
+        assert re.fullmatch(r"[0-9a-f]{64}", pin["archive_sha256"])
+        assert pin["asset"] == f"axiom-rules-engine-{target}.tar.xz"
+        assert (
+            pin["binary_in_archive"]
+            == f"axiom-rules-engine-{target}/axiom-rules-engine"
+        )
+
+
+@pytest.mark.parametrize(
+    ("system", "machine", "expected"),
+    [
+        ("linux", "x86_64", "x86_64-unknown-linux-gnu"),
+        ("linux2", "amd64", "x86_64-unknown-linux-gnu"),
+        ("linux", "aarch64", "aarch64-unknown-linux-gnu"),
+        ("darwin", "arm64", "aarch64-apple-darwin"),
+        ("darwin", "x86_64", "x86_64-apple-darwin"),
+        ("win32", "AMD64", None),
+        ("linux", "riscv64", None),
+    ],
+)
+def test_de_host_engine_target_mapping(system, machine, expected):
+    executable = _load("de_executable")
+    assert executable.host_engine_target(system, machine) == expected
+
+
+def test_de_sibling_host_requires_a_sha_pinned_archive(tmp_path, monkeypatch):
+    """MUTANT: a verifier off the producing target cannot run arbitrary bytes."""
+
+    executable = _load("de_executable")
+    monkeypatch.setattr(
+        executable, "host_engine_target", lambda *_: "aarch64-apple-darwin"
+    )
+    monkeypatch.setattr(executable, "HOST_ARCHIVE_CACHE", tmp_path / "cache")
+    monkeypatch.delenv(executable.HOST_ARCHIVE_ENV, raising=False)
+    embedded = b"producing-target archive bytes"
+
+    with pytest.raises(executable.DEExecutableError, match="fetch-host-engine") as info:
+        executable._host_engine_archive(embedded)
+    assert "aarch64-apple-darwin" in str(info.value)
+    assert executable.ENGINE_PLATFORM_PINS["aarch64-apple-darwin"][
+        "archive_sha256"
+    ] in str(info.value)
+
+    tampered = tmp_path / "engine.tar.xz"
+    tampered.write_bytes(b"not the pinned asset")
+    monkeypatch.setenv(executable.HOST_ARCHIVE_ENV, str(tampered))
+    with pytest.raises(
+        executable.DEExecutableError, match="host engine archive SHA-256"
+    ):
+        executable._host_engine_archive(embedded)
+
+    # A correctly pinned sibling asset is selected with its own pin, and the
+    # embedded producing archive is never executed on the wrong target.
+    sibling_bytes = b"sibling-target archive bytes"
+    pinned = copy.deepcopy(executable.ENGINE_PLATFORM_PINS)
+    pinned["aarch64-apple-darwin"]["archive_sha256"] = hashlib.sha256(
+        sibling_bytes
+    ).hexdigest()
+    monkeypatch.setattr(executable, "ENGINE_PLATFORM_PINS", pinned)
+    tampered.write_bytes(sibling_bytes)
+    chosen, pin = executable._host_engine_archive(embedded)
+    assert chosen == sibling_bytes
+    assert pin["target"] == "aarch64-apple-darwin"
+    assert pin["release"] == executable.ENGINE_PIN["release"]
+    assert pin["commit"] == executable.ENGINE_PIN["commit"]
+    assert pin["asset"] == "axiom-rules-engine-aarch64-apple-darwin.tar.xz"
+
+    # Unsupported hosts fail closed rather than guessing an asset.
+    monkeypatch.setattr(executable, "host_engine_target", lambda *_: None)
+    with pytest.raises(executable.DEExecutableError, match="unsupported host"):
+        executable._host_engine_archive(embedded)
+
+
+def test_de_producing_host_replays_the_embedded_archive_unchanged(monkeypatch):
+    executable = _load("de_executable")
+    monkeypatch.setattr(
+        executable, "host_engine_target", lambda *_: executable.ENGINE_PIN["target"]
+    )
+    embedded = b"producing-target archive bytes"
+    chosen, pin = executable._host_engine_archive(embedded)
+    assert chosen is embedded
+    assert pin == executable.ENGINE_PIN
+
+
+def test_de_replay_receipt_on_a_sibling_target_relaxes_only_the_binary_sha(
+    tmp_path, monkeypatch
+):
+    """MUTANTS: off-target replay still binds version, artifact, stdout, rows."""
+
+    executable = _load("de_executable")
+    inputs = _synthetic_de_replay(executable, tmp_path, monkeypatch)
+    path, manifest, unified, legs, fixture, descriptor, receipt, fresh = inputs
+    recorded_binary_sha = receipt["engine"]["binary_sha256"]
+
+    sibling = {
+        **fresh,
+        "engine_target": "aarch64-apple-darwin",
+        "binary_sha256": "e" * 64,
+    }
+    assert sibling["binary_sha256"] != recorded_binary_sha
+    row = executable._validate_replay_receipt(
+        path, manifest, unified, legs, fixture, descriptor, lambda *_: sibling
+    )
+    # The status stays host-invariant: it reports the producing binary.
+    assert row["fresh_binary_sha256"] == recorded_binary_sha
+
+    on_target = {**fresh, "binary_sha256": "e" * 64}
+    with pytest.raises(
+        executable.DEExecutableError, match="fresh release binary SHA-256"
+    ):
+        executable._validate_replay_receipt(
+            path, manifest, unified, legs, fixture, descriptor, lambda *_: on_target
+        )
+
+    mutants = {
+        "unpinned target": {**sibling, "engine_target": "riscv64-unknown-linux-gnu"},
+        "version": {**sibling, "version_stdout": "axiom-rules-engine 0.2.3"},
+        "compiled artifact": {**sibling, "compiled_artifact_sha256": "f" * 64},
+        "stdout": {**sibling, "stdout_sha256": "f" * 64},
+        "results": {
+            **sibling,
+            "observed_results": copy.deepcopy(fresh["observed_results"])[:-1],
+        },
+        "binary sha shape": {**sibling, "binary_sha256": "not-a-sha"},
+    }
+    for label, mutant in mutants.items():
+        with pytest.raises(executable.DEExecutableError):
+            executable._validate_replay_receipt(
+                path, manifest, unified, legs, fixture, descriptor, lambda *_: mutant
+            )
+        assert label
+
+
+def test_de_raw_replay_binds_the_engine_pin_it_is_given(tmp_path, monkeypatch):
+    executable = _load("de_executable")
+    sibling_pin = executable._host_engine_pin("aarch64-apple-darwin")
+    with pytest.raises(executable.DEExecutableError, match="engine archive SHA-256"):
+        executable._execute_release_archive_raw(
+            b"wrong bytes", {"module_bytes": b""}, {}, engine=sibling_pin
+        )
+    with pytest.raises(executable.DEExecutableError, match="engine archive SHA-256"):
+        executable._execute_release_archive_raw(
+            b"wrong bytes", {"module_bytes": b""}, {}
+        )
+    with pytest.raises(executable.DEExecutableError, match="ships no asset"):
+        executable._host_engine_pin("riscv64-unknown-linux-gnu")

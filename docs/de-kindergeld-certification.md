@@ -99,6 +99,32 @@ requirements unconditionally — nothing written into the rederived closure
 summary can flip them; the real ledger must land through the central
 producer gate.
 
+## Verifying on a non-Linux host (oracles#498)
+
+The receipt embeds the producing `x86_64-unknown-linux-gnu` archive, and the
+manifest, receipt, and status bind that pin; none of them change with the
+verifying host. A verifier on another target replays the receipt's exact
+request with the sha-pinned sibling asset of the same release from
+`ENGINE_PLATFORM_PINS` in `scripts/de_executable.py`, and every fresh equality
+except the binary's own SHA-256 (platform-specific by construction) must still
+hold: version line, compiled artifact bytes, engine stdout bytes, and all 13
+result rows. The rendered status is host-invariant, so `--check` compares
+byte-for-byte on macOS and Linux alike.
+
+One-time setup on macOS or aarch64 Linux:
+
+```sh
+python scripts/de_executable.py --fetch-host-engine
+```
+
+This downloads this host's asset into `~/.cache/axiom-oracles/axiom-rules-engine/<release>/`,
+refusing any bytes whose SHA-256 differs from the pin. Alternatively point
+`AXIOM_RULES_ENGINE_HOST_ARCHIVE` at an already-downloaded archive; it is
+verified against the same pin before it runs. Without either, the executable
+status computes `computed_invalid` with a blocker naming the asset and its
+expected hash — never a silent pass. Producing a new receipt (`--run`) still
+requires the producing target and its archive.
+
 ## Closing worklist (seed enumeration — discovery incomplete)
 
 Stable IDs; each row is a node of the open frontier, not an engineering
