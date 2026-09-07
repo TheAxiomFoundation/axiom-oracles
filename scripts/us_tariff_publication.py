@@ -34,7 +34,7 @@ REPORT_PATH = "conformance/detail/us-tariff-schedule.json"
 # This binds composition assignments as well as counts; a raw population hash
 # alone cannot prove how component signatures were assigned to total classes.
 TRUSTED_CLASSIFICATION_SHA256 = (
-    "119f1b3a017b44362649f3a10307e16eeedc43b3de86fc0b228694ac06663858"
+    "6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35"
 )
 RETIRED_BASE_IDS = frozenset(
     {
@@ -43,7 +43,7 @@ RETIRED_BASE_IDS = frozenset(
     }
 )
 BASE_ENTRY_COUNT = 42
-BASE_ENTRIES_SHA256 = "8d3f6dba38c2a48c7449a51476625e6ba840de58f3dc0d27303fe051d25d009c"
+BASE_ENTRIES_SHA256 = "a0236b58e3039253260b92e547ba9dcdb76e2f63e51f2afbd6cac52e2f977da8"
 BASE_CLASS_MEASUREMENTS_SHA256 = (
     "767727ff1936341e8fca19ae534a8dd5a319583ee6d891e1c95180557d07608f"
 )
@@ -62,11 +62,11 @@ CLASSIFICATION_POPULATION = {
 }
 PINNED_CLASSIFICATION_INPUTS = {
     "comparison_artifact_sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0",
-    "comparison_receipt_sha256": "0e50e4a07a71c8046fadb8df7f77f57f555c22af93dda57f1b60a905e21a9826",
+    "comparison_receipt_sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7",
     "preview_disposition_receipt_sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181",
     "preview_disposition_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
-    "preview_selector_transition_receipt_sha256": "a36755d7c593315139689c28d3fdbde4ba0c4fdf352f9e24f9c5d1512c9474f5",
-    "preview_selector_transition_payload_sha256": "13b81539961a3978be4e6411c4cb2303ff40fb5eef50923308723e8ae97756eb",
+    "preview_selector_transition_receipt_sha256": "69121a39e488a411a9dc1e402d7ee49f29dfd59e0a24f82c0d7138e311ca642b",
+    "preview_selector_transition_payload_sha256": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
     "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
 }
 PINNED_PROOFS = {
@@ -77,7 +77,7 @@ PINNED_PROOFS = {
         "preview_selector_transition_receipt_sha256"
     ],
     "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json": (
-        "014292089e83e964d8da6f91f8eba590810025772740cf7cc04c0d7e7e570a32"
+        "3b7697e864c5895a39f535a9be7de59029f94524aebc2af401ac53a19537496c"
     ),
 }
 PROOF_SPECS = (

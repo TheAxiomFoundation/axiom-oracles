@@ -8,11 +8,11 @@ The final 46-entry classification explains all 6,807,741 mismatch units and
 leaves zero unexplained. It assigns 3,740,478 direct component units and
 3,067,263 derived total-composition units, with zero engine errors and exact
 conservation. The committed classification receipt has SHA-256
-`119f1b3a017b44362649f3a10307e16eeedc43b3de86fc0b228694ac06663858`.
+`6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35`.
 
 The full report producer independently streamed the 4 GB comparison artifact
 and the complete classification sidecar before emitting the conformant report
-(SHA-256 `43be57b8063fb97cc76440938710b1dfa3a29bb4c43f5cfb7cdd7dafc76749b1`).
+(SHA-256 `41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be`).
 A separate audit fully streamed the 203 MB compressed sidecar, regenerated every
 component signature, and reconciled all assignments, groups, samples,
 populations, and accumulators. Its sidecar SHA-256 is
@@ -32,9 +32,11 @@ The same base-rate pattern affects another 2,398 units previously labeled
 `preference-entry-semantics`. The aluminum membership mechanism also affects
 the 8 units in `vintage-revision-232-changed-rate`. The final ledger retires both
 incorrect explanations and enrolls exact-signature replacements for all 5,709
-base units and 24 aluminum units. The other 42 entries remain byte-identical;
-neither retired selector was widened to absorb unexplained rows. The final
-report audit confirms that these replacements account for the remainder exactly.
+base units and 24 aluminum units. The other 42 selectors remain semantically
+unchanged; 39 ledger scalars were mechanically rebound to the fresh proof and
+publication receipt hashes. Neither retired selector was widened to absorb
+unexplained rows. The final report audit confirms that these replacements
+account for the remainder exactly.
 
 ## Passed historical migration
 
@@ -101,9 +103,11 @@ methodology difference, a reference defect, reference behavior, or an input-
 comparability boundary rather than a finding that both systems agree.
 
 No classification disposition establishes source completeness or certification.
-The compiled-input audit finds 58 reachable inputs and 21 missing exact scopes;
-the complete instrument and typed dependency-closure requirements remain open.
-`closed` and `certified` must remain false.
+The compiled-input audit now assigns a named exact semantic scope to all 58 of
+58 reachable inputs: `missing_input_count` is zero and the boundary frontier is
+complete. All 58 groundings remain uncaptured, however, and the pending or
+partial source, instrument, and typed dependency families remain open. `closed`
+and `certified` must therefore remain false.
 
 ## Historical status
 

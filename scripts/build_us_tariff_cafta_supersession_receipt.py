@@ -17,12 +17,15 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import os
 import shutil
+import stat
 import subprocess
 import tempfile
 from collections import Counter
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 import yaml
 
@@ -32,6 +35,10 @@ from scripts import us_tariff_schedule_campaign as campaign
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PRODUCER_SOURCE = Path(__file__).resolve()
+FOUNDATION_SOURCE = Path(foundation.__file__).resolve()
+EXPECTED_FOUNDATION_SHA256 = (
+    "34e92d18ef1dcba5a2ace50b6d2dd2bee348530e7b9ad628a3aaed3bcf353441"
+)
 PREVIEW_RECEIPT = foundation.PREVIEW_RECEIPT
 HISTORICAL_ARTIFACT = foundation.HISTORICAL_ARTIFACT
 EVAL_MANIFEST = foundation.EVAL_MANIFEST
@@ -139,6 +146,482 @@ def canonical_sha256(value: Any) -> str:
 
 def population_sha256(values: Iterable[dict[str, Any]]) -> str:
     return foundation.population_sha256(values)
+
+
+OutputSnapshot = tuple[bytes | None, tuple[int, ...] | None, int | None]
+EvidenceSnapshot = tuple[tuple[int, ...], str]
+
+
+def _file_identity(value: os.stat_result) -> tuple[int, ...]:
+    return (
+        value.st_dev,
+        value.st_ino,
+        value.st_size,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
+
+
+class _ProofInputs:
+    """Authenticate proof inputs once, then guard their filesystem identities."""
+
+    def __init__(self) -> None:
+        self._snapshots: dict[Path, EvidenceSnapshot] = {}
+        self._sealed = False
+
+    def sha256(self, path: Path) -> str:
+        resolved = Path(path).resolve()
+        prior = self._snapshots.get(resolved)
+        if prior is not None:
+            require(
+                _file_identity(resolved.stat()) == prior[0],
+                f"proof input changed: {resolved}",
+            )
+            return prior[1]
+        require(not self._sealed, f"uncaptured proof input after build: {resolved}")
+        digest = hashlib.sha256()
+        with resolved.open("rb") as source:
+            before = _file_identity(os.fstat(source.fileno()))
+            for block in iter(lambda: source.read(1024 * 1024), b""):
+                digest.update(block)
+            after = _file_identity(os.fstat(source.fileno()))
+        require(
+            before == after == _file_identity(resolved.stat()),
+            f"proof input changed while authenticating: {resolved}",
+        )
+        value = digest.hexdigest()
+        self._snapshots[resolved] = (before, value)
+        return value
+
+    def file_receipt(
+        self, path: Path, *, relative_to: Path | None = None
+    ) -> dict[str, Any]:
+        resolved = Path(path).resolve()
+        digest = self.sha256(resolved)
+        identity = self._snapshots[resolved][0]
+        logical_path = str(resolved)
+        if relative_to is not None:
+            try:
+                logical_path = str(resolved.relative_to(Path(relative_to).resolve()))
+            except ValueError:
+                pass
+        return {"path": logical_path, "bytes": identity[2], "sha256": digest}
+
+    def require_current(self) -> None:
+        for path, (identity, _digest) in self._snapshots.items():
+            require(
+                _file_identity(path.stat()) == identity,
+                f"proof input changed: {path}",
+            )
+
+    def discard_ephemeral(self, *prefixes: str) -> None:
+        for path in tuple(self._snapshots):
+            if any(
+                part.startswith(prefix) for part in path.parts for prefix in prefixes
+            ):
+                del self._snapshots[path]
+
+    def seal(self) -> None:
+        self._sealed = True
+
+    @contextmanager
+    def capture_foundation(self):
+        original_sha256 = foundation.sha256
+        original_file_receipt = foundation.file_receipt
+        foundation.sha256 = self.sha256
+        foundation.file_receipt = self.file_receipt
+        try:
+            yield
+        finally:
+            foundation.sha256 = original_sha256
+            foundation.file_receipt = original_file_receipt
+
+
+def _output_snapshot(path: Path) -> OutputSnapshot:
+    path = path.resolve()
+    try:
+        with path.open("rb") as source:
+            before = os.fstat(source.fileno())
+            body = source.read()
+            after = os.fstat(source.fileno())
+    except FileNotFoundError:
+        require(not path.exists(), f"output changed while checking absence: {path}")
+        return None, None, None
+    identity = _file_identity(before)
+    current = path.stat()
+    require(
+        identity == _file_identity(after) == _file_identity(current),
+        f"output changed while snapshotting: {path}",
+    )
+    return body, identity, stat.S_IMODE(before.st_mode)
+
+
+def _require_output_current(path: Path, expected: OutputSnapshot) -> None:
+    require(
+        _output_snapshot(path) == expected,
+        f"output changed during proof transaction: {path}",
+    )
+
+
+def _fsync_directory(path: Path) -> None:
+    directory_fd = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
+
+
+Quarantine = tuple[Path, Path, OutputSnapshot]
+
+
+def _same_file_after_topology_change(
+    current: OutputSnapshot, expected: OutputSnapshot
+) -> bool:
+    return (
+        current[0] == expected[0]
+        and current[1] is not None
+        and expected[1] is not None
+        and current[1][:4] == expected[1][:4]
+        and current[2] == expected[2]
+    )
+
+
+def _quarantine_live_path(
+    path: Path, label: str, expected: OutputSnapshot
+) -> Quarantine:
+    directory = Path(tempfile.mkdtemp(prefix=f"{path.name}.{label}.", dir=path.parent))
+    directory.chmod(0o700)
+    candidate = directory / "candidate"
+    try:
+        os.rename(path, candidate)
+    except BaseException:
+        directory.rmdir()
+        _fsync_directory(path.parent)
+        raise
+    return directory, candidate, expected
+
+
+def _sync_quarantine_move(quarantine: Quarantine, path: Path) -> None:
+    directory, _candidate, _snapshot = quarantine
+    _fsync_directory(directory)
+    _fsync_directory(path.parent)
+
+
+def _link_quarantined_without_clobber(
+    quarantine: Quarantine, path: Path
+) -> Quarantine | None:
+    directory, candidate, snapshot = quarantine
+    current = _output_snapshot(candidate)
+    require(
+        _same_file_after_topology_change(current, snapshot),
+        f"quarantined proof changed before linking: {candidate}",
+    )
+    try:
+        os.link(candidate, path)
+    except FileExistsError:
+        return None
+    linked = _output_snapshot(candidate)
+    public = _output_snapshot(path)
+    require(
+        linked == public
+        and linked[0] == current[0]
+        and linked[1] is not None
+        and current[1] is not None
+        and linked[1][:4] == current[1][:4]
+        and linked[2] == current[2],
+        f"quarantined proof changed while linking: {candidate}",
+    )
+    _fsync_directory(path.parent)
+    return directory, candidate, linked
+
+
+def _delete_quarantine(quarantine: Quarantine, path: Path) -> None:
+    directory, candidate, snapshot = quarantine
+    _require_output_current(candidate, snapshot)
+    candidate.unlink()
+    _fsync_directory(directory)
+    require(not candidate.exists(), f"quarantined proof cleanup failed: {candidate}")
+    directory.rmdir()
+    _fsync_directory(path.parent)
+
+
+def _conditional_publish_output(
+    path: Path,
+    output: bytes,
+    previous: OutputSnapshot,
+    *,
+    require_current: Callable[[], None] | None = None,
+    before_replace: Callable[[], None] | None = None,
+    after_destination_check: Callable[[], None] | None = None,
+    before_install: Callable[[], None] | None = None,
+    after_staged_unlink: Callable[[], None] | None = None,
+    after_replace: Callable[[], None] | None = None,
+    before_rollback_displace: Callable[[], None] | None = None,
+    after_rollback_displace: Callable[[], None] | None = None,
+) -> None:
+    """Publish and roll back without ever clobbering a competing destination."""
+
+    path = path.resolve()
+    mode = previous[2] if previous[2] is not None else 0o644
+    temporary: Path | None = None
+    prepared: OutputSnapshot | None = None
+    published: OutputSnapshot | None = None
+    prior_quarantine: Quarantine | None = None
+    installed = False
+    committed = False
+    primary_failure: BaseException | None = None
+    preserved_conflicts: list[Path] = []
+    current_guard = require_current or (lambda: None)
+    try:
+        current_guard()
+        _require_output_current(path, previous)
+        with tempfile.NamedTemporaryFile(
+            "wb", dir=path.parent, prefix=path.name + ".proof.", delete=False
+        ) as target:
+            temporary = Path(target.name)
+            target.write(output)
+            target.flush()
+            os.fchmod(target.fileno(), mode)
+            os.fsync(target.fileno())
+        prepared = _output_snapshot(temporary)
+        current_guard()
+        _require_output_current(path, previous)
+        if before_replace is not None:
+            before_replace()
+        current_guard()
+        _require_output_current(path, previous)
+        _require_output_current(temporary, prepared)
+        if after_destination_check is not None:
+            after_destination_check()
+        if previous[0] is not None:
+            prior_quarantine = _quarantine_live_path(path, "prior", previous)
+            _sync_quarantine_move(prior_quarantine, path)
+            prior_quarantine = (
+                prior_quarantine[0],
+                prior_quarantine[1],
+                _output_snapshot(prior_quarantine[1]),
+            )
+            if not _same_file_after_topology_change(prior_quarantine[2], previous):
+                raise ValueError(f"output changed during proof transaction: {path}")
+        if before_install is not None:
+            before_install()
+        _require_output_current(temporary, prepared)
+        try:
+            os.link(temporary, path)
+        except FileExistsError as error:
+            raise ValueError(
+                f"concurrent proof output blocked no-clobber publication: {path}"
+            ) from error
+        installed = True
+        _fsync_directory(path.parent)
+        linked_stage = _output_snapshot(temporary)
+        public_link = _output_snapshot(path)
+        require(
+            linked_stage == public_link
+            and public_link[0] == output
+            and public_link[1] is not None
+            and prepared[1] is not None
+            and public_link[1][:4] == prepared[1][:4]
+            and public_link[2] == mode,
+            f"published proof bytes or mode drifted: {path}",
+        )
+        prepared = linked_stage
+        _require_output_current(temporary, prepared)
+        temporary.unlink()
+        temporary = None
+        _fsync_directory(path.parent)
+        if after_staged_unlink is not None:
+            after_staged_unlink()
+        observed_publication = _output_snapshot(path)
+        require(
+            observed_publication[0] == output
+            and observed_publication[1] is not None
+            and public_link[1] is not None
+            and observed_publication[1][:4] == public_link[1][:4]
+            and observed_publication[2] == mode,
+            f"published proof changed while removing staged alias: {path}",
+        )
+        published = observed_publication
+        if after_replace is not None:
+            after_replace()
+        current_guard()
+        _require_output_current(path, published)
+        committed = True
+        if prior_quarantine is not None:
+            _delete_quarantine(prior_quarantine, path)
+            prior_quarantine = None
+    except BaseException as error:
+        primary_failure = error
+        primary_error = error
+        if committed:
+            if prior_quarantine is not None:
+                directory, candidate, _snapshot = prior_quarantine
+                if candidate.exists():
+                    primary_error.add_note(
+                        "Committed proof retained; prior quarantine cleanup "
+                        f"failed at: {candidate}"
+                    )
+                elif directory.exists():
+                    try:
+                        directory.rmdir()
+                        _fsync_directory(path.parent)
+                    except BaseException as cleanup_error:
+                        primary_error.add_note(
+                            "Empty committed quarantine cleanup failed at "
+                            f"{directory}: {cleanup_error}"
+                        )
+            raise
+        owned = published
+        if owned is None and installed and prepared is not None:
+            try:
+                candidate = _output_snapshot(path)
+            except BaseException as snapshot_error:
+                primary_error.add_note(
+                    f"Published proof ownership check failed: {snapshot_error}"
+                )
+                candidate = (None, None, None)
+            if (
+                candidate[0] == output
+                and candidate[1] is not None
+                and prepared[1] is not None
+                and candidate[1][:2] == prepared[1][:2]
+                and candidate[2] == mode
+            ):
+                owned = candidate
+
+        def preserve(
+            quarantine: Quarantine, cleanup_error: BaseException | None = None
+        ) -> None:
+            candidate_path = quarantine[1]
+            if candidate_path.exists() and candidate_path not in preserved_conflicts:
+                preserved_conflicts.append(candidate_path)
+            if cleanup_error is not None:
+                primary_error.add_note(
+                    f"Proof quarantine operation failed for {candidate_path}: "
+                    f"{cleanup_error}"
+                )
+
+        def restore(quarantine: Quarantine) -> None:
+            try:
+                linked = _link_quarantined_without_clobber(quarantine, path)
+            except BaseException as restore_error:
+                preserve(quarantine, restore_error)
+                return
+            if linked is None:
+                preserve(quarantine)
+                return
+            try:
+                _delete_quarantine(linked, path)
+            except BaseException as cleanup_error:
+                preserve(linked, cleanup_error)
+
+        def delete(quarantine: Quarantine) -> None:
+            try:
+                _delete_quarantine(quarantine, path)
+            except BaseException as cleanup_error:
+                preserve(quarantine, cleanup_error)
+
+        if owned is not None:
+            if before_rollback_displace is not None:
+                try:
+                    before_rollback_displace()
+                except BaseException as hook_error:
+                    primary_error.add_note(f"Pre-rollback hook failed: {hook_error}")
+            try:
+                rollback_quarantine = _quarantine_live_path(path, "rollback", owned)
+            except FileNotFoundError:
+                rollback_quarantine = None
+            except BaseException as displacement_error:
+                primary_error.add_note(
+                    f"Rollback quarantine displacement failed: {displacement_error}"
+                )
+                rollback_quarantine = None
+            if rollback_quarantine is not None:
+                try:
+                    _sync_quarantine_move(rollback_quarantine, path)
+                except BaseException as sync_error:
+                    primary_error.add_note(
+                        f"Rollback quarantine fsync failed: {sync_error}"
+                    )
+                try:
+                    rollback_quarantine = (
+                        rollback_quarantine[0],
+                        rollback_quarantine[1],
+                        _output_snapshot(rollback_quarantine[1]),
+                    )
+                except BaseException as authentication_error:
+                    primary_error.add_note(
+                        "Rollback quarantine authentication failed: "
+                        f"{authentication_error}"
+                    )
+                    restore(rollback_quarantine)
+                    rollback_quarantine = None
+                if after_rollback_displace is not None:
+                    try:
+                        after_rollback_displace()
+                    except BaseException as hook_error:
+                        primary_error.add_note(
+                            f"Post-displacement rollback hook failed: {hook_error}"
+                        )
+            if rollback_quarantine is not None and _same_file_after_topology_change(
+                rollback_quarantine[2], owned
+            ):
+                if prior_quarantine is not None:
+                    restore(prior_quarantine)
+                    prior_quarantine = None
+                delete(rollback_quarantine)
+            else:
+                if rollback_quarantine is not None:
+                    restore(rollback_quarantine)
+                if prior_quarantine is not None:
+                    restore(prior_quarantine)
+                    prior_quarantine = None
+        elif prior_quarantine is not None:
+            restore(prior_quarantine)
+            prior_quarantine = None
+        if preserved_conflicts:
+            primary_error.add_note(
+                "Concurrent proof data preserved at: "
+                + ", ".join(str(item) for item in preserved_conflicts)
+            )
+        raise
+    finally:
+        if temporary is not None:
+            try:
+                staged = _output_snapshot(temporary)
+                if prepared is not None and _same_file_after_topology_change(
+                    staged, prepared
+                ):
+                    temporary.unlink()
+                    _fsync_directory(path.parent)
+                elif staged[0] is not None and primary_failure is not None:
+                    primary_failure.add_note(
+                        f"Changed staged proof preserved at: {temporary}"
+                    )
+            except BaseException as cleanup_error:
+                if primary_failure is None:
+                    raise
+                primary_failure.add_note(
+                    f"Staged proof cleanup failed for {temporary}: {cleanup_error}"
+                )
+
+
+def _check_output(
+    path: Path,
+    output: bytes,
+    previous: OutputSnapshot,
+    *,
+    require_current: Callable[[], None] | None = None,
+) -> None:
+    current_guard = require_current or (lambda: None)
+    current_guard()
+    require(
+        previous[0] == output,
+        f"generated receipt missing or stale: {path}",
+    )
+    _require_output_current(path, previous)
+    current_guard()
+    _require_output_current(path, previous)
 
 
 def _require_file_receipt_unchanged(
@@ -1084,7 +1567,7 @@ def _scan_fresh_reference_population(
     }
 
 
-def build_receipt(
+def _build_receipt_impl(
     *,
     repo_root: Path,
     producer_source: Path,
@@ -1093,8 +1576,16 @@ def build_receipt(
     eval_manifest_path: Path,
     comparison_receipt_path: Path,
     yale_root: Path,
+    manifest_locked: bool = False,
 ) -> dict[str, Any]:
-    producer = foundation.file_receipt(producer_source, relative_to=repo_root)
+    producer = {
+        "script": foundation.file_receipt(producer_source, relative_to=repo_root)
+    }
+    identity_helper = foundation.file_receipt(FOUNDATION_SOURCE, relative_to=repo_root)
+    require(
+        identity_helper["sha256"] == EXPECTED_FOUNDATION_SHA256,
+        "identity helper source pin drift",
+    )
     preview_file = foundation.file_receipt(preview_receipt_path, relative_to=repo_root)
     preview, selectors, line_sets, historical_receipt, selected_receipt = (
         _validate_preview(preview_receipt_path)
@@ -1130,7 +1621,12 @@ def build_receipt(
         "historical CAFTA defect replay census drift",
     )
 
-    with foundation._manifest_lock(eval_manifest_path):
+    lock = (
+        nullcontext()
+        if manifest_locked
+        else foundation._manifest_lock(eval_manifest_path)
+    )
+    with lock:
         manifest_file = foundation.file_receipt(
             eval_manifest_path, relative_to=repo_root
         )
@@ -1214,7 +1710,7 @@ def build_receipt(
     payload: dict[str, Any] = {
         "schema": SCHEMA,
         "verdict": "PASS",
-        "producer": {"script": producer},
+        "producer": producer,
         "definition": EXPECTED_DEFINITION,
         "inputs": {
             "immutable_preview_receipt": preview_file,
@@ -1287,7 +1783,16 @@ def build_receipt(
         manifest["run_identity"]["input_contract"]["path"], repo_root
     )
     _require_file_receipt_unchanged(
-        producer_source, producer, label="producer", relative_to=repo_root
+        producer_source,
+        producer["script"],
+        label="producer",
+        relative_to=repo_root,
+    )
+    _require_file_receipt_unchanged(
+        FOUNDATION_SOURCE,
+        identity_helper,
+        label="identity helper",
+        relative_to=repo_root,
     )
     _require_file_receipt_unchanged(
         preview_receipt_path,
@@ -1353,6 +1858,73 @@ def build_receipt(
     return payload
 
 
+def _build_receipt_transaction(
+    *,
+    repo_root: Path,
+    producer_source: Path,
+    preview_receipt_path: Path,
+    historical_artifact_path: Path,
+    eval_manifest_path: Path,
+    comparison_receipt_path: Path,
+    yale_root: Path,
+    manifest_locked: bool = False,
+) -> tuple[dict[str, Any], Callable[[], None]]:
+    proof_inputs = _ProofInputs()
+    with proof_inputs.capture_foundation():
+        payload = _build_receipt_impl(
+            repo_root=repo_root,
+            producer_source=producer_source,
+            preview_receipt_path=preview_receipt_path,
+            historical_artifact_path=historical_artifact_path,
+            eval_manifest_path=eval_manifest_path,
+            comparison_receipt_path=comparison_receipt_path,
+            yale_root=yale_root,
+            manifest_locked=manifest_locked,
+        )
+    proof_inputs.seal()
+
+    def require_current() -> None:
+        with proof_inputs.capture_foundation():
+            proof_inputs.require_current()
+            _revalidate_yale_evidence(yale_root, payload["yale_reference_defect"])
+            require(
+                campaign._rulespec_root_identity(campaign.RULESPEC_US_ROOT)
+                == payload["bindings"]["rulespec"]
+                and campaign._campaign_evaluator_identity()
+                == payload["bindings"]["campaign_evaluator"],
+                "RuleSpec or campaign runtime changed during CAFTA publication",
+            )
+            proof_inputs.require_current()
+
+    require_current()
+    return payload, require_current
+
+
+def build_receipt(
+    *,
+    repo_root: Path,
+    producer_source: Path,
+    preview_receipt_path: Path,
+    historical_artifact_path: Path,
+    eval_manifest_path: Path,
+    comparison_receipt_path: Path,
+    yale_root: Path,
+    manifest_locked: bool = False,
+    _return_transaction: bool = False,
+) -> dict[str, Any] | tuple[dict[str, Any], Callable[[], None]]:
+    transaction = _build_receipt_transaction(
+        repo_root=repo_root,
+        producer_source=producer_source,
+        preview_receipt_path=preview_receipt_path,
+        historical_artifact_path=historical_artifact_path,
+        eval_manifest_path=eval_manifest_path,
+        comparison_receipt_path=comparison_receipt_path,
+        yale_root=yale_root,
+        manifest_locked=manifest_locked,
+    )
+    return transaction if _return_transaction else transaction[0]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--preview-receipt", type=Path, default=PREVIEW_RECEIPT)
@@ -1365,35 +1937,47 @@ def main() -> int:
         "--check", action="store_true", help="compare generated bytes; do not write"
     )
     args = parser.parse_args()
-    receipt = build_receipt(
-        repo_root=REPO_ROOT,
-        producer_source=PRODUCER_SOURCE,
-        preview_receipt_path=args.preview_receipt.resolve(),
-        historical_artifact_path=args.historical_artifact.resolve(),
-        eval_manifest_path=args.eval_manifest.resolve(),
-        comparison_receipt_path=args.comparison_receipt.resolve(),
-        yale_root=args.yale_root.resolve(),
-    )
-    output = render(receipt)
-    if args.check:
-        require(args.output.is_file(), f"generated receipt missing: {args.output}")
-        require(
-            args.output.read_text() == output, f"generated receipt drift: {args.output}"
+    eval_manifest_path = args.eval_manifest.resolve()
+    output_path = args.output.resolve()
+    with foundation._manifest_lock(eval_manifest_path):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        previous_output = _output_snapshot(output_path)
+        built = build_receipt(
+            repo_root=REPO_ROOT,
+            producer_source=PRODUCER_SOURCE,
+            preview_receipt_path=args.preview_receipt.resolve(),
+            historical_artifact_path=args.historical_artifact.resolve(),
+            eval_manifest_path=eval_manifest_path,
+            comparison_receipt_path=args.comparison_receipt.resolve(),
+            yale_root=args.yale_root.resolve(),
+            manifest_locked=True,
+            _return_transaction=True,
         )
-    else:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.NamedTemporaryFile(
-            "w", dir=args.output.parent, delete=False
-        ) as target:
-            target.write(output)
-            temporary = Path(target.name)
-        temporary.replace(args.output)
+        if isinstance(built, tuple):
+            receipt, require_current = built
+        else:  # Preserve test and downstream monkeypatch compatibility.
+            receipt, require_current = built, lambda: None
+        output = render(receipt).encode()
+        if args.check:
+            _check_output(
+                output_path,
+                output,
+                previous_output,
+                require_current=require_current,
+            )
+        else:
+            _conditional_publish_output(
+                output_path,
+                output,
+                previous_output,
+                require_current=require_current,
+            )
     print(
         render(
             {
                 "verdict": receipt["verdict"],
-                "output": str(args.output.resolve()),
-                "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
+                "output": str(output_path),
+                "output_sha256": hashlib.sha256(output).hexdigest(),
                 "cafta_units": receipt["census"]["cafta_units"],
             }
         ),

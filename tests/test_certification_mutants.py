@@ -3380,11 +3380,16 @@ def test_tariff_preview_ruling_does_not_rewrite_current_certificate(monkeypatch)
         {"program": row["module"], "sha256": row["sha256"]}
         for row in executable_receipt["compiled_artifacts"]
     ]
-    assert len(actual["blockers"]) == 16
+    assert len(actual["blockers"]) == 15
     assert all(blocker.startswith("closed: ") for blocker in actual["blockers"])
-    assert any(
-        "21 compiler-required input(s) lack exact source scope" in blocker
-        for blocker in actual["blockers"]
+    assert not any("lack exact source scope" in blocker for blocker in actual["blockers"])
+    boundary_frontier = actual["verdicts"]["closed"]["boundary_frontier"]
+    assert boundary_frontier["complete"] is True
+    assert boundary_frontier["input_count"] == 58
+    assert boundary_frontier["required_input_count"] == 58
+    assert boundary_frontier["missing_input_count"] == 0
+    assert all(
+        row["grounding"] == "uncaptured" for row in boundary_frontier["inputs"]
     )
     assert any(
         "note-51-section-338 is pending" in blocker for blocker in actual["blockers"]

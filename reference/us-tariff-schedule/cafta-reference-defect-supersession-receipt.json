@@ -50,9 +50,9 @@
           "sha256": "ba091d58858d5e1bc583d6cf69a3041e85e86e5ca01340e58457accd12c47099"
         },
         {
-          "bytes": 162413,
+          "bytes": 163037,
           "path": "axiom_oracles/adapters/axiom/tax_projection.py",
-          "sha256": "1bcb63544cc358774a2ebdbfcf8c9f7f7752612e1d966ae0a3bbe1f88afd96a4"
+          "sha256": "8fd6c0bfb203167a50d8a4ed853841921f28475a8dfa246842b7e048b3f24214"
         },
         {
           "bytes": 361,
@@ -115,7 +115,7 @@
           "sha256": "6f8c2c37cb30637cc88739d6db6c2d7dbe6a248ed8663474d8a70d208038c16e"
         }
       ],
-      "producer_sha256": "eed30cdd73732cb324fb48ffc0137dcb74d0d69cb5c693e074b631b4947f573d",
+      "producer_sha256": "4445de9d524fae3b5fe96a6c47ced4f82971b01c4cb68a311e3bebf8268e6328",
       "python": {
         "executable": {
           "bytes": 49968,
@@ -131,10 +131,10 @@
     "comparison_receipt_engine_errors": 0,
     "evaluated_cases": 19118619,
     "evaluated_chapters": 100,
-    "evaluation_manifest_sha256": "76a86e5910e4f8f46f997abca52f0b221a4fce6ff29510727730957ce2461b0b",
+    "evaluation_manifest_sha256": "cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84",
     "evaluation_shard_engine_errors": 0,
     "fresh_campaign_classifier_sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b",
-    "generation_id": "05c790a321e24d07b14443bffdb1e312",
+    "generation_id": "3b25bc33665d4eed90a21409872a54bb",
     "observed_evaluated_cases": 19118619,
     "observed_evaluation_record_errors": 0,
     "preview_cafta_snapshot_sha256": "531fce05b3c6ac32980fb0e570140ccde0b277d674b6f107724fab76f7ee57c3",
@@ -152,7 +152,7 @@
       "tracked_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "untracked": []
     },
-    "run_identity_sha256": "e86ea58fb08c947f9a4fed44424416b3c216842556ceafefad7dbde9d6848527",
+    "run_identity_sha256": "0d5b10e153cf38dc14a1a181c41d393e6bba05fe32ef2a8fe48015624be67f40",
     "selected_population_sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
   },
   "census": {
@@ -188,13 +188,13 @@
   "inputs": {
     "comparison_artifact": {
       "bytes": 4039630088,
-      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/76/76a86e5910e4f8f46f997abca52f0b221a4fce6ff29510727730957ce2461b0b.jsonl.gz",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/ce/cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84.jsonl.gz",
       "sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0"
     },
     "comparison_receipt": {
       "bytes": 1565,
       "path": "reference/us-tariff-schedule/comparison-summary.json",
-      "sha256": "0e50e4a07a71c8046fadb8df7f77f57f555c22af93dda57f1b60a905e21a9826"
+      "sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7"
     },
     "declared_input_contract": {
       "bytes": 1159553,
@@ -202,9 +202,9 @@
       "sha256": "e9db8760690ecd8a273e8e8e94095104a80e146fbe438ba41b14ab97b4abfd7a"
     },
     "evaluation_manifest": {
-      "bytes": 429472,
+      "bytes": 429475,
       "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
-      "sha256": "905e9732ac42f7c8ad792d8bd88d7323b554772b5af72d6c5d83fbecd29415e6"
+      "sha256": "f11f8a72108bfdaa0aafb332b2fc47eb410dcf1970931dfbbf2e32d4a8f5ad1a"
     },
     "historical_target_mismatch_artifact": {
       "bytes": 10088070,
@@ -234,12 +234,12 @@
   },
   "producer": {
     "script": {
-      "bytes": 55747,
+      "bytes": 77060,
       "path": "scripts/build_us_tariff_cafta_supersession_receipt.py",
-      "sha256": "f1fb4590b2d33afe5e8d87f4dc98974ebdf42ee8623ac7c79521cd266988a618"
+      "sha256": "705d7694b91008aae843d22e4732fcc1ae5166d4fb5860712e7da375644bff90"
     }
   },
-  "receipt_payload_sha256": "a3d4ec500ff0dcc435a202e2565550c6d12f0cce697e645226d7936752fca2d0",
+  "receipt_payload_sha256": "8948878bae5f34ad2b33e49619f462aaee09619fbbc261397503ea4d061cdac4",
   "schema": "axiom_oracles.us_tariff_schedule.cafta_reference_defect_supersession.v1",
   "supersession": {
     "all_corrected_yale_statutory_rates_match_axiom": true,

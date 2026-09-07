@@ -1,86 +1,44 @@
-# PROGRESS — PR #468 cross-lane reconciliation
+# Tariff evidence sprint — September 7, 2026
 
 ## State
 
-- Branch/worktree: `evidence-validator-land` in
-  `/Users/maxghenis/TheAxiomFoundation/_worktrees/evidence-land`.
-- Requested operation: finish the `origin/main` reconciliation in place, keep
-  the strict evidence layer together with the DK/NZ multi-program and
-  oracle-switch machinery, regenerate all certificates and downstream
-  artifacts, run every freshness check and the full requested battery, then
-  push the branch without merging PR #468.
-- Starting checkout: clean at `27e3a51fc`; contrary to the task handoff,
-  `MERGE_HEAD` is absent. The tip contains an earlier merge of main at
-  `7f4e579b3`, but current `origin/main` is `a33cadea0` and is not an ancestor.
-  The current remote-tracking tip will therefore be merged without discarding
-  or aborting the prior reconciliation history.
-- Reconciliation rules: union both code lanes; prove the certification-mutant
-  function-name union in both directions; never hand-edit certificate
-  conflicts; preserve and prominently report honest DK/NZ regressions caused
-  by strict evidence requirements.
-- Final report target:
-  `sol-evidence-validator-land-reconciliation-2026-08-15-result.md`.
-- Current status: reconciliation is committed and every requested gate is
-  green. Publication is externally blocked: terminal transport cannot resolve
-  GitHub, and the connected GitHub interface rejected its first blob write.
-  The remote branch and PR remain unchanged.
+Sole implementation owner: sprint-tariff (Subfleet run 20260907-164915-sprint-tariff).
+Isolated continuation: sprint/tariff-evidence-20260907. Preserved unfinished
+frontier rebuild at 83908413e68f551f83c61fbbd891409a567bf5ee, with all 27 dirty
+files copied byte-for-byte. Original worktree remains untouched.
+
+GitHub fetch failed: Could not resolve host: github.com. Cached origin/main is
+fb88de90be8b2a666acae7eeac5c5b25f8b57817; live base integration is blocked,
+not represented as verified. RuleSpec input remains the clean combined head
+4f591c4267063094cc6da9d590872ea982940b81.
 
 ## Done
 
-- Confirmed the requested branch and clean worktree.
-- Confirmed there is no active merge metadata and recorded the exact local and
-  `origin/main` tips rather than aborting or rewriting any history.
-- Started independent read-only audits of `scripts/certify.py`, mutant-test
-  function sets, and the repository's canonical regeneration/check pipeline.
-- Read `origin/main`'s 1,055-line `scripts/certify.py` end to end before
-  resolving it. The result retains CO+DK+seven NZ registry entries, NZ
-  report/view and attestation switching, and every strict evidence contract:
-  bound/full reference evidence, typed fail-closed report parsing, disposition
-  schema/marker agreement, exact report/index byte hashes, per-case evidence,
-  and census-to-registry identity. Derived premise modes still override any
-  registry-supplied `mode` field.
-- Reconciled `tests/test_certification_mutants.py` as the exact name union:
-  branch 55 functions, main 41, 23 shared, merged 73. Both parent-to-merged
-  differences are empty, and the merged-to-parent-union difference is empty.
-- Preserved main's fresh 856-case Colorado QC execution, then used the guarded
-  inline-mirror migration and immutable source replay rather than hand edits.
-  CO QC now validates `bound/cardinality`; CO ECPS validates `bound/full`.
-- Regenerated NZ unified/closure receipts, dispositions, both certified chunk
-  indexes, freshness, scoreboard/history, both ratchets, burn-down, overview,
-  the exercise census, and every program certificate. Certificate conflicts
-  were resolved solely by `scripts/certify.py` output.
-- Preserved the honest protocol regressions: CO remains conformant=true and
-  certified=unavailable; DK changes from main's conformant=true to false and
-  remains certified=unavailable; all seven NZ program views change from
-  conformant=true to false and certified=no.
-- DK's three legs are `unbound/full`: each lacks a chunk index, disagrees on
-  the stored case/report disposition marker, and has a non-object
-  `errors_by_engine`. NZ's shared leg is `unbound/none`: the unified report
-  lacks a non-negative top-level `case_count`, its stored cases cannot support
-  full/cardinality reconciliation, and its chunk index is absent. No strict
-  rule was softened and no certificate verdict was edited by hand.
-- All canonical checks pass: NZ record/closure, 95 disposition files, both
-  immutable Colorado replays and indexes, freshness (223 suites / 34
-  executable surfaces), scoreboard (6 jurisdictions / 4 conformant), both
-  ratchets, burn-down (6 series / 143 points), overview (224 reports), census,
-  and certificates.
-- Requested batteries pass: 83/83 certification mutants, 84/84 complete
-  evidence cases (the historical 66 expanded by the 18 NZ mutants), and 65/65
-  runner/refresh cases in 565.35 seconds.
-- Focused Ruff/compile/whitespace checks and the 10-case census/immutable-replay
-  support battery pass.
-- Created merge commit `0e4d9a840578264bc6e862c4169cd52666d5d312`
-  with parents `511cacaa9` and `a33cadea0`; its subject and body explicitly
-  document the three-way union and the DK/NZ conformant regressions.
-- A normal push failed before authentication with `Could not resolve host:
-  github.com`. A connected GitHub Git-data interface is available as the
-  publication fallback; PR #468 has not been merged or edited.
-- The connected interface confirmed PR #468 is open and unmerged at remote
-  head `27e3a51fc`, then rejected the first atomic blob write as
-  `user cancelled MCP tool call`. No remote object, ref, or PR state changed.
+- Read global and Axiom Foundation instructions and RuleSpec project notes.
+- Checked branches, remotes, status and attempted fetching main before edits.
+- Read live Subfleet records: this run is the only named tariff implementation.
+  OS process enumeration is sandbox-blocked; the complete active-run snapshot
+  is saved alongside the sprint output.
+- Saved patch, tar archive, original progress and SHA-256 manifest of all 27
+  dirty files in capacity-sprint-20260907/tariff/snapshot-frontier.
+- Verified both no-reset controls; automatic reset remains disabled.
+- Preserved CAFTA 17,404, steel 114, residual 5,733 and 216,111,132-unit selector
+  proofs. No huge scan launched.
+- Initial inventory corrects a stale assignment premise: the unfinished rebuild
+  already names 58/58 input scopes (21 previously missing are repaired); all 58
+  source groundings still read uncaptured. Scope names alone are not evidence.
 
 ## Next
 
-- When GitHub terminal transport or connected write authorization is
-  available, push `evidence-validator-land`, verify the remote ref, and leave
-  PR #468 unmerged.
+1. Inventory proof bindings, downstream reproduction/certificates and source gaps.
+2. Capture a bounded highest-priority subset of the 21 repaired scopes using
+   authoritative sources; execute the real pinned Axiom runtime for the batch.
+3. Validate evidence receipts and retain closed=false/certified=false and all
+   transaction-fact limitations. Commit every coherent step.
+4. Obtain one bounded semantic Subfleet review if capacity permits; final Fable
+   review is still required before release. Do not publish or merge.
+5. Write the final report to /Users/maxghenis/capacity-sprint-20260907/tariff/result.md
+   with commits, artifacts, tests, risks and next action before sprint handoff.
+
+Deadline: 2026-09-07 21:00 America/New_York. No reset, overflow, paid API or remote
+compute; preserve no-reset.json and auto_reset.enabled=false afterward.

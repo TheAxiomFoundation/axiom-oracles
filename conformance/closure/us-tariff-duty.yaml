@@ -173,193 +173,215 @@ committed_decisions:
     reason: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not a
       reproduced root.
   input_grounding: &id001
-  - input: hts_number
+  - input: cbp_agrees_chapter_98_entry_is_appropriate
     grounding: uncaptured
-    uncaptured_scope: HTS classification assigned to the entry
+    uncaptured_scope: CBP acceptance on the entry record that the declarant's Chapter 98 provision is appropriate
+      under U.S. note 2(u); not inferable from the HTS number alone
   - input: country_of_origin
     grounding: uncaptured
-    uncaptured_scope: origin determination for the entry
-  - input: entry_date
-    grounding: uncaptured
-    uncaptured_scope: CBP entry date and effective-time facts
+    uncaptured_scope: CBP country-of-origin determination for the entry transaction; not a tariff-table membership
+      proxy
   - input: customs_value
     grounding: uncaptured
-    uncaptured_scope: 19 USC 1401a appraised customs value
-  - input: shipment_value
+    uncaptured_scope: 19 U.S.C. 1401a appraised customs value for the entry
+  - input: entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight
     grounding: uncaptured
-    uncaptured_scope: shipment value used by de-minimis/postal rules
-  - input: is_postal_shipment
+    uncaptured_scope: real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable
+      listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof
+  - input: entry_is_9802_excepted_entry
     grounding: uncaptured
-    uncaptured_scope: postal-channel classification
-  - input: column_1_general_rate
-    grounding: uncaptured
-    uncaptured_scope: selected Rev-15 HTS general rate line
-  - input: special_rate
-    grounding: uncaptured
-    uncaptured_scope: claimed and qualifying special-program rate
-  - input: column_2_rate
-    grounding: uncaptured
-    uncaptured_scope: column-2 rate selection
-  - input: section_232_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the applicable 232 annex
-  - input: section_301_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the applicable 301 list
-  - input: section_201_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the solar safeguard annex
-  - input: section_122_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in surcharge exclusions
-  - input: ieepa_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in reciprocal/fentanyl annexes
-  - input: section_338_membership
-    grounding: uncaptured
-    uncaptured_scope: membership under HTS note 51
-  - input: is_section_232_article
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 232 article'
-  - input: is_section_232_derivative
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 232 derivative'
-  - input: is_reciprocal_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: reciprocal annex exclusion'
-  - input: is_reciprocal_metals_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: reciprocal metals exclusion'
-  - input: is_section_122_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 122 annex exclusion'
-  - input: is_section_122_232_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 122/232 exclusion'
-  - input: is_brazil_301_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: Brazil-301 exclusion'
-  - input: is_forced_labor_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: forced-labor annex exclusion'
-  - input: is_forced_labor_metals_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: forced-labor metals exclusion'
+    uncaptured_scope: entry classification within the U.S. note 2(u) Chapter 98 exception for heading 9802.00.80
+      or subheading 9802.00.40, 9802.00.50, or 9802.00.60
   - input: entry_is_brazil_301_listed
     grounding: uncaptured
-    uncaptured_scope: entry-preparation determination under U.S. note 50 for the Brazil section-301 component
+    uncaptured_scope: entry-preparation membership determination under HTS chapter 99 U.S. note 50 for the Brazil
+      section-301 component
+  - input: entry_is_china_301_2024_action
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation membership determination against the complete HTS U.S. note 31 China 2024-action
+      table, which the pinned program does not itself derive
+  - input: entry_is_china_301_list123
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation membership determination against the original China section-301 lists 1,
+      2, or 3 and their exclusions
+  - input: entry_is_china_301_list4a
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation membership determination against China section-301 list 4A and its exclusions
+  - input: entry_is_china_301_solar
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation membership determination against the complete HTS U.S. note 31 solar-products
+      China section-301 table, which the pinned program does not itself derive
+  - input: entry_is_entered_free_of_duty_under_dr_cafta
+    grounding: uncaptured
+    uncaptured_scope: declarant claim and transaction qualification for duty-free DR-CAFTA treatment, including
+      applicable subchapter XXII treatment
+  - input: entry_is_entered_free_of_duty_under_usmca
+    grounding: uncaptured
+    uncaptured_scope: declarant claim and transaction qualification for duty-free USMCA treatment used by HTS U.S.
+      note 52(g)-(h)
   - input: entry_is_forced_labor_301_listed
     grounding: uncaptured
-    uncaptured_scope: entry-preparation determination under U.S. note 52 for the forced-labor section-301 component
-  - input: entry_is_section_232_covered
+    uncaptured_scope: entry-preparation membership determination under HTS chapter 99 U.S. note 52 for the forced-labor
+      section-301 component
+  - input: entry_is_general_note_29_d_v_textile_or_apparel_good
     grounding: uncaptured
-    uncaptured_scope: entry-preparation determination of existing aluminum or steel section-232 coverage
+    uncaptured_scope: General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated
+      exclusions
+  - input: entry_is_humanitarian_donation_article
+    grounding: uncaptured
+    uncaptured_scope: transaction determination that the article is a humanitarian donation described by HTS 9903.01.21
+      and U.S. note 2(t)
+  - input: entry_is_informational_material_article
+    grounding: uncaptured
+    uncaptured_scope: article determination that the goods are informational material described by HTS 9903.01.22
+  - input: entry_is_line_a
+    grounding: uncaptured
+    uncaptured_scope: generated-schedule adapter's exact HTS-number equality to 7202.11.10.00; the witness derives
+      the same predicate from hts_number
+  - input: entry_is_line_b
+    grounding: uncaptured
+    uncaptured_scope: generated-schedule adapter's exact HTS-number equality to 7601.10.30.00; the witness derives
+      the same predicate from hts_number
+  - input: entry_is_line_d
+    grounding: uncaptured
+    uncaptured_scope: generated-schedule adapter's exact HTS-number equality to 2203.00.00.30; the witness derives
+      the same predicate from hts_number
+  - input: entry_is_note33_auto_part_subject_to_import_adjustment_offset
+    grounding: uncaptured
+    uncaptured_scope: entry-level HTS U.S. note 33 automobile-part import-adjustment-offset determination
+  - input: entry_is_note33_g_automobile_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a U.S. note 33(g) candidate is an automobile part
+  - input: entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a U.S. note 37(f) candidate is a completed kitchen cabinet,
+      vanity, or part
+  - input: entry_is_note38_i_medium_or_heavy_duty_vehicle_part
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a U.S. note 38(i) candidate is a medium- or heavy-duty-vehicle
+      part
+  - input: entry_is_note38_mhd_part_subject_to_import_adjustment_offset
+    grounding: uncaptured
+    uncaptured_scope: entry-level HTS U.S. note 38 medium/heavy-duty-vehicle-part import-adjustment-offset determination
+  - input: entry_is_note40_patented_pharmaceutical_article
+    grounding: uncaptured
+    uncaptured_scope: entry-level determination that a U.S. note 40 candidate is covered by a valid unexpired U.S.
+      patent
+  - input: entry_is_personal_use_accompanied_baggage
+    grounding: uncaptured
+    uncaptured_scope: transaction determination that the goods are for personal use in accompanied baggage under
+      HTS U.S. note 2(u)
+  - input: entry_is_properly_claimed_chapter_98_entry
+    grounding: uncaptured
+    uncaptured_scope: declarant's Chapter 98 claim made under applicable CBP regulations for the entry transaction
+  - input: entry_is_s232_copper_additional_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation
+  - input: entry_is_s232_copper_primary_member
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation
   - input: entry_is_s232_note16_c_ii_derivative_aluminum_member
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation
-  - input: entry_is_s232_note16_c_vi_derivative_aluminum_candidate
-    grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation;
-      candidate status alone does not establish the listed-metal-weight qualification
   - input: entry_is_s232_note16_c_ix_derivative_aluminum_candidate
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation;
+      candidate status alone does not establish the listed-metal-weight qualification
+  - input: entry_is_s232_note16_c_vi_derivative_aluminum_candidate
+    grounding: uncaptured
+    uncaptured_scope: HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation;
       candidate status alone does not establish the listed-metal-weight qualification
   - input: entry_is_s232_note16_metal_chapter
     grounding: uncaptured
     uncaptured_scope: entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight
       exception
-  - input: entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight
+  - input: entry_is_s232_note33_auto_part_candidate
     grounding: uncaptured
-    uncaptured_scope: real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable
-      listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof
-  - input: entry_is_s232_copper_primary_member
+    uncaptured_scope: HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation
+  - input: entry_is_s232_note33_vehicle_candidate
     grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation
-  - input: entry_is_s232_copper_additional_member
+    uncaptured_scope: HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation
+  - input: entry_is_s232_note37_cabinet_vanity_candidate
     grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation
+    uncaptured_scope: HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation
   - input: entry_is_s232_note37_softwood_member
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 37(b) softwood membership supplied by entry preparation
   - input: entry_is_s232_note37_upholstered_wood_furniture_member
     grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 37(d) upholstered-wood membership supplied by entry preparation
-  - input: entry_is_s232_note38_mhd_vehicle_member
-    grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation
+    uncaptured_scope: HTS U.S. note 37(d) upholstered-wood-furniture membership supplied by entry preparation
   - input: entry_is_s232_note38_bus_member
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 38(c) bus membership supplied by entry preparation
-  - input: entry_is_s232_note33_vehicle_candidate
-    grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation
-  - input: entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52
-    grounding: uncaptured
-    uncaptured_scope: transaction qualification for a note-33 vehicle heading listed in notes 50 and 52
-  - input: entry_is_s232_note33_auto_part_candidate
-    grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation
-  - input: entry_is_note33_g_automobile_part
-    grounding: uncaptured
-    uncaptured_scope: entry-level determination that a note-33(g) candidate is an automobile part
-  - input: entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52
-    grounding: uncaptured
-    uncaptured_scope: importer certification for a note-33 automobile part listed in notes 50 and 52
-  - input: entry_is_note33_auto_part_subject_to_import_adjustment_offset
-    grounding: uncaptured
-    uncaptured_scope: entry-level note-33 automobile-part import-adjustment-offset determination
-  - input: entry_is_s232_note37_cabinet_vanity_candidate
-    grounding: uncaptured
-    uncaptured_scope: HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation
-  - input: entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part
-    grounding: uncaptured
-    uncaptured_scope: entry-level determination that a note-37(f) candidate is a completed cabinet, vanity, or part
   - input: entry_is_s232_note38_mhd_part_candidate
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 38(i) medium/heavy-duty-vehicle-part candidate membership supplied by entry
       preparation
-  - input: entry_is_note38_i_medium_or_heavy_duty_vehicle_part
+  - input: entry_is_s232_note38_mhd_vehicle_member
     grounding: uncaptured
-    uncaptured_scope: entry-level determination that a note-38(i) candidate is a medium/heavy-duty-vehicle part
-  - input: entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52
-    grounding: uncaptured
-    uncaptured_scope: importer certification for a note-38 vehicle part listed in notes 50 and 52
-  - input: entry_is_note38_mhd_part_subject_to_import_adjustment_offset
-    grounding: uncaptured
-    uncaptured_scope: entry-level note-38 vehicle-part import-adjustment-offset determination
+    uncaptured_scope: HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation
   - input: entry_is_s232_note39_semiconductor_candidate
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 39 semiconductor candidate membership supplied by entry preparation
-  - input: entry_qualifies_for_note39_heading_9903_79_01
-    grounding: uncaptured
-    uncaptured_scope: entry-level technical qualification for semiconductor heading 9903.79.01
   - input: entry_is_s232_note40_pharmaceutical_candidate
     grounding: uncaptured
     uncaptured_scope: HTS U.S. note 40 pharmaceutical candidate membership supplied by entry preparation
-  - input: entry_is_note40_patented_pharmaceutical_article
+  - input: entry_is_section_122_exempt
     grounding: uncaptured
-    uncaptured_scope: entry-level determination that a note-40 candidate is covered by a valid unexpired U.S. patent
-  - input: entry_is_general_note_29_d_v_textile_or_apparel_good
+    uncaptured_scope: entry-preparation determination that an applicable section 122 surcharge exclusion in HTS
+      U.S. note 2(aa) covers the entry
+  - input: entry_is_section_201_cspv
     grounding: uncaptured
-    uncaptured_scope: General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated
+    uncaptured_scope: classification of the entry as a crystalline-silicon photovoltaic (CSPV) article within the
+      expired HTS U.S. note 18 safeguard surface
+  - input: entry_is_section_232_aluminum
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation determination that the entry is an aluminum article or derivative covered
+      by the applicable section 232 action
+  - input: entry_is_section_232_covered
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation determination of existing aluminum or steel section-232 coverage for cross-program
       exclusions
-  - input: entry_is_entered_free_of_duty_under_dr_cafta
+  - input: entry_is_section_232_steel
     grounding: uncaptured
-    uncaptured_scope: claim and qualification for duty-free DR-CAFTA treatment, including applicable subchapter
-      XXII treatment
-  - input: is_china_2024_action_member
+    uncaptured_scope: entry-preparation determination that the entry is a steel article or derivative covered by
+      the applicable section 232 action
+  - input: entry_loaded_and_in_transit_before_july_24_2026
     grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 2024 China action membership'
-  - input: is_solar_china_member
+    uncaptured_scope: carrier and entry records establishing the HTS 9903.05.85 transit condition before July 24,
+      2026 for entries before July 28, 2026
+  - input: entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52
     grounding: uncaptured
-    uncaptured_scope: 'witness boolean: solar-China membership'
-  - input: chapter_98_partial_value_share
+    uncaptured_scope: importer certification for a U.S. note 33 automobile part whose heading is listed in notes
+      50 and 52
+  - input: entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52
     grounding: uncaptured
-    uncaptured_scope: 9802 dutiable-value share supplied by the declarant
-  - input: section_338_reduced_duty_base_share
+    uncaptured_scope: transaction qualification for a U.S. note 33 vehicle heading listed in notes 50 and 52
+  - input: entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52
     grounding: uncaptured
-    uncaptured_scope: note-51 partial-value share supplied by the declarant
+    uncaptured_scope: importer certification for a U.S. note 38 vehicle part whose heading is listed in notes 50
+      and 52
+  - input: entry_qualifies_for_note39_heading_9903_79_01
+    grounding: uncaptured
+    uncaptured_scope: entry-level technical qualification for semiconductor heading 9903.79.01 under U.S. note 39
+  - input: hts_line
+    grounding: uncaptured
+    uncaptured_scope: caller-selected exact HTS tariff-line key in the generated Rev-15 rate table after entry classification
+  - input: hts_number
+    grounding: uncaptured
+    uncaptured_scope: full HTS statistical reporting number assigned to the entry by the declarant and accepted
+      or corrected through CBP classification
+  - input: is_postal_shipment
+    grounding: uncaptured
+    uncaptured_scope: carrier-channel fact that the shipment is postal
+  - input: resolved_non_ad_valorem_column2_rate
+    grounding: uncaptured
+    uncaptured_scope: entry-preparation resolution of the applicable specific, compound, or conditional non-ad-valorem
+      column-2 duty to the Rate value consumed for chapter-99 schedule rows; no flat column-2 table value is inferred
+  - input: shipment_value
+    grounding: uncaptured
+    uncaptured_scope: declared shipment value used by the postal/de-minimis branch, distinct from 19 U.S.C. 1401a
+      customs value
   audited_input_inventory:
     rulespec_ref: 4f591c4267063094cc6da9d590872ea982940b81
     engine_sha256: 674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7
@@ -375,6 +397,7 @@ committed_decisions:
     schedule_composition_count: 100
     input_count: 58
     inputs_sha256: 10c812c01fd7c46b309d9cde66b30b6020acef05a5c9c8f0b97fb3e32ae773b1
+    input_scopes_sha256: 13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8
     inputs:
     - cbp_agrees_chapter_98_entry_is_appropriate
     - country_of_origin
@@ -524,31 +547,16 @@ computed:
     blocker: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not
       a reproduced root.
   boundary_frontier:
-    complete: false
-    input_count: 60
+    complete: true
+    input_count: 58
     inputs: *id001
     required_input_count: 58
-    missing_input_count: 21
-    missing_inputs:
-    - cbp_agrees_chapter_98_entry_is_appropriate
-    - entry_is_9802_excepted_entry
-    - entry_is_china_301_2024_action
-    - entry_is_china_301_list123
-    - entry_is_china_301_list4a
-    - entry_is_china_301_solar
-    - entry_is_entered_free_of_duty_under_usmca
-    - entry_is_humanitarian_donation_article
-    - entry_is_informational_material_article
-    - entry_is_line_a
-    - entry_is_line_b
-    - entry_is_line_d
-    - entry_is_personal_use_accompanied_baggage
-    - entry_is_properly_claimed_chapter_98_entry
-    - entry_is_section_122_exempt
-    - entry_is_section_201_cspv
-    - entry_is_section_232_aluminum
-    - entry_is_section_232_steel
-    - entry_loaded_and_in_transit_before_july_24_2026
-    - hts_line
-    - resolved_non_ad_valorem_column2_rate
+    missing_input_count: 0
+    missing_inputs: []
+    unexpected_input_count: 0
+    unexpected_inputs: []
+    duplicate_input_count: 0
+    duplicate_inputs: []
+    scope_contract_complete: true
+    input_scopes_sha256: 13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8
   closed: false

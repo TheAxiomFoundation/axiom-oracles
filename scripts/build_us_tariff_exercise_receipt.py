@@ -43,7 +43,7 @@ MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
 COMPARISON_SCHEMA = "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
 INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v4"
 TRUSTED_RECEIPT_SHA256 = (
-    "39f2fe75f3b28f9f20fb5f6d848e956b1297701b8ea76136f0b47a77fc13570d"
+    "7e9f6ec11c67cbc17b951c816dc7116dd028c8e2d56b4bfdfa7e9702ce24a9d9"
 )
 MAPPED_FIELDS = {
     "hts_number": "hts10",

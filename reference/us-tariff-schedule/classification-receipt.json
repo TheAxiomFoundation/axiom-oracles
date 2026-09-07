@@ -777,12 +777,12 @@
   },
   "inputs": {
     "comparison_artifact_sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0",
-    "comparison_receipt_sha256": "0e50e4a07a71c8046fadb8df7f77f57f555c22af93dda57f1b60a905e21a9826",
-    "disposition_ledger_sha256": "5e17f4c956d2ddefbd3de4c5ebc3664b538d45d0faf6f5518042c3e2b283a944",
+    "comparison_receipt_sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7",
+    "disposition_ledger_sha256": "2ebafef886b4f2e57724e5f6a06e5703709684b9f7c58470a585d0fe5201cf7d",
     "preview_disposition_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
     "preview_disposition_receipt_sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181",
-    "preview_selector_transition_payload_sha256": "13b81539961a3978be4e6411c4cb2303ff40fb5eef50923308723e8ae97756eb",
-    "preview_selector_transition_receipt_sha256": "a36755d7c593315139689c28d3fdbde4ba0c4fdf352f9e24f9c5d1512c9474f5",
+    "preview_selector_transition_payload_sha256": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+    "preview_selector_transition_receipt_sha256": "69121a39e488a411a9dc1e402d7ee49f29dfd59e0a24f82c0d7138e311ca642b",
     "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
   },
   "mismatches": 6807741,
@@ -790,7 +790,7 @@
   "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
   "selector_count": 46,
   "sidecar": {
-    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/classify/8d/8dd73a69ed26094eb3f047550d88007afe437c603c330a9e26c4b53683a4bcab.jsonl.gz",
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/classify/25/25503d6ac677051ac9f635731f73bb7ae34e5fc7fddf9472560b74d39741551e.jsonl.gz",
     "schema": "axiom_oracles.us_tariff_schedule.classification_sidecar.v2",
     "sha256": "3f39f296acd4fc7b0134f7082d1463260fff507df7abcf600b274f8fa987b677"
   },

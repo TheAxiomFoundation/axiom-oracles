@@ -17,9 +17,13 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import math
+import os
+import stat
 import tempfile
 from collections import Counter, defaultdict
+from contextlib import contextmanager, nullcontext
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Callable
@@ -162,6 +166,482 @@ def require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+OutputSnapshot = tuple[bytes | None, tuple[int, ...] | None, int | None]
+EvidenceSnapshot = tuple[tuple[int, ...], str]
+
+
+def _file_identity(value: os.stat_result) -> tuple[int, ...]:
+    return (
+        value.st_dev,
+        value.st_ino,
+        value.st_size,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
+
+
+class _ProofInputs:
+    """Authenticate proof inputs once, then guard their filesystem identities."""
+
+    def __init__(self) -> None:
+        self._snapshots: dict[Path, EvidenceSnapshot] = {}
+        self._sealed = False
+
+    def sha256(self, path: Path) -> str:
+        resolved = Path(path).resolve()
+        prior = self._snapshots.get(resolved)
+        if prior is not None:
+            require(
+                _file_identity(resolved.stat()) == prior[0],
+                f"proof input changed: {resolved}",
+            )
+            return prior[1]
+        require(not self._sealed, f"uncaptured proof input after build: {resolved}")
+        digest = hashlib.sha256()
+        with resolved.open("rb") as source:
+            before = _file_identity(os.fstat(source.fileno()))
+            for block in iter(lambda: source.read(1024 * 1024), b""):
+                digest.update(block)
+            after = _file_identity(os.fstat(source.fileno()))
+        require(
+            before == after == _file_identity(resolved.stat()),
+            f"proof input changed while authenticating: {resolved}",
+        )
+        value = digest.hexdigest()
+        self._snapshots[resolved] = (before, value)
+        return value
+
+    def file_receipt(
+        self, path: Path, *, relative_to: Path | None = None
+    ) -> dict[str, Any]:
+        resolved = Path(path).resolve()
+        digest = self.sha256(resolved)
+        identity = self._snapshots[resolved][0]
+        logical_path = str(resolved)
+        if relative_to is not None:
+            try:
+                logical_path = str(resolved.relative_to(Path(relative_to).resolve()))
+            except ValueError:
+                pass
+        return {"path": logical_path, "bytes": identity[2], "sha256": digest}
+
+    def require_current(self) -> None:
+        for path, (identity, _digest) in self._snapshots.items():
+            require(
+                _file_identity(path.stat()) == identity,
+                f"proof input changed: {path}",
+            )
+
+    def discard_ephemeral(self, *prefixes: str) -> None:
+        for path in tuple(self._snapshots):
+            if any(
+                part.startswith(prefix) for part in path.parts for prefix in prefixes
+            ):
+                del self._snapshots[path]
+
+    def seal(self) -> None:
+        self._sealed = True
+
+    @contextmanager
+    def capture_foundation(self):
+        original_sha256 = full.sha256
+        original_file_receipt = full.file_receipt
+        full.sha256 = self.sha256
+        full.file_receipt = self.file_receipt
+        try:
+            yield
+        finally:
+            full.sha256 = original_sha256
+            full.file_receipt = original_file_receipt
+
+
+def _output_snapshot(path: Path) -> OutputSnapshot:
+    path = path.resolve()
+    try:
+        with path.open("rb") as source:
+            before = os.fstat(source.fileno())
+            body = source.read()
+            after = os.fstat(source.fileno())
+    except FileNotFoundError:
+        require(not path.exists(), f"output changed while checking absence: {path}")
+        return None, None, None
+    identity = _file_identity(before)
+    current = path.stat()
+    require(
+        identity == _file_identity(after) == _file_identity(current),
+        f"output changed while snapshotting: {path}",
+    )
+    return body, identity, stat.S_IMODE(before.st_mode)
+
+
+def _require_output_current(path: Path, expected: OutputSnapshot) -> None:
+    require(
+        _output_snapshot(path) == expected,
+        f"output changed during proof transaction: {path}",
+    )
+
+
+def _fsync_directory(path: Path) -> None:
+    directory_fd = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
+
+
+Quarantine = tuple[Path, Path, OutputSnapshot]
+
+
+def _same_file_after_topology_change(
+    current: OutputSnapshot, expected: OutputSnapshot
+) -> bool:
+    return (
+        current[0] == expected[0]
+        and current[1] is not None
+        and expected[1] is not None
+        and current[1][:4] == expected[1][:4]
+        and current[2] == expected[2]
+    )
+
+
+def _quarantine_live_path(
+    path: Path, label: str, expected: OutputSnapshot
+) -> Quarantine:
+    directory = Path(tempfile.mkdtemp(prefix=f"{path.name}.{label}.", dir=path.parent))
+    directory.chmod(0o700)
+    candidate = directory / "candidate"
+    try:
+        os.rename(path, candidate)
+    except BaseException:
+        directory.rmdir()
+        _fsync_directory(path.parent)
+        raise
+    return directory, candidate, expected
+
+
+def _sync_quarantine_move(quarantine: Quarantine, path: Path) -> None:
+    directory, _candidate, _snapshot = quarantine
+    _fsync_directory(directory)
+    _fsync_directory(path.parent)
+
+
+def _link_quarantined_without_clobber(
+    quarantine: Quarantine, path: Path
+) -> Quarantine | None:
+    directory, candidate, snapshot = quarantine
+    current = _output_snapshot(candidate)
+    require(
+        _same_file_after_topology_change(current, snapshot),
+        f"quarantined proof changed before linking: {candidate}",
+    )
+    try:
+        os.link(candidate, path)
+    except FileExistsError:
+        return None
+    linked = _output_snapshot(candidate)
+    public = _output_snapshot(path)
+    require(
+        linked == public
+        and linked[0] == current[0]
+        and linked[1] is not None
+        and current[1] is not None
+        and linked[1][:4] == current[1][:4]
+        and linked[2] == current[2],
+        f"quarantined proof changed while linking: {candidate}",
+    )
+    _fsync_directory(path.parent)
+    return directory, candidate, linked
+
+
+def _delete_quarantine(quarantine: Quarantine, path: Path) -> None:
+    directory, candidate, snapshot = quarantine
+    _require_output_current(candidate, snapshot)
+    candidate.unlink()
+    _fsync_directory(directory)
+    require(not candidate.exists(), f"quarantined proof cleanup failed: {candidate}")
+    directory.rmdir()
+    _fsync_directory(path.parent)
+
+
+def _conditional_publish_output(
+    path: Path,
+    output: bytes,
+    previous: OutputSnapshot,
+    *,
+    require_current: Callable[[], None] | None = None,
+    before_replace: Callable[[], None] | None = None,
+    after_destination_check: Callable[[], None] | None = None,
+    before_install: Callable[[], None] | None = None,
+    after_staged_unlink: Callable[[], None] | None = None,
+    after_replace: Callable[[], None] | None = None,
+    before_rollback_displace: Callable[[], None] | None = None,
+    after_rollback_displace: Callable[[], None] | None = None,
+) -> None:
+    """Publish and roll back without ever clobbering a competing destination."""
+
+    path = path.resolve()
+    mode = previous[2] if previous[2] is not None else 0o644
+    temporary: Path | None = None
+    prepared: OutputSnapshot | None = None
+    published: OutputSnapshot | None = None
+    prior_quarantine: Quarantine | None = None
+    installed = False
+    committed = False
+    primary_failure: BaseException | None = None
+    preserved_conflicts: list[Path] = []
+    current_guard = require_current or (lambda: None)
+    try:
+        current_guard()
+        _require_output_current(path, previous)
+        with tempfile.NamedTemporaryFile(
+            "wb", dir=path.parent, prefix=path.name + ".proof.", delete=False
+        ) as target:
+            temporary = Path(target.name)
+            target.write(output)
+            target.flush()
+            os.fchmod(target.fileno(), mode)
+            os.fsync(target.fileno())
+        prepared = _output_snapshot(temporary)
+        current_guard()
+        _require_output_current(path, previous)
+        if before_replace is not None:
+            before_replace()
+        current_guard()
+        _require_output_current(path, previous)
+        _require_output_current(temporary, prepared)
+        if after_destination_check is not None:
+            after_destination_check()
+        if previous[0] is not None:
+            prior_quarantine = _quarantine_live_path(path, "prior", previous)
+            _sync_quarantine_move(prior_quarantine, path)
+            prior_quarantine = (
+                prior_quarantine[0],
+                prior_quarantine[1],
+                _output_snapshot(prior_quarantine[1]),
+            )
+            if not _same_file_after_topology_change(prior_quarantine[2], previous):
+                raise ValueError(f"output changed during proof transaction: {path}")
+        if before_install is not None:
+            before_install()
+        _require_output_current(temporary, prepared)
+        try:
+            os.link(temporary, path)
+        except FileExistsError as error:
+            raise ValueError(
+                f"concurrent proof output blocked no-clobber publication: {path}"
+            ) from error
+        installed = True
+        _fsync_directory(path.parent)
+        linked_stage = _output_snapshot(temporary)
+        public_link = _output_snapshot(path)
+        require(
+            linked_stage == public_link
+            and public_link[0] == output
+            and public_link[1] is not None
+            and prepared[1] is not None
+            and public_link[1][:4] == prepared[1][:4]
+            and public_link[2] == mode,
+            f"published proof bytes or mode drifted: {path}",
+        )
+        prepared = linked_stage
+        _require_output_current(temporary, prepared)
+        temporary.unlink()
+        temporary = None
+        _fsync_directory(path.parent)
+        if after_staged_unlink is not None:
+            after_staged_unlink()
+        observed_publication = _output_snapshot(path)
+        require(
+            observed_publication[0] == output
+            and observed_publication[1] is not None
+            and public_link[1] is not None
+            and observed_publication[1][:4] == public_link[1][:4]
+            and observed_publication[2] == mode,
+            f"published proof changed while removing staged alias: {path}",
+        )
+        published = observed_publication
+        if after_replace is not None:
+            after_replace()
+        current_guard()
+        _require_output_current(path, published)
+        committed = True
+        if prior_quarantine is not None:
+            _delete_quarantine(prior_quarantine, path)
+            prior_quarantine = None
+    except BaseException as error:
+        primary_failure = error
+        primary_error = error
+        if committed:
+            if prior_quarantine is not None:
+                directory, candidate, _snapshot = prior_quarantine
+                if candidate.exists():
+                    primary_error.add_note(
+                        "Committed proof retained; prior quarantine cleanup "
+                        f"failed at: {candidate}"
+                    )
+                elif directory.exists():
+                    try:
+                        directory.rmdir()
+                        _fsync_directory(path.parent)
+                    except BaseException as cleanup_error:
+                        primary_error.add_note(
+                            "Empty committed quarantine cleanup failed at "
+                            f"{directory}: {cleanup_error}"
+                        )
+            raise
+        owned = published
+        if owned is None and installed and prepared is not None:
+            try:
+                candidate = _output_snapshot(path)
+            except BaseException as snapshot_error:
+                primary_error.add_note(
+                    f"Published proof ownership check failed: {snapshot_error}"
+                )
+                candidate = (None, None, None)
+            if (
+                candidate[0] == output
+                and candidate[1] is not None
+                and prepared[1] is not None
+                and candidate[1][:2] == prepared[1][:2]
+                and candidate[2] == mode
+            ):
+                owned = candidate
+
+        def preserve(
+            quarantine: Quarantine, cleanup_error: BaseException | None = None
+        ) -> None:
+            candidate_path = quarantine[1]
+            if candidate_path.exists() and candidate_path not in preserved_conflicts:
+                preserved_conflicts.append(candidate_path)
+            if cleanup_error is not None:
+                primary_error.add_note(
+                    f"Proof quarantine operation failed for {candidate_path}: "
+                    f"{cleanup_error}"
+                )
+
+        def restore(quarantine: Quarantine) -> None:
+            try:
+                linked = _link_quarantined_without_clobber(quarantine, path)
+            except BaseException as restore_error:
+                preserve(quarantine, restore_error)
+                return
+            if linked is None:
+                preserve(quarantine)
+                return
+            try:
+                _delete_quarantine(linked, path)
+            except BaseException as cleanup_error:
+                preserve(linked, cleanup_error)
+
+        def delete(quarantine: Quarantine) -> None:
+            try:
+                _delete_quarantine(quarantine, path)
+            except BaseException as cleanup_error:
+                preserve(quarantine, cleanup_error)
+
+        if owned is not None:
+            if before_rollback_displace is not None:
+                try:
+                    before_rollback_displace()
+                except BaseException as hook_error:
+                    primary_error.add_note(f"Pre-rollback hook failed: {hook_error}")
+            try:
+                rollback_quarantine = _quarantine_live_path(path, "rollback", owned)
+            except FileNotFoundError:
+                rollback_quarantine = None
+            except BaseException as displacement_error:
+                primary_error.add_note(
+                    f"Rollback quarantine displacement failed: {displacement_error}"
+                )
+                rollback_quarantine = None
+            if rollback_quarantine is not None:
+                try:
+                    _sync_quarantine_move(rollback_quarantine, path)
+                except BaseException as sync_error:
+                    primary_error.add_note(
+                        f"Rollback quarantine fsync failed: {sync_error}"
+                    )
+                try:
+                    rollback_quarantine = (
+                        rollback_quarantine[0],
+                        rollback_quarantine[1],
+                        _output_snapshot(rollback_quarantine[1]),
+                    )
+                except BaseException as authentication_error:
+                    primary_error.add_note(
+                        "Rollback quarantine authentication failed: "
+                        f"{authentication_error}"
+                    )
+                    restore(rollback_quarantine)
+                    rollback_quarantine = None
+                if after_rollback_displace is not None:
+                    try:
+                        after_rollback_displace()
+                    except BaseException as hook_error:
+                        primary_error.add_note(
+                            f"Post-displacement rollback hook failed: {hook_error}"
+                        )
+            if rollback_quarantine is not None and _same_file_after_topology_change(
+                rollback_quarantine[2], owned
+            ):
+                if prior_quarantine is not None:
+                    restore(prior_quarantine)
+                    prior_quarantine = None
+                delete(rollback_quarantine)
+            else:
+                if rollback_quarantine is not None:
+                    restore(rollback_quarantine)
+                if prior_quarantine is not None:
+                    restore(prior_quarantine)
+                    prior_quarantine = None
+        elif prior_quarantine is not None:
+            restore(prior_quarantine)
+            prior_quarantine = None
+        if preserved_conflicts:
+            primary_error.add_note(
+                "Concurrent proof data preserved at: "
+                + ", ".join(str(item) for item in preserved_conflicts)
+            )
+        raise
+    finally:
+        if temporary is not None:
+            try:
+                staged = _output_snapshot(temporary)
+                if prepared is not None and _same_file_after_topology_change(
+                    staged, prepared
+                ):
+                    temporary.unlink()
+                    _fsync_directory(path.parent)
+                elif staged[0] is not None and primary_failure is not None:
+                    primary_failure.add_note(
+                        f"Changed staged proof preserved at: {temporary}"
+                    )
+            except BaseException as cleanup_error:
+                if primary_failure is None:
+                    raise
+                primary_failure.add_note(
+                    f"Staged proof cleanup failed for {temporary}: {cleanup_error}"
+                )
+
+
+def _check_output(
+    path: Path,
+    output: bytes,
+    previous: OutputSnapshot,
+    *,
+    require_current: Callable[[], None] | None = None,
+) -> None:
+    current_guard = require_current or (lambda: None)
+    current_guard()
+    require(
+        previous[0] == output,
+        f"generated receipt missing or stale: {path}",
+    )
+    _require_output_current(path, previous)
+    current_guard()
+    _require_output_current(path, previous)
+
+
 def _valid_delta_bound(value: Any, *, selector_id: str) -> dict[str, Any]:
     require(
         isinstance(value, dict) and set(value) in ({"sign"}, {"values"}),
@@ -204,6 +684,7 @@ def _validate_preview(
     *,
     expected_snapshot_sha256: str,
     expected_selector_units: dict[str, int],
+    expected_producer: dict[str, Any] | None = None,
 ) -> tuple[
     dict[str, Any],
     dict[str, dict[str, Any]],
@@ -224,6 +705,19 @@ def _validate_preview(
     require(
         payload_sha256 == full.canonical_sha256(without_digest),
         "preview payload digest drift",
+    )
+    if expected_producer is None:
+        expected_producer = {
+            "script": full.file_receipt(
+                preview_builder.PRODUCER_SOURCE, relative_to=REPO_ROOT
+            ),
+            "campaign_classifier": full.file_receipt(
+                preview_builder.CAMPAIGN_SOURCE, relative_to=REPO_ROOT
+            ),
+        }
+    require(
+        preview.get("producer") == expected_producer,
+        "preview receipt producer drift",
     )
     require(
         full.canonical_sha256(
@@ -852,8 +1346,10 @@ def _validated_cafta_supersession_receipt(
     expected_producer = {
         "script": full.file_receipt(producer_source, relative_to=repo_root)
     }
+    identity_helper = full.file_receipt(cafta.FOUNDATION_SOURCE, relative_to=repo_root)
     require(
-        receipt.get("producer") == expected_producer,
+        receipt.get("producer") == expected_producer
+        and identity_helper["sha256"] == cafta.EXPECTED_FOUNDATION_SHA256,
         "CAFTA supersession receipt producer drift",
     )
 
@@ -1090,7 +1586,9 @@ def _validated_cafta_supersession_receipt(
     require(
         full.file_receipt(path, relative_to=repo_root) == receipt_file
         and full.file_receipt(producer_source, relative_to=repo_root)
-        == expected_producer["script"],
+        == expected_producer["script"]
+        and full.file_receipt(cafta.FOUNDATION_SOURCE, relative_to=repo_root)
+        == identity_helper,
         "CAFTA supersession receipt or producer changed during validation",
     )
     return {"file": receipt_file, "payload": receipt}
@@ -1608,7 +2106,7 @@ def _transition_items(
     return transitions
 
 
-def build_receipt(
+def _build_receipt_impl(
     *,
     repo_root: Path = REPO_ROOT,
     producer_source: Path = PRODUCER_SOURCE,
@@ -1632,6 +2130,7 @@ def build_receipt(
     yale_root: Path = preview_builder.DEFAULT_YALE_ROOT,
     expected_yale_parser_receipt: dict[str, Any] = YALE_PARSER_RECEIPT,
     expected_reference_assumptions: dict[str, Any] | None = None,
+    manifest_locked: bool = False,
 ) -> dict[str, Any]:
     require(
         set(expected_selector_units) == expected_parent_ids
@@ -1660,18 +2159,21 @@ def build_receipt(
             full_closure_guard_source, relative_to=repo_root
         ),
     }
+    preview_builder_file = full.file_receipt(
+        preview_builder.PRODUCER_SOURCE, relative_to=repo_root
+    )
+    preview_producer = {
+        "script": preview_builder_file,
+        "campaign_classifier": producer["campaign_classifier"],
+    }
     preview_file = full.file_receipt(preview_receipt_path, relative_to=repo_root)
     preview, selectors, line_sets, historical_receipt, selected_receipt = (
         _validate_preview(
             preview_receipt_path,
             expected_snapshot_sha256=expected_preview_snapshot_sha256,
             expected_selector_units=expected_selector_units,
+            expected_producer=preview_producer,
         )
-    )
-    require(
-        preview.get("producer", {}).get("campaign_classifier")
-        == producer["campaign_classifier"],
-        "preview receipt is not bound to the current campaign classifier",
     )
     yale_annex_classifier, yale_source_receipt = _verified_yale_annex_classifier(
         yale_root=yale_root,
@@ -1688,7 +2190,8 @@ def build_receipt(
         )
     )
 
-    with full._manifest_lock(eval_manifest_path):
+    lock = nullcontext() if manifest_locked else full._manifest_lock(eval_manifest_path)
+    with lock:
         manifest_file = full.file_receipt(eval_manifest_path, relative_to=repo_root)
         comparison_file = full.file_receipt(
             comparison_receipt_path, relative_to=repo_root
@@ -1848,6 +2351,8 @@ def build_receipt(
     payload["receipt_payload_sha256"] = full.canonical_sha256(payload)
     require(
         full.file_receipt(producer_source, relative_to=repo_root) == producer["script"]
+        and full.file_receipt(preview_builder.PRODUCER_SOURCE, relative_to=repo_root)
+        == preview_builder_file
         and full.file_receipt(campaign_source, relative_to=repo_root)
         == producer["campaign_classifier"]
         and full.file_receipt(full_closure_guard_source, relative_to=repo_root)
@@ -1866,6 +2371,186 @@ def build_receipt(
         "transition producer or preview evidence changed during receipt build",
     )
     return payload
+
+
+def _build_receipt_transaction(
+    *,
+    repo_root: Path = REPO_ROOT,
+    producer_source: Path = PRODUCER_SOURCE,
+    campaign_source: Path = CAMPAIGN_SOURCE,
+    full_closure_guard_source: Path = FULL_CLOSURE_GUARD_SOURCE,
+    preview_receipt_path: Path = full.PREVIEW_RECEIPT,
+    historical_artifact_path: Path = full.HISTORICAL_ARTIFACT,
+    eval_manifest_path: Path = full.EVAL_MANIFEST,
+    comparison_receipt_path: Path = full.COMPARISON_RECEIPT,
+    cafta_receipt_path: Path = CAFTA_SUPERSESSION_RECEIPT,
+    cafta_producer_source: Path = cafta.PRODUCER_SOURCE,
+    expected_preview_snapshot_sha256: str = EXPECTED_PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256,
+    expected_selector_units: dict[str, int] = preview_builder.EXPECTED_SELECTOR_UNITS,
+    expected_parent_ids: frozenset[str] = EXPECTED_PARENT_IDS,
+    expected_parent_patterns: dict[
+        str, frozenset[tuple[str, ...]]
+    ] = EXPECTED_PARENT_PATTERNS,
+    expected_fallback_hts10: frozenset[str] | None = (
+        EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10
+    ),
+    yale_root: Path = preview_builder.DEFAULT_YALE_ROOT,
+    expected_yale_parser_receipt: dict[str, Any] = YALE_PARSER_RECEIPT,
+    expected_reference_assumptions: dict[str, Any] | None = None,
+    manifest_locked: bool = False,
+) -> tuple[dict[str, Any], Callable[[], None]]:
+    proof_inputs = _ProofInputs()
+    uses_live_reference_assumption = expected_reference_assumptions is None
+    pinned_note16_identity: dict[str, Any] | None = None
+    with proof_inputs.capture_foundation():
+        if uses_live_reference_assumption:
+            note16_receipt_file = proof_inputs.file_receipt(
+                campaign.YALE_NOTE16_WEIGHT_ASSUMPTION,
+                relative_to=repo_root,
+            )
+            note16_producer_file = proof_inputs.file_receipt(
+                campaign.YALE_NOTE16_WEIGHT_ASSUMPTION_PRODUCER,
+                relative_to=repo_root,
+            )
+            pinned_note16_identity = campaign._yale_note16_weight_assumption_identity()
+            require(
+                {
+                    name: pinned_note16_identity[name]
+                    for name in ("path", "bytes", "sha256")
+                }
+                == note16_receipt_file,
+                "Yale Note 16 assumption receipt identity drift",
+            )
+            note16_receipt = json.loads(
+                campaign.YALE_NOTE16_WEIGHT_ASSUMPTION.read_text()
+            )
+            require(
+                isinstance(note16_receipt, dict)
+                and note16_receipt.get("producer") == note16_producer_file,
+                "Yale Note 16 assumption producer drift",
+            )
+            proof_inputs.require_current()
+            effective_reference_assumptions = {
+                "yale_note16_metal_weight": pinned_note16_identity
+            }
+        else:
+            effective_reference_assumptions = expected_reference_assumptions
+        payload = _build_receipt_impl(
+            repo_root=repo_root,
+            producer_source=producer_source,
+            campaign_source=campaign_source,
+            full_closure_guard_source=full_closure_guard_source,
+            preview_receipt_path=preview_receipt_path,
+            historical_artifact_path=historical_artifact_path,
+            eval_manifest_path=eval_manifest_path,
+            comparison_receipt_path=comparison_receipt_path,
+            cafta_receipt_path=cafta_receipt_path,
+            cafta_producer_source=cafta_producer_source,
+            expected_preview_snapshot_sha256=expected_preview_snapshot_sha256,
+            expected_selector_units=expected_selector_units,
+            expected_parent_ids=expected_parent_ids,
+            expected_parent_patterns=expected_parent_patterns,
+            expected_fallback_hts10=expected_fallback_hts10,
+            yale_root=yale_root,
+            expected_yale_parser_receipt=expected_yale_parser_receipt,
+            expected_reference_assumptions=effective_reference_assumptions,
+            manifest_locked=manifest_locked,
+        )
+        preview = full.load_json(preview_receipt_path)
+        _classifier, pinned_yale_source = _verified_yale_annex_classifier(
+            yale_root=yale_root,
+            preview=preview,
+            expected_parser_receipt=expected_yale_parser_receipt,
+        )
+    emitted_yale_sources = {
+        full.canonical_sha256(source)
+        for transition in payload["transitions"]
+        if isinstance(transition.get("evidence"), dict)
+        for proof in [transition["evidence"].get("yale_annex_defect_source_proof")]
+        if isinstance(proof, dict)
+        for source in [proof.get("pinned_yale_source")]
+        if isinstance(source, dict)
+    }
+    require(
+        emitted_yale_sources <= {full.canonical_sha256(pinned_yale_source)},
+        "transition receipt contains inconsistent pinned Yale source evidence",
+    )
+    proof_inputs.seal()
+
+    def require_current() -> None:
+        with proof_inputs.capture_foundation():
+            proof_inputs.require_current()
+            if uses_live_reference_assumption:
+                require(
+                    campaign._yale_note16_weight_assumption_identity()
+                    == pinned_note16_identity,
+                    "Yale Note 16 assumption changed during transition publication",
+                )
+            preview = full.load_json(preview_receipt_path)
+            _classifier, current_yale_source = _verified_yale_annex_classifier(
+                yale_root=yale_root,
+                preview=preview,
+                expected_parser_receipt=expected_yale_parser_receipt,
+            )
+            require(
+                current_yale_source == pinned_yale_source,
+                "pinned Yale source changed during transition publication",
+            )
+            proof_inputs.require_current()
+
+    require_current()
+    return payload, require_current
+
+
+def build_receipt(
+    *,
+    repo_root: Path = REPO_ROOT,
+    producer_source: Path = PRODUCER_SOURCE,
+    campaign_source: Path = CAMPAIGN_SOURCE,
+    full_closure_guard_source: Path = FULL_CLOSURE_GUARD_SOURCE,
+    preview_receipt_path: Path = full.PREVIEW_RECEIPT,
+    historical_artifact_path: Path = full.HISTORICAL_ARTIFACT,
+    eval_manifest_path: Path = full.EVAL_MANIFEST,
+    comparison_receipt_path: Path = full.COMPARISON_RECEIPT,
+    cafta_receipt_path: Path = CAFTA_SUPERSESSION_RECEIPT,
+    cafta_producer_source: Path = cafta.PRODUCER_SOURCE,
+    expected_preview_snapshot_sha256: str = EXPECTED_PREVIEW_ALL_SELECTOR_SNAPSHOT_SHA256,
+    expected_selector_units: dict[str, int] = preview_builder.EXPECTED_SELECTOR_UNITS,
+    expected_parent_ids: frozenset[str] = EXPECTED_PARENT_IDS,
+    expected_parent_patterns: dict[
+        str, frozenset[tuple[str, ...]]
+    ] = EXPECTED_PARENT_PATTERNS,
+    expected_fallback_hts10: frozenset[str] | None = (
+        EXPECTED_LEGACY_DERIVATIVE_FALLBACK_HTS10
+    ),
+    yale_root: Path = preview_builder.DEFAULT_YALE_ROOT,
+    expected_yale_parser_receipt: dict[str, Any] = YALE_PARSER_RECEIPT,
+    expected_reference_assumptions: dict[str, Any] | None = None,
+    manifest_locked: bool = False,
+    _return_transaction: bool = False,
+) -> dict[str, Any] | tuple[dict[str, Any], Callable[[], None]]:
+    transaction = _build_receipt_transaction(
+        repo_root=repo_root,
+        producer_source=producer_source,
+        campaign_source=campaign_source,
+        full_closure_guard_source=full_closure_guard_source,
+        preview_receipt_path=preview_receipt_path,
+        historical_artifact_path=historical_artifact_path,
+        eval_manifest_path=eval_manifest_path,
+        comparison_receipt_path=comparison_receipt_path,
+        cafta_receipt_path=cafta_receipt_path,
+        cafta_producer_source=cafta_producer_source,
+        expected_preview_snapshot_sha256=expected_preview_snapshot_sha256,
+        expected_selector_units=expected_selector_units,
+        expected_parent_ids=expected_parent_ids,
+        expected_parent_patterns=expected_parent_patterns,
+        expected_fallback_hts10=expected_fallback_hts10,
+        yale_root=yale_root,
+        expected_yale_parser_receipt=expected_yale_parser_receipt,
+        expected_reference_assumptions=expected_reference_assumptions,
+        manifest_locked=manifest_locked,
+    )
+    return transaction if _return_transaction else transaction[0]
 
 
 def main() -> int:
@@ -1887,35 +2572,46 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    receipt = build_receipt(
-        preview_receipt_path=args.preview_receipt.resolve(),
-        historical_artifact_path=args.historical_artifact.resolve(),
-        eval_manifest_path=args.eval_manifest.resolve(),
-        comparison_receipt_path=args.comparison_receipt.resolve(),
-        cafta_receipt_path=args.cafta_receipt.resolve(),
-        yale_root=args.yale_root.resolve(),
-    )
-    output = full.render(receipt)
-    if args.check:
-        require(args.output.is_file(), f"generated receipt missing: {args.output}")
-        require(
-            args.output.read_text() == output,
-            f"generated receipt drift: {args.output}",
+    eval_manifest_path = args.eval_manifest.resolve()
+    output_path = args.output.resolve()
+    with full._manifest_lock(eval_manifest_path):
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        previous_output = _output_snapshot(output_path)
+        built = build_receipt(
+            preview_receipt_path=args.preview_receipt.resolve(),
+            historical_artifact_path=args.historical_artifact.resolve(),
+            eval_manifest_path=eval_manifest_path,
+            comparison_receipt_path=args.comparison_receipt.resolve(),
+            cafta_receipt_path=args.cafta_receipt.resolve(),
+            yale_root=args.yale_root.resolve(),
+            manifest_locked=True,
+            _return_transaction=True,
         )
-    else:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.NamedTemporaryFile(
-            "w", dir=args.output.parent, delete=False
-        ) as target:
-            target.write(output)
-            temporary = Path(target.name)
-        temporary.replace(args.output)
+        if isinstance(built, tuple):
+            receipt, require_current = built
+        else:  # Preserve test and downstream monkeypatch compatibility.
+            receipt, require_current = built, lambda: None
+        output = full.render(receipt).encode()
+        if args.check:
+            _check_output(
+                output_path,
+                output,
+                previous_output,
+                require_current=require_current,
+            )
+        else:
+            _conditional_publish_output(
+                output_path,
+                output,
+                previous_output,
+                require_current=require_current,
+            )
     print(
         full.render(
             {
                 "verdict": receipt["verdict"],
-                "output": str(args.output.resolve()),
-                "output_sha256": hashlib.sha256(output.encode()).hexdigest(),
+                "output": str(output_path),
+                "output_sha256": hashlib.sha256(output).hexdigest(),
                 "transitions": len(receipt["transitions"]),
                 "children": sum(
                     len(item["children"]) for item in receipt["transitions"]

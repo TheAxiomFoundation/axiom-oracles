@@ -32,6 +32,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence
@@ -389,73 +390,151 @@ DECISIONS = [
     },
 ]
 
-INPUTS = [
-    ("hts_number", "HTS classification assigned to the entry"),
-    ("country_of_origin", "origin determination for the entry"),
-    ("entry_date", "CBP entry date and effective-time facts"),
-    ("customs_value", "19 USC 1401a appraised customs value"),
-    ("shipment_value", "shipment value used by de-minimis/postal rules"),
-    ("is_postal_shipment", "postal-channel classification"),
-    ("column_1_general_rate", "selected Rev-15 HTS general rate line"),
-    ("special_rate", "claimed and qualifying special-program rate"),
-    ("column_2_rate", "column-2 rate selection"),
-    ("section_232_membership", "membership in the applicable 232 annex"),
-    ("section_301_membership", "membership in the applicable 301 list"),
-    ("section_201_membership", "membership in the solar safeguard annex"),
-    ("section_122_membership", "membership in surcharge exclusions"),
-    ("ieepa_membership", "membership in reciprocal/fentanyl annexes"),
-    ("section_338_membership", "membership under HTS note 51"),
-    ("is_section_232_article", "witness boolean: 232 article"),
-    ("is_section_232_derivative", "witness boolean: 232 derivative"),
-    ("is_reciprocal_annex_excluded", "witness boolean: reciprocal annex exclusion"),
-    ("is_reciprocal_metals_excluded", "witness boolean: reciprocal metals exclusion"),
-    ("is_section_122_annex_excluded", "witness boolean: 122 annex exclusion"),
-    ("is_section_122_232_excluded", "witness boolean: 122/232 exclusion"),
-    ("is_brazil_301_excluded", "witness boolean: Brazil-301 exclusion"),
-    ("is_forced_labor_annex_excluded", "witness boolean: forced-labor annex exclusion"),
+# Exact source boundaries for every input reachable from the pinned compiler
+# audit above.  ``uncaptured`` means the composed program consumes the fact but
+# this ledger does not claim to derive it.  Naming a boundary therefore closes
+# the interface inventory, not the underlying policy-family burndown.
+CANONICAL_INPUT_SCOPES = (
     (
-        "is_forced_labor_metals_excluded",
-        "witness boolean: forced-labor metals exclusion",
+        "cbp_agrees_chapter_98_entry_is_appropriate",
+        "CBP acceptance on the entry record that the declarant's Chapter 98 provision is appropriate under U.S. note 2(u); not inferable from the HTS number alone",
     ),
     (
-        "entry_is_brazil_301_listed",
-        "entry-preparation determination under U.S. note 50 for the Brazil section-301 component",
+        "country_of_origin",
+        "CBP country-of-origin determination for the entry transaction; not a tariff-table membership proxy",
     ),
-    (
-        "entry_is_forced_labor_301_listed",
-        "entry-preparation determination under U.S. note 52 for the forced-labor section-301 component",
-    ),
-    (
-        "entry_is_section_232_covered",
-        "entry-preparation determination of existing aluminum or steel section-232 coverage",
-    ),
-    (
-        "entry_is_s232_note16_c_ii_derivative_aluminum_member",
-        "HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation",
-    ),
-    (
-        "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
-        "HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
-    ),
-    (
-        "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
-        "HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
-    ),
-    (
-        "entry_is_s232_note16_metal_chapter",
-        "entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight exception",
-    ),
+    ("customs_value", "19 U.S.C. 1401a appraised customs value for the entry"),
     (
         "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
         "real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof",
+    ),
+    (
+        "entry_is_9802_excepted_entry",
+        "entry classification within the U.S. note 2(u) Chapter 98 exception for heading 9802.00.80 or subheading 9802.00.40, 9802.00.50, or 9802.00.60",
+    ),
+    (
+        "entry_is_brazil_301_listed",
+        "entry-preparation membership determination under HTS chapter 99 U.S. note 50 for the Brazil section-301 component",
+    ),
+    (
+        "entry_is_china_301_2024_action",
+        "entry-preparation membership determination against the complete HTS U.S. note 31 China 2024-action table, which the pinned program does not itself derive",
+    ),
+    (
+        "entry_is_china_301_list123",
+        "entry-preparation membership determination against the original China section-301 lists 1, 2, or 3 and their exclusions",
+    ),
+    (
+        "entry_is_china_301_list4a",
+        "entry-preparation membership determination against China section-301 list 4A and its exclusions",
+    ),
+    (
+        "entry_is_china_301_solar",
+        "entry-preparation membership determination against the complete HTS U.S. note 31 solar-products China section-301 table, which the pinned program does not itself derive",
+    ),
+    (
+        "entry_is_entered_free_of_duty_under_dr_cafta",
+        "declarant claim and transaction qualification for duty-free DR-CAFTA treatment, including applicable subchapter XXII treatment",
+    ),
+    (
+        "entry_is_entered_free_of_duty_under_usmca",
+        "declarant claim and transaction qualification for duty-free USMCA treatment used by HTS U.S. note 52(g)-(h)",
+    ),
+    (
+        "entry_is_forced_labor_301_listed",
+        "entry-preparation membership determination under HTS chapter 99 U.S. note 52 for the forced-labor section-301 component",
+    ),
+    (
+        "entry_is_general_note_29_d_v_textile_or_apparel_good",
+        "General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated exclusions",
+    ),
+    (
+        "entry_is_humanitarian_donation_article",
+        "transaction determination that the article is a humanitarian donation described by HTS 9903.01.21 and U.S. note 2(t)",
+    ),
+    (
+        "entry_is_informational_material_article",
+        "article determination that the goods are informational material described by HTS 9903.01.22",
+    ),
+    (
+        "entry_is_line_a",
+        "generated-schedule adapter's exact HTS-number equality to 7202.11.10.00; the witness derives the same predicate from hts_number",
+    ),
+    (
+        "entry_is_line_b",
+        "generated-schedule adapter's exact HTS-number equality to 7601.10.30.00; the witness derives the same predicate from hts_number",
+    ),
+    (
+        "entry_is_line_d",
+        "generated-schedule adapter's exact HTS-number equality to 2203.00.00.30; the witness derives the same predicate from hts_number",
+    ),
+    (
+        "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
+        "entry-level HTS U.S. note 33 automobile-part import-adjustment-offset determination",
+    ),
+    (
+        "entry_is_note33_g_automobile_part",
+        "entry-level determination that a U.S. note 33(g) candidate is an automobile part",
+    ),
+    (
+        "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
+        "entry-level determination that a U.S. note 37(f) candidate is a completed kitchen cabinet, vanity, or part",
+    ),
+    (
+        "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
+        "entry-level determination that a U.S. note 38(i) candidate is a medium- or heavy-duty-vehicle part",
+    ),
+    (
+        "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
+        "entry-level HTS U.S. note 38 medium/heavy-duty-vehicle-part import-adjustment-offset determination",
+    ),
+    (
+        "entry_is_note40_patented_pharmaceutical_article",
+        "entry-level determination that a U.S. note 40 candidate is covered by a valid unexpired U.S. patent",
+    ),
+    (
+        "entry_is_personal_use_accompanied_baggage",
+        "transaction determination that the goods are for personal use in accompanied baggage under HTS U.S. note 2(u)",
+    ),
+    (
+        "entry_is_properly_claimed_chapter_98_entry",
+        "declarant's Chapter 98 claim made under applicable CBP regulations for the entry transaction",
+    ),
+    (
+        "entry_is_s232_copper_additional_member",
+        "HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation",
     ),
     (
         "entry_is_s232_copper_primary_member",
         "HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation",
     ),
     (
-        "entry_is_s232_copper_additional_member",
-        "HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation",
+        "entry_is_s232_note16_c_ii_derivative_aluminum_member",
+        "HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
+        "HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+    ),
+    (
+        "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
+        "HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+    ),
+    (
+        "entry_is_s232_note16_metal_chapter",
+        "entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight exception",
+    ),
+    (
+        "entry_is_s232_note33_auto_part_candidate",
+        "HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note33_vehicle_candidate",
+        "HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation",
+    ),
+    (
+        "entry_is_s232_note37_cabinet_vanity_candidate",
+        "HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation",
     ),
     (
         "entry_is_s232_note37_softwood_member",
@@ -463,99 +542,93 @@ INPUTS = [
     ),
     (
         "entry_is_s232_note37_upholstered_wood_furniture_member",
-        "HTS U.S. note 37(d) upholstered-wood membership supplied by entry preparation",
-    ),
-    (
-        "entry_is_s232_note38_mhd_vehicle_member",
-        "HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation",
+        "HTS U.S. note 37(d) upholstered-wood-furniture membership supplied by entry preparation",
     ),
     (
         "entry_is_s232_note38_bus_member",
         "HTS U.S. note 38(c) bus membership supplied by entry preparation",
     ),
     (
-        "entry_is_s232_note33_vehicle_candidate",
-        "HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation",
-    ),
-    (
-        "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
-        "transaction qualification for a note-33 vehicle heading listed in notes 50 and 52",
-    ),
-    (
-        "entry_is_s232_note33_auto_part_candidate",
-        "HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation",
-    ),
-    (
-        "entry_is_note33_g_automobile_part",
-        "entry-level determination that a note-33(g) candidate is an automobile part",
-    ),
-    (
-        "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
-        "importer certification for a note-33 automobile part listed in notes 50 and 52",
-    ),
-    (
-        "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
-        "entry-level note-33 automobile-part import-adjustment-offset determination",
-    ),
-    (
-        "entry_is_s232_note37_cabinet_vanity_candidate",
-        "HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation",
-    ),
-    (
-        "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
-        "entry-level determination that a note-37(f) candidate is a completed cabinet, vanity, or part",
-    ),
-    (
         "entry_is_s232_note38_mhd_part_candidate",
         "HTS U.S. note 38(i) medium/heavy-duty-vehicle-part candidate membership supplied by entry preparation",
     ),
     (
-        "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
-        "entry-level determination that a note-38(i) candidate is a medium/heavy-duty-vehicle part",
-    ),
-    (
-        "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
-        "importer certification for a note-38 vehicle part listed in notes 50 and 52",
-    ),
-    (
-        "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
-        "entry-level note-38 vehicle-part import-adjustment-offset determination",
+        "entry_is_s232_note38_mhd_vehicle_member",
+        "HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation",
     ),
     (
         "entry_is_s232_note39_semiconductor_candidate",
         "HTS U.S. note 39 semiconductor candidate membership supplied by entry preparation",
     ),
     (
-        "entry_qualifies_for_note39_heading_9903_79_01",
-        "entry-level technical qualification for semiconductor heading 9903.79.01",
-    ),
-    (
         "entry_is_s232_note40_pharmaceutical_candidate",
         "HTS U.S. note 40 pharmaceutical candidate membership supplied by entry preparation",
     ),
     (
-        "entry_is_note40_patented_pharmaceutical_article",
-        "entry-level determination that a note-40 candidate is covered by a valid unexpired U.S. patent",
+        "entry_is_section_122_exempt",
+        "entry-preparation determination that an applicable section 122 surcharge exclusion in HTS U.S. note 2(aa) covers the entry",
     ),
     (
-        "entry_is_general_note_29_d_v_textile_or_apparel_good",
-        "General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated exclusions",
+        "entry_is_section_201_cspv",
+        "classification of the entry as a crystalline-silicon photovoltaic (CSPV) article within the expired HTS U.S. note 18 safeguard surface",
     ),
     (
-        "entry_is_entered_free_of_duty_under_dr_cafta",
-        "claim and qualification for duty-free DR-CAFTA treatment, including applicable subchapter XXII treatment",
-    ),
-    ("is_china_2024_action_member", "witness boolean: 2024 China action membership"),
-    ("is_solar_china_member", "witness boolean: solar-China membership"),
-    (
-        "chapter_98_partial_value_share",
-        "9802 dutiable-value share supplied by the declarant",
+        "entry_is_section_232_aluminum",
+        "entry-preparation determination that the entry is an aluminum article or derivative covered by the applicable section 232 action",
     ),
     (
-        "section_338_reduced_duty_base_share",
-        "note-51 partial-value share supplied by the declarant",
+        "entry_is_section_232_covered",
+        "entry-preparation determination of existing aluminum or steel section-232 coverage for cross-program exclusions",
     ),
-]
+    (
+        "entry_is_section_232_steel",
+        "entry-preparation determination that the entry is a steel article or derivative covered by the applicable section 232 action",
+    ),
+    (
+        "entry_loaded_and_in_transit_before_july_24_2026",
+        "carrier and entry records establishing the HTS 9903.05.85 transit condition before July 24, 2026 for entries before July 28, 2026",
+    ),
+    (
+        "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
+        "importer certification for a U.S. note 33 automobile part whose heading is listed in notes 50 and 52",
+    ),
+    (
+        "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
+        "transaction qualification for a U.S. note 33 vehicle heading listed in notes 50 and 52",
+    ),
+    (
+        "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
+        "importer certification for a U.S. note 38 vehicle part whose heading is listed in notes 50 and 52",
+    ),
+    (
+        "entry_qualifies_for_note39_heading_9903_79_01",
+        "entry-level technical qualification for semiconductor heading 9903.79.01 under U.S. note 39",
+    ),
+    (
+        "hts_line",
+        "caller-selected exact HTS tariff-line key in the generated Rev-15 rate table after entry classification",
+    ),
+    (
+        "hts_number",
+        "full HTS statistical reporting number assigned to the entry by the declarant and accepted or corrected through CBP classification",
+    ),
+    ("is_postal_shipment", "carrier-channel fact that the shipment is postal"),
+    (
+        "resolved_non_ad_valorem_column2_rate",
+        "entry-preparation resolution of the applicable specific, compound, or conditional non-ad-valorem column-2 duty to the Rate value consumed for chapter-99 schedule rows; no flat column-2 table value is inferred",
+    ),
+    (
+        "shipment_value",
+        "declared shipment value used by the postal/de-minimis branch, distinct from 19 U.S.C. 1401a customs value",
+    ),
+)
+CANONICAL_INPUT_SCOPES_SHA256 = (
+    "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8"
+)
+# Keep a separate runtime copy so mutant tests exercise the same mutable
+# declaration surface that the producer consumes without rewriting the
+# independently digest-pinned semantic contract above.
+INPUTS = list(CANONICAL_INPUT_SCOPES)
 
 
 def _git(root: Path, *args: str) -> bytes:
@@ -579,12 +652,42 @@ def _blob_facts(
     }
 
 
+def _input_scopes_sha256(rows: Sequence[tuple[str, str]]) -> str:
+    payload = (
+        json.dumps(
+            list(rows),
+            ensure_ascii=False,
+            allow_nan=False,
+            separators=(",", ":"),
+        )
+        + "\n"
+    ).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _canonical_input_scope_digest() -> str:
+    names = tuple(name for name, _scope in CANONICAL_INPUT_SCOPES)
+    digest = _input_scopes_sha256(CANONICAL_INPUT_SCOPES)
+    if (
+        len(CANONICAL_INPUT_SCOPES) != 58
+        or names != AUDITED_REACHABLE_INPUTS
+        or any(
+            not isinstance(scope, str) or not scope.strip()
+            for _name, scope in CANONICAL_INPUT_SCOPES
+        )
+        or digest != CANONICAL_INPUT_SCOPES_SHA256
+    ):
+        raise ValueError("canonical input-scope contract pin changed")
+    return digest
+
+
 def _audited_input_inventory() -> dict[str, Any]:
     digest = hashlib.sha256(
         ("\n".join(AUDITED_REACHABLE_INPUTS) + "\n").encode()
     ).hexdigest()
     if len(AUDITED_REACHABLE_INPUTS) != 58 or digest != AUDITED_REACHABLE_INPUTS_SHA256:
         raise ValueError("audited reachable-input inventory pin changed")
+    input_scopes_digest = _canonical_input_scope_digest()
     return {
         "rulespec_ref": RULESPEC_REF,
         "engine_sha256": INPUT_INVENTORY_ENGINE_SHA256,
@@ -597,6 +700,7 @@ def _audited_input_inventory() -> dict[str, Any]:
         "schedule_composition_count": 100,
         "input_count": 58,
         "inputs_sha256": digest,
+        "input_scopes_sha256": input_scopes_digest,
         "inputs": list(AUDITED_REACHABLE_INPUTS),
     }
 
@@ -784,10 +888,27 @@ def _decision_state(
         for name, scope in INPUTS
     ]
     audited_inventory = _audited_input_inventory()
+    declared_input_names = [name for name, _scope in INPUTS]
+    declared_input_counts = Counter(declared_input_names)
     scoped_inputs = {
         name for name, scope in INPUTS if isinstance(scope, str) and scope.strip()
     }
-    missing_inputs = sorted(set(audited_inventory["inputs"]) - scoped_inputs)
+    required_inputs = set(audited_inventory["inputs"])
+    missing_inputs = sorted(required_inputs - scoped_inputs)
+    unexpected_inputs = sorted(set(declared_input_names) - required_inputs)
+    duplicate_inputs = sorted(
+        name for name, count in declared_input_counts.items() if count != 1
+    )
+    input_scopes_digest = _input_scopes_sha256(INPUTS)
+    scope_contract_complete = (
+        input_scopes_digest == audited_inventory["input_scopes_sha256"]
+    )
+    frontier_complete = not (
+        missing_inputs
+        or unexpected_inputs
+        or duplicate_inputs
+        or not scope_contract_complete
+    )
     decisions = {
         "ledger": ledger,
         "input_grounding": frontier,
@@ -797,15 +918,21 @@ def _decision_state(
         "counts_by_status_per_root": counts,
         "burndown": pending,
         "boundary_frontier": {
-            "complete": not missing_inputs,
+            "complete": frontier_complete,
             "input_count": len(frontier),
             "inputs": frontier,
             "required_input_count": len(audited_inventory["inputs"]),
             "missing_input_count": len(missing_inputs),
             "missing_inputs": missing_inputs,
+            "unexpected_input_count": len(unexpected_inputs),
+            "unexpected_inputs": unexpected_inputs,
+            "duplicate_input_count": len(duplicate_inputs),
+            "duplicate_inputs": duplicate_inputs,
+            "scope_contract_complete": scope_contract_complete,
+            "input_scopes_sha256": input_scopes_digest,
         },
         "closed": not pending
-        and not missing_inputs
+        and frontier_complete
         and all(sum(values.values()) > 0 for values in counts.values()),
     }
     return decisions, computed
@@ -970,9 +1097,19 @@ def validate(doc: dict[str, Any]) -> list[str]:
         errors.append("boundary frontier input count changed")
     if any(
         frontier.get(key) != expected_frontier[key]
-        for key in ("required_input_count", "missing_input_count", "missing_inputs")
+        for key in (
+            "required_input_count",
+            "missing_input_count",
+            "missing_inputs",
+            "unexpected_input_count",
+            "unexpected_inputs",
+            "duplicate_input_count",
+            "duplicate_inputs",
+            "scope_contract_complete",
+            "input_scopes_sha256",
+        )
     ):
-        errors.append("boundary frontier missing inputs are not derived")
+        errors.append("boundary frontier input set is not derived")
     expected_inputs = [
         {"input": name, "grounding": "uncaptured", "uncaptured_scope": scope}
         for name, scope in INPUTS
