@@ -268,3 +268,14 @@ lane. Source body and signature hashes did not change.
 - Next: package an independent offline replay of all new receipts and native
   errors; produce a source/file/line blocker handoff; validate preservation and
   save continuation-result.md. No more scope expansion or giant scan needed.
+
+## Combined replay implementation checkpoint
+
+- Added a distinct standard-library replay packager for all eight receipts; the
+  original replay archive and verifier remain untouched. It freshly compiles
+  pinned RuleSpec, binds source/producer/runtime bytes and preserves recorded
+  native errors and legal counterexamples instead of treating them as passes.
+- Ten tamper/native-outcome tests pass. Actual combined build and isolated
+  extraction replay are next; no standalone runtime success is claimed yet.
+- Rechecked live ownership: this run remains the sole tariff writer. Both
+  no-reset controls remain set, and the original RuleSpec checkout is clean.
