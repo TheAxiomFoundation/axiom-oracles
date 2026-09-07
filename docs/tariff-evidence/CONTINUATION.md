@@ -145,12 +145,35 @@ calculations. Admission needs an appropriate vintage, the underlying duty for
 The complete native errors and requests are retained; this scope stops at the
 precise external-resolution/vintage blocker.
 
-Current source coverage is **19 of the original 21 repaired scopes**: 12 with
-no legal counterexample under their bounded contracts, five with counterexamples,
-one post-expiry-only scope and one diagnostic-contract-only scope. Aluminum and
-steel remain outside the captured batches. All 58 actual-entry groundings remain
-uncaptured; admitted/grounded scopes remain zero. See the
-[updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
+## Primary metals and the missing UK qualification
+
+[The metals receipt](../../reference/us-tariff-schedule/boundary-evidence/primary-metals.json)
+adds aluminum and steel using source-defined primary classifications and two
+negative controls. Note 16(d) requires at least 95% qualifying UK metal for the
+reduced rate; origin alone is insufficient. The actual adapter supplies correct
+primary-metal incidence for all 16 fixtures, but the required provenance fact
+has no supported input in the pinned components.
+
+Real Axiom replay executes 28 cases / 44 outputs. Three cases disagree with the
+source: the witness and generated aluminum components charge 25% at 94% UK
+qualification instead of 50%; generated steel charges 50% at 95% qualification
+instead of 25%. Twenty-five cases match. The old steel-114 proof is a separate
+bounded input-comparability receipt; its bytes and conclusions remain intact.
+Both new metal scopes stop at the missing qualification/heading-selection blocker.
+
+Source coverage is now **21 of the original 21 gaps**, adding 15 scopes to the
+preserved six-scope milestone. This means bounded source evidence, not completed
+legal validation: 12 scopes have no legal counterexample under their bounded
+contracts, seven have source/runtime counterexamples, one is post-expiry only,
+and one is diagnostic-contract only with external-resolution/vintage blockers.
+All 58 actual-entry groundings remain uncaptured; admitted/grounded scopes remain
+zero. See the [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
+
+The continuation adds **459 real runtime cases, 1,049 returned outputs and 12
+native missing-input rejections**. Thirty cases retain legal source/runtime
+counterexamples; nine raw identity aliases separately document the canonical
+input contract. These counts include repeat projections through different
+compiled modules; they are not counts of actual customs transactions.
 
 ## Reproduction and current-base hold
 
@@ -162,16 +185,18 @@ python scripts/build_us_tariff_china_action_evidence.py --check
 python scripts/build_us_tariff_temporal_evidence.py --check
 python scripts/build_us_tariff_china_list_evidence.py --check
 python scripts/build_us_tariff_column2_evidence.py --check
+python scripts/build_us_tariff_metal_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
   tests/test_us_tariff_note52_boundary_evidence.py \
   tests/test_us_tariff_identity_evidence.py \
   tests/test_us_tariff_china_action_evidence.py \
   tests/test_us_tariff_temporal_evidence.py \
   tests/test_us_tariff_china_list_evidence.py \
-  tests/test_us_tariff_column2_evidence.py
+  tests/test_us_tariff_column2_evidence.py \
+  tests/test_us_tariff_metal_evidence.py
 ```
 
-33 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
+36 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 

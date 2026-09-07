@@ -8,7 +8,7 @@ origin/main ef012e83cd2e8b9b7afd4829841d9e29bc173d42. The original clean
 milestone a7d2bf13a, its branch, bundle and evidence artifacts remain preserved.
 RuleSpec stays clean at 4f591c4267063094cc6da9d590872ea982940b81.
 
-Bounded source coverage is 19/21; five captured scopes have real counterexamples.
+Bounded source coverage is 21/21; seven captured scopes have real counterexamples.
 All 58 actual-entry groundings remain uncaptured. The canonical merged tariff
 certificate has conformant=false due to current-base comparator changes;
 closed/certified remain false. No historical proof repin or huge scan rerun.
@@ -253,3 +253,18 @@ lane. Source body and signature hashes did not change.
   receipt. Supplied numeric sentinels are interface tests only.
 - Aluminum and steel remain. Next use a bounded source/adapter/runtime batch
   without changing the previously verified steel114 proof.
+
+## All original gaps have bounded receipts
+
+- Source coverage21/21, adding15scopes beyond the original6. Seven scopes have
+  real counterexamples,12have none under bounded contracts, one is post-expiry
+  only and one diagnostic-only. All58actual-entry groundings remain uncaptured.
+- Final metals batch:28realcases/44outputs;25match,3counterexamples preserve
+  the missing UK95% metal-provenance qualification. Actual adapter incidence
+  is correct for16fixtures. Three new tests pass (36continuation tests total).
+- Continuation totals:459realruntimecases,1049returnedoutputs,12native missing
+  input rejections.30source/runtime counterexample cases;9raw identity alias
+  differences separately document the canonical input contract.
+- Next: package an independent offline replay of all new receipts and native
+  errors; produce a source/file/line blocker handoff; validate preservation and
+  save continuation-result.md. No more scope expansion or giant scan needed.
