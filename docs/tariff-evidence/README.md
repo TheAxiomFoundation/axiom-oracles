@@ -1,5 +1,9 @@
 # Tariff evidence closure, September 7, 2026
 
+This page records the first milestone. See [the continuation](CONTINUATION.md)
+for live source authentication, added scopes, observed counterexamples and the
+current-main admission hold. The original milestone branch remains unchanged.
+
 The bounded sprint adds source evidence for six of the 21 previously missing
 scope descriptions and exercises their complete Boolean input space through
 real Axiom software. It does not change the RuleSpec program or certify any

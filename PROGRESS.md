@@ -164,3 +164,19 @@ integration/admission blocker is separate from new real-runtime source batches.
 
 Normalized committed HTTP header whitespace; exact raw responses remain in the
 lane. Source body and signature hashes did not change.
+
+## Second boundary batch checkpoint
+
+- Added two original21scope source receipts: USMCA free-duty entry and loading/
+  transit safe harbor. Live GeneralNote11, Chapter99 notes52(g)/(h), heading
+  9903.05.85 and the GPO FederalRegister action2026-15181 support the batch.
+- Real Axiom witness/generated-ch95 replay:230cases/690outputs. All200noon
+  controls and10exact-cutoff probes match.20first-minute cases expose the
+  Day-versus-00:01eastern mismatch. The source-qualified safe harbor is lost at
+  July28 00:00:00/00:00:59; positive duty follows for covered origins. Stop
+  admission of this scope pending a timestamp contract/supervised encoder fix.
+- Source evidence now8/21 (6 prior+2new), with7bounded batches without observed
+  counterexamples and1time-precision blocker.13not yet captured. All58actual
+  entry groundings remain uncaptured; closed/certified false.
+-15targeted source/note52tests pass. Byte-identical real replay --check passes.
+  No frozen proof, originalmilestone artifact, or campaign population changed.

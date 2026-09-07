@@ -47,13 +47,34 @@
       },
       "retrieved_at": "2026-09-07T21:48:44.897447+00:00",
       "tls_verification_result": 0
+    },
+    {
+      "authoritative_url": "https://www.govinfo.gov/content/pkg/FR-2026-07-28/pdf/2026-15181.pdf",
+      "curl_metadata": {
+        "bytes": 408,
+        "file": "forced-labor-action.curl.json",
+        "sha256": "d62d4dfc14bc3ed31ff44be241dcc8c1c8ebfb4636ae8f50688eda6ad81033e4"
+      },
+      "headers": {
+        "bytes": 1908,
+        "file": "forced-labor-action.headers",
+        "sha256": "226a3dff91eb2ed929af45008189ddbd23e04f7e547bdcf66ff9d1c824dd3ab5"
+      },
+      "http_status": 200,
+      "pdf": {
+        "bytes": 25556467,
+        "file": "forced-labor-action.pdf",
+        "sha256": "3c1e16a61af26b2a53b5d42f8b38e8e6a4f93f93a92238aba1f96026cdd45557"
+      },
+      "retrieved_at": "2026-09-07T21:58:55.964128+00:00",
+      "tls_verification_result": 0
     }
   ],
   "general_note11_status": "raw authoritative PDF capture; not ingested or signed by this sprint",
   "http_metadata": "Set-Cookie omitted; header whitespace normalized; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
   "limitations": [
     "HTTP retrieval metadata is an unsigned receipt, not a newly created cryptographic signature.",
-    "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 remains an unsigned direct-source capture.",
+    "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 and the FederalRegister action remain direct-source captures; no GPO PDF signature verification is claimed.",
     "A source snapshot and authentic signature do not establish real-entry facts, historical coverage or source completeness."
   ],
   "provisions": {

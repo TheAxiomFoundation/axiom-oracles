@@ -1,13 +1,16 @@
 {
   "canonical_scope_sha256": "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8",
-  "claim": "Source-linked synthetic predicate evidence does not establish any actual-entry input.",
+  "claim": "8 of the21 repaired scopes have source evidence, including one known time-precision blocker. All58actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
   "counts": {
+    "fully_admitted_or_grounded_scopes": 0,
     "named_scopes": 58,
     "originally_missing_scopes_repaired_before_sprint": 21,
     "reachable_inputs": 58,
-    "repaired_scopes_outside_batch": 15,
+    "repaired_scopes_outside_batch": 13,
+    "source_captured_scopes_with_known_runtime_counterexamples": 1,
+    "source_captured_scopes_without_counterexamples_in_bounded_batch": 7,
     "source_groundings_still_uncaptured": 58,
-    "sprint_source_evidence_scopes": 6
+    "sprint_source_evidence_scopes": 8
   },
   "inputs": [
     {
@@ -112,11 +115,12 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "declarant claim and transaction qualification for duty-free USMCA treatment used by HTS U.S. note 52(g)-(h)",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json",
       "grounding": "uncaptured",
       "input": "entry_is_entered_free_of_duty_under_usmca",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "bounded_stipulated_fact_replay_matches",
+      "sprint_runtime_cases": 230,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": false,
@@ -445,11 +449,12 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "carrier and entry records establishing the HTS 9903.05.85 transit condition before July 24, 2026 for entries before July 28, 2026",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json",
       "grounding": "uncaptured",
       "input": "entry_loaded_and_in_transit_before_july_24_2026",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "blocked_at_subminute_entry_cutoff",
+      "sprint_runtime_cases": 230,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": false,
@@ -533,6 +538,7 @@
       "sprint_source_evidence": "not_captured_this_batch"
     }
   ],
+  "live_source_supplement": "reference/us-tariff-schedule/boundary-evidence/live-sources/receipt.json",
   "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
   "schema": "axiom_oracles.us_tariff_schedule.boundary_inventory.v1"
 }

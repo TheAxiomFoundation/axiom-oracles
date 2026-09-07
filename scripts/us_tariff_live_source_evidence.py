@@ -25,6 +25,8 @@ from scripts import build_us_tariff_boundary_evidence as boundary  # noqa: E402
 DIRECTORY = ROOT / "reference/us-tariff-schedule/boundary-evidence/live-sources"
 RECEIPT = DIRECTORY / "receipt.json"
 GN11_URL = "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=General%20Note%2011"
+ACTION_URL = "https://www.govinfo.gov/content/pkg/FR-2026-07-28/pdf/2026-15181.pdf"
+ACTION_SHA256 = "3c1e16a61af26b2a53b5d42f8b38e8e6a4f93f93a92238aba1f96026cdd45557"
 GN11_SHA256 = "db7ec89a2ef6232c54045e3498b40c494db1b8162a8f8c8e971e4753beaffef3"
 KEY_API = "https://api.github.com/repos/TheAxiomFoundation/axiom-corpus/actions/variables/AXIOM_CORPUS_INGEST_PUBLIC_KEY"
 KEY_SHA256 = "9b3f3cdbad4e6523ccd114d1649f57a351d05ea117fa77cb0a6184e92ce50f17"
@@ -34,6 +36,7 @@ MANIFEST_SHA256 = "2811c6a36f05dbafbf3b3b1b23b42470377ce6d3e53e3f4e5a865c08dd2f2
 DOWNLOADS = {
     "chapter99": (boundary.SOURCE_URL, boundary.PDF_SHA256),
     "general-note11": (GN11_URL, GN11_SHA256),
+    "forced-labor-action": (ACTION_URL, ACTION_SHA256),
 }
 
 
@@ -154,7 +157,7 @@ def build(directory: Path, corpus: Path) -> dict:
         "claim": {"closed": False, "certified": False, "release_authorized": False},
         "limitations": [
             "HTTP retrieval metadata is an unsigned receipt, not a newly created cryptographic signature.",
-            "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 remains an unsigned direct-source capture.",
+            "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 and the FederalRegister action remain direct-source captures; no GPO PDF signature verification is claimed.",
             "A source snapshot and authentic signature do not establish real-entry facts, historical coverage or source completeness.",
         ],
     }
@@ -242,7 +245,7 @@ def main() -> int:
         print(f"live source evidence failed: {exc}", file=sys.stderr)
         return 1
     print(
-        "Two live USITC PDFs verified; original Chapter99 Ed25519 signature verified against the authenticated repository trust root; certified=false"
+        "Three live primary-source PDFs verified; original Chapter99 Ed25519 signature verified against the authenticated repository trust root; certified=false"
     )
     return 0
 
