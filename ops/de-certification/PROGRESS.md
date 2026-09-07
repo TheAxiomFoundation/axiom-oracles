@@ -67,6 +67,13 @@
   concrete encoder work the reads have produced. Frontier 288 of 463
   pending; 12 open dependencies. Next: Kapitel R (69) and S (64), then A
   (108, where most bearing instruments are expected).
+- Kindergeld reads, DA-KG 2025 Kapitel R (69) and S (64), 2026-09-07: all
+  133 excluded as appeals / court / penal procedure and penalty scales; no
+  bearing rows. KiZDAV (issued under § 68 Abs. 5 EStG) and RiStBV enrolled
+  as pending supplementals. Frontier 157 of 465 pending: Kapitel A (108
+  headings, entitlement conditions — where bearing instruments and the
+  encoder work are expected), the 28 discovered candidates (BKGG, EStG
+  § 31, corpus citations, unresolved references), and 17 supplementals.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);
