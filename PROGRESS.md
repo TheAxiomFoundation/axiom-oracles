@@ -292,3 +292,13 @@ lane. Source body and signature hashes did not change.
 - Separately committed continuation-replay-manifest.json supplies the archive
   hash and manifest trust anchor. Ten new tamper/native-outcome tests pass.
 - Next: exact blocker handoff, final preservation audit, and final output.
+
+## Repair handoff checkpoint
+
+- CONTINUATION-BLOCKERS.md records pinned RuleSpec file/line findings, primary
+  source pages, all30counterexample cases, and exact next authorization/input
+  requirements. Column2 has zero validated legal resolutions; CSPV remains
+  post-expiry only. All58entry groundings and release gates remain open.
+- The combined replay's trusted archive/manifest hashes and exact offline
+  command are recorded. Next run the consolidated targeted battery and final
+  preservation checks, then save the durable continuation report.
