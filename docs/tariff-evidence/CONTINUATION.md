@@ -128,12 +128,28 @@ The witness charges the source's single 25%. Seventeen other cases match.
 The complete overlap counterexample is preserved; the aggregate list scope
 stays blocked pending an authorized composition repair and review.
 
-Current source coverage is **18 of the original 21 repaired scopes**. Thirteen
-have no legal counterexample within their documented bounded contracts (one
-tests post-expiry behavior only); five have explicit counterexamples. Aluminum,
-steel and chapter-99 non-ad-valorem Column 2 resolution remain outside the
-captured batches. All 58 actual-entry groundings remain uncaptured; admitted
-or grounded scopes remain zero. See the
+## Non-flat Column 2 blocker
+
+[The Column 2 receipt](../../reference/us-tariff-schedule/boundary-evidence/column2-resolution.json)
+adds the source-bound external-resolution contract. A new live General Note 3
+PDF confirms all four Column 2 origins. The real engine makes 41 diagnostic
+calls: 29 outputs match the contract/disposition checks, and 12 calls exit with
+an explicit missing `resolved_non_ad_valorem_column2_rate` error. Missing input
+is never replaced with zero. The supplied numeric sentinels only test the
+receiver; **zero legal resolved rates are validated**.
+
+The sampled archival chapter 99 rows explicitly expired before 2012 or at the
+end of 2020. Their 2026 calls are interface diagnostics, not current-entry duty
+calculations. Admission needs an appropriate vintage, the underlying duty for
+“No change,” actual quantities/units/customs value, and a real resolver receipt.
+The complete native errors and requests are retained; this scope stops at the
+precise external-resolution/vintage blocker.
+
+Current source coverage is **19 of the original 21 repaired scopes**: 12 with
+no legal counterexample under their bounded contracts, five with counterexamples,
+one post-expiry-only scope and one diagnostic-contract-only scope. Aluminum and
+steel remain outside the captured batches. All 58 actual-entry groundings remain
+uncaptured; admitted/grounded scopes remain zero. See the
 [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
 
 ## Reproduction and current-base hold
@@ -145,15 +161,17 @@ python scripts/build_us_tariff_identity_evidence.py --check
 python scripts/build_us_tariff_china_action_evidence.py --check
 python scripts/build_us_tariff_temporal_evidence.py --check
 python scripts/build_us_tariff_china_list_evidence.py --check
+python scripts/build_us_tariff_column2_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
   tests/test_us_tariff_note52_boundary_evidence.py \
   tests/test_us_tariff_identity_evidence.py \
   tests/test_us_tariff_china_action_evidence.py \
   tests/test_us_tariff_temporal_evidence.py \
-  tests/test_us_tariff_china_list_evidence.py
+  tests/test_us_tariff_china_list_evidence.py \
+  tests/test_us_tariff_column2_evidence.py
 ```
 
-30 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
+33 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 

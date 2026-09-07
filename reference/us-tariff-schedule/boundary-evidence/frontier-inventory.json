@@ -1,16 +1,18 @@
 {
   "canonical_scope_sha256": "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8",
-  "claim": "18 of the 21 repaired scopes have bounded source evidence. Five have known source/runtime counterexamples. CSPV replay covers post-expiry behavior only; identity coverage assumes the documented canonical input contract. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
+  "claim": "19 of the 21 repaired scopes have bounded source evidence: 12 without legal counterexamples under their bounded contracts, five with known source/runtime counterexamples, one post-expiry-only scope and one diagnostic-contract-only scope blocked on external resolution/vintage admission. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
   "counts": {
+    "diagnostic_contract_only_scopes": 1,
     "fully_admitted_or_grounded_scopes": 0,
     "named_scopes": 58,
     "originally_missing_scopes_repaired_before_sprint": 21,
+    "postexpiry_only_scopes": 1,
     "reachable_inputs": 58,
-    "repaired_scopes_outside_batch": 3,
+    "repaired_scopes_outside_batch": 2,
     "source_captured_scopes_with_known_runtime_counterexamples": 5,
-    "source_captured_scopes_without_counterexamples_in_bounded_batch": 13,
+    "source_captured_scopes_without_counterexamples_in_bounded_batch": 14,
     "source_groundings_still_uncaptured": 58,
-    "sprint_source_evidence_scopes": 18
+    "sprint_source_evidence_scopes": 19
   },
   "inputs": [
     {
@@ -532,11 +534,12 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "entry-preparation resolution of the applicable specific, compound, or conditional non-ad-valorem column-2 duty to the Rate value consumed for chapter-99 schedule rows; no flat column-2 table value is inferred",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/column2-resolution.json",
       "grounding": "uncaptured",
       "input": "resolved_non_ad_valorem_column2_rate",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "blocked_on_external_non_ad_valorem_resolution_and_vintage_admission",
+      "sprint_runtime_cases": 41,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": false,

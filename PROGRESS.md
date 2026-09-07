@@ -8,7 +8,7 @@ origin/main ef012e83cd2e8b9b7afd4829841d9e29bc173d42. The original clean
 milestone a7d2bf13a, its branch, bundle and evidence artifacts remain preserved.
 RuleSpec stays clean at 4f591c4267063094cc6da9d590872ea982940b81.
 
-Bounded source coverage is 18/21; five captured scopes have real counterexamples.
+Bounded source coverage is 19/21; five captured scopes have real counterexamples.
 All 58 actual-entry groundings remain uncaptured. The canonical merged tariff
 certificate has conformant=false due to current-base comparator changes;
 closed/certified remain false. No historical proof repin or huge scan rerun.
@@ -239,3 +239,17 @@ lane. Source body and signature hashes did not change.
   batch candidates: aluminum, steel, non-ad-valorem Column2 resolution. Next
   preserve the latter's required external-resolution failure semantics and
   package portable replay. No RuleSpec edits or frozen proof changes.
+
+## Column 2 contract checkpoint
+
+- Added one source-bound diagnostic contract, bringing coverage to19/21.
+  New live GN3 PDF identifies the four Column2 origins; source pages retain
+  specific/conditional dispositions and their explicit historical expiry dates.
+- Real Axiom:41diagnostic calls,29outputs and12native missing-input errors.
+  The engine never substitutes zero for the missing resolved rate. Three new
+  tests pass (33continuation tests). Zero legal resolved rates are validated.
+- Stop this scope on missing valid-vintage entry classification, underlying
+  duties, quantities/units/customs value, and an authorized real resolver
+  receipt. Supplied numeric sentinels are interface tests only.
+- Aluminum and steel remain. Next use a bounded source/adapter/runtime batch
+  without changing the previously verified steel114 proof.
