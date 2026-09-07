@@ -197,3 +197,19 @@ lane. Source body and signature hashes did not change.
 - Next: inspect the remaining China action membership boundaries against the
   authenticated primary snapshot and actual Axiom runtime. Keep current-base
   admission hold and all closed/certified false labels; Fable remains pending.
+
+## China note 31 checkpoint — 18:43 ET
+
+- Added two source scopes with precise blockers, bringing bounded coverage to
+  14/21. Live GPO 2024-21217 and authenticated Chapter 99 bind the 25% aluminum
+  and 50% solar positive cases; all source bodies/metadata and hashes persist.
+- Real Axiom replay: 36 cases / 36 outputs. Direct witness and source-declared
+  generated paths match. Four generated cases fed actual adapter facts return
+  zero for China; the pinned adapter hardcodes both membership flags false.
+  Hong Kong and France controls remain zero. Four semantic receipt tests pass.
+- Three captured scopes now have known counterexamples; 11 have none under
+  their bounded contracts. Seven remain outside the batches. All 58 actual
+  entry groundings, current-base admission and final Fable review remain open.
+- Stop admission of the two note 31 scopes until the authorized source/adapter
+  repair covers complete membership, distinct heading rates and exclusions.
+  No RuleSpec change, proof repin, campaign rescan or review retry occurred.

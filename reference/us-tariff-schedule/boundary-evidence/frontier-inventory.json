@@ -1,16 +1,16 @@
 {
   "canonical_scope_sha256": "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8",
-  "claim": "12 of the 21 repaired scopes have bounded source evidence, including one known legal time-precision blocker. Identity coverage assumes the documented canonical input contract. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
+  "claim": "14 of the 21 repaired scopes have bounded source evidence. Three have known source/runtime counterexamples (one time-precision scope and two missing adapter membership scopes). Identity coverage assumes the documented canonical input contract. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
   "counts": {
     "fully_admitted_or_grounded_scopes": 0,
     "named_scopes": 58,
     "originally_missing_scopes_repaired_before_sprint": 21,
     "reachable_inputs": 58,
-    "repaired_scopes_outside_batch": 9,
-    "source_captured_scopes_with_known_runtime_counterexamples": 1,
+    "repaired_scopes_outside_batch": 7,
+    "source_captured_scopes_with_known_runtime_counterexamples": 3,
     "source_captured_scopes_without_counterexamples_in_bounded_batch": 11,
     "source_groundings_still_uncaptured": 58,
-    "sprint_source_evidence_scopes": 12
+    "sprint_source_evidence_scopes": 14
   },
   "inputs": [
     {
@@ -70,11 +70,12 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "entry-preparation membership determination against the complete HTS U.S. note 31 China 2024-action table, which the pinned program does not itself derive",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-action.json",
       "grounding": "uncaptured",
       "input": "entry_is_china_301_2024_action",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "blocked_on_missing_adapter_note31_membership",
+      "sprint_runtime_cases": 36,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": true,
@@ -97,11 +98,12 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "entry-preparation membership determination against the complete HTS U.S. note 31 solar-products China section-301 table, which the pinned program does not itself derive",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-action.json",
       "grounding": "uncaptured",
       "input": "entry_is_china_301_solar",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "blocked_on_missing_adapter_note31_membership",
+      "sprint_runtime_cases": 36,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": false,

@@ -69,12 +69,33 @@ The note 52 request now supplies the correct integer `hts_line` instead of an
 unused dotted Text value. Its 230 cases / 690 outputs and 20 known time-precision
 counterexamples are unchanged. All frozen original proofs remain untouched.
 
-Current source coverage is **12 of the original 21 repaired scopes**. Eleven
-have no legal counterexample within their documented bounded contracts; one
-has the time-precision blocker. Nine remain outside the captured batches.
-All 58 actual-entry groundings remain uncaptured; admitted/grounded scopes
-remain zero. See the
-[updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
+## China action adapter counterexamples
+
+[The note 31 receipt](../../reference/us-tariff-schedule/boundary-evidence/china-action.json)
+adds `entry_is_china_301_2024_action` and `entry_is_china_301_solar`. The live
+USITC snapshot and newly downloaded GPO notice 2024-21217 establish positive
+classifications at 7601.10.30 and 8541.42.00, with respective additional rates
+of 25% and 50% for China. The PDF pages and their rate columns were visually
+checked; the original notice's extraction warnings are preserved.
+
+The real pinned adapter (`tools/b16_entry_flags.py:385–386`) returns false for
+both inputs. In 36 real runtime cases, the direct witness and generated programs
+with explicitly declared source membership match. Four generated-program cases
+using actual adapter facts return zero for China instead of the source rates.
+Hong Kong and France controls remain zero. These are preserved counterexamples,
+not repairs or invented proof of complete note 31 coverage. The broad 2024-action
+scope also needs a heading-specific contract; other note 31 rate families must
+not be collapsed into this 25% Boolean component.
+
+Both scopes remain blocked pending complete source-grounded adapter membership,
+exclusion/precedence validation and the authorized encoding workflow. All code
+under the pinned RuleSpec repository remains untouched.
+
+Current source coverage is **14 of the original 21 repaired scopes**. Eleven
+have no legal counterexample within their documented bounded contracts; three
+have explicit blockers. Seven remain outside the captured batches. All 58
+actual-entry groundings remain uncaptured; admitted/grounded scopes remain zero.
+See the [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
 
 ## Reproduction and current-base hold
 
@@ -82,12 +103,14 @@ remain zero. See the
 python scripts/us_tariff_live_source_evidence.py --check
 python scripts/build_us_tariff_note52_boundary_evidence.py --check
 python scripts/build_us_tariff_identity_evidence.py --check
+python scripts/build_us_tariff_china_action_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
   tests/test_us_tariff_note52_boundary_evidence.py \
-  tests/test_us_tariff_identity_evidence.py
+  tests/test_us_tariff_identity_evidence.py \
+  tests/test_us_tariff_china_action_evidence.py
 ```
 
-20 targeted tests pass. Real replay --check reproduces the exact receipt,
+24 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 
