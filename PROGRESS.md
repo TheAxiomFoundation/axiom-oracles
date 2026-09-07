@@ -98,14 +98,26 @@ not represented as verified. RuleSpec input remains the clean combined head
 - Thirteen narrow tariff certificate/census tests pass; all original proof
   populations and closed/certified false labels remain preserved.
 
+## Final validation checkpoint
+
+- 351 tests passed across six targeted groups. Canonical tariff certificate and
+  census reproduce exactly; the other 226 census suite rows remain unchanged.
+- All 27 original dirty files, original Git status and binary patch remain
+  identical. Combined RuleSpec stays clean at its original pinned head. All
+  four preserved prior proof hashes match. Both no-reset controls remain set.
+- Bounded work is complete; final handoff is docs/tariff-evidence/HANDOFF.md.
+  No publication, merge, push or messages to people occurred.
+
 ## Next
 
-1. Complete narrow certificate/census checks and final preservation audit.
-2. Save branch bundle, artifact manifest and durable handoff.
-3. Final Fable review and existing release gates remain mandatory; no publish,
-   merge, reset, paid overflow or remote compute.
-4. Write /Users/maxghenis/capacity-sprint-20260907/tariff/result.md with commits,
-   artifacts, tests, risks and the exact next action.
+1. Obtain the required Fable review through accessible existing subscription
+   capacity. The sole attempted review failed before execution; no pass claimed.
+2. When GitHub DNS access returns, fetch/reconcile current main and prepare a
+   draft PR. Retain existing release gates and all uncertified labels.
+3. Use the 15-scope gap table for the next bounded source batch. Obtain the
+   authorized corpus public trust root before claiming signature verification.
+4. Preserve the incremental Git bundle, standalone replay archive, final output
+   and snapshot manifest under capacity-sprint-20260907/tariff.
 
 Deadline: 2026-09-07 21:00 America/New_York. No reset, overflow, paid API or remote
-compute; preserve no-reset.json and auto_reset.enabled=false afterward.
+compute; no-reset.json stays blocked without explicit user authorization.
