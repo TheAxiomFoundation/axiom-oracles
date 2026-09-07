@@ -1,0 +1,798 @@
+{
+  "class_census": {
+    "aircraft-utilization-proxy-brazil-fresh-signature-rebind": 3654,
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind": 71168,
+    "cafta-52i-yale-reference-defect": 17404,
+    "chapter98-brazil-fresh-signature-rebind": 6,
+    "chapter98-forced-labor-fresh-signature-rebind": 1508,
+    "column2-gn3b": 683334,
+    "legal-date-boundary-ieepa": 38392,
+    "non-metal-232-family": 754434,
+    "pharma-utilization-proxy-brazil-fresh-signature-rebind": 5082,
+    "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind": 988,
+    "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": 67430,
+    "reciprocal-vintage-ieepa": 244,
+    "s122-ch98": 18848,
+    "s122-entry-status-lines": 779746,
+    "s122-gn6-lines": 687295,
+    "s201-stale-proxy": 9384,
+    "section232-annex-auto-and-mhd-part-candidates-brazil": 222,
+    "section232-annex-auto-and-mhd-part-candidates-forced-labor": 4700,
+    "section232-annex-auto-part-candidate-brazil": 24,
+    "section232-annex-auto-part-candidate-forced-labor": 752,
+    "section232-annex-mhd-part-candidate-brazil": 54,
+    "section232-annex-mhd-part-candidate-forced-labor": 584,
+    "section232-annex-yale-reference-defect-brazil": 846,
+    "section232-annex-yale-reference-defect-forced-labor": 18252,
+    "section232-heading-auto-and-mhd-part-candidates-brazil": 666,
+    "section232-heading-auto-and-mhd-part-candidates-forced-labor": 11356,
+    "section232-heading-auto-part-candidate-brazil": 348,
+    "section232-heading-auto-part-candidate-forced-labor": 5108,
+    "section232-heading-cabinet-vanity-candidate-brazil": 18,
+    "section232-heading-cabinet-vanity-candidate-forced-labor": 244,
+    "section232-heading-mhd-part-candidate-brazil": 18,
+    "section232-heading-mhd-part-candidate-forced-labor": 272,
+    "section232-heading-vehicle-candidate-brazil": 438,
+    "section232-heading-vehicle-candidate-forced-labor": 5504,
+    "section232-russia-aluminum-membership-vintage": 24,
+    "section232-steel-scope-projection-brazil": 6,
+    "section232-steel-scope-projection-forced-labor": 108,
+    "vintage-revision-232": 513556,
+    "vintage-revision-301": 4716,
+    "vintage-revision-301-removed-lines": 26730,
+    "yale-html-statutory-base-parser-defect": 5709,
+    "yale-hts8-broadening-brazil-fresh-signature-rebind": 96,
+    "yale-parser-zero-statutory-base-fresh-signature-rebind": 68,
+    "yale-zero-pharma-brazil-fresh-signature-rebind": 84,
+    "yale-zero-pharma-forced-labor-fresh-signature-rebind": 1058
+  },
+  "classification_population": {
+    "accumulators": [
+      "4c38649708307c9935ac42227007edc9914a5c2e04e8e785b582ce041fe06046",
+      "bdc732bbc7e58ca01f8db9c3ab6b37c0261fedaadfe94349a08fb7a995337095"
+    ],
+    "algorithm": "two-domain-sha256-sums-mod-secp256k1-prime",
+    "schema": "axiom_oracles.us_tariff_schedule.classification_population.v1",
+    "units": 6807741,
+    "units_by_kind": {
+      "component_signature": 3740478,
+      "total_signature_composition": 3067263
+    }
+  },
+  "classified": 6807741,
+  "conservation": "PASS",
+  "derived_total_compositions": {
+    "aircraft-utilization-proxy-brazil-fresh-signature-rebind": 168,
+    "aircraft-utilization-proxy-brazil-fresh-signature-rebind + aircraft-utilization-proxy-forced-labor-fresh-signature-rebind": 2368,
+    "aircraft-utilization-proxy-brazil-fresh-signature-rebind + s122-gn6-lines": 1046,
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind": 66284,
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind + column2-gn3b": 2368,
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind + vintage-revision-301": 100,
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind + vintage-revision-301-removed-lines": 48,
+    "cafta-52i-yale-reference-defect": 17404,
+    "chapter98-brazil-fresh-signature-rebind + chapter98-forced-labor-fresh-signature-rebind": 4,
+    "chapter98-brazil-fresh-signature-rebind + s122-ch98": 2,
+    "chapter98-forced-labor-fresh-signature-rebind": 1496,
+    "chapter98-forced-labor-fresh-signature-rebind + column2-gn3b": 8,
+    "column2-gn3b": 596229,
+    "column2-gn3b + legal-date-boundary-ieepa": 1436,
+    "column2-gn3b + legal-date-boundary-ieepa + non-metal-232-family": 66,
+    "column2-gn3b + non-metal-232-family": 20195,
+    "column2-gn3b + non-metal-232-family + s122-gn6-lines": 2482,
+    "column2-gn3b + non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-forced-labor": 224,
+    "column2-gn3b + non-metal-232-family + section232-annex-auto-part-candidate-forced-labor": 24,
+    "column2-gn3b + non-metal-232-family + section232-annex-mhd-part-candidate-forced-labor": 28,
+    "column2-gn3b + non-metal-232-family + section232-annex-yale-reference-defect-forced-labor": 724,
+    "column2-gn3b + non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-forced-labor": 520,
+    "column2-gn3b + non-metal-232-family + section232-heading-auto-part-candidate-forced-labor": 172,
+    "column2-gn3b + non-metal-232-family + section232-heading-cabinet-vanity-candidate-forced-labor": 12,
+    "column2-gn3b + non-metal-232-family + section232-heading-mhd-part-candidate-forced-labor": 16,
+    "column2-gn3b + non-metal-232-family + section232-heading-vehicle-candidate-forced-labor": 264,
+    "column2-gn3b + pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": 1634,
+    "column2-gn3b + reciprocal-vintage-ieepa": 4,
+    "column2-gn3b + s122-ch98": 38,
+    "column2-gn3b + s122-entry-status-lines": 19527,
+    "column2-gn3b + s122-entry-status-lines + section232-russia-aluminum-membership-vintage": 12,
+    "column2-gn3b + s122-entry-status-lines + vintage-revision-232": 7229,
+    "column2-gn3b + s122-gn6-lines": 22934,
+    "column2-gn3b + s122-gn6-lines + vintage-revision-232": 2907,
+    "column2-gn3b + s201-stale-proxy": 282,
+    "column2-gn3b + section232-russia-aluminum-membership-vintage": 12,
+    "column2-gn3b + section232-steel-scope-projection-forced-labor + vintage-revision-232": 4,
+    "column2-gn3b + vintage-revision-232": 2820,
+    "column2-gn3b + yale-zero-pharma-forced-labor-fresh-signature-rebind": 18,
+    "legal-date-boundary-ieepa": 35118,
+    "legal-date-boundary-ieepa + non-metal-232-family": 1236,
+    "legal-date-boundary-ieepa + non-metal-232-family + vintage-revision-301": 2,
+    "legal-date-boundary-ieepa + non-metal-232-family + vintage-revision-301-removed-lines": 4,
+    "legal-date-boundary-ieepa + s201-stale-proxy": 14,
+    "legal-date-boundary-ieepa + vintage-revision-232": 14,
+    "legal-date-boundary-ieepa + vintage-revision-301": 22,
+    "legal-date-boundary-ieepa + vintage-revision-301-removed-lines": 228,
+    "non-metal-232-family": 612139,
+    "non-metal-232-family + s122-gn6-lines": 62809,
+    "non-metal-232-family + s122-gn6-lines + section232-annex-yale-reference-defect-brazil": 14,
+    "non-metal-232-family + s122-gn6-lines + section232-heading-auto-and-mhd-part-candidates-brazil": 4,
+    "non-metal-232-family + s122-gn6-lines + vintage-revision-301": 101,
+    "non-metal-232-family + s122-gn6-lines + vintage-revision-301-removed-lines": 76,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-brazil": 68,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-brazil + section232-annex-auto-and-mhd-part-candidates-forced-labor": 136,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-brazil + section232-annex-auto-and-mhd-part-candidates-forced-labor + yale-html-statutory-base-parser-defect": 12,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-brazil + yale-html-statutory-base-parser-defect": 6,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-forced-labor": 4068,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-forced-labor + vintage-revision-301": 16,
+    "non-metal-232-family + section232-annex-auto-and-mhd-part-candidates-forced-labor + yale-html-statutory-base-parser-defect": 220,
+    "non-metal-232-family + section232-annex-auto-part-candidate-brazil": 8,
+    "non-metal-232-family + section232-annex-auto-part-candidate-brazil + section232-annex-auto-part-candidate-forced-labor": 16,
+    "non-metal-232-family + section232-annex-auto-part-candidate-forced-labor": 684,
+    "non-metal-232-family + section232-annex-mhd-part-candidate-brazil + section232-annex-mhd-part-candidate-forced-labor": 36,
+    "non-metal-232-family + section232-annex-mhd-part-candidate-forced-labor": 520,
+    "non-metal-232-family + section232-annex-yale-reference-defect-brazil": 52,
+    "non-metal-232-family + section232-annex-yale-reference-defect-brazil + section232-annex-yale-reference-defect-forced-labor": 564,
+    "non-metal-232-family + section232-annex-yale-reference-defect-forced-labor": 16836,
+    "non-metal-232-family + section232-annex-yale-reference-defect-forced-labor + vintage-revision-301": 40,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-brazil": 200,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-brazil + section232-heading-auto-and-mhd-part-candidates-forced-labor": 408,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-brazil + section232-heading-auto-and-mhd-part-candidates-forced-labor + yale-html-statutory-base-parser-defect": 36,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-brazil + yale-html-statutory-base-parser-defect": 18,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-forced-labor": 9540,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-forced-labor + vintage-revision-301": 20,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-forced-labor + vintage-revision-301-removed-lines": 4,
+    "non-metal-232-family + section232-heading-auto-and-mhd-part-candidates-forced-labor + yale-html-statutory-base-parser-defect": 668,
+    "non-metal-232-family + section232-heading-auto-part-candidate-brazil": 116,
+    "non-metal-232-family + section232-heading-auto-part-candidate-brazil + section232-heading-auto-part-candidate-forced-labor": 232,
+    "non-metal-232-family + section232-heading-auto-part-candidate-forced-labor": 4552,
+    "non-metal-232-family + section232-heading-auto-part-candidate-forced-labor + vintage-revision-301": 4,
+    "non-metal-232-family + section232-heading-auto-part-candidate-forced-labor + vintage-revision-301-removed-lines": 12,
+    "non-metal-232-family + section232-heading-cabinet-vanity-candidate-brazil + section232-heading-cabinet-vanity-candidate-forced-labor": 12,
+    "non-metal-232-family + section232-heading-cabinet-vanity-candidate-forced-labor": 208,
+    "non-metal-232-family + section232-heading-mhd-part-candidate-brazil + section232-heading-mhd-part-candidate-forced-labor": 12,
+    "non-metal-232-family + section232-heading-mhd-part-candidate-forced-labor": 244,
+    "non-metal-232-family + section232-heading-vehicle-candidate-brazil": 146,
+    "non-metal-232-family + section232-heading-vehicle-candidate-brazil + section232-heading-vehicle-candidate-forced-labor": 292,
+    "non-metal-232-family + section232-heading-vehicle-candidate-forced-labor": 4848,
+    "non-metal-232-family + section232-heading-vehicle-candidate-forced-labor + vintage-revision-301-removed-lines": 100,
+    "non-metal-232-family + vintage-revision-301": 486,
+    "non-metal-232-family + vintage-revision-301-removed-lines": 891,
+    "non-metal-232-family + yale-html-statutory-base-parser-defect": 3044,
+    "pharma-utilization-proxy-brazil-fresh-signature-rebind": 1742,
+    "pharma-utilization-proxy-brazil-fresh-signature-rebind + pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": 3340,
+    "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind": 988,
+    "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": 62380,
+    "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind + vintage-revision-301": 16,
+    "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind + vintage-revision-301-removed-lines": 60,
+    "reciprocal-vintage-ieepa": 230,
+    "reciprocal-vintage-ieepa + vintage-revision-232": 8,
+    "reciprocal-vintage-ieepa + vintage-revision-301-removed-lines": 2,
+    "s122-ch98": 11436,
+    "s122-entry-status-lines": 452129,
+    "s122-entry-status-lines + section232-steel-scope-projection-brazil + vintage-revision-232": 2,
+    "s122-entry-status-lines + vintage-revision-232": 270667,
+    "s122-entry-status-lines + vintage-revision-232 + vintage-revision-301": 75,
+    "s122-entry-status-lines + vintage-revision-301": 39,
+    "s122-entry-status-lines + vintage-revision-301-removed-lines": 12844,
+    "s122-entry-status-lines + yale-hts8-broadening-brazil-fresh-signature-rebind": 8,
+    "s122-gn6-lines": 476967,
+    "s122-gn6-lines + vintage-revision-232": 106201,
+    "s122-gn6-lines + vintage-revision-232 + vintage-revision-301": 35,
+    "s122-gn6-lines + vintage-revision-301": 452,
+    "s122-gn6-lines + vintage-revision-301-removed-lines": 2033,
+    "s201-stale-proxy": 8791,
+    "s201-stale-proxy + vintage-revision-301-removed-lines": 81,
+    "section232-steel-scope-projection-brazil + section232-steel-scope-projection-forced-labor + vintage-revision-232": 4,
+    "section232-steel-scope-projection-forced-labor + vintage-revision-232": 100,
+    "vintage-revision-232": 108032,
+    "vintage-revision-232 + vintage-revision-301": 24,
+    "vintage-revision-301": 3257,
+    "vintage-revision-301-removed-lines": 10320,
+    "yale-html-statutory-base-parser-defect": 1637,
+    "yale-hts8-broadening-brazil-fresh-signature-rebind": 58,
+    "yale-zero-pharma-brazil-fresh-signature-rebind + yale-zero-pharma-forced-labor-fresh-signature-rebind": 84,
+    "yale-zero-pharma-forced-labor-fresh-signature-rebind": 956
+  },
+  "derived_total_units": 3067263,
+  "engine_errors": 0,
+  "groups": {
+    "aircraft-utilization-proxy-brazil-fresh-signature-rebind": {
+      "per_slot": {
+        "brazil_section_301": 3654
+      },
+      "sample_signatures": [
+        "e1453257af1fee109bc8545051cc47856772315c3f100c818f684839aedd54a2",
+        "ef4d765e5333369527cf510ff1950d87ac3e6c0b7709c6d3cd7e414a76e5444f",
+        "8ff37247ecafa1532e311be2220e81f2a175b7c331115b286bae26648dea163d",
+        "dd520521df5d0fe032f77d80d112a915708f6a36c6b689bb771126f5a382acc5",
+        "e5c33bed4f85c2500a868e01fb90ac9de756d9ddc5c4c2a2b0a6153a23e975b7"
+      ],
+      "units": 3654
+    },
+    "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 71168
+      },
+      "sample_signatures": [
+        "4875f238b6b85d8e55ea9e610f9c6da2c96b5f149994167fe0482d532eaab485",
+        "d47f354150c6e35b73ee81547dd12f216c59513a8c300b74efba58beff411480",
+        "20324dc2ed0a17845abe65d35cf6a83d9f2fd6e0f09f2ec5a2b0d736720cbfc5",
+        "68bbe12f270a83824cd22ee1f716119154e7e603470256c41392e23628669464",
+        "cb40790220a98f275b4aeb2f72e42a30b01fbd9c137d91a4d7100719acd5fdc6"
+      ],
+      "units": 71168
+    },
+    "cafta-52i-yale-reference-defect": {
+      "per_slot": {
+        "forced_labor_section_301": 17404
+      },
+      "sample_signatures": [
+        "8658d2ff79eaebb46e97e61b208f33b946cdd0dfac29f174dd72447d48bafb09",
+        "28f680a76fa5560295cf76b4f33f24400452db66151875147d30ebfe436d3d41",
+        "108d972c2540befec736b9e3f97bb89eda0ab44713b04f4182544c687e73fb97",
+        "44ea46f4e585124e9c447d43f1b5bac70acd16f0256b2d9cc65e684298a929eb",
+        "07493d74a362f205e8c6e6ce993defd0def4a7f98db90b47166a4311cdc570b5"
+      ],
+      "units": 17404
+    },
+    "chapter98-brazil-fresh-signature-rebind": {
+      "per_slot": {
+        "brazil_section_301": 6
+      },
+      "sample_signatures": [
+        "eb3ce3b2e62f2c26806598466896bd368131e735c6373f427ab24f11b3742daf",
+        "40f24284a739e49117bfb0d54fe1a27c0e5abcdb74288f6e4c4f3a7af412d650",
+        "02ebd07be6a7e0fb774d593653f709b8cce1430c40ef974bad1757c4250d58d0"
+      ],
+      "units": 6
+    },
+    "chapter98-forced-labor-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 1508
+      },
+      "sample_signatures": [
+        "faaedccfc5fd9ec5f5db3d63793c46188eed312c2b96b42cbf70bc0bdd0f59bf",
+        "16e4d88bd6db98d77821a4d21a92e63869edbc000bff60d03ea5e093fcd69f19",
+        "18d0efdda1266e96a2137c6b38ac540dfa0097a2548ffe0f80c7188aec4e1aeb",
+        "1a9f41ee183e86c1027302bffbff5ed0c85e7fc7b1968d0ab670caa203dfe274",
+        "870c968b768d22034ccdeac7aedfc0df5a08e0c97a87bbc9937acf693fd3136b"
+      ],
+      "units": 1508
+    },
+    "column2-gn3b": {
+      "per_slot": {
+        "base": 683334
+      },
+      "sample_signatures": [
+        "85f4a56eafcebc08adc2c581cb8637c58c7648d57a35fcbe118b4f084e665208",
+        "4fbdd07452777a4ca0d3b16fb68b8762f5bc59b251bdcae8a8ed0ef4db249a97",
+        "d68a474dc8548b4c4f377cb4966f2d3ae6fe00e8850a28983e34a5278402983d",
+        "f746312daf75b40fb4b105029c979a2862eb99c7d709ea24ed6a6931267d3a8b",
+        "96f4e48268f5acf4cc8a5883e391b967221ed43ada0fcb602d4112e2a90af713"
+      ],
+      "units": 683334
+    },
+    "legal-date-boundary-ieepa": {
+      "per_slot": {
+        "ieepa": 38392
+      },
+      "sample_signatures": [
+        "9e93f1f29b35821e72a3b4153af318695429efea40f00532b18d7d5128b9ee86",
+        "360a4f06df275a0166b369cb3b8cc6d9a7c54927de398fb69232c23a9f6acada",
+        "680942de877f3f8b61b5d19d8c89e39664f87a3322994e218bc2d3baf42e9ee1",
+        "1b0fbd79b13b74dcf36d6609a60f0574abff6e5cfdf8bd7ce8def145d03dcd3f",
+        "7557971551fb819a7427aee8b8b705d15e093f20bb3e235e9044c15292fd350c"
+      ],
+      "units": 38392
+    },
+    "non-metal-232-family": {
+      "per_slot": {
+        "section_232": 754434
+      },
+      "sample_signatures": [
+        "ba6513afabe515cd0770a18b6c8bb53b5a98cac98be62c7c18d8cb72ce5b10f1",
+        "551ded897825112f18b02ba339b6c8ad0e3b2f469083bbf67fdd10612141a7ee",
+        "19f61d700f2eb2f64b08b2de8abf22eb8eab0a92d62238dfc845c0913b243797",
+        "59535b7cf484188c525c1f7585430c9d0e4f088ca1243a26e68f03149c67f64c",
+        "6afd77f92d8c61aa711f8943572f75cf943ade1ffb0c21fe9845848ca09e8aaa"
+      ],
+      "units": 754434
+    },
+    "pharma-utilization-proxy-brazil-fresh-signature-rebind": {
+      "per_slot": {
+        "brazil_section_301": 5082
+      },
+      "sample_signatures": [
+        "b6fa74528efbff79ca3d8d7d551ca3e5e0ef3492821fed7ec9c20d1b0e70c9e3",
+        "de22501fd07a99f4316dc57c81309761d3ffad722b734295cabf8d561f205768",
+        "a9d57e47f9d178f98ca5c95ed9324e289b8ac9855e9c3294900eb8bb2b7dd08f",
+        "4f36fb8b2427abd0505eb5244836428e238ba1fb66e7684f656c778e714a9953",
+        "81c9a2f52bd72989dc667fdfbe98a2c1109eb633e170597f731da2f122127bfd"
+      ],
+      "units": 5082
+    },
+    "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 988
+      },
+      "sample_signatures": [
+        "17303f329117ed459a26ebfff94b795fc250c805bb0b6a2690ca078592f69e72",
+        "96191e4423d5809e0dc2c557c6087c82653c048e0a164ed7912712414bb6b68e",
+        "cc3a2f2f25da31f187a02f201808cbbdb9e2de0e1a06be5e68aeb9a43f84e750",
+        "fcb4c12f5e0a72d67147c234690b2712511e0c0e534d8d62ea2f6e4d0bdd3aaf",
+        "395b801b0bbdaa88b599842b00fa62c3c7edfa29867cbf86e966168d9904d2d9"
+      ],
+      "units": 988
+    },
+    "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 67430
+      },
+      "sample_signatures": [
+        "353ac909dedc6ed920d1d0f4e9445e66a3707af567c9e023c215905355df5a1c",
+        "9054a238a92dfe5cb354a9a74f4f928782ff4204a669121c7a1415b895c269dd",
+        "ee5f7da33de72fedbdcff31790e58eb281c4720bedeb2089b5acb7d1b674059f",
+        "95c747ed3f1bde33bde9975c1b8b410b594c9dae8db20227e29e45d3b635066e",
+        "dd36e23dd56c433e16953276c12672b5981fe4f87cc1344ee5b4319d2e51a5c0"
+      ],
+      "units": 67430
+    },
+    "reciprocal-vintage-ieepa": {
+      "per_slot": {
+        "ieepa": 244
+      },
+      "sample_signatures": [
+        "11d6c55a75200f30e587db91aa6d26109ea84ee5fce280ebbc17bc1edf6eb86f",
+        "e3c9a717aaab923fce466b1b2f0c82c4703ab863e2840cf030a1551cc90dbab6",
+        "6db7110ac81a5781adc5e7e1bf4cc782d53d1bbf01466e0c50b226dd956b4b0f",
+        "ef7573b9897260bcd524a4d0a40d9c86afcb53ae0aa3ecb79a8988e3be02225c",
+        "fa2cbae13b5cc33b45e60c078819c05ab9525e6f36a4d661f4b97639afd5a24c"
+      ],
+      "units": 244
+    },
+    "s122-ch98": {
+      "per_slot": {
+        "section_122": 18848
+      },
+      "sample_signatures": [
+        "a8ac548dfe20f8faf2fc9a9626be922814416dc10def87370ed60c275d1acdb2",
+        "dd083205138151e4af07d086e5816bd698ea8aa223b4e5260942fa6d43c6767c",
+        "c68f670ca74f6cb9a03347acb160c26d0f3996fb8bdc89075e975c0ded3eec54",
+        "6ec48cd7bd0698df4e905a0000fc55f8ac62509bf2d3d78ccc5e9313acf77ff9",
+        "b5d09437296f71f84c4e54de57968d578fce3aeb0b1640d6b27c8806d884571b"
+      ],
+      "units": 18848
+    },
+    "s122-entry-status-lines": {
+      "per_slot": {
+        "section_122": 779746
+      },
+      "sample_signatures": [
+        "7d9aafd80be2481c06af50114a7209c3676ca9766b66e8f7085a0d76b5291d69",
+        "b1e61580c21750f6a453fed56f1c44a2912cf6482161280cfa254ae68efcd1eb",
+        "9c2d4dab29c9d021fa057dde3ec836e67fd2bd27d377e045be165ad9dbd66a4e",
+        "d79135acb4e6a9199a4e4e317e6829757045bfe83c943e05c057a03cb3177167",
+        "d5b93ee870970084b8ec78367ac203bea3ee6127a092244a3d2786240913b726"
+      ],
+      "units": 779746
+    },
+    "s122-gn6-lines": {
+      "per_slot": {
+        "section_122": 687295
+      },
+      "sample_signatures": [
+        "f3c1c473e2ecb016c4c540e71436e549292a52336c7a824e7e7d0ce381b6a0e4",
+        "61c0f2216f31f8fadd375853dd2c5ac1b03aad6f02cc5e3d80dfecdf7fed3c96",
+        "a9c29af145c40305dd5697f5f82bfe6ebd533df06ac11fefd7483d7af6e283c1",
+        "1be0040dfb70fb6d6b6fa475e98da711630714336fd16d1bd5576f29863cdfdc",
+        "fd198e1c32adb737455721ee8a759bf1eb774accd52447e95fae7f93dc00e829"
+      ],
+      "units": 687295
+    },
+    "s201-stale-proxy": {
+      "per_slot": {
+        "section_201": 9384
+      },
+      "sample_signatures": [
+        "fb54ebc970f47f9e689078b1dbe75ed02b0dade43c85a7423cfc908f8dc122af",
+        "58e8cd3727f908f6563bdf30dbd9c5ee547b15542830d10808e6ed06a45a58d2",
+        "b4a12c4b14cab80509fbb7ced9e72b9ae19de86279244ded37831f587848d770",
+        "ce56d571e13ca24818cb79a4f8548b36f4441674171ada9b9d2ae608fcd08f2d",
+        "6fedd39a5e15b3bda80b81bbcc0c8f834144dc63ea28687f1cea9483ff9957d1"
+      ],
+      "units": 9384
+    },
+    "section232-annex-auto-and-mhd-part-candidates-brazil": {
+      "per_slot": {
+        "brazil_section_301": 222
+      },
+      "sample_signatures": [
+        "47bb93ce4b5a06ee176a65e31ae4b8f77dae6b56388d0c56aad1afe675164e4d",
+        "56c477239f651cb14036c82153505f4b55f43d2d9c899cd14b268718754e67d9",
+        "e9215f6a086b586cce26530815134c037a31b498d43233d16916daa7c0b5c792",
+        "a613450c2ed857e66ab0fcc1e349df1c77a4d7cfa6c9f0230c09769436f317a5",
+        "309656d2618e52a3b9f8015ec76b8ff157d454c105a6c496e7b2630d93daf690"
+      ],
+      "units": 222
+    },
+    "section232-annex-auto-and-mhd-part-candidates-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 4700
+      },
+      "sample_signatures": [
+        "c12111bcc7fe1d46e7d378bc0b5a77861a50ca9ffefa1a3cf27a72634685b879",
+        "5e8f72528147dc239fbc712c90ee0493c49a630d4c47006da8e0a2bb00ad295b",
+        "f61b1ff7dcfc0d0f9afaccd24dd1500af0090db88ac8c88583ed84dc61ae86dc",
+        "a392ad972dcbdc7f8535d76540f818aecc6d2292a10e6ce8d62c14ec06f230c0",
+        "81d500937f4f6055c58ef826ad332ffeb6f40c11112061b7b99f836c52472eda"
+      ],
+      "units": 4700
+    },
+    "section232-annex-auto-part-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 24
+      },
+      "sample_signatures": [
+        "f5c709afaf198127b695273df1ebadc040bdf56def5c15e8e8299f48af425389",
+        "4c9415159d4c766bd6e91d6a8f6fd50eba554464593ef3e85351ea20febc25c8",
+        "1560f8d627a0c3494e490502a33482f32d356c536a6a3060dcc657fd0a7cefd6",
+        "6fe530a311c1999f3523355eb4b0ab7894afa7f829fe170b7f595c0ce6d33820",
+        "538275f3798512e560e451cf4ca550582c61c7ac06368dae09f88300d412429e"
+      ],
+      "units": 24
+    },
+    "section232-annex-auto-part-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 752
+      },
+      "sample_signatures": [
+        "482bd25b8cf2514891081ed3c16b692b7e9bcc56cf54454d5ae60eb199025f1d",
+        "5bed61924243b6dae7c7c7f971b825ead561df2ce12fcd9e190ca30f067a2d69",
+        "89d85d5169710f5ae2db693c42c51e096f6ecbaddfa5a57246f043c17d1db040",
+        "59a5cc4029153b4f37dd26ec35ccb5d5ffe815dd8edc0a152053d5308ba815f1",
+        "05bdf3424ad69947a5c48a04c5d5f086ac5e08af4a5c7fceb82c0d0b880eebe1"
+      ],
+      "units": 752
+    },
+    "section232-annex-mhd-part-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 54
+      },
+      "sample_signatures": [
+        "08216bdac0db60214eb3f678178780d8b29eb1191e5b9539633670534a757236",
+        "556cc4a3fe8ace2dd83b68a2021f4442659809b2c3cf8426ea71c83034c07887",
+        "ce0768c4160f808c41b3ac6387c4cfa4b20c7c1ebcd52617b4710d88d7a9a435",
+        "d513eff0bc57eedac8d877d30172d1aee09afd3389a52faf01f967d9224c26be",
+        "04cf555925f758210a161ec0878f0c6469764d2a15fa85374a62fabd7ab13150"
+      ],
+      "units": 54
+    },
+    "section232-annex-mhd-part-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 584
+      },
+      "sample_signatures": [
+        "fff5613f298bc9ab8d533be44d089f9f067894b94eff3bf8ec2275b22c9de2d6",
+        "ce7984ff3e11015bc33cfc7f51ba46415ff9714f23f4fc66641b46f5c66a74aa",
+        "2b0b1ec92de96fe9815f85ed0dcdf005d7970bd72a4fd880276cf3f8bc4fb79d",
+        "20b7a0df24168b4d301d0405de10b975da30766ab47bccde5d747d1dea28c2f5",
+        "e0dadb3716b55ca886f401f956240f31ba7509bec7331f93604cf7ff418232f7"
+      ],
+      "units": 584
+    },
+    "section232-annex-yale-reference-defect-brazil": {
+      "per_slot": {
+        "brazil_section_301": 846
+      },
+      "sample_signatures": [
+        "ae8f4d3fde881e9cc363a8754fac609a4456e4b16c6c105f2debaaba2e8afcef",
+        "4d690e42850b55c6ce36bb1052424722a5996799bd235617d0db6e4d2cbaa74b",
+        "6159397ceeb0638e4d42b813ab82ab61fd2436770d3ee05b0a08e0cc97e8b3f7",
+        "f87a8013e8aa42de40546b51ed0b7a2e209a9ed7586b71daf4c5dbc36bce834f",
+        "36ef817932275b14396d060eeae5d91e190db955d28df3e6fc15f85f3d2df7f5"
+      ],
+      "units": 846
+    },
+    "section232-annex-yale-reference-defect-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 18252
+      },
+      "sample_signatures": [
+        "9a048a25090d729a0ef0eb654d259643571d4e765febfcd0b0c07cedb3415290",
+        "fe3e9f525675abe44ca435256f2e322ad5bbea9f4f3b4ad656e6335aeb80072f",
+        "33535ac62744215f45646298ae9328506d1c91d815f364a5d5738c9a58631c2f",
+        "4ede8123c2b109bebfae0494feb05aa99ec182ad46547d7ae72e2203b1020e0a",
+        "062a73ea3f8e8d377385784370cd440868d368b8c490678ff9e4a166fd951488"
+      ],
+      "units": 18252
+    },
+    "section232-heading-auto-and-mhd-part-candidates-brazil": {
+      "per_slot": {
+        "brazil_section_301": 666
+      },
+      "sample_signatures": [
+        "83b31e123944b0552bc0650c42e95e7763174724c73baa051a7f2d5e6b3c3ed6",
+        "64019c746684a77c8bd64311b0b7143fd7c168be94e92fbb2d0d57e3bb92957e",
+        "99d39fc5963c3325aa2d82c8d427cec923c561ac096e8b9dea48fba2f59659d9",
+        "98f2ee6714f5b8ab7b1ffc18445896c7ea660dd4d9080a3e0bbad3581aaaf982",
+        "a6fe306b7a6744c8828ef866beda1ecb254173e2462f367b46a1087e102489e9"
+      ],
+      "units": 666
+    },
+    "section232-heading-auto-and-mhd-part-candidates-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 11356
+      },
+      "sample_signatures": [
+        "ee18f8dc3ad6a92625ffc80d77781faeede760ad6edbd73d26a81d582ecce109",
+        "75e5650949c89e386f650edc28f6fd7f5189bad6a3fbd291290a35a63d1665d1",
+        "7691dd9fc72aa78e2af947a1b5262686582a68ee2a2c72401acd3f051802fe1c",
+        "026d530179c376e82e43e433abf70d64167274e6487fb7474d4d349b7b4a0862",
+        "6cdd8b4613992c37d9c8fa985e74e5bfd7548dd89c65bd22aa254c758e7f01c5"
+      ],
+      "units": 11356
+    },
+    "section232-heading-auto-part-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 348
+      },
+      "sample_signatures": [
+        "f385aa6209f43b20de96994c27beb7a914227586671eaea6f407ec7e85b87b91",
+        "88ebf33f74fed2aff5e2037489180b2cc07f6ee788dd7b7d52b4e67e3622ad59",
+        "22f4a83a599e4159074d893b8f5587861fb179972485fd57163bd536f4b11dfe",
+        "a64cc8eba22844a52f16f876a2b31dc687c5d5658f87585052c166a626c6846a",
+        "e93ce3c72dd15d71c35ecad309eb361697bddb971c1344c565e72e79b769d6d8"
+      ],
+      "units": 348
+    },
+    "section232-heading-auto-part-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 5108
+      },
+      "sample_signatures": [
+        "4c6e78513e68f006d44e90d8afb60204a832f44d97edbaf6a4428044289b7fad",
+        "87fc7ccafa0bb38f30249a17a21e19739809b23fd401df22216baf67f3d08483",
+        "dc7abeac445eca295e4136bca5699cef7cadfe0256046d275710def964aebc64",
+        "00e0d70e18779aa7448618449eafd5590125589556f8db9401348ec3578e8e23",
+        "e258a7218ab3b7fec83951e6f890f264142dffbae5fad33538451d0a8cf769d2"
+      ],
+      "units": 5108
+    },
+    "section232-heading-cabinet-vanity-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 18
+      },
+      "sample_signatures": [
+        "b78f8934ecebc698d22b80036bc654020791a9fac58d2c729fe493eaf802562c",
+        "d7f478c62669941ab96b4c58726d7cc6c5c24820e898a059b06b5d8f270d26a9",
+        "46be2e3fc84dcc7ff8a124f42486e80282a043a22e237e030721616cd18e797b",
+        "bc71bd0d82b1fc6cdc6e8133b922ae8c21feb3318731212b973b905c8e24c970",
+        "044ce04ca9e3f64caa60c9a443aedd102823ed3507d6229981e460928d439d55"
+      ],
+      "units": 18
+    },
+    "section232-heading-cabinet-vanity-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 244
+      },
+      "sample_signatures": [
+        "1ca1c29b6c52bdaa0e8e000c58ac06f1e31f5eb96ed0a0462e88c18110d24b5f",
+        "232bb390481348fe0cce1e4cada4cfadab65d63deccdd6189b0ceb769faf5aa9",
+        "7ca3dd045622dbdc4311be5cb328ad37c1f4d57b95c81880b816a760671709f0",
+        "6b69019f83aea0223c14cc51f3d68009f2f3c38118efbb35b537aa06f66f5293",
+        "74f1052d49b8675636178787efc686dc16700840dfd73790d9918c3555257ed7"
+      ],
+      "units": 244
+    },
+    "section232-heading-mhd-part-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 18
+      },
+      "sample_signatures": [
+        "3645deb7452fe1fee469193ca4db0a5e299dafc541ee4728fb9bf1ef10fed60f",
+        "214bd59083e3b3b5dbc7641945cfb6e48a94a699dcf9ddbad70001e50890a017",
+        "c7aa4e8d00d000c5633b22ebcc64e51de550dd289845c32898751cc99fb7eb3d",
+        "b4510c615ef43c21f84c14041da47da7086ed156a137bcb185baf800a3e20ab2",
+        "41fbdc478b57e128ca9fe0f6b5a72521bf0aade8f037ac58a5418b77621b397f"
+      ],
+      "units": 18
+    },
+    "section232-heading-mhd-part-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 272
+      },
+      "sample_signatures": [
+        "707762a77f354ec0eefb86ab9bb65453cab534811a0393c1bad84209e38eac67",
+        "f28f841f5a592cdfa0a43a4c6d0545f4d75ed9fe2a5a717f492fd24beec981a9",
+        "5fadc74b557ff1dd4acc1305a1b0e7307cb057d0f12759170acb66d8a255654a",
+        "d39a38d2a41f83e87540b7a37d4daf6318ce877870822d80447300b24e542d84",
+        "1b9e4c97a140baf52f48b16dcd4fe71d79770161465afeeb5b94817f8195ea8c"
+      ],
+      "units": 272
+    },
+    "section232-heading-vehicle-candidate-brazil": {
+      "per_slot": {
+        "brazil_section_301": 438
+      },
+      "sample_signatures": [
+        "870553c66a115dec9b108f05299e2d8a1c6394e2dcc58435d12722f862005a86",
+        "ef5b84b245f0498d8bd5241a70c16d28c217b869551cb730828860d13fb4afa5",
+        "e87bc4b55ee2006cfa1c24d20488df4483e3ff974f2081428e82186bc822c0f3",
+        "84e0d75018c06bce43957ba9864113e203d32df92a82842b0837b55cf8d1c6ae",
+        "c4aac8f61c8ea9fe7f29a634e73dafbcb7653104c123bb2fc819f056ce222a80"
+      ],
+      "units": 438
+    },
+    "section232-heading-vehicle-candidate-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 5504
+      },
+      "sample_signatures": [
+        "162334f8f08994375cdfe6e0203d8589271362a17d6b3e17faa53c597ec02524",
+        "76309f7ec6d6a32bc991f9a51e3fe0457c01be2fe42dbb43abcfc5523e7434c9",
+        "fbf4e18add26adde3c6456b95ccbdfbd1f216d565fcd40211d63cedf7f72dbed",
+        "5432301271b82344f38ca623910af0ef49cbc35acf1c5b9b33041b8f67c4afbc",
+        "e64c32a1007b3e9596cd8983b340a9a6182d721309a16d6675e4894a3eb2e942"
+      ],
+      "units": 5504
+    },
+    "section232-russia-aluminum-membership-vintage": {
+      "per_slot": {
+        "section_232": 24
+      },
+      "sample_signatures": [
+        "b5a6ada126eb27950984b9f46562c545ccf471b5cb1f3fa85fc0af746b21405c",
+        "5f0fddfa68571e7f9e9d294aba8b69d919d69a960a244b7b17218b2b4f3017d0",
+        "0fac0d078eac89151fa884ae39e1ce981c9a60710e7a32bc324909ff7cefe2f2",
+        "019a66c6a1ce5f068278901bf48ce63dcd7e087ec9e363a47dc41aa97e60e25f",
+        "81ebba657b06d494ae2dd8883e4c8ecd7d5a3004f24735fa2f678d1008a56df9"
+      ],
+      "units": 24
+    },
+    "section232-steel-scope-projection-brazil": {
+      "per_slot": {
+        "brazil_section_301": 6
+      },
+      "sample_signatures": [
+        "0e4b77252451189efefcdcf2a3992d7eb71ae357be1e0b2f7e81e79b1624f488",
+        "8e145a61854ec45fc85784797a199c983af92408e172ee3032ed3c85757fc3ad",
+        "e551f273e81c7de15fe3ed93c9affcdef96a7447404a6c74945950a7bf06cdbe"
+      ],
+      "units": 6
+    },
+    "section232-steel-scope-projection-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 108
+      },
+      "sample_signatures": [
+        "9dbbad7cd1124b8e452f44458ff25dee9f3b7c10ab82131f8729e62c2de146cf",
+        "67daf3c30904b0a49a106117b622753733d31ffbc5a1607e3ee03749aca9f494",
+        "47b8d35ec829ed2c0931c7f659dc4622582ca8108be2e56098da8fbfaa9e53f0",
+        "2616674c3b2cfabae3d63f70852057f2a410fe19ceb04227473a4ad348c9ef68",
+        "10ff9c7490db168e074ae47b522eed4655bfcba87babbdd70d22368b18ef52a7"
+      ],
+      "units": 108
+    },
+    "vintage-revision-232": {
+      "per_slot": {
+        "section_232": 513556
+      },
+      "sample_signatures": [
+        "21a24d238b4980fca0c2c0d5fc2dc042dedc1f22b88e66ae4bdfca5a0d874df8",
+        "c83bc41fa4cb78460cfce5494aa1f73bce72847700e408723f9e97ea3c654e89",
+        "ba4cee460bd5f6b979ff3118e60a00a4a945418268061ef122224405543b5555",
+        "4aff5ba09b174db950df88605666eb53ff5f11b91235c9da81c4dfbd3df23c25",
+        "1fb99f6df727bc8358aa11973ce6bf58feb7ad2c886f89c87c2d49426bc2c624"
+      ],
+      "units": 513556
+    },
+    "vintage-revision-301": {
+      "per_slot": {
+        "china_section_301": 4716
+      },
+      "sample_signatures": [
+        "d12f6aa720b2e6aba07f0850d8ca86f92ef508a56bf47a028d78ebf8372ac96d",
+        "a104f35e8563e7d29dc3d1890cb3984be36022a44841fb6e3e5110ccea2f7ab8",
+        "4f1fc272a2c55f884e4d70df1fff526266bc3cd1f6390bf7229010a163590af9",
+        "8acd444614b77da005385af3ac88ba76494d317f48031ffab3869dcb068b982c",
+        "c5499d0dd2bf7c1531939d83412ef395e560f2417feed45b36bd155bc1dc09eb"
+      ],
+      "units": 4716
+    },
+    "vintage-revision-301-removed-lines": {
+      "per_slot": {
+        "china_section_301": 26730
+      },
+      "sample_signatures": [
+        "970c81d1d3838a5cfa69111bbea2a56b3145c13b8d0158f97b1934cfa86baac4",
+        "383a6b68ed827165c10b6c77bae88510680c8a545f67928baf4e341092f9c6a2",
+        "5a41f10bff79f69aa4b0c419229391fdaf74178766e81ba7b343fae1261ad785",
+        "d20aa41695e50cd816519b3c0cbbafa54d2f787841a9b680645edac1498f3e97",
+        "07df6073118e99c1eb04c1ff422d9f375bd47e90b3113869876ddd16af8023e9"
+      ],
+      "units": 26730
+    },
+    "yale-html-statutory-base-parser-defect": {
+      "per_slot": {
+        "base": 5709
+      },
+      "sample_signatures": [
+        "3ac0909eafb649c58c83dfd0a573beff4909840898e454c0513bb662d1e34c51",
+        "fbc3a6c5c88292c47abb4c15a0efb01b1ed14ba187cd1e9ff96f12ee506fbb40",
+        "8a6b0501eef6a56b9a1daada17793dafbae4aefd4bdbd27832a5f39e6e45e6aa",
+        "9b6209120dc2ab2beb6a343071cec8cb21bfd098c7ccc70b598b5b9fe751b969",
+        "86dbc8949e04ec37b1b51e072b33331e57ac0c0c73caacdee8fd05f770cb7292"
+      ],
+      "units": 5709
+    },
+    "yale-hts8-broadening-brazil-fresh-signature-rebind": {
+      "per_slot": {
+        "brazil_section_301": 96
+      },
+      "sample_signatures": [
+        "b45bc8822e8b246457b056d06f485d206f50059f8b9c1999e3f009bb6834d466",
+        "bbafac9cd27475262adf8efd04a6efa907011fca0cd74bc1ea03e616183e9b7b",
+        "12fadd7470abf6ac74b3a5d38baecdb2d0c71c599502528fdbc3087cba72cf01",
+        "c5974cd2a7e32323476e44e8ee822aaa182156ddcb06e1f409c918fa4e821dc3",
+        "affdc977d62b34c7a028011802da69d14b59da8a68b9c8d07c656ce3bf4b1bc4"
+      ],
+      "units": 96
+    },
+    "yale-parser-zero-statutory-base-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 68
+      },
+      "sample_signatures": [
+        "1cc7571f183fc5f2a4d0c3296cea6028df9ca65c6f9c0fcbb0ff3c2c19d4e3e1",
+        "d4dc21f328a8909f338f316bfd75183b213a56597b197c7a8bb9767f898790bc",
+        "3b17f11a0428c2ff5f9fcf15af0bd90c0edc161189bf7192820d221fd25e0f4b",
+        "6a38131066eff88d2062f317493cbc2adb8f66f108cf387ff234a2ce82428096",
+        "3a55d70a8034b5adf6a880ac0f5f9cbbea766764636f4a6794f691c4c071ea8f"
+      ],
+      "units": 68
+    },
+    "yale-zero-pharma-brazil-fresh-signature-rebind": {
+      "per_slot": {
+        "brazil_section_301": 84
+      },
+      "sample_signatures": [
+        "6da9ccbe24a732a7647e17acb484c803980ba328ba720ebc52f8706b8db46044",
+        "708fada97f94ad5d16e5b718cc2a37da80c31951c7d945dc73f5e5103ea56a2a",
+        "51843e5273fa5a9106a3a1f1188c5bef2e67d3f2b0ba2a44758bd89777e49a71",
+        "b639ee9e9325e382b19bd42b2f8edaa0c5c83f489fcdefd3f5e3ee9bd15610e4",
+        "a49d16991c9195e33662a75970f7a3181ef89779345fcf0d2fde1964f2cfc78e"
+      ],
+      "units": 84
+    },
+    "yale-zero-pharma-forced-labor-fresh-signature-rebind": {
+      "per_slot": {
+        "forced_labor_section_301": 1058
+      },
+      "sample_signatures": [
+        "a11d8d29da70562fa8d1dde11390c1cda8a1379ea372d7e21be28116eb4549c3",
+        "c6dde6ea718e78d238467768bb05672e3fa158a91c7b436f2953a23be78d4aaf",
+        "9e3e75e857ae63ed1716bcd4f9949741251c35dfcab871ce720336d120232c43",
+        "cdeb85e39325ab1f60111d5921b564c6c9909023aae7ec246938cfe8d92e92ed",
+        "a96ba7c2b575c42feb1cb1d115b99f21c6e6b296461055a4eab0d17aff3288ff"
+      ],
+      "units": 1058
+    }
+  },
+  "inputs": {
+    "comparison_artifact_sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0",
+    "comparison_receipt_sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7",
+    "disposition_ledger_sha256": "2ebafef886b4f2e57724e5f6a06e5703709684b9f7c58470a585d0fe5201cf7d",
+    "preview_disposition_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
+    "preview_disposition_receipt_sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181",
+    "preview_selector_transition_payload_sha256": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+    "preview_selector_transition_receipt_sha256": "69121a39e488a411a9dc1e402d7ee49f29dfd59e0a24f82c0d7138e311ca642b",
+    "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+  },
+  "mismatches": 6807741,
+  "observed_signature_count": 1949637,
+  "schema": "axiom_oracles.us_tariff_schedule.classification.v2",
+  "selector_count": 46,
+  "sidecar": {
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/classify/25/25503d6ac677051ac9f635731f73bb7ae34e5fc7fddf9472560b74d39741551e.jsonl.gz",
+    "schema": "axiom_oracles.us_tariff_schedule.classification_sidecar.v2",
+    "sha256": "3f39f296acd4fc7b0134f7082d1463260fff507df7abcf600b274f8fa987b677"
+  },
+  "unexplained": 0
+}

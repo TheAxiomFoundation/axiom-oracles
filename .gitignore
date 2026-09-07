@@ -3,6 +3,7 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .cache/us-tariff-c1/
+reference/us-tariff-schedule/eval/.MANIFEST.json.lock
 .mypy_cache/
 .env
 *.pyc

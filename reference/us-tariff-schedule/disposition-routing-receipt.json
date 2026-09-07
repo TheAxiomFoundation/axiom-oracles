@@ -6,7 +6,7 @@
       "ieepa"
     ],
     "component_formulas_checked": 900,
-    "composition_hash_aggregate": "bc3037373d2fdfd2bf95c093ba94b1192726bb5a9d52cae09df10bf8aa5cb896",
+    "composition_hash_aggregate": "3fa9092d6eb275e0556ee5bed770536b11eb762ad42844cd64ceaccf62dec269",
     "generated_compositions": 100,
     "queried_for_every_cell": [
       "section_201",
@@ -448,6 +448,6 @@
     "path": "reference/us-tariff-schedule/selected-intervals.csv.gz",
     "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
   },
-  "stage_wall_clock_seconds": 60.018,
+  "stage_wall_clock_seconds": 52.136,
   "structurally_unavailable_column2_cells": 0
 }

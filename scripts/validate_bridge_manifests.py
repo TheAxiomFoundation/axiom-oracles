@@ -58,9 +58,119 @@ EUROMOD_SYNTHETIC_RUNNER = "euromod-synthetic-compare"
 YEAR_MONTH_EXECUTION_RUNNERS = {"axiom-encode-snap-ecps-compare"}
 
 
+def _unique_json_pairs(pairs: list[tuple[str, object]]) -> dict:
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError(f"duplicate JSON key: {key}")
+        value[key] = item
+    return value
+
+
+def _strict_json_loads(raw: str | bytes) -> object:
+    return json.loads(raw, object_pairs_hook=_unique_json_pairs)
+
+
+class _UniqueSafeLoader(yaml.SafeLoader):
+    def construct_mapping(self, node, deep=False):
+        self.flatten_mapping(node)
+        result = {}
+        for key_node, value_node in node.value:
+            key = self.construct_object(key_node, deep=deep)
+            if key in result:
+                raise ValueError(f"duplicate YAML key: {key}")
+            result[key] = self.construct_object(value_node, deep=deep)
+        return result
+
+
+def _strict_yaml_loads(raw: str | bytes) -> object:
+    return yaml.load(raw, Loader=_UniqueSafeLoader)
+
+
+def _validate_panel_group_receipt(
+    name: str, receipt: dict, report: object
+) -> list[str]:
+    errors: list[str] = []
+    cases = receipt.get("cases")
+    comparison_units = receipt.get("comparison_units")
+    group_count = receipt.get("case_groups")
+    groups = report.get("cases") if isinstance(report, dict) else None
+    scope = report.get("scope") if isinstance(report, dict) else None
+    if (
+        receipt.get("evidence_mode") != "committed-group-aggregate-census"
+        or receipt.get("population_commitment") != "grouped-aggregate-only"
+        or type(cases) is not int
+        or cases <= 0
+        or type(comparison_units) is not int
+        or comparison_units <= 0
+        or type(group_count) is not int
+        or group_count <= 0
+        or cases != group_count
+        or not isinstance(report, dict)
+        or report.get("case_count") != comparison_units
+        or not isinstance(scope, dict)
+        or scope.get("comparison_units") != comparison_units
+        or not isinstance(groups, list)
+        or len(groups) != cases
+    ):
+        return [f"{name}: panel aggregate census drifted"]
+    expanded = 0
+    case_ids: set[str] = set()
+    hts_numbers: set[str] = set()
+    countries: set[str] = set()
+    probe_dates: set[str] = set()
+    for index, group in enumerate(groups):
+        case_id = group.get("case_id") if isinstance(group, dict) else None
+        hts_number = group.get("hts_number") if isinstance(group, dict) else None
+        group_countries = group.get("countries") if isinstance(group, dict) else None
+        group_dates = group.get("probe_dates") if isinstance(group, dict) else None
+        units = group.get("unit_count") if isinstance(group, dict) else None
+        if (
+            not isinstance(case_id, str)
+            or not case_id
+            or case_id in case_ids
+            or not isinstance(hts_number, str)
+            or not hts_number
+            or not isinstance(group_countries, list)
+            or not group_countries
+            or len(group_countries) != len(set(group_countries))
+            or any(not isinstance(item, str) or not item for item in group_countries)
+            or not isinstance(group_dates, list)
+            or not group_dates
+            or len(group_dates) != len(set(group_dates))
+            or any(not isinstance(item, str) or not item for item in group_dates)
+            or type(units) is not int
+            or units <= 0
+        ):
+            errors.append(f"{name}: panel group {index} is malformed")
+            continue
+        case_ids.add(case_id)
+        hts_numbers.add(hts_number)
+        countries.update(group_countries)
+        probe_dates.update(group_dates)
+        expanded += units
+    if errors:
+        return errors
+    if expanded != comparison_units:
+        errors.append(f"{name}: panel group units do not conserve")
+    fields = receipt.get("evidence_fields")
+    expected = {
+        "hts_number": len(hts_numbers),
+        "country_of_origin": len(countries),
+        "entry_date": len(probe_dates),
+    }
+    if not isinstance(fields, dict) or any(
+        not isinstance(fields.get(field), dict)
+        or fields[field].get("distinct") != distinct
+        for field, distinct in expected.items()
+    ):
+        errors.append(f"{name}: panel grouped field census drifted")
+    return errors
+
+
 def load_manifests() -> dict[Path, dict]:
     return {
-        path: yaml.safe_load(path.read_text())
+        path: _strict_yaml_loads(path.read_text())
         for path in sorted(MANIFEST_DIR.glob("*.yaml"))
     }
 
@@ -398,16 +508,21 @@ def _validate_committed_exercise_receipt(
     ):
         return [f"{name}: invalid committed exercise receipt {raw_path!r}"], []
     try:
-        receipt = json.loads(path.read_text())
-    except (OSError, json.JSONDecodeError) as exc:
+        receipt = _strict_json_loads(path.read_text())
+    except (OSError, ValueError) as exc:
         return [f"{name}: cannot read committed exercise receipt: {exc}"], []
-    if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+    if (
+        not isinstance(receipt, dict)
+        or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA
+    ):
         errors.append(f"{name}: committed exercise receipt has wrong schema")
         return errors, findings
     if receipt.get("suite") != manifest.get("suite"):
         errors.append(f"{name}: committed exercise receipt suite does not match")
     if receipt.get("report") != report_path:
-        errors.append(f"{name}: committed exercise receipt is not bound to its suite report")
+        errors.append(
+            f"{name}: committed exercise receipt is not bound to its suite report"
+        )
     cases = receipt.get("cases")
     if isinstance(cases, bool) or not isinstance(cases, int) or cases <= 0:
         errors.append(f"{name}: committed exercise receipt has no positive case count")
@@ -415,17 +530,32 @@ def _validate_committed_exercise_receipt(
     if not isinstance(fields, dict) or not fields:
         errors.append(f"{name}: committed exercise receipt has no evidence fields")
         fields = {}
+    distinct_denominator = cases
+    if manifest.get("suite") == "us-tariff-panel":
+        distinct_denominator = receipt.get("comparison_units")
+        if type(distinct_denominator) is not int or distinct_denominator <= 0:
+            errors.append(
+                f"{name}: panel receipt has no positive comparison-unit count"
+            )
     for field, row in fields.items():
         if not isinstance(field, str) or not field or not isinstance(row, dict):
             errors.append(f"{name}: malformed committed exercise field {field!r}")
             continue
         distinct = row.get("distinct")
         state = row.get("state")
-        expected = (
-            "varied" if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
-            else "constant" if distinct == 1
-            else None
-        )
+        if (
+            type(distinct) is not int
+            or type(cases) is not int
+            or cases <= 0
+            or type(distinct_denominator) is not int
+            or distinct_denominator <= 0
+            or not 1 <= distinct <= distinct_denominator
+        ):
+            errors.append(
+                f"{name}: committed exercise field {field!r} has invalid distinct count"
+            )
+            continue
+        expected = "varied" if distinct > 1 else "constant"
         if state != expected:
             errors.append(
                 f"{name}: committed exercise field {field!r} state/count disagree"
@@ -435,7 +565,9 @@ def _validate_committed_exercise_receipt(
     if missing:
         errors.append(f"{name}: bindings omit receipt input(s): {', '.join(missing)}")
     if extra:
-        errors.append(f"{name}: bindings declare input(s) absent from receipt: {', '.join(extra)}")
+        errors.append(
+            f"{name}: bindings declare input(s) absent from receipt: {', '.join(extra)}"
+        )
     artifacts = receipt.get("evidence_artifacts")
     if not isinstance(artifacts, list) or not artifacts:
         errors.append(f"{name}: committed exercise receipt has no evidence artifacts")
@@ -453,10 +585,41 @@ def _validate_committed_exercise_receipt(
         if expected_sha != actual_sha:
             errors.append(f"{name}: evidence artifact [{index}] sha256 mismatch")
     report_sha = receipt.get("report_sha256")
+    report = None
     if report_path and (REPO_ROOT / report_path).is_file():
-        actual_report_sha = hashlib.sha256((REPO_ROOT / report_path).read_bytes()).hexdigest()
+        report_body = (REPO_ROOT / report_path).read_bytes()
+        actual_report_sha = hashlib.sha256(report_body).hexdigest()
         if report_sha != actual_report_sha:
             errors.append(f"{name}: committed exercise report_sha256 mismatch")
+        try:
+            report = _strict_json_loads(report_body)
+        except (UnicodeDecodeError, ValueError) as exc:
+            errors.append(f"{name}: committed exercise report is invalid JSON: {exc}")
+    if manifest.get("suite") == "us-tariff-panel":
+        errors.extend(_validate_panel_group_receipt(name, receipt, report))
+    if manifest.get("suite") == "us-tariff-schedule":
+        # The schedule receipt must bind its actual input contract and case
+        # total, not merely supply a self-consistent invented field census.
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "_bridge_tariff_exercise",
+            Path(__file__).with_name("build_us_tariff_exercise_receipt.py"),
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        try:
+            snapshots = module.validate_committed_receipt(receipt, repo_root=REPO_ROOT)
+            if (
+                module._load_yaml(
+                    snapshots[REPO_ROOT.resolve() / module.BRIDGE_REL],
+                    "tariff bridge manifest",
+                )
+                != manifest
+            ):
+                errors.append(f"{name}: tariff bridge changed while validating")
+        except (OSError, ValueError, yaml.YAMLError) as exc:
+            errors.append(f"{name}: invalid tariff exercise binding: {exc}")
     return errors, findings
 
 

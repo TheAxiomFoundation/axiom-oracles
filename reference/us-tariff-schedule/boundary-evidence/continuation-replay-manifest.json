@@ -1,0 +1,380 @@
+{
+  "bundle_bytes": 45356596,
+  "bundle_sha256": "4b913f987afb7db5910dbddb62f623049047d284dc2bee8669ee6bae83f65eff",
+  "manifest": {
+    "files": {
+      "README.md": {
+        "bytes": 1744,
+        "sha256": "b2dea4b07f7d992e8f0d8d56f9f42c550cc313fdc108b0aa919da6653bd33e59"
+      },
+      "axiom-rules-engine": {
+        "bytes": 3046352,
+        "sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
+      },
+      "compiled/01951090ca451fb300e356c8dc5b4685f17e759b5e57031bbb7cbab4907a1f8c.json": {
+        "bytes": 1827481,
+        "sha256": "01951090ca451fb300e356c8dc5b4685f17e759b5e57031bbb7cbab4907a1f8c"
+      },
+      "compiled/0dba687900fff7a47a5d9db414bee2585b5a505089aa1745f4755a5c0cf08277.json": {
+        "bytes": 1998114,
+        "sha256": "0dba687900fff7a47a5d9db414bee2585b5a505089aa1745f4755a5c0cf08277"
+      },
+      "compiled/13badfd90807c03e4151b03cfa410b34b81feada3a138274b440540826519869.json": {
+        "bytes": 1997068,
+        "sha256": "13badfd90807c03e4151b03cfa410b34b81feada3a138274b440540826519869"
+      },
+      "compiled/35e17146171ff23841d8f3d6f8e2d6ad955842ca3942234244f8495bc00649dd.json": {
+        "bytes": 1690432,
+        "sha256": "35e17146171ff23841d8f3d6f8e2d6ad955842ca3942234244f8495bc00649dd"
+      },
+      "compiled/5a897c83a05e633aba1381db7510a82a54cf0196527d7c8b5c5ce9ba2472d213.json": {
+        "bytes": 1737186,
+        "sha256": "5a897c83a05e633aba1381db7510a82a54cf0196527d7c8b5c5ce9ba2472d213"
+      },
+      "compiled/75af28be4548099ef64401bec5fe37c7c99f4a236fa90a6ea3b2de7296b1c88b.json": {
+        "bytes": 1752743,
+        "sha256": "75af28be4548099ef64401bec5fe37c7c99f4a236fa90a6ea3b2de7296b1c88b"
+      },
+      "compiled/88541433ebe9d0b1042740ecac1fbf2694c391e6598e6802a97c61cb6d584862.json": {
+        "bytes": 1996655,
+        "sha256": "88541433ebe9d0b1042740ecac1fbf2694c391e6598e6802a97c61cb6d584862"
+      },
+      "compiled/b95c0c8b6df705fdcf60f78c97c80c387caac9a2333d87776c1d520b319b209a.json": {
+        "bytes": 1746733,
+        "sha256": "b95c0c8b6df705fdcf60f78c97c80c387caac9a2333d87776c1d520b319b209a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-action-sources/china-2024-action.curl.json": {
+        "bytes": 406,
+        "sha256": "494f7e5722015d77584ada009cd02e6ced7781c57683a4eb517f6f3a5ef564a8"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-action-sources/china-2024-action.headers": {
+        "bytes": 1906,
+        "sha256": "5c616b014c569f9c4c8f6a3bb018183e3fec76c9af6e2c1cc0be02bc4d7f7d42"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-action-sources/china-2024-action.pdf": {
+        "bytes": 465024,
+        "sha256": "e83f46c0039b8e647eb9197b48aac363b272f36d6775940389a767d8f2841917"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-action-sources/retrieval-time.json": {
+        "bytes": 57,
+        "sha256": "154b05923701f983dd903a5b6e9cd3ad928d296de54a117c977b368ecfcb7258"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-action.json": {
+        "bytes": 297376,
+        "sha256": "96b45afd7086cc554318bbdbd62bee234828db698983dc25884a4748c52721ca"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/china-lists.json": {
+        "bytes": 159917,
+        "sha256": "d8cb1d9cc83caddc918986e4a44f77a74ab91fd0754fd5870409e9eb5e70eb7d"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/column2-resolution.json": {
+        "bytes": 286687,
+        "sha256": "b40c7f890269cdd502e7a56898b0e9eac9734bd09bec4d1f94e28f684bc6d918"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/column2-sources/general-note3.curl.json": {
+        "bytes": 430,
+        "sha256": "b8845cc7e0290fff4f13016a1395c3c9acedfaba3f78ed5fa8cf2b29216aff9d"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/column2-sources/general-note3.headers": {
+        "bytes": 604,
+        "sha256": "20307c03d306eaa954647fe3e1b6785c27eb20cd11239b1ff1c71aae2a7faa20"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/column2-sources/general-note3.pdf": {
+        "bytes": 45466,
+        "sha256": "a2cf79ac77e973d0c13129faae26b40cf4791b302f3a9f0ff6a578b37626685f"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/column2-sources/retrieval-time.json": {
+        "bytes": 57,
+        "sha256": "0023f4500c69a33e68f8eb312708fb6664ed3c68f3c7f371a87377fa80ae9b37"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/hts-identity.json": {
+        "bytes": 309085,
+        "sha256": "aaabab2080a70a23a8f150916d0f993c186d75629762fe1e65ede1b1764d0c83"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter22.curl.json": {
+        "bytes": 425,
+        "sha256": "d17e3311305b6b09ba8c836a297bb7f40eb1aa17265bd827989a842b4d95b92d"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter22.headers": {
+        "bytes": 575,
+        "sha256": "2d25c0f466116164199e4c8682fb91690167ed1bac9becb46187d884824f5d48"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter22.pdf": {
+        "bytes": 894095,
+        "sha256": "faf177c73bf71c0c3815f366042f50eccc3b6cfc76777e8c3d48cc4488f47eb1"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter72.curl.json": {
+        "bytes": 426,
+        "sha256": "02588288294f976282b80aa0d70265c1d6dbf977a9bd5fad2d3645b4fd44f00b"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter72.headers": {
+        "bytes": 578,
+        "sha256": "23322c33e66584de1d25dd963ca6072f8afc6440cde411b093c7e3a8a59aa80c"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter72.pdf": {
+        "bytes": 1006517,
+        "sha256": "8c8346ef492310a4b34ff540286f902c8079bcf0c5900a7e1175771614cd699a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter76.curl.json": {
+        "bytes": 425,
+        "sha256": "8149e2b4ad468a74e33c1c930413c9a1fc7e6f3d882fd02cb9b8a78c7d94046e"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter76.headers": {
+        "bytes": 574,
+        "sha256": "97f9117b918ce68a3df638ff48548731aa3824ce72ec993f53cf2ee0a2df1846"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/chapter76.pdf": {
+        "bytes": 874914,
+        "sha256": "fcda655f4da588f193ab28f9540b27329efbd9bb7413e1cfc01fd24a6bcae0d5"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/identity-sources/retrieval-times.json": {
+        "bytes": 156,
+        "sha256": "dbb3d6833072720b12849777e17f982bfe62c154736f1680fdb76a257c0e5a9f"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/chapter99.curl.json": {
+        "bytes": 427,
+        "sha256": "3900554f5126ac7e5385f8178a117561eb28df7813f6367ecbd1b02f79155cab"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/chapter99.headers": {
+        "bytes": 579,
+        "sha256": "87ca7ad139d536e0d9eea404fa6fe5a1cd16fa5d72b236f5cbac581f71b9979a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/chapter99.pdf": {
+        "bytes": 13957698,
+        "sha256": "92822e8f38873a7275c4cf9bd5341f96f5834dbea964623e7a7aa7b2cd02f225"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/corpus-ingest-public-key.json": {
+        "bytes": 168,
+        "sha256": "8ebd75a0b56198a68b26001394426752798b4fc08b7a4ac794ba17efe04ee900"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/forced-labor-action.curl.json": {
+        "bytes": 408,
+        "sha256": "d62d4dfc14bc3ed31ff44be241dcc8c1c8ebfb4636ae8f50688eda6ad81033e4"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/forced-labor-action.headers": {
+        "bytes": 1908,
+        "sha256": "226a3dff91eb2ed929af45008189ddbd23e04f7e547bdcf66ff9d1c824dd3ab5"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/forced-labor-action.pdf": {
+        "bytes": 25556467,
+        "sha256": "3c1e16a61af26b2a53b5d42f8b38e8e6a4f93f93a92238aba1f96026cdd45557"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/general-note11.curl.json": {
+        "bytes": 432,
+        "sha256": "b672429de84894c9e1f6472738d967593949385e5ebd48ffde2b0a2b52f0ea0d"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/general-note11.headers": {
+        "bytes": 581,
+        "sha256": "7135eaa7b480e61ffb49c78357a06b4040f0986cd48d87990fa0dca6f2aeb4fb"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/general-note11.pdf": {
+        "bytes": 395454,
+        "sha256": "db7ec89a2ef6232c54045e3498b40c494db1b8162a8f8c8e971e4753beaffef3"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/ingest_manifests.py": {
+        "bytes": 32278,
+        "sha256": "84e08c6d4847a4f049216a654977e6a370074c17592c326546739eb0e5cdce8d"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/original-ingest-manifest.json": {
+        "bytes": 2110,
+        "sha256": "2811c6a36f05dbafbf3b3b1b23b42470377ce6d3e53e3f4e5a865c08dd2f21f7"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/provisions.jsonl": {
+        "bytes": 4229923,
+        "sha256": "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/receipt.json": {
+        "bytes": 4398,
+        "sha256": "dd38b4f96668ab1ad4a619bd22e298affa69b4feb5a4aed26a2c13cc0cdfa6be"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/live-sources/retrieval-times.json": {
+        "bytes": 237,
+        "sha256": "15767c8eef61497333d82771a150943ff18e821e36e1e053e5a5a6e764a69dea"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json": {
+        "bytes": 6686787,
+        "sha256": "e019be99f86af5e9919a768a73f8d83f177e8766d48e6d15827d89bf6357ea4a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json": {
+        "bytes": 4817310,
+        "sha256": "14b8f5097813398d0e1d78a457650276c1d09f1b63b4ee90fbe43926e3cd8636"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/primary-metals.json": {
+        "bytes": 227601,
+        "sha256": "c3f2c7b7ab9897a85e431c9b948dbcb7130cfbf64c6883e9d70978c933aba769"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-boundaries.json": {
+        "bytes": 279140,
+        "sha256": "5df5b83001272b2b9e682380951ab5feaf33820e03478e621a4aa79682b32d20"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/retrieval-times.json": {
+        "bytes": 121,
+        "sha256": "3219de3583d9d04e839720a198e7ecaf5dbc77538202a8d01736fad5c94af87a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/solar-safeguard-2022.curl.json": {
+        "bytes": 406,
+        "sha256": "2ee911cd3702e149a882b0afa810baac48704b42c42f297c0731a5d90ba7a68a"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/solar-safeguard-2022.headers": {
+        "bytes": 1906,
+        "sha256": "acd5e0e022baa527d2036170a894f54fdd528c61134309d52613fae5cdc514e2"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/solar-safeguard-2022.pdf": {
+        "bytes": 424072,
+        "sha256": "fe4d4a4ea60e2affd41714b78cd9c400fdb3aff8d4ebd446044de9db14bccce8"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/surcharge-2026.curl.json": {
+        "bytes": 408,
+        "sha256": "6539d517146066673f668754ce3d2e4ef76996fc5ce9114e0e9f66326d3ef2b7"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/surcharge-2026.headers": {
+        "bytes": 1908,
+        "sha256": "95c5157fa1ba2a6553976874a1ca5ad3bf3f20efde923e4e3cc7bbfef4357b59"
+      },
+      "reference/us-tariff-schedule/boundary-evidence/temporal-sources/surcharge-2026.pdf": {
+        "bytes": 10655840,
+        "sha256": "1ad226167d7f1b92feac3a2b1adc54bb332093f46e37c248eb714d9340b63cb9"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-duty/composition.yaml": {
+        "bytes": 174613,
+        "sha256": "0dafe611b0680a64c7b20364bf0f9d2fd71c6e58036f30f088f8d07653d66a56"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml": {
+        "bytes": 166986,
+        "sha256": "92d1109939f555a808225b2344f25bce0ba0f303dc8b1c84925d93aab29291f7"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch72/ch72.yaml": {
+        "bytes": 162153,
+        "sha256": "b53a84a43826c5a433d864390de9ab669375fe6becafe6721cf2ce0682e75036"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch76/ch76.yaml": {
+        "bytes": 173382,
+        "sha256": "79dd0dd234a6ea24b5707a26a57420fee07f5a691a8484b5a30c3c158d029a0c"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch85/ch85.yaml": {
+        "bytes": 172166,
+        "sha256": "02f0623d0f9c941ffc297c3919d17ce254baa775edac89c42f576c475fce5268"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch95/ch95.yaml": {
+        "bytes": 173216,
+        "sha256": "95449992c10bfe3d6587f61ea5f8b7c64f5f0916085b2a3aa6a29528aeaccfec"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch99a/ch99a.yaml": {
+        "bytes": 174610,
+        "sha256": "54b4a431d2d34577f1750a43fc22c48bdef593a6088a706f79a1d6e44ae172e0"
+      },
+      "rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch99b/ch99b.yaml": {
+        "bytes": 175940,
+        "sha256": "226b6ce2a2391901613055f28e4698dc0103a8c8b531b6db3fa561997a7cdfad"
+      },
+      "scripts/build_us_tariff_boundary_evidence.py": {
+        "bytes": 17581,
+        "sha256": "ee1e88d9226e442424fb0c23c776ef6dacfbb700cf03e8a860c13eb7dc826d33"
+      },
+      "scripts/build_us_tariff_china_action_evidence.py": {
+        "bytes": 13480,
+        "sha256": "ebac7b9d9180da29a8c20ec6b011f42578a1122cfd89b5376c567c2b662a632f"
+      },
+      "scripts/build_us_tariff_china_list_evidence.py": {
+        "bytes": 9185,
+        "sha256": "7aa55b9c0df654694ad098463b9ecda80e2dd2fc17bed50355f4a46f1dade9c8"
+      },
+      "scripts/build_us_tariff_column2_evidence.py": {
+        "bytes": 12198,
+        "sha256": "c38c807fca42f1759cb9ba73d4c862ea32072ef15c50aa2559cc8bd053960b6a"
+      },
+      "scripts/build_us_tariff_identity_evidence.py": {
+        "bytes": 12195,
+        "sha256": "b22762da60acbaac1556909ba4a388baf47d560a9b85affb4bbcb3f34b04f825"
+      },
+      "scripts/build_us_tariff_metal_evidence.py": {
+        "bytes": 11853,
+        "sha256": "7a7b749cbff701d117faf563f159d4bef3e9acf0c0d785f14accaaa1251a4a2e"
+      },
+      "scripts/build_us_tariff_note52_boundary_evidence.py": {
+        "bytes": 10821,
+        "sha256": "ec7e8cc38b4763764c31a8e8b534bb50cc1fdd16ef1eb7ab32baa9484882832e"
+      },
+      "scripts/build_us_tariff_temporal_evidence.py": {
+        "bytes": 14334,
+        "sha256": "a3729efa6bfea59d91c9047640b75324ac4a827c47d3f2c93011e5853f7c3623"
+      },
+      "scripts/us_tariff_continuation_runtime.py": {
+        "bytes": 7555,
+        "sha256": "3fa2693e4684c4b3caba380e6c7bd8d5b5b344de52c6f12699e51be57b6f284c"
+      },
+      "scripts/us_tariff_live_source_evidence.py": {
+        "bytes": 10431,
+        "sha256": "e39fc68e0995db67f9af44302f09b44b8184a2af92c6f9957f14c344af9ecf69"
+      },
+      "scripts/us_tariff_raw_runtime.py": {
+        "bytes": 3298,
+        "sha256": "fef616e980c79505ff74eb7c1d6447d7efd8a7eb3a1410273eef488c04fddbf1"
+      },
+      "verify.py": {
+        "bytes": 16187,
+        "sha256": "bc4ee52fc9bd2076a2fa637688f3f6d32c51340655130961b4445274668b54a2"
+      }
+    },
+    "producer_ref": "746e0ddcef163ef149b697b656e9f5e5d8a61445",
+    "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
+    "runtime_platform": "macOS arm64",
+    "schema": "axiom_oracles.us_tariff_schedule.continuation_replay.v1"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.continuation_replay.v1",
+  "verification": {
+    "actual_entry_grounding": "uncaptured",
+    "by_receipt": {
+      "china-action": {
+        "cases": 36,
+        "native_missing_input_errors": 0,
+        "outputs": 36
+      },
+      "china-lists": {
+        "cases": 18,
+        "native_missing_input_errors": 0,
+        "outputs": 18
+      },
+      "column2-resolution": {
+        "cases": 41,
+        "native_missing_input_errors": 12,
+        "outputs": 29
+      },
+      "hts-identity": {
+        "cases": 63,
+        "native_missing_input_errors": 0,
+        "outputs": 189
+      },
+      "note2-exceptions": {
+        "cases": 384,
+        "native_missing_input_errors": 0,
+        "outputs": 768
+      },
+      "note52-transit-usmca": {
+        "cases": 230,
+        "native_missing_input_errors": 0,
+        "outputs": 690
+      },
+      "primary-metals": {
+        "cases": 28,
+        "native_missing_input_errors": 0,
+        "outputs": 44
+      },
+      "temporal-boundaries": {
+        "cases": 43,
+        "native_missing_input_errors": 0,
+        "outputs": 43
+      }
+    },
+    "certified": false,
+    "closed": false,
+    "legal_correctness_inferred": false,
+    "manifest_sha256": "f4e9257e0e121ebbc0e5cc47adc3c443aa4f9bdd5994d30620253fb6f42c99aa",
+    "network_required": false,
+    "totals": {
+      "cases": 843,
+      "native_missing_input_errors": 12,
+      "outputs": 1817
+    }
+  }
+}

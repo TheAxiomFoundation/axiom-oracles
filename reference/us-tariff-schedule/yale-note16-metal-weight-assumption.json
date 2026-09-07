@@ -1,0 +1,58 @@
+{
+  "campaign_binding": {
+    "factual_status": "reference-model assumption only; not an observed or inferred transaction-level metal-weight fact",
+    "input": "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
+    "interpretation": "reproduce Yale's point-estimate baseline in which zero of the scoped import share is below the 15-percent threshold",
+    "scope": "RuleSpec Note 16(c)(vi)/(ix) candidate membership; the input has no effect outside those candidate branches",
+    "value": true
+  },
+  "configuration": {
+    "aggregate_share": 0.0,
+    "applies_to": [
+      "annex_1b",
+      "annex_3"
+    ],
+    "excludes_chapters": [
+      "72",
+      "73",
+      "74",
+      "76"
+    ],
+    "threshold": 0.15
+  },
+  "model_implementation": {
+    "baseline_at_or_above_threshold_share": 1.0,
+    "baseline_below_threshold_share": 0.0,
+    "below_threshold_route_is_share_scaled": true,
+    "route_executes_only_when_aggregate_share_is_positive": true
+  },
+  "producer": {
+    "bytes": 7114,
+    "path": "scripts/build_us_tariff_yale_note16_weight_assumption.py",
+    "sha256": "acb9c4996e7d7fc0bc00bcaf6a92d17e69538cf846338dbafbd18f9a53ade908"
+  },
+  "receipt_payload_sha256": "cb248ff3bb4c3f228286c0b2f45360c2e99e0f96f3008a2b80229ba054661826",
+  "schema": "axiom_oracles.us_tariff_schedule.yale_note16_weight_assumption.v1",
+  "verdict": "PASS",
+  "yale_source": {
+    "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+    "files": {
+      "config/policy_params.yaml": {
+        "bytes": 50577,
+        "path": "config/policy_params.yaml",
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "docs/assumptions.md": {
+        "bytes": 37812,
+        "path": "docs/assumptions.md",
+        "sha256": "e2b65a9641895156c9e3fa1e06c05866e3cfdfb04075b26bee5117c0357f0dbf"
+      },
+      "src/pipeline/06_calculate_rates.R": {
+        "bytes": 179892,
+        "path": "src/pipeline/06_calculate_rates.R",
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      }
+    },
+    "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "bundle_bytes": 15577166,
+  "bundle_sha256": "953cdff08d2ad068ef5e6914c683c73ad01ce5ccdd6acf6046cfe1907e1af016",
+  "manifest": {
+    "claims": {
+      "actual_entry_grounding": "uncaptured",
+      "certified": false,
+      "closed": false,
+      "kind": "bounded_source_and_runtime_evidence",
+      "release_authorized": false
+    },
+    "corpus_ref": "cc18c703741425a3ebf994a2975cae158bd305d1",
+    "files": {
+      "README.md": {
+        "bytes": 850,
+        "sha256": "59bd983672a9f7f857b041de3a060997cfd6afe6372280a36854c2d6cd76b10c"
+      },
+      "axiom-rules-engine": {
+        "bytes": 3046352,
+        "sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
+      },
+      "evidence.json": {
+        "bytes": 6686787,
+        "sha256": "e019be99f86af5e9919a768a73f8d83f177e8766d48e6d15827d89bf6357ea4a"
+      },
+      "runs/0.compiled.json": {
+        "bytes": 1690432,
+        "sha256": "35e17146171ff23841d8f3d6f8e2d6ad955842ca3942234244f8495bc00649dd"
+      },
+      "runs/0.request.json": {
+        "bytes": 424580,
+        "sha256": "c00fc3c2ca10ae5cead0e70182e734f0cc15e3557f47e4424fa88291750f61e8"
+      },
+      "runs/1.compiled.json": {
+        "bytes": 1827481,
+        "sha256": "01951090ca451fb300e356c8dc5b4685f17e759b5e57031bbb7cbab4907a1f8c"
+      },
+      "runs/1.request.json": {
+        "bytes": 535940,
+        "sha256": "7e0ec260ee100fc1b33fdb8960e19b0e37eb5cb21c4cb1f90d077d5079585973"
+      },
+      "sources/chapter-99.pdf": {
+        "bytes": 13957698,
+        "sha256": "92822e8f38873a7275c4cf9bd5341f96f5834dbea964623e7a7aa7b2cd02f225"
+      },
+      "sources/ingest-manifest.json": {
+        "bytes": 2110,
+        "sha256": "2811c6a36f05dbafbf3b3b1b23b42470377ce6d3e53e3f4e5a865c08dd2f21f7"
+      },
+      "sources/provisions.jsonl": {
+        "bytes": 4229923,
+        "sha256": "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8"
+      },
+      "verify.py": {
+        "bytes": 12190,
+        "sha256": "7b6a19b827de820f11564521f419be28db906bfb88803bc5f4f47326a84c9a86"
+      }
+    },
+    "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
+    "runtime_platform": "macOS arm64",
+    "schema": "axiom_oracles.us_tariff_schedule.offline_boundary_replay.v1"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.offline_boundary_replay.v1",
+  "verification": {
+    "cases": 384,
+    "certified": false,
+    "checked_outputs": 768,
+    "manifest_sha256": "ffaba0ea667d0562ceada755678eb12dd654a71c3e2152d8efe700756e6c8ad5",
+    "network_required": false
+  }
+}

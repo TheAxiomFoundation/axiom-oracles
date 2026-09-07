@@ -1,0 +1,466 @@
+{
+  "baseline": {
+    "reference/us-tariff-schedule/publication-baseline/campaign-dispositions.yaml": "2ebafef886b4f2e57724e5f6a06e5703709684b9f7c58470a585d0fe5201cf7d",
+    "reference/us-tariff-schedule/publication-baseline/classification-receipt.json": "6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35",
+    "reference/us-tariff-schedule/publication-baseline/comparison-report.json": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be",
+    "reference/us-tariff-schedule/publication-baseline/exercise-receipt.json": "7e9f6ec11c67cbc17b951c816dc7116dd028c8e2d56b4bfdfa7e9702ce24a9d9"
+  },
+  "certified": false,
+  "classification_input_hash_changes": [
+    {
+      "after": "196afd7b030a781cd852bee469af26d7ff3939db60aba2454f7500fded0b480b",
+      "before": "2ebafef886b4f2e57724e5f6a06e5703709684b9f7c58470a585d0fe5201cf7d",
+      "field": "disposition_ledger_sha256"
+    },
+    {
+      "after": "51f8f1405fbd398b4bb55f916abcb562901e1ff8bcc900b4a5d9bdee30fb2671",
+      "before": "69121a39e488a411a9dc1e402d7ee49f29dfd59e0a24f82c0d7138e311ca642b",
+      "field": "preview_selector_transition_receipt_sha256"
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "field": "preview_selector_transition_payload_sha256"
+    }
+  ],
+  "exercise_change": "two report-hash fields only; measured cardinalities and field states unchanged",
+  "ledger_hash_changes": [
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "aircraft-utilization-proxy-brazil-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "cafta-52i-yale-reference-defect",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "chapter98-brazil-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "chapter98-forced-labor-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "pharma-utilization-proxy-brazil-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-auto-part-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-auto-and-mhd-part-candidates-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-mhd-part-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-yale-reference-defect-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-auto-part-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-auto-and-mhd-part-candidates-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-mhd-part-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-annex-yale-reference-defect-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-auto-part-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-auto-and-mhd-part-candidates-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-vehicle-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-cabinet-vanity-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-mhd-part-candidate-brazil",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-auto-part-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-auto-and-mhd-part-candidates-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-vehicle-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-cabinet-vanity-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "section232-heading-mhd-part-candidate-forced-labor",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "yale-hts8-broadening-brazil-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "yale-parser-zero-statutory-base-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "yale-zero-pharma-brazil-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+      "before": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+      "entry_id": "yale-zero-pharma-forced-labor-fresh-signature-rebind",
+      "path": [
+        "evidence",
+        "transition",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "8948878bae5f34ad2b33e49619f462aaee09619fbbc261397503ea4d061cdac4",
+      "before": "af395ba6f22ae6dd6adc6b028138fbdb0900a3b0bad4c9966c5bfe93cdce7e87",
+      "entry_id": "cafta-52i-yale-reference-defect",
+      "path": [
+        "evidence",
+        "cafta_supersession_receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793",
+      "before": "8f86c59e322f311599b7096dde710d408d811aa45f2e4171f84cab88823fc7bf",
+      "entry_id": "section232-steel-scope-projection-brazil",
+      "path": [
+        "evidence",
+        "steel_scope_projection",
+        "sha256"
+      ]
+    },
+    {
+      "after": "27f7764dd834a45ce90dee4ffe04b1417594c1f14c6ef47e2510601c22393847",
+      "before": "2358c3c8e08bff3c49e6e9d801ec7cacc6dd314fa354d182c756e8ccd7f3e73a",
+      "entry_id": "section232-steel-scope-projection-brazil",
+      "path": [
+        "evidence",
+        "steel_scope_projection",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793",
+      "before": "8f86c59e322f311599b7096dde710d408d811aa45f2e4171f84cab88823fc7bf",
+      "entry_id": "section232-steel-scope-projection-forced-labor",
+      "path": [
+        "evidence",
+        "steel_scope_projection",
+        "sha256"
+      ]
+    },
+    {
+      "after": "27f7764dd834a45ce90dee4ffe04b1417594c1f14c6ef47e2510601c22393847",
+      "before": "2358c3c8e08bff3c49e6e9d801ec7cacc6dd314fa354d182c756e8ccd7f3e73a",
+      "entry_id": "section232-steel-scope-projection-forced-labor",
+      "path": [
+        "evidence",
+        "steel_scope_projection",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547",
+      "before": "092a3dac97b0b0337274c386013116041294ce06612bb4c3909d33a913d68a99",
+      "entry_id": "section232-russia-aluminum-membership-vintage",
+      "path": [
+        "evidence",
+        "remaining_residuals",
+        "sha256"
+      ]
+    },
+    {
+      "after": "6d34a59cff5ce3a6d3c7a070427699f7a870766a7325c8abaf7c5558341d7fc4",
+      "before": "88e86d5cdea018704bb284e513b85cb7dfe3135a1961e4a560c69ef90cdb7a00",
+      "entry_id": "section232-russia-aluminum-membership-vintage",
+      "path": [
+        "evidence",
+        "remaining_residuals",
+        "receipt_payload_sha256"
+      ]
+    },
+    {
+      "after": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547",
+      "before": "092a3dac97b0b0337274c386013116041294ce06612bb4c3909d33a913d68a99",
+      "entry_id": "yale-html-statutory-base-parser-defect",
+      "path": [
+        "evidence",
+        "remaining_residuals",
+        "sha256"
+      ]
+    },
+    {
+      "after": "6d34a59cff5ce3a6d3c7a070427699f7a870766a7325c8abaf7c5558341d7fc4",
+      "before": "88e86d5cdea018704bb284e513b85cb7dfe3135a1961e4a560c69ef90cdb7a00",
+      "entry_id": "yale-html-statutory-base-parser-defect",
+      "path": [
+        "evidence",
+        "remaining_residuals",
+        "receipt_payload_sha256"
+      ]
+    }
+  ],
+  "new_comparison_rows_scanned": 0,
+  "new_semantic_or_legal_claims": false,
+  "preserved_classification_fields": [
+    "class_census",
+    "classification_population",
+    "classified",
+    "conservation",
+    "derived_total_compositions",
+    "derived_total_units",
+    "engine_errors",
+    "groups",
+    "mismatches",
+    "observed_signature_count",
+    "schema",
+    "selector_count",
+    "sidecar",
+    "unexplained"
+  ],
+  "preserved_comparison_units": 216111132,
+  "preserved_measurements_sha256": "51197ad382ff142a6f6fd42404c55f2ef62ca9f5425164b0ad7f02c57de5a370",
+  "preserved_mismatch_units": 6807741,
+  "preserved_report_fields": [
+    "column_exposure",
+    "conformant",
+    "output_summary",
+    "schema",
+    "scope",
+    "scoreboard",
+    "suite",
+    "summary",
+    "title"
+  ],
+  "producer": "scripts/rebind_us_tariff_publication.py",
+  "proofs": {
+    "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json": "f77eb238e20780e39afc84b8a43954ceb8e59a54a4002b485715bccf33a1ea29",
+    "reference/us-tariff-schedule/preview-selector-transition-receipt.json": "51f8f1405fbd398b4bb55f916abcb562901e1ff8bcc900b4a5d9bdee30fb2671",
+    "reference/us-tariff-schedule/remaining-residual-receipt.json": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547",
+    "reference/us-tariff-schedule/steel-scope-projection-receipt.json": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793"
+  },
+  "release_authorized": false,
+  "schema": "axiom_oracles.us_tariff_schedule.publication_metadata_rebind.v1",
+  "source_generation": "preserved unfinished frontier rebuild at 5673d70e8b0de52b60c1fb0792e4c478704ba6a6",
+  "successors": {
+    "axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json": "41a3bf09bc34c932121c5601672d1cc741aaa0e4026312f30cf819dfc6f72337",
+    "conformance/detail/us-tariff-schedule.json": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
+    "reference/us-tariff-schedule/campaign-dispositions.yaml": "196afd7b030a781cd852bee469af26d7ff3939db60aba2454f7500fded0b480b",
+    "reference/us-tariff-schedule/classification-receipt.json": "36ee1920af8b1ed94d90b01c48eeedf0441cf1a9653e5f3fcb084ba639f7ed95"
+  }
+}

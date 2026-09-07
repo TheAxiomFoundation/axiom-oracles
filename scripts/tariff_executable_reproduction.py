@@ -48,6 +48,7 @@ PINNED_ENGINE_SHA256 = (
     "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
 )
 DEFAULT_RULESPEC_ROOT = Path("/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us")
+DEFAULT_RULESPEC_REF = "4f591c4267063094cc6da9d590872ea982940b81"
 DEFAULT_ENGINE_BINARY = Path(
     "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
 )
@@ -229,7 +230,7 @@ def _certified_cases(repo_root: Path) -> list[dict[str, Any]]:
 def build_reproduction(
     *,
     rulespec_repo: Path = DEFAULT_RULESPEC_ROOT,
-    rulespec_ref: str,
+    rulespec_ref: str = DEFAULT_RULESPEC_REF,
     engine_binary: Path = DEFAULT_ENGINE_BINARY,
     repo_root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
@@ -313,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--engine-binary", type=Path, default=DEFAULT_ENGINE_BINARY)
     args = parser.parse_args(argv)
     artifact = args.artifact.expanduser()
-    ref = args.rulespec_ref or "main"
+    ref = args.rulespec_ref or DEFAULT_RULESPEC_REF
     committed = None
     if args.check:
         try:

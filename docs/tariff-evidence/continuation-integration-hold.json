@@ -1,0 +1,70 @@
+{
+  "certified": false,
+  "changed_bindings": [
+    {
+      "actual_bytes": 8669,
+      "bytes": 5388,
+      "current_sha256": "2766ff798f2c8e339ca8194bed35a9cabc408c06c7f12bbf1c8f9cf42c6a21d6",
+      "namespace": "axiom-oracles",
+      "path": "axiom_oracles/comparison/comparator.py",
+      "references": [
+        {
+          "pointer": "/bindings/campaign_evaluator/oracle_sources/8",
+          "proof": "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json"
+        },
+        {
+          "pointer": "/producer/campaign_evaluator/oracle_sources/8",
+          "proof": "reference/us-tariff-schedule/steel-scope-projection-receipt.json"
+        },
+        {
+          "pointer": "/producer/campaign_evaluator/oracle_sources/8",
+          "proof": "reference/us-tariff-schedule/remaining-residual-receipt.json"
+        },
+        {
+          "pointer": "/transitions/2/evidence/cafta_supersession_receipt/payload/bindings/campaign_evaluator/oracle_sources/8",
+          "proof": "reference/us-tariff-schedule/preview-selector-transition-receipt.json"
+        }
+      ],
+      "resolved_path": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-evidence-continuation-20260907/axiom_oracles/comparison/comparator.py",
+      "sha256": "3475feb28994b90a167d04963ca53f81b6249b3e357a9d450e9e0998a9a6ddc1",
+      "status": "size_mismatch"
+    },
+    {
+      "actual_bytes": 30423,
+      "bytes": 27827,
+      "current_sha256": "218f12a119916a18016560f4492e9e2aa4c1e2e85d9023cc86f0016903a1674e",
+      "namespace": "axiom-oracles",
+      "path": "axiom_oracles/comparison/report.py",
+      "references": [
+        {
+          "pointer": "/bindings/campaign_evaluator/oracle_sources/10",
+          "proof": "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json"
+        },
+        {
+          "pointer": "/producer/campaign_evaluator/oracle_sources/10",
+          "proof": "reference/us-tariff-schedule/steel-scope-projection-receipt.json"
+        },
+        {
+          "pointer": "/producer/campaign_evaluator/oracle_sources/10",
+          "proof": "reference/us-tariff-schedule/remaining-residual-receipt.json"
+        },
+        {
+          "pointer": "/transitions/2/evidence/cafta_supersession_receipt/payload/bindings/campaign_evaluator/oracle_sources/10",
+          "proof": "reference/us-tariff-schedule/preview-selector-transition-receipt.json"
+        }
+      ],
+      "resolved_path": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-evidence-continuation-20260907/axiom_oracles/comparison/report.py",
+      "sha256": "1bb9b43eca53d229b40031232fd862db4324e028ecd26b3a1273b1362cb20988",
+      "status": "size_mismatch"
+    }
+  ],
+  "closed": false,
+  "frozen_milestone_conformant": true,
+  "merged_certificate_conformant": false,
+  "preserved_milestone": "a7d2bf13af1b64fa20695e7347e933c76f5efe2c",
+  "refresh_note": "Scheduled report metadata updates only; both inherited tariff census rows reproduce and 225 other census rows match refreshed main. Canonical tariff certificate regenerated; original comparator/report admission hold unchanged.",
+  "refreshed_upstream_main": "82d342793d939b3bb11e9a2d50d3fb0b3bc57622",
+  "resolution": "Current main changes the comparison implementation; do not rebind proof hashes or assert renewed historical compatibility. The original proof generation and its green qualified conformance remain preserved on the original milestone. New boundary evidence uses immutable RuleSpec and real pinned runtime independently. A future admission review must decide historical source pinning versus a justified targeted reproduction.",
+  "schema": "axiom_oracles.tariff_continuation.integration_hold.v1",
+  "upstream_main": "ef012e83cd2e8b9b7afd4829841d9e29bc173d42"
+}

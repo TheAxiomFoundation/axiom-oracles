@@ -1,0 +1,79 @@
+{
+  "fable_review": {
+    "blocker": "no keychain token for max.ghenis@gmail.com (claude-quota-max.ghenis@gmail.com)",
+    "exit_code": 5,
+    "release_gate_satisfied": false,
+    "run": "20260907-172639-tariff-evidence-fable",
+    "state": "blocked_before_review"
+  },
+  "implementation_head": "10972f34dd6e884f0f9645dfc9445751d3e31ed3",
+  "note": "These are separate targeted invocations, not a single full-repository test run. Initial portability and stale metadata failures were fixed; logs remain in the lane. No huge scan was rerun.",
+  "passed_across_disjoint_groups": 351,
+  "preservation": {
+    "auto_reset_enabled": false,
+    "certificate_reproduces_byte_for_byte": true,
+    "certificate_verdicts": {
+      "closed": false,
+      "conformant": true,
+      "executable": true,
+      "exercised": true
+    },
+    "certified": false,
+    "implementation_head": "10972f34dd6e884f0f9645dfc9445751d3e31ed3",
+    "new_campaign_rows_scanned": 0,
+    "no_reset_block_enabled": true,
+    "no_reset_marker_sha256": "8b7f37db5e084eed3eb960141c189483606f8286a1624b8f1b50ff92d06503c1",
+    "original_dirty_files_identical": 27,
+    "original_head_unchanged": "83908413e68f551f83c61fbbd891409a567bf5ee",
+    "original_status_and_binary_patch_identical": true,
+    "other_226_census_suites_unchanged": true,
+    "preserved_proof_sha256": {
+      "cafta-reference-defect-supersession-receipt.json": "f77eb238e20780e39afc84b8a43954ceb8e59a54a4002b485715bccf33a1ea29",
+      "preview-selector-transition-receipt.json": "51f8f1405fbd398b4bb55f916abcb562901e1ff8bcc900b4a5d9bdee30fb2671",
+      "remaining-residual-receipt.json": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547",
+      "steel-scope-projection-receipt.json": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793"
+    },
+    "release_authorized": false,
+    "rulespec_clean": true,
+    "rulespec_head_unchanged": "4f591c4267063094cc6da9d590872ea982940b81",
+    "tariff_census_reproduces_exactly": true
+  },
+  "test_groups": [
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/closure-portability-tests.log",
+      "log_sha256": "b66530bc1ed013add4347778de4b66fbd976ad88f21d3bfafad6934b3c7bde9b",
+      "passed": 164,
+      "scope": "Preserved rebuild and 101 real pinned compilations"
+    },
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/boundary-tests.log",
+      "log_sha256": "f5801870ba3c5ceaddd5b679e3bc49fcaf5484957ab861eb9e4a296e654ee7e6",
+      "passed": 13,
+      "scope": "Six-scope source and runtime evidence"
+    },
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/reproducibility-restored-tests.log",
+      "log_sha256": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18",
+      "passed": 3,
+      "scope": "File binding/root audit"
+    },
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/publication-rebind-tests.log",
+      "log_sha256": "eb022cf8f64ce98731f5539a63f91d92c03183255cbc37964bf22e812048fefd",
+      "passed": 151,
+      "scope": "Publication metadata and exercise receipt"
+    },
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/offline-bundle-tests.log",
+      "log_sha256": "c39efe51cd313bd35a816020dcd8c7ac1446c3b68b8b6f37038ffea4140f72bf",
+      "passed": 7,
+      "scope": "Portable replay substitution and trust checks"
+    },
+    {
+      "log": "/Users/maxghenis/capacity-sprint-20260907/tariff/certificate-census-tests.log",
+      "log_sha256": "9ca106687bf586dbe5857a031cd48b1e22be31379975dfcfca56dc6bb86ac37c",
+      "passed": 13,
+      "scope": "Narrow tariff certificate/census integration"
+    }
+  ]
+}

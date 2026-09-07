@@ -1,0 +1,13 @@
+{
+  "content_type": "application/octet-stream",
+  "curl_version": "libcurl/8.7.1 (SecureTransport) LibreSSL/3.3.6 zlib/1.2.12 nghttp2/1.68.1",
+  "exitcode": 0,
+  "http_code": 200,
+  "http_version": "2",
+  "method": "GET",
+  "num_redirects": 0,
+  "size_download": 13957698,
+  "ssl_verify_result": 0,
+  "time_total": 1.077671,
+  "url_effective": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099"
+}

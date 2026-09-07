@@ -3247,16 +3247,118 @@ def test_tariff_scale_report_derives_open_axiom_units(monkeypatch):
     monkeypatch.setattr(certify, "_load", lambda _path: report)
     leg, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
     assert defects == []
-    assert leg["axiom_attributed_open"] == 1_592_236
-    assert leg["axiom_attributed_open_classes"] == {
+    assert leg["axiom_attributed_open"] == 0
+    assert leg["axiom_attributed_open_classes"] == {}
+    assert leg["unexplained"] == 0
+    assert leg["clean"] is True
+
+
+@pytest.fixture
+def tariff_scale_attribution_report():
+    """Minimal synthetic consumer report, independent of the live campaign."""
+    class_census = {
+        "fed-false-family-brazil": 93_198,
+        "fed-false-family-forced-labor": 1_499_038,
+        "synthetic-reference-methodology": 7,
+    }
+    mismatches = sum(class_census.values())
+    return {
+        "schema": "axiom.comparison_report.v2",
+        "suite": "us-tariff-schedule",
+        "conformant": True,
+        "summary": {
+            "total": mismatches + 1,
+            "matches": 1,
+            "mismatches": mismatches,
+            "explained": mismatches,
+            "unexplained": 0,
+            "engine_errors": 0,
+        },
+        "scoreboard": {
+            "conformant": True,
+            "derivation": "unexplained == 0 and engine_errors == 0",
+        },
+        "classification": {
+            "class_census": class_census,
+            "class_attribution": {
+                name: {"units": units, "attribution": "upstream-methodology"}
+                for name, units in class_census.items()
+            },
+        },
+        "scope": {"open": {"status": "OPEN", "axiom_attributed_open_classes": {}}},
+    }
+
+
+def test_tariff_scale_report_open_axiom_fixture_blocks_clean_conformance(
+    tmp_path, monkeypatch, tariff_scale_attribution_report
+):
+    """Explained Axiom-open units block the leg even with conformant=true."""
+    certify = _load("certify")
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    # This fixture isolates the attribution gate. The mandatory independent
+    # proof gate has its own adversarial integration tests.
+    monkeypatch.setattr(
+        certify,
+        "_validate_tariff_publication",
+        lambda _report, entry: ([], certify.sha256_of(tmp_path / entry["report"])),
+    )
+    entry = {
+        "suite": "us-tariff-schedule",
+        "oracle_type": "reference",
+        "oracle": "synthetic reference",
+        "report": "us-tariff-schedule-fixture.json",
+    }
+    report_path = tmp_path / entry["report"]
+    report_path.write_text(json.dumps(tariff_scale_attribution_report))
+    baseline, _evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert defects == []
+    assert baseline["axiom_attributed_open"] == 0
+    assert baseline["axiom_attributed_open_classes"] == {}
+    assert baseline["clean"] is True
+
+    # Preserve the historical nonzero-unit gate as the live report changes.
+    # Only attribution changes; conserved counts and producer flags stay valid.
+    mutant = copy.deepcopy(tariff_scale_attribution_report)
+    expected_open_classes = {
         "fed-false-family-brazil": 93_198,
         "fed-false-family-forced-labor": 1_499_038,
     }
+    attributions = mutant["classification"]["class_attribution"]
+    for name in expected_open_classes:
+        attributions[name]["attribution"] = "axiom-attributed-open"
+    mutant["scope"]["open"]["axiom_attributed_open_classes"] = {
+        name: copy.deepcopy(attributions[name]) for name in expected_open_classes
+    }
+    report_path.write_text(json.dumps(mutant))
+
+    leg, evidence, defects = certify._tariff_schedule_suite_verdict(entry)
+    assert defects == []
+    assert mutant["conformant"] is True
+    assert mutant["scoreboard"]["conformant"] is True
+    assert leg["unexplained"] == 0
+    assert leg["axiom_attributed_open"] == 1_592_236
+    assert leg["axiom_attributed_open_classes"] == expected_open_classes
     assert leg["clean"] is False
+    assert evidence[0]["sha256"] == hashlib.sha256(report_path.read_bytes()).hexdigest()
 
 
-def test_tariff_preview_ruling_does_not_rewrite_current_certificate():
+def test_tariff_preview_ruling_does_not_rewrite_current_certificate(monkeypatch):
     certify = _load("certify")
+    report_path = (
+        REPO / "conformance/detail/us-tariff-schedule.json"
+    ).resolve()
+    original_load = certify._load
+    report_loads = 0
+
+    def load_once(path):
+        nonlocal report_loads
+        if path.resolve() == report_path:
+            report_loads += 1
+            if report_loads > 1:
+                raise AssertionError("validated tariff report was reopened")
+        return original_load(path)
+
+    monkeypatch.setattr(certify, "_load", load_once)
     actual = certify.build_certificate(
         "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
     )
@@ -3265,9 +3367,38 @@ def test_tariff_preview_ruling_does_not_rewrite_current_certificate():
     )
 
     assert actual == committed
+    assert report_loads == 1
     assert actual["certified"]["value"] is False
+    assert actual["verdicts"]["conformant"]["value"] is True
+    assert actual["verdicts"]["exercised"]["value"] is True
     assert actual["verdicts"]["closed"]["status"] == "computed_open"
     assert actual["verdicts"]["executable"]["status"] == "computed_pass"
+    executable_receipt = json.loads(
+        (REPO / "conformance/executable/us-tariff-witness.json").read_text()
+    )
+    assert actual["verdicts"]["executable"]["compiled_artifacts"] == [
+        {"program": row["module"], "sha256": row["sha256"]}
+        for row in executable_receipt["compiled_artifacts"]
+    ]
+    assert len(actual["blockers"]) == 15
+    assert all(blocker.startswith("closed: ") for blocker in actual["blockers"])
+    assert not any("lack exact source scope" in blocker for blocker in actual["blockers"])
+    boundary_frontier = actual["verdicts"]["closed"]["boundary_frontier"]
+    assert boundary_frontier["complete"] is True
+    assert boundary_frontier["input_count"] == 58
+    assert boundary_frontier["required_input_count"] == 58
+    assert boundary_frontier["missing_input_count"] == 0
+    assert all(
+        row["grounding"] == "uncaptured" for row in boundary_frontier["inputs"]
+    )
+    assert any(
+        "note-51-section-338 is pending" in blocker for blocker in actual["blockers"]
+    )
+    assert "requires zero axiom-attributed-open units" in actual["_comment"]
+    assert (
+        "requires the report's axiom-attributed-open class set to be empty"
+        in (actual["scope"]["certificate_premise"])
+    )
 
 
 # ── Exercise denominator: computed from committed artifacts ──────────────────

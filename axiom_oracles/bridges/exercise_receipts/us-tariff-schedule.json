@@ -1,45 +1,268 @@
 {
-  "schema": "axiom_oracles.committed_exercise_receipt.v1",
-  "suite": "us-tariff-schedule",
   "cases": 19118619,
-  "evidence_mode": "content-addressed-shard-manifest",
-  "report": "conformance/detail/us-tariff-schedule.json",
-  "report_sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72",
   "evidence_artifacts": [
-    {"path": "reference/us-tariff-schedule/eval/MANIFEST.json", "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"},
-    {"path": "reference/us-tariff-schedule/comparison-summary.json", "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"},
-    {"path": "conformance/detail/us-tariff-schedule.json", "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"}
+    {
+      "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "f11f8a72108bfdaa0aafb332b2fc47eb410dcf1970931dfbbf2e32d4a8f5ad1a"
+    },
+    {
+      "path": "reference/us-tariff-schedule/comparison-summary.json",
+      "sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7"
+    },
+    {
+      "path": "conformance/detail/us-tariff-schedule.json",
+      "sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d"
+    },
+    {
+      "path": "axiom_oracles/bridges/manifests/us-tariff-schedule.yaml",
+      "sha256": "e5e1c81e7a7c817815a045b5ede87eaac16669d7ce4d970e7592fafc0c5f68a5"
+    }
   ],
   "evidence_fields": {
-    "hts_number": {"distinct": 20508, "state": "varied"},
-    "hts_line": {"distinct": 11570, "state": "varied"},
-    "country_of_origin": {"distinct": 240, "state": "varied"},
-    "entry_date": {"distinct": 27, "state": "varied"},
-    "origin_regime": {"distinct": 16, "state": "varied"},
-    "entry_is_china_301_list123": {"distinct": 2, "state": "varied"},
-    "entry_is_china_301_list4a": {"distinct": 2, "state": "varied"},
-    "entry_is_line_a": {"distinct": 2, "state": "varied"},
-    "entry_is_line_b": {"distinct": 2, "state": "varied"},
-    "entry_is_line_d": {"distinct": 2, "state": "varied"},
-    "entry_is_section_122_exempt": {"distinct": 2, "state": "varied"},
-    "entry_is_section_201_cspv": {"distinct": 2, "state": "varied"},
-    "entry_is_section_232_aluminum": {"distinct": 2, "state": "varied"},
-    "entry_is_section_232_covered": {"distinct": 2, "state": "varied"},
-    "entry_is_section_232_steel": {"distinct": 2, "state": "varied"},
-    "entry_is_brazil_301_listed": {"distinct": 1, "state": "constant"},
-    "entry_is_china_301_2024_action": {"distinct": 1, "state": "constant"},
-    "entry_is_china_301_solar": {"distinct": 1, "state": "constant"},
-    "entry_is_forced_labor_301_listed": {"distinct": 1, "state": "constant"},
-    "article_is_potash": {"distinct": 1, "state": "constant"},
-    "cbp_agrees_chapter_98_entry_is_appropriate": {"distinct": 1, "state": "constant"},
-    "entry_is_9802_excepted_entry": {"distinct": 1, "state": "constant"},
-    "entry_is_chapter_98_subchapter_xxiii_entry": {"distinct": 1, "state": "constant"},
-    "entry_is_entered_free_of_duty_under_usmca": {"distinct": 1, "state": "constant"},
-    "entry_is_humanitarian_donation_article": {"distinct": 1, "state": "constant"},
-    "entry_is_informational_material_article": {"distinct": 1, "state": "constant"},
-    "entry_is_personal_use_accompanied_baggage": {"distinct": 1, "state": "constant"},
-    "entry_is_properly_claimed_chapter_98_entry": {"distinct": 1, "state": "constant"},
-    "entry_is_usmca_duty_free_entry": {"distinct": 1, "state": "constant"},
-    "entry_loaded_and_in_transit_before_july_24_2026": {"distinct": 1, "state": "constant"}
-  }
+    "article_is_potash": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "cbp_agrees_chapter_98_entry_is_appropriate": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "country_of_origin": {
+      "distinct": 240,
+      "state": "varied"
+    },
+    "entry_date": {
+      "distinct": 27,
+      "state": "varied"
+    },
+    "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_9802_excepted_entry": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_brazil_301_listed": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_chapter_98_subchapter_xxiii_entry": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_china_301_2024_action": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_china_301_list123": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_china_301_list4a": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_china_301_solar": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_entered_free_of_duty_under_dr_cafta": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_entered_free_of_duty_under_usmca": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_forced_labor_301_listed": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_general_note_29_d_v_textile_or_apparel_good": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_humanitarian_donation_article": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_informational_material_article": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_line_a": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_line_b": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_line_d": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_note33_auto_part_subject_to_import_adjustment_offset": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_note33_g_automobile_part": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_note40_patented_pharmaceutical_article": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_personal_use_accompanied_baggage": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_properly_claimed_chapter_98_entry": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_s232_copper_additional_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_copper_primary_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note16_c_ii_derivative_aluminum_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note16_metal_chapter": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note33_auto_part_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note33_vehicle_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note37_cabinet_vanity_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note37_softwood_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note37_upholstered_wood_furniture_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note38_bus_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note38_mhd_part_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note38_mhd_vehicle_member": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note39_semiconductor_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_s232_note40_pharmaceutical_candidate": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_section_122_exempt": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_section_201_cspv": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_section_232_aluminum": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_section_232_covered": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_section_232_steel": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_is_usmca_duty_free_entry": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_is_within_temporary_surcharge_effective_period": {
+      "distinct": 2,
+      "state": "varied"
+    },
+    "entry_loaded_and_in_transit_before_july_24_2026": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "entry_qualifies_for_note39_heading_9903_79_01": {
+      "distinct": 1,
+      "state": "constant"
+    },
+    "hts_line": {
+      "distinct": 11570,
+      "state": "varied"
+    },
+    "hts_number": {
+      "distinct": 20508,
+      "state": "varied"
+    },
+    "origin_regime": {
+      "distinct": 16,
+      "state": "varied"
+    }
+  },
+  "evidence_mode": "content-addressed-shard-manifest",
+  "report": "conformance/detail/us-tariff-schedule.json",
+  "report_sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
+  "schema": "axiom_oracles.committed_exercise_receipt.v1",
+  "suite": "us-tariff-schedule"
 }

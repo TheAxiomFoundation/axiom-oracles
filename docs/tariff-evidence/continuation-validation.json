@@ -1,0 +1,53 @@
+{
+  "actual_entry_groundings_uncaptured": 58,
+  "auto_reset_enabled": false,
+  "automatic_expiry": false,
+  "certificate_verdicts": {
+    "closed": false,
+    "conformant": false,
+    "executable": true,
+    "exercised": true
+  },
+  "certified": false,
+  "checked_at_utc": "2026-09-07T23:15:53.000285+00:00",
+  "ci": "not run; skip-CI draft head preserves pending required checks",
+  "counterexample_scopes": 7,
+  "fable_review": "pending; no continuation attempt",
+  "fully_admitted_scopes": 0,
+  "identity_alias_differences": 9,
+  "integrated_base": "82d342793d939b3bb11e9a2d50d3fb0b3bc57622",
+  "isolated_replay_log": "continuation-replay-isolated.log",
+  "legal_counterexample_cases": 30,
+  "new_campaign_rows_scanned": 0,
+  "new_source_scopes": 15,
+  "no_reset_block_enabled": true,
+  "no_reset_marker_sha256": "8b7f37db5e084eed3eb960141c189483606f8286a1624b8f1b50ff92d06503c1",
+  "original_artifact_hashes_checked": 23,
+  "original_dirty_files_identical": 27,
+  "original_frontier_head": "83908413e68f551f83c61fbbd891409a567bf5ee",
+  "original_milestone": "a7d2bf13af1b64fa20695e7347e933c76f5efe2c",
+  "original_milestone_clean": true,
+  "original_status_and_binary_patch_identical": true,
+  "preserved_proof_sha256": {
+    "cafta-reference-defect-supersession-receipt.json": "f77eb238e20780e39afc84b8a43954ceb8e59a54a4002b485715bccf33a1ea29",
+    "preview-selector-transition-receipt.json": "51f8f1405fbd398b4bb55f916abcb562901e1ff8bcc900b4a5d9bdee30fb2671",
+    "remaining-residual-receipt.json": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547",
+    "steel-scope-projection-receipt.json": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793"
+  },
+  "replay_bundle_sha256": "4b913f987afb7db5910dbddb62f623049047d284dc2bee8669ee6bae83f65eff",
+  "replay_totals": {
+    "cases": 843,
+    "native_missing_input_errors": 12,
+    "outputs": 1817
+  },
+  "rulespec_clean_and_head_preserved": true,
+  "schema": "axiom_oracles.tariff_continuation.validation.v1",
+  "source_scope_count": 21,
+  "targeted_tests": {
+    "combined_replay_tests": 10,
+    "log": "continuation-targeted-tests.log",
+    "passed": 46,
+    "source_receipt_tests": 36
+  },
+  "worktree_head": "429b93db4606cc17c6964b5cd7396271023a1a5f"
+}

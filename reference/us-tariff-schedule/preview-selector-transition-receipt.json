@@ -1,0 +1,3261 @@
+{
+  "bindings": {
+    "entry_flag_producers": {
+      "dependencies": [
+        {
+          "bytes": 145240,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note16-232-steel.yaml",
+          "sha256": "9b2429251b526b6deb37717c85d60bc1a3b4220f7ea6d27a1ec9cf49d2f6ee4e"
+        },
+        {
+          "bytes": 1508,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note18-201-solar.yaml",
+          "sha256": "454ec0b48db747e44be06afb1ed7efee0e49e2bbdd80321483a2ec1fafa9866e"
+        },
+        {
+          "bytes": 10211,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note19-232-aluminum.yaml",
+          "sha256": "0d8f9408b0e70af1baab5ed6d20d844fd6e2c002d21e749eecc165367b1b779f"
+        },
+        {
+          "bytes": 2711080,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note20-china-301.yaml",
+          "sha256": "538c08da91b90eccd67409b43c4edb69cc3349ac3ea2008cddcb5226c466750b"
+        },
+        {
+          "bytes": 457180,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note2aa-122-exemptions.yaml",
+          "sha256": "8335aed5dc5733f07d60d12b711ea5ada45ac07a6922276230f26a667f10ed8c"
+        },
+        {
+          "bytes": 168458,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50-52-232-sector-precedence.yaml",
+          "sha256": "7077e299ccfd8dcdd18de289ff9d7b303bee6a9b32d8543c060d6214e2b57880"
+        },
+        {
+          "bytes": 103082,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note16-232-aluminum-precedence.yaml",
+          "sha256": "cffa5c0c9a4e913029ed2fa5ccb87c011a4321a7de536cf900c4ff318b9a2514"
+        },
+        {
+          "bytes": 91202,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-543.yaml",
+          "sha256": "59036c1f56add0cde83908b30849ee553098ce27f81fe6d5c640523d16c6dedb"
+        },
+        {
+          "bytes": 91381,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-544.yaml",
+          "sha256": "5aae9de351f85c44beb0e71050ad9c0ca9f4e5ea3ba0ab0bc642d4949310e0f3"
+        },
+        {
+          "bytes": 59347,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-545.yaml",
+          "sha256": "3bfbcf9402ca2d1d093f5041dbc576f78fd5fb5b9d06390f2803c4932aac558c"
+        },
+        {
+          "bytes": 1488,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-546.yaml",
+          "sha256": "b04f2d7ba3a081b695b1586b1e3d34188cb4eca8e39e04cc296197c215acba5a"
+        },
+        {
+          "bytes": 91379,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-548.yaml",
+          "sha256": "966652e04f91f6989c7bc0de819ad732f97de68eac5583c7740067627662690c"
+        },
+        {
+          "bytes": 60143,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-549.yaml",
+          "sha256": "f0d7be0d2ddde430305621cd4625aa730f911f4dc9cf5203d259e525e7a87e2a"
+        },
+        {
+          "bytes": 91044,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-551.yaml",
+          "sha256": "af8110e864c49d2cd657116a84dac061dd26efe54aaed0a30d82f4d5a4d84a57"
+        },
+        {
+          "bytes": 91044,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-552.yaml",
+          "sha256": "362ae5b833bf38a39ea8d7189702519950385885790e095725b62ad0a2d252aa"
+        },
+        {
+          "bytes": 13239,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-553.yaml",
+          "sha256": "e4067a21c7ee52456223806fc4481688ba2a38bbbd087da712a249a9dc59f5fe"
+        },
+        {
+          "bytes": 89884,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-556.yaml",
+          "sha256": "030f802b4b94947e5a0908bb26ad5cd8b0fd8dbaed6fbee10d0b006ac6ff8cf6"
+        },
+        {
+          "bytes": 90051,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-557.yaml",
+          "sha256": "f19a4923a325b3a56a181302979e460c357fa6e7b7393614d11feceb4bb0aa79"
+        },
+        {
+          "bytes": 58474,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-558.yaml",
+          "sha256": "29055521b8d8655f169ed6cd76a3aae25b9a2c954c1755c2e6f9390ea864aa63"
+        },
+        {
+          "bytes": 2554,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-559.yaml",
+          "sha256": "8a30ef51846c6a9a41310db267dd9fe1a01170ba2baa1cf5d9da78f63fd4834a"
+        },
+        {
+          "bytes": 90067,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-561.yaml",
+          "sha256": "3c47613ff99e0671b477735f02bc819795ac6f428f3d548831fe3c7f862cd9af"
+        },
+        {
+          "bytes": 57937,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-562.yaml",
+          "sha256": "786672b496d5b1774e1938e283d6bf2e18713ea5705398a22b75863a7f6b8b41"
+        },
+        {
+          "bytes": 90063,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-564.yaml",
+          "sha256": "7403d216c3a69b47bab8d2cbf5f7c352eda9acccb0eebcf706331c8ead9d6b71"
+        },
+        {
+          "bytes": 90063,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-565.yaml",
+          "sha256": "4369d9755e98a8c6df1b52387dae3afddb8d968f43a15cca40b156963c6e8ff1"
+        },
+        {
+          "bytes": 11763,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-566.yaml",
+          "sha256": "eca10ac7eaa67429f6b330a4009e7dc115dd213d51aef61c3cbf543ce824012f"
+        },
+        {
+          "bytes": 62489,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-567.yaml",
+          "sha256": "758a13770630f050d769d14f97c40ea5f65f3017d7e6c136da162022f5130045"
+        },
+        {
+          "bytes": 28722,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-568.yaml",
+          "sha256": "b75a99f85c38eb12b432af619ae62724452cd492caa32ac75bbddea57826f081"
+        },
+        {
+          "bytes": 43007,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-569.yaml",
+          "sha256": "3f2dfc8b6f2c1ff279af1b8a706bceee8fc5ca965faa0e20bd30a456e71a779d"
+        },
+        {
+          "bytes": 30879,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-570.yaml",
+          "sha256": "c7dce80cdea4eecdfaaf25dac813366f8867de735b625102db6270394a741774"
+        },
+        {
+          "bytes": 27379,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-577.yaml",
+          "sha256": "90cd839b4f955d4fc4cdfcae1ce942bf40b0751cb0b3cc9c460019bc01861d9b"
+        },
+        {
+          "bytes": 25759,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-584.yaml",
+          "sha256": "ea7729c4ac8296b383c3dc145b3af0568a461260fa9680f0ae0fce3f10978ed3"
+        },
+        {
+          "bytes": 55988,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-585.yaml",
+          "sha256": "935b2dd1b10a1de8e363b9e4c480ff26ffbdd293536e7e02d74b9cc6d9b2718c"
+        },
+        {
+          "bytes": 41119,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-586.yaml",
+          "sha256": "7081c59324e4b158c68b8c456c411c3bbb1a051be87161ccf1e3ab8c2de2f4f4"
+        },
+        {
+          "bytes": 41382,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-587.yaml",
+          "sha256": "90ba9951724f5012ac3edcca0dc1cead617ebe5d4701ebc7b81f7432cfed30e6"
+        },
+        {
+          "bytes": 89715,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-589.yaml",
+          "sha256": "7302e33a458fbf22ff5206ffa089cf3cef70501b948b92e1879761b247bddf85"
+        },
+        {
+          "bytes": 89750,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-590.yaml",
+          "sha256": "92ba4f1c3318a321c1bbc45a5036efc45989fef295363cfef509414ab6e8c6bc"
+        },
+        {
+          "bytes": 89750,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-591.yaml",
+          "sha256": "de4d327e3b1a7666c35f154745b03212a32849885cfc7dd85b0fc727761dfc79"
+        },
+        {
+          "bytes": 89750,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-592.yaml",
+          "sha256": "22d5cdb4003e8f76fe7333adb9a6488f9cd073d151502ed57d3e28a3a87369ba"
+        },
+        {
+          "bytes": 89750,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-593.yaml",
+          "sha256": "ac897ad4c9ab9d0f2b142396fbe3cb4845bdbc06e72c0ecadfaede730c95c2d3"
+        },
+        {
+          "bytes": 65180,
+          "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-594.yaml",
+          "sha256": "4c3b3746c04b9d1253e43805fc8ec7162c3c7a85e1497b520fc76425c28f1203"
+        }
+      ],
+      "producer_sha256": "c8de94515e36cce1d6fb17b7cf8baea48dbb908e23e66c7b8c560166ca87cb24",
+      "tool": {
+        "bytes": 19697,
+        "path": "tools/b16_entry_flags.py",
+        "sha256": "864a309fdcb7217961c69ab79c490f56e5e0263c899a5e5d4895768c7e23d44f"
+      }
+    },
+    "evaluation_manifest_sha256": "cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84",
+    "generation_id": "3b25bc33665d4eed90a21409872a54bb",
+    "preview_receipt_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
+    "reference_assumptions": {
+      "yale_note16_metal_weight": {
+        "bytes": 2142,
+        "campaign_binding": {
+          "factual_status": "reference-model assumption only; not an observed or inferred transaction-level metal-weight fact",
+          "input": "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
+          "interpretation": "reproduce Yale's point-estimate baseline in which zero of the scoped import share is below the 15-percent threshold",
+          "scope": "RuleSpec Note 16(c)(vi)/(ix) candidate membership; the input has no effect outside those candidate branches",
+          "value": true
+        },
+        "path": "reference/us-tariff-schedule/yale-note16-metal-weight-assumption.json",
+        "receipt_payload_sha256": "cb248ff3bb4c3f228286c0b2f45360c2e99e0f96f3008a2b80229ba054661826",
+        "schema": "axiom_oracles.us_tariff_schedule.yale_note16_weight_assumption.v1",
+        "sha256": "27d4aef3966556f0fd34195e4a3500e5a7beb6e609315855babf5b4785343719",
+        "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+        "yale_tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+      }
+    },
+    "rulespec": {
+      "content_sha256": "3791e1a8d9139a5d76e35bdc846f663902815f5433aad13e1340e4f10f89ed23",
+      "dirty": false,
+      "head_commit": "4f591c4267063094cc6da9d590872ea982940b81",
+      "head_tree": "b2d4d0ef3929c8600f121206a207f70c7437eaff",
+      "root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us",
+      "tracked_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": []
+    },
+    "run_identity_sha256": "0d5b10e153cf38dc14a1a181c41d393e6bba05fe32ef2a8fe48015624be67f40"
+  },
+  "inputs": {
+    "comparison_artifact": {
+      "bytes": 4039630088,
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/ce/cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84.jsonl.gz",
+      "sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0"
+    },
+    "comparison_receipt": {
+      "bytes": 1565,
+      "path": "reference/us-tariff-schedule/comparison-summary.json",
+      "sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7"
+    },
+    "evaluation_manifest": {
+      "bytes": 429475,
+      "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "f11f8a72108bfdaa0aafb332b2fc47eb410dcf1970931dfbbf2e32d4a8f5ad1a"
+    },
+    "historical_target_mismatch_artifact": {
+      "bytes": 10088070,
+      "path": "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
+      "sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705"
+    },
+    "immutable_preview_receipt": {
+      "bytes": 303477,
+      "path": "reference/us-tariff-schedule/preview-disposition-line-sets.json",
+      "sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181"
+    }
+  },
+  "producer": {
+    "campaign_classifier": {
+      "bytes": 255120,
+      "path": "scripts/us_tariff_schedule_campaign.py",
+      "sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b"
+    },
+    "full_closure_guard": {
+      "bytes": 50937,
+      "path": "scripts/build_us_tariff_section232_equivalence_receipt.py",
+      "sha256": "34e92d18ef1dcba5a2ace50b6d2dd2bee348530e7b9ad628a3aaed3bcf353441"
+    },
+    "script": {
+      "bytes": 105892,
+      "path": "scripts/build_us_tariff_preview_selector_transition_receipt.py",
+      "sha256": "6769e2c4b105b8ec8d88978ccaa7baf50c4669a0ab0ef9dbe011623fd9c6acfd"
+    }
+  },
+  "receipt_payload_sha256": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
+  "schema": "axiom_oracles.us_tariff_schedule.preview_selector_transitions.v1",
+  "transitions": [
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 1827,
+          "expected_signature_population_sha256": "52c27877a2ccd35ac2777450c272f90399056402d40708d20b5c4dda5551d6ec",
+          "expected_units": 3654,
+          "id": "aircraft-utilization-proxy-brazil-fresh-signature-rebind",
+          "logical_class": "aircraft-utilization-proxy",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-aircraft-utilization-proxy-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "aircraft-utilization-proxy-brazil"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "aircraft-utilization-proxy-brazil-fresh-signature-rebind": {
+            "signature_count": 1827,
+            "signature_population_sha256": "52c27877a2ccd35ac2777450c272f90399056402d40708d20b5c4dda5551d6ec",
+            "units": 3654
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "aircraft-utilization-proxy"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "aircraft-utilization-proxy"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 1827,
+        "signature_population_sha256": "52c27877a2ccd35ac2777450c272f90399056402d40708d20b5c4dda5551d6ec",
+        "units": 3654
+      },
+      "historical_units": 3654,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 1827,
+        "expected_signature_population_sha256": "c5437a7fc21abbcf4411d96e9a59225f5586262b8b15aff64be9b0bc8d2fdfbf",
+        "expected_units": 3654,
+        "id": "aircraft-utilization-proxy-brazil",
+        "logical_class": "aircraft-utilization-proxy",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-aircraft-utilization-proxy-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "aircraft-utilization-proxy-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 35584,
+          "expected_signature_population_sha256": "2966c88b13e7668622e2d51ac8767db771aeb878127c50f35e07649ea37458b7",
+          "expected_units": 71168,
+          "id": "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind",
+          "logical_class": "aircraft-utilization-proxy",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-aircraft-utilization-proxy-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "aircraft-utilization-proxy-forced-labor"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "aircraft-utilization-proxy-forced-labor-fresh-signature-rebind": {
+            "signature_count": 35584,
+            "signature_population_sha256": "2966c88b13e7668622e2d51ac8767db771aeb878127c50f35e07649ea37458b7",
+            "units": 71168
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "aircraft-utilization-proxy"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "aircraft-utilization-proxy"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 35584,
+        "signature_population_sha256": "2966c88b13e7668622e2d51ac8767db771aeb878127c50f35e07649ea37458b7",
+        "units": 71168
+      },
+      "historical_units": 71168,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 35584,
+        "expected_signature_population_sha256": "33adbdbcbfe79c5313c26e83a25232b091d8183062c07efbc69c59542bd56c0c",
+        "expected_units": 71168,
+        "id": "aircraft-utilization-proxy-forced-labor",
+        "logical_class": "aircraft-utilization-proxy",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-aircraft-utilization-proxy-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "aircraft-utilization-proxy-forced-labor",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "expected_signature_count": 8702,
+          "expected_signature_population_sha256": "ab9394992fe6cc8ca9cbe13768ee427e530caac37b6cd85b6dbb2ef97ce732f3",
+          "expected_units": 17404,
+          "id": "cafta-52i-yale-reference-defect",
+          "logical_class": "cafta-52i-yale-reference-defect",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-cafta-52i-deferred-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "cafta-52i-deferred"
+        }
+      ],
+      "evidence": {
+        "cafta_supersession_receipt": {
+          "file": {
+            "bytes": 16778,
+            "path": "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json",
+            "sha256": "f77eb238e20780e39afc84b8a43954ceb8e59a54a4002b485715bccf33a1ea29"
+          },
+          "payload": {
+            "axiom_predicate_proof": {
+              "actual_case_feed_projection_sha256": "89a12b14bfd36a845a31ec6d49be68a597a4d5ae038ab75a3215ef046aa0508c",
+              "all_joined_actual_case_feeds_false_false": true,
+              "chapter_contracts_checked": 100,
+              "contract_sha256": "e9db8760690ecd8a273e8e8e94095104a80e146fbe438ba41b14ab97b4abfd7a",
+              "joined_fresh_evaluation_records": 17404,
+              "predicates": {
+                "entry_is_entered_free_of_duty_under_dr_cafta": false,
+                "entry_is_general_note_29_d_v_textile_or_apparel_good": false
+              },
+              "scope": "all campaign cases in all 100 compiled chapters"
+            },
+            "bindings": {
+              "campaign_evaluator": {
+                "campaign": {
+                  "bytes": 255120,
+                  "path": "scripts/us_tariff_schedule_campaign.py",
+                  "sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b"
+                },
+                "oracle_sources": [
+                  {
+                    "bytes": 431,
+                    "path": "axiom_oracles/__init__.py",
+                    "sha256": "86745944f591aef5ee9ac3e2f5cc6dbd8c70b00236a17a2ced1e6e7813f0a1a2"
+                  },
+                  {
+                    "bytes": 23,
+                    "path": "axiom_oracles/adapters/__init__.py",
+                    "sha256": "6a79422564a92e91c35d2f80eb8e6d5612023c7068a2d30cd835db3b47940e10"
+                  },
+                  {
+                    "bytes": 719,
+                    "path": "axiom_oracles/adapters/axiom/__init__.py",
+                    "sha256": "89cf772cff7886ce57f8f25df72424c3ff3e82bc60597cb45f4791bf0e4706ac"
+                  },
+                  {
+                    "bytes": 16384,
+                    "path": "axiom_oracles/adapters/axiom/_snap_co_base_inputs.py",
+                    "sha256": "e69ae84be2184dc2f269d56d3620041f97543206b9ce9a812cf326a45cc7b854"
+                  },
+                  {
+                    "bytes": 59946,
+                    "path": "axiom_oracles/adapters/axiom/runner.py",
+                    "sha256": "27b90ef698026b07802b0adbdfe473a0c2367f72f75b34253cd094fb5650393b"
+                  },
+                  {
+                    "bytes": 12733,
+                    "path": "axiom_oracles/adapters/axiom/snap_co_projection.py",
+                    "sha256": "ba091d58858d5e1bc583d6cf69a3041e85e86e5ca01340e58457accd12c47099"
+                  },
+                  {
+                    "bytes": 163037,
+                    "path": "axiom_oracles/adapters/axiom/tax_projection.py",
+                    "sha256": "8fd6c0bfb203167a50d8a4ed853841921f28475a8dfa246842b7e048b3f24214"
+                  },
+                  {
+                    "bytes": 361,
+                    "path": "axiom_oracles/comparison/__init__.py",
+                    "sha256": "c71a21a9f4c168d13006cc79d52530bd1930899746b40567052adcb4d375b4f7"
+                  },
+                  {
+                    "bytes": 5388,
+                    "path": "axiom_oracles/comparison/comparator.py",
+                    "sha256": "3475feb28994b90a167d04963ca53f81b6249b3e357a9d450e9e0998a9a6ddc1"
+                  },
+                  {
+                    "bytes": 9864,
+                    "path": "axiom_oracles/comparison/mappings.py",
+                    "sha256": "a7fb63baa8eb9d8e7557bc8c5ba96d5c7b09c2767934976db0368fa0df8f6cff"
+                  },
+                  {
+                    "bytes": 27827,
+                    "path": "axiom_oracles/comparison/report.py",
+                    "sha256": "1bb9b43eca53d229b40031232fd862db4324e028ecd26b3a1273b1362cb20988"
+                  },
+                  {
+                    "bytes": 117535,
+                    "path": "axiom_oracles/config/concept_mappings.yaml",
+                    "sha256": "6bd056698683a18e7db1e48f0a7e816947571f470c378338e61f03562f3477b1"
+                  },
+                  {
+                    "bytes": 55,
+                    "path": "axiom_oracles/core/__init__.py",
+                    "sha256": "514f3510e01d13f69792800dc81eca231822f69b4e0822b89feb2274fb04bb23"
+                  },
+                  {
+                    "bytes": 29372,
+                    "path": "axiom_oracles/core/case.py",
+                    "sha256": "c37f8fe3caafc06f7d4b7d7a93a77dcdcbb1f76b5619312cae54eeb36bb91ed9"
+                  },
+                  {
+                    "bytes": 809,
+                    "path": "axiom_oracles/core/engine.py",
+                    "sha256": "b3f8f54b3ab039b5f7a716b4d52b1d15bc5f9e46bb01a415aa1beda502a18e07"
+                  },
+                  {
+                    "bytes": 5189,
+                    "path": "axiom_oracles/core/geography.py",
+                    "sha256": "c939d55ab63c0e4903ca63c5bca7b1c5b650f988a912c8d0d9ba503e6bacf121"
+                  },
+                  {
+                    "bytes": 2886,
+                    "path": "axiom_oracles/core/household.py",
+                    "sha256": "c1e80bd4621d11c756e27a1f17c6bfb18e0cbcfce3e22fbd0f9c5f8331548438"
+                  },
+                  {
+                    "bytes": 447,
+                    "path": "axiom_oracles/core/results.py",
+                    "sha256": "543b20135f8aff3ecdd6230f61610dfcda2ff2086b3df0c1cd762f9c2572dd31"
+                  },
+                  {
+                    "bytes": 8681,
+                    "path": "axiom_oracles/engine_compat.py",
+                    "sha256": "6f8c2c37cb30637cc88739d6db6c2d7dbe6a248ed8663474d8a70d208038c16e"
+                  }
+                ],
+                "producer_sha256": "4445de9d524fae3b5fe96a6c47ced4f82971b01c4cb68a311e3bebf8268e6328",
+                "python": {
+                  "executable": {
+                    "bytes": 49968,
+                    "path": "/Users/maxghenis/.local/share/uv/python/cpython-3.14.4-macos-aarch64-none/bin/python3.14",
+                    "sha256": "bf4ea26231212e330b8e9b6f24969a30f894fec88665bf42754070d114ac7fc6"
+                  },
+                  "version": "3.14.4 (main, Apr 14 2026, 14:46:33) [Clang 22.1.3 ]"
+                },
+                "pyyaml_version": "6.0.3"
+              },
+              "campaign_producer_identity_required": false,
+              "campaign_semantic_equivalence_basis": "identical selected population plus an exact per-unit historical-to-source-evaluation-to-comparison identity and arithmetic replay",
+              "comparison_receipt_engine_errors": 0,
+              "evaluated_cases": 19118619,
+              "evaluated_chapters": 100,
+              "evaluation_manifest_sha256": "cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84",
+              "evaluation_shard_engine_errors": 0,
+              "fresh_campaign_classifier_sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b",
+              "generation_id": "3b25bc33665d4eed90a21409872a54bb",
+              "observed_evaluated_cases": 19118619,
+              "observed_evaluation_record_errors": 0,
+              "preview_cafta_snapshot_sha256": "531fce05b3c6ac32980fb0e570140ccde0b277d674b6f107724fab76f7ee57c3",
+              "preview_campaign_classifier_sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b",
+              "preview_receipt_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
+              "reference_compared_field": "statutory_rate_s301fl",
+              "reference_rds_path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/timeseries/rate_timeseries.rds",
+              "reference_rds_sha256": "724a0be1dce45d423d5ce599bb56f2ab81cbf78b637ba59a3287738bfc488a35",
+              "rulespec": {
+                "content_sha256": "3791e1a8d9139a5d76e35bdc846f663902815f5433aad13e1340e4f10f89ed23",
+                "dirty": false,
+                "head_commit": "4f591c4267063094cc6da9d590872ea982940b81",
+                "head_tree": "b2d4d0ef3929c8600f121206a207f70c7437eaff",
+                "root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us",
+                "tracked_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "untracked": []
+              },
+              "run_identity_sha256": "0d5b10e153cf38dc14a1a181c41d393e6bba05fe32ef2a8fe48015624be67f40",
+              "selected_population_sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+            },
+            "census": {
+              "cafta_signatures": 8702,
+              "cafta_units": 17404,
+              "fresh_comparison_rows_scanned": 216111132,
+              "historical_artifact_rows_scanned": 395330,
+              "origin_units": {
+                "CR": 1260,
+                "DO": 128,
+                "GT": 108,
+                "HN": 120,
+                "NI": 15636,
+                "SV": 152
+              }
+            },
+            "definition": {
+              "bounded_conclusion": "the 17,404 preview cells are a Yale reference defect caused by the pinned tidy-eval name collision under the campaign's explicitly neutral false entry facts",
+              "real_entry_frontier": "unchanged: the receipt proves neither GN-29(d)(v) product status nor a DR-CAFTA duty-free claim for any actual entry",
+              "stable_identity": [
+                "case_id",
+                "slot",
+                "hts10",
+                "hts_line",
+                "iso2",
+                "revision",
+                "interval",
+                "origin_regime",
+                "expected"
+              ],
+              "supersession_condition": "exact immutable population and fresh identity digest; zero evaluation or comparison engine errors; both Axiom entry predicates explicitly false; every Yale zero and delta reproduced by the pinned name-collision defect; corrected statutory rates equal Axiom on every cell"
+            },
+            "inputs": {
+              "comparison_artifact": {
+                "bytes": 4039630088,
+                "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/ce/cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84.jsonl.gz",
+                "sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0"
+              },
+              "comparison_receipt": {
+                "bytes": 1565,
+                "path": "reference/us-tariff-schedule/comparison-summary.json",
+                "sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7"
+              },
+              "declared_input_contract": {
+                "bytes": 1159553,
+                "path": "reference/us-tariff-schedule/declared-input-contract-receipt.json",
+                "sha256": "e9db8760690ecd8a273e8e8e94095104a80e146fbe438ba41b14ab97b4abfd7a"
+              },
+              "evaluation_manifest": {
+                "bytes": 429475,
+                "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+                "sha256": "f11f8a72108bfdaa0aafb332b2fc47eb410dcf1970931dfbbf2e32d4a8f5ad1a"
+              },
+              "historical_target_mismatch_artifact": {
+                "bytes": 10088070,
+                "path": "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
+                "sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705"
+              },
+              "immutable_preview_receipt": {
+                "bytes": 303477,
+                "path": "reference/us-tariff-schedule/preview-disposition-line-sets.json",
+                "sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181"
+              },
+              "reference_integrity_receipt": {
+                "bytes": 1013,
+                "path": "reference/us-tariff-schedule/integrity-receipt.json",
+                "sha256": "14d974d9eb8a7e58f63fe5be9b80eb2cdc0e2e2e14dc65893572abacc63c6191"
+              },
+              "reference_provenance": {
+                "bytes": 1718,
+                "path": "reference/us-tariff-schedule/provenance.json",
+                "sha256": "52d9da88a0aa5d1b1af4844d3be304f37601c8c1679104be3c2b1b335b57eabe"
+              },
+              "selected_panel_extractor": {
+                "bytes": 8659,
+                "path": "scripts/extract_us_tariff_schedule.R",
+                "sha256": "5ad47ab101eb64bc409f7175caa1d03719bc613655729e61944f903f776fe8b4"
+              }
+            },
+            "producer": {
+              "script": {
+                "bytes": 77060,
+                "path": "scripts/build_us_tariff_cafta_supersession_receipt.py",
+                "sha256": "705d7694b91008aae843d22e4732fcc1ae5166d4fb5860712e7da375644bff90"
+              }
+            },
+            "receipt_payload_sha256": "8948878bae5f34ad2b33e49619f462aaee09619fbbc261397503ea4d061cdac4",
+            "schema": "axiom_oracles.us_tariff_schedule.cafta_reference_defect_supersession.v1",
+            "supersession": {
+              "all_corrected_yale_statutory_rates_match_axiom": true,
+              "all_predicates_false": true,
+              "all_present": true,
+              "all_unique": true,
+              "all_yale_defect_zeros_reproduced": true,
+              "authorized_attribution_after_pass": "reference-defect",
+              "authorized_disposition_after_pass": "upstream_engine_gap",
+              "duplicate_fresh_identities": 0,
+              "duplicate_historical_identities": 0,
+              "fresh_defect_projection_sha256": "d124b93308c27e42cad8cff1d944c63e6f24d67973ea44ea1d623672ade27462",
+              "fresh_identity_population_sha256": "1ceb489cd916d87fd6bedc4797dba33f9562a7a25869e36adde96589aba619f3",
+              "fresh_mismatching_units": 17404,
+              "historical_defect_projection_sha256": "d124b93308c27e42cad8cff1d944c63e6f24d67973ea44ea1d623672ade27462",
+              "historical_identity_population_sha256": "1ceb489cd916d87fd6bedc4797dba33f9562a7a25869e36adde96589aba619f3",
+              "historical_mismatch_projection_sha256": "f97e554b6c638a66ab994c52668510168490304f52e38523719bef2b26cf2852",
+              "joined_historical_units": 17404,
+              "missing_historical_units": 0
+            },
+            "verdict": "PASS",
+            "yale_reference_defect": {
+              "adapter_source_proof": {
+                "authority_builder_first_line": 485,
+                "authority_builder_sha256": "06d6b8a59363f668fa2bcae8a35e157241b19fc1e8a254fd41dfa0f99b1db805",
+                "exemption_resolver_first_line": 435,
+                "exemption_resolver_sha256": "0237e0ee3978687f967b8cdaabbb3c4721984aac7899a4ee36bb7e294bf06869",
+                "rate_and_type_resolvers_first_line": 391,
+                "rate_and_type_resolvers_sha256": "b4b03adb11756fd9ff2dda56313c0aea5dddf4511e0c1d65a1f2ce19caf05ebf"
+              },
+              "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+              "deterministic_minimal_reproduction": {
+                "dplyr_path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/dplyr",
+                "dplyr_tree": {
+                  "bytes": 2618210,
+                  "file_count": 68,
+                  "manifest_sha256": "647bc333c2efabcc6519b6c16b5b3b90fa6a0c3a2515bdf008318314f30f79fc",
+                  "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/dplyr"
+                },
+                "dplyr_version": "1.1.2",
+                "program_sha256": "27f678ccd8f1486fa88b6393ecbbd50cc28d01ae87d2e3e6ab1abfd85b6c0afb",
+                "r_runtime_tree": {
+                  "bytes": 357968262,
+                  "file_count": 8300,
+                  "manifest_sha256": "23f7ebbac8578e60c99b7dd808fcb6d268f8b479240e6760383454b32f978641",
+                  "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources"
+                },
+                "r_version": "4.3.0",
+                "result": "PASS: rule_hit('full') selected both the full and fta rows under the pinned .data$condition %in% condition expression",
+                "rscript": {
+                  "bytes": 70912,
+                  "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/bin/Rscript",
+                  "sha256": "258c64ed913846b06ab5f6829de9e69a23ce8e515cc6c61a34ece40cb274a49c"
+                },
+                "selected_conditions": "full,fta"
+              },
+              "files": {
+                "config/policy_params.yaml": {
+                  "bytes": 50577,
+                  "path": "config/policy_params.yaml",
+                  "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+                },
+                "resources/mfn_exemption_shares.csv": {
+                  "bytes": 122722,
+                  "path": "resources/mfn_exemption_shares.csv",
+                  "sha256": "9505d04e441386ac08348de663c151743fdf3c537947cbe7ceab43b4d21381e1"
+                },
+                "resources/s232_pharma_products.csv": {
+                  "bytes": 1447,
+                  "path": "resources/s232_pharma_products.csv",
+                  "sha256": "eb5f888ef3967c699b4f85618859d3556a9552e7d636ead2bbdc09256edcca04"
+                },
+                "resources/s301fl_final_common_exemptions.csv": {
+                  "bytes": 33245,
+                  "path": "resources/s301fl_final_common_exemptions.csv",
+                  "sha256": "15b5e352cd810af33b90699bb595010f5aca43ea10de25ba1b2c6239acc96054"
+                },
+                "resources/s301fl_final_country_exemptions.csv": {
+                  "bytes": 140808,
+                  "path": "resources/s301fl_final_country_exemptions.csv",
+                  "sha256": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280"
+                },
+                "src/model/authority_adapter.R": {
+                  "bytes": 65357,
+                  "path": "src/model/authority_adapter.R",
+                  "sha256": "91d6adab284dc823fa4c541910d6c4a74494b3a09f3e5fb6b6a71a98e3b1288a"
+                },
+                "src/pipeline/06_calculate_rates.R": {
+                  "bytes": 179892,
+                  "path": "src/pipeline/06_calculate_rates.R",
+                  "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+                }
+              },
+              "source_proof": {
+                "chapter98_precapture_first_line": 2961,
+                "chapter98_precapture_transforms_sha256": "9950e34ca8d3bbd481985b04ffdf80ae828247df62155b0eb6ce773c26208e2b",
+                "comparison_surface": "statutory_rate_s301fl captures rate_s301fl before the later HS2-country preference scaling; fixing the name collision restores the statutory country-tier rate on the compared surface regardless of utilization share",
+                "defect": "the function argument is named condition, but dplyr's data mask resolves the bare RHS condition to the condition column; therefore .data$condition %in% condition is true for every nonmissing row",
+                "downstream_effect": "rule_hit('full') includes condition=fta rows, making country_full_hit true, covered false, and rate_s301fl zero before preference scaling",
+                "rule_hit_function_first_line": 959,
+                "rule_hit_function_sha256": "3257ccacb37c6d7ced57e112a3f0fc63015758df50afb5e08646790e6f617d3a",
+                "rule_hit_use_site_first_line": 973,
+                "rule_hit_use_site_sha256": "ccd1a2de00c1747444734437acb2567d59c43e39047f05ba98c21791ce52a61f",
+                "statutory_capture_and_preference_scaling_sha256": "28ad1849ca43d61431e282b090b465e518da98978f90d143627815b50e57cd1c",
+                "statutory_capture_first_line": 3022,
+                "use_conditioned_first_line": 999,
+                "use_conditioned_scaling_sha256": "3093f85841b5209701730688ab822677928ad10e1c2b3a6d479fa274332534e0"
+              },
+              "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+            },
+            "zero_error_proof": {
+              "comparison_artifact_engine_error_rows": 0,
+              "comparison_receipt_engine_errors": 0,
+              "evaluation_shard_engine_errors": 0,
+              "observed_evaluation_record_errors": 0
+            }
+          }
+        },
+        "child_populations": {
+          "cafta-52i-yale-reference-defect": {
+            "signature_count": 8702,
+            "signature_population_sha256": "ab9394992fe6cc8ca9cbe13768ee427e530caac37b6cd85b6dbb2ef97ce732f3",
+            "units": 17404
+          }
+        },
+        "classification": "cafta-reference-defect-receipted-fresh-signature",
+        "fresh_ruling": {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "logical_class": "cafta-52i-yale-reference-defect"
+        },
+        "historical_ruling": {
+          "attribution": "axiom-attributed-open",
+          "disposition": "axiom_encoding_gap",
+          "logical_class": "cafta-52i-deferred"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 8702,
+        "signature_population_sha256": "ab9394992fe6cc8ca9cbe13768ee427e530caac37b6cd85b6dbb2ef97ce732f3",
+        "units": 17404
+      },
+      "historical_units": 17404,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 8702,
+        "expected_signature_population_sha256": "80c145228a88fb2589dc410ccbf50759ff4bc04e35950a6dd89f012d52203e11",
+        "expected_units": 17404,
+        "id": "cafta-52i-deferred",
+        "logical_class": "cafta-52i-deferred",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-cafta-52i-deferred-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "cafta-52i-deferred",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 3,
+          "expected_signature_population_sha256": "8986e982df8b7a0b1d5f2017f2fb42f3b7d04ae7e8f9d7a03645cbe316e4e461",
+          "expected_units": 6,
+          "id": "chapter98-brazil-fresh-signature-rebind",
+          "logical_class": "chapter98-handling",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-chapter98-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "chapter98-brazil"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "chapter98-brazil-fresh-signature-rebind": {
+            "signature_count": 3,
+            "signature_population_sha256": "8986e982df8b7a0b1d5f2017f2fb42f3b7d04ae7e8f9d7a03645cbe316e4e461",
+            "units": 6
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "chapter98-handling"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "chapter98-handling"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 3,
+        "signature_population_sha256": "8986e982df8b7a0b1d5f2017f2fb42f3b7d04ae7e8f9d7a03645cbe316e4e461",
+        "units": 6
+      },
+      "historical_units": 6,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 3,
+        "expected_signature_population_sha256": "d367c04582189659b35c8ba42f24e227d7c6e1d7dcfb670696c49a6e186963b8",
+        "expected_units": 6,
+        "id": "chapter98-brazil",
+        "logical_class": "chapter98-handling",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-chapter98-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "chapter98-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 754,
+          "expected_signature_population_sha256": "77d214126a7146d26758ffc88537261d4fdc466af0be755413734dabd3ec5b57",
+          "expected_units": 1508,
+          "id": "chapter98-forced-labor-fresh-signature-rebind",
+          "logical_class": "chapter98-handling",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-chapter98-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "chapter98-forced-labor"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "chapter98-forced-labor-fresh-signature-rebind": {
+            "signature_count": 754,
+            "signature_population_sha256": "77d214126a7146d26758ffc88537261d4fdc466af0be755413734dabd3ec5b57",
+            "units": 1508
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "chapter98-handling"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "chapter98-handling"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 754,
+        "signature_population_sha256": "77d214126a7146d26758ffc88537261d4fdc466af0be755413734dabd3ec5b57",
+        "units": 1508
+      },
+      "historical_units": 1508,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 754,
+        "expected_signature_population_sha256": "ac2703de247b2ccab20d182e782408d87ed634c23b2b9ed483a8af7e118b3035",
+        "expected_units": 1508,
+        "id": "chapter98-forced-labor",
+        "logical_class": "chapter98-handling",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-chapter98-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "chapter98-forced-labor",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 2541,
+          "expected_signature_population_sha256": "373f1ed27267197ab19064a436d80923095716c8972124d05014ce5bed6d4913",
+          "expected_units": 5082,
+          "id": "pharma-utilization-proxy-brazil-fresh-signature-rebind",
+          "logical_class": "pharma-utilization-proxy",
+          "match": {
+            "delta": {
+              "values": [
+                0.125
+              ]
+            },
+            "line_set": "preview-1311-pharma-utilization-proxy-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "pharma-utilization-proxy-brazil"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "pharma-utilization-proxy-brazil-fresh-signature-rebind": {
+            "signature_count": 2541,
+            "signature_population_sha256": "373f1ed27267197ab19064a436d80923095716c8972124d05014ce5bed6d4913",
+            "units": 5082
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 2541,
+        "signature_population_sha256": "373f1ed27267197ab19064a436d80923095716c8972124d05014ce5bed6d4913",
+        "units": 5082
+      },
+      "historical_units": 5082,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 2541,
+        "expected_signature_population_sha256": "e8b63be5016bad90d59842e1a0b42b58783da905c13ada179f59fe5341119537",
+        "expected_units": 5082,
+        "id": "pharma-utilization-proxy-brazil",
+        "logical_class": "pharma-utilization-proxy",
+        "match": {
+          "delta": {
+            "values": [
+              0.125
+            ]
+          },
+          "line_set": "preview-1311-pharma-utilization-proxy-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "pharma-utilization-proxy-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 494,
+          "expected_signature_population_sha256": "dc5e0bc8713c14dc48d8d1de050aba1596c1a2726aee1001769b61e2e542f7b7",
+          "expected_units": 988,
+          "id": "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind",
+          "logical_class": "pharma-utilization-proxy",
+          "match": {
+            "delta": {
+              "values": [
+                0.035
+              ]
+            },
+            "line_set": "preview-1311-pharma-utilization-proxy-forced-labor-035-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "pharma-utilization-proxy-forced-labor-035"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "pharma-utilization-proxy-forced-labor-035-fresh-signature-rebind": {
+            "signature_count": 494,
+            "signature_population_sha256": "dc5e0bc8713c14dc48d8d1de050aba1596c1a2726aee1001769b61e2e542f7b7",
+            "units": 988
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 494,
+        "signature_population_sha256": "dc5e0bc8713c14dc48d8d1de050aba1596c1a2726aee1001769b61e2e542f7b7",
+        "units": 988
+      },
+      "historical_units": 988,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 494,
+        "expected_signature_population_sha256": "bdbddd7f342785ddd605cd54bdb4a2e12926dbe30acd87b22bb573cd4c7b3f66",
+        "expected_units": 988,
+        "id": "pharma-utilization-proxy-forced-labor-035",
+        "logical_class": "pharma-utilization-proxy",
+        "match": {
+          "delta": {
+            "values": [
+              0.035
+            ]
+          },
+          "line_set": "preview-1311-pharma-utilization-proxy-forced-labor-035-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "pharma-utilization-proxy-forced-labor-035",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 33715,
+          "expected_signature_population_sha256": "ec69fddc2cd58520c0b6ae713c15cee1f45a9f2e279d9a50a69d277902fd9238",
+          "expected_units": 67430,
+          "id": "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind",
+          "logical_class": "pharma-utilization-proxy",
+          "match": {
+            "delta": {
+              "values": [
+                0.0175,
+                0.018,
+                0.0185,
+                0.019,
+                0.0195,
+                0.02,
+                0.0205,
+                0.021,
+                0.0225,
+                0.0235,
+                0.024,
+                0.0245,
+                0.025,
+                0.026,
+                0.027,
+                0.028,
+                0.029,
+                0.03,
+                0.0305,
+                0.031,
+                0.0315,
+                0.032,
+                0.0325,
+                0.033,
+                0.0335,
+                0.0345,
+                0.036,
+                0.0365,
+                0.037,
+                0.0375,
+                0.0385,
+                0.0395,
+                0.0405,
+                0.041,
+                0.0415,
+                0.042,
+                0.0425,
+                0.043,
+                0.0435,
+                0.044,
+                0.045,
+                0.0455,
+                0.046,
+                0.047,
+                0.0475,
+                0.048,
+                0.0485,
+                0.05,
+                0.052,
+                0.0535,
+                0.054,
+                0.0545,
+                0.055,
+                0.0555,
+                0.056,
+                0.0565,
+                0.0575,
+                0.0605,
+                0.0625
+              ]
+            },
+            "line_set": "preview-1311-pharma-utilization-proxy-forced-labor-non035-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "pharma-utilization-proxy-forced-labor-non035"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "pharma-utilization-proxy-forced-labor-non035-fresh-signature-rebind": {
+            "signature_count": 33715,
+            "signature_population_sha256": "ec69fddc2cd58520c0b6ae713c15cee1f45a9f2e279d9a50a69d277902fd9238",
+            "units": 67430
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "pharma-utilization-proxy"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 33715,
+        "signature_population_sha256": "ec69fddc2cd58520c0b6ae713c15cee1f45a9f2e279d9a50a69d277902fd9238",
+        "units": 67430
+      },
+      "historical_units": 67430,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 33715,
+        "expected_signature_population_sha256": "1175f70e8da59d5367578b248a208d09dddc01291eeb678fc827de619bae0705",
+        "expected_units": 67430,
+        "id": "pharma-utilization-proxy-forced-labor-non035",
+        "logical_class": "pharma-utilization-proxy",
+        "match": {
+          "delta": {
+            "values": [
+              0.0175,
+              0.018,
+              0.0185,
+              0.019,
+              0.0195,
+              0.02,
+              0.0205,
+              0.021,
+              0.0225,
+              0.0235,
+              0.024,
+              0.0245,
+              0.025,
+              0.026,
+              0.027,
+              0.028,
+              0.029,
+              0.03,
+              0.0305,
+              0.031,
+              0.0315,
+              0.032,
+              0.0325,
+              0.033,
+              0.0335,
+              0.0345,
+              0.036,
+              0.0365,
+              0.037,
+              0.0375,
+              0.0385,
+              0.0395,
+              0.0405,
+              0.041,
+              0.0415,
+              0.042,
+              0.0425,
+              0.043,
+              0.0435,
+              0.044,
+              0.045,
+              0.0455,
+              0.046,
+              0.047,
+              0.0475,
+              0.048,
+              0.0485,
+              0.05,
+              0.052,
+              0.0535,
+              0.054,
+              0.0545,
+              0.055,
+              0.0555,
+              0.056,
+              0.0565,
+              0.0575,
+              0.0605,
+              0.0625
+            ]
+          },
+          "line_set": "preview-1311-pharma-utilization-proxy-forced-labor-non035-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "pharma-utilization-proxy-forced-labor-non035",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 12,
+          "expected_signature_population_sha256": "69eafa20530cb043a5722a0f388ac64a739217326dbbf1072862faef3253568f",
+          "expected_units": 24,
+          "id": "section232-annex-auto-part-candidate-brazil",
+          "logical_class": "section232-annex-auto-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-annex-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 111,
+          "expected_signature_population_sha256": "8af8f54268deaf8005b73298dcdcdc61e58ea753776fd73972977cee9ee1cdf7",
+          "expected_units": 222,
+          "id": "section232-annex-auto-and-mhd-part-candidates-brazil",
+          "logical_class": "section232-annex-auto-and-mhd-part-candidates-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-annex-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 27,
+          "expected_signature_population_sha256": "4b0edc1feed7ebc21d5c0057d5d523063401b8abc6b2f1d78e6c181440140454",
+          "expected_units": 54,
+          "id": "section232-annex-mhd-part-candidate-brazil",
+          "logical_class": "section232-annex-mhd-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-annex-brazil"
+        },
+        {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "expected_signature_count": 423,
+          "expected_signature_population_sha256": "e9ebad129b65430099d9ec8f9f82579be098b4fcc60fcc9f929766b434438e20",
+          "expected_units": 846,
+          "id": "section232-annex-yale-reference-defect-brazil",
+          "logical_class": "section232-annex-yale-reference-defect",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-annex-brazil"
+        }
+      ],
+      "evidence": {
+        "candidate_pattern_units": {
+          "entry_is_s232_note33_auto_part_candidate": 24,
+          "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate": 222,
+          "entry_is_s232_note38_mhd_part_candidate": 54,
+          "none": 846
+        },
+        "child_populations": {
+          "section232-annex-auto-and-mhd-part-candidates-brazil": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 111,
+            "signature_population_sha256": "8af8f54268deaf8005b73298dcdcdc61e58ea753776fd73972977cee9ee1cdf7",
+            "units": 222
+          },
+          "section232-annex-auto-part-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate",
+            "signature_count": 12,
+            "signature_population_sha256": "69eafa20530cb043a5722a0f388ac64a739217326dbbf1072862faef3253568f",
+            "units": 24
+          },
+          "section232-annex-mhd-part-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 27,
+            "signature_population_sha256": "4b0edc1feed7ebc21d5c0057d5d523063401b8abc6b2f1d78e6c181440140454",
+            "units": 54
+          },
+          "section232-annex-yale-reference-defect-brazil": {
+            "candidate_pattern": "none",
+            "signature_count": 423,
+            "signature_population_sha256": "e9ebad129b65430099d9ec8f9f82579be098b4fcc60fcc9f929766b434438e20",
+            "units": 846
+          }
+        },
+        "classification": "disjoint-reference-defect-and-conditional-reference-behavior",
+        "current_precedence_false_units": 1146,
+        "current_precedence_true_units": 1332,
+        "yale_annex_defect_source_proof": {
+          "classification": "pinned-yale-direct-annex-or-derivative-fallback",
+          "per_arm": {
+            "annex_proclamation_prefix": {
+              "hts10": [
+                "7615101100",
+                "8202390010",
+                "8202390070",
+                "8207200030",
+                "8207200040",
+                "8207303020",
+                "8207303050",
+                "8207306032",
+                "8207306092",
+                "8302419015",
+                "8302419045",
+                "8302419050",
+                "8302419080",
+                "8305100010",
+                "8309900085",
+                "8412901000",
+                "8412909025",
+                "8414591000",
+                "8414591500",
+                "8414596560",
+                "8418998010",
+                "8418998015",
+                "8418998020",
+                "8418998025",
+                "8422900200",
+                "8422900400",
+                "8422900680",
+                "8422901100",
+                "8422902100",
+                "8422909120",
+                "8422909130",
+                "8422909160",
+                "8422909195",
+                "8424900500",
+                "8424901000",
+                "8424902000",
+                "8430100000",
+                "8430200030",
+                "8430200060",
+                "8430200090",
+                "8430310040",
+                "8430310080",
+                "8430390040",
+                "8430390080",
+                "8430410000",
+                "8430494000",
+                "8430498010",
+                "8430498020",
+                "8430498030",
+                "8430498040",
+                "8430498050",
+                "8430501000",
+                "8430505000",
+                "8430610000",
+                "8430690100",
+                "8454200080",
+                "8477904501",
+                "8477906500",
+                "8477908620",
+                "8477908630",
+                "8477908640",
+                "8477908695",
+                "8479898300",
+                "8479899200",
+                "8479899550",
+                "8479899560",
+                "8479899565",
+                "8479899585",
+                "8479899595",
+                "8479899596",
+                "8480490090",
+                "8480711000",
+                "8480714000",
+                "8480718020",
+                "8480791000",
+                "8480799020",
+                "8480799090",
+                "8481901000",
+                "8481903000",
+                "8481905000",
+                "8481909020",
+                "8481909040",
+                "8481909081",
+                "8487900040",
+                "8501102000",
+                "8501104020",
+                "8501104040",
+                "8501104060",
+                "8501104080",
+                "8501106020",
+                "8501106040",
+                "8501106060",
+                "8501106080",
+                "8501202000",
+                "8501204000",
+                "8501312000",
+                "8501314000",
+                "8501316000",
+                "8501318100",
+                "8501640125",
+                "8501640135",
+                "8501640155",
+                "8501801000",
+                "8501809000",
+                "8502120000",
+                "8503002000",
+                "8516500030",
+                "8516500060",
+                "8516500090",
+                "8516900500",
+                "8516901500",
+                "8516902500",
+                "8516903500",
+                "8516904500",
+                "8516905500",
+                "8516906500",
+                "8516907500",
+                "8516908010",
+                "8516908500",
+                "8516909000",
+                "8536904000",
+                "8536906000",
+                "8536908510",
+                "8536908530",
+                "8705300000",
+                "8708991600",
+                "8708994810",
+                "9403992040",
+                "9403992080",
+                "9403993005",
+                "9403993010",
+                "9403993080",
+                "9403994005",
+                "9403994010",
+                "9403994080",
+                "9403995005",
+                "9403995010",
+                "9403995080"
+              ],
+              "signature_count": 414,
+              "signature_population_sha256": "4a080ff64bb590d6a3ada62db41f55f5e0f1edb39f32d6bb51a95cabe3347e6c",
+              "units": 828
+            },
+            "legacy_derivative_fallback": {
+              "hts10": [
+                "9401999030",
+                "9401999040",
+                "9401999085"
+              ],
+              "signature_count": 9,
+              "signature_population_sha256": "043b692b395b8d20d2ec291a5304c645df079daabe35ecd0c5a7372f68374a61",
+              "units": 18
+            }
+          },
+          "pinned_yale_source": {
+            "classification_precedence": [
+              "latest-effective direct annex row per normalized prefix",
+              "longest-prefix direct match",
+              "longest-prefix legacy derivative fallback only when direct is absent"
+            ],
+            "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+            "files": {
+              "resources/s232_annex_products.csv": {
+                "bytes": 44677,
+                "path": "resources/s232_annex_products.csv",
+                "sha256": "90b800fc3556b25cbf4cef982dc3232c86e367e1b7ec6f53621a116fc7b4a68d"
+              },
+              "resources/s232_derivative_products.csv": {
+                "bytes": 25415,
+                "path": "resources/s232_derivative_products.csv",
+                "sha256": "4502c782a356b2843cf7652ccaf3dcb2c7af1ac1556fec16e00062acc844a0bb"
+              },
+              "scripts/parse_annex_products.R": {
+                "bytes": 11189,
+                "path": "scripts/parse_annex_products.R",
+                "sha256": "8d560897f85d60ee2c2e1d3025a6b9bdd7406e67621aed428abe957ad1cf4bb6"
+              },
+              "src/model/data_loaders.R": {
+                "bytes": 43137,
+                "path": "src/model/data_loaders.R",
+                "sha256": "a088811f84ff19eaf6fce28f2587152c69ed50e53435ddedd2425fd369b62ccc"
+              }
+            },
+            "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+          },
+          "units": 846
+        }
+      },
+      "fresh_matching_units": 1332,
+      "fresh_residual_population": {
+        "signature_count": 573,
+        "signature_population_sha256": "26448be14dd06de77982bac3ae848ce66bf4deaa9ec4806e03928b56eb96c0ce",
+        "units": 1146
+      },
+      "historical_units": 2478,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 1239,
+        "expected_signature_population_sha256": "b761eb72134cba35880e995b1ddae0ea3a8119b748c04ece47dafedda3b41246",
+        "expected_units": 2478,
+        "id": "section232-annex-brazil",
+        "logical_class": "section232-annex-membership",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-annex-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "section232-annex-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 376,
+          "expected_signature_population_sha256": "d346140898d9707c8a92698a4f1f173e5894bc144a4bb693410376a0068bddd9",
+          "expected_units": 752,
+          "id": "section232-annex-auto-part-candidate-forced-labor",
+          "logical_class": "section232-annex-auto-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-annex-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 2350,
+          "expected_signature_population_sha256": "85e8fbf7d2ab5c97a8db94d91b2fdb21bd48f27cfc365e00e4c5b719d3edfc42",
+          "expected_units": 4700,
+          "id": "section232-annex-auto-and-mhd-part-candidates-forced-labor",
+          "logical_class": "section232-annex-auto-and-mhd-part-candidates-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-annex-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 292,
+          "expected_signature_population_sha256": "f83cf0701730fa0eb4a0f0f0e573c474a9c90231d56853327609614ca115c5e9",
+          "expected_units": 584,
+          "id": "section232-annex-mhd-part-candidate-forced-labor",
+          "logical_class": "section232-annex-mhd-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-annex-forced-labor"
+        },
+        {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "expected_signature_count": 9126,
+          "expected_signature_population_sha256": "03b720942bbfaff162b848ce215cbc4fd820f45092d755a9404d2db74f408a52",
+          "expected_units": 18252,
+          "id": "section232-annex-yale-reference-defect-forced-labor",
+          "logical_class": "section232-annex-yale-reference-defect",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-annex-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-annex-forced-labor"
+        }
+      ],
+      "evidence": {
+        "candidate_pattern_units": {
+          "entry_is_s232_note33_auto_part_candidate": 752,
+          "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate": 4700,
+          "entry_is_s232_note38_mhd_part_candidate": 584,
+          "none": 18252
+        },
+        "child_populations": {
+          "section232-annex-auto-and-mhd-part-candidates-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 2350,
+            "signature_population_sha256": "85e8fbf7d2ab5c97a8db94d91b2fdb21bd48f27cfc365e00e4c5b719d3edfc42",
+            "units": 4700
+          },
+          "section232-annex-auto-part-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate",
+            "signature_count": 376,
+            "signature_population_sha256": "d346140898d9707c8a92698a4f1f173e5894bc144a4bb693410376a0068bddd9",
+            "units": 752
+          },
+          "section232-annex-mhd-part-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 292,
+            "signature_population_sha256": "f83cf0701730fa0eb4a0f0f0e573c474a9c90231d56853327609614ca115c5e9",
+            "units": 584
+          },
+          "section232-annex-yale-reference-defect-forced-labor": {
+            "candidate_pattern": "none",
+            "signature_count": 9126,
+            "signature_population_sha256": "03b720942bbfaff162b848ce215cbc4fd820f45092d755a9404d2db74f408a52",
+            "units": 18252
+          }
+        },
+        "classification": "disjoint-reference-defect-and-conditional-reference-behavior",
+        "current_precedence_false_units": 24288,
+        "current_precedence_true_units": 17124,
+        "yale_annex_defect_source_proof": {
+          "classification": "pinned-yale-direct-annex-or-derivative-fallback",
+          "per_arm": {
+            "annex_proclamation_prefix": {
+              "hts10": [
+                "7615101100",
+                "8202390010",
+                "8202390070",
+                "8207200030",
+                "8207200040",
+                "8207303020",
+                "8207303050",
+                "8207306032",
+                "8207306092",
+                "8302419015",
+                "8302419045",
+                "8302419050",
+                "8302419080",
+                "8305100010",
+                "8309900085",
+                "8412901000",
+                "8412909005",
+                "8412909015",
+                "8412909025",
+                "8412909035",
+                "8412909050",
+                "8412909085",
+                "8413912000",
+                "8413919015",
+                "8413919020",
+                "8413919029",
+                "8413919031",
+                "8413919039",
+                "8413919041",
+                "8413919044",
+                "8413919046",
+                "8413919059",
+                "8413919099",
+                "8414591000",
+                "8414591500",
+                "8414596560",
+                "8414596595",
+                "8418998010",
+                "8418998015",
+                "8418998020",
+                "8418998025",
+                "8422900200",
+                "8422900400",
+                "8422900680",
+                "8422901100",
+                "8422902100",
+                "8422909120",
+                "8422909130",
+                "8422909160",
+                "8422909195",
+                "8424900500",
+                "8424901000",
+                "8424902000",
+                "8424909010",
+                "8424909020",
+                "8430100000",
+                "8430200030",
+                "8430200060",
+                "8430200090",
+                "8430310040",
+                "8430310080",
+                "8430390040",
+                "8430390080",
+                "8430410000",
+                "8430494000",
+                "8430498010",
+                "8430498020",
+                "8430498030",
+                "8430498040",
+                "8430498050",
+                "8430501000",
+                "8430505000",
+                "8430610000",
+                "8430690100",
+                "8454200080",
+                "8477904501",
+                "8477906500",
+                "8477908620",
+                "8477908630",
+                "8477908640",
+                "8477908695",
+                "8479891000",
+                "8479892000",
+                "8479897000",
+                "8479898300",
+                "8479899200",
+                "8479899550",
+                "8479899560",
+                "8479899565",
+                "8479899585",
+                "8479899595",
+                "8479899596",
+                "8479904100",
+                "8480490090",
+                "8480711000",
+                "8480714000",
+                "8480718020",
+                "8480791000",
+                "8480799020",
+                "8480799090",
+                "8481901000",
+                "8481903000",
+                "8481905000",
+                "8481909020",
+                "8481909040",
+                "8481909081",
+                "8483403040",
+                "8483403080",
+                "8483405010",
+                "8483405080",
+                "8483408000",
+                "8483901010",
+                "8483901050",
+                "8487900040",
+                "8501102000",
+                "8501104020",
+                "8501104040",
+                "8501104060",
+                "8501104080",
+                "8501106020",
+                "8501106040",
+                "8501106060",
+                "8501106080",
+                "8501202000",
+                "8501204000",
+                "8501205000",
+                "8501206000",
+                "8501312000",
+                "8501314000",
+                "8501315000",
+                "8501316000",
+                "8501318100",
+                "8501610100",
+                "8501620100",
+                "8501630100",
+                "8501640125",
+                "8501640135",
+                "8501640155",
+                "8501710000",
+                "8501721000",
+                "8501722000",
+                "8501723000",
+                "8501729000",
+                "8501801000",
+                "8501802000",
+                "8501803000",
+                "8501809000",
+                "8502110000",
+                "8502120000",
+                "8502130020",
+                "8502130040",
+                "8502390040",
+                "8502390080",
+                "8502400000",
+                "8503002000",
+                "8516500030",
+                "8516500060",
+                "8516500090",
+                "8516900500",
+                "8516901500",
+                "8516902500",
+                "8516903500",
+                "8516904500",
+                "8516905500",
+                "8516906500",
+                "8516907500",
+                "8516908010",
+                "8516908500",
+                "8516909000",
+                "8536904000",
+                "8536906000",
+                "8536908510",
+                "8536908530",
+                "8543901200",
+                "8543901500",
+                "8543903500",
+                "8543906500",
+                "8543906800",
+                "8543908500",
+                "8543908845",
+                "8543908865",
+                "8705300000",
+                "8708991600",
+                "8708994810",
+                "9403992040",
+                "9403992080",
+                "9403993005",
+                "9403993010",
+                "9403993080",
+                "9403994005",
+                "9403994010",
+                "9403994080",
+                "9403995005",
+                "9403995010",
+                "9403995080"
+              ],
+              "signature_count": 9020,
+              "signature_population_sha256": "a158a52bde7312e740bce96a308f9c5b61b0697ab83bf424b5fdf7437b214059",
+              "units": 18040
+            },
+            "legacy_derivative_fallback": {
+              "hts10": [
+                "9401999030",
+                "9401999040",
+                "9401999085"
+              ],
+              "signature_count": 106,
+              "signature_population_sha256": "4bf035cbf5ef05d8d81a9ea09379e5e8faf68e8dd0ee7ae5f9329f1f168e77d6",
+              "units": 212
+            }
+          },
+          "pinned_yale_source": {
+            "classification_precedence": [
+              "latest-effective direct annex row per normalized prefix",
+              "longest-prefix direct match",
+              "longest-prefix legacy derivative fallback only when direct is absent"
+            ],
+            "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+            "files": {
+              "resources/s232_annex_products.csv": {
+                "bytes": 44677,
+                "path": "resources/s232_annex_products.csv",
+                "sha256": "90b800fc3556b25cbf4cef982dc3232c86e367e1b7ec6f53621a116fc7b4a68d"
+              },
+              "resources/s232_derivative_products.csv": {
+                "bytes": 25415,
+                "path": "resources/s232_derivative_products.csv",
+                "sha256": "4502c782a356b2843cf7652ccaf3dcb2c7af1ac1556fec16e00062acc844a0bb"
+              },
+              "scripts/parse_annex_products.R": {
+                "bytes": 11189,
+                "path": "scripts/parse_annex_products.R",
+                "sha256": "8d560897f85d60ee2c2e1d3025a6b9bdd7406e67621aed428abe957ad1cf4bb6"
+              },
+              "src/model/data_loaders.R": {
+                "bytes": 43137,
+                "path": "src/model/data_loaders.R",
+                "sha256": "a088811f84ff19eaf6fce28f2587152c69ed50e53435ddedd2425fd369b62ccc"
+              }
+            },
+            "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+          },
+          "units": 18252
+        }
+      },
+      "fresh_matching_units": 17124,
+      "fresh_residual_population": {
+        "signature_count": 12144,
+        "signature_population_sha256": "69c353048862edfe7a38bd3721122a314dfb6b8a2437cc28df5128683cd1099b",
+        "units": 24288
+      },
+      "historical_units": 41412,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 20706,
+        "expected_signature_population_sha256": "0ac94fd1de8d37931a7037bb979160ebd6fc631f82ea5850d3a403af414eec1e",
+        "expected_units": 41412,
+        "id": "section232-annex-forced-labor",
+        "logical_class": "section232-annex-membership",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-annex-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "section232-annex-forced-labor",
+      "status": "superseded"
+    },
+    {
+      "children": [],
+      "evidence": {
+        "candidate_pattern_units": {},
+        "child_populations": {},
+        "classification": "fully-fixed-exposed",
+        "current_precedence_false_units": 0,
+        "current_precedence_true_units": 9096
+      },
+      "fresh_matching_units": 9096,
+      "fresh_residual_population": {
+        "signature_count": 0,
+        "signature_population_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "units": 0
+      },
+      "historical_units": 9096,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 4548,
+        "expected_signature_population_sha256": "21831a636c83fb51ad2f8e89f8f3e06775434f7f2f40285b9a2918ba0798a405",
+        "expected_units": 9096,
+        "id": "section232-exposed-brazil",
+        "logical_class": "section232-exposed-unconsumed",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-exposed-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "section232-exposed-brazil",
+      "status": "retired"
+    },
+    {
+      "children": [],
+      "evidence": {
+        "candidate_pattern_units": {},
+        "child_populations": {},
+        "classification": "fully-fixed-exposed",
+        "current_precedence_false_units": 0,
+        "current_precedence_true_units": 138340
+      },
+      "fresh_matching_units": 138340,
+      "fresh_residual_population": {
+        "signature_count": 0,
+        "signature_population_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "units": 0
+      },
+      "historical_units": 138340,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 69170,
+        "expected_signature_population_sha256": "8b3a6187ea7ed594cebfbc921786fcd957f0e05ae7effbd73908927a5d1a05cf",
+        "expected_units": 138340,
+        "id": "section232-exposed-forced-labor",
+        "logical_class": "section232-exposed-unconsumed",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-exposed-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "section232-exposed-forced-labor",
+      "status": "retired"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 174,
+          "expected_signature_population_sha256": "f79e5fbb3482777501d7fe00dbd93a3e5bbdaa22d6940bb78f4712fc764a14fe",
+          "expected_units": 348,
+          "id": "section232-heading-auto-part-candidate-brazil",
+          "logical_class": "section232-heading-auto-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-heading-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 333,
+          "expected_signature_population_sha256": "7f015cc860de4dff67dddcb726d3e9fd2ef5ad38d25af233d76aec1497929057",
+          "expected_units": 666,
+          "id": "section232-heading-auto-and-mhd-part-candidates-brazil",
+          "logical_class": "section232-heading-auto-and-mhd-part-candidates-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-heading-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 219,
+          "expected_signature_population_sha256": "0bf3ab5dba1b76c2905b46108517f896812e22cc7e4ac0175fd584d411a865da",
+          "expected_units": 438,
+          "id": "section232-heading-vehicle-candidate-brazil",
+          "logical_class": "section232-heading-vehicle-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": true,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-heading-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 9,
+          "expected_signature_population_sha256": "a510345be4953e047b477245305474b64be26ad059e1039b86a41b87ebec3735",
+          "expected_units": 18,
+          "id": "section232-heading-cabinet-vanity-candidate-brazil",
+          "logical_class": "section232-heading-cabinet-vanity-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": true,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-heading-brazil"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 9,
+          "expected_signature_population_sha256": "985d125a29631cdf382e8eb124c1207f9d0b772722b5795ee73fef9eb01235c6",
+          "expected_units": 18,
+          "id": "section232-heading-mhd-part-candidate-brazil",
+          "logical_class": "section232-heading-mhd-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "section232-heading-brazil"
+        }
+      ],
+      "evidence": {
+        "candidate_pattern_units": {
+          "entry_is_s232_note33_auto_part_candidate": 348,
+          "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate": 666,
+          "entry_is_s232_note33_vehicle_candidate": 438,
+          "entry_is_s232_note37_cabinet_vanity_candidate": 18,
+          "entry_is_s232_note38_mhd_part_candidate": 18
+        },
+        "child_populations": {
+          "section232-heading-auto-and-mhd-part-candidates-brazil": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 333,
+            "signature_population_sha256": "7f015cc860de4dff67dddcb726d3e9fd2ef5ad38d25af233d76aec1497929057",
+            "units": 666
+          },
+          "section232-heading-auto-part-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate",
+            "signature_count": 174,
+            "signature_population_sha256": "f79e5fbb3482777501d7fe00dbd93a3e5bbdaa22d6940bb78f4712fc764a14fe",
+            "units": 348
+          },
+          "section232-heading-cabinet-vanity-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note37_cabinet_vanity_candidate",
+            "signature_count": 9,
+            "signature_population_sha256": "a510345be4953e047b477245305474b64be26ad059e1039b86a41b87ebec3735",
+            "units": 18
+          },
+          "section232-heading-mhd-part-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 9,
+            "signature_population_sha256": "985d125a29631cdf382e8eb124c1207f9d0b772722b5795ee73fef9eb01235c6",
+            "units": 18
+          },
+          "section232-heading-vehicle-candidate-brazil": {
+            "candidate_pattern": "entry_is_s232_note33_vehicle_candidate",
+            "signature_count": 219,
+            "signature_population_sha256": "0bf3ab5dba1b76c2905b46108517f896812e22cc7e4ac0175fd584d411a865da",
+            "units": 438
+          }
+        },
+        "classification": "disjoint-conditional-reference-behavior",
+        "current_precedence_false_units": 1488,
+        "current_precedence_true_units": 882
+      },
+      "fresh_matching_units": 882,
+      "fresh_residual_population": {
+        "signature_count": 744,
+        "signature_population_sha256": "497ba22a6fc83c75da7eccab2c44cf0ae64f44a472489edf1832fc6128956c83",
+        "units": 1488
+      },
+      "historical_units": 2370,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 1185,
+        "expected_signature_population_sha256": "d73384b35bd7cc44d73bf1d6aa9cb40538e6219a7227060f14790eb295fa8e20",
+        "expected_units": 2370,
+        "id": "section232-heading-brazil",
+        "logical_class": "section232-heading-program",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-heading-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "section232-heading-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 2554,
+          "expected_signature_population_sha256": "e53a0a9a6ce7f0d02da0bb98fbc25b30aea468a7d1f7613ff085c1fb116f0bde",
+          "expected_units": 5108,
+          "id": "section232-heading-auto-part-candidate-forced-labor",
+          "logical_class": "section232-heading-auto-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-heading-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 5678,
+          "expected_signature_population_sha256": "b95dc2a3cc48bce905843f85c7785140d4938777c73e23635a1b547e379330a7",
+          "expected_units": 11356,
+          "id": "section232-heading-auto-and-mhd-part-candidates-forced-labor",
+          "logical_class": "section232-heading-auto-and-mhd-part-candidates-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": true,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-heading-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 2752,
+          "expected_signature_population_sha256": "2c8199496665b051733d9d502473999ec59f6c0b05224384bb520f670e66b1ca",
+          "expected_units": 5504,
+          "id": "section232-heading-vehicle-candidate-forced-labor",
+          "logical_class": "section232-heading-vehicle-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": true,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-heading-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 122,
+          "expected_signature_population_sha256": "53569e969793511a030620b62f3a05a5be5f9e21acfc5ad003d4e1d30f7576b9",
+          "expected_units": 244,
+          "id": "section232-heading-cabinet-vanity-candidate-forced-labor",
+          "logical_class": "section232-heading-cabinet-vanity-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": true,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": false,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-heading-forced-labor"
+        },
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 136,
+          "expected_signature_population_sha256": "eb68e88d061acc20be3272c848ae9df4a5596a4e6b4b4bf777edde4a3ff48767",
+          "expected_units": 272,
+          "id": "section232-heading-mhd-part-candidate-forced-labor",
+          "logical_class": "section232-heading-mhd-part-candidate-conditional-reference-behavior",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_class": {
+              "flags": {
+                "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight": true,
+                "entry_is_note33_auto_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note33_g_automobile_part": false,
+                "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part": false,
+                "entry_is_note38_i_medium_or_heavy_duty_vehicle_part": false,
+                "entry_is_note38_mhd_part_subject_to_import_adjustment_offset": false,
+                "entry_is_note40_patented_pharmaceutical_article": false,
+                "entry_is_s232_copper_additional_member": false,
+                "entry_is_s232_copper_primary_member": false,
+                "entry_is_s232_note16_c_ii_derivative_aluminum_member": false,
+                "entry_is_s232_note16_c_ix_derivative_aluminum_candidate": false,
+                "entry_is_s232_note16_c_vi_derivative_aluminum_candidate": false,
+                "entry_is_s232_note33_auto_part_candidate": false,
+                "entry_is_s232_note33_vehicle_candidate": false,
+                "entry_is_s232_note37_cabinet_vanity_candidate": false,
+                "entry_is_s232_note37_softwood_member": false,
+                "entry_is_s232_note37_upholstered_wood_furniture_member": false,
+                "entry_is_s232_note38_bus_member": false,
+                "entry_is_s232_note38_mhd_part_candidate": true,
+                "entry_is_s232_note38_mhd_vehicle_member": false,
+                "entry_is_s232_note39_semiconductor_candidate": false,
+                "entry_is_s232_note40_pharmaceutical_candidate": false,
+                "entry_is_section_232_covered": false,
+                "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52": false,
+                "entry_qualifies_for_note39_heading_9903_79_01": false
+              }
+            },
+            "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "section232-heading-forced-labor"
+        }
+      ],
+      "evidence": {
+        "candidate_pattern_units": {
+          "entry_is_s232_note33_auto_part_candidate": 5108,
+          "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate": 11356,
+          "entry_is_s232_note33_vehicle_candidate": 5504,
+          "entry_is_s232_note37_cabinet_vanity_candidate": 244,
+          "entry_is_s232_note38_mhd_part_candidate": 272
+        },
+        "child_populations": {
+          "section232-heading-auto-and-mhd-part-candidates-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate+entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 5678,
+            "signature_population_sha256": "b95dc2a3cc48bce905843f85c7785140d4938777c73e23635a1b547e379330a7",
+            "units": 11356
+          },
+          "section232-heading-auto-part-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note33_auto_part_candidate",
+            "signature_count": 2554,
+            "signature_population_sha256": "e53a0a9a6ce7f0d02da0bb98fbc25b30aea468a7d1f7613ff085c1fb116f0bde",
+            "units": 5108
+          },
+          "section232-heading-cabinet-vanity-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note37_cabinet_vanity_candidate",
+            "signature_count": 122,
+            "signature_population_sha256": "53569e969793511a030620b62f3a05a5be5f9e21acfc5ad003d4e1d30f7576b9",
+            "units": 244
+          },
+          "section232-heading-mhd-part-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note38_mhd_part_candidate",
+            "signature_count": 136,
+            "signature_population_sha256": "eb68e88d061acc20be3272c848ae9df4a5596a4e6b4b4bf777edde4a3ff48767",
+            "units": 272
+          },
+          "section232-heading-vehicle-candidate-forced-labor": {
+            "candidate_pattern": "entry_is_s232_note33_vehicle_candidate",
+            "signature_count": 2752,
+            "signature_population_sha256": "2c8199496665b051733d9d502473999ec59f6c0b05224384bb520f670e66b1ca",
+            "units": 5504
+          }
+        },
+        "classification": "disjoint-conditional-reference-behavior",
+        "current_precedence_false_units": 22484,
+        "current_precedence_true_units": 10604
+      },
+      "fresh_matching_units": 10604,
+      "fresh_residual_population": {
+        "signature_count": 11242,
+        "signature_population_sha256": "9532e0f37625cfa94f10e605c8ad1d493264e71bde3203b51b850f7e7d779a66",
+        "units": 22484
+      },
+      "historical_units": 33088,
+      "parent_contract": {
+        "attribution": "axiom-attributed-open",
+        "disposition": "axiom_encoding_gap",
+        "expected_signature_count": 16544,
+        "expected_signature_population_sha256": "9b4f2afb96e8710a1f93a195a3cbcaf34f7672540cb5cc9939dd627bde2d6006",
+        "expected_units": 33088,
+        "id": "section232-heading-forced-labor",
+        "logical_class": "section232-heading-program",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-section232-heading-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "section232-heading-forced-labor",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "expected_signature_count": 48,
+          "expected_signature_population_sha256": "8335840397dfc9a1cb0b1d075c5bd8627e4e8a9e670b72cfbe674b1c025600ee",
+          "expected_units": 96,
+          "id": "yale-hts8-broadening-brazil-fresh-signature-rebind",
+          "logical_class": "yale-hts8-broadening",
+          "match": {
+            "delta": {
+              "sign": "pos"
+            },
+            "line_set": "preview-1311-yale-hts8-broadening-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "yale-hts8-broadening-brazil"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "yale-hts8-broadening-brazil-fresh-signature-rebind": {
+            "signature_count": 48,
+            "signature_population_sha256": "8335840397dfc9a1cb0b1d075c5bd8627e4e8a9e670b72cfbe674b1c025600ee",
+            "units": 96
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "logical_class": "yale-hts8-broadening"
+        },
+        "historical_ruling": {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "logical_class": "yale-hts8-broadening"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 48,
+        "signature_population_sha256": "8335840397dfc9a1cb0b1d075c5bd8627e4e8a9e670b72cfbe674b1c025600ee",
+        "units": 96
+      },
+      "historical_units": 96,
+      "parent_contract": {
+        "attribution": "reference-defect",
+        "disposition": "upstream_engine_gap",
+        "expected_signature_count": 48,
+        "expected_signature_population_sha256": "7c20b21beb8ddf2ac5f855b3fa2074c0f26bf79b2ebd6e58ab621f523cf6ad89",
+        "expected_units": 96,
+        "id": "yale-hts8-broadening-brazil",
+        "logical_class": "yale-hts8-broadening",
+        "match": {
+          "delta": {
+            "sign": "pos"
+          },
+          "line_set": "preview-1311-yale-hts8-broadening-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "yale-hts8-broadening-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "expected_signature_count": 34,
+          "expected_signature_population_sha256": "7f153c474c5ba3e82997b416bf75ed9eca0abd121fac572f3baa68a2f4e51136",
+          "expected_units": 68,
+          "id": "yale-parser-zero-statutory-base-fresh-signature-rebind",
+          "logical_class": "yale-parser-zero-statutory-base",
+          "match": {
+            "delta": {
+              "sign": "neg"
+            },
+            "line_set": "preview-1311-yale-parser-zero-statutory-base-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "yale-parser-zero-statutory-base"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "yale-parser-zero-statutory-base-fresh-signature-rebind": {
+            "signature_count": 34,
+            "signature_population_sha256": "7f153c474c5ba3e82997b416bf75ed9eca0abd121fac572f3baa68a2f4e51136",
+            "units": 68
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "logical_class": "yale-parser-zero-statutory-base"
+        },
+        "historical_ruling": {
+          "attribution": "reference-defect",
+          "disposition": "upstream_engine_gap",
+          "logical_class": "yale-parser-zero-statutory-base"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 34,
+        "signature_population_sha256": "7f153c474c5ba3e82997b416bf75ed9eca0abd121fac572f3baa68a2f4e51136",
+        "units": 68
+      },
+      "historical_units": 68,
+      "parent_contract": {
+        "attribution": "reference-defect",
+        "disposition": "upstream_engine_gap",
+        "expected_signature_count": 34,
+        "expected_signature_population_sha256": "f1c64304bdeaca7cb352c4a183a957fb5d7d2d2e02957ad9d98122115ff355dd",
+        "expected_units": 68,
+        "id": "yale-parser-zero-statutory-base",
+        "logical_class": "yale-parser-zero-statutory-base",
+        "match": {
+          "delta": {
+            "sign": "neg"
+          },
+          "line_set": "preview-1311-yale-parser-zero-statutory-base-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "yale-parser-zero-statutory-base",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 42,
+          "expected_signature_population_sha256": "f48f1d2fa998ba822aac5ae0f125e5205278f641c274fcfaae172b63564be788",
+          "expected_units": 84,
+          "id": "yale-zero-pharma-brazil-fresh-signature-rebind",
+          "logical_class": "yale-zero-pharma-conditional",
+          "match": {
+            "delta": {
+              "values": [
+                0.25
+              ]
+            },
+            "line_set": "preview-1311-yale-zero-pharma-brazil-hts10",
+            "slot": "brazil_section_301"
+          },
+          "parent_id": "yale-zero-pharma-brazil"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "yale-zero-pharma-brazil-fresh-signature-rebind": {
+            "signature_count": 42,
+            "signature_population_sha256": "f48f1d2fa998ba822aac5ae0f125e5205278f641c274fcfaae172b63564be788",
+            "units": 84
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "yale-zero-pharma-conditional"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "yale-zero-pharma-conditional"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 42,
+        "signature_population_sha256": "f48f1d2fa998ba822aac5ae0f125e5205278f641c274fcfaae172b63564be788",
+        "units": 84
+      },
+      "historical_units": 84,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 42,
+        "expected_signature_population_sha256": "f13336e757e96f00b0651b816a1d1a3b8e5f90cf97e9c0243aa27e4efbf1d3fd",
+        "expected_units": 84,
+        "id": "yale-zero-pharma-brazil",
+        "logical_class": "yale-zero-pharma-conditional",
+        "match": {
+          "delta": {
+            "values": [
+              0.25
+            ]
+          },
+          "line_set": "preview-1311-yale-zero-pharma-brazil-hts10",
+          "slot": "brazil_section_301"
+        }
+      },
+      "parent_id": "yale-zero-pharma-brazil",
+      "status": "superseded"
+    },
+    {
+      "children": [
+        {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "expected_signature_count": 529,
+          "expected_signature_population_sha256": "30e23fffb82b5bd4038df45dbf13feb2df6ae76c865731662d52417ea6a352f8",
+          "expected_units": 1058,
+          "id": "yale-zero-pharma-forced-labor-fresh-signature-rebind",
+          "logical_class": "yale-zero-pharma-conditional",
+          "match": {
+            "delta": {
+              "values": [
+                0.035,
+                0.04,
+                0.06,
+                0.063,
+                0.065,
+                0.088,
+                0.1,
+                0.125
+              ]
+            },
+            "line_set": "preview-1311-yale-zero-pharma-forced-labor-hts10",
+            "slot": "forced_labor_section_301"
+          },
+          "parent_id": "yale-zero-pharma-forced-labor"
+        }
+      ],
+      "evidence": {
+        "child_populations": {
+          "yale-zero-pharma-forced-labor-fresh-signature-rebind": {
+            "signature_count": 529,
+            "signature_population_sha256": "30e23fffb82b5bd4038df45dbf13feb2df6ae76c865731662d52417ea6a352f8",
+            "units": 1058
+          }
+        },
+        "classification": "fresh-signature-rebind-preserved-ruling",
+        "fresh_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "yale-zero-pharma-conditional"
+        },
+        "historical_ruling": {
+          "attribution": "reference-behavior",
+          "disposition": "explained_residual",
+          "logical_class": "yale-zero-pharma-conditional"
+        }
+      },
+      "fresh_matching_units": 0,
+      "fresh_residual_population": {
+        "signature_count": 529,
+        "signature_population_sha256": "30e23fffb82b5bd4038df45dbf13feb2df6ae76c865731662d52417ea6a352f8",
+        "units": 1058
+      },
+      "historical_units": 1058,
+      "parent_contract": {
+        "attribution": "reference-behavior",
+        "disposition": "explained_residual",
+        "expected_signature_count": 529,
+        "expected_signature_population_sha256": "036ccf43b935b96f7687860d2b08fbcc55068faf45c7ce575da2e7c6d745aa07",
+        "expected_units": 1058,
+        "id": "yale-zero-pharma-forced-labor",
+        "logical_class": "yale-zero-pharma-conditional",
+        "match": {
+          "delta": {
+            "values": [
+              0.035,
+              0.04,
+              0.06,
+              0.063,
+              0.065,
+              0.088,
+              0.1,
+              0.125
+            ]
+          },
+          "line_set": "preview-1311-yale-zero-pharma-forced-labor-hts10",
+          "slot": "forced_labor_section_301"
+        }
+      },
+      "parent_id": "yale-zero-pharma-forced-labor",
+      "status": "superseded"
+    }
+  ],
+  "verdict": "PASS",
+  "zero_error_proof": {
+    "comparison_artifact_engine_error_rows": 0,
+    "comparison_receipt_engine_errors": 0,
+    "evaluation_shard_engine_errors": 0,
+    "observed_evaluation_record_errors": 0
+  }
+}

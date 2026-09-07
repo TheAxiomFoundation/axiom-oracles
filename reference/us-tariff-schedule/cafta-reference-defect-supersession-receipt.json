@@ -1,0 +1,359 @@
+{
+  "axiom_predicate_proof": {
+    "actual_case_feed_projection_sha256": "89a12b14bfd36a845a31ec6d49be68a597a4d5ae038ab75a3215ef046aa0508c",
+    "all_joined_actual_case_feeds_false_false": true,
+    "chapter_contracts_checked": 100,
+    "contract_sha256": "e9db8760690ecd8a273e8e8e94095104a80e146fbe438ba41b14ab97b4abfd7a",
+    "joined_fresh_evaluation_records": 17404,
+    "predicates": {
+      "entry_is_entered_free_of_duty_under_dr_cafta": false,
+      "entry_is_general_note_29_d_v_textile_or_apparel_good": false
+    },
+    "scope": "all campaign cases in all 100 compiled chapters"
+  },
+  "bindings": {
+    "campaign_evaluator": {
+      "campaign": {
+        "bytes": 255120,
+        "path": "scripts/us_tariff_schedule_campaign.py",
+        "sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b"
+      },
+      "oracle_sources": [
+        {
+          "bytes": 431,
+          "path": "axiom_oracles/__init__.py",
+          "sha256": "86745944f591aef5ee9ac3e2f5cc6dbd8c70b00236a17a2ced1e6e7813f0a1a2"
+        },
+        {
+          "bytes": 23,
+          "path": "axiom_oracles/adapters/__init__.py",
+          "sha256": "6a79422564a92e91c35d2f80eb8e6d5612023c7068a2d30cd835db3b47940e10"
+        },
+        {
+          "bytes": 719,
+          "path": "axiom_oracles/adapters/axiom/__init__.py",
+          "sha256": "89cf772cff7886ce57f8f25df72424c3ff3e82bc60597cb45f4791bf0e4706ac"
+        },
+        {
+          "bytes": 16384,
+          "path": "axiom_oracles/adapters/axiom/_snap_co_base_inputs.py",
+          "sha256": "e69ae84be2184dc2f269d56d3620041f97543206b9ce9a812cf326a45cc7b854"
+        },
+        {
+          "bytes": 59946,
+          "path": "axiom_oracles/adapters/axiom/runner.py",
+          "sha256": "27b90ef698026b07802b0adbdfe473a0c2367f72f75b34253cd094fb5650393b"
+        },
+        {
+          "bytes": 12733,
+          "path": "axiom_oracles/adapters/axiom/snap_co_projection.py",
+          "sha256": "ba091d58858d5e1bc583d6cf69a3041e85e86e5ca01340e58457accd12c47099"
+        },
+        {
+          "bytes": 163037,
+          "path": "axiom_oracles/adapters/axiom/tax_projection.py",
+          "sha256": "8fd6c0bfb203167a50d8a4ed853841921f28475a8dfa246842b7e048b3f24214"
+        },
+        {
+          "bytes": 361,
+          "path": "axiom_oracles/comparison/__init__.py",
+          "sha256": "c71a21a9f4c168d13006cc79d52530bd1930899746b40567052adcb4d375b4f7"
+        },
+        {
+          "bytes": 5388,
+          "path": "axiom_oracles/comparison/comparator.py",
+          "sha256": "3475feb28994b90a167d04963ca53f81b6249b3e357a9d450e9e0998a9a6ddc1"
+        },
+        {
+          "bytes": 9864,
+          "path": "axiom_oracles/comparison/mappings.py",
+          "sha256": "a7fb63baa8eb9d8e7557bc8c5ba96d5c7b09c2767934976db0368fa0df8f6cff"
+        },
+        {
+          "bytes": 27827,
+          "path": "axiom_oracles/comparison/report.py",
+          "sha256": "1bb9b43eca53d229b40031232fd862db4324e028ecd26b3a1273b1362cb20988"
+        },
+        {
+          "bytes": 117535,
+          "path": "axiom_oracles/config/concept_mappings.yaml",
+          "sha256": "6bd056698683a18e7db1e48f0a7e816947571f470c378338e61f03562f3477b1"
+        },
+        {
+          "bytes": 55,
+          "path": "axiom_oracles/core/__init__.py",
+          "sha256": "514f3510e01d13f69792800dc81eca231822f69b4e0822b89feb2274fb04bb23"
+        },
+        {
+          "bytes": 29372,
+          "path": "axiom_oracles/core/case.py",
+          "sha256": "c37f8fe3caafc06f7d4b7d7a93a77dcdcbb1f76b5619312cae54eeb36bb91ed9"
+        },
+        {
+          "bytes": 809,
+          "path": "axiom_oracles/core/engine.py",
+          "sha256": "b3f8f54b3ab039b5f7a716b4d52b1d15bc5f9e46bb01a415aa1beda502a18e07"
+        },
+        {
+          "bytes": 5189,
+          "path": "axiom_oracles/core/geography.py",
+          "sha256": "c939d55ab63c0e4903ca63c5bca7b1c5b650f988a912c8d0d9ba503e6bacf121"
+        },
+        {
+          "bytes": 2886,
+          "path": "axiom_oracles/core/household.py",
+          "sha256": "c1e80bd4621d11c756e27a1f17c6bfb18e0cbcfce3e22fbd0f9c5f8331548438"
+        },
+        {
+          "bytes": 447,
+          "path": "axiom_oracles/core/results.py",
+          "sha256": "543b20135f8aff3ecdd6230f61610dfcda2ff2086b3df0c1cd762f9c2572dd31"
+        },
+        {
+          "bytes": 8681,
+          "path": "axiom_oracles/engine_compat.py",
+          "sha256": "6f8c2c37cb30637cc88739d6db6c2d7dbe6a248ed8663474d8a70d208038c16e"
+        }
+      ],
+      "producer_sha256": "4445de9d524fae3b5fe96a6c47ced4f82971b01c4cb68a311e3bebf8268e6328",
+      "python": {
+        "executable": {
+          "bytes": 49968,
+          "path": "/Users/maxghenis/.local/share/uv/python/cpython-3.14.4-macos-aarch64-none/bin/python3.14",
+          "sha256": "bf4ea26231212e330b8e9b6f24969a30f894fec88665bf42754070d114ac7fc6"
+        },
+        "version": "3.14.4 (main, Apr 14 2026, 14:46:33) [Clang 22.1.3 ]"
+      },
+      "pyyaml_version": "6.0.3"
+    },
+    "campaign_producer_identity_required": false,
+    "campaign_semantic_equivalence_basis": "identical selected population plus an exact per-unit historical-to-source-evaluation-to-comparison identity and arithmetic replay",
+    "comparison_receipt_engine_errors": 0,
+    "evaluated_cases": 19118619,
+    "evaluated_chapters": 100,
+    "evaluation_manifest_sha256": "cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84",
+    "evaluation_shard_engine_errors": 0,
+    "fresh_campaign_classifier_sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b",
+    "generation_id": "3b25bc33665d4eed90a21409872a54bb",
+    "observed_evaluated_cases": 19118619,
+    "observed_evaluation_record_errors": 0,
+    "preview_cafta_snapshot_sha256": "531fce05b3c6ac32980fb0e570140ccde0b277d674b6f107724fab76f7ee57c3",
+    "preview_campaign_classifier_sha256": "b465e2953ac821522259e4e4811bac4615c93908c0ccd76086a2db8990f5277b",
+    "preview_receipt_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
+    "reference_compared_field": "statutory_rate_s301fl",
+    "reference_rds_path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/timeseries/rate_timeseries.rds",
+    "reference_rds_sha256": "724a0be1dce45d423d5ce599bb56f2ab81cbf78b637ba59a3287738bfc488a35",
+    "rulespec": {
+      "content_sha256": "3791e1a8d9139a5d76e35bdc846f663902815f5433aad13e1340e4f10f89ed23",
+      "dirty": false,
+      "head_commit": "4f591c4267063094cc6da9d590872ea982940b81",
+      "head_tree": "b2d4d0ef3929c8600f121206a207f70c7437eaff",
+      "root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-policy-combined-20260829/rulespec-us",
+      "tracked_worktree_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": []
+    },
+    "run_identity_sha256": "0d5b10e153cf38dc14a1a181c41d393e6bba05fe32ef2a8fe48015624be67f40",
+    "selected_population_sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+  },
+  "census": {
+    "cafta_signatures": 8702,
+    "cafta_units": 17404,
+    "fresh_comparison_rows_scanned": 216111132,
+    "historical_artifact_rows_scanned": 395330,
+    "origin_units": {
+      "CR": 1260,
+      "DO": 128,
+      "GT": 108,
+      "HN": 120,
+      "NI": 15636,
+      "SV": 152
+    }
+  },
+  "definition": {
+    "bounded_conclusion": "the 17,404 preview cells are a Yale reference defect caused by the pinned tidy-eval name collision under the campaign's explicitly neutral false entry facts",
+    "real_entry_frontier": "unchanged: the receipt proves neither GN-29(d)(v) product status nor a DR-CAFTA duty-free claim for any actual entry",
+    "stable_identity": [
+      "case_id",
+      "slot",
+      "hts10",
+      "hts_line",
+      "iso2",
+      "revision",
+      "interval",
+      "origin_regime",
+      "expected"
+    ],
+    "supersession_condition": "exact immutable population and fresh identity digest; zero evaluation or comparison engine errors; both Axiom entry predicates explicitly false; every Yale zero and delta reproduced by the pinned name-collision defect; corrected statutory rates equal Axiom on every cell"
+  },
+  "inputs": {
+    "comparison_artifact": {
+      "bytes": 4039630088,
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/ce/cef3cf01250471156ba24b5eb0c5c7a80bb7fa218dfaa8015eec0fbb5f7d0a84.jsonl.gz",
+      "sha256": "3e0f72d28abe9a2d0f4cb9ed53920f225039b896794302afe4671c5271110fd0"
+    },
+    "comparison_receipt": {
+      "bytes": 1565,
+      "path": "reference/us-tariff-schedule/comparison-summary.json",
+      "sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7"
+    },
+    "declared_input_contract": {
+      "bytes": 1159553,
+      "path": "reference/us-tariff-schedule/declared-input-contract-receipt.json",
+      "sha256": "e9db8760690ecd8a273e8e8e94095104a80e146fbe438ba41b14ab97b4abfd7a"
+    },
+    "evaluation_manifest": {
+      "bytes": 429475,
+      "path": "reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "f11f8a72108bfdaa0aafb332b2fc47eb410dcf1970931dfbbf2e32d4a8f5ad1a"
+    },
+    "historical_target_mismatch_artifact": {
+      "bytes": 10088070,
+      "path": "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
+      "sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705"
+    },
+    "immutable_preview_receipt": {
+      "bytes": 303477,
+      "path": "reference/us-tariff-schedule/preview-disposition-line-sets.json",
+      "sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181"
+    },
+    "reference_integrity_receipt": {
+      "bytes": 1013,
+      "path": "reference/us-tariff-schedule/integrity-receipt.json",
+      "sha256": "14d974d9eb8a7e58f63fe5be9b80eb2cdc0e2e2e14dc65893572abacc63c6191"
+    },
+    "reference_provenance": {
+      "bytes": 1718,
+      "path": "reference/us-tariff-schedule/provenance.json",
+      "sha256": "52d9da88a0aa5d1b1af4844d3be304f37601c8c1679104be3c2b1b335b57eabe"
+    },
+    "selected_panel_extractor": {
+      "bytes": 8659,
+      "path": "scripts/extract_us_tariff_schedule.R",
+      "sha256": "5ad47ab101eb64bc409f7175caa1d03719bc613655729e61944f903f776fe8b4"
+    }
+  },
+  "producer": {
+    "script": {
+      "bytes": 77060,
+      "path": "scripts/build_us_tariff_cafta_supersession_receipt.py",
+      "sha256": "705d7694b91008aae843d22e4732fcc1ae5166d4fb5860712e7da375644bff90"
+    }
+  },
+  "receipt_payload_sha256": "8948878bae5f34ad2b33e49619f462aaee09619fbbc261397503ea4d061cdac4",
+  "schema": "axiom_oracles.us_tariff_schedule.cafta_reference_defect_supersession.v1",
+  "supersession": {
+    "all_corrected_yale_statutory_rates_match_axiom": true,
+    "all_predicates_false": true,
+    "all_present": true,
+    "all_unique": true,
+    "all_yale_defect_zeros_reproduced": true,
+    "authorized_attribution_after_pass": "reference-defect",
+    "authorized_disposition_after_pass": "upstream_engine_gap",
+    "duplicate_fresh_identities": 0,
+    "duplicate_historical_identities": 0,
+    "fresh_defect_projection_sha256": "d124b93308c27e42cad8cff1d944c63e6f24d67973ea44ea1d623672ade27462",
+    "fresh_identity_population_sha256": "1ceb489cd916d87fd6bedc4797dba33f9562a7a25869e36adde96589aba619f3",
+    "fresh_mismatching_units": 17404,
+    "historical_defect_projection_sha256": "d124b93308c27e42cad8cff1d944c63e6f24d67973ea44ea1d623672ade27462",
+    "historical_identity_population_sha256": "1ceb489cd916d87fd6bedc4797dba33f9562a7a25869e36adde96589aba619f3",
+    "historical_mismatch_projection_sha256": "f97e554b6c638a66ab994c52668510168490304f52e38523719bef2b26cf2852",
+    "joined_historical_units": 17404,
+    "missing_historical_units": 0
+  },
+  "verdict": "PASS",
+  "yale_reference_defect": {
+    "adapter_source_proof": {
+      "authority_builder_first_line": 485,
+      "authority_builder_sha256": "06d6b8a59363f668fa2bcae8a35e157241b19fc1e8a254fd41dfa0f99b1db805",
+      "exemption_resolver_first_line": 435,
+      "exemption_resolver_sha256": "0237e0ee3978687f967b8cdaabbb3c4721984aac7899a4ee36bb7e294bf06869",
+      "rate_and_type_resolvers_first_line": 391,
+      "rate_and_type_resolvers_sha256": "b4b03adb11756fd9ff2dda56313c0aea5dddf4511e0c1d65a1f2ce19caf05ebf"
+    },
+    "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+    "deterministic_minimal_reproduction": {
+      "dplyr_path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/dplyr",
+      "dplyr_tree": {
+        "bytes": 2618210,
+        "file_count": 68,
+        "manifest_sha256": "647bc333c2efabcc6519b6c16b5b3b90fa6a0c3a2515bdf008318314f30f79fc",
+        "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/dplyr"
+      },
+      "dplyr_version": "1.1.2",
+      "program_sha256": "27f678ccd8f1486fa88b6393ecbbd50cc28d01ae87d2e3e6ab1abfd85b6c0afb",
+      "r_runtime_tree": {
+        "bytes": 357968262,
+        "file_count": 8300,
+        "manifest_sha256": "23f7ebbac8578e60c99b7dd808fcb6d268f8b479240e6760383454b32f978641",
+        "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources"
+      },
+      "r_version": "4.3.0",
+      "result": "PASS: rule_hit('full') selected both the full and fta rows under the pinned .data$condition %in% condition expression",
+      "rscript": {
+        "bytes": 70912,
+        "path": "/Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/bin/Rscript",
+        "sha256": "258c64ed913846b06ab5f6829de9e69a23ce8e515cc6c61a34ece40cb274a49c"
+      },
+      "selected_conditions": "full,fta"
+    },
+    "files": {
+      "config/policy_params.yaml": {
+        "bytes": 50577,
+        "path": "config/policy_params.yaml",
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "resources/mfn_exemption_shares.csv": {
+        "bytes": 122722,
+        "path": "resources/mfn_exemption_shares.csv",
+        "sha256": "9505d04e441386ac08348de663c151743fdf3c537947cbe7ceab43b4d21381e1"
+      },
+      "resources/s232_pharma_products.csv": {
+        "bytes": 1447,
+        "path": "resources/s232_pharma_products.csv",
+        "sha256": "eb5f888ef3967c699b4f85618859d3556a9552e7d636ead2bbdc09256edcca04"
+      },
+      "resources/s301fl_final_common_exemptions.csv": {
+        "bytes": 33245,
+        "path": "resources/s301fl_final_common_exemptions.csv",
+        "sha256": "15b5e352cd810af33b90699bb595010f5aca43ea10de25ba1b2c6239acc96054"
+      },
+      "resources/s301fl_final_country_exemptions.csv": {
+        "bytes": 140808,
+        "path": "resources/s301fl_final_country_exemptions.csv",
+        "sha256": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280"
+      },
+      "src/model/authority_adapter.R": {
+        "bytes": 65357,
+        "path": "src/model/authority_adapter.R",
+        "sha256": "91d6adab284dc823fa4c541910d6c4a74494b3a09f3e5fb6b6a71a98e3b1288a"
+      },
+      "src/pipeline/06_calculate_rates.R": {
+        "bytes": 179892,
+        "path": "src/pipeline/06_calculate_rates.R",
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      }
+    },
+    "source_proof": {
+      "chapter98_precapture_first_line": 2961,
+      "chapter98_precapture_transforms_sha256": "9950e34ca8d3bbd481985b04ffdf80ae828247df62155b0eb6ce773c26208e2b",
+      "comparison_surface": "statutory_rate_s301fl captures rate_s301fl before the later HS2-country preference scaling; fixing the name collision restores the statutory country-tier rate on the compared surface regardless of utilization share",
+      "defect": "the function argument is named condition, but dplyr's data mask resolves the bare RHS condition to the condition column; therefore .data$condition %in% condition is true for every nonmissing row",
+      "downstream_effect": "rule_hit('full') includes condition=fta rows, making country_full_hit true, covered false, and rate_s301fl zero before preference scaling",
+      "rule_hit_function_first_line": 959,
+      "rule_hit_function_sha256": "3257ccacb37c6d7ced57e112a3f0fc63015758df50afb5e08646790e6f617d3a",
+      "rule_hit_use_site_first_line": 973,
+      "rule_hit_use_site_sha256": "ccd1a2de00c1747444734437acb2567d59c43e39047f05ba98c21791ce52a61f",
+      "statutory_capture_and_preference_scaling_sha256": "28ad1849ca43d61431e282b090b465e518da98978f90d143627815b50e57cd1c",
+      "statutory_capture_first_line": 3022,
+      "use_conditioned_first_line": 999,
+      "use_conditioned_scaling_sha256": "3093f85841b5209701730688ab822677928ad10e1c2b3a6d479fa274332534e0"
+    },
+    "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+  },
+  "zero_error_proof": {
+    "comparison_artifact_engine_error_rows": 0,
+    "comparison_receipt_engine_errors": 0,
+    "evaluation_shard_engine_errors": 0,
+    "observed_evaluation_record_errors": 0
+  }
+}

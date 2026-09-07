@@ -2,7 +2,10 @@
   "schema": "axiom_oracles.committed_exercise_receipt.v1",
   "suite": "us-tariff-panel",
   "cases": 122,
-  "evidence_mode": "committed-detail-rows",
+  "case_groups": 122,
+  "comparison_units": 39600,
+  "evidence_mode": "committed-group-aggregate-census",
+  "population_commitment": "grouped-aggregate-only",
   "report": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
   "report_sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
   "evidence_artifacts": [
