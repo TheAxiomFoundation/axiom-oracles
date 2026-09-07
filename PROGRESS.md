@@ -342,9 +342,22 @@ lane. Source body and signature hashes did not change.
   459newcases/1049outputs/12nativeerrors,46targeted tests, the standalone
   replay and preserved original artifacts. All closure/admission labels remain
   false and Fable review remains pending for root.
-- Final remaining artifact operations: create/verify the incremental Git bundle,
-  record its prerequisites/hash and save continuation-result.md plus a durable
-  duplicate handoff. No additional scope or campaign work is being launched.
+- Incremental Git bundle verified successfully; its prerequisites are the
+  original a7d2bf13a milestone and fetched main refs ef012e83c/82d342793. Final
+  output and artifact hashes live in the lane, with a duplicate durable handoff.
+  The final package is regenerated after this metadata checkpoint. No additional
+  scope or campaign work is being launched.
 - Next authorized substantive work requires the exact source/encoder/input or
   review conditions in CONTINUATION-BLOCKERS.md. Do not substitute unsupported
   evidence or consume a reset. No-reset block remains until explicit release.
+
+## Durable package complete
+
+Draft PR532, committed source receipts/blocker handoff, validated standalone
+replay, verified incremental Git bundle and preserved original artifacts form
+the review package. Final head/hash accounting is in the lane's
+continuation-artifact-manifest.json and continuation-result.md. The prepared
+continuation Fable brief is for root; no review dispatch was made. Bounded
+implementation/reproducibility work is complete. Legal closure, source repairs,
+transaction grounding, current-base proof admission and all review/release
+gates remain explicitly open.
