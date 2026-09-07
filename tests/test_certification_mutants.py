@@ -613,17 +613,30 @@ def test_nz_unified_exercise_receipt_does_not_self_audit_a_bridge():
     assert row["evidence_source"] == "unified-experiment-receipt"
 
 
-def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
+def test_nz_certificates_compute_open_on_v3_closure_frontiers():
+    """Aggregation is clear, while each rederived v3 frontier keeps NZ open."""
+
     certify = _load("certify")
+    expected_cones = {
+        "nz/acc-earners-levy": (1, 2, 3),
+        "nz/accommodation-supplement": (26, 3, 29),
+        "nz/income-tax": (1, 25, 26),
+        "nz/independent-earner-tax-credit": (7, 32, 39),
+        "nz/main-benefits": (11, 1, 12),
+        "nz/winter-energy-payment": (2, 1, 3),
+        "nz/working-for-families": (80, 33, 113),
+    }
     for program in sorted(name for name in certify.PROGRAMS if name.startswith("nz/")):
         certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        assert certificate["blockers"] == []
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
-        assert certificate["verdicts"]["exercised"]["mode"] == "computed"
-        assert certificate["verdicts"]["exercised"]["value"] is True
-        assert (
-            certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
-            == "computed"
+        for premise in ("conformant", "exercised", "closed", "executable"):
+            block = certificate["verdicts"][premise]
+            assert block["mode"] == "computed", (program, premise)
+            assert block["value"] is (premise != "closed"), (program, premise)
+        assert certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"] == (
+            "computed"
         )
         assert certificate["verdicts"]["exercised"]["capture_lineage"]["mode"] == (
             "computed"
@@ -632,19 +645,145 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
             blocker.startswith("exercise denominator:")
             for blocker in certificate["blockers"]
         )
-        assert certificate["blockers"], "structural engine blockers must remain"
-        # The instrument-frontier requirement (oracles#491) opens every
-        # closure claim that dispositions only the act's own provisions: the
-        # NZ closure summary carries no instrument frontier, so certify
-        # computes closed=false with the named requirement until the NZ
-        # ledger dispositions its subordinate instruments.
         assert certificate["verdicts"]["closed"]["mode"] == "computed"
         assert certificate["verdicts"]["closed"]["value"] is False
-        closed_frontier = certificate["verdicts"]["closed"]["instrument_frontier"]
-        assert closed_frontier["missing"] is True
-        assert closed_frontier["complete"] is False
+        closed = certificate["verdicts"]["closed"]
+
+        instrument_frontier = closed["instrument_frontier"]
+        assert instrument_frontier["complete"] is False
+
+        dependency_closure = closed["dependency_closure"]
+        assert dependency_closure["closed"] is False
+        law_count, bearing_count, open_count = expected_cones[program]
+        assert dependency_closure["open_dependency_count"] == open_count
+        assert dependency_closure["jurisdiction_open_dependency_count"] == 268
+        assert len(dependency_closure["law_derived_inputs"]) == law_count
+        assert (
+            len(dependency_closure["instruments_bearing_on_computed"])
+            == bearing_count
+        )
+        assert dependency_closure["open_dependency_count"] == (
+            len(dependency_closure["law_derived_inputs"])
+            + len(dependency_closure["instruments_bearing_on_computed"])
+        )
+
+        spine_frontier = closed["spine_frontier"]
+        assert spine_frontier["complete"] is True
+        assert spine_frontier["scope_adjudication_pending"] is False
+        assert spine_frontier["body_hash_ledger_complete"] is True
+        assert spine_frontier["blockers"] == []
+        assert (
+            spine_frontier["requested_legal_subgraph_scope"]["by_status"]["pending"]
+            == 0
+        )
         assert certificate["verdicts"]["executable"]["mode"] == "computed"
         assert certificate["verdicts"]["executable"]["value"] is True
+
+
+@pytest.mark.parametrize("mutation", ["forge_complete", "remove"])
+def test_nz_certificates_reject_forged_spine_frontier(tmp_path, monkeypatch, mutation):
+    """MUTANT: the committed spine frontier is producer-derived, not a claim."""
+
+    certify = _load("certify")
+    summary = json.loads((REPO / "closure/nz/summary.json").read_text())
+    if mutation == "forge_complete":
+        summary["computed"]["spine_frontier"]["complete"] = True
+    else:
+        del summary["computed"]["spine_frontier"]
+    artifact = tmp_path / f"nz-closure-{mutation}.json"
+    artifact.write_text(json.dumps(summary))
+
+    resolve_artifact = certify._repo_artifact_path
+    monkeypatch.setattr(
+        certify,
+        "_repo_artifact_path",
+        lambda relative, label: (
+            artifact
+            if relative == "closure/nz/summary.json"
+            else resolve_artifact(relative, label=label)
+        ),
+    )
+    with pytest.raises(
+        ValueError, match="NZ closure artifact does not rederive from committed inputs"
+    ):
+        certify._producer_closed_verdict(
+            "nz/income-tax", certify.PROGRAMS["nz/income-tax"], []
+        )
+
+
+def test_central_spine_gate_rejects_incomplete_and_restores_complete_guard():
+    """MUTANT: an otherwise closed claim cannot omit v3 spine completion."""
+
+    certify = _load("certify")
+    complete = {
+        "complete": True,
+        "scope_adjudication_pending": False,
+        "body_hash_ledger_complete": True,
+        "blockers": [],
+        "requested_legal_subgraph_scope": {
+            "total": 1,
+            "by_status": {
+                "encoded": 1,
+                "classified": 0,
+                "excluded": 0,
+                "pending": 0,
+            },
+            "instrument_counts": [
+                {
+                    "total": 1,
+                    "by_status": {
+                        "encoded": 1,
+                        "classified": 0,
+                        "excluded": 0,
+                        "pending": 0,
+                    },
+                }
+            ],
+        },
+    }
+    baseline, passes = certify._central_spine_frontier(complete)
+    assert passes is True
+    assert baseline is not None and baseline["complete"] is True
+
+    mutant = copy.deepcopy(complete)
+    mutant.update(
+        complete=False,
+        scope_adjudication_pending=True,
+        body_hash_ledger_complete=False,
+        blockers=["scope_pending", "body_hash_pending"],
+    )
+    normalized, passes = certify._central_spine_frontier(mutant)
+    assert passes is False
+    assert normalized is not None and normalized["complete"] is False
+
+    restored, passes = certify._central_spine_frontier(complete)
+    assert passes is True
+    assert restored == baseline
+
+
+def test_nz_injected_blocker_still_gates_certified(monkeypatch):
+    """MUTANT: blockers must still veto certified even with all premises green."""
+
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["nz/income-tax"])
+    spec["blockers"] = ["synthetic gating blocker: must veto certification"]
+    monkeypatch.setattr(
+        certify,
+        "_closed_verdict",
+        lambda *_args, **_kwargs: {
+            "mode": "computed",
+            "status": "computed_closed",
+            "value": True,
+        },
+    )
+    certificate = certify.build_certificate("nz/income-tax", spec)
+    assert all(
+        certificate["verdicts"][premise]["value"] is True
+        for premise in ("conformant", "exercised", "closed", "executable")
+    )
+    assert certificate["certified"]["value"] is False
+    assert certificate["certified"]["state"] == "no"
+    assert any("synthetic gating blocker" in b for b in certificate["blockers"])
 
 
 # ── Round 3: inputs from the second fix-verification ─────────────────────────
@@ -1140,8 +1279,9 @@ def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
             shutil.copytree(
                 src, tree / root, ignore=shutil.ignore_patterns("__pycache__")
             )
-    shutil.copytree(REPO / "scripts", tree / "scripts",
-                    ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copytree(
+        REPO / "scripts", tree / "scripts", ignore=shutil.ignore_patterns("__pycache__")
+    )
     assert not (tree / "tests").exists()
     spec = importlib.util.spec_from_file_location(
         "census_hermetic", tree / "scripts" / "exercise_census.py"
@@ -1155,6 +1295,7 @@ def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
         "dk-child-youth-benefit-couple",
     ):
         assert clean.get(suite) is True, (suite, clean.get(suite))
+
 
 # ── #378: strict execution-evidence boundary ─────────────────────────────────
 
@@ -2050,9 +2191,7 @@ def test_nz_view_scoped_trace_mutants_are_killed(mutation, marker):
     elif mutation == "declared-roots":
         evaluation()["requested_output_roots"] = ["mutant"]
     elif mutation == "changed-typed-input":
-        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = (
-            "999999999"
-        )
+        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = "999999999"
     elif mutation == "missing-returned-output":
         row = evaluation()
         root = row["requested_output_roots"][0]
@@ -2060,9 +2199,7 @@ def test_nz_view_scoped_trace_mutants_are_killed(mutation, marker):
     elif mutation == "cross-view-root":
         row = evaluation()
         foreign = nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0]
-        template = copy.deepcopy(
-            next(iter(row["response"]["outputs"].values()))
-        )
+        template = copy.deepcopy(next(iter(row["response"]["outputs"].values())))
         template["id"] = foreign
         row["request"]["queries"][0]["outputs"].append(foreign)
         row["requested_output_roots"].append(foreign)
@@ -2137,7 +2274,9 @@ def test_nz_exercise_is_derived_separately_for_each_requested_root_set():
     views = nz.derive_bound_trace_views()
 
     benefits = views["nz/main-benefits"]["root_set_receipts"]
-    assert [(row["evaluation_count"], len(row["evidence_fields"])) for row in benefits] == [
+    assert [
+        (row["evaluation_count"], len(row["evidence_fields"])) for row in benefits
+    ] == [
         (150, 11),
         (16, 2),
     ]
@@ -2212,9 +2351,7 @@ def test_nz_trace_normalizer_mutants_are_killed(mutation, marker, monkeypatch):
                             {
                                 "outputs": [
                                     nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0],
-                                    nz.PROGRAM_VIEWS["nz/acc-earners-levy"]["roots"][
-                                        0
-                                    ],
+                                    nz.PROGRAM_VIEWS["nz/acc-earners-levy"]["roots"][0],
                                 ]
                             }
                         ]
@@ -2300,9 +2437,7 @@ def test_nz_trace_capture_path_is_no_drift_only(tmp_path, monkeypatch, capsys):
 
 def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypatch):
     certify = _load("certify")
-    source_path = (
-        REPO / "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
-    )
+    source_path = REPO / "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
     mutant = json.loads(source_path.read_text())
     mutant["compiled_program"]["input_slots"] += 1
     original_load = certify._load
@@ -2633,7 +2768,7 @@ def test_nz_subgraph_cited_path_cannot_be_silently_dropped():
 
 
 def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
-    """MUTANT: a pending citation outside ACC must stay jurisdiction-only."""
+    """MUTANT: an unrelated citation must not enter ACC's scoped evidence."""
 
     closure = _load("nz_closure")
     source = json.loads(closure.SOURCE_PATH.read_text())
@@ -2648,12 +2783,20 @@ def test_unrelated_pending_path_does_not_red_acc_certificate_scope():
     node["citations"] = sorted([*node["citations"], missing])
     node["citations_sha256"] = closure._list_sha256(node["citations"])
     row["citations"] = sorted([*row["citations"], missing])
+    baseline = closure.build(source)
     summary = closure.build(mutant)
     assert missing in summary["pending_citations"]
     assert summary["closed"] is False
-    assert summary["programs"]["nz/acc-earners-levy"]["closed"] is True
+    # ACC is already honestly open on its incomplete instrument capture.  The
+    # unrelated Income Tax citation must leave both its citation and instrument
+    # frontiers exactly unchanged rather than being credited for that openness.
+    assert summary["programs"]["nz/acc-earners-levy"]["closed"] is False
     assert (
         missing not in summary["programs"]["nz/acc-earners-levy"]["pending_citations"]
+    )
+    assert (
+        summary["programs"]["nz/acc-earners-levy"]
+        == baseline["programs"]["nz/acc-earners-levy"]
     )
 
 
@@ -2700,7 +2843,7 @@ def test_nz_certificate_rederives_closure_instead_of_trusting_summary(
     certify = _load("certify")
     closure = _load("nz_closure")
     summary = json.loads((REPO / "closure/nz/summary.json").read_text())
-    summary["programs"]["nz/income-tax"]["closed"] = False
+    summary["programs"]["nz/income-tax"]["closed"] = True
     mutant = tmp_path / "summary.json"
     mutant.write_text(json.dumps(summary))
     monkeypatch.setattr(certify, "_repo_artifact_path", lambda *args, **kwargs: mutant)
@@ -2836,12 +2979,24 @@ def test_strict_typed_evidence_honest_forms_validate():
         "dk-child-youth-benefit-couple",
         "README.md",
         # wrong suite's report / index / an unlisted chunk (relevance gap)
-        {"report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json", "claim": "x"},
+        {
+            "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+            "claim": "x",
+        },
         {"report": "conformance/exercise-census.json", "claim": "x"},
         {"report": "certificates/dk-boerne-og-ungeydelse.json", "claim": "x"},
-        {"report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml", "claim": "self"},
-        {"chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json", "claim": "x"},
-        {"chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json", "claim": "x"},
+        {
+            "report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml",
+            "claim": "self",
+        },
+        {
+            "chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json",
+            "claim": "x",
+        },
+        {
+            "chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json",
+            "claim": "x",
+        },
         # physical: outside roots / unshipped / never-shipped / case-variant / abs
         {"report": "tests/test_certification_mutants.py", "claim": "x"},
         {"report": "axiom_oracles/__pycache__/x.pyc", "claim": "x"},
@@ -2876,7 +3031,10 @@ def test_strict_typed_evidence_prose_is_opaque():
     resolver never sees it."""
     vbm, path, manifest, binding = _couple_manifest()
     binding["covered_by"] = [
-        {"report": COUPLE_REPORT, "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ..."},
+        {
+            "report": COUPLE_REPORT,
+            "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ...",
+        },
     ]
     errors, findings = vbm.validate(path, manifest)
     assert not errors and not findings, (errors, findings)
@@ -2915,7 +3073,9 @@ def test_shipped_evidence_file_physical_rules():
     assert not stray.exists()
     stray.write_text("not tracked\n")
     try:
-        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        assert (
+            vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        )
     finally:
         stray.unlink()
 
@@ -2983,7 +3143,9 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     assert cl.main(["--check", "--rulespec-ref", recorded]) == 0
     # currency against the OLDER commit 9986b603 (same module bytes, but the
     # ledger records bbc987b0): the recorded pin differs → drift
-    rc = cl.main(["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"])
+    rc = cl.main(
+        ["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"]
+    )
     assert rc == 1
     # and the ledger's own generated_facts.rulespec.ref is the immutable sha
     facts = yaml.safe_load(
@@ -3016,7 +3178,9 @@ def test_strict_evidence_rejects_never_shipped_files():
     assert not stray.exists()
     stray.write_text("not tracked\n")
     try:
-        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        assert (
+            vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        )
     finally:
         stray.unlink()
 
@@ -3062,7 +3226,9 @@ def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
     assert cert["verdicts"]["closed"]["mode"] == "computed"
     assert cert["verdicts"]["closed"]["rulespec_commit"] == other
     assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
-    assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
+    assert any(
+        "producers disagree on the rulespec commit" in b for b in cert["blockers"]
+    ), cert["blockers"]
     assert cert["certified"]["value"] is False
 
 
@@ -3147,7 +3313,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
             doc["generated_facts"][fact]["ref"] = forged
             errors = cl._validation_errors(doc)
             assert any("commit must be a full git commit SHA" in e for e in errors), (
-                fact, forged, errors
+                fact,
+                forged,
+                errors,
             )
 
         doc = copy.deepcopy(baseline)
@@ -3161,7 +3329,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     original_closed = certify._producer_closed_verdict
 
     def _tampered(program, spec_, evidence, *, verify_producer=False):
-        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        block = original_closed(
+            program, spec_, evidence, verify_producer=verify_producer
+        )
         if block is not None:
             block["rulespec_commit"] = digits
         return block
@@ -3175,7 +3345,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
         certify._producer_closed_verdict = original_closed
     assert cert["verdicts"]["closed"]["mode"] == "computed"
     assert cert["verdicts"]["executable"]["mode"] == "computed"
-    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert[
+        "blockers"
+    ]
     assert cert["certified"]["value"] is False
 
     # delta-audit #8: COORDINATED equal digit-only strings on both computed
@@ -3184,7 +3356,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     original_exec = certify._producer_executable_verdict
 
     def _tampered_closed(program, spec_, evidence, *, verify_producer=False):
-        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        block = original_closed(
+            program, spec_, evidence, verify_producer=verify_producer
+        )
         if block is not None:
             block["rulespec_commit"] = digit_str
         return block
@@ -3206,7 +3380,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
         certify._producer_executable_verdict = original_exec
     assert cert["verdicts"]["closed"]["rulespec_commit"] == digit_str
     assert cert["verdicts"]["executable"]["rulespec_sha"] == digit_str
-    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert[
+        "blockers"
+    ]
     assert cert["certified"]["value"] is False
     assert cert["certified"]["state"] != "yes"
 
@@ -3296,9 +3472,7 @@ def test_nz_denominator_recorded_input_slots_tamper_reds(tmp_path, monkeypatch):
     mutant = tmp_path / "source-comparison.json"
     mutant.write_text(json.dumps(report))
     monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
-    with pytest.raises(
-        denominator.DenominatorError, match="input_slots denominator"
-    ):
+    with pytest.raises(denominator.DenominatorError, match="input_slots denominator"):
         denominator.validate()
 
 
@@ -3384,9 +3558,7 @@ def test_bare_closed_true_dependency_block_fails_the_central_gate(
     assert verdict["dependency_closure"]["malformed"] is True
 
 
-def test_boolean_count_dependency_block_fails_the_central_gate(
-    tmp_path, monkeypatch
-):
+def test_boolean_count_dependency_block_fails_the_central_gate(tmp_path, monkeypatch):
     """open_dependency_count=false must read malformed, not as zero: bool
     is an int subclass in Python (launch-audit delta r2 finding). Covers
     both the generic and program-scoped verdict paths."""
@@ -3439,9 +3611,7 @@ def test_boolean_count_dependency_block_fails_the_central_gate(
         monkeypatch.setattr(
             certify, "_repo_artifact_path", lambda relative, label: artifact
         )
-        monkeypatch.setattr(
-            certify, "_producer_module", lambda name, _p=producer: _p()
-        )
+        monkeypatch.setattr(certify, "_producer_module", lambda name, _p=producer: _p())
         monkeypatch.setattr(certify, "sha256_of", lambda path: "0" * 64)
         verdict = certify._producer_closed_verdict(
             "forged/program",
@@ -3450,6 +3620,8 @@ def test_boolean_count_dependency_block_fails_the_central_gate(
         )
         assert verdict["value"] is False, f"scoped={scoped}"
         assert verdict["dependency_closure"]["malformed"] is True
+
+
 # ── DE Kindergeld: every new unified-record gate gets a killed mutant ──
 
 
@@ -3846,9 +4018,7 @@ def test_de_closure_pending_signature_cannot_self_promote():
     )
     module["signature_state"] = "pending"
     del module["artifact"]
-    with pytest.raises(
-        closure.ClosureError, match="must be encoded and signed"
-    ):
+    with pytest.raises(closure.ClosureError, match="must be encoded and signed"):
         closure.build(demoted)
 
 
@@ -3939,7 +4109,10 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
     # certify while the closure's instrument frontier is undeclared.
-    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["blockers"] == [
+        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
+        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block",
+    ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 
@@ -3953,7 +4126,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert mutant["certified"]["state"] == "no"
     assert mutant["blockers"] == [
         "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block',
+        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block",
         "release replay mismatch",
     ]
 
@@ -4166,9 +4339,7 @@ def test_de_executable_pending_inputs_never_self_assert_true(tmp_path):
     # not pending, and build_status fails closed on it).
     tmp_unified = _load_from(root / "scripts/de_unified_comparison.py")
     record = tmp_unified.build()
-    rendered = (
-        json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
-    )
+    rendered = json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     (root / "comparisons/de-worker-dual-oracle/unified-record.json").write_text(
         rendered, encoding="utf-8"
     )
@@ -4294,17 +4465,12 @@ def _complete_de_axiom_leg(de, unified, *, oracle="euromod"):
     from scripts import de_axiom_legs
 
     inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in inspection["artifacts"]:
         if artifact["path"] == "de/statutes/estg/66.yaml":
             artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
-        elif artifact["path"] == (
-            ".axiom/encoding-manifests/de/statutes/estg/66.json"
-        ):
+        elif artifact["path"] == (".axiom/encoding-manifests/de/statutes/estg/66.json"):
             artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
     scaffolds = de_axiom_legs.complete_view_scaffolds(oracle, inspection)
     kindergeld = record["views"][de.PROGRAM]
@@ -4494,17 +4660,12 @@ def test_de_live_leg_builder_uses_actual_engine_rows_not_aggregate_expansion():
     fixture = _de_engine_fixture(executable, case_ids)
     oracle_rows = [0.0] * 11 + [250.0, 515.0]
     dependency_inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in dependency_inspection["artifacts"]:
         if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
-        elif artifact["path"] == executable.RULESPEC_PIN[
-            "encoding_manifest_path"
-        ]:
+        elif artifact["path"] == executable.RULESPEC_PIN["encoding_manifest_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
     with pytest.raises(executable.DEExecutableError, match="differs from Axiom"):
         executable._build_live_leg_documents(
@@ -4613,17 +4774,12 @@ def test_de_live_producer_repairs_stale_bundle_and_emits_all_flip_inputs(
     from scripts import de_axiom_legs
 
     dependency_inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in dependency_inspection["artifacts"]:
         if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "2" * 64})
-        elif artifact["path"] == executable.RULESPEC_PIN[
-            "encoding_manifest_path"
-        ]:
+        elif artifact["path"] == executable.RULESPEC_PIN["encoding_manifest_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "4" * 64})
     monkeypatch.setattr(
         de_axiom_legs,
