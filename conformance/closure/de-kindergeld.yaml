@@ -6761,6 +6761,127 @@ committed_decisions:
     reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
     bears_on_computed_surface: false
   leaf_classifications: []
+  supplemental_instruments:
+  - id: de-kg-suppl-001
+    identity: Einkommensteuer-Richtlinien (EStR)
+    title_short: EStR
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-002
+    identity: Einkommensteuer-Hinweise (EStH)
+    title_short: EStH
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-003
+    identity: Lohnsteuer-Richtlinien (LStR)
+    title_short: LStR
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-004
+    identity: Lohnsteuer-Hinweise (LStH)
+    title_short: LStH
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-005
+    identity: Anwendungserlass zur Abgabenordnung (AEAO)
+    title_short: AEAO
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-006
+    identity: Anweisungen für das Straf- und Bußgeldverfahren (Steuer) (AStBV (St))
+    title_short: AStBV (St)
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-007
+    identity: 'BMF-Schreiben — class: every BMF letter the Familienkassen must observe; members to be enumerated by a discovery channel'
+    title_short: BMF-Schreiben (class)
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-008
+    identity: 'Weisungen des BZSt an die Familienkassen — class: BZSt directives beyond the DA-KG; members to be enumerated by a discovery channel'
+    title_short: BZSt-Weisungen (class)
+    relation: guidance
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-009
+    identity: Im BStBl II veröffentlichte oder vom BMF zur Veröffentlichung vorgesehene Entscheidungen des BFH, BVerfG und EuGH — class; members to be enumerated by a discovery channel
+    title_short: BFH/BVerfG/EuGH decisions (class)
+    relation: bears_on
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    status: pending
+  - id: de-kg-suppl-010
+    identity: Zwischenstaatliche (zwei- oder mehrseitige) Vereinbarungen und Abkommen über Soziale Sicherheit — class; members to be enumerated by a discovery channel
+    title_short: Social-security agreements (class)
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
+  - id: de-kg-suppl-011
+    identity: Verordnung (EG) Nr. 883/2004 zur Koordinierung der Systeme der sozialen Sicherheit
+    title_short: VO (EG) 883/2004
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
+  - id: de-kg-suppl-012
+    identity: Verordnung (EG) Nr. 987/2009 (Durchführungsverordnung zur VO (EG) Nr. 883/2004)
+    title_short: VO (EG) 987/2009
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
+  - id: de-kg-suppl-013
+    identity: Abkommen über den Austritt des Vereinigten Königreichs Großbritannien und Nordirland aus der Europäischen Union und der Europäischen Atomgemeinschaft (Austrittsabkommen EU/VK)
+    title_short: Austrittsabkommen EU/VK
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
+  - id: de-kg-suppl-014
+    identity: Verordnung (EG) Nr. 859/2003 (Drittstaatsangehörige; im Verhältnis zum Vereinigten Königreich in Bestandsfällen)
+    title_short: VO (EG) 859/2003
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
+  - id: de-kg-suppl-015
+    identity: Verordnung (EU) Nr. 1231/2010 (Ausdehnung der VO (EG) 883/2004 und 987/2009 auf Drittstaatsangehörige)
+    title_short: VO (EU) 1231/2010
+    relation: coordination
+    discovered_by: de-kg-dakg-O2.4
+    discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    status: pending
 computed:
   ledger:
   - ordinal: 1
@@ -7059,13 +7180,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 448
+    instrument_count: 463
     counts:
-      total: 448
+      total: 463
       encoded: 0
       classified-with-reason: 1
       excluded-with-reason: 26
-      pending: 421
+      pending: 436
     pending:
     - de-kg-dakg-A1
     - de-kg-dakg-A10
@@ -7488,6 +7609,21 @@ computed:
     - de-kg-instr-ce168756ed1a28cb
     - de-kg-instr-db7693cd9f018ff4
     - de-kg-instr-f480bf90ee72ae1d
+    - de-kg-suppl-001
+    - de-kg-suppl-002
+    - de-kg-suppl-003
+    - de-kg-suppl-004
+    - de-kg-suppl-005
+    - de-kg-suppl-006
+    - de-kg-suppl-007
+    - de-kg-suppl-008
+    - de-kg-suppl-009
+    - de-kg-suppl-010
+    - de-kg-suppl-011
+    - de-kg-suppl-012
+    - de-kg-suppl-013
+    - de-kg-suppl-014
+    - de-kg-suppl-015
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -13767,6 +13903,156 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Ersten Buches Sozialgesetzbuch
+    - id: de-kg-suppl-001
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Einkommensteuer-Richtlinien (EStR)
+      title_short: EStR
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-002
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Einkommensteuer-Hinweise (EStH)
+      title_short: EStH
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-003
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Lohnsteuer-Richtlinien (LStR)
+      title_short: LStR
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-004
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Lohnsteuer-Hinweise (LStH)
+      title_short: LStH
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-005
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Anwendungserlass zur Abgabenordnung (AEAO)
+      title_short: AEAO
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-006
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Anweisungen für das Straf- und Bußgeldverfahren (Steuer) (AStBV (St))
+      title_short: AStBV (St)
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-007
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: 'BMF-Schreiben — class: every BMF letter the Familienkassen must observe; members to be enumerated by a discovery channel'
+      title_short: BMF-Schreiben (class)
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-008
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: 'Weisungen des BZSt an die Familienkassen — class: BZSt directives beyond the DA-KG; members to be enumerated by a discovery channel'
+      title_short: BZSt-Weisungen (class)
+      relation: guidance
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-009
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Im BStBl II veröffentlichte oder vom BMF zur Veröffentlichung vorgesehene Entscheidungen des BFH, BVerfG und EuGH — class; members to be enumerated by a discovery channel
+      title_short: BFH/BVerfG/EuGH decisions (class)
+      relation: bears_on
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 2 (Weisungen an die Finanzbehörden / Weisungen des BZSt / veröffentlichte Entscheidungen)
+    - id: de-kg-suppl-010
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Zwischenstaatliche (zwei- oder mehrseitige) Vereinbarungen und Abkommen über Soziale Sicherheit — class; members to be enumerated by a discovery channel
+      title_short: Social-security agreements (class)
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-011
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Verordnung (EG) Nr. 883/2004 zur Koordinierung der Systeme der sozialen Sicherheit
+      title_short: VO (EG) 883/2004
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-012
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Verordnung (EG) Nr. 987/2009 (Durchführungsverordnung zur VO (EG) Nr. 883/2004)
+      title_short: VO (EG) 987/2009
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-013
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Abkommen über den Austritt des Vereinigten Königreichs Großbritannien und Nordirland aus der Europäischen Union und der Europäischen Atomgemeinschaft (Austrittsabkommen EU/VK)
+      title_short: Austrittsabkommen EU/VK
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-014
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Verordnung (EG) Nr. 859/2003 (Drittstaatsangehörige; im Verhältnis zum Vereinigten Königreich in Bestandsfällen)
+      title_short: VO (EG) 859/2003
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-015
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O2.4
+      identity_kind: supplemental
+      identity: Verordnung (EU) Nr. 1231/2010 (Ausdehnung der VO (EG) 883/2004 und 987/2009 auf Drittstaatsangehörige)
+      title_short: VO (EU) 1231/2010
+      relation: coordination
+      discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
   dependency_closure:
     law_derived_inputs:
     - claimant_entitlement
@@ -13786,14 +14072,14 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 448
+    bearing_candidate_instruments: 463
     law_derived_leaf_nodes: 4
     max_depth_estimate: 1
     remaining_oracle_work: 0
     remaining_executable_work: 0
   measurement_method:
     spine_rows: count of rows selected by the preregistered exact-citation/range scope from the pinned corpus release
-    bearing_candidate_instruments: unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition
+    bearing_candidate_instruments: unique candidates discovered by any captured channel or enrolled from a recorded read (supplemental); potential bearing, not a legal disposition
     law_derived_leaf_nodes: unique typed frontier inputs that closure/de/source.json already commits as law_derived
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory

@@ -66,7 +66,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 448, 4, 1, 0, 0),
+    "de/kindergeld": (18, 463, 4, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1215,3 +1215,150 @@ def test_working_tree_decisions_are_checked_without_a_git_commit(tmp_path, monke
     assert edited != expected
     edited["computed"] = expected["computed"]
     assert edited == expected
+
+
+# ---------------------------------------------------------------------------
+# supplemental_instruments: instruments found by reading enter the frontier
+# as pending rows, bound to the read that named them.
+# ---------------------------------------------------------------------------
+
+
+def _supplemental_fixture(module):
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    discovering = next(
+        row for row in facts["instrument_graph"]["candidates"] if isinstance(row.get("body_sha256"), str)
+    )
+    disposition = {
+        "id": discovering["id"],
+        "status": "excluded-with-reason",
+        "classification": "test_only",
+        "reason": "synthetic read that names another instrument",
+        "bears_on_computed_surface": False,
+        "body_sha256": discovering["body_sha256"],
+    }
+    supplemental = {
+        "id": "de-kg-suppl-901",
+        "identity": "Verordnung (EG) Nr. 883/2004",
+        "title_short": "VO 883/2004",
+        "relation": "coordination",
+        "discovered_by": discovering["id"],
+        "discovered_in_body_sha256": discovering["body_sha256"],
+        "provenance": "synthetic read, Abs. 2",
+        "status": "pending",
+    }
+    return document, facts, disposition, supplemental
+
+
+def _canon(module, facts, decisions):
+    errors: list[str] = []
+    canonical = module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    return canonical, errors
+
+
+def test_supplemental_instrument_enters_the_frontier_as_pending_and_counts_toward_it() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert errors == []
+    computed = module._computed(
+        facts["provision_spine"], facts["leaf_frontier"], facts["instrument_graph"], facts["measurement_basis"], canonical
+    )
+    frontier = computed["instrument_frontier"]
+    assert frontier["instrument_count"] == len(facts["instrument_graph"]["candidates"]) + 1
+    row = next(r for r in frontier["ledger"] if r["id"] == "de-kg-suppl-901")
+    assert row["identity_kind"] == "supplemental" and row["status"] == "pending"
+    assert row["discovery_refs"] == [disposition["id"]]
+    assert "de-kg-suppl-901" in frontier["pending"]
+    assert computed["measured_denominators"]["bearing_candidate_instruments"] == frontier["instrument_count"]
+    assert frontier["complete"] is False
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (lambda d, s: s.__setitem__("id", "suppl-1"), "must match de-<program>-suppl-NNN"),
+        (lambda d, s: s.__setitem__("discovered_by", "de-kg-instr-999"), "must name a generated instrument candidate"),
+        (lambda d, s: s.__setitem__("discovered_in_body_sha256", "0" * 64), "does not bind the discovering candidate's section text"),
+        (lambda d, s: s.__setitem__("relation", "mentioned"), "relation must be one of"),
+        (lambda d, s: s.__setitem__("provenance", " "), "provenance must record"),
+        (lambda d, s: s.update({"status": "excluded-with-reason", "classification": "x", "reason": "y", "bears_on_computed_surface": False}), "must bind the captured text it was read from"),
+        (lambda d, s: s.__setitem__("reason", "pending rows cannot carry this"), "pending rows carry no reason"),
+    ],
+)
+def test_supplemental_binding_mutants_are_rejected(mutate, message) -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    mutate(disposition, supplemental)
+    _canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert any(message in error for error in errors), errors
+
+
+def test_supplemental_requires_the_discovering_read_to_be_recorded() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    _canonical, errors = _canon(module, facts, {"supplemental_instruments": [supplemental]})
+    assert any("has no committed disposition" in error for error in errors), errors
+
+
+def test_decided_supplemental_instrument_binds_captured_text_and_bearing_stays_open() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    supplemental.update(
+        {
+            "status": "classified-with-reason",
+            "classification": "coordination_instrument",
+            "reason": "synthetic",
+            "bears_on_computed_surface": True,
+            "text_source": "https://example.invalid/883-2004",
+            "text_sha256": "a" * 64,
+        }
+    )
+    canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert errors == []
+    computed = module._computed(
+        facts["provision_spine"], facts["leaf_frontier"], facts["instrument_graph"], facts["measurement_basis"], canonical
+    )
+    assert "de-kg-suppl-901" in computed["dependency_closure"]["instruments_bearing_on_computed"]
+    assert "de-kg-suppl-901" not in computed["instrument_frontier"]["pending"]
+
+
+def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    supplemental = document["committed_decisions"]["supplemental_instruments"]
+    assert len(supplemental) == 15
+    assert all(row["status"] == "pending" for row in supplemental)
+    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4"}
+    o24 = next(r for r in document["committed_decisions"]["instrument_dispositions"] if r["id"] == "de-kg-dakg-O2.4")
+    assert {row["discovered_in_body_sha256"] for row in supplemental} == {o24["body_sha256"]}
+    frontier = document["computed"]["instrument_frontier"]
+    assert frontier["instrument_count"] == 448 + 15
+    assert all(sid in frontier["pending"] for sid in (row["id"] for row in supplemental))
+
+
+def test_duplicate_supplemental_ids_are_rejected() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    _canonical, errors = _canon(
+        module,
+        facts,
+        {
+            "instrument_dispositions": [disposition],
+            "supplemental_instruments": [supplemental, copy.deepcopy(supplemental)],
+        },
+    )
+    assert any("duplicate or colliding supplemental instrument id" in error for error in errors), errors

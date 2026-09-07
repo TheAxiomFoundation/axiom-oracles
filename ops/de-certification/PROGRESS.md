@@ -50,6 +50,13 @@
   pending candidates — next contract change. Frontier: 421 of 448
   pending. Hermetic rederivation now takes decisions from the document
   under check (working-tree edits are checkable before commit).
+- `supplemental_instruments` section landed in the ledger contract (mirrors
+  DK): the 15 instruments O 2.4 Abs. 2 names are enrolled as pending rows
+  bound to O 2.4's section hash (`de-kg-suppl-001`–`015`). Four are classes
+  (BMF letters, BZSt directives, published court decisions, bilateral
+  agreements) whose members a discovery channel must enumerate; the
+  frontier cannot complete around them. Kindergeld: 463 candidates, 436
+  pending.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

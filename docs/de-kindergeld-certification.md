@@ -155,6 +155,18 @@ fact twice fails the check. The three sections:
   excluded — `bears_on_computed_surface: true|false`. Per CERTIFIED.md v3 a
   bearing instrument classified around stays an open dependency; only
   `encoded` (with `encoded_by`) removes it.
+- `supplemental_instruments` — instruments found by reading rather than by a
+  captured discovery channel: `id` (`de-kg-suppl-NNN`), `identity` (official
+  citation), `title_short`, `relation` ∈ `bears_on` / `issued_under` /
+  `coordination` / `guidance`, `discovered_by` (the candidate whose text
+  named it — that candidate must itself have a recorded disposition) plus
+  `discovered_in_body_sha256` (that candidate's section hash), `provenance`
+  (where in the read), and `status`. Rows enter `pending` and count toward
+  the frontier like any candidate; deciding one later requires
+  `text_source` + `text_sha256` of the captured text it was read from. A
+  named class ("BMF-Schreiben") is enrolled as one pending row whose
+  members a discovery channel must still enumerate — the frontier cannot
+  complete around it.
 - `leaf_classifications` — one row per frontier `input` the ledger lists as
   `unclassified`: `leaf_kind` ∈ `world_fact` / `law_derived`, `reason`, and
   for `law_derived` the `defining_citation_path`. Leaves already typed
@@ -175,6 +187,13 @@ producer's exact rederivation before it reaches certify.
   index whose cited instruments await enrolment as supplemental candidates.
   Rows: `committed_decisions.instrument_dispositions` in
   `conformance/closure/de-kindergeld.yaml`, ids `de-kg-dakg-O*`.
+- 2026-09-07 — O 2.4 Abs. 2 enrolment: 15 supplemental instruments
+  (`de-kg-suppl-001`–`015`, all pending, bound to O 2.4's section hash):
+  EStR, EStH, LStR, LStH, AEAO, AStBV (St); the classes BMF-Schreiben,
+  BZSt-Weisungen, published BFH/BVerfG/EuGH decisions, bilateral
+  social-security agreements; Regulations (EC) 883/2004, 987/2009,
+  859/2003, Regulation (EU) 1231/2010, and the EU/UK Withdrawal Agreement.
+  Frontier 463 candidates, 436 pending.
 
 ## Closing worklist (seed enumeration — discovery incomplete)
 

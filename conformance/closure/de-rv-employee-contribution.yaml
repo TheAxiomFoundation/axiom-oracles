@@ -259,6 +259,7 @@ committed_decisions:
   provisions: []
   instrument_dispositions: []
   leaf_classifications: []
+  supplemental_instruments: []
 computed:
   ledger:
   - ordinal: 1
@@ -464,7 +465,7 @@ computed:
     remaining_executable_work: 1
   measurement_method:
     spine_rows: count of rows selected by the preregistered exact-citation/range scope from the pinned corpus release
-    bearing_candidate_instruments: unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition
+    bearing_candidate_instruments: unique candidates discovered by any captured channel or enrolled from a recorded read (supplemental); potential bearing, not a legal disposition
     law_derived_leaf_nodes: unique typed frontier inputs that closure/de/source.json already commits as law_derived
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
