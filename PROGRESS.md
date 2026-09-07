@@ -1,10 +1,10 @@
 # Tariff evidence sprint — September 7, 2026
 
-## State — active continuation
+## State — bounded continuation handed off
 
 Sole tariff writer: Subfleet 20260907-174414-continuation-result-md. Work is
 isolated on sprint/tariff-evidence-continuation-20260907, integrated with fetched
-origin/main ef012e83cd2e8b9b7afd4829841d9e29bc173d42. The original clean
+origin/main 82d342793d939b3bb11e9a2d50d3fb0b3bc57622. The original clean
 milestone a7d2bf13a, its branch, bundle and evidence artifacts remain preserved.
 RuleSpec stays clean at 4f591c4267063094cc6da9d590872ea982940b81.
 
@@ -332,3 +332,19 @@ lane. Source body and signature hashes did not change.
   minute cutoff appears. Receipt/source/proof bytes did not change.
 - Next: same-repository draft PR with pending CI, incremental Git bundle, final
   artifact manifest and continuation-result.md. Root can arrange Fable review.
+
+## Final continuation handoff
+
+- Draft PR532 is open in TheAxiomFoundation/axiom-oracles; the pushed head/base
+  and exact body were verified live. No workflows launched for the checked
+  skip-CI head. No merge, release, activation or reviewer message occurred.
+- CONTINUATION-HANDOFF.md summarizes21/21bounded scope evidence,15new scopes,
+  459newcases/1049outputs/12nativeerrors,46targeted tests, the standalone
+  replay and preserved original artifacts. All closure/admission labels remain
+  false and Fable review remains pending for root.
+- Final remaining artifact operations: create/verify the incremental Git bundle,
+  record its prerequisites/hash and save continuation-result.md plus a durable
+  duplicate handoff. No additional scope or campaign work is being launched.
+- Next authorized substantive work requires the exact source/encoder/input or
+  review conditions in CONTINUATION-BLOCKERS.md. Do not substitute unsupported
+  evidence or consume a reset. No-reset block remains until explicit release.
