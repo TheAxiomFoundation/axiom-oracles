@@ -28,6 +28,18 @@ not represented as verified. RuleSpec input remains the clean combined head
   already names 58/58 input scopes (21 previously missing are repaired); all 58
   source groundings still read uncaptured. Scope names alone are not evidence.
 
+## Validated checkpoint
+
+- Preserved-rebuild battery: 164 tests passed, including 101 real pinned-engine
+  compilations that reproduce the complete 58-input frontier from Git objects.
+- Fixed sandbox portability: compiler artifacts use a temporary regular file,
+  with strict JSON parsing and isolation/cleanup assertions. No receipt values
+  changed. Initial failure and passing rerun logs are saved in lane artifacts.
+- Selected six previously repaired, campaign-constant China/Hong Kong exception
+  inputs: donation, informational material, accompanied baggage, Chapter 98
+  claim, CBP agreement, and the 9802 carve-out. Original USITC Rev-15 PDF pages
+  176 and 598 were extracted from pinned Git objects and visually checked.
+
 ## Next
 
 1. Inventory proof bindings, downstream reproduction/certificates and source gaps.

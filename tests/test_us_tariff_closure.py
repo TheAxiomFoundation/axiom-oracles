@@ -594,7 +594,9 @@ def test_full_reproduction_uses_pinned_git_objects(tmp_path, monkeypatch):
         if command[1] == "compile":
             compiled_path = Path(command[command.index("--program") + 1])
             assert module.RULESPEC not in compiled_path.parents
-            assert command[command.index("--output") + 1] == "/dev/stdout"
+            artifact_path = Path(command[command.index("--output") + 1])
+            assert artifact_path.parent / "rulespec-us" in compiled_path.parents
+            assert not artifact_path.exists()
             compiled_paths.append(compiled_path)
         return real_run(command, *args, **kwargs)
 

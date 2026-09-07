@@ -824,6 +824,8 @@ def reproduce_input_inventory(
                 raise ValueError(
                     f"input inventory promised outputs changed: {spec_path}"
                 )
+            compiled_path = Path(raw) / "inventory.compiled.json"
+            compiled_path.unlink(missing_ok=True)
             result = subprocess.run(
                 [
                     str(snapshot_engine),
@@ -831,7 +833,7 @@ def reproduce_input_inventory(
                     "--program",
                     str(snapshot / module_path),
                     "--output",
-                    "/dev/stdout",
+                    str(compiled_path),
                 ],
                 capture_output=True,
                 text=True,
@@ -841,8 +843,9 @@ def reproduce_input_inventory(
                 raise ValueError(
                     f"input inventory compile failed for {module_path}: {result.stderr.strip()}"
                 )
-            # The pinned CLI appends a human-readable compile summary after JSON.
-            payload, _ = json.JSONDecoder().raw_decode(result.stdout)
+            # A regular file works under restricted device access and keeps the
+            # CLI's human-readable stdout summary separate from artifact JSON.
+            payload = json.loads(compiled_path.read_text())
             program = payload.get("program") if isinstance(payload, Mapping) else None
             if not isinstance(program, Mapping):
                 raise ValueError("compiled input inventory has no program")
