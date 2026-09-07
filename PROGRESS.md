@@ -40,6 +40,19 @@ not represented as verified. RuleSpec input remains the clean combined head
   claim, CBP agreement, and the 9802 carve-out. Original USITC Rev-15 PDF pages
   176 and 598 were extracted from pinned Git objects and visually checked.
 
+## Source-evidence checkpoint
+
+- Built source-linked note-2 evidence from the pinned USITC Rev-15 PDF and
+  two corpus page records, including original ingest-signature metadata and
+  applied-file hash checks (trusted-key signature verification remains open).
+- Real Axiom run-compiled executed 384 synthetic cases / 768 outputs across
+  the witness and generated chapter 72, all 64 six-flag combinations for China,
+  Hong Kong and a France negative control, on the exact day 2026-02-16. All
+  match; 28 cases retain a positive component rate. Thirteen adversarial
+  tests pass. Actual-entry grounding remains uncaptured.
+- Inventory found the absent 10,088,070-byte historical mismatch artifact in
+  the earlier certificate checkout; its SHA-256 matches the original proof.
+
 ## Next
 
 1. Inventory proof bindings, downstream reproduction/certificates and source gaps.
