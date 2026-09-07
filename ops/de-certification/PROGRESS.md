@@ -57,6 +57,16 @@
   agreements) whose members a discovery channel must enumerate; the
   frontier cannot complete around them. Kindergeld: 463 candidates, 436
   pending.
+- Kindergeld reads, DA-KG 2025 Kapitel V (148 headings, 2026-09-07): 144
+  excluded as procedure / payment mechanics / recovery / payout routing;
+  four classified as open bearing restatements of spine rules (V 14.3
+  month principle § 66 Abs. 2; V 23.1 unrounded payout vs the module's
+  whole-euro rounding rule; V 23.4 six-month payout limit § 70 Abs. 1;
+  V 24.2 per-child share § 76). Those four stay open dependencies until the
+  spine provisions are encoded and the rules bound to them — the first
+  concrete encoder work the reads have produced. Frontier 288 of 463
+  pending; 12 open dependencies. Next: Kapitel R (69) and S (64), then A
+  (108, where most bearing instruments are expected).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);
