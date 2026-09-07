@@ -1,0 +1,83 @@
+{
+  "chapter99_matches_original_frozen_pdf": true,
+  "claim": {
+    "certified": false,
+    "closed": false,
+    "release_authorized": false
+  },
+  "downloads": [
+    {
+      "authoritative_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+      "curl_metadata": {
+        "bytes": 427,
+        "file": "chapter99.curl.json",
+        "sha256": "3900554f5126ac7e5385f8178a117561eb28df7813f6367ecbd1b02f79155cab"
+      },
+      "headers": {
+        "bytes": 596,
+        "file": "chapter99.headers",
+        "sha256": "acc0449755cfa82bbdeaa933d38822442e92fe0edbada5f2d26626ba103d8567"
+      },
+      "http_status": 200,
+      "pdf": {
+        "bytes": 13957698,
+        "file": "chapter99.pdf",
+        "sha256": "92822e8f38873a7275c4cf9bd5341f96f5834dbea964623e7a7aa7b2cd02f225"
+      },
+      "retrieved_at": "2026-09-07T21:45:30.186793+00:00",
+      "tls_verification_result": 0
+    },
+    {
+      "authoritative_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=General%20Note%2011",
+      "curl_metadata": {
+        "bytes": 432,
+        "file": "general-note11.curl.json",
+        "sha256": "b672429de84894c9e1f6472738d967593949385e5ebd48ffde2b0a2b52f0ea0d"
+      },
+      "headers": {
+        "bytes": 598,
+        "file": "general-note11.headers",
+        "sha256": "6cba29906db347b48c0f41318a80d061ad23be1fcf65594e35f641175fd815ea"
+      },
+      "http_status": 200,
+      "pdf": {
+        "bytes": 395454,
+        "file": "general-note11.pdf",
+        "sha256": "db7ec89a2ef6232c54045e3498b40c494db1b8162a8f8c8e971e4753beaffef3"
+      },
+      "retrieved_at": "2026-09-07T21:48:44.897447+00:00",
+      "tls_verification_result": 0
+    }
+  ],
+  "general_note11_status": "raw authoritative PDF capture; not ingested or signed by this sprint",
+  "http_metadata": "Set-Cookie omitted; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
+  "limitations": [
+    "HTTP retrieval metadata is an unsigned receipt, not a newly created cryptographic signature.",
+    "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 remains an unsigned direct-source capture.",
+    "A source snapshot and authentic signature do not establish real-entry facts, historical coverage or source completeness."
+  ],
+  "provisions": {
+    "bytes": 4229923,
+    "file": "provisions.jsonl",
+    "sha256": "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.live_source_evidence.v1",
+  "signature_verification": {
+    "algorithm": "ed25519",
+    "applied_pdf_and_provision_hashes_match": true,
+    "canonical_verifier_corpus_ref": "cc18c703741425a3ebf994a2975cae158bd305d1",
+    "canonical_verifier_sha256": "84e08c6d4847a4f049216a654977e6a370074c17592c326546739eb0e5cdce8d",
+    "issues": [],
+    "manifest_sha256": "2811c6a36f05dbafbf3b3b1b23b42470377ce6d3e53e3f4e5a865c08dd2f21f7",
+    "trust_root_api": "https://api.github.com/repos/TheAxiomFoundation/axiom-corpus/actions/variables/AXIOM_CORPUS_INGEST_PUBLIC_KEY",
+    "trust_root_updated_at": "2026-06-06T20:07:28Z",
+    "trusted_key_sha256": "9b3f3cdbad4e6523ccd114d1649f57a351d05ea117fa77cb0a6184e92ce50f17",
+    "verified": true
+  },
+  "trust_root_retrieved_at": "2026-09-07T21:49:28.750721+00:00",
+  "trust_root_snapshot": {
+    "bytes": 168,
+    "file": "corpus-ingest-public-key.json",
+    "sha256": "8ebd75a0b56198a68b26001394426752798b4fc08b7a4ac794ba17efe04ee900"
+  }
+}

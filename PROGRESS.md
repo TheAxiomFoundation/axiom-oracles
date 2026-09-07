@@ -147,3 +147,17 @@ and all four proof artifacts stay unchanged. Do not mechanically repin proofs
 to new source code or rerun the giant scan merely to turn this verdict green.
 Exact changed-file digests are in continuation-integration-hold.json. This
 integration/admission blocker is separate from new real-runtime source batches.
+
+## Live source authentication checkpoint
+
+- Both official Rev15 PDFs returned HTTPS200: Chapter99 exactly matches the
+  frozen13,957,698-byte PDF; GeneralNote11 is a newly captured395,454-byte,
+  136-page primary PDF. Actual retrieval timestamps, response headers, URLs and
+  hashes are committed; cookies and local connection metadata are excluded.
+- Obtained the real corpus Actions public verification key from the authenticated
+  GitHub repository API. The pinned canonical axiom-corpus verifier confirms the
+  original Chapter99 Ed25519 ingest signature and applied PDF/provision hashes.
+  This closes the prior signature-verification blocker for that ingest only.
+  No signature or certificate was created; GeneralNote11 remains a raw capture.
+- Nine adversarial source/trust checks pass. New source-linked scope count stays
+  6/21 until the next actual runtime batch completes. All58groundingsuncaptured.

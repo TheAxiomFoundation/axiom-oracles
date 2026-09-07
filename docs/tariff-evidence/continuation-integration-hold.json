@@ -4,6 +4,7 @@
     {
       "actual_bytes": 8669,
       "bytes": 5388,
+      "current_sha256": "2766ff798f2c8e339ca8194bed35a9cabc408c06c7f12bbf1c8f9cf42c6a21d6",
       "namespace": "axiom-oracles",
       "path": "axiom_oracles/comparison/comparator.py",
       "references": [
@@ -31,6 +32,7 @@
     {
       "actual_bytes": 30423,
       "bytes": 27827,
+      "current_sha256": "218f12a119916a18016560f4492e9e2aa4c1e2e85d9023cc86f0016903a1674e",
       "namespace": "axiom-oracles",
       "path": "axiom_oracles/comparison/report.py",
       "references": [
