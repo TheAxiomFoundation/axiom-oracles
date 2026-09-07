@@ -1,0 +1,3519 @@
+{
+  "adapter": {
+    "bytes": 19697,
+    "path": "tools/b16_entry_flags.py",
+    "sha256": "864a309fdcb7217961c69ab79c490f56e5e0263c899a5e5d4895768c7e23d44f"
+  },
+  "adapter_results": [
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-7202111000-CN",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-7202111000-HK",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-7202111000-FR",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": true
+      },
+      "case_id": "list-2203000000-CN",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": true
+      },
+      "case_id": "list-2203000000-HK",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": true
+      },
+      "case_id": "list-2203000000-FR",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-9506624040-CN",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-9506624040-HK",
+      "membership_matches_source": true
+    },
+    {
+      "actual_flags": {
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true,
+        "entry_is_china_301_solar": false,
+        "entry_is_line_d": false
+      },
+      "case_id": "list-9506624040-FR",
+      "membership_matches_source": true
+    }
+  ],
+  "blocker": {
+    "finding": "The generated component adds list123 and the retained entry_is_line_d term. The real adapter correctly marks beer as both, so one China entry receives two 25% additions instead of the source single 25% addition.",
+    "lines": [
+      3243,
+      3246
+    ],
+    "next_step": "Repair composition overlap through the authorized deterministic composition workflow, with findings/replay and existing review/admission gates. Preserve the frozen campaign proof generation.",
+    "path": "us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml"
+  },
+  "claim": {
+    "certified": false,
+    "closed": false,
+    "release_authorized": false
+  },
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "fixtures": [
+    {
+      "case_id": "list-7202111000-CN",
+      "chapter": 72,
+      "country": "CN",
+      "day": "2026-08-03",
+      "expected": "0.25",
+      "hts_number": "7202.11.10.00",
+      "rate_line": 7202111000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-7202111000-HK",
+      "chapter": 72,
+      "country": "HK",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "7202.11.10.00",
+      "rate_line": 7202111000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-7202111000-FR",
+      "chapter": 72,
+      "country": "FR",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "7202.11.10.00",
+      "rate_line": 7202111000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-2203000000-CN",
+      "chapter": 22,
+      "country": "CN",
+      "day": "2026-08-03",
+      "expected": "0.25",
+      "hts_number": "2203.00.00.30",
+      "rate_line": 2203000000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-2203000000-HK",
+      "chapter": 22,
+      "country": "HK",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "2203.00.00.30",
+      "rate_line": 2203000000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-2203000000-FR",
+      "chapter": 22,
+      "country": "FR",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "2203.00.00.30",
+      "rate_line": 2203000000,
+      "source_membership": {
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false
+      }
+    },
+    {
+      "case_id": "list-9506624040-CN",
+      "chapter": 95,
+      "country": "CN",
+      "day": "2026-08-03",
+      "expected": "0.075",
+      "hts_number": "9506.62.40.40",
+      "rate_line": 9506624040,
+      "source_membership": {
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true
+      }
+    },
+    {
+      "case_id": "list-9506624040-HK",
+      "chapter": 95,
+      "country": "HK",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "9506.62.40.40",
+      "rate_line": 9506624040,
+      "source_membership": {
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true
+      }
+    },
+    {
+      "case_id": "list-9506624040-FR",
+      "chapter": 95,
+      "country": "FR",
+      "day": "2026-08-03",
+      "expected": "0",
+      "hts_number": "9506.62.40.40",
+      "rate_line": 9506624040,
+      "source_membership": {
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true
+      }
+    }
+  ],
+  "known_mismatches": [
+    {
+      "actual": "0.5",
+      "case_id": "list-2203000000-CN",
+      "expected": "0.25",
+      "module": "us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml"
+    }
+  ],
+  "limitations": [
+    "This is an August3 Rev15 snapshot projection with no transaction-specific exclusion or Chapter98 claim; origin and classification are stipulated.",
+    "The aggregate list123 flag is exercised on list3 members only. Complete list1/list2 membership, all excluded descriptions and historical amendments are not validated.",
+    "The actual adapter resolves printed code incidence. It does not establish the absence of every heading-specific exclusion or actual-entry qualification.",
+    "The list3/list4A rates come from the separate authoritative headings, not from observed runtime values. No membership flag or RuleSpec code was patched.",
+    "All actual-entry groundings, final Fable review and current-base admission gates remain open."
+  ],
+  "live_source_receipt_sha256": "dd38b4f96668ab1ad4a619bd22e298affa69b4feb5a4aed26a2c13cc0cdfa6be",
+  "producer_sha256": "7aa55b9c0df654694ad098463b9ecda80e2dd2fc17bed50355f4a46f1dade9c8",
+  "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
+  "runs": [
+    {
+      "compiled_sha256": "35e17146171ff23841d8f3d6f8e2d6ad955842ca3942234244f8495bc00649dd",
+      "input_mode": "direct_witness",
+      "module": {
+        "bytes": 174613,
+        "path": "us/policies/cbp/us-tariff-duty/composition.yaml",
+        "sha256": "0dafe611b0680a64c7b20364bf0f9d2fd71c6e58036f30f088f8d07653d66a56"
+      },
+      "request": {
+        "dataset": {
+          "inputs": [
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "7202.11.10.00"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "7202.11.10.00"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "7202.11.10.00"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "2203.00.00.30"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "2203.00.00.30"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "2203.00.00.30"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "9506.62.40.40"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "9506.62.40.40"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-duty/composition#input.hts_number",
+              "value": {
+                "kind": "text",
+                "value": "9506.62.40.40"
+              }
+            }
+          ],
+          "relations": []
+        },
+        "mode": "explain",
+        "queries": [
+          {
+            "entity_id": "list-7202111000-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-7202111000-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-7202111000-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-2203000000-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-2203000000-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-2203000000-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-9506624040-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-9506624040-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-9506624040-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          }
+        ]
+      },
+      "request_sha256": "cfe888237664ed276666f29fa90692b8bcdcd2e33e481846d598cfc6d72be74b",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "list-7202111000-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-7202111000-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-7202111000-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-2203000000-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-2203000000-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-2203000000-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "not_holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-9506624040-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.075"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.075"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-9506624040-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-9506624040-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                  "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                  "us:policies/cbp/us-tariff-duty/composition#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-duty/composition#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_a",
+                "kind": "judgment",
+                "name": "entry_is_line_a",
+                "outcome": "not_holds",
+                "source": "HTS 7202.11.10.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_b",
+                "kind": "judgment",
+                "name": "entry_is_line_b",
+                "outcome": "not_holds",
+                "source": "HTS 7601.10.30.00 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_c",
+                "kind": "judgment",
+                "name": "entry_is_line_c",
+                "outcome": "holds",
+                "source": "HTS 9506.62.40.40 statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_d",
+                "kind": "judgment",
+                "name": "entry_is_line_d",
+                "outcome": "not_holds",
+                "source": "HTS 2203.00.00.30 beer made from malt, in containers each holding not over 4 liters, in glass containers statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#entry_is_line_e",
+                "kind": "judgment",
+                "name": "entry_is_line_e",
+                "outcome": "not_holds",
+                "source": "HTS 8541.42.00.10 crystalline silicon photovoltaic cell statistical reporting number",
+                "unit": null
+              },
+              "us:policies/cbp/us-tariff-duty/composition#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-duty/composition#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "b568a7258336121e5cb79c100aba8c1995633f6692146386f08d2164bb541222",
+      "results": [
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.25"
+          },
+          "case_id": "list-7202111000-CN",
+          "expected_from_source": "0.25",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-7202111000-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-7202111000-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.25"
+          },
+          "case_id": "list-2203000000-CN",
+          "expected_from_source": "0.25",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-2203000000-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-2203000000-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.075"
+          },
+          "case_id": "list-9506624040-CN",
+          "expected_from_source": "0.075",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-9506624040-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-9506624040-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        }
+      ]
+    },
+    {
+      "compiled_sha256": "01951090ca451fb300e356c8dc5b4685f17e759b5e57031bbb7cbab4907a1f8c",
+      "input_mode": "actual_adapter",
+      "module": {
+        "bytes": 162153,
+        "path": "us/policies/cbp/us-tariff-schedule/generated/ch72/ch72.yaml",
+        "sha256": "b53a84a43826c5a433d864390de9ab669375fe6becafe6721cf2ce0682e75036"
+      },
+      "request": {
+        "dataset": {
+          "inputs": [
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 7202111000
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 7202111000
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-7202111000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 7202111000
+              }
+            }
+          ],
+          "relations": []
+        },
+        "mode": "explain",
+        "queries": [
+          {
+            "entity_id": "list-7202111000-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-7202111000-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-7202111000-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          }
+        ]
+      },
+      "request_sha256": "3c57510bfd0ba0d80e7f653d7edb4cfec6effb2fc828e5b61d2b7586b2969438",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "list-7202111000-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-7202111000-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-7202111000-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch72/ch72#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "aa22b4705be53a83c5de2fdea925ac79fd0ff665a266324d70d75ee8d9da134e",
+      "results": [
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.25"
+          },
+          "case_id": "list-7202111000-CN",
+          "expected_from_source": "0.25",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-7202111000-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-7202111000-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        }
+      ]
+    },
+    {
+      "compiled_sha256": "5a897c83a05e633aba1381db7510a82a54cf0196527d7c8b5c5ce9ba2472d213",
+      "input_mode": "actual_adapter",
+      "module": {
+        "bytes": 166986,
+        "path": "us/policies/cbp/us-tariff-schedule/generated/ch22/ch22.yaml",
+        "sha256": "92d1109939f555a808225b2344f25bce0ba0f303dc8b1c84925d93aab29291f7"
+      },
+      "request": {
+        "dataset": {
+          "inputs": [
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 2203000000
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 2203000000
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-2203000000-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 2203000000
+              }
+            }
+          ],
+          "relations": []
+        },
+        "mode": "explain",
+        "queries": [
+          {
+            "entity_id": "list-2203000000-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-2203000000-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-2203000000-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          }
+        ]
+      },
+      "request_sha256": "55be64dc5e13b926ed79374e85c219f5652d67f5767d6564e135f0460582abc6",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "list-2203000000-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.5"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.5"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-2203000000-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-2203000000-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch22/ch22#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "5b9fa4d9ce37f8908ade5cf85caac00efae795b27267c9a986dcf418c682f348",
+      "results": [
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.5"
+          },
+          "case_id": "list-2203000000-CN",
+          "expected_from_source": "0.25",
+          "source_match": false
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-2203000000-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-2203000000-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        }
+      ]
+    },
+    {
+      "compiled_sha256": "75af28be4548099ef64401bec5fe37c7c99f4a236fa90a6ea3b2de7296b1c88b",
+      "input_mode": "actual_adapter",
+      "module": {
+        "bytes": 173216,
+        "path": "us/policies/cbp/us-tariff-schedule/generated/ch95/ch95.yaml",
+        "sha256": "95449992c10bfe3d6587f61ea5f8b7c64f5f0916085b2a3aa6a29528aeaccfec"
+      },
+      "request": {
+        "dataset": {
+          "inputs": [
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "CN"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-CN",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 9506624040
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "HK"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-HK",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 9506624040
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.country_of_origin",
+              "value": {
+                "kind": "text",
+                "value": "FR"
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_2024_action",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list123",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_list4a",
+              "value": {
+                "kind": "bool",
+                "value": true
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_china_301_solar",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.entry_is_line_d",
+              "value": {
+                "kind": "bool",
+                "value": false
+              }
+            },
+            {
+              "entity": "CustomsEntry",
+              "entity_id": "list-9506624040-FR",
+              "interval": {
+                "end": "2026-08-03",
+                "start": "2026-08-03"
+              },
+              "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
+              "value": {
+                "kind": "integer",
+                "value": 9506624040
+              }
+            }
+          ],
+          "relations": []
+        },
+        "mode": "explain",
+        "queries": [
+          {
+            "entity_id": "list-9506624040-CN",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-9506624040-HK",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          },
+          {
+            "entity_id": "list-9506624040-FR",
+            "outputs": [
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate"
+            ],
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            }
+          }
+        ]
+      },
+      "request_sha256": "32c216b7df500ab51d4a8543837ae7d0ff218c2e54b04eb69a30bda1e84e761e",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "list-9506624040-CN",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.075"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.075"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-9506624040-HK",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          },
+          {
+            "entity_id": "list-9506624040-FR",
+            "outputs": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2026-08-03",
+              "name": "day",
+              "period_kind": "custom",
+              "start": "2026-08-03"
+            },
+            "trace": {
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate": {
+                "dependencies": [
+                  "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china"
+                ],
+                "dtype": "decimal",
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#china_section_301_component_rate",
+                "kind": "scalar",
+                "name": "china_section_301_component_rate",
+                "source": "China section 301 overlay composition via HTS line footnotes",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china": {
+                "dependencies": [],
+                "id": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#origin_is_china",
+                "kind": "judgment",
+                "name": "origin_is_china",
+                "outcome": "not_holds",
+                "source": "Composition origin gate for China overlay headings",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "e6c11f4c0bc4a58741d63065fc8ce6e44e56a78b8095d052f8a5b67cc1ee45c4",
+      "results": [
+        {
+          "actual": {
+            "china_section_301_component_rate": "0.075"
+          },
+          "case_id": "list-9506624040-CN",
+          "expected_from_source": "0.075",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-9506624040-HK",
+          "expected_from_source": "0",
+          "source_match": true
+        },
+        {
+          "actual": {
+            "china_section_301_component_rate": "0"
+          },
+          "case_id": "list-9506624040-FR",
+          "expected_from_source": "0",
+          "source_match": true
+        }
+      ]
+    }
+  ],
+  "runtime_helper_sha256": "3fa2693e4684c4b3caba380e6c7bd8d5b5b344de52c6f12699e51be57b6f284c",
+  "schema": "axiom_oracles.us_tariff_schedule.china_list_evidence.v1",
+  "scopes": [
+    {
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_list123",
+      "source_evidence": "captured_live_primary_source",
+      "status": "blocked_on_beer_list3_overlap"
+    },
+    {
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_list4a",
+      "source_evidence": "captured_live_primary_source",
+      "status": "bounded_nonexcluded_list4a_replay_matches"
+    }
+  ],
+  "source_records": [
+    {
+      "jsonl_line": 279,
+      "raw_record_sha256": "74387cf68e76321e0ae8fbd7f2354bcb5b158e082f80e5c63e3f7ac4ed71ff0b",
+      "record": {
+        "body": "U.S. Notes (con.) (f) Heading 9903.88.03 applies to all products of China that are classified in the following 8-digit subheadings, except products of China granted an exclusion by the U.S. Trade Representative and provided for in (1) heading 9903.88.13 and U.S. note 20(p) to subchapter III of chapter 99; (2) heading 9903.88.18 and U.S. note 20(w) to subchapter III of chapter 99; (3) heading 9903.88.33 and U.S. note 20(ll) to subchapter III of chapter 99; (4) U.S. note 20(mm) to subchapter III of chapter 99; (5) heading 9903.88.35 and U.S. note 20(nn) to subchapter III of chapter 99; (6) heading 9903.88.36 and U.S. note 20(oo) to subchapter III of chapter 99; (7) heading 9903.88.37 and U.S. note 20(pp) to subchapter III of chapter 99; (8) heading 9903.88.38 and U.S. note 20(qq) to subchapter III of chapter 99; (9) heading 9903.88.40 and U.S. note 20(ss) to subchapter III of chapter 99; (10) heading 9903:88.41 and U.S. note 20(tt) to subchapter III of chapter 99; (11) heading 9903.88.43 and U.S. note 20(vv) to subchapter III of chapter 99; (12) heading 9903.88.45 and U.S. note 20(xx) to subchapter III of chapter 99; (13) heading 9903.88.46 and U.S. note 20(yy) to subchapter III of chapter 99; (14) heading 9903.88.48 and U.S. note 20(aaa) to subchapter III of chapter 99; (15) heading 9903.88.56 and U.S. note 20(iii) to subchapter III of chapter 99; (16) heading 9903.88.64 and U.S. note 20(qqq) to subchapter III of chapter 99; (17) heading 9903.88.66 and U.S. note 20(sss)(iii) to subchapter III of chapter 99; (18) heading 9903.88.67 and U.S. note 20(ttt)(iii) to subchapter III of chapter 99; (19) heading 9903.88.68 and U.S. note 20(uuu)(iii) to subchapter III of chapter 99; or (20) heading 9903.88.69 and U.S. note 20(vvv)(iii) to subchapter III of chapter 99. [Compiler's note: only subdivisions (vvv) and (www) are now in effect.The list of subheadings may begin on following page; read numbers from left to right.] Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 97",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 269",
+        "citation_path": "us/statute/hts/chapter-99/page-269",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 269",
+        "id": "4bbbaa6a-2fb2-5e6d-8ba6-8d6bb71ef0d7",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-269",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 269,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 269,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 283,
+      "raw_record_sha256": "ca79f3fcf8ca83c60005265f8eefcaec28294980da4a0d9f698abbb9241f6b5e",
+      "record": {
+        "body": "U.S. Notes (con.) 2003.90.80 2003.90.10 2003.10.01 2002.90.80 2005.20.00 2004.90.85 2004.90.80 2004.10.80 2005.59.00 2005.51.40 2005.51.20 2005.40.00 2005.70.70 2005.70.60 2005.70.25 2005.60.00 2005.91.60 2005.80.00 2005.70.97 2005.70.75 2005.99.30 2005.99.20 2005.99.10 2005.91.97 2005.99.80 2005.99.55 2005.99.50 2005.99.41 2006.00.30 2006.00.20 2005.99.97 2005.99.85 2006.00.70 2006.00.60 2006.00.50 2006.00.40 2007.91.40 2007.91.10 2007.10.00 2006.00.90 2007.99.20 2007.99.15 2007.99.10 2007.99.05 2007.99.45 2007.99.40 2007.99.35 2007.99.25 2007.99.65 2007.99.60 2007.99.50 2007.99.48 2008.11.05 2008.11.02 2007.99.75 2007.99.70 2008.19.10 2008.11.46 2008.11.43 2008.11.15 2008.19.30 2008.19.25 2008.19.20 2008.19.15 2008.19.90 2008.19.85 2008.19.50 2008.19.40 2008.30.30 2008.30.20 2008.30.10 2008.20.00 2008.30.48 2008.30.46 2008.30.42 2008.30.40 2008.30.96 2008.30.80 2008.30.70 2008.30.55 2008.60.00 2008.50.40 2008.50.20 2008.40.00 2008.93.00 2008.80.00 2008.70.20 2008.70.10 2008.99.15 2008.99.05 2008.97.90 2008.97.10 2008.99.25 2008.99.23 2008.99.21 2008.99.18 2008.99.35 2008.99.30 2008.99.29 2008.99.28 2008.99.61 2008.99.60 2008.99.50 2008.99.40 2008.99.80 2008.99.71 2008.99.70 2008.99.63 2009.31.20 2009.29.00 2009.11.00 2008.99.91 2009.41.40 2009.39.60 2009.31.60 2009.31.40 2009.71.00 2009.69.00 2009.50.00 2009.49.40 2009.89.70 2009.89.65 2009.89.20 2009.79.00 2103.90.80 2103.10.00 2009.90.40 2009.89.80 2202.10.00 2201.90.00 2201.10.00 2106.10.00 2202.99.37 2202.99.36 2202.99.35 2202.99.30 2202.99.91 2204.21.30 2204.21.20 2204.10.00 2203.00.00 2206.00.45 2204.21.80 2204.21.60 2204.21.50 2209.00.00 2207.10.60 2207.10.30 2206.00.90 2302.40.01 2302.30.00 2301.20.00 2301.10.00 2303.30.00 2303.20.00 2303.10.00 2302.50.00 2306.30.00 2306.20.00 2305.00.00 2304.00.00 2308.00.95 2306.90.01 2306.49.00 2306.41.00 2309.90.70 2309.90.10 2309.10.00 2308.00.98 2401.20.14 2401.20.05 2401.10.44 2309.90.95 2401.20.29 2401.20.26 2401.20.23 2401.20.18 2401.20.57 2401.20.35 2401.20.33 2401.20.31 2401.20.85 2401.20.83 2401.20.75 2401.20.60 2401.30.09 2401.30.06 2401.30.03 2401.20.87 2401.30.23 2401.30.19 2401.30.16 2401.30.13 2401.30.35 2401.30.33 2401.30.27 2401.30.25 2402.10.60 2402.10.30 2401.30.70 2401.30.37 2402.20.90 2402.20.80 2402.20.10 2402.10.80 2403.19.30 2403.19.20 2403.11.00 2402.90.00 2403.99.21 2403.91.43 2403.19.90 2403.19.60 2404.11.00 2403.99.90 2403.99.60 2403.99.31 2404.19.05 2404.12.90 2404.12.10 2404.12.05 2404.99.00 2404.92.00 2404.19.90 2404.19.10 2505.10.10 2503.00.00 2502.00.00 2501.00.00 2506.20.00 2506.10.00 2505.90.00 2505.10.50 2508.50.00 2508.40.01 2508.10.00 2507.00.00 2509.00.20 2509.00.10 2508.70.00 2508.60.00 2512.00.00 2511.20.00 2510.20.00 2510.10.00 2514.00.00 2513.20.90 2513.20.10 2513.10.00 2515.20.00 2515.12.20 2515.12.10 2515.11.00 2516.20.20 2516.20.10 2516.12.00 2516.11.00 2517.30.00 2517.20.00 2517.10.00 2516.90.00 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 101",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 273",
+        "citation_path": "us/statute/hts/chapter-99/page-273",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 273",
+        "id": "1eb848fa-842c-5ed1-8cd5-8b963097a861",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-273",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 273,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 273,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 297,
+      "raw_record_sha256": "7563f614eb0aae914177d5c001eda887933d372a3590796750c5fa2b195d09da",
+      "record": {
+        "body": "U.S. Notes (con.) 7005.21.10 7005.10.80 7005.10.40 7004.90.50 7005.29.14 7005.29.08 7005.29.04 7005.21.20 7006.00.10 7005.30.00 7005.29.25 7005.29.18 7007.19.00 7007.11.00 7006.00.40 7006.00.20 7008.00.00 7007.29.00 7007.21.51 7007.21.11 7009.92.10 7009.91.50 7009.91.10 7009.10.00 7010.20.30 7010.20.20 7010.10.00 7009.92.50 7010.90.50 7010.90.30 7010.90.20 7010.90.05 7011.20.45 7011.20.10 7011.10.50 7011.10.10 7014.00.20 7014.00.10 7011.90.00 7011.20.85 7016.90.10 7016.10.00 7014.00.50 7014.00.30 7017.20.00 7017.10.60 7017.10.30 7016.90.50 7018.10.20 7018.10.10 7017.90.50 7017.90.10 7019.11.00 7018.90.50 7018.20.00 7018.10.50 7019.13.24 7019.13.15 7019.13.05 7019.12.00 7019.15.00 7019.14.00 7019.13.35 7019.13.28 7019.61.05 7019.19.91 7019.19.70 7019.61.70 7019.61.40 7019.61.30 7019.61.10 7019.62.40 7019.62.30 7019.62.15 7019.62.05 7019.63.30 7019.63.15 7019.63.05 7019.62.70 7019.64.05 7019.63.90 7019.63.70 7019.63.40 7019.64.70 7019.64.40 7019.64.30 7019.64.15 7019.66.40 7019.66.30 7019.65.90 7019.65.51 7019.69.40 7019.69.30 7019.66.90 7019.66.70 7019.72.05 7019.71.00 7019.69.90 7019.69.70 7019.72.70 7019.72.40 7019.72.30 7019.72.15 7019.80.90 7019.80.10 7019.73.90 7019.73.51 7020.00.40 7020.00.30 7019.90.51 7019.90.11 7102.21.40 7102.21.30 7102.21.10 7020.00.60 7106.10.00 7105.90.00 7105.10.00 7102.29.00 7106.92.50 7106.92.10 7106.91.50 7106.91.10 7108.12.50 7108.12.10 7108.11.00 7107.00.00 7108.20.00 7108.13.70 7108.13.55 7108.13.10 7110.21.00 7110.19.00 7110.11.00 7109.00.00 7110.41.00 7110.39.00 7110.31.00 7110.29.00 7112.91.01 7112.30.01 7111.00.00 7110.49.00 7114.11.20 7114.11.10 7112.99.01 7112.92.01 7114.11.50 7114.11.45 7114.11.40 7114.11.30 7114.20.00 7114.19.00 7114.11.70 7114.11.60 7115.90.40 7115.90.30 7115.90.05 7115.10.00 7201.50.30 7201.20.00 7201.10.00 7115.90.60 7202.19.10 7202.11.50 7202.11.10 7201.50.60 7202.21.75 7202.21.50 7202.21.10 7202.19.50 7202.41.00 7202.30.00 7202.29.00 7202.21.90 7202.80.00 7202.50.00 7202.49.50 7202.49.10 7202.99.20 7202.99.10 7202.92.00 7202.91.00 7204.21.00 7204.10.00 7203.90.00 7203.10.00 7204.49.00 7204.41.00 7204.30.00 7204.29.00 7205.29.00 7205.21.00 7205.10.00 7204.50.00 7301.20.10 7216.91.00 7216.69.00 7216.61.00 7307.11.00 7303.00.00 7302.30.00 7301.20.50 7307.21.50 7307.21.10 7307.19.90 7307.19.30 7307.29.00 7307.23.00 7307.22.50 7307.22.10 7307.92.30 7307.91.50 7307.91.30 7307.91.10 7307.93.90 7307.93.60 7307.93.30 7307.92.90 7308.30.10 7307.99.50 7307.99.30 7307.99.10 7310.10.00 7309.00.00 7308.40.00 7308.30.50 7312.10.05 7311.00.00 7310.29.00 7310.21.00 7312.10.50 7312.10.30 7312.10.20 7312.10.10 7312.10.90 7312.10.80 7312.10.70 7312.10.60 7314.12.20 7314.12.10 7313.00.00 7312.90.00 7314.14.10 7314.12.90 7314.12.60 7314.12.30 7314.14.90 7314.14.60 7314.14.30 7314.14.20 7314.31.50 7314.31.10 7314.20.00 7314.19.01 7314.49.30 7314.42.00 7314.41.00 7314.39.00 7315.12.00 7315.11.00 7314.50.00 7314.49.60 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 115",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 287",
+        "citation_path": "us/statute/hts/chapter-99/page-287",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 287",
+        "id": "dfdfef37-0497-562b-a735-14264a1ea993",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-287",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 287,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 287,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 339,
+      "raw_record_sha256": "d1060eb6791ae46be3c2c52452c4b26fe103995a9bd67e682ada90cf0f0d283f",
+      "record": {
+        "body": "U.S. Notes (con.) (i) all products of China that are classified in the following 8-digit subheadings: [Compiler's note: numbers in this table read from left to right] Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 157",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 329",
+        "citation_path": "us/statute/hts/chapter-99/page-329",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 329",
+        "id": "97a4f731-99e8-5f73-8fd9-96e23ff5b393",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-329",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 329,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 329,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 340,
+      "raw_record_sha256": "970e42c689219c380913c20a27d299c211a548901a0ad43f092b6df521b6deff",
+      "record": {
+        "body": "U.S. Notes (con.) 0101.90.30 0101.30.00 0101.29.00 0101.21.00 0102.29.40 0102.29.20 0102.21.00 0101.90.40 0103.10.00 0102.90.00 0102.39.00 0102.31.00 0104.20.00 0104.10.00 0103.92.00 0103.91.00 0105.14.00 0105.13.00 0105.12.00 0105.11.00 0106.11.00 0105.99.00 0105.94.00 0105.15.00 0106.19.30 0106.14.00 0106.13.00 0106.12.01 0106.32.00 0106.31.00 0106.20.00 0106.19.91 0106.49.00 0106.41.00 0106.39.01 0106.33.00 0201.10.50 0201.10.10 0201.10.05 0106.90.01 0201.20.10 0201.20.06 0201.20.04 0201.20.02 0201.30.02 0201.20.80 0201.20.50 0201.20.30 0201.30.30 0201.30.10 0201.30.06 0201.30.04 0202.10.10 0202.10.05 0201.30.80 0201.30.50 0202.20.06 0202.20.04 0202.20.02 0202.10.50 0202.20.80 0202.20.50 0202.20.30 0202.20.10 0202.30.10 0202.30.06 0202.30.04 0202.30.02 0203.11.00 0202.30.80 0202.30.50 0202.30.30 0203.19.40 0203.19.20 0203.12.90 0203.12.10 0204.10.00 0203.22.90 0203.22.10 0203.21.00 0204.23.20 0204.22.40 0204.22.20 0204.21.00 0204.42.20 0204.41.00 0204.30.00 0204.23.40 0204.50.00 0204.43.40 0204.43.20 0204.42.40 0206.29.00 0206.22.00 0206.21.00 0205.00.00 0206.80.00 0206.49.00 0206.41.00 0206.30.00 0207.13.00 0207.12.00 0207.11.00 0206.90.00 0207.25.40 0207.25.20 0207.24.00 0207.14.00 0207.42.00 0207.41.00 0207.27.00 0207.26.00 0207.51.00 0207.45.00 0207.44.00 0207.43.00 0207.55.00 0207.54.00 0207.53.00 0207.52.00 0207.60.40 0207.60.30 0207.60.20 0207.60.10 0208.50.00 0208.40.01 0208.30.00 0207.60.60 0209.10.00 0208.90.91 0208.90.30 0208.60.00 0210.20.00 0210.12.00 0210.11.00 0209.90.00 0210.99.20 0210.93.00 0210.92.01 0210.91.00 0401.20.40 0401.20.20 0401.10.00 0210.99.91 0401.50.02 0401.40.25 0401.40.05 0401.40.02 0401.50.50 0401.50.42 0401.50.25 0401.50.05 0402.10.50 0402.10.10 0402.10.05 0401.50.75 0402.21.27 0402.21.25 0402.21.05 0402.21.02 0402.21.75 0402.21.73 0402.21.50 0402.21.30 0402.29.50 0402.29.10 0402.29.05 0402.21.90 0402.91.30 0402.91.10 0402.91.06 0402.91.03 0402.99.06 0402.99.03 0402.91.90 0402.91.70 0402.99.55 0402.99.45 0402.99.30 0402.99.10 0403.20.05 0402.99.90 0402.99.70 0402.99.68 0403.90.02 0403.20.90 0403.20.50 0403.20.10 0403.90.37 0403.90.20 0403.90.16 0403.90.04 0403.90.51 0403.90.47 0403.90.45 0403.90.41 0403.90.65 0403.90.61 0403.90.57 0403.90.55 0403.90.85 0403.90.78 0403.90.74 0403.90.72 0404.90.10 0403.90.95 0403.90.90 0403.90.87 0404.90.70 0404.90.50 0404.90.30 0404.90.28 0405.20.40 0405.20.30 0405.20.20 0405.20.10 0405.20.80 0405.20.70 0405.20.60 0405.20.50 0406.10.02 0405.90.20 0405.90.10 0405.90.05 0406.10.14 0406.10.12 0406.10.08 0406.10.04 0406.10.34 0406.10.28 0406.10.24 0406.10.18 0406.10.54 0406.10.48 0406.10.44 0406.10.38 0406.10.74 0406.10.68 0406.10.64 0406.10.58 0406.10.95 0406.10.88 0406.10.84 0406.10.78 0406.20.24 0406.20.22 0406.20.15 0406.20.10 0406.20.33 0406.20.31 0406.20.29 0406.20.28 0406.20.43 0406.20.39 0406.20.36 0406.20.34 0406.20.51 0406.20.49 0406.20.48 0406.20.44 0406.20.56 0406.20.55 0406.20.54 0406.20.53 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 158",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 330",
+        "citation_path": "us/statute/hts/chapter-99/page-330",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 330",
+        "id": "36129f92-1d6f-50b5-93e5-90379cf3efc7",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-330",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 330,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 330,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 350,
+      "raw_record_sha256": "1c305c43e3064dc046dde6d9e380608280c30bd64b9ebc80091159c3ff3c1bd9",
+      "record": {
+        "body": "U.S. Notes (con.) 9013.90.20 9013.80.91 9013.10.50 9013.10.10 9025.80.35 9025.80.15 9023.00.00 9014.10.60 9026.10.60 9026.10.40 9025.80.50 9025.80.40 9029.90.60 9027.90.20 9026.80.60 9026.20.80 9101.19.40 9101.19.20 9101.11.80 9101.11.40 9101.21.50 9101.21.30 9101.21.10 9101.19.80 9101.29.30 9101.29.20 9101.29.10 9101.21.80 9101.29.80 9101.29.70 9101.29.50 9101.29.40 9101.99.20 9101.91.80 9101.91.20 9101.29.90 9102.11.25 9102.11.10 9101.99.80 9101.99.60 9102.11.65 9102.11.50 9102.11.45 9102.11.30 9102.19.20 9102.12.80 9102.11.95 9102.11.70 9102.21.10 9102.19.80 9102.19.60 9102.19.40 9102.21.70 9102.21.50 9102.21.30 9102.21.25 9102.29.10 9102.29.04 9102.29.02 9102.21.90 9102.29.35 9102.29.30 9102.29.25 9102.29.20 9102.29.55 9102.29.50 9102.29.45 9102.29.40 9102.91.80 9102.91.40 9102.91.20 9102.29.60 9102.99.80 9102.99.60 9102.99.40 9102.99.20 9105.19.10 9104.00.60 9103.90.00 9103.10.80 9105.29.10 9105.19.50 9105.19.30 9105.19.20 9105.99.10 9105.29.50 9105.29.30 9105.29.20 9105.99.60 9105.99.40 9105.99.30 9105.99.20 9108.19.80 9108.19.40 9108.11.80 9108.11.40 9108.90.20 9108.90.10 9108.20.80 9108.20.40 9108.90.60 9108.90.50 9108.90.40 9108.90.30 9108.90.95 9108.90.90 9108.90.85 9108.90.70 9109.10.80 9109.10.50 9109.10.40 9109.10.20 9110.12.00 9110.11.00 9109.90.60 9109.90.20 9110.90.60 9110.90.40 9110.90.20 9110.19.00 9111.80.00 9111.20.40 9111.20.20 9111.10.00 9112.20.40 9111.90.70 9111.90.50 9111.90.40 9113.20.60 9113.10.00 9112.90.00 9112.20.80 9114.30.80 9114.30.40 9113.90.80 9113.20.90 9114.40.80 9114.40.60 9114.40.40 9114.40.20 9114.90.38 9114.90.34 9114.90.15 9114.90.10 9201.20.00 9201.10.00 9114.90.50 9114.90.40 9205.10.00 9202.90.40 9202.90.20 9201.90.00 9205.90.18 9205.90.15 9205.90.14 9205.90.12 9205.90.60 9205.90.40 9205.90.20 9205.90.19 9206.00.80 9206.00.60 9206.00.40 9206.00.20 9209.30.00 9208.90.00 9207.90.00 9207.10.00 9209.92.60 9209.92.40 9209.91.80 9209.91.40 9209.99.10 9209.99.05 9209.94.80 9209.92.80 9209.99.40 9209.99.20 9209.99.18 9209.99.16 9301.20.00 9301.10.00 9209.99.80 9209.99.61 9302.00.00 9301.90.90 9301.90.60 9301.90.30 9303.30.80 9303.30.40 9303.20.00 9303.10.00 9304.00.40 9304.00.20 9303.90.80 9303.90.40 9305.10.60 9305.10.40 9305.10.20 9304.00.60 9305.91.10 9305.20.80 9305.20.05 9305.10.80 9305.99.60 9305.99.50 9305.91.30 9305.91.20 9306.30.80 9306.30.41 9306.29.00 9306.21.00 9401.10.80 9401.10.40 9307.00.00 9306.90.00 9401.99.25 9401.99.10 9401.91.20 9401.91.15 9504.20.40 9504.20.20 9404.90.20 9404.90.10 9505.10.10 9504.90.90 9504.30.00 9504.20.80 9506.12.40 9506.11.60 9506.11.40 9506.11.20 9506.21.40 9506.19.80 9506.19.40 9506.12.80 9506.32.00 9506.31.00 9506.29.00 9506.21.80 9506.61.00 9506.59.80 9506.51.60 9506.39.00 9506.69.40 9506.69.20 9506.62.80 9506.62.40 9506.91.00 9506.70.60 9506.70.40 9506.69.60 9506.99.28 9506.99.25 9506.99.20 9506.99.05 9506.99.45 9506.99.40 9506.99.35 9506.99.30 9507.20.80 9507.20.40 9506.99.60 9506.99.55 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 168",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 340",
+        "citation_path": "us/statute/hts/chapter-99/page-340",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 340",
+        "id": "c675f3cf-43b4-5b18-922b-367446695c51",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-340",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 340,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 340,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 682,
+      "raw_record_sha256": "52651b1f3f737b8fd3dbe4356d5f7252625b134a75c1ad657fc4e5b72718080f",
+      "record": {
+        "body": "Rates of Duty Unit of Quantity Article Description Stat. Suf- fix Heading/ Subheading 2 1 Special General Derivative aluminum articles that are products of Russia, or where any amount of primary aluminum used in the manufacture of the derivative articles is smelted in Russia, or where the derivative aluminum articles are cast in Russia, when such derivative articles are provided for in the headings or subheadings enumerated in note 19(a)(iii) to this subchapter, or notes 19(i), 19(j) or 19(k) to this subchapter, as applicable per the date of entry for consumption or withdrawal from warehouse for consumption, except any exclusions that may be determined and announced by the Department of Commerce..................................................................................... 1/ 9903.85.68 The duty provided in the applicable subheading + 200% The duty provided in the applicable subheading + 200% (AU, BH, CA, CL, CO, E, IL, JO, KR, MA, MX, OM, P, PA, PE, SG) The duty provided in the applicable subheading + 200% 1/ Except as provided in headings 9903.88.05, 9903.88.06, 9903.88.07, 9903.88.08, 9903.88.10, 9903.88.11, 9903.88.14, 9903.88.19, 9903.88.50, 9903.88.52, 9903.88.58, 9903.88.60, 9903.88.62, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69, articles the product of China, as provided for in U.S. note 20(a) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(b) [to this subchapter].................................................................................... 1/ 9903.88.01 The duty provided in the applicable subheading plus 25% 1/ Except as provided in headings 9903.88.12, 9903.88.17, 9903.88.20, 9903.88.54, 9903.88.59, 9903.88.61, 9903.88.63, 9903.88.66, 9903.88.67, 9903.88.68, 9903.88.69, or 9903.88.70, articles the product of China, as provided for in U.S. note 20(c) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(d)............................. 1/ 9903.88.02 The duty provided in the applicable subheading + 25% 1/ Except as provided in headings 9903.88.13, 9903.88.18, 9903.88.33, 9903.88.34, 9903.88.35, 9903.88.36, 9903.88.37, 9903.88.38, 9903.88.40, 9903.88.41, 9903.88.43, 9903.88.45, 9903.88.46, 9903.88.48, 9903.88.56, 9903.88.64, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69, articles the product of China, as provided for in U.S. note 20(e) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(f)........................................................................................ 1/ 9903.88.03 The duty provided in the applicable subheading + 25% 1/ 1/ See chapter 99 statistical note 1. Rates of Duty 1 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 500",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 672",
+        "citation_path": "us/statute/hts/chapter-99/page-672",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 672",
+        "id": "54d1424a-d1e5-5e36-bdc4-3080cd4f06b5",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-672",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 672,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 672,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    },
+    {
+      "jsonl_line": 684,
+      "raw_record_sha256": "acdcbdc8454b090209ce7842c65e9dd9d6170263441ea0873e164b9b4b9dd2d4",
+      "record": {
+        "body": "Rates of Duty Unit of Quantity Article Description Stat. Suf- fix Heading/ Subheading 2 1 Special General Articles the product of China, as provided for in U.S. note 20(n) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.11 The duty provided in the applicable subheading 1/ Articles the product of China, as provided for in U.S. note 20(o) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.12 The duty provided in the applicable subheading 1/ Articles the product of China, as provided for in U.S. note 20(p) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.13 The duty provided in the applicable subheading 1/ Articles the product of China, as provided for in U.S. note 20(q) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.14 The duty provided in the applicable subheading 1/ Except as provided in headings 9903.88.39, 9903.88.42, 9903.88.44, 9903.88.47, 9903.88.49, 9903.88.51, 9903.88.53, 9903.88.55, 9903.88.57, 9903.88.65, 9903.88.66, 9903.88.67, 9903.88.68, or 9903.88.69, articles the product of China, as provided for in U.S. note 20(r) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(s)............................................................................................... 1/ 9903.88.15 The duty provided in the applicable subheading + 7.5% 1/ Articles the product of China, as provided for in U.S. note 20(t) to this subchapter and as provided for in the subheadings enumerated in U.S. note 20(u) [Compiler's note: provision suspended.]................................................................................. 1/ 9903.88.16 The duty provided in the applicable subheading + 15% 2/ 1/ Articles the product of China, as provided for in U.S. note 20(v) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.17 The duty provided in the applicable subheading 1/ Articles the product of China, as provided for in U.S. note 20(w) to this subchapter, each covered by an exclusion granted by the U.S. Trade Representative.................................................... 1/ 9903.88.18 The duty provided in the applicable subheading 1/ 1/ See chapter 99 statistical note 1. 2/ Subdivisions (t) and (u) of note 20 to this chapter and heading 9903.88.16 are suspended. Rates of Duty 1 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 502 Note:The shaded areas indicate the provision has expired",
+        "citation_label": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions 674",
+        "citation_path": "us/statute/hts/chapter-99/page-674",
+        "document_class": "statute",
+        "expression_date": "2026-08-03",
+        "heading": "Page 674",
+        "id": "0e8996e2-a179-50d5-b04f-dd272563cd91",
+        "jurisdiction": "us",
+        "kind": "page",
+        "language": "en",
+        "level": 2,
+        "metadata": {
+          "archived_official_source": false,
+          "block_count": 805,
+          "chapter_number": 99,
+          "citation_suffix": "page-674",
+          "content_type": "application/octet-stream",
+          "document_subtype": "hts_chapter",
+          "download_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+          "edition": "2026",
+          "kind": "page",
+          "page_number": 674,
+          "primary_source": true,
+          "release": "2026HTSRev15",
+          "release_landing_page": "https://hts.usitc.gov/",
+          "revision": 15,
+          "revision_effective_date": "2026-08-03",
+          "source_authority": "United States International Trade Commission",
+          "title": "Harmonized Tariff Schedule of the United States (2026) Revision 15, Chapter 99: Temporary Legislation; Temporary Modifications Proclaimed Pursuant to Trade Agreements Legislation; Additional Import Restrictions",
+          "verified_current_on": "2026-08-04"
+        },
+        "ordinal": 674,
+        "parent_citation_path": "us/statute/hts/chapter-99",
+        "parent_id": "cea20236-56c2-5708-8ed3-bfdf25c6b48a",
+        "source_as_of": "2026-08-04",
+        "source_format": "pdf",
+        "source_id": "usitc-hts-2026-rev15-chapter-99",
+        "source_path": "sources/us/statute/2026-08-04-usitc-hts-2026-rev15-notes/official-documents/usitc-hts-2026-rev15-chapter-99.pdf",
+        "source_url": "https://hts.usitc.gov/reststop/file?release=2026HTSRev15&filename=Chapter%2099",
+        "version": "2026-08-04-usitc-hts-2026-rev15-notes"
+      }
+    }
+  ],
+  "validation": {
+    "adapter_cases": 9,
+    "all_cases_match": false,
+    "known_mismatching_cases": 1,
+    "matching_cases": 17,
+    "new_campaign_rows_scanned": 0,
+    "real_runtime_cases": 18,
+    "real_runtime_outputs": 18
+  },
+  "visually_checked_pdf_pages": [
+    273,
+    287,
+    340,
+    672,
+    674
+  ]
+}

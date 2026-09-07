@@ -1,23 +1,22 @@
 # Tariff evidence sprint — September 7, 2026
 
-## State — continuation at 17:44 ET
+## State — active continuation
 
-Sole tariff implementation: Subfleet 20260907-174414-continuation-result-md.
-Live process list and run ledger show no other tariff writer. New isolated
-branch sprint/tariff-evidence-continuation-20260907 starts from the verified
-clean a7d2bf13af1b64fa20695e7347e933c76f5efe2c milestone. Its original branch,
-checkout, Git bundle, replay archive and final-report.md remain preserved.
+Sole tariff writer: Subfleet 20260907-174414-continuation-result-md. Work is
+isolated on sprint/tariff-evidence-continuation-20260907, integrated with fetched
+origin/main ef012e83cd2e8b9b7afd4829841d9e29bc173d42. The original clean
+milestone a7d2bf13a, its branch, bundle and evidence artifacts remain preserved.
+RuleSpec stays clean at 4f591c4267063094cc6da9d590872ea982940b81.
 
-Live origin/main fetched successfully at ef012e83cd2e8b9b7afd4829841d9e29bc173d42.
-Read-only merge assessment found one generated-certificate conflict. Integrate
-that base and regenerate the tariff certificate canonically before new evidence.
-RuleSpec stays at immutable 4f591c4267063094cc6da9d590872ea982940b81.
+Bounded source coverage is 18/21; five captured scopes have real counterexamples.
+All 58 actual-entry groundings remain uncaptured. The canonical merged tariff
+certificate has conformant=false due to current-base comparator changes;
+closed/certified remain false. No historical proof repin or huge scan rerun.
 
-The live USITC Rev-15 Chapter99 download returned HTTP200 and exactly matched
-its archived 13,957,698-byte SHA-256 92822e8f38873a7275c4cf9bd5341f96f5834dbea964623e7a7aa7b2cd02f225.
-Headers and retrieval metadata are saved under tariff/live-sources. Initial
-source-linked coverage is 6 of the original21 repaired scopes; all58groundings
-remain uncaptured. No Fable retries, resets, overflow or scan launches.
+The original Chapter99 ingest signature now verifies against the actual public
+trust root. Direct source PDFs retain actual HTTPS metadata and hashes.
+Fable remains pending for root to arrange; no retry, reset or overflow launched.
+Older checkpoint sections below describe the preserved first milestone.
 
 ## Done
 
@@ -228,3 +227,15 @@ lane. Source body and signature hashes did not change.
   Five original gaps remain outside the captured batches; all58groundings and
   Fable/current-base admission gates remain open. Next: bounded China list
   membership/overlay receipt and portable replay of the new evidence.
+
+## China list checkpoint
+
+- Bounded source coverage 18/21. Added list123 (sampled on list3 members) and
+  list4A source receipts; actual adapter membership matches all nine inputs.
+- Real Axiom runs 18 cases / 18 outputs. One China beer case charges50% instead
+  of25% because the generated composition adds the list3 and line-D terms.
+  Seventeen cases match. Three semantic tests pass; 30 continuation tests total.
+- Source/runtime blockers now affect five captured scopes. Remaining source
+  batch candidates: aluminum, steel, non-ad-valorem Column2 resolution. Next
+  preserve the latter's required external-resolution failure semantics and
+  package portable replay. No RuleSpec edits or frozen proof changes.

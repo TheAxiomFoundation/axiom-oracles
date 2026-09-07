@@ -1,16 +1,16 @@
 {
   "canonical_scope_sha256": "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8",
-  "claim": "16 of the 21 repaired scopes have bounded source evidence. Four have known source/runtime counterexamples. CSPV replay covers post-expiry behavior only; identity coverage assumes the documented canonical input contract. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
+  "claim": "18 of the 21 repaired scopes have bounded source evidence. Five have known source/runtime counterexamples. CSPV replay covers post-expiry behavior only; identity coverage assumes the documented canonical input contract. All 58 actual-entry groundings remain uncaptured; no scope is fully admitted or certified.",
   "counts": {
     "fully_admitted_or_grounded_scopes": 0,
     "named_scopes": 58,
     "originally_missing_scopes_repaired_before_sprint": 21,
     "reachable_inputs": 58,
-    "repaired_scopes_outside_batch": 5,
-    "source_captured_scopes_with_known_runtime_counterexamples": 4,
-    "source_captured_scopes_without_counterexamples_in_bounded_batch": 12,
+    "repaired_scopes_outside_batch": 3,
+    "source_captured_scopes_with_known_runtime_counterexamples": 5,
+    "source_captured_scopes_without_counterexamples_in_bounded_batch": 13,
     "source_groundings_still_uncaptured": 58,
-    "sprint_source_evidence_scopes": 16
+    "sprint_source_evidence_scopes": 18
   },
   "inputs": [
     {
@@ -80,20 +80,22 @@
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "entry-preparation membership determination against the original China section-301 lists 1, 2, or 3 and their exclusions",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-lists.json",
       "grounding": "uncaptured",
       "input": "entry_is_china_301_list123",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "blocked_on_beer_list3_overlap",
+      "sprint_runtime_cases": 18,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": true,
       "canonical_scope": "entry-preparation membership determination against China section-301 list 4A and its exclusions",
-      "evidence_receipt": null,
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-lists.json",
       "grounding": "uncaptured",
       "input": "entry_is_china_301_list4a",
-      "sprint_runtime_cases": 0,
-      "sprint_source_evidence": "not_captured_this_batch"
+      "scope_validation_status": "bounded_nonexcluded_list4a_replay_matches",
+      "sprint_runtime_cases": 18,
+      "sprint_source_evidence": "captured_live_primary_source"
     },
     {
       "among_21_repaired_scopes": true,

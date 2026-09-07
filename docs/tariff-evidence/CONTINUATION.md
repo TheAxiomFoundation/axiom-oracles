@@ -113,11 +113,27 @@ the composition begins February 15, after the safeguard's February 6 end date.
 Active-period rates, quotas and complete CSPV classification are unvalidated.
 The older 5 GW quota is not represented as the final 12.5 GW quota in Rev15.
 
-Current source coverage is **16 of the original 21 repaired scopes**. Twelve
+## China list incidence and duplicate beer charge
+
+[The list receipt](../../reference/us-tariff-schedule/boundary-evidence/china-lists.json)
+adds the aggregate list 1/2/3 flag (tested on list 3 members) and list 4A flag.
+The authenticated source pages bind ferroalloy and beer to heading 9903.88.03
+at 25%, and the sports-ball line to 9903.88.15 at 7.5%. Exclusion qualification
+is stipulated absent; complete list 1/2 and exclusion coverage is unvalidated.
+
+The real adapter classifies all nine source/three-origin cases correctly. In
+18 real runtime cases, the generated chapter 22 China beer case charges 50%
+because it adds both `entry_is_china_301_list123` and `entry_is_line_d` terms.
+The witness charges the source's single 25%. Seventeen other cases match.
+The complete overlap counterexample is preserved; the aggregate list scope
+stays blocked pending an authorized composition repair and review.
+
+Current source coverage is **18 of the original 21 repaired scopes**. Thirteen
 have no legal counterexample within their documented bounded contracts (one
-of these tests post-expiry behavior only); four have explicit counterexamples.
-Five remain outside the captured batches. All 58 actual-entry groundings remain
-uncaptured; admitted/grounded scopes remain zero. See the
+tests post-expiry behavior only); five have explicit counterexamples. Aluminum,
+steel and chapter-99 non-ad-valorem Column 2 resolution remain outside the
+captured batches. All 58 actual-entry groundings remain uncaptured; admitted
+or grounded scopes remain zero. See the
 [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
 
 ## Reproduction and current-base hold
@@ -128,14 +144,16 @@ python scripts/build_us_tariff_note52_boundary_evidence.py --check
 python scripts/build_us_tariff_identity_evidence.py --check
 python scripts/build_us_tariff_china_action_evidence.py --check
 python scripts/build_us_tariff_temporal_evidence.py --check
+python scripts/build_us_tariff_china_list_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
   tests/test_us_tariff_note52_boundary_evidence.py \
   tests/test_us_tariff_identity_evidence.py \
   tests/test_us_tariff_china_action_evidence.py \
-  tests/test_us_tariff_temporal_evidence.py
+  tests/test_us_tariff_temporal_evidence.py \
+  tests/test_us_tariff_china_list_evidence.py
 ```
 
-27 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
+30 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 
