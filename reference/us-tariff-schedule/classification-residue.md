@@ -7,7 +7,8 @@ are comparison units, not distinct transactions. No engine errors occurred.
 The final 46-entry classification explains all 6,807,741 mismatch units and
 leaves zero unexplained. It assigns 3,740,478 direct component units and
 3,067,263 derived total-composition units, with zero engine errors and exact
-conservation. The committed classification receipt has SHA-256
+conservation. The original audited classification receipt, preserved under
+`publication-baseline/`, has SHA-256
 `6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35`.
 
 The full report producer independently streamed the 4 GB comparison artifact
@@ -37,6 +38,19 @@ unchanged; 39 ledger scalars were mechanically rebound to the fresh proof and
 publication receipt hashes. Neither retired selector was widened to absorb
 unexplained rows. The final report audit confirms that these replacements
 account for the remainder exactly.
+
+## September 7 metadata successor
+
+The original audit and measurements above are preserved. The isolated evidence
+sprint found that the completed proof rebuild had left 39 stale hash scalars in
+the published ledger. [The metadata rebind](publication-metadata-rebind.json)
+mechanically updates those hashes, three classification input hashes, the
+report and its two exercise-receipt bindings. The original artifacts remain
+hash-pinned under `publication-baseline/`. All selectors, assignments,
+populations, sidecar bytes and measured rates remain unchanged. No bulk scan
+was repeated. The mandatory publication gate verifies the exact transformation
+before accepting the successor certificate. See
+[the bounded evidence handoff](../../docs/tariff-evidence/README.md).
 
 ## Passed historical migration
 

@@ -63,17 +63,26 @@ not represented as verified. RuleSpec input remains the clean combined head
   certificate does not reproduce (fresh conformant=false). Preserve the
   original proof populations while preparing a narrow metadata-only repair.
 
+## Downstream repair checkpoint
+
+- Preserved four independently hash-pinned baseline artifacts and the exact
+  completed proof generation. Rebound 39 ledger hash scalars, three
+  classification input hashes and corresponding report/exercise bindings.
+- Added a mandatory publication gate that reproduces the exact transformation;
+  comparison counts, classifications, sidecar and population accumulators
+  cannot change. Zero comparison rows scanned. All 151 targeted tests pass.
+- Regenerated the tariff certificate and only its exercise-census row with
+  canonical producers. Conformant/exercised/executable true; closed/certified
+  false. Historical proof bytes remain unchanged.
+
 ## Next
 
-1. Inventory proof bindings, downstream reproduction/certificates and source gaps.
-2. Capture a bounded highest-priority subset of the 21 repaired scopes using
-   authoritative sources; execute the real pinned Axiom runtime for the batch.
-3. Validate evidence receipts and retain closed=false/certified=false and all
-   transaction-fact limitations. Commit every coherent step.
-4. Obtain one bounded semantic Subfleet review if capacity permits; final Fable
-   review is still required before release. Do not publish or merge.
-5. Write the final report to /Users/maxghenis/capacity-sprint-20260907/tariff/result.md
-   with commits, artifacts, tests, risks and next action before sprint handoff.
+1. Request one bounded read-only Fable semantic review of committed work.
+2. Finish durable offline artifacts, provenance verification and handoff.
+3. Final Fable review and existing release gates remain mandatory; no publish,
+   merge, reset, paid overflow or remote compute.
+4. Write /Users/maxghenis/capacity-sprint-20260907/tariff/result.md with commits,
+   artifacts, tests, risks and the exact next action.
 
 Deadline: 2026-09-07 21:00 America/New_York. No reset, overflow, paid API or remote
 compute; preserve no-reset.json and auto_reset.enabled=false afterward.

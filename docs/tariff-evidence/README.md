@@ -107,15 +107,34 @@ the existing executable receipt reproduces all ten recorded witness values and
 101 program compilations byte-for-byte. The new six-input receipt supplements
 those existing receipts and does not relabel campaign-constant inputs as varied.
 
-## Downstream blocker found during this sprint
+## Downstream metadata repair
 
-The canonical certificate producer currently rejects the saved conformant
-claim: all 39 proof-hash scalars in the disposition ledger are stale after the
-prior rebuild. Its first reported failure is the steel-scope Brazil causal
-binding. The saved certificate is therefore stale; its `conformant=true` value
-is not a freshly validated verdict. The original proof populations remain
-unchanged. A bounded metadata rebind and downstream regeneration are being
-prepared; no large scan is justified merely by stale file hashes.
+The canonical certificate producer initially rejected the saved conformant
+claim: all 39 proof-hash scalars in the disposition ledger were stale after the
+prior rebuild. The first failure was the steel-scope Brazil causal binding.
+The [metadata rebind receipt](../../reference/us-tariff-schedule/publication-metadata-rebind.json)
+now links immutable copies of the original audited ledger, classification,
+report and exercise receipt to the completed, preserved proof generation.
+
+The deterministic producer changes exactly 39 ledger hash scalars and three
+classification input hashes, adds an explicit original-audit annotation, and
+updates the corresponding report and two exercise-receipt hash fields. It
+preserves every comparison, signature assignment, population accumulator,
+class count and sidecar binding. It scans **zero comparison rows**. It does
+not represent the old sidecar as a fresh audit of new metadata. The mandatory
+publication gate reproduces this exact transformation from hash-pinned inputs;
+changing measured results or replacing the baseline makes it fail.
+
+```sh
+python scripts/rebind_us_tariff_publication.py --check
+python -m pytest -q tests/test_us_tariff_publication_rebind.py \
+  tests/test_us_tariff_publication.py tests/test_build_us_tariff_exercise_receipt.py
+```
+
+All 151 targeted tests pass. The canonical tariff certificate and its census
+row have been regenerated: conformant, exercised and executable are true;
+closed and certified remain false. This repairs reproducibility of an existing
+qualified comparison verdict; it supplies no new legal-completeness claim.
 
 ## Fifteen repaired scopes outside this batch
 
@@ -142,7 +161,7 @@ rebuild from `83908413e68f551f83c61fbbd891409a567bf5ee` in an isolated worktree.
 GitHub fetch failed with `Could not resolve host: github.com`; the cached main
 ref is not represented as a verified live base. Neither original checkout was
 edited. Before integration, fetch and safely reconcile current main, regenerate
-downstream certificates with their canonical producers, and rerun changed gates.
+the tariff certificate with its canonical producer, and rerun changed gates.
 
 Final Fable review and the existing release conditions remain mandatory.
 Launch runbook Gates 2–3 remain Max's: prebriefs/contact, followed by an explicit

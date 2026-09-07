@@ -43,7 +43,10 @@ MANIFEST_SCHEMA = "axiom_oracles.us_tariff_schedule.eval_manifest.v3"
 COMPARISON_SCHEMA = "axiom_oracles.us_tariff_schedule.comparison_summary.v3"
 INPUT_CONTRACT_SCHEMA = "axiom_oracles.us_tariff_schedule.declared_input_contract.v4"
 TRUSTED_RECEIPT_SHA256 = (
-    "7e9f6ec11c67cbc17b951c816dc7116dd028c8e2d56b4bfdfa7e9702ce24a9d9"
+    # Only the two report bindings changed from the audited original. Its
+    # measured input cardinalities are preserved by the mandatory publication
+    # metadata-rebind gate and scripts/rebind_us_tariff_publication.py --check.
+    "41a3bf09bc34c932121c5601672d1cc741aaa0e4026312f30cf819dfc6f72337"
 )
 MAPPED_FIELDS = {
     "hts_number": "hts10",

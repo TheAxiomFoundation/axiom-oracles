@@ -9738,7 +9738,7 @@
         },
         {
           "path": "conformance/detail/us-tariff-schedule.json",
-          "sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be"
+          "sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d"
         },
         {
           "path": "axiom_oracles/bridges/manifests/us-tariff-schedule.yaml",
@@ -9989,14 +9989,14 @@
         }
       },
       "evidence_receipt": "axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json",
-      "evidence_receipt_sha256": "7e9f6ec11c67cbc17b951c816dc7116dd028c8e2d56b4bfdfa7e9702ce24a9d9",
+      "evidence_receipt_sha256": "41a3bf09bc34c932121c5601672d1cc741aaa0e4026312f30cf819dfc6f72337",
       "evidence_source": "content-addressed-shard-manifest",
       "exercised": true,
       "inline_cases_not_counted": 0,
       "per_case_evidence_committed": true,
       "reconciliation": "content-addressed-receipt",
       "report": "conformance/detail/us-tariff-schedule.json",
-      "report_sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be",
+      "report_sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
       "varied_fields": 34,
       "verdict_concepts": {}
     },

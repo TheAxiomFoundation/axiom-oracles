@@ -190,6 +190,10 @@ def publication_fixture(tmp_path, enrollment, contracts, monkeypatch):
     No raw comparison scan or clean-conformance claim is represented by this
     fixture. All totals deliberately stay unexplained, isolating this gate.
     """
+    # This synthetic OPEN classification is not the frozen campaign rebind.
+    # Its new metadata gate has independent real-baseline/mutant coverage in
+    # test_us_tariff_publication_rebind.py; this fixture isolates other gates.
+    monkeypatch.setattr(publication, "_validate_metadata_rebind", lambda _: [])
 
     def copy_path(relative):
         path = tmp_path / relative

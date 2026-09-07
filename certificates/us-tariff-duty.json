@@ -27,37 +27,43 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "c2b48261c484a0b6f879e01115003b700953ca9854eed43abb601a7a6c860e3e"
+      "sha256": "b422d73a589210946c8378dafca31719cdd1738ba74015e373fe42b709fe13b6"
     },
     {
       "artifact": "conformance/detail/us-tariff-schedule.json",
       "claim": "suite:us-tariff-schedule",
       "mode": "computed",
-      "sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be"
+      "sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d"
     },
     {
       "artifact": "reference/us-tariff-schedule/steel-scope-projection-receipt.json",
       "claim": "suite:us-tariff-schedule:causal-proof:steel_scope_projection",
       "mode": "computed",
-      "sha256": "8f86c59e322f311599b7096dde710d408d811aa45f2e4171f84cab88823fc7bf"
+      "sha256": "8b21d6faf20a6686d6beac106f19ea36db4543e958bec6a3b344c624dab4e793"
     },
     {
       "artifact": "reference/us-tariff-schedule/remaining-residual-receipt.json",
       "claim": "suite:us-tariff-schedule:causal-proof:remaining_residuals",
       "mode": "computed",
-      "sha256": "092a3dac97b0b0337274c386013116041294ce06612bb4c3909d33a913d68a99"
+      "sha256": "f9c0c5325803ba21a4fa1b1902b116af6ca38e24af3b08631ebb58a7fb72f547"
+    },
+    {
+      "artifact": "reference/us-tariff-schedule/publication-metadata-rebind.json",
+      "claim": "suite:us-tariff-schedule:publication-metadata-rebind",
+      "mode": "computed",
+      "sha256": "01907a8c67ef9f321c61e0dab1c4be9132e93057231b06b26f0895c7ed3f6d48"
     },
     {
       "artifact": "reference/us-tariff-schedule/campaign-dispositions.yaml",
       "claim": "suite:us-tariff-schedule:publication",
       "mode": "computed",
-      "sha256": "2ebafef886b4f2e57724e5f6a06e5703709684b9f7c58470a585d0fe5201cf7d"
+      "sha256": "196afd7b030a781cd852bee469af26d7ff3939db60aba2454f7500fded0b480b"
     },
     {
       "artifact": "reference/us-tariff-schedule/classification-receipt.json",
       "claim": "suite:us-tariff-schedule:publication",
       "mode": "computed",
-      "sha256": "6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35"
+      "sha256": "36ee1920af8b1ed94d90b01c48eeedf0441cf1a9653e5f3fcb084ba639f7ed95"
     },
     {
       "artifact": "conformance/closure/us-tariff-duty.yaml",
@@ -969,10 +975,10 @@
           "per_case_evidence_committed": true,
           "reconciliation": "content-addressed-receipt",
           "registry_report": "conformance/detail/us-tariff-schedule.json",
-          "registry_report_sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be",
+          "registry_report_sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
           "report": "conformance/detail/us-tariff-schedule.json",
           "report_identity_matches_registry": true,
-          "report_sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be",
+          "report_sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
           "varied_fields": 34
         }
       },

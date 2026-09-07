@@ -29,12 +29,15 @@ LEDGER_PATH = "reference/us-tariff-schedule/campaign-dispositions.yaml"
 CLASSIFICATION_PATH = "reference/us-tariff-schedule/classification-receipt.json"
 COMPARISON_PATH = "reference/us-tariff-schedule/comparison-summary.json"
 REPORT_PATH = "conformance/detail/us-tariff-schedule.json"
-# Set only after the frozen report producer's full sidecar/stream handoff audit
-# and independent verification of the final run. Missing is deliberately red.
+# The original full sidecar/stream audit is preserved in publication-baseline.
+# This successor is its verified metadata-only rebind; reproduce the exact
+# transformation with scripts/rebind_us_tariff_publication.py --check.
+# No comparison population, signature assignment or sidecar was recomputed.
+# Missing is deliberately red.
 # This binds composition assignments as well as counts; a raw population hash
 # alone cannot prove how component signatures were assigned to total classes.
 TRUSTED_CLASSIFICATION_SHA256 = (
-    "6df388c81e30fe918d8b3dd6211bde23e25d07e5ebfc554fef994911d41a4a35"
+    "36ee1920af8b1ed94d90b01c48eeedf0441cf1a9653e5f3fcb084ba639f7ed95"
 )
 RETIRED_BASE_IDS = frozenset(
     {
@@ -43,7 +46,7 @@ RETIRED_BASE_IDS = frozenset(
     }
 )
 BASE_ENTRY_COUNT = 42
-BASE_ENTRIES_SHA256 = "a0236b58e3039253260b92e547ba9dcdb76e2f63e51f2afbd6cac52e2f977da8"
+BASE_ENTRIES_SHA256 = "2af5fe1a28092898428538d797ac00ddcddbea39bd2b54ae0e697e265fce04db"
 BASE_CLASS_MEASUREMENTS_SHA256 = (
     "767727ff1936341e8fca19ae534a8dd5a319583ee6d891e1c95180557d07608f"
 )
@@ -65,8 +68,8 @@ PINNED_CLASSIFICATION_INPUTS = {
     "comparison_receipt_sha256": "936e0653c8fc6e950c46951ddc7865d9a7943c2559165b7ab41364521d4cfcc7",
     "preview_disposition_receipt_sha256": "f112b376dd7d4af5933b3adee070aabf93b84eac77c7a901843d99429cc37181",
     "preview_disposition_payload_sha256": "7fd2ce585bf84d40aeabfdca0bbea82fac23c4c02a7f5976236e6cd657314f18",
-    "preview_selector_transition_receipt_sha256": "69121a39e488a411a9dc1e402d7ee49f29dfd59e0a24f82c0d7138e311ca642b",
-    "preview_selector_transition_payload_sha256": "dc2ab7b53c1096a9fb0bb95f7fd2ca65aba60380bf5a6df70e875da45a4507ac",
+    "preview_selector_transition_receipt_sha256": "51f8f1405fbd398b4bb55f916abcb562901e1ff8bcc900b4a5d9bdee30fb2671",
+    "preview_selector_transition_payload_sha256": "11dd2d05a60742dbc2b09eb095c12e2e49110f439302a43dd92ae54a82c3b3ca",
     "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
 }
 PINNED_PROOFS = {
@@ -77,7 +80,7 @@ PINNED_PROOFS = {
         "preview_selector_transition_receipt_sha256"
     ],
     "reference/us-tariff-schedule/cafta-reference-defect-supersession-receipt.json": (
-        "3b7697e864c5895a39f535a9be7de59029f94524aebc2af401ac53a19537496c"
+        "f77eb238e20780e39afc84b8a43954ceb8e59a54a4002b485715bccf33a1ea29"
     ),
 }
 PROOF_SPECS = (
@@ -444,6 +447,27 @@ def _validate_classification(
     )
 
 
+def _validate_metadata_rebind(snapshot: _Snapshot) -> list[dict]:
+    from scripts import rebind_us_tariff_publication as rebind
+
+    # Every byte is either independently pinned baseline/proof evidence or an
+    # exact derivative of it. Read derivatives through the publication snapshot
+    # so a later concurrent change cannot leave a valid mixed-generation gate.
+    for relative, expected in rebind.build(snapshot.root).items():
+        _require(
+            snapshot.read(relative) == expected,
+            f"metadata-rebound artifact drift: {relative}",
+        )
+    return [
+        {
+            "claim": f"suite:{SUITE}:publication-metadata-rebind",
+            "mode": "computed",
+            "artifact": rebind.RECEIPT,
+            "sha256": snapshot.sha256(rebind.RECEIPT),
+        }
+    ]
+
+
 def validate_publication(
     report: dict, *, repo_root: Path = REPO_ROOT, report_path: str = REPORT_PATH
 ) -> tuple[list[dict], str]:
@@ -469,6 +493,7 @@ def validate_publication(
                 snapshot.sha256(relative) == expected_hash,
                 f"historical proof changed: {relative}",
             )
+        evidence.extend(_validate_metadata_rebind(snapshot))
         classification = snapshot.json(CLASSIFICATION_PATH)
         _require(
             isinstance(TRUSTED_CLASSIFICATION_SHA256, str)

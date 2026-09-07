@@ -11,7 +11,7 @@
     },
     {
       "path": "conformance/detail/us-tariff-schedule.json",
-      "sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d"
+      "sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be"
     },
     {
       "path": "axiom_oracles/bridges/manifests/us-tariff-schedule.yaml",
@@ -262,7 +262,7 @@
   },
   "evidence_mode": "content-addressed-shard-manifest",
   "report": "conformance/detail/us-tariff-schedule.json",
-  "report_sha256": "11d1032673641ddabf32c65cf614d4c3a0e13ac8b96784af76c7ef77ad3fcc9d",
+  "report_sha256": "41d7080f41aa4c585b505bdb7e65798cb1c5adef51ef854f661babcfb58012be",
   "schema": "axiom_oracles.committed_exercise_receipt.v1",
   "suite": "us-tariff-schedule"
 }
