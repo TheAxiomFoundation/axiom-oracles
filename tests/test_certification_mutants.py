@@ -48,7 +48,7 @@ def _load(name: str):
 #: + 4 unclassified leaves). Certificates and the DE census must both carry
 #: exactly these — they are derived, never typed, in the producers.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 448 of 448 subordinate/bearing "
+    "closed: instrument frontier incomplete — 421 of 448 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
     "closed: dependency closure open — 8 open dependencies (4 law-derived "
     "inputs, 4 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)",

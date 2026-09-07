@@ -6597,7 +6597,169 @@ generated_facts:
       uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
   provisions: []
-  instrument_dispositions: []
+  instrument_dispositions:
+  - id: de-kg-dakg-O1
+    status: excluded-with-reason
+    body_sha256: 43a97c0fa9c4e3f3f5e48a92995e4808c7f25f6b515fc7ae640f318cd5bcf747
+    classification: structural_heading
+    reason: The located section text is the chapter heading line only ("O 1 Familienleistungsausgleich"); the operative text sits under O 1.1 and O 1.2, which are dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O1.1
+    status: excluded-with-reason
+    body_sha256: ed6715a5451fde331e91ad166fb385387ace6318364f30984dbca2a047cd64e2
+    classification: explanatory_overview
+    reason: 'Descriptive overview of the Familienleistungsausgleich: constitutional background (Abs. 1), the Finanzamt''s year-end Günstigerprüfung offsetting the Kindergeld claim against the § 32 Abs. 6 EStG allowances (Abs. 2), and the split between tax-law Kindergeld under §§ 31, 62–78 EStG and social-law Kindergeld under the BKGG (Abs. 3). It restates statute and sets no rule for the monthly per-child amount or for entitlement; the bearing it describes belongs to the spine (§§ 62–65 EStG) and to the pending EStG § 31 and BKGG candidates, which stay open.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O1.2
+    status: excluded-with-reason
+    body_sha256: 20eb34c6dbd405dce448092e98784a44cb35f7f9c0fbb2b1c9003dbd3a5a33a5
+    classification: administration_only
+    reason: 'Allocates competence: the BZSt carries out the Familienleistungsausgleich under § 5 Abs. 1 Nr. 11 FVG, the Familienkassen fix and pay Kindergeld on application as a Steuervergütung, the BA provides its offices as Familienkassen. Institutional assignment; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2
+    status: excluded-with-reason
+    body_sha256: 4c26cbd861da333de1428c94616b848ac679b680a960d48949302780e201e726
+    classification: structural_heading
+    reason: Heading line only ("O 2 Familienkassen"); operative text is in O 2.1–O 2.13.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.1
+    status: excluded-with-reason
+    body_sha256: 339d193589266e353296c300b707a716a81b21e8f97304dafd3b2cf6494dc89d
+    classification: administration_only
+    reason: Defines which BA offices are Familienkassen, their status as Bundesfinanzbehörde (§ 6 Abs. 2 Nr. 6 AO) under BZSt supervision, and the required letterhead suffix "Familienkasse". Institutional identity and correspondence form; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.10
+    status: excluded-with-reason
+    body_sha256: 99a3774fec27a490411eb816ecb97b8f73494385656e786ddb9f0385e0e46b16
+    classification: administration_only
+    reason: 'Periodic review of running Kindergeld cases: reminders of the § 68 Abs. 1 Satz 1 EStG notification duty, minimum review intervals set in Kapitel A, a one-month evidence request plus one reminder, and adverse inference on non-cooperation (V 7.2, V 7.4). Procedure for verifying facts; the entitlement conditions it verifies live in Kapitel A and on the spine.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.11
+    status: excluded-with-reason
+    body_sha256: 53fe54c5e358ee049efc65083b53112e69a72e7134c4c9995f34f2149dd91742
+    classification: administration_only
+    reason: 'Monthly Kindergeld statistics under § 4 StStatG: which data per claimant and per child are reported to the BZSt, how amounts and residence are attributed for reporting, anonymisation, deadline, and retention. Statistical reporting of outcomes; it does not determine them.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.12
+    status: excluded-with-reason
+    body_sha256: b1fa4404cc3aeaa9179a4fd2a5eee00947ba0202568165baaf1e724acb746b38
+    classification: repealed
+    reason: 'The complete located text of O 2.12 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.13
+    status: excluded-with-reason
+    body_sha256: a32df2f7d352036ddd012827f5bd7d4a990ef03fbf66797cd91021ca086c9861
+    classification: repealed
+    reason: 'The complete located text of O 2.13 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.2
+    status: excluded-with-reason
+    body_sha256: 6f4dd986228b0fd3bc0ab42d068ab0029a9c2bf1a9bf58665c921871a1875cdd
+    classification: repealed
+    reason: 'The complete located text of O 2.2 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.3
+    status: excluded-with-reason
+    body_sha256: 6e77559541768c2eb65f0ea6c37a0d6230813d07a2070f71c1be2f420aab7fd2
+    classification: repealed
+    reason: 'The complete located text of O 2.3 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.4
+    status: classified-with-reason
+    body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+    classification: instrument_index
+    reason: 'Lists the Familienkassen''s tasks beyond fixing and paying Kindergeld (periodic review, recovery, enforcement, appeals, statistics, data transfers) and the law they must observe. It sets no computation rule itself, but Abs. 2 names instruments that can bear on entitlement in specific case classes and are NOT yet candidates in this frontier: the Einkommensteuer-Richtlinien and -Hinweise, LStR, AEAO, AStBV (St), BMF letters, BZSt directives, published BFH/BVerfG/EuGH decisions, bilateral social-security agreements, Regulations (EC) 883/2004 and 987/2009 (EU/EEA/CH coordination), the EU/UK Withdrawal Agreement, Regulation (EC) 859/2003, and Regulation (EU) 1231/2010. Those references are recorded here for enrolment as supplemental candidates; this row does not decide them. bears_on_computed_surface is false for this heading''s own text only.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.5
+    status: excluded-with-reason
+    body_sha256: 09abd749f929146d0424c49c44cecb75023051d09889e096987821b8fcbaa0d5
+    classification: repealed
+    reason: 'The complete located text of O 2.5 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.6
+    status: excluded-with-reason
+    body_sha256: b334def8a88a370f32c0c001d8e883ecb84fc8cb18b44afae0ed33b454f072b2
+    classification: administration_only
+    reason: Requires use of the BZSt's prescribed forms (Vordrucke KG 1 and Anlage Kind) without alteration. Form discipline; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.7
+    status: excluded-with-reason
+    body_sha256: b65d45979540b298cd155a3ae80a45cb6af1d9497ae51b0561292cffbcf55eea
+    classification: administration_only
+    reason: 'Tax secrecy (§ 30 AO) and data protection (DSGVO, §§ 29b ff. AO): who is bound, what is protected, when disclosure is permitted (§ 30 Abs. 4 AO, § 68 Abs. 4 and 5 EStG, § 21 Abs. 4 FVG), and encryption of electronic transmission (§ 87a AO). Confidentiality rules for the agency; nothing determines a Kindergeld amount or entitlement.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.8
+    status: excluded-with-reason
+    body_sha256: 0dac222a4606ec5180fd7345d3c4b17f71e211b02b714bd93f0b5c55e47c3805
+    classification: structural_heading
+    reason: Heading line only ("O 2.8 Kindergeldakten"); operative text is in O 2.8.1–O 2.8.3.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.8.1
+    status: excluded-with-reason
+    body_sha256: 0e07ef36fa67011b0f70ebd86f9d5c41e6c4c2696faeadba6561f41f28518714
+    classification: administration_only
+    reason: 'File-keeping: paper or electronic Kindergeld files split by child, separate from pay and personnel files, access limited to Familienkasse staff, recording of names and IdNr, separate criminal/fine files with case-number format. Records administration; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.8.2
+    status: excluded-with-reason
+    body_sha256: 52f36ce73ff45ca1a3ecc6213b79a717103241f14f1bea98b2b15a09c6080453
+    classification: administration_only
+    reason: 'Electronic files: qualified signatures on scanned documents, immutable indexing per the BMF GoBD letter of 14.11.2014, return of original deeds, destruction eight weeks after scanning. Records administration; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.8.3
+    status: excluded-with-reason
+    body_sha256: a1f8097d57e238a538a32671e8b01213c996f1432dd8c57a945004908d751d5a
+    classification: administration_only
+    reason: Retention periods for Kindergeld, appeal, and criminal/fine files (six, six, five years with stated start points) and secure destruction. Records administration; the worked example concerns file destruction, not an amount.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O2.9
+    status: excluded-with-reason
+    body_sha256: 03b6d4a14a23bf55cff68c6b515d5691e1a2fcbe8c0484e4a3c735b8487dd29e
+    classification: administration_only
+    reason: 'The BZSt''s IdNr control procedure against double fixing since 01.01.2016: Familienkassen report competence, fixing status, and the child''s IdNr to the BZSt database and receive overlap notices. It is the enforcement mechanism for the one-claimant rule; the rule itself is § 64 EStG on the spine, and V 6.3 Abs. 3 governs handling. No amount or entitlement rule here.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O3
+    status: excluded-with-reason
+    body_sha256: a8d7c92c8a6765094cb99fc67895c26a0124c2fdcd686d4958441fad8b82d340
+    classification: administration_only
+    reason: 'BZSt supervision of the Familienkassen: directives and individual instructions, audits, training, prescribed forms, leaflets, and operation of the IdNr control procedure. Supervisory organisation; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4
+    status: excluded-with-reason
+    body_sha256: 9138a5c78499b10bd8bea7084f9129b5b4147210a911f62b3c16ac8ee3b4873e
+    classification: structural_heading
+    reason: Heading line only ("O 4 Zusammenarbeit der Behörden"); operative text is in O 4.1–O 4.5.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4.1
+    status: excluded-with-reason
+    body_sha256: 99c5f130d67af9d17f2c346cdbbb213f1cd65bcae70c137e80b9c9920969dd1a
+    classification: administration_only
+    reason: How a Familienkasse escalates legal questions to the BZSt (content of a query, reporting duties, deadlines) and that the Familienkasse decides the individual case under the BZSt's legal view. Intra-administration procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4.2
+    status: excluded-with-reason
+    body_sha256: c44c17a7ec6c26dda8b92f4dd430aeadbd1ec86dfa6cda3bc66e262d0f864d3a
+    classification: administration_only
+    reason: 'Cross-reference only: cooperation between Familienkassen is governed by V 3 (change of competence) and V 36/V 37 (change of claimant), which are dispositioned under Kapitel V.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4.3
+    status: excluded-with-reason
+    body_sha256: b7f4719af6b0e9870e869016b192fdb044cba260a9278760bc8f06e2f14d81aa
+    classification: cross_agency_coordination
+    reason: 'Certificates under § 68 Abs. 3 EStG for the tax office when it deducts the § 32 Abs. 6 EStG allowances and adds back the Kindergeld claim: certify entitlements rather than paid amounts, including diverted or set-off amounts, and notify later corrections (§ 21 Abs. 4 FVG). This serves the income-tax side of the Familienleistungsausgleich; it does not change the monthly Kindergeld amount or its entitlement conditions.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4.4
+    status: excluded-with-reason
+    body_sha256: c819dd95b6cc61d9afdaf3ce18dd478d04fd978f383085a8e02d3c499deaba98
+    classification: administration_only
+    reason: Disclosure of fixing status to public-service pay offices under § 68 Abs. 4 EStG (on request, limited scope, optional change notices, automated retrieval) and the prohibitions for religious bodies and Beihilfe offices. Data-disclosure rule; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-O4.5
+    status: excluded-with-reason
+    body_sha256: 264987bc1bebb81f96a3f2f23252cccbafc4731ba3b61de479bdfdee37bb9f73
+    classification: administration_only
+    reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
+    bears_on_computed_surface: false
   leaf_classifications: []
 computed:
   ledger:
@@ -6901,9 +7063,9 @@ computed:
     counts:
       total: 448
       encoded: 0
-      classified-with-reason: 0
-      excluded-with-reason: 0
-      pending: 448
+      classified-with-reason: 1
+      excluded-with-reason: 26
+      pending: 421
     pending:
     - de-kg-dakg-A1
     - de-kg-dakg-A10
@@ -7017,33 +7179,6 @@ computed:
     - de-kg-dakg-A7
     - de-kg-dakg-A8
     - de-kg-dakg-A9
-    - de-kg-dakg-O1
-    - de-kg-dakg-O1.1
-    - de-kg-dakg-O1.2
-    - de-kg-dakg-O2
-    - de-kg-dakg-O2.1
-    - de-kg-dakg-O2.10
-    - de-kg-dakg-O2.11
-    - de-kg-dakg-O2.12
-    - de-kg-dakg-O2.13
-    - de-kg-dakg-O2.2
-    - de-kg-dakg-O2.3
-    - de-kg-dakg-O2.4
-    - de-kg-dakg-O2.5
-    - de-kg-dakg-O2.6
-    - de-kg-dakg-O2.7
-    - de-kg-dakg-O2.8
-    - de-kg-dakg-O2.8.1
-    - de-kg-dakg-O2.8.2
-    - de-kg-dakg-O2.8.3
-    - de-kg-dakg-O2.9
-    - de-kg-dakg-O3
-    - de-kg-dakg-O4
-    - de-kg-dakg-O4.1
-    - de-kg-dakg-O4.2
-    - de-kg-dakg-O4.3
-    - de-kg-dakg-O4.4
-    - de-kg-dakg-O4.5
     - de-kg-dakg-R1
     - de-kg-dakg-R10
     - de-kg-dakg-R10.1
@@ -8924,7 +9059,7 @@ computed:
       section_located: true
       body_sha256: dfef9e999de2c1c166b94a771f29819cbd8d7c7fb096d27027d4d9734bb910e0
     - id: de-kg-dakg-O1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -8937,8 +9072,11 @@ computed:
       heading_sha256: f339438807ef108a851110d4cd372783e5b5aec8a9cdfdd7830b8290e5b148c9
       section_located: true
       body_sha256: 43a97c0fa9c4e3f3f5e48a92995e4808c7f25f6b515fc7ae640f318cd5bcf747
+      classification: structural_heading
+      reason: The located section text is the chapter heading line only ("O 1 Familienleistungsausgleich"); the operative text sits under O 1.1 and O 1.2, which are dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -8951,8 +9089,11 @@ computed:
       heading_sha256: 1cf054b7b3d86b0e03433fd74e3b1a74b50817088774687613ded297ecee34a9
       section_located: true
       body_sha256: ed6715a5451fde331e91ad166fb385387ace6318364f30984dbca2a047cd64e2
+      classification: explanatory_overview
+      reason: 'Descriptive overview of the Familienleistungsausgleich: constitutional background (Abs. 1), the Finanzamt''s year-end Günstigerprüfung offsetting the Kindergeld claim against the § 32 Abs. 6 EStG allowances (Abs. 2), and the split between tax-law Kindergeld under §§ 31, 62–78 EStG and social-law Kindergeld under the BKGG (Abs. 3). It restates statute and sets no rule for the monthly per-child amount or for entitlement; the bearing it describes belongs to the spine (§§ 62–65 EStG) and to the pending EStG § 31 and BKGG candidates, which stay open.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -8965,8 +9106,11 @@ computed:
       heading_sha256: e01b4293bb9258fb15bdf0b5ecfdb55f5482e659605b1c5547dc518fd7ca0eeb
       section_located: true
       body_sha256: 20eb34c6dbd405dce448092e98784a44cb35f7f9c0fbb2b1c9003dbd3a5a33a5
+      classification: administration_only
+      reason: 'Allocates competence: the BZSt carries out the Familienleistungsausgleich under § 5 Abs. 1 Nr. 11 FVG, the Familienkassen fix and pay Kindergeld on application as a Steuervergütung, the BA provides its offices as Familienkassen. Institutional assignment; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -8979,8 +9123,11 @@ computed:
       heading_sha256: 5b16aeb20051e445745870e59d837420394a3d138e61b847fc0cbea61722b419
       section_located: true
       body_sha256: 4c26cbd861da333de1428c94616b848ac679b680a960d48949302780e201e726
+      classification: structural_heading
+      reason: Heading line only ("O 2 Familienkassen"); operative text is in O 2.1–O 2.13.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -8993,8 +9140,11 @@ computed:
       heading_sha256: 899bfaa278466fea3d64d48dcf580a255e906aad365e3f087c7a3bc7f27bc167
       section_located: true
       body_sha256: 339d193589266e353296c300b707a716a81b21e8f97304dafd3b2cf6494dc89d
+      classification: administration_only
+      reason: Defines which BA offices are Familienkassen, their status as Bundesfinanzbehörde (§ 6 Abs. 2 Nr. 6 AO) under BZSt supervision, and the required letterhead suffix "Familienkasse". Institutional identity and correspondence form; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9007,8 +9157,11 @@ computed:
       heading_sha256: 73dfcc5a9fadca070935b9acffa2395777153da8d5ee18b5655ead9feb0b690a
       section_located: true
       body_sha256: 99a3774fec27a490411eb816ecb97b8f73494385656e786ddb9f0385e0e46b16
+      classification: administration_only
+      reason: 'Periodic review of running Kindergeld cases: reminders of the § 68 Abs. 1 Satz 1 EStG notification duty, minimum review intervals set in Kapitel A, a one-month evidence request plus one reminder, and adverse inference on non-cooperation (V 7.2, V 7.4). Procedure for verifying facts; the entitlement conditions it verifies live in Kapitel A and on the spine.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.11
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9021,8 +9174,11 @@ computed:
       heading_sha256: 634e4b544f7c654bb3cab40be9f0429ef5af55bf92ec397d95f6ba88588510f2
       section_located: true
       body_sha256: 53fe54c5e358ee049efc65083b53112e69a72e7134c4c9995f34f2149dd91742
+      classification: administration_only
+      reason: 'Monthly Kindergeld statistics under § 4 StStatG: which data per claimant and per child are reported to the BZSt, how amounts and residence are attributed for reporting, anonymisation, deadline, and retention. Statistical reporting of outcomes; it does not determine them.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.12
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9035,8 +9191,11 @@ computed:
       heading_sha256: 18c321528259c71cf2796196111ed285ae4cf642e69021169ed86b0fe599b4af
       section_located: true
       body_sha256: b1fa4404cc3aeaa9179a4fd2a5eee00947ba0202568165baaf1e724acb746b38
+      classification: repealed
+      reason: 'The complete located text of O 2.12 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.13
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9049,8 +9208,11 @@ computed:
       heading_sha256: 2e2f00bc770b69fcb175143dc26ee22d5f723bb5c6e0202ebd5dcd1c74b90637
       section_located: true
       body_sha256: a32df2f7d352036ddd012827f5bd7d4a990ef03fbf66797cd91021ca086c9861
+      classification: repealed
+      reason: 'The complete located text of O 2.13 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9063,8 +9225,11 @@ computed:
       heading_sha256: 11301020d3f18992a53f33dc3adeb6bd4f5267232ebcb2f6abade5b3f442da42
       section_located: true
       body_sha256: 6f4dd986228b0fd3bc0ab42d068ab0029a9c2bf1a9bf58665c921871a1875cdd
+      classification: repealed
+      reason: 'The complete located text of O 2.2 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9077,8 +9242,11 @@ computed:
       heading_sha256: 1ef4f93eb5347aae398cf93c2b5b2ead54323ceeb177a5d4a204cde353c52ab0
       section_located: true
       body_sha256: 6e77559541768c2eb65f0ea6c37a0d6230813d07a2070f71c1be2f420aab7fd2
+      classification: repealed
+      reason: 'The complete located text of O 2.3 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.4
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9091,8 +9259,11 @@ computed:
       heading_sha256: 7db9f201b360805958bdcfe46afe92005816cd896af27aa216a9eb2f20e6ecd6
       section_located: true
       body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
+      classification: instrument_index
+      reason: 'Lists the Familienkassen''s tasks beyond fixing and paying Kindergeld (periodic review, recovery, enforcement, appeals, statistics, data transfers) and the law they must observe. It sets no computation rule itself, but Abs. 2 names instruments that can bear on entitlement in specific case classes and are NOT yet candidates in this frontier: the Einkommensteuer-Richtlinien and -Hinweise, LStR, AEAO, AStBV (St), BMF letters, BZSt directives, published BFH/BVerfG/EuGH decisions, bilateral social-security agreements, Regulations (EC) 883/2004 and 987/2009 (EU/EEA/CH coordination), the EU/UK Withdrawal Agreement, Regulation (EC) 859/2003, and Regulation (EU) 1231/2010. Those references are recorded here for enrolment as supplemental candidates; this row does not decide them. bears_on_computed_surface is false for this heading''s own text only.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9105,8 +9276,11 @@ computed:
       heading_sha256: 501c22b37f30613766d2b73817401c2b673cf8c9e205d72d9fede78aa555b5c4
       section_located: true
       body_sha256: 09abd749f929146d0424c49c44cecb75023051d09889e096987821b8fcbaa0d5
+      classification: repealed
+      reason: 'The complete located text of O 2.5 is "(weggefallen)": the heading has been dropped from the 2025 edition and carries no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9119,8 +9293,11 @@ computed:
       heading_sha256: d2d4fa4a287cfe9845696769ca3eb59377595fe32d0221bce64d884e0fd18f42
       section_located: true
       body_sha256: b334def8a88a370f32c0c001d8e883ecb84fc8cb18b44afae0ed33b454f072b2
+      classification: administration_only
+      reason: Requires use of the BZSt's prescribed forms (Vordrucke KG 1 and Anlage Kind) without alteration. Form discipline; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9133,8 +9310,11 @@ computed:
       heading_sha256: 5393d73d54abb61a3f9399db9e9bd1afe7ed99379a5634bba664c8712a9b251c
       section_located: true
       body_sha256: b65d45979540b298cd155a3ae80a45cb6af1d9497ae51b0561292cffbcf55eea
+      classification: administration_only
+      reason: 'Tax secrecy (§ 30 AO) and data protection (DSGVO, §§ 29b ff. AO): who is bound, what is protected, when disclosure is permitted (§ 30 Abs. 4 AO, § 68 Abs. 4 and 5 EStG, § 21 Abs. 4 FVG), and encryption of electronic transmission (§ 87a AO). Confidentiality rules for the agency; nothing determines a Kindergeld amount or entitlement.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9147,8 +9327,11 @@ computed:
       heading_sha256: cdbe0c74bde1bbf409874f75bd89df49110fbb8fef5671029ff9bb335bd0a3f0
       section_located: true
       body_sha256: 0dac222a4606ec5180fd7345d3c4b17f71e211b02b714bd93f0b5c55e47c3805
+      classification: structural_heading
+      reason: Heading line only ("O 2.8 Kindergeldakten"); operative text is in O 2.8.1–O 2.8.3.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.8.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9161,8 +9344,11 @@ computed:
       heading_sha256: 22743555047e0c7c4b339b4dfe2d8b0bca5d8dab28fd7c1a3e66ba96fab4c569
       section_located: true
       body_sha256: 0e07ef36fa67011b0f70ebd86f9d5c41e6c4c2696faeadba6561f41f28518714
+      classification: administration_only
+      reason: 'File-keeping: paper or electronic Kindergeld files split by child, separate from pay and personnel files, access limited to Familienkasse staff, recording of names and IdNr, separate criminal/fine files with case-number format. Records administration; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.8.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9175,8 +9361,11 @@ computed:
       heading_sha256: 0806edcbb67dd16f3ddff6fd05d4dfed67217f884777032335aa1349e0c7b300
       section_located: true
       body_sha256: 52f36ce73ff45ca1a3ecc6213b79a717103241f14f1bea98b2b15a09c6080453
+      classification: administration_only
+      reason: 'Electronic files: qualified signatures on scanned documents, immutable indexing per the BMF GoBD letter of 14.11.2014, return of original deeds, destruction eight weeks after scanning. Records administration; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.8.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9189,8 +9378,11 @@ computed:
       heading_sha256: 096c80348c09d46b85a46b8226000df86f483f4fa866a9e761b5cabfd8da1810
       section_located: true
       body_sha256: a1f8097d57e238a538a32671e8b01213c996f1432dd8c57a945004908d751d5a
+      classification: administration_only
+      reason: Retention periods for Kindergeld, appeal, and criminal/fine files (six, six, five years with stated start points) and secure destruction. Records administration; the worked example concerns file destruction, not an amount.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O2.9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9203,8 +9395,11 @@ computed:
       heading_sha256: fa760bf5f59f0c0ffe07dd67fac16597d77fa17449efb10c8c7da4caf2911fc2
       section_located: true
       body_sha256: 03b6d4a14a23bf55cff68c6b515d5691e1a2fcbe8c0484e4a3c735b8487dd29e
+      classification: administration_only
+      reason: 'The BZSt''s IdNr control procedure against double fixing since 01.01.2016: Familienkassen report competence, fixing status, and the child''s IdNr to the BZSt database and receive overlap notices. It is the enforcement mechanism for the one-claimant rule; the rule itself is § 64 EStG on the spine, and V 6.3 Abs. 3 governs handling. No amount or entitlement rule here.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9217,8 +9412,11 @@ computed:
       heading_sha256: d438504d9a28ba617d04b276bc0aeb88004dfd196b54d329fc1e31ad9e2484a6
       section_located: true
       body_sha256: a8d7c92c8a6765094cb99fc67895c26a0124c2fdcd686d4958441fad8b82d340
+      classification: administration_only
+      reason: 'BZSt supervision of the Familienkassen: directives and individual instructions, audits, training, prescribed forms, leaflets, and operation of the IdNr control procedure. Supervisory organisation; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9231,8 +9429,11 @@ computed:
       heading_sha256: af09b6d45ba56a050f9efdd2f272606a8cf3a5074d1b9ca84078ca18b0b772e2
       section_located: true
       body_sha256: 9138a5c78499b10bd8bea7084f9129b5b4147210a911f62b3c16ac8ee3b4873e
+      classification: structural_heading
+      reason: Heading line only ("O 4 Zusammenarbeit der Behörden"); operative text is in O 4.1–O 4.5.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9245,8 +9446,11 @@ computed:
       heading_sha256: 808a3216a590680d090233beb7042de1988b65c20686ab3c591dc9cf0bf4492a
       section_located: true
       body_sha256: 99c5f130d67af9d17f2c346cdbbb213f1cd65bcae70c137e80b9c9920969dd1a
+      classification: administration_only
+      reason: How a Familienkasse escalates legal questions to the BZSt (content of a query, reporting duties, deadlines) and that the Familienkasse decides the individual case under the BZSt's legal view. Intra-administration procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9259,8 +9463,11 @@ computed:
       heading_sha256: 04acf4566caaa5e03522350c124e3f75c718659aba7ee742666e351c809bc63d
       section_located: true
       body_sha256: c44c17a7ec6c26dda8b92f4dd430aeadbd1ec86dfa6cda3bc66e262d0f864d3a
+      classification: administration_only
+      reason: 'Cross-reference only: cooperation between Familienkassen is governed by V 3 (change of competence) and V 36/V 37 (change of claimant), which are dispositioned under Kapitel V.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9273,8 +9480,11 @@ computed:
       heading_sha256: 8ac5053579abd6e31053635b7817035ca37a9f9dce3ce98f16737e29ad564f00
       section_located: true
       body_sha256: b7f4719af6b0e9870e869016b192fdb044cba260a9278760bc8f06e2f14d81aa
+      classification: cross_agency_coordination
+      reason: 'Certificates under § 68 Abs. 3 EStG for the tax office when it deducts the § 32 Abs. 6 EStG allowances and adds back the Kindergeld claim: certify entitlements rather than paid amounts, including diverted or set-off amounts, and notify later corrections (§ 21 Abs. 4 FVG). This serves the income-tax side of the Familienleistungsausgleich; it does not change the monthly Kindergeld amount or its entitlement conditions.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9287,8 +9497,11 @@ computed:
       heading_sha256: 6727044d0b92f5b1f697d36fa356a2c7b5ff6d607e6dddd896e4119194f35cce
       section_located: true
       body_sha256: c819dd95b6cc61d9afdaf3ce18dd478d04fd978f383085a8e02d3c499deaba98
+      classification: administration_only
+      reason: Disclosure of fixing status to public-service pay offices under § 68 Abs. 4 EStG (on request, limited scope, optional change notices, automated retrieval) and the prohibitions for religious bodies and Beihilfe offices. Data-disclosure rule; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-O4.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -9301,6 +9514,9 @@ computed:
       heading_sha256: 57b69675627a0c769ae6fe10a3285dfe139d6939ec5eda43969e94bf29c2cee9
       section_located: true
       body_sha256: 264987bc1bebb81f96a3f2f23252cccbafc4731ba3b61de479bdfdee37bb9f73
+      classification: administration_only
+      reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R1
       status: pending
       discovery_refs:

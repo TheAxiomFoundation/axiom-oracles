@@ -405,7 +405,7 @@ def test_snapshot_mutants_are_rejected(mutation: str) -> None:
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
-def test_committed_ledgers_are_valid_and_exactly_open(program: str) -> None:
+def test_committed_ledgers_are_valid_and_open(program: str) -> None:
     module = _load_script()
     path = Path(module.ARTIFACT_PATHS[program])
     document = _document(module, path)
@@ -419,26 +419,26 @@ def test_committed_ledgers_are_valid_and_exactly_open(program: str) -> None:
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
-def test_all_pending_counts_and_lists_agree(program: str) -> None:
+def test_counts_lists_and_decisions_agree(program: str) -> None:
+    """Counts are strict integers that agree with the row statuses; every
+    non-pending row is backed by a committed decision that binds it."""
+
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS[program]))
     computed = document["computed"]
+    decisions = document["committed_decisions"]
 
     ledger = computed["ledger"]
     provision_counts = computed["provision_counts"]
-    provision_pending = computed["pending"]
     for value in provision_counts.values():
         _assert_strict_count(value)
-    assert provision_counts["total"] == len(ledger)
-    assert len(ledger) == EXPECTED_SPINE_COUNTS[program]
-    assert provision_counts["pending"] == len(provision_pending) == len(ledger)
-    assert provision_counts["encoded"] == 0
-    assert provision_counts["partially-encoded"] == 0
-    assert provision_counts["classified-with-reason"] == 0
-    assert provision_counts["excluded-with-reason"] == 0
-    assert computed["partially_encoded"] == []
-    assert all(row["status"] == "pending" for row in ledger)
-    assert provision_pending == [row["citation_path"] for row in ledger]
+    assert provision_counts["total"] == len(ledger) == EXPECTED_SPINE_COUNTS[program]
+    for status in ("encoded", "partially-encoded", "classified-with-reason", "excluded-with-reason", "pending"):
+        assert provision_counts[status] == sum(1 for row in ledger if row["status"] == status)
+    assert computed["pending"] == [row["citation_path"] for row in ledger if row["status"] == "pending"]
+    assert {row["citation_path"] for row in ledger if row["status"] != "pending"} == {
+        row["citation_path"] for row in decisions["provisions"]
+    }
 
     frontier = computed["instrument_frontier"]
     instrument_ledger = frontier["ledger"]
@@ -446,21 +446,17 @@ def test_all_pending_counts_and_lists_agree(program: str) -> None:
     for value in instrument_counts.values():
         _assert_strict_count(value)
     assert instrument_counts["total"] == len(instrument_ledger)
-    assert instrument_counts["pending"] == len(frontier["pending"])
-    assert instrument_counts["pending"] == len(instrument_ledger)
-    assert instrument_counts["encoded"] == 0
-    assert instrument_counts["classified-with-reason"] == 0
-    assert instrument_counts["excluded-with-reason"] == 0
-    assert all(row["status"] == "pending" for row in instrument_ledger)
-    assert frontier["pending"] == [row["id"] for row in instrument_ledger]
-    assert frontier["complete"] is False
-
-    decisions = document["committed_decisions"]
-    assert decisions == {
-        "provisions": [],
-        "instrument_dispositions": [],
-        "leaf_classifications": [],
-    }
+    for status in ("encoded", "classified-with-reason", "excluded-with-reason", "pending"):
+        assert instrument_counts[status] == sum(1 for row in instrument_ledger if row["status"] == status)
+    assert frontier["pending"] == [row["id"] for row in instrument_ledger if row["status"] == "pending"]
+    decided = {row["id"]: row for row in decisions["instrument_dispositions"]}
+    assert {row["id"] for row in instrument_ledger if row["status"] != "pending"} == set(decided)
+    for row in instrument_ledger:
+        if row["status"] != "pending":
+            assert row["reason"] == decided[row["id"]]["reason"]
+            assert row["body_sha256"] == decided[row["id"]]["body_sha256"]
+    assert frontier["complete"] is (bool(instrument_ledger) and not frontier["pending"])
+    assert computed["closed"] is False
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
@@ -668,6 +664,7 @@ def test_full_verifier_rejects_coordinated_generated_fact_mutation(
         generated["leaf_frontier"],
         generated["instrument_graph"],
         generated["measurement_basis"],
+        document["committed_decisions"],
     )
     mutant = tmp_path / f"{generated_mutation}.yaml"
     _write_document(mutant, document)
@@ -901,21 +898,32 @@ def _with_decisions(module, program: str, decisions: dict) -> dict:
     return document
 
 
-def test_empty_decisions_reproduce_the_committed_all_pending_join() -> None:
+def test_committed_decisions_reproduce_the_committed_join() -> None:
+    """The committed computed block is exactly the join of the committed
+    facts and decisions; with the decisions removed every row is pending."""
+
     module = _load_script()
     for program in PROGRAMS:
         document = _document(module, Path(module.ARTIFACT_PATHS[program]))
-        assert document["committed_decisions"] == module._empty_decisions()
         facts = document["generated_facts"]
-        assert (
-            module._computed(
-                facts["provision_spine"],
-                facts["leaf_frontier"],
-                facts["instrument_graph"],
-                facts["measurement_basis"],
-            )
-            == document["computed"]
+        joined = module._computed(
+            facts["provision_spine"],
+            facts["leaf_frontier"],
+            facts["instrument_graph"],
+            facts["measurement_basis"],
+            document["committed_decisions"],
         )
+        assert joined == document["computed"]
+        bare = module._computed(
+            facts["provision_spine"],
+            facts["leaf_frontier"],
+            facts["instrument_graph"],
+            facts["measurement_basis"],
+        )
+        assert bare["pending"] == [row["citation_path"] for row in bare["ledger"]]
+        assert bare["instrument_frontier"]["pending"] == [row["id"] for row in bare["instrument_frontier"]["ledger"]]
+        if document["committed_decisions"] == module._empty_decisions():
+            assert bare == document["computed"]
 
 
 def test_full_dispositions_close_a_ledger_with_no_law_derived_leaves() -> None:
@@ -1173,3 +1181,37 @@ def test_non_canonical_or_forged_computed_with_decisions_is_rejected() -> None:
     broken["committed_decisions"]["provisions"][0]["body_sha256"] = "2" * 64
     with pytest.raises(module.ClosureLedgerError, match="does not bind"):
         module.validate_artifact(broken)
+
+
+def test_working_tree_decisions_are_checked_without_a_git_commit(tmp_path, monkeypatch) -> None:
+    """The hermetic rederivation must take committed_decisions from the
+    document under check, not from HEAD: a new disposition is validated and
+    joined before it is committed, and a stale computed block is refused."""
+
+    module = _load_script()
+    program = "de/rv-employee-contribution"
+    document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    facts = document["generated_facts"]
+    candidate = facts["instrument_graph"]["candidates"][0]
+    decision = {
+        "id": candidate["id"],
+        "status": "excluded-with-reason",
+        "classification": "test_only",
+        "reason": "synthetic working-tree decision",
+        "bears_on_computed_surface": False,
+    }
+    if isinstance(candidate.get("body_sha256"), str):
+        decision["body_sha256"] = candidate["body_sha256"]
+    edited = copy.deepcopy(document)
+    edited["committed_decisions"]["instrument_dispositions"] = [decision]
+
+    monkeypatch.setattr(module, "_load_committed_document", lambda _program: copy.deepcopy(document))
+    expected = module._hermetic_rederivation(edited, source_path=module.SOURCE_PATH, snapshot_path=module.SNAPSHOT_PATH)
+    assert expected["committed_decisions"]["instrument_dispositions"] == [decision]
+    assert expected["computed"]["instrument_frontier"]["counts"]["excluded-with-reason"] == 1
+    assert candidate["id"] not in expected["computed"]["instrument_frontier"]["pending"]
+    # The edited file with its old computed block does not equal the
+    # rederivation, so --check would refuse it until computed is rewritten.
+    assert edited != expected
+    edited["computed"] = expected["computed"]
+    assert edited == expected
