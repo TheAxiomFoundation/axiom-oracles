@@ -123,7 +123,7 @@ ratchets:
 - suite: co-state-income-tax-ecps
   unexplained_max: 0
 - suite: co-state-income-tax-taxsim
-  unexplained_max: 7
+  unexplained_max: 0
 - suite: co-state-supplement
   unexplained_max: 0
 - suite: co-tanf-coverage
@@ -131,7 +131,7 @@ ratchets:
 - suite: co-tanf-ecps
   unexplained_max: 0
 - suite: co-tax-intersection-taxsim
-  unexplained_max: 57
+  unexplained_max: 0
 - suite: csfp-parameters
   unexplained_max: 0
 - suite: ct-income-tax-populace
@@ -153,7 +153,7 @@ ratchets:
 - suite: fiit-ecps
   unexplained_max: 0
 - suite: fiit-taxsim-ecps
-  unexplained_max: 3
+  unexplained_max: 0
 - suite: fl-snap-ecps
   unexplained_max: 0
 - suite: fl-tca-standards
@@ -259,7 +259,7 @@ ratchets:
 - suite: nc-snap-ecps
   unexplained_max: 0
 - suite: nd-income-tax-liability
-  unexplained_max: 1
+  unexplained_max: 0
 - suite: ne-income-tax-liability
   unexplained_max: 0
 - suite: nj-income-tax-liability
@@ -303,7 +303,7 @@ ratchets:
 - suite: pell-parameters
   unexplained_max: 0
 - suite: ri-income-tax-liability
-  unexplained_max: 4
+  unexplained_max: 0
 - suite: sc-income-tax-liability
   unexplained_max: 0
 - suite: sc-income-tax-populace

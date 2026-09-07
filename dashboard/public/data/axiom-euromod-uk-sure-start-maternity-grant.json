@@ -147,10 +147,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "b06df40d76edc801773fed4a5c6a6fff53327484",
+      "axiom_rules_engine_sha": "1f824237d43c1234d88fea60c8ac2fa7b9b9da4c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-08-30T12:19:27Z",
+    "generated_at": "2026-09-07T04:58:03Z",
     "generated_by": "scripts/run_comparison.py::uk-sure-start-maternity-grant-ukmod",
     "oracle": {
       "euromod_country": "UK",

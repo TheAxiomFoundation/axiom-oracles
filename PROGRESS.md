@@ -136,3 +136,14 @@ compute; no-reset.json stays blocked without explicit user authorization.
    recording live authoritative metadata and real Axiom replay evidence.
 3. Keep closed/certified false. Root can arrange the required final Fable review.
 4. Save continuation-result.md, current coverage, tests and precise blockers.
+
+## Live-base integration checkpoint
+
+Merged verified origin/main ef012e83c. Its comparator.py changes real comparison
+semantics, so the preserved proof's expires-on-source-change gate correctly
+rejects current source bindings. Canonical merged certificate now explicitly
+has conformant=false, closed=false, certified=false. The prior a7d2bf13a branch
+and all four proof artifacts stay unchanged. Do not mechanically repin proofs
+to new source code or rerun the giant scan merely to turn this verdict green.
+Exact changed-file digests are in continuation-integration-hold.json. This
+integration/admission blocker is separate from new real-runtime source batches.

@@ -170,45 +170,58 @@ entries:
     - ri-married-300000
     - ri-married-60000
     - ri-single-150000
-  disposition: unexplained
+  disposition: upstream_engine_gap
   evidence:
-    mechanism: 'Documented open investigation - these four rows are exactly the
-      Rhode
+    mechanism: 'Resolved by direct statutory verification, replacing the
 
-      Island residuals where the triangulation test FAILS. On every other lane
+      triangulation this entry previously waited on: the pinned rulespec
 
-      in this grid family the axiom value is corroborated by PolicyEngine to the
+      pilot''s companion fixtures carry the Division of Taxation''s November
 
-      cent, which is what licenses attributing the residual to TAXSIM. Here axiom
+      3, 2025 ADV inflation-adjustment advisory for Tax Year 2026 (the
 
-      and PolicyEngine disagree by 26.25-81.02 (the same 2026 uprating gap the
+      $82,050 / $186,450 bracket transitions at 3.75/4.75/5.99%, the 2026
 
-      ri-pe-2026-uprating-* entries disposition on the PolicyEngine leg of these
+      standard deductions, the $5,250 exemption, and the $290,800
 
-      identical cases), so axiom''s own Rhode Island value is not independently
+      deduction/exemption phase-out top), and axiom reproduces the official
 
-      confirmed and the TAXSIM residual cannot be attributed to TAXSIM. Note
+      schedule to the cent on all four rows: single-150000 TI 133,550 ->
 
-      ri-married-300000 has TAXSIM BELOW axiom (+10.81) while PolicyEngine sits
+      3,076.875 + 0.0475 x 51,500 = 5,523.13; married-60000 TI 27,100 ->
 
-      above it, so the three legs bracket each other and no two-of-three majority
+      0.0375 x 27,100 = 1,016.25; married-120000 TI 87,100 -> 3,076.875 +
 
-      exists. These stay unexplained until the rulespec-us companion fixtures are
+      0.0475 x 5,050 = 3,316.75; married-300000 fully phased out, TI
 
-      regenerated against Rhode Island''s official 2026 indexed amounts, which
+      300,000 -> 3,076.875 + 0.0475 x 104,400 + 0.0599 x 113,550 =
 
-      closes the axiom-PolicyEngine gap and makes the triangulation decidable.'
+      14,837.52. TAXSIM''s implied 2026 deduction/exemption amounts drift
+
+      from the advisory by 65.20 / 245.90 / 188.20 and its phase-out leaves
+
+      180.50 of deductions at 300,000, reproducing each residual exactly:
+
+      0.0475 x 65.20 = 3.10; 0.0375 x 245.90 = 9.22; 0.0475 x 188.20 =
+
+      8.94; 0.0599 x 180.50 = 10.81. A TAXSIM-side parameter vintage
+
+      (its own projection of the 2026 indexed amounts); PolicyEngine''s
+
+      separate uprating lag on the same rows remains dispositioned by the
+
+      ri-pe-2026-uprating-* entries. Resolves when NBER re-bases.'
     arithmetic:
-    - expression: 5523.13 - 5561.25
-      equals: -38.12
-      tolerance: 0.05
-    - expression: 1016.25 - 1042.50
-      equals: -26.25
-      tolerance: 0.05
-    - expression: 3316.75 - 3371.50
-      equals: -54.75
-      tolerance: 0.05
-    - expression: 14837.52 - 14918.54
-      equals: -81.02
-      tolerance: 0.05
+    - expression: 3076.875 + 0.0475 * 51500
+      equals: 5523.13
+      tolerance: 0.02
+    - expression: 3076.875 + 0.0475 * 104400 + 0.0599 * 113550
+      equals: 14837.52
+      tolerance: 0.02
+    - expression: 0.0375 * 245.90
+      equals: 9.22
+      tolerance: 0.02
+    - expression: 0.0599 * 180.50
+      equals: 10.81
+      tolerance: 0.02
   expires_on_source_change: true

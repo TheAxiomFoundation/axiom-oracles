@@ -86,7 +86,58 @@ gap; disposition it, do not chase the Axiom encoding):
   over head+spouse only, while the Axiom/PolicyEngine side computes the
   full tax-unit value. The one-sided AGI gap equals the dependents'
   unearned income; it is a projection-surface limitation (all lanes,
-  ECPS and populace alike), not an oracle disagreement.
+  ECPS and populace alike), not an oracle disagreement. Social-security
+  benefits (`gssi`) follow the same rule: the §86 member is exactly
+  0.85 × the non-earner members' benefits, plus the H.R.1 §70103
+  senior-deduction phaseout knock-on of the shifted MAGI.
+- **SE-tax ALD**: the pinned binary deducts half of the §1401(b)(2)
+  additional Medicare tax in its self-employment-tax ALD, which §164(f)(1)
+  excludes (isolated probe: w=0, se=810,431 → ALD 24,759.23 = 22,291.28
+  statutory + 0.5 × 0.009 × (748,433 − 200,000)). Its OASDI base is the
+  official 184,500; the oracle bridge deliberately pins 186,000 to match
+  PolicyEngine, so wage-straddling rows differ by exactly 0.5 × 0.124 ×
+  1,500 = 93.00. Axiom's ALD is statutory at the bridge base.
+- **QBID**: plain 20% of (psemp + ssemp − its SE ALD) — no §199A(b)(3)
+  wage/UBIA limitation, no H.R.1 §70105 $400 minimum, no rental in the
+  QBI base. Rows above the phase-in ceiling collapse to axiom's $400
+  floor vs TAXSIM's full 20%.
+- **§461(l)**: the binary DOES cap excess business losses, at its own
+  projected 332,389.95 single / 664,779.90 joint, and it treats net
+  positive capital gain as business gross income (the allowance grows
+  dollar-for-dollar). The axiom leg's cap arrives through the projection
+  surface at the 2024-vintage 305,000/610,000 with no gain offset, so
+  these rows are two-sided (`explained_residual`), favoring neither.
+- **AMT at extreme incomes**: AMTI agrees to the cent (`v26`); `v27`
+  departs per the pre-OBBBA AMT parameter vintage compounded with the
+  capital-gains bracket vintage, while the bridge's Part III grants the
+  gain stack the full 0%/15% brackets (the dispositioned bucket-routing
+  convention). Two-sided; axiom's value reproduces exactly from its own
+  audited worksheet identity `max(0, TMT − (§1(h)+§1(j)))`.
+- **ND/RI grids**: the binary's 2026 state parameters are its own
+  inflation projections; axiom reproduces the ND Commissioner's official
+  2026 schedule ($49,575 single 0% bracket) and RI's ADV 2025-22 amounts to
+  the cent, so these residuals attribute to TAXSIM without triangulation.
+
+**Axiom-side, classified `axiom_encoding_gap` (visible until fixed):**
+
+- The bridge's `earned_income` input for §32 does not net self-employment
+  losses; §32(c)(2)(A)(ii) nets net earnings from self-employment. Units
+  with wages and an SE loss phase out on the unnetted wage figure (or keep
+  a sliver of childless credit when the netted figure would be ≤ 0).
+  Four rows across the CO intersection and national lanes. Fixing the
+  projection converts them to matches.
+
+## Status
+
+As of 2026-09-01 every TAXSIM lane is at **100% explained, zero
+unexplained rows** (PR #515 closed the last 72: 57 + 7 CO, 3 national, 1 ND,
+4 RI). The row-by-row member decomposition that licensed the final CO
+entries — full-evidence axiom closure (337 outputs per unit, compared
+concepts reproducing every committed mismatch value before any chain was
+read) plus pinned-binary synthetic probes — is committed as
+`reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json`.
+The `unexplained_ratchet` pins the ceiling at zero; a regression on any
+TAXSIM lane now fails CI.
 
 ## Extending coverage
 

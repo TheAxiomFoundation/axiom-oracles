@@ -375,10 +375,14 @@ def test_gettsim_synthetic_runner_registered_and_reemits_committed_report(
     assert output.read_text() == committed.read_text()
 
 
-def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_path):
+@pytest.mark.parametrize("concept_subset", [False, True])
+def test_gettsim_synthetic_runner_compares_requested_sample(
+    concept_subset, monkeypatch, tmp_path
+):
     from axiom_oracles.adapters.euromod import EuromodPlatformRunner
     from axiom_oracles.adapters.gettsim import GettsimRunner
     from axiom_oracles.core.results import EngineResult
+    from axiom_oracles.suites.de_worker import DE_WORKER_OUTPUTS
 
     run_comparison = load_run_comparison_module()
     monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
@@ -391,7 +395,7 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
     def fake_euromod_run(self, cases, variables):
         assert len(cases) == 1
         assert self.extra_columns == ("drgn1",)
-        assert set(variables) == {
+        expected_variables = {"tsceehl_s"} if concept_subset else {
             "tsceehl_s",
             "tsceepi_s",
             "tsceeui_s",
@@ -399,6 +403,7 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
             "tin_s",
             "bch00_s",
         }
+        assert set(variables) == expected_variables
         return [
             EngineResult(
                 engine="euromod",
@@ -429,21 +434,22 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
     )
 
     output = tmp_path / "report.json"
+    parameters = {
+        "suite": "de-worker-dual-oracle",
+        "sample_size": 1,
+        "euromod_extra_columns": ["drgn1"],
+    }
+    if concept_subset:
+        parameters["concepts"] = [DE_WORKER_OUTPUTS[0]]
     run_comparison._run_gettsim_synthetic_compare(
-        {
-            "parameters": {
-                "suite": "de-worker-dual-oracle",
-                "sample_size": 1,
-                "euromod_extra_columns": ["drgn1"],
-            }
-        },
+        {"parameters": parameters},
         output,
     )
 
     report = json.loads(output.read_text())
     assert report["engines"] == {"left": "euromod", "right": "gettsim"}
     assert report["case_count"] == 1
-    assert report["summary"]["comparison_count"] == 6
+    assert report["summary"]["comparison_count"] == (1 if concept_subset else 6)
     assert report["summary"]["mismatch_count"] == 0
     assert report["summary"]["error_count"] == 0
     assert report["engine_metadata"]["euromod"]["extra_columns"] == ["drgn1"]

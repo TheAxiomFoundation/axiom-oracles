@@ -95,26 +95,40 @@ entries:
   case_selector:
     case_ids:
     - nd-single-150000
-  disposition: unexplained
+  disposition: upstream_engine_gap
   evidence:
-    mechanism: 'Documented open investigation - this row is the single North Dakota
+    mechanism: 'Resolved by direct statutory verification, replacing the
 
-      residual where the triangulation test FAILS. axiom and PolicyEngine
+      triangulation this entry previously waited on: the pinned rulespec
 
-      disagree by 21.45 on nd-single-150000 (that axiom-vs-PolicyEngine row is
+      pilot carries the Tax Commissioner''s OFFICIAL 2026 indexed schedule
 
-      separately dispositioned upstream_engine_gap in this same report), so
+      (status official_parameter_source; single 0% bracket top $49,575,
 
-      axiom''s North Dakota value is not independently corroborated and the
+      middle rate 1.95%), and axiom reproduces it to the cent - taxable
 
-      6.62 TAXSIM residual cannot be attributed to TAXSIM rather than to axiom.
+      income 150,000 - 16,100 = 133,900, tax 0.0195 x (133,900 - 49,575) =
 
-      The other five North Dakota grid rows reconcile or are already classified.
+      1,644.34. The engines'' implied single 0%-bracket tops solve to:
 
-      Stays unexplained until the axiom-PolicyEngine divergence at this grid
+      axiom 49,575 (official), PolicyEngine 48,475 (the 2025 amount, its
 
-      point is closed, which makes the triangulation decidable.'
+      uprating lag separately dispositioned upstream_engine_gap in this
+
+      report), TAXSIM 49,914 (its own inflation projection). The 6.62
+
+      residual is exactly the TAXSIM bracket-vintage difference: 0.0195 x
+
+      (49,914.36 - 49,575) = 6.62. Resolves when NBER re-bases to the
+
+      Commissioner''s published 2026 amounts.'
     arithmetic:
+    - expression: 0.0195 * (133900 - 49575)
+      equals: 1644.34
+      tolerance: 0.02
+    - expression: 0.0195 * (49914.36 - 49575)
+      equals: 6.62
+      tolerance: 0.02
     - expression: 1644.34 - 1665.79
       equals: -21.45
       tolerance: 0.05

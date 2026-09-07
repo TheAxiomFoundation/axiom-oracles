@@ -46711,7 +46711,7 @@
       "description": "State income tax liability",
       "difference": -3047.88,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -48685,7 +48685,7 @@
       "description": "State income tax liability",
       "difference": 212.97618457031245,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -48979,7 +48979,7 @@
       "description": "State income tax liability",
       "difference": -1183.41203125,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -49210,7 +49210,7 @@
       "description": "State income tax liability",
       "difference": 109.82294177246095,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -51352,7 +51352,7 @@
       "description": "State income tax liability",
       "difference": 503.90207320175614,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -52885,7 +52885,7 @@
       "description": "State income tax liability",
       "difference": -740.4946158630371,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -52990,7 +52990,7 @@
       "description": "State income tax liability",
       "difference": -786.8043798828112,
       "disposition": {
-        "disposition": "unexplained",
+        "disposition": "upstream_engine_gap",
         "id": "co-state-open-rows-axiom-pe-divergent",
         "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
       },
@@ -57301,16 +57301,16 @@
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
         "explained_residual": 0,
-        "unexplained": 7,
-        "upstream_engine_gap": 523
+        "unexplained": 0,
+        "upstream_engine_gap": 530
       },
       "dispositions_file": "dispositions/co-state-income-tax-taxsim.yaml",
       "expired_entries": [],
-      "explained_rate": 99.417152,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 55.870108,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 7
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
