@@ -445,7 +445,7 @@
       "axiom_rules_engine_sha": "1f824237d43c1234d88fea60c8ac2fa7b9b9da4c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-07T13:04:47Z",
+    "generated_at": "2026-09-07T21:37:50Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-savings-ukmod",
     "oracle": {
       "euromod_country": "UK",

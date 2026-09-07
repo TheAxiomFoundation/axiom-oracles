@@ -62,6 +62,8 @@
   "frozen_milestone_conformant": true,
   "merged_certificate_conformant": false,
   "preserved_milestone": "a7d2bf13af1b64fa20695e7347e933c76f5efe2c",
+  "refresh_note": "Scheduled report metadata updates only; both inherited tariff census rows reproduce and 225 other census rows match refreshed main. Canonical tariff certificate regenerated; original comparator/report admission hold unchanged.",
+  "refreshed_upstream_main": "82d342793d939b3bb11e9a2d50d3fb0b3bc57622",
   "resolution": "Current main changes the comparison implementation; do not rebind proof hashes or assert renewed historical compatibility. The original proof generation and its green qualified conformance remain preserved on the original milestone. New boundary evidence uses immutable RuleSpec and real pinned runtime independently. A future admission review must decide historical source pinning versus a justified targeted reproduction.",
   "schema": "axiom_oracles.tariff_continuation.integration_hold.v1",
   "upstream_main": "ef012e83cd2e8b9b7afd4829841d9e29bc173d42"

@@ -302,3 +302,19 @@ lane. Source body and signature hashes did not change.
 - The combined replay's trusted archive/manifest hashes and exact offline
   command are recorded. Next run the consolidated targeted battery and final
   preservation checks, then save the durable continuation report.
+
+## Refreshed live-base integration
+
+- Fetched origin/main82d342793 and integrated26scheduled report updates. Only
+  certificate/census overlapped. Canonical producers reproduce both inherited
+  tariff census rows;225other rows match refreshed main exactly. Regenerated
+  only the tariff certificate to resolve its census-hash conflict.
+- The original current-base admission hold remains: conformant=false,
+  exercised/executable=true, closed=false, certified=false. Comparator/report
+  source bytes and every bounded runtime receipt remain unchanged.
+- Consolidated continuation battery passes46tests (36source/receipt plus
+  10combined-replay tamper/native checks). Initial audit helper mistakes in
+  census-key/program-key selection are preserved in logs; corrected canonical
+  reproduction passes. No comparison population was recomputed.
+- A same-repository draft can use a skip-CI head to avoid starting remote jobs;
+  required checks will remain pending, alongside Fable and admission gates.
