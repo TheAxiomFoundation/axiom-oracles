@@ -279,3 +279,16 @@ lane. Source body and signature hashes did not change.
   extraction replay are next; no standalone runtime success is claimed yet.
 - Rechecked live ownership: this run remains the sole tariff writer. Both
   no-reset controls remain set, and the original RuleSpec checkout is clean.
+
+## Combined isolated replay validated
+
+- Built the distinct45,356,596-byte tariff-continuation-replay.tar.gz from
+  committed producer746e0ddce. Eight fresh pinned compilations match all receipt
+  hashes. The78-file package includes sources and original signature/trust root.
+- An independent extraction, using Python -I -S with an empty project
+  environment, reproduced843cases/1817outputs/12native missing-input errors.
+  This includes the unchanged original384cases/768outputs. Counterexamples
+  remain counterexamples; offline replay does not re-verify Ed25519 signatures.
+- Separately committed continuation-replay-manifest.json supplies the archive
+  hash and manifest trust anchor. Ten new tamper/native-outcome tests pass.
+- Next: exact blocker handoff, final preservation audit, and final output.
