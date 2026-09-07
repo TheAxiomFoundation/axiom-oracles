@@ -89,6 +89,15 @@ not represented as verified. RuleSpec input remains the clean combined head
 - Trusted ingest public-key verification remains blocked: the corpus Actions
   trust-root variable is not present in this process; no substitute key used.
 
+## Historical artifact recovery checkpoint
+
+- Restored and committed the exact 10,088,070-byte historical mismatch artifact
+  at its original relative path. SHA-256 d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705.
+- Refreshed the inventory: all 202 bindings present, 190 small content hashes
+  match, 12 large files remain explicitly size/presence-only. No campaign scan.
+- Thirteen narrow tariff certificate/census tests pass; all original proof
+  populations and closed/certified false labels remain preserved.
+
 ## Next
 
 1. Complete narrow certificate/census checks and final preservation audit.

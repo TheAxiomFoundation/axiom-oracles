@@ -2778,6 +2778,8 @@
       "status": "sha256_match"
     },
     {
+      "actual_bytes": 10088070,
+      "actual_sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705",
       "bytes": 10088070,
       "namespace": "axiom-oracles",
       "path": "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
@@ -2807,7 +2809,7 @@
       ],
       "resolved_path": "/Users/maxghenis/TheAxiomFoundation/_worktrees/tariff-evidence-20260907/reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
       "sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705",
-      "status": "missing"
+      "status": "sha256_match"
     },
     {
       "actual_bytes": 303477,
@@ -4323,9 +4325,8 @@
     }
   ],
   "counts": {
-    "missing": 1,
     "present_not_rehashed_large": 12,
-    "sha256_match": 189
+    "sha256_match": 190
   },
   "full_reproduction_verified": false,
   "max_hashed_file_bytes": 20000000,
@@ -4350,7 +4351,7 @@
   ],
   "remaining_requirements": [
     "Large campaign artifacts retain prior verified digests; this audit does not rehash or replay them.",
-    "A missing relative historical artifact must be restored from its exact hash-matching copy before full replay.",
+    "The relative historical artifact is restored and hash-matches its preserved proof binding.",
     "Source closure, trusted ingest-signature verification and final Fable release review remain separate gates."
   ],
   "roots": {

@@ -125,7 +125,14 @@ def audit(
         "full_reproduction_verified": False,
         "remaining_requirements": [
             "Large campaign artifacts retain prior verified digests; this audit does not rehash or replay them.",
-            "A missing relative historical artifact must be restored from its exact hash-matching copy before full replay.",
+            (
+                "The relative historical artifact is restored and hash-matches its preserved proof binding."
+                if any(
+                    row["path"] == HISTORICAL_PATH and row["status"] == "sha256_match"
+                    for row in rows
+                )
+                else "The relative historical artifact must be restored from its exact hash-matching copy before full replay."
+            ),
             "Source closure, trusted ingest-signature verification and final Fable release review remain separate gates.",
         ],
     }

@@ -114,10 +114,10 @@ The CAFTA 17,404-unit, steel 114-unit, residual 5,733-unit and selector
 conclusions. No full scan ran during this sprint.
 
 The [file-binding inventory](../../reference/us-tariff-schedule/boundary-evidence/reproducibility-inventory.json)
-examines 202 unique path/digest pairs: 189 small files hash-match, 12 large
-artifacts are present but deliberately not rehashed, and one relative
-historical artifact is missing. Existence/size checks do not renew its previous
-content verification. The audit hashes files at most 20 MB and never
+examines 202 unique path/digest pairs: 190 small files hash-match and 12 large
+artifacts are present but deliberately not rehashed. There are no missing
+bindings after restoring the historical artifact below. Existence/size checks
+for the large files do not renew their previous content verification. The audit hashes files at most 20 MB and never
 uncompresses campaign data. Use:
 
 ```sh
@@ -127,14 +127,15 @@ python scripts/audit_us_tariff_reproducibility.py \
   --output /path/to/reproducibility-inventory.json
 ```
 
-The missing 10,088,070-byte file is
+The previously missing 10,088,070-byte file is
 `reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz`.
 Its exact SHA-256 is
 `d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705`.
-An exact copy was recovered from `axiom-oracles-cert` and saved durably at
+An exact copy was recovered from `axiom-oracles-cert`, restored and committed
+at its original relative path, and also saved durably at
 `/Users/maxghenis/capacity-sprint-20260907/tariff/historical/target-mismatch-cells.jsonl.gz`.
-Restore that file at the relative path before a future *full* reproduction;
-restoration is not a reason to rerun the 216-million-row scan now. Other large
+The restored file hashes identically to the original proof binding; no receipt
+or historical result changed. No 216-million-row scan was rerun. Other large
 inputs remain tied to local absolute cache paths. Shipping a portable full
 campaign bundle is still outstanding.
 
