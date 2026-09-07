@@ -318,3 +318,17 @@ lane. Source body and signature hashes did not change.
   reproduction passes. No comparison population was recomputed.
 - A same-repository draft can use a skip-CI head to avoid starting remote jobs;
   required checks will remain pending, alongside Fable and admission gates.
+
+## Preservation and validation checkpoint
+
+- Final read-only audit verifies all27original dirty files, exact original
+  status/binary diff, original clean a7d2bf13a branch, clean pinned RuleSpec,
+  all four frozen proof hashes, and every artifact in the original manifest.
+- Both no-reset controls are preserved byte/field-exact as applicable. Sole
+  tariff ownership remains this run; no Fable retry or remote job launched.
+- Committed continuation-validation.json records46passing targeted tests,
+  independent843/1817/12offline replay and all unresolved admission labels.
+- Corrected the handoff's direct safe-harbor page link to PDF648, where the
+  minute cutoff appears. Receipt/source/proof bytes did not change.
+- Next: same-repository draft PR with pending CI, incremental Git bundle, final
+  artifact manifest and continuation-result.md. Root can arrange Fable review.
