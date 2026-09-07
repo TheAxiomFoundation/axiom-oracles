@@ -75,10 +75,24 @@ not represented as verified. RuleSpec input remains the clean combined head
   canonical producers. Conformant/exercised/executable true; closed/certified
   false. Historical proof bytes remain unchanged.
 
+## Offline replay checkpoint
+
+- Built a 15,577,166-byte portable bounded replay with the exact compiled
+  programs, requests, source files, expected outputs and real pinned engine.
+  Standalone extraction reproduced all 768 outputs with Python isolated mode,
+  site packages disabled and no inherited project environment. Seven tests pass.
+- The included executable requires macOS arm64; no campaign caches, network,
+  external Python packages, paid APIs or remote compute are used.
+- One bounded Fable review dispatch failed before review with exit 5: no
+  accessible keychain token for max.ghenis@gmail.com. Final Fable review remains
+  pending. No alternate review, reset or overflow was launched.
+- Trusted ingest public-key verification remains blocked: the corpus Actions
+  trust-root variable is not present in this process; no substitute key used.
+
 ## Next
 
-1. Request one bounded read-only Fable semantic review of committed work.
-2. Finish durable offline artifacts, provenance verification and handoff.
+1. Complete narrow certificate/census checks and final preservation audit.
+2. Save branch bundle, artifact manifest and durable handoff.
 3. Final Fable review and existing release gates remain mandatory; no publish,
    merge, reset, paid overflow or remote compute.
 4. Write /Users/maxghenis/capacity-sprint-20260907/tariff/result.md with commits,

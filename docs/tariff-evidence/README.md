@@ -68,6 +68,45 @@ The producer exports immutable Git objects and copies the verified executable
 to an isolated temporary directory before compiling/running it. It replays
 every case and requires byte-identical output under `--check`.
 
+## Standalone offline replay
+
+The separately saved `tariff-boundary-replay.tar.gz` contains the exact two
+compiled programs, requests, complete expected response receipt, original
+PDF/provisions/ingest manifest and the 3 MB pinned real Axiom executable.
+The [committed bundle receipt](../../reference/us-tariff-schedule/boundary-evidence/offline-replay-manifest.json)
+binds all 11 files and the complete 15,577,166-byte archive. Archive SHA-256:
+`953cdff08d2ad068ef5e6914c683c73ad01ce5ccdd6acf6046cfe1907e1af016`.
+
+After extracting it, verify with the manifest trust anchor obtained from this
+committed handoff, independently of the downloaded bundle:
+
+```sh
+python3 verify.py --verify-bundle . --manifest-sha256 \
+  ffaba0ea667d0562ceada755678eb12dd654a71c3e2152d8efe700756e6c8ad5
+```
+
+The verifier uses only Python 3.10+ standard-library modules. The included
+engine requires **macOS arm64** and the system C library; it is not portable
+to Linux or another architecture. It checks all source/program/request bytes
+before copying verified runtime inputs to a private directory and executing
+real Axiom `run-compiled`. Every response, including traces, must exactly
+match the source-linked receipt. A separate extraction was validated with
+Python isolated mode, site packages disabled and a clean inherited environment:
+384 cases / 768 outputs matched. Seven substitution/path/trust-anchor tests pass.
+
+Rebuild with existing local inputs:
+
+```sh
+python scripts/tariff_boundary_replay_bundle.py \
+  --build /path/to/tariff-boundary-replay.tar.gz \
+  --receipt /path/to/offline-replay-manifest.json
+```
+
+The builder recompiles the two immutable Git programs and requires the original
+compiled hashes before packaging. This bundle solves the bounded replay's
+checkout/cache dependency; the full historical campaign still has separate
+large-file reproduction requirements.
+
 ## Existing proofs and downstream receipts
 
 The CAFTA 17,404-unit, steel 114-unit, residual 5,733-unit and selector
@@ -164,5 +203,13 @@ edited. Before integration, fetch and safely reconcile current main, regenerate
 the tariff certificate with its canonical producer, and rerun changed gates.
 
 Final Fable review and the existing release conditions remain mandatory.
+One bounded read-only Subfleet Fable review was attempted on September 7,
+run `20260907-172639-tariff-evidence-fable`, and failed before review (exit 5):
+`no keychain token for max.ghenis@gmail.com (claude-quota-max.ghenis@gmail.com)`.
+No review pass is claimed. The brief and exact failure are saved in the lane.
+The ingest public key is absent from the process environment; the corpus CI
+uses its repository Actions variable `AXIOM_CORPUS_INGEST_PUBLIC_KEY` as the
+trust root. That trust root must be obtained through the authorized environment
+before claiming signature verification; no substitute key was embedded.
 Launch runbook Gates 2–3 remain Max's: prebriefs/contact, followed by an explicit
 go for the nav switch and publication. This sprint grants none of those actions.
