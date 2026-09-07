@@ -181,7 +181,7 @@ lane. Source body and signature hashes did not change.
 -15targeted source/note52tests pass. Byte-identical real replay --check passes.
   No frozen proof, originalmilestone artifact, or campaign population changed.
 
-## Identity batch checkpoint — 18:25 ET
+## Identity batch checkpoint — committed 18:22 ET
 
 - Source coverage now 12/21: six prior scopes plus two note 52 scopes plus
   three line identities and the generated lookup key. Nine remain uncaptured
@@ -198,7 +198,7 @@ lane. Source body and signature hashes did not change.
   authenticated primary snapshot and actual Axiom runtime. Keep current-base
   admission hold and all closed/certified false labels; Fable remains pending.
 
-## China note 31 checkpoint — 18:43 ET
+## China note 31 checkpoint — committed 18:28 ET
 
 - Added two source scopes with precise blockers, bringing bounded coverage to
   14/21. Live GPO 2024-21217 and authenticated Chapter 99 bind the 25% aluminum
@@ -213,3 +213,18 @@ lane. Source body and signature hashes did not change.
 - Stop admission of the two note 31 scopes until the authorized source/adapter
   repair covers complete membership, distinct heading rates and exclusions.
   No RuleSpec change, proof repin, campaign rescan or review retry occurred.
+
+## Temporal batch checkpoint
+
+- Bounded coverage is now 16/21. Added live source receipts for section122
+  exemption and expired CSPV. Two new GPO PDFs and authenticated Chapter99
+  records bind the real Axiom replay (43 cases / 43 outputs).
+- Two first-minute activation cases reproduce a source/runtime mismatch for
+  section122; 41 other controls match. The end-minute discrepancy between
+  the proclamation and compiler note remains explicitly unresolved.
+- All 20 solar cases are post-expiry. No active safeguard period or quota
+  application is claimed. Three new semantic tests pass (27 continuation tests).
+- Corrected earlier checkpoint headings to the actual Git commit times.
+  Five original gaps remain outside the captured batches; all58groundings and
+  Fable/current-base admission gates remain open. Next: bounded China list
+  membership/overlay receipt and portable replay of the new evidence.

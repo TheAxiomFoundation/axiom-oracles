@@ -91,11 +91,34 @@ Both scopes remain blocked pending complete source-grounded adapter membership,
 exclusion/precedence validation and the authorized encoding workflow. All code
 under the pinned RuleSpec repository remains untouched.
 
-Current source coverage is **14 of the original 21 repaired scopes**. Eleven
-have no legal counterexample within their documented bounded contracts; three
-have explicit blockers. Seven remain outside the captured batches. All 58
-actual-entry groundings remain uncaptured; admitted/grounded scopes remain zero.
-See the [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
+## Surcharge activation and expired safeguard
+
+[The temporal receipt](../../reference/us-tariff-schedule/boundary-evidence/temporal-boundaries.json)
+adds `entry_is_section_122_exempt` and `entry_is_section_201_cspv`. Two new live
+GPO PDFs, 2026-03824 and 2022-02906, bind the surcharge's activation and the
+solar safeguard's last staged period. Full source PDFs, sanitized HTTP metadata,
+visually checked pages and source hashes are retained.
+
+The real engine executes 43 cases / 43 outputs. Forty-one match; two generated
+section 122 cases charge 10% at February 24 00:00:00 and 00:00:59 Eastern,
+before the proclamation's 00:01 activation. The Day precision contract therefore
+also blocks this scope. Noon exemption and expiry controls match. The precise
+end boundary remains unresolved: the proclamation says through July 24 00:01,
+while the Rev15 compiler note says close of July 23. No end-minute judgment is
+invented. The full exemption flag remains an external determination.
+
+All 20 post-expiry solar runtime cases return zero, including the adapter's
+positive CSPV-cell classification. This validates the expired behavior only:
+the composition begins February 15, after the safeguard's February 6 end date.
+Active-period rates, quotas and complete CSPV classification are unvalidated.
+The older 5 GW quota is not represented as the final 12.5 GW quota in Rev15.
+
+Current source coverage is **16 of the original 21 repaired scopes**. Twelve
+have no legal counterexample within their documented bounded contracts (one
+of these tests post-expiry behavior only); four have explicit counterexamples.
+Five remain outside the captured batches. All 58 actual-entry groundings remain
+uncaptured; admitted/grounded scopes remain zero. See the
+[updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
 
 ## Reproduction and current-base hold
 
@@ -104,13 +127,15 @@ python scripts/us_tariff_live_source_evidence.py --check
 python scripts/build_us_tariff_note52_boundary_evidence.py --check
 python scripts/build_us_tariff_identity_evidence.py --check
 python scripts/build_us_tariff_china_action_evidence.py --check
+python scripts/build_us_tariff_temporal_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
   tests/test_us_tariff_note52_boundary_evidence.py \
   tests/test_us_tariff_identity_evidence.py \
-  tests/test_us_tariff_china_action_evidence.py
+  tests/test_us_tariff_china_action_evidence.py \
+  tests/test_us_tariff_temporal_evidence.py
 ```
 
-24 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
+27 targeted tests pass across the source and continuation batches. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 
