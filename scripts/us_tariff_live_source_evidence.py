@@ -144,7 +144,7 @@ def build(directory: Path, corpus: Path) -> dict:
     return {
         "schema": "axiom_oracles.us_tariff_schedule.live_source_evidence.v1",
         "downloads": records,
-        "http_metadata": "Set-Cookie omitted; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
+        "http_metadata": "Set-Cookie omitted; header whitespace normalized; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
         "provisions": bound(notes),
         "signature_verification": signature,
         "trust_root_snapshot": bound(directory / "corpus-ingest-public-key.json"),
@@ -163,12 +163,12 @@ def build(directory: Path, corpus: Path) -> dict:
 def public_http_metadata(source: Path) -> bytes:
     if source.name.endswith(".headers"):
         return (
-            "\r\n".join(
-                line
+            "\n".join(
+                line.rstrip()
                 for line in source.read_text().splitlines()
-                if not line.lower().startswith("set-cookie:")
+                if line.strip() and not line.lower().startswith("set-cookie:")
             )
-            + "\r\n"
+            + "\n"
         ).encode()
     if source.name.endswith(".curl.json"):
         record = json.loads(source.read_bytes())

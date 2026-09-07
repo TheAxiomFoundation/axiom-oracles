@@ -14,9 +14,9 @@
         "sha256": "3900554f5126ac7e5385f8178a117561eb28df7813f6367ecbd1b02f79155cab"
       },
       "headers": {
-        "bytes": 596,
+        "bytes": 579,
         "file": "chapter99.headers",
-        "sha256": "acc0449755cfa82bbdeaa933d38822442e92fe0edbada5f2d26626ba103d8567"
+        "sha256": "87ca7ad139d536e0d9eea404fa6fe5a1cd16fa5d72b236f5cbac581f71b9979a"
       },
       "http_status": 200,
       "pdf": {
@@ -35,9 +35,9 @@
         "sha256": "b672429de84894c9e1f6472738d967593949385e5ebd48ffde2b0a2b52f0ea0d"
       },
       "headers": {
-        "bytes": 598,
+        "bytes": 581,
         "file": "general-note11.headers",
-        "sha256": "6cba29906db347b48c0f41318a80d061ad23be1fcf65594e35f641175fd815ea"
+        "sha256": "7135eaa7b480e61ffb49c78357a06b4040f0986cd48d87990fa0dca6f2aeb4fb"
       },
       "http_status": 200,
       "pdf": {
@@ -50,7 +50,7 @@
     }
   ],
   "general_note11_status": "raw authoritative PDF capture; not ingested or signed by this sprint",
-  "http_metadata": "Set-Cookie omitted; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
+  "http_metadata": "Set-Cookie omitted; header whitespace normalized; curl fields allowlisted. Raw HTTP metadata retained in the private lane artifact directory.",
   "limitations": [
     "HTTP retrieval metadata is an unsigned receipt, not a newly created cryptographic signature.",
     "The existing corpus signature authenticates the original Chapter99 ingest only; GeneralNote11 remains an unsigned direct-source capture.",

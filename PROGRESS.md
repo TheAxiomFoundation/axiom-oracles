@@ -161,3 +161,6 @@ integration/admission blocker is separate from new real-runtime source batches.
   No signature or certificate was created; GeneralNote11 remains a raw capture.
 - Nine adversarial source/trust checks pass. New source-linked scope count stays
   6/21 until the next actual runtime batch completes. All58groundingsuncaptured.
+
+Normalized committed HTTP header whitespace; exact raw responses remain in the
+lane. Source body and signature hashes did not change.

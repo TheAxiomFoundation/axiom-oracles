@@ -1,4 +1,4 @@
-HTTP/2 200 
+HTTP/2 200
 vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
 content-disposition: inline; filename="General Note 11_2026HTSRev15.pdf"
 accept-ranges: bytes
@@ -12,4 +12,3 @@ server-timing: edge; dur=31
 server-timing: origin; dur=24
 strict-transport-security: max-age=31536000
 server-timing: ak_p; desc="1788817724732_399005957_146495556_5523_12603_10_42_15";dur=1
-
