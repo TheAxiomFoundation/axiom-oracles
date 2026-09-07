@@ -48,10 +48,32 @@ encoder repair. No hand-written RuleSpec fix was made. USMCA remains a
 stipulated fact: GeneralNote11(b) and applicable entry requirements must be
 established separately; origin alone does not determine qualification.
 
-Current source coverage is **8 of the original21repaired scopes**, of which
-7have no counterexample in their bounded batches and1has this precision blocker.
-13remain outside the captured batches. All58actual-entry groundings remain
-uncaptured; fully admitted/grounded scopes remain zero. See the
+## HTS identity and lookup contracts
+
+[The identity receipt](../../reference/us-tariff-schedule/boundary-evidence/hts-identity.json)
+adds the three named line flags and `hts_line`. New live USITC Chapters 72, 76
+and 22 PDFs support seven legal/statistical lines, including negative neighbors.
+The actual pinned adapter accepts dotted, digit-only, spaced and hyphenated
+codes. All 28 canonical witness calls match its identity flags; nine raw alias
+calls differ because the witness compares dotted Text literally. The receipt
+retains both results and requires normalization at the direct witness boundary.
+
+Generated-table lookups take an **Integer legal rate-row key**. Aluminum
+7601.10.60.40 uses 7601106000; beer suffixes 30/60/90 use 2203000000. All seven
+rate/disposition lookups match the visually checked official pages. Beer keeps
+its specific Column 2 disposition (13.2 cents/liter); no ad-valorem equivalent
+is inferred. This batch executes 63 real cases / 189 outputs plus 28 adapter
+calls. It establishes a bounded input contract, not actual classification.
+
+The note 52 request now supplies the correct integer `hts_line` instead of an
+unused dotted Text value. Its 230 cases / 690 outputs and 20 known time-precision
+counterexamples are unchanged. All frozen original proofs remain untouched.
+
+Current source coverage is **12 of the original 21 repaired scopes**. Eleven
+have no legal counterexample within their documented bounded contracts; one
+has the time-precision blocker. Nine remain outside the captured batches.
+All 58 actual-entry groundings remain uncaptured; admitted/grounded scopes
+remain zero. See the
 [updated frontier](../../reference/us-tariff-schedule/boundary-evidence/frontier-inventory.json).
 
 ## Reproduction and current-base hold
@@ -59,11 +81,13 @@ uncaptured; fully admitted/grounded scopes remain zero. See the
 ```sh
 python scripts/us_tariff_live_source_evidence.py --check
 python scripts/build_us_tariff_note52_boundary_evidence.py --check
+python scripts/build_us_tariff_identity_evidence.py --check
 python -m pytest -q tests/test_us_tariff_live_source_evidence.py \
-  tests/test_us_tariff_note52_boundary_evidence.py
+  tests/test_us_tariff_note52_boundary_evidence.py \
+  tests/test_us_tariff_identity_evidence.py
 ```
 
-15targeted tests pass. Real replay --check reproduces the exact receipt,
+20 targeted tests pass. Real replay --check reproduces the exact receipt,
 including its20known counterexamples. The input cache is the same immutable
 RuleSpec commit and pinned executable used by the preserved milestone.
 

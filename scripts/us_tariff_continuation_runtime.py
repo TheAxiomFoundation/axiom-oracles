@@ -5,6 +5,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from decimal import Decimal
 import io
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -20,7 +21,9 @@ def value(raw):
         return {"kind": "bool", "value": raw}
     if isinstance(raw, str):
         return {"kind": "text", "value": raw}
-    if type(raw) in (int, float):
+    if type(raw) is int:
+        return {"kind": "integer", "value": raw}
+    if type(raw) is float:
         return {"kind": "decimal", "value": str(raw)}
     raise ValueError("unsupported runtime input type")
 
@@ -31,11 +34,15 @@ def output(raw):
             raw["outcome"] in ("holds", "not_holds"), "non-binary runtime judgment"
         )
         return raw["outcome"] == "holds"
+    if raw["kind"] == "scalar" and raw["value"]["kind"] == "text":
+        return raw["value"]["value"]
     original.require(
-        raw["kind"] == "scalar" and raw["value"]["kind"] == "decimal",
-        "unexpected runtime scalar type",
+        raw["kind"] == "scalar" and raw["value"]["kind"] in ("decimal", "integer"),
+        "unexpected runtime scalar type: " + str(raw),
     )
-    return str(Decimal(raw["value"]["value"]).normalize())
+    number = Decimal(raw["value"]["value"])
+    original.require(number.is_finite(), "non-finite runtime number")
+    return str(number.normalize())
 
 
 def request(module, fixtures, outputs):
@@ -98,6 +105,7 @@ def compiled(
                 original.closure.RULESPEC_REF,
                 "us",
                 "programs",
+                "tools/b16_entry_flags.py",
             ]
         )
         snapshot = work / "rulespec-us"
@@ -192,4 +200,14 @@ def compiled(
                 "results": checked,
             }
 
+        adapter_path = snapshot / "tools/b16_entry_flags.py"
+        spec = importlib.util.spec_from_file_location(
+            "tariff_boundary_adapter", adapter_path
+        )
+        adapter = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(adapter)
+        execute.entry_flags = adapter.entry_flags
+        execute.adapter_binding = original.binding(
+            "tools/b16_entry_flags.py", adapter_path.read_bytes()
+        )
         yield execute

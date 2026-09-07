@@ -96,7 +96,7 @@ def module_fixtures(module, rows):
         if module == MODULES[0]:
             facts["hts_number"] = "9506.62.40.40"
         else:
-            facts["hts_line"] = "9506.62.40.40"
+            facts["hts_line"] = 9506624040
             defaults["entry_is_forced_labor_301_listed"] = True
         result.append({**row, "facts": facts, "defaults": defaults})
     return result

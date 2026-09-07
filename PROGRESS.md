@@ -180,3 +180,20 @@ lane. Source body and signature hashes did not change.
   entry groundings remain uncaptured; closed/certified false.
 -15targeted source/note52tests pass. Byte-identical real replay --check passes.
   No frozen proof, originalmilestone artifact, or campaign population changed.
+
+## Identity batch checkpoint — 18:25 ET
+
+- Source coverage now 12/21: six prior scopes plus two note 52 scopes plus
+  three line identities and the generated lookup key. Nine remain uncaptured
+  in this sprint; all 58 actual-entry groundings remain uncaptured.
+- Three new live USITC chapter PDFs bind seven source rows. Real Axiom replay
+  executes 63 cases / 189 outputs and the actual adapter checks 28 inputs.
+  Canonical witness identities and integer-key rate/disposition lookups match.
+  Nine noncanonical direct-witness aliases differ; normalize at that interface.
+- Corrected the new note 52 fixture's previously unused lookup input to an
+  Integer rate key. Its outputs and 20 source/runtime counterexamples persist.
+  This rebind touches only continuation receipts, never frozen original proofs.
+- 20 targeted tests pass; identity replay --check reproduces the exact receipt.
+- Next: inspect the remaining China action membership boundaries against the
+  authenticated primary snapshot and actual Axiom runtime. Keep current-base
+  admission hold and all closed/certified false labels; Fable remains pending.

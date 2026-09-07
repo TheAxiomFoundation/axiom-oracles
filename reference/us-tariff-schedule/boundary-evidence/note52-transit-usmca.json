@@ -2159,7 +2159,7 @@
     "Original campaign proofs remain frozen; current-main publication admission and final Fable review remain open."
   ],
   "live_source_receipt_sha256": "dd38b4f96668ab1ad4a619bd22e298affa69b4feb5a4aed26a2c13cc0cdfa6be",
-  "producer_sha256": "317e00728c88b0809c839e9cc5287da88d236d799262f3a278d034c49a3e1c52",
+  "producer_sha256": "ec7e8cc38b4763764c31a8e8b534bb50cc1fdd16ef1eb7ab32baa9484882832e",
   "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
   "runs": [
     {
@@ -37176,8 +37176,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -37709,8 +37709,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -38242,8 +38242,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -38775,8 +38775,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -39308,8 +39308,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -39841,8 +39841,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -40374,8 +40374,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -40907,8 +40907,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -41440,8 +41440,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -41973,8 +41973,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -42506,8 +42506,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -43039,8 +43039,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -43572,8 +43572,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -44105,8 +44105,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -44638,8 +44638,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -45171,8 +45171,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -45704,8 +45704,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -46237,8 +46237,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -46770,8 +46770,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -47303,8 +47303,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -47836,8 +47836,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -48369,8 +48369,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -48902,8 +48902,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -49435,8 +49435,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -49968,8 +49968,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -50501,8 +50501,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -51034,8 +51034,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -51567,8 +51567,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -52100,8 +52100,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -52633,8 +52633,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -53166,8 +53166,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -53699,8 +53699,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -54232,8 +54232,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -54765,8 +54765,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -55298,8 +55298,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -55831,8 +55831,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -56364,8 +56364,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -56897,8 +56897,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -57430,8 +57430,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -57963,8 +57963,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -58496,8 +58496,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -59029,8 +59029,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -59562,8 +59562,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -60095,8 +60095,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -60628,8 +60628,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -61161,8 +61161,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -61694,8 +61694,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -62227,8 +62227,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -62760,8 +62760,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -63293,8 +63293,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -63826,8 +63826,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -64359,8 +64359,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -64892,8 +64892,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -65425,8 +65425,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -65958,8 +65958,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -66491,8 +66491,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -67024,8 +67024,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -67557,8 +67557,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -68090,8 +68090,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -68623,8 +68623,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -69156,8 +69156,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -69689,8 +69689,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -70222,8 +70222,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -70755,8 +70755,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -71288,8 +71288,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -71821,8 +71821,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -72354,8 +72354,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -72887,8 +72887,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -73420,8 +73420,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -73953,8 +73953,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -74486,8 +74486,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -75019,8 +75019,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -75552,8 +75552,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -76085,8 +76085,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -76618,8 +76618,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -77151,8 +77151,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -77684,8 +77684,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -78217,8 +78217,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -78750,8 +78750,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -79283,8 +79283,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -79816,8 +79816,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -80349,8 +80349,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -80882,8 +80882,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -81415,8 +81415,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -81948,8 +81948,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -82481,8 +82481,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -83014,8 +83014,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -83547,8 +83547,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -84080,8 +84080,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -84613,8 +84613,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -85146,8 +85146,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -85679,8 +85679,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -86212,8 +86212,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -86745,8 +86745,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -87278,8 +87278,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -87811,8 +87811,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -88344,8 +88344,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -88877,8 +88877,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -89410,8 +89410,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -89943,8 +89943,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -90476,8 +90476,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -91009,8 +91009,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -91542,8 +91542,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -92075,8 +92075,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -92608,8 +92608,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -93141,8 +93141,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -93674,8 +93674,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -94207,8 +94207,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -94740,8 +94740,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -95273,8 +95273,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -95806,8 +95806,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -96339,8 +96339,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -96872,8 +96872,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -97405,8 +97405,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             },
             {
@@ -97938,8 +97938,8 @@
               },
               "name": "us:policies/cbp/us-tariff-schedule/generated/ch95/ch95#input.hts_line",
               "value": {
-                "kind": "text",
-                "value": "9506.62.40.40"
+                "kind": "integer",
+                "value": 9506624040
               }
             }
           ],
@@ -99559,7 +99559,7 @@
           }
         ]
       },
-      "request_sha256": "7ca0dde04801c816d0fdc7aded9126bedbe311715755c2959823a3e97c3477cc",
+      "request_sha256": "1dd5cea2b0e47d5d9241b6a6f44884a485d476102f137209ee5cde83c30e2e73",
       "response": {
         "metadata": {
           "actual_mode": "explain",
@@ -113838,7 +113838,7 @@
       ]
     }
   ],
-  "runtime_helper_sha256": "a87a4242a974e5cde26691d7876b8f69376188fdc61d7a58cadddc98a29addbb",
+  "runtime_helper_sha256": "3fa2693e4684c4b3caba380e6c7bd8d5b5b344de52c6f12699e51be57b6f284c",
   "schema": "axiom_oracles.us_tariff_schedule.note52_boundary_evidence.v1",
   "scopes": [
     {
