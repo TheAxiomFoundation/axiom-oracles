@@ -53,6 +53,16 @@ not represented as verified. RuleSpec input remains the clean combined head
 - Inventory found the absent 10,088,070-byte historical mismatch artifact in
   the earlier certificate checkout; its SHA-256 matches the original proof.
 
+## Downstream inventory checkpoint
+
+- Audited 202 proof file/digest bindings across the correct project roots:
+  189 small hash matches, 12 large files present without rehashing, one missing
+  relative historical artifact with a separately preserved exact recovery copy.
+- Canonical certificate reproduction found a real preexisting stale-publication
+  gap: all 39 ledger proof-hash scalars are stale; the saved conformant=true
+  certificate does not reproduce (fresh conformant=false). Preserve the
+  original proof populations while preparing a narrow metadata-only repair.
+
 ## Next
 
 1. Inventory proof bindings, downstream reproduction/certificates and source gaps.
