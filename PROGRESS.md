@@ -1,16 +1,23 @@
 # Tariff evidence sprint — September 7, 2026
 
-## State
+## State — continuation at 17:44 ET
 
-Sole implementation owner: sprint-tariff (Subfleet run 20260907-164915-sprint-tariff).
-Isolated continuation: sprint/tariff-evidence-20260907. Preserved unfinished
-frontier rebuild at 83908413e68f551f83c61fbbd891409a567bf5ee, with all 27 dirty
-files copied byte-for-byte. Original worktree remains untouched.
+Sole tariff implementation: Subfleet 20260907-174414-continuation-result-md.
+Live process list and run ledger show no other tariff writer. New isolated
+branch sprint/tariff-evidence-continuation-20260907 starts from the verified
+clean a7d2bf13af1b64fa20695e7347e933c76f5efe2c milestone. Its original branch,
+checkout, Git bundle, replay archive and final-report.md remain preserved.
 
-GitHub fetch failed: Could not resolve host: github.com. Cached origin/main is
-fb88de90be8b2a666acae7eeac5c5b25f8b57817; live base integration is blocked,
-not represented as verified. RuleSpec input remains the clean combined head
-4f591c4267063094cc6da9d590872ea982940b81.
+Live origin/main fetched successfully at ef012e83cd2e8b9b7afd4829841d9e29bc173d42.
+Read-only merge assessment found one generated-certificate conflict. Integrate
+that base and regenerate the tariff certificate canonically before new evidence.
+RuleSpec stays at immutable 4f591c4267063094cc6da9d590872ea982940b81.
+
+The live USITC Rev-15 Chapter99 download returned HTTP200 and exactly matched
+its archived 13,957,698-byte SHA-256 92822e8f38873a7275c4cf9bd5341f96f5834dbea964623e7a7aa7b2cd02f225.
+Headers and retrieval metadata are saved under tariff/live-sources. Initial
+source-linked coverage is 6 of the original21 repaired scopes; all58groundings
+remain uncaptured. No Fable retries, resets, overflow or scan launches.
 
 ## Done
 
@@ -121,3 +128,11 @@ not represented as verified. RuleSpec input remains the clean combined head
 
 Deadline: 2026-09-07 21:00 America/New_York. No reset, overflow, paid API or remote
 compute; no-reset.json stays blocked without explicit user authorization.
+
+## Continuation next
+
+1. Integrate the verified live base while preserving every frozen tariff proof.
+2. Capture the next highest-priority remaining source scopes in bounded batches,
+   recording live authoritative metadata and real Axiom replay evidence.
+3. Keep closed/certified false. Root can arrange the required final Fable review.
+4. Save continuation-result.md, current coverage, tests and precise blockers.
