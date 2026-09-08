@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "bd481e0973df6286349bbbee53ef899b063beb05",
-  "corpus_release": "de-rulespec-2026-09-08-kindergeld-parentage",
-  "corpus_release_content_sha256": "98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0",
+  "corpus_commit": "069407610ff961a075665d08c96ad08f54a9767b",
+  "corpus_release": "de-rulespec-2026-09-08-kindergeld-context",
+  "corpus_release_content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -132,7 +132,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "2d782a78634012133e1ad4af8f6b6daddb7909deb32c5af47841eff1e70042eb",
+      "subgraph_sha256": "e6f533dbaec143d5ed9aca4f102aaf4d90369b6ba6de93cd23b658c4cb0e9da8",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +216,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "8e928a57dda0f95fb1cc4f09d664212983b20090d3b9ff402d508d53cfdd1268",
+      "subgraph_sha256": "635b28e1b236186e71216ff3af1535fa37518b53c4ce2bab23fdbffb8e3f1259",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +299,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "4ee8771febee7504f2495eff92a9c1610f0719d921260c23137d1669ed5b6226",
+      "subgraph_sha256": "6940f7feaef99d17f8f41c0cb505400c2be15865c3bf018c99c8a974126d306d",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -322,7 +322,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68"
+    "sha256": "a6ebfdd42b00ac00686b6bd460435841fdacd240cfa42e354982223ffd4d91fa"
   },
   "spine_closed": false
 }

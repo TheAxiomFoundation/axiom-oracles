@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68
+    sha256: a6ebfdd42b00ac00686b6bd460435841fdacd240cfa42e354982223ffd4d91fa
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: bd481e0973df6286349bbbee53ef899b063beb05
-    release: de-rulespec-2026-09-08-kindergeld-parentage
-    release_content_sha256: 98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0
+    commit: 069407610ff961a075665d08c96ad08f54a9767b
+    release: de-rulespec-2026-09-08-kindergeld-context
+    release_content_sha256: 32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -91,6 +91,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
       sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl
+      sha256: 906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f
+      row_count: 2
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl
       sha256: 9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf
       row_count: 2
@@ -359,10 +362,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 56da987f0423fca08fa325a8a97ef68fbf8f14edffb4c85c92d0726631d9205e
+    snapshot_sha256: b46073d8bf3ffe47608626f901127a4bb75908583a9855a848fad1e96720eb2d
     channel_receipts:
-      corpus_release: cb0180018770e678c68eafd8c86d1e214ae54bc0b6a9e531156d9d2affa6a717
-      subject_matter_search: 99fb12e0333764047a0c9285c4801833b9355ea72f6c5f2b3f8defeddac91a67
+      corpus_release: a86c385b43783b71ec7be4f6f41f09ad56840bdaff9d7b9ff1e297bf73c134a0
+      subject_matter_search: 80608485be5ee72d84ff6be82840f47309e3fb412b44fa748508e559b8b2b341
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

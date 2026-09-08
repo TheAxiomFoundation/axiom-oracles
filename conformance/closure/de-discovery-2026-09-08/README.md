@@ -48,7 +48,7 @@ manifests; the signature guard and deep release dry-run pass. The handbook
 scope has sixteen rows with explicit ISO capture expression dates; 119
 focused adapter/release-quality tests pass.
 
-The source manifest now binds this expanded release. Supplemental entries
+The source manifest first bound this expanded release. Supplemental entries
 001–006 and 011–017 bind 32 corpus rows through
 `supplemental-corpus-bindings.json`, replacing their earlier page captures.
 The thirteen entries retain their existing bearing and legal dispositions.
@@ -371,3 +371,21 @@ suite passed 13,980 tests (132 skipped); after rebase, 6,977 focused tests
 pass, as do Ruff and compileall. The live signed-release diagnostic now
 discovers KindRG as a structured amendment. Fresh-head CI and independent
 review remain pending; the RuleSpec encoder pin is unchanged.
+
+### Current context release
+
+Corpus #651 passed all checks and merged as
+`069407610ff961a075665d08c96ad08f54a9767b`. Publication 34266745140 and
+mirror 34267191780 succeeded. The current oracle source manifest binds
+`de-rulespec-2026-09-08-kindergeld-context`, content SHA-256
+`32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c`.
+The signature and content address verify and the anonymous mirror is
+byte-identical. Its 8,176 rows in 20 scopes preserve all 19 parentage scopes;
+the new context body is a disclosed excerpt, with the full act retained.
+The rebuilt global index covers 8,125 bodies and 80 acts. Corpus-pin PR #49
+has nine passing local layout tests and awaits required repository CI.
+
+Encoder #1588 is now green at head `94d7f0719`: 14,034 CI tests pass,
+80 skip, and lint plus both platform builds pass. Independent review remains
+outstanding. No new legal module has been merged or declared encoded.
+The BGB candidate still needs substantive repair and an accepted encoder pin.

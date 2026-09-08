@@ -2,9 +2,9 @@
   "schema": "axiom_oracles.de_supplemental_corpus_bindings.v1",
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "bd481e0973df6286349bbbee53ef899b063beb05",
-    "release": "de-rulespec-2026-09-08-kindergeld-parentage",
-    "release_content_sha256": "98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0"
+    "commit": "069407610ff961a075665d08c96ad08f54a9767b",
+    "release": "de-rulespec-2026-09-08-kindergeld-context",
+    "release_content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c"
   },
   "bindings": [
     {
@@ -387,5 +387,5 @@
       ]
     }
   ],
-  "receipt_sha256": "1499e4bf0e608d2413796ec4daae81ca02a0cc1f43573b58e4c27102101d5a7b"
+  "receipt_sha256": "1e7bf8559d7bc37455ec01e0e20af47bdc55c350955d6a82f33e8fb58fddd634"
 }
