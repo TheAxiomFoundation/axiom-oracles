@@ -1479,3 +1479,46 @@ def test_discovery_pairs_inventories_by_full_scope(tmp_path, monkeypatch, missin
         assert len(corpus.scans) == 2
         for scan in corpus.scans:
             assert Path(scan["inventory"]["path"]).stem == Path(scan["provisions"]["path"]).stem
+
+
+@pytest.mark.parametrize('mutation', ['none', 'date', 'number', 'ambiguous', 'preamble', 'split', 'unsupported'])
+def test_changed_by_resolution_requires_unique_dated_full_body(mutation):
+    refresh = _load_refresh_script()
+    path = 'de/statute/bgbl-2026-i-156/example'
+    document = refresh.CorpusRow({
+        'citation_path': path,
+        'citation_label': 'Beispielgesetz, BGBl. 2026 I Nr. 156',
+        'metadata': {'date_document': '2026-05-26'},
+    }, 1, '1' * 64, None)
+    body = refresh.CorpusRow({
+        'citation_path': path + '/document-1', 'body': 'Full official act',
+        'source_format': 'pdf', 'kind': 'document',
+        'metadata': {'block_count': 1, 'page_count': 24},
+    }, 2, '2' * 64, '3' * 64)
+    rows = [document, body]
+    documents = {path: document}
+    parents = {document.path: path, body.path: path}
+    reference = 'zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156'
+    if mutation == 'date':
+        document.value['metadata']['date_document'] = '2026-05-25'
+    elif mutation == 'number':
+        document.value['citation_label'] = 'Beispielgesetz, BGBl. 2026 I Nr. 1560'
+    elif mutation == 'preamble':
+        body.value['source_format'] = 'gesetze-im-internet.de-juris-xml'
+    elif mutation == 'unsupported':
+        reference = 'zuletzt geändert durch ein Gesetz'
+    elif mutation in ('ambiguous', 'split'):
+        extra = copy.deepcopy(body)
+        extra.value['citation_path'] = path + '/document-2'
+        rows.append(extra)
+        parents[extra.path] = path
+        if mutation == 'ambiguous':
+            other = copy.deepcopy(document)
+            other.value['citation_path'] = path + '-other'
+            rows.append(other)
+            documents[other.path] = other
+            parents[other.path] = other.path
+            parents[extra.path] = other.path
+    corpus = refresh.Corpus(rows, {r.path: r for r in rows}, documents, parents, [], {})
+    result = refresh._resolved_changed_by_body(corpus, reference)
+    assert result == (body.path if mutation == 'none' else None)

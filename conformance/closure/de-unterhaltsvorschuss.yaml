@@ -344,10 +344,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: bebe908757de43e8a7c16ccbff266c3ca6c1f8c2af9f274debc6cf82891310ce
+    snapshot_sha256: a131faa7bf1ada4f28b7b68ad479d2551632376ad56556f5d903337ac7baa881
     channel_receipts:
-      corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
-      subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
+      corpus_release: 42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf
+      subject_matter_search: d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -435,6 +435,20 @@ generated_facts:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
+    - id: de-uhv-instr-38f449529edd140f
+      status: pending
+      discovery_refs:
+      - de-corpus-83a369013d285786dbf3
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -477,13 +491,6 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
-    - id: de-uhv-instr-8939b62ab3b44a39
-      status: pending
-      discovery_refs:
-      - de-corpus-f83148ffc269677da9ed
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
     - id: de-uhv-instr-906e7387d896596c
       status: pending
       discovery_refs:
@@ -859,11 +866,11 @@ computed:
     - de-uhv-instr-2b0a8f983f861591
     - de-uhv-instr-333ba26c32e038d3
     - de-uhv-instr-3875634198c25414
+    - de-uhv-instr-38f449529edd140f
     - de-uhv-instr-703d3b12aaab39f8
     - de-uhv-instr-73cb585362978769
     - de-uhv-instr-78841044a219e9b8
     - de-uhv-instr-7aa5943b5f0a6e6c
-    - de-uhv-instr-8939b62ab3b44a39
     - de-uhv-instr-906e7387d896596c
     - de-uhv-instr-a303758d3667d729
     - de-uhv-instr-a66a4cb13aaf0599
@@ -956,6 +963,20 @@ computed:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
+    - id: de-uhv-instr-38f449529edd140f
+      status: pending
+      discovery_refs:
+      - de-corpus-83a369013d285786dbf3
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -998,13 +1019,6 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
-    - id: de-uhv-instr-8939b62ab3b44a39
-      status: pending
-      discovery_refs:
-      - de-corpus-f83148ffc269677da9ed
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
     - id: de-uhv-instr-906e7387d896596c
       status: pending
       discovery_refs:

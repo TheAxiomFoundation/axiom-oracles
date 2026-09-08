@@ -977,6 +977,54 @@ def _resolved_section(corpus: Corpus, document_path: str, section: str) -> str |
     return None
 
 
+def _resolved_changed_by_body(corpus: Corpus, reference: str) -> str | None:
+    """Resolve numbered BGBl references only with matching date and body evidence.
+
+    Preserve ambiguity and unsupported citation forms as pending raw references.
+    Matching the act does not disposition the cited article or its effective date.
+    """
+    match = re.fullmatch(
+        r"zuletzt geändert durch Art\.\s*\d+[a-z]?\s+G v\.\s*"
+        r"(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(I|II)\s+Nr\.\s*(\d+)",
+        reference.strip(),
+    )
+    if not match:
+        return None
+    day, month, year, part, number = match.groups()
+    date = f"{year}-{int(month):02d}-{int(day):02d}"
+    identity = re.compile(rf"\bBGBl\.\s*{year}\s+{part}\s+Nr\.\s*{int(number)}\b")
+    matches = []
+    for path, document in corpus.documents.items():
+        metadata = document.value.get("metadata", {})
+        if not isinstance(metadata, dict) or metadata.get("date_document") != date:
+            continue
+        if not identity.search(str(document.value.get("citation_label", ""))):
+            continue
+        bodies = [
+            row.path for row in corpus.rows
+            if corpus.document_for_path.get(row.path) == path
+            and isinstance(row.value.get("body"), str) and row.value["body"].strip()
+        ]
+        # Only a single full-body capture can resolve an article without
+        # a separately captured article path. Never substitute a preamble.
+        captured = corpus.by_path[bodies[0]].value if len(bodies) == 1 else {}
+        capture_metadata = captured.get("metadata", {})
+        if not isinstance(capture_metadata, dict):
+            return None
+        if (
+            len(bodies) == 1
+            and captured.get("source_format") == "pdf"
+            and captured.get("kind") == "document"
+            and capture_metadata.get("block_count") == 1
+            and isinstance(capture_metadata.get("page_count"), int)
+            and capture_metadata["page_count"] > 0
+        ):
+            matches.append(bodies[0])
+        else:
+            return None
+    return matches[0] if len(matches) == 1 else None
+
+
 def _discover_corpus_program(
     program: str,
     source_program: Mapping[str, Any],
@@ -1012,8 +1060,8 @@ def _discover_corpus_program(
             evidence_id,
         )
 
-    # Fundstelle is an identity fact for each declared act; ``stand`` is an
-    # opaque changed_by analogue and therefore a pending candidate verbatim.
+    # Preserve changed-by references verbatim, resolving only uniquely
+    # identified numbered BGBl acts with a retained full body.
     for document_path in sorted(declared_documents):
         document = corpus.documents.get(document_path)
         if not document:
@@ -1036,16 +1084,17 @@ def _discover_corpus_program(
             )
         stand = law.get("stand")
         if isinstance(stand, str) and stand.strip():
-            add_raw(
-                f"stand:{document_path}:{stand.casefold()}",
-                stand,
-                {
-                    "mechanism": "law_metadata_changed_by",
-                    "source_citation_path": document_path,
-                    "source_row_sha256": document.raw_sha256,
-                    "raw_reference": stand,
-                },
-            )
+            payload = {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": document_path,
+                "source_row_sha256": document.raw_sha256,
+                "raw_reference": stand,
+            }
+            resolved = _resolved_changed_by_body(corpus, stand)
+            if resolved:
+                add_path(resolved, {**payload, "resolved_citation_path": resolved})
+            else:
+                add_raw(f"stand:{document_path}:{stand.casefold()}", stand, payload)
 
     aliases = {path: _document_aliases(row) for path, row in corpus.documents.items()}
 
@@ -1235,7 +1284,7 @@ def _discover_corpus_program(
                     },
                 )
 
-    # All 3,548 rows participate in the two inbound mechanisms.  Body matching
+    # Every pinned row participates in the two inbound mechanisms. Body matching
     # is targeted to explicit act+section citations to configured roots; it is
     # not the future comprehensive citation scan tracked in corpus#611.
     exact_targets = sorted(scope | declared)

@@ -351,10 +351,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: bebe908757de43e8a7c16ccbff266c3ca6c1f8c2af9f274debc6cf82891310ce
+    snapshot_sha256: a131faa7bf1ada4f28b7b68ad479d2551632376ad56556f5d903337ac7baa881
     channel_receipts:
-      corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
-      subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
+      corpus_release: 42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf
+      subject_matter_search: d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -8139,6 +8139,20 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Aufenthaltsgesetzes
+    - id: de-kg-instr-38f449529edd140f
+      status: pending
+      discovery_refs:
+      - de-corpus-869f2125c47ff8d4159f
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
     - id: de-kg-instr-43b69c0fdc7079aa
       status: pending
       discovery_refs:
@@ -8265,13 +8279,6 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Abkommen über den Europäischen Wirtschaftsraum
-    - id: de-kg-instr-8939b62ab3b44a39
-      status: pending
-      discovery_refs:
-      - de-corpus-7ca2ebb4684aaf979da8
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
     - id: de-kg-instr-995400ec8f736a51
       status: pending
       discovery_refs:
@@ -8374,7 +8381,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 98f4ed36519f3c0aa2af1e5030a8d3d901abcc1ead2f0efcfb80a15e536f976b
+      sha256: aa4d49a1732026bd813e00c3e43a800a9fc92996781935356ea3eca7bed765ef
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -8415,8 +8422,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
-        subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
+        corpus_release: 42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf
+        subject_matter_search: d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -11969,7 +11976,7 @@ computed:
     - de-kg-discovery-fbc6d3709f27eb49
     - de-kg-discovery-ff3af97754355946
     - de-kg-discovery-ff9019c2c2453a4d
-    - de-kg-instr-8939b62ab3b44a39
+    - de-kg-instr-38f449529edd140f
     - de-kg-suppl-007
     - de-kg-suppl-008
     - de-kg-suppl-009
@@ -21054,6 +21061,20 @@ computed:
       classification: entitlement_condition
       reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
       bears_on_computed_surface: true
+    - id: de-kg-instr-38f449529edd140f
+      status: pending
+      discovery_refs:
+      - de-corpus-869f2125c47ff8d4159f
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
     - id: de-kg-instr-43b69c0fdc7079aa
       status: classified-with-reason
       discovery_refs:
@@ -21215,13 +21236,6 @@ computed:
       classification: entitlement_condition
       reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
       bears_on_computed_surface: true
-    - id: de-kg-instr-8939b62ab3b44a39
-      status: pending
-      discovery_refs:
-      - de-corpus-7ca2ebb4684aaf979da8
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
     - id: de-kg-instr-995400ec8f736a51
       status: excluded-with-reason
       discovery_refs:

@@ -124,7 +124,7 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "6f74a85f8a08b3ee4498410f8b2bab95b424889f0583837335ae9c63b199886a",
+      "sha256": "77f56c3f87fd46811a1bf3d82915e4105229dabb58927bc1be33e669a38879f1",
       "verification": "producer_artifact_validation"
     },
     {
@@ -737,7 +737,7 @@
           "de-kg-discovery-fbc6d3709f27eb49",
           "de-kg-discovery-ff3af97754355946",
           "de-kg-discovery-ff9019c2c2453a4d",
-          "de-kg-instr-8939b62ab3b44a39",
+          "de-kg-instr-38f449529edd140f",
           "de-kg-suppl-007",
           "de-kg-suppl-008",
           "de-kg-suppl-009",

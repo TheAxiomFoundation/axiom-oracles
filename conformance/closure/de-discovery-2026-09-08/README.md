@@ -87,3 +87,49 @@ as encoded dependencies or manually applied to bypass the signed workflow.
 Next encoding work needs source-grounded, child-scoped household/claimant
 relations and the missing upstream modules, followed by signed regeneration
 and successful proof and behavior checks.
+
+### Residence encoding attempts after the release pin merged
+
+The dedicated corpus-pin PR `rulespec-de#44` passed all repository checks and
+merged as `2d74a6126d10c3038106e09d9f15b61453f298cb`. The following protected
+runs resolved the published September release but produced zero signatures:
+
+- [AO §8, run 34242110828](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34242110828):
+  the initial full-unit deferral failed the exact-dependency check. The later
+  candidate used a `Judgment` input with string values `holds`, `not_holds`
+  and `undetermined`; the pinned formula lowering treats a bare input as a
+  scalar comparison against Boolean true, and execution failed with “left
+  side of comparison is not numeric”. It also used annual periods and an
+  unsupported year-0001 effective date. The legal inference about retaining
+  and using a dwelling remains unimplemented; registration alone cannot
+  replace it. A type-only repair would not close that legal dependency.
+- [AO §9, run 34242115184](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34242115184):
+  the candidate supplied the six-month and one-year parameters, but its
+  sentence-1 deferral failed the exact-dependency check. It deferred calendar
+  duration arithmetic and the classifications of temporary stays, short
+  interruptions and similar private purposes, and duplicated several deferred
+  outputs. No executable habitual-abode test was accepted. The pinned
+  `src/formula.rs` exposes `days_between` and `date_add_days`; it does not
+  expose calendar-month/year addition. That observation does not establish
+  that every exact alternative representation is impossible. Fixed 180/183-day
+  or 365-day replacements would not implement the statutory calendar periods.
+
+Neither failed candidate was applied or declared as an encoded source.
+Further work must implement the source-bound residence judgments and exact
+calendar boundaries, with valid monthly tests and temporal provenance; merely
+renaming those judgments as observable inputs would leave the frontier open.
+
+### Captured amendment identity
+
+The raw EStG changed-by reference formerly identified by
+`de-kg-instr-8939b62ab3b44a39` now resolves to
+`de-kg-instr-38f449529edd140f`, corpus path
+`de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1`, body SHA-256
+`17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28`.
+The producer requires agreement of the numbered BGBl citation, document date
+and a unique PDF body; it preserves the original metadata reference in the
+discovery evidence. The row remains pending for legal disposition. Article 14
+stages commencement: Article 3 is effective 1 January 2028; Articles 1 and 2
+have different commencement dates. Reading Article 3 alone cannot justify
+excluding the entire amending act or its indirect income effects. The capture
+is now available for that review, replacing the unreadable-source obstacle.

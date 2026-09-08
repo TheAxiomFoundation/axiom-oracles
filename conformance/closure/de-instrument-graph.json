@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-08T14:44:03Z",
+  "generated_at": "2026-09-08T15:13:24Z",
   "source": {
     "path": "closure/de/source.json",
     "sha256": "89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06"
@@ -35122,14 +35122,6 @@
           "resolved_citation_path": "de/statute/sgb-4"
         },
         {
-          "id": "de-corpus-7ca2ebb4684aaf979da8",
-          "program": "de/kindergeld",
-          "mechanism": "law_metadata_changed_by",
-          "source_citation_path": "de/statute/estg",
-          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
-          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
-        },
-        {
           "id": "de-corpus-7dd34add44b01ccd165a",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -35159,6 +35151,15 @@
           ]
         },
         {
+          "id": "de-corpus-83a369013d285786dbf3",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156",
+          "resolved_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1"
+        },
+        {
           "id": "de-corpus-86534602aca6487afa11",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -35167,6 +35168,15 @@
           "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
           "matched_text": "Dritten Buch",
           "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-869f2125c47ff8d4159f",
+          "program": "de/kindergeld",
+          "mechanism": "law_metadata_changed_by",
+          "source_citation_path": "de/statute/estg",
+          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156",
+          "resolved_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1"
         },
         {
           "id": "de-corpus-8b8889a0b2d2e5f82791",
@@ -35642,14 +35652,6 @@
           "resolved_citation_path": "de/statute/uhvorschg"
         },
         {
-          "id": "de-corpus-f83148ffc269677da9ed",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "law_metadata_changed_by",
-          "source_citation_path": "de/statute/estg",
-          "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
-          "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
-        },
-        {
           "id": "de-corpus-fe32452ac5c22dc84324",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -35669,7 +35671,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175"
+      "receipt_sha256": "42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -35685,10 +35687,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "8038eeabe945b4d3607b79106cb9271caa3035a666e5d904603b095cd05e4926"
+          "receipt_sha256": "dac05c516aaca690f88679278679c9cc85f2254696ae76792d960fad167ed3fc"
         },
         {
           "id": "de-subject-002",
@@ -35698,14 +35700,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "fe6ce76864514f26f9d319c5857c199b01a494cb1f400b9c86b4ab9598842c14"
+          "receipt_sha256": "6d2e8a37f016f07f3373d8a6b6de81cc983d8db467334de3a070e44e5a288844"
         },
         {
           "id": "de-subject-003",
@@ -35715,14 +35717,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "9796b831da24237f07419c63026c5b9f2fefc4dd40f0d1ad607c770cee07031b"
+          "receipt_sha256": "d8171d2fcef7e3ae82350820e5ac16b59012a06a2326389a6e3a72ee21c83a8c"
         },
         {
           "id": "de-subject-004",
@@ -35732,14 +35734,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
-          "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
+          "final_url": "https://validate.perfdrive.com/?ssa=dbd7332e-cd02-4d9b-b0e1-bc3e21e5bd7b&ssb=35949205224&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=559a204d-ca3f-4bc5-8981-ad80fa310684&ssk=botmanager_support@radware.com&ssm=41034212860045585100764555235642&ssn=39cd0141c9fcd41d52b4808df4b5fb4649073a88b525-867d-41b7-bff30d&sso=a85f9352-1f6b1494c63dd4eee45fe38232474a60aea5ed98f4d978da&ssp=49568095961788871439178883091209691&ssq=37906928046180918686280461956405122386874&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJ1em14IjoiN2ZjMDAwNTgxZDE0OTYtNjdjMS00YjNiLWFlNzctNjUyMTIyY2I3ZDY0MS0xNzg4ODgwNDYxNDYwMC0wMDRkN2QzYzU5YTBmYTRmNWNiMTAiLCJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwiX191em1mIjoiN2Y5MDAwM2E4OGI1MjUtODY3ZC00MWI3LWIzNTItMWY2YjE0OTRjNjNkMS0xNzg4ODgwNDYxNDYwMC0wMDQ2NzRhYzJkZjBmNTJkNzIxMTAifQ==",
           "http_status": 200,
-          "content_type": "text/html;charset=utf-8",
-          "byte_count": 214555,
-          "content_sha256": "aa146e42ba3cb14a4ff2d9e0bc37a324bda85e1715d7d832661a91702bb1dc7b",
-          "receipt_sha256": "4e2948fd0dcdc6e4ef284545925db2d078047b6edb63e6ce12440ff9db76db27"
+          "content_type": "text/html; charset=UTF-8",
+          "byte_count": 15113,
+          "content_sha256": "428b9a378ebab5626c4da2eb473052e7601994b5b583ef794d59053f4e209ea1",
+          "receipt_sha256": "5b1f9fda30b2418aecc088837db1ae89c314e5bfffe0f5153399470aeab54d37"
         },
         {
           "id": "de-subject-005",
@@ -35750,14 +35752,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "25299527a0c9df992eda3b0afa82d3736d764ff67ee93f1675f39d243825edfa"
+          "receipt_sha256": "bc933427ab93aac507e0a68292282652158dbae6f99fde10f1f7a7a1e94bec11"
         },
         {
           "id": "de-subject-006",
@@ -35767,14 +35769,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "3837e1b956bd8a44262c58001c1b66a76bbb11c0ebd7c437503a5761b2d167ba"
+          "receipt_sha256": "cded8a8302e46faf2edebdf5a6c77a01946c4ddd810791d67f4e41657cbbe668"
         },
         {
           "id": "de-subject-007",
@@ -35784,14 +35786,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "76f4f7ed0aa05af1b10be69b5ada4ef347a7c8dc8a0610447378fb7b76f15045"
+          "receipt_sha256": "0356a0259aa3f6e7f096782dd1cbebfad128f0e1c41fd220e9c21da8cff9f608"
         },
         {
           "id": "de-subject-008",
@@ -35801,10 +35803,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "cb3dce4f7e0029b81e5a6ce7fb9319d6237434826e6c4080883e21ae85b2f242"
+          "receipt_sha256": "3d2d52262dc800fb5e0ce44467cd30394b889f9fc76f089d41a69c6854367409"
         },
         {
           "id": "de-subject-009",
@@ -35814,14 +35816,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "7ab96208259cb504fb5beb8510f4854cd6fe5c5e5cf974d8ec4dc7cd571b8cfe"
+          "receipt_sha256": "9fa5073873f39c081990c878e9e36916659d9845965f8c77affcc43ab86f97f3"
         },
         {
           "id": "de-subject-010",
@@ -35831,14 +35833,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "9744f1e0905c7dc5b194bcc7102a8c1ab5a20f2631d5cb4f46e974b26a675416"
+          "receipt_sha256": "cf557c5f635b57d49d478d7b34f79660e2ea1c1816a10d0615eb4bbf09e02985"
         },
         {
           "id": "de-subject-011",
@@ -35848,14 +35850,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "cad2e228dbd44ab9eeaeef79af7b98ccce9c8e02f4ec07278403dfb3b70ec143"
+          "receipt_sha256": "b673ba45dbc52fe22ed4578e842b972c8188ccffe759a10c75b0ba0ff7d5a6ba"
         },
         {
           "id": "de-subject-012",
@@ -35865,10 +35867,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "14f2903d8af5a668c71f6df31a83e56d8735873378a4ff013f71eedde5aae834"
+          "receipt_sha256": "85f86a06dfc4afd68babcade75c73e3d2b94525c444b8abde4f50de8c5c452b0"
         },
         {
           "id": "de-subject-013",
@@ -35878,14 +35880,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "ae801f3eb3f581d66cfe3f1f383b5d079a6b841eab9b270e2a22c8f51b42d19c"
+          "receipt_sha256": "7e41facc9ca1b3eb29dc813a772c47795284c0605d7d48d731da8469a9b5a33d"
         },
         {
           "id": "de-subject-014",
@@ -35895,14 +35897,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "d5d0c9f6792eaddc767ffae9966809c9e71e9ac3ae81a661911390d38b75e2c5"
+          "receipt_sha256": "4134751737d803f14cbdd48a8b8080df4cb53518da7486033177ecbad04cdb86"
         },
         {
           "id": "de-subject-015",
@@ -35912,13 +35914,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-08T14:44:03Z",
+          "captured_at": "2026-09-08T15:13:24Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "f6b6b0508e27faff0d896bae737c3e8eb128265990f8c251502b4f1cdf71a3af"
+          "receipt_sha256": "065b00ec83f318551eabd53c0a50c5ce2fa98bfedd5b45963bd82ccca6aeb1b7"
         }
       ],
-      "receipt_sha256": "328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4"
+      "receipt_sha256": "d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -36047,6 +36049,23 @@
           "raw_references": [
             "Aufenthaltsgesetzes"
           ]
+        },
+        {
+          "id": "de-kg-instr-38f449529edd140f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-869f2125c47ff8d4159f"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1",
+          "row_sha256": "1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1",
+          "body_sha256": "17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28",
+          "document_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz",
+          "title": "Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156",
+          "date_document": "2026-05-26",
+          "document_type": "Änderungsgesetz (amendment act)"
         },
         {
           "id": "de-kg-instr-43b69c0fdc7079aa",
@@ -36212,17 +36231,6 @@
           ]
         },
         {
-          "id": "de-kg-instr-8939b62ab3b44a39",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-7ca2ebb4684aaf979da8"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
-          ]
-        },
-        {
           "id": "de-kg-instr-995400ec8f736a51",
           "status": "pending",
           "discovery_refs": [
@@ -36379,8 +36387,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175",
-            "subject_matter_search": "328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4",
+            "corpus_release": "42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf",
+            "subject_matter_search": "d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -36649,6 +36657,23 @@
           ]
         },
         {
+          "id": "de-uhv-instr-38f449529edd140f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-83a369013d285786dbf3"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1",
+          "row_sha256": "1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1",
+          "body_sha256": "17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28",
+          "document_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz",
+          "title": "Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156",
+          "date_document": "2026-05-26",
+          "document_type": "Änderungsgesetz (amendment act)"
+        },
+        {
           "id": "de-uhv-instr-703d3b12aaab39f8",
           "status": "pending",
           "discovery_refs": [
@@ -36702,17 +36727,6 @@
           "identity_kind": "unresolved_reference",
           "raw_references": [
             "Bürgerlichen Gesetzbuchs"
-          ]
-        },
-        {
-          "id": "de-uhv-instr-8939b62ab3b44a39",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-f83148ffc269677da9ed"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
           ]
         },
         {
@@ -36840,5 +36854,5 @@
       ]
     }
   ],
-  "receipt_sha256": "0b71a241634f8b59601da4e5503a512586e579e78c4cc0c7e1f6aa9d3af545f2"
+  "receipt_sha256": "2de7d3167197e01ca4d80097348db69bdd2da1d867176d311568d63d3d073e90"
 }
