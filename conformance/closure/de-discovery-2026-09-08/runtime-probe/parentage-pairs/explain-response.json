@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "requested_mode": "explain",
+    "actual_mode": "explain",
+    "fallback_reason": null
+  },
+  "results": [
+    {
+      "entity_id": "person-a:child-1",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "holds"
+        }
+      },
+      "trace": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "holds",
+          "dependencies": []
+        }
+      }
+    },
+    {
+      "entity_id": "person-a:child-2",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "holds"
+        }
+      },
+      "trace": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "holds",
+          "dependencies": []
+        }
+      }
+    },
+    {
+      "entity_id": "person-b:child-1",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "not_holds",
+          "dependencies": []
+        }
+      }
+    },
+    {
+      "entity_id": "person-b:child-2",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {
+        "record_identifiers_match": {
+          "kind": "judgment",
+          "name": "record_identifiers_match",
+          "unit": null,
+          "outcome": "not_holds",
+          "dependencies": []
+        }
+      }
+    }
+  ]
+}
