@@ -3490,6 +3490,48 @@
         }
       }
     },
+    "de-kindergeld-eligibility": {
+      "binding": "unbound",
+      "binding_defects": [
+        "de-kindergeld-eligibility: chunk index dashboard/public/data/cases/de-kindergeld-eligibility/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 8,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "joint_assessment": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "region": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 8,
+          "state": "varied"
+        },
+        "yearly_earned_income": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/euromod-gettsim-de-kindergeld-eligibility.json",
+      "report_sha256": "e8b22fda6f8d0808d9781eaa33ab1b7d065f1b37398bba59bf859ae1bf8ca930",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "de-tanf-ecps": {
       "binding": "unbound",
       "binding_defects": [
