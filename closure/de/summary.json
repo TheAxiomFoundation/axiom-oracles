@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
-  "corpus_release": "de-rulespec-2026-07-21",
-  "corpus_release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+  "corpus_commit": "c3623fe4bfea336be6b990a947f69e270d8bf951",
+  "corpus_release": "de-rulespec-2026-09-08-kindergeld-frontier",
+  "corpus_release_content_sha256": "39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -132,7 +132,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "f71795568853f918bde0f777a4ea6a1de2da3d9cf106fcd154337216e128c382",
+      "subgraph_sha256": "4b54764a1c7d37f2939675abdca939cd0c829f103982ee429bbc918b96c552ae",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +216,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "subgraph_sha256": "433a1efc906706fc21a30237cfe792af085948dc0038e2ad4a54b080b334c800",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +299,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "subgraph_sha256": "145ef62031095f467206bf38f7728e8e0f162f63b30cee996b6e3c2bc856ae21",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -322,7 +322,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
+    "sha256": "89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06"
   },
   "spine_closed": false
 }

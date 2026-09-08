@@ -20,11 +20,17 @@ producer verifies every source hash and every whitespace-normalized
 excerpt, rejects duplicates and missing snapshots, and adds pending rows.
 Discovery-source hashes are deliberately not operative-body hashes.
 
-The corpus capture tranche in axiom-corpus PR #647 contains the 23 agreement
-texts, but ingest signatures and release publication are pending. Its local
-availability does not authorize an `encoded` or text-bound legal disposition.
-The consumer retains its published corpus and RuleSpec pins until a new
-signed release and signed modules exist.
+The corpus capture tranche in axiom-corpus PR #647 was signed, merged and
+published as `de-rulespec-2026-09-08-kindergeld-frontier` from commit
+`c3623fe4bfea336be6b990a947f69e270d8bf951`, with content SHA
+`39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a`.
+Publication run 34239272192 and mirror run 34239946209 succeeded. The public
+object is byte-identical to the locally signature-verified publication receipt.
+The source manifest is repinned to that object. Snapshot member capture-state
+labels describe the original discovery time, before signing and publication;
+they are not current release verification results. No new signed RuleSpec
+modules exist yet, so module declarations and legal dispositions are not
+promoted merely because a source became available.
 
 Remaining work: exhaust the official BMF/BZSt registers; verify individual
 case identities and BStBl II publication against official records; reconcile

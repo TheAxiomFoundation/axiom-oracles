@@ -67,7 +67,7 @@ EXPECTED_LEAVES = {
 }
 EXPECTED_MEASURED = {
     "de/kindergeld": (18, 666, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
+    "de/unterhaltsvorschuss": (12, 22, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -165,7 +165,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 3548
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 4483
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -210,16 +210,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=3548)
-    assert index["row_count"] == index["mapped_row_count"] == 3548
-    assert index["body_row_count"] == 3545
+    refresh._validate_global_extraction_index(index, scanned_row_count=4483)
+    assert index["row_count"] == index["mapped_row_count"] == 4483
+    assert index["body_row_count"] == 4444
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 25
+    assert index["act_count"] == len(index["acts"]) == 65
     assert index["mechanism_counts"] == {
-        "amendment_targets": 36,
-        "explicit_cross_reference_body": 2859,
-        "law_metadata_changed_by": 18,
-        "law_metadata_fundstelle": 23,
+        "amendment_targets": 38,
+        "explicit_cross_reference_body": 3977,
+        "law_metadata_changed_by": 21,
+        "law_metadata_fundstelle": 27,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]

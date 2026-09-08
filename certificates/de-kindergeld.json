@@ -100,7 +100,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "67cb71990b0380911566197be31bc1db51d653f5856582344a506d6fd9cc9d25"
+      "sha256": "1b01dc87139d6311c50b2a69e9e55c86df32641773b20888612ebcb0628f727e"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -124,14 +124,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "502af75ce0364f2b7b0e2aa8ff54876b51ae295649c7a1ed14d738674a186b13",
+      "sha256": "9adaf8ece72ce472e65c4c738b8cd9b0dd61d88d6d6541f056eeeb47821feba5",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
+      "sha256": "cdf60439731daaacda6ce520778e4d677646e0194e3ea585f59d635c821f8765"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -344,7 +344,7 @@
       ],
       "citation_root_count": 6,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-07-21",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-frontier",
       "declared_sources": [
         {
           "checkout_observation": {
@@ -477,9 +477,9 @@
           "de-kg-instr-3841260753e31d86",
           "de-kg-instr-3875634198c25414",
           "de-kg-instr-43b69c0fdc7079aa",
-          "de-kg-instr-4e1f544ea66cccdf",
           "de-kg-instr-57142250c1d7c52f",
           "de-kg-instr-703d3b12aaab39f8",
+          "de-kg-instr-78841044a219e9b8",
           "de-kg-instr-7b88fe63abf1deb1",
           "de-kg-instr-87d3e50373adabc2",
           "de-kg-instr-b96e03076e143e8e",
@@ -771,7 +771,7 @@
         "role_claim_mode": "attested",
         "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "f71795568853f918bde0f777a4ea6a1de2da3d9cf106fcd154337216e128c382",
+        "subgraph_sha256": "4b54764a1c7d37f2939675abdca939cd0c829f103982ee429bbc918b96c552ae",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,

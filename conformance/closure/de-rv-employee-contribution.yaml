@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f
+    sha256: 89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6f064ee6081f16440dc706ae09ac60652bb67570
-    release: de-rulespec-2026-07-21
-    release_content_sha256: b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574
+    commit: c3623fe4bfea336be6b990a947f69e270d8bf951
+    release: de-rulespec-2026-09-08-kindergeld-frontier
+    release_content_sha256: 39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -42,12 +42,48 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
+      sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
+      sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
+      sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl
+      sha256: 29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl
+      sha256: f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e
+      row_count: 44
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97
+      row_count: 9
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl
+      sha256: 5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl
+      sha256: 5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
+      sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
+      sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
+      row_count: 854
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
+      sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -118,10 +154,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
+    snapshot_sha256: bebe908757de43e8a7c16ccbff266c3ca6c1f8c2af9f274debc6cf82891310ce
     channel_receipts:
-      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+      corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
+      subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

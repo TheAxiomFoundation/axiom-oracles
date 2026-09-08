@@ -23,12 +23,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f
+    sha256: 89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6f064ee6081f16440dc706ae09ac60652bb67570
-    release: de-rulespec-2026-07-21
-    release_content_sha256: b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574
+    commit: c3623fe4bfea336be6b990a947f69e270d8bf951
+    release: de-rulespec-2026-09-08-kindergeld-frontier
+    release_content_sha256: 39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -36,12 +36,48 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
+      sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
+      sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
+      sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl
+      sha256: 29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl
+      sha256: f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e
+      row_count: 44
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97
+      row_count: 9
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl
+      sha256: 5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl
+      sha256: 5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
+      sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
+      sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
+      row_count: 854
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
+      sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 62
@@ -315,10 +351,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
+    snapshot_sha256: bebe908757de43e8a7c16ccbff266c3ca6c1f8c2af9f274debc6cf82891310ce
     channel_receipts:
-      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+      corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
+      subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -8122,19 +8158,6 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Verordnung (EU) 2017/492
-    - id: de-kg-instr-4e1f544ea66cccdf
-      status: pending
-      discovery_refs:
-      - de-corpus-043880c8a12aa41c518e
-      - de-corpus-05a43bd8718a27d94769
-      - de-corpus-16b40f8ab12eac3755ff
-      - de-corpus-65ec17810d7bb50cadf7
-      - de-corpus-8147c0d164d863cdebe4
-      - de-corpus-dfec9d09628cdf1ac901
-      - de-corpus-fe5fb03c77c15f5c5c97
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
     - id: de-kg-instr-57142250c1d7c52f
       status: pending
       discovery_refs:
@@ -8202,6 +8225,25 @@ generated_facts:
       body_sha256: ab6442cd2f52fc33c4f72ca19a8d879e20f48e7cff58e44c095808a3d922db22
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+    - id: de-kg-instr-78841044a219e9b8
+      status: pending
+      discovery_refs:
+      - de-corpus-6f0371332ecc12225a78
+      - de-corpus-7339241372ee322f0ac8
+      - de-corpus-9f86038cb34463bd1471
+      - de-corpus-debda12e7904d090ed0c
+      - de-corpus-e637adf550bf2a846e17
+      - de-corpus-ee7b61d00da1b3b92fbf
+      - de-corpus-fe32452ac5c22dc84324
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
     - id: de-kg-instr-7b88fe63abf1deb1
       status: pending
       discovery_refs:
@@ -8332,7 +8374,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 2e7c7d4d0f9ab5ad206054fd1d34186524eb07e75ce6f6cba761b99b0eb372c3
+      sha256: 98f4ed36519f3c0aa2af1e5030a8d3d901abcc1ead2f0efcfb80a15e536f976b
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -8373,8 +8415,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-        subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+        corpus_release: cd2d5e60e817bb5c6e50adb5aebb768270a3281a6271da47d0d25012d180e175
+        subject_matter_search: 328b87e4eccf30675f7cf53c37c7669ee89ee32dc8c70c6ffbc8ef77289582b4
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -11076,12 +11118,6 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
     bears_on_computed_surface: false
-  - id: de-kg-instr-4e1f544ea66cccdf
-    status: classified-with-reason
-    classification: entitlement_condition
-    reason: 'Unresolved reference ''Abgabenordnung'' matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The AO is not in the pinned corpus release as a statute row; §§ 139a, 139b AO must be captured to encode the identification condition. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG
-      is encoded and the cited rule is bound to it.'
-    bears_on_computed_surface: true
   - id: de-kg-instr-57142250c1d7c52f
     status: classified-with-reason
     classification: exclusion_comparator
@@ -11117,6 +11153,13 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
     bears_on_computed_surface: false
+  - id: de-kg-instr-78841044a219e9b8
+    status: classified-with-reason
+    body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+    classification: entitlement_condition
+    reason: 'The captured AO act resolves former unresolved candidate de-kg-instr-4e1f544ea66cccdf (''Abgabenordnung''), matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The successor release now contains the AO act and §§ 8, 9, 139a and 139b. Capture resolves the instrument identity but does not encode the residence or identification
+      rules. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-7b88fe63abf1deb1
     status: classified-with-reason
     body_sha256: 626f7bb866fc0a1c6e7a2ccc96dac66ba7131eb8ee87ca981d2578d7a3f97366
@@ -21036,23 +21079,6 @@ computed:
       classification: data_and_procedure_reference
       reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
       bears_on_computed_surface: false
-    - id: de-kg-instr-4e1f544ea66cccdf
-      status: classified-with-reason
-      discovery_refs:
-      - de-corpus-043880c8a12aa41c518e
-      - de-corpus-05a43bd8718a27d94769
-      - de-corpus-16b40f8ab12eac3755ff
-      - de-corpus-65ec17810d7bb50cadf7
-      - de-corpus-8147c0d164d863cdebe4
-      - de-corpus-dfec9d09628cdf1ac901
-      - de-corpus-fe5fb03c77c15f5c5c97
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
-      classification: entitlement_condition
-      reason: 'Unresolved reference ''Abgabenordnung'' matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The AO is not in the pinned corpus release as a statute row; §§ 139a, 139b AO must be captured to encode the identification condition. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62
-        EStG is encoded and the cited rule is bound to it.'
-      bears_on_computed_surface: true
     - id: de-kg-instr-57142250c1d7c52f
       status: classified-with-reason
       discovery_refs:
@@ -21139,6 +21165,29 @@ computed:
       classification: data_and_procedure_reference
       reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
       bears_on_computed_surface: false
+    - id: de-kg-instr-78841044a219e9b8
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-6f0371332ecc12225a78
+      - de-corpus-7339241372ee322f0ac8
+      - de-corpus-9f86038cb34463bd1471
+      - de-corpus-debda12e7904d090ed0c
+      - de-corpus-e637adf550bf2a846e17
+      - de-corpus-ee7b61d00da1b3b92fbf
+      - de-corpus-fe32452ac5c22dc84324
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
+      classification: entitlement_condition
+      reason: 'The captured AO act resolves former unresolved candidate de-kg-instr-4e1f544ea66cccdf (''Abgabenordnung''), matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The successor release now contains the AO act and §§ 8, 9, 139a and 139b. Capture resolves the instrument identity but does not encode the residence or identification
+        rules. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-7b88fe63abf1deb1
       status: classified-with-reason
       discovery_refs:
@@ -21653,9 +21702,9 @@ computed:
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
-    - de-kg-instr-4e1f544ea66cccdf
     - de-kg-instr-57142250c1d7c52f
     - de-kg-instr-703d3b12aaab39f8
+    - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-b96e03076e143e8e
