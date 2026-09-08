@@ -288,17 +288,26 @@ method, `text_sha256` the hash):
   agreements. A class cannot be decided; a discovery channel must
   enumerate its members.
 
-Capture method: EUR-Lex and the BMF handbook sites sit behind bot
-challenges, so the texts were read through the in-app browser and hashed
-in-page (`innerText` for EUR-Lex and the AStBV page; whitespace-collapsed
-`textContent` for handbook pages, whose R/H sections are collapsed in the
-rendered view). Multi-page instruments bind the SHA-256 of their page
-hashes joined by newline in the listed order. These are page captures,
-not corpus rows; a corpus channel for guidance documents would replace
-them with receipted bytes.
+The original browser capture methods remain recorded in git history. Seven
+supplementals (011–017: the five EU instruments, KiZDAV and RiStBV) now bind
+receipted corpus bodies from `de-rulespec-2026-09-08-kindergeld-frontier`,
+commit `c3623fe4bfea336be6b990a947f69e270d8bf951`, content SHA-256
+`39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a`.
+[Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
+records each citation path, pinned JSONL path and line, row hash, body hash,
+expression date and official URL. Single-body instruments use that body's
+SHA-256 directly. KiZDAV uses the SHA-256 of the nine body hashes joined by
+newline in citation-path order, without a trailing newline. These hash
+changes replace the source receipt only; classifications and bearing remain
+unchanged. The missing BMF handbook pages still prevent replacement of the
+complete EStR/EStH, LStR/LStH, AEAO and AStBV page bundles.
 
-Result: frontier 5 of 465 pending; 126 open dependencies (8 law-derived
-inputs, 0 unclassified inputs, 118 bearing instruments).
+The SHA-bound class discovery snapshot adds 201 pending candidate entries.
+It is explicitly incomplete and retains the four pending class rows;
+court citations still require identity deduplication and comprehensive
+register discovery. Current result: frontier 206 of 666 pending; 126 open
+dependencies (8 law-derived inputs, 0 unclassified inputs, 118 bearing
+instruments). Dependency closure remains false.
 
 ## Reads log
 

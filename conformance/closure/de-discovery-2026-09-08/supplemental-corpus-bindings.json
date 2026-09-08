@@ -1,0 +1,196 @@
+{
+  "schema": "axiom_oracles.de_supplemental_corpus_bindings.v1",
+  "corpus": {
+    "repository": "TheAxiomFoundation/axiom-corpus",
+    "commit": "c3623fe4bfea336be6b990a947f69e270d8bf951",
+    "release": "de-rulespec-2026-09-08-kindergeld-frontier",
+    "release_content_sha256": "39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a"
+  },
+  "bindings": [
+    {
+      "id": "de-kg-suppl-011",
+      "text_sha256": "5304565b00d908bd9d8f58a5d9da59b6e83cfe1a76a5a2867b2d39b7794ea05d",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/regulation/eu-883-2004/document-1",
+          "expression_date": "2019-07-31",
+          "source_url": "https://publications.europa.eu/resource/cellar/296c9322-ca95-11e9-992f-01aa75ed71a1.0005.02/DOC_1",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+          "line": 4,
+          "row_sha256": "a549bfe02330ec43350b074a1d31d77a24d39c8eebb9905ac09ff4c302a6dc60",
+          "body_sha256": "5304565b00d908bd9d8f58a5d9da59b6e83cfe1a76a5a2867b2d39b7794ea05d"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-012",
+      "text_sha256": "1bff0ae62efaf9d01b2959b0d312b291c2a96f1d68d6a546b1bdc54ad70afa1a",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/regulation/eu-987-2009/document-1",
+          "expression_date": "2018-01-01",
+          "source_url": "https://publications.europa.eu/resource/cellar/00185d05-a69f-4055-8a8e-341c14c29d50.0012.03/DOC_2",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+          "line": 6,
+          "row_sha256": "6bdf7e5c373be012e2f27406ef502b8926a84fa8a0eb76aba8254118a10b3cee",
+          "body_sha256": "1bff0ae62efaf9d01b2959b0d312b291c2a96f1d68d6a546b1bdc54ad70afa1a"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-013",
+      "text_sha256": "e996b8f48d0df1dafd5a104f187d0482c7cb535b1fc8d8920e8794f8948a62b3",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/regulation/eu-uk-withdrawal-agreement/document-1",
+          "expression_date": "2020-01-24",
+          "source_url": "https://publications.europa.eu/resource/cellar/6b06c8b6-43f0-11ea-b81b-01aa75ed71a1.0004.01/DOC_1",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
+          "line": 2,
+          "row_sha256": "4cbbba928922860c7da8cf62a13ab7c2107994b3a72a4f23ffa75d85f07ebd4f",
+          "body_sha256": "e996b8f48d0df1dafd5a104f187d0482c7cb535b1fc8d8920e8794f8948a62b3"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-014",
+      "text_sha256": "41d2bb94ad19d788ab915949c0a258a1029ef5f903a703bf1547c1692b3f25e7",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/regulation/eu-859-2003/document-1",
+          "expression_date": "2003-05-14",
+          "source_url": "https://publications.europa.eu/resource/cellar/b9cb64f6-c17f-4ba2-ae42-5d127b148dcf.0002.02/DOC_1",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+          "line": 8,
+          "row_sha256": "f4c9230b2ce57381fdb822461d0f8bbbcc589728b66c13c615e6027c166c0b90",
+          "body_sha256": "41d2bb94ad19d788ab915949c0a258a1029ef5f903a703bf1547c1692b3f25e7"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-015",
+      "text_sha256": "371ee3422bfbe096bd82b2b0ad471a7193e6bf58ff786de9ac259bd142117f09",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/regulation/eu-1231-2010/document-1",
+          "expression_date": "2010-11-24",
+          "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/ewgverordnungen/drittstaatenverordnung_1231_2010.pdf",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+          "line": 2,
+          "row_sha256": "8fc0b50b0ddc4aad51f01c2b94eb6b13b7bfff5c6b35362b5e938df0e468849b",
+          "body_sha256": "371ee3422bfbe096bd82b2b0ad471a7193e6bf58ff786de9ac259bd142117f09"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-016",
+      "text_sha256": "0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/regulation/kizdav",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 1,
+          "row_sha256": "55ba9e46328e3010a47dedde6546a452d3d5830b4f4e7d7889a204fb0d6f042d",
+          "body_sha256": "84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/1",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 2,
+          "row_sha256": "407a2249838ec6bee53d6e891c1fe8471edda03f69a9cb24b274d988e0072736",
+          "body_sha256": "9deb2b2f66a3522faa27a15c95ec4a14aff5cd6a44f10c21a47eb2efcd12e72c"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/2",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 3,
+          "row_sha256": "ab8b6dd7a1b6a8d8b1b5470b565fcdf139452aa764b5b7ab683004bf13d65758",
+          "body_sha256": "c1a18f681d4fdd81b86e67a604ddb3e0f280743add15efe410a6a86ba62b8cae"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/3",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 4,
+          "row_sha256": "c47178c7ebb0f4a34eb66ce4853aef7611baa304c3f827add712cc0a4033582f",
+          "body_sha256": "db616b241881d9b02acf60e35ff1c94c916e7d2730811a41b3eeb794be98d1ef"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/4",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 5,
+          "row_sha256": "debac79357576f60e217f9aaa3bbd2d76b8ccf5d056524a56c803bf64363f224",
+          "body_sha256": "9393fbdcf8e6477f6d97ef4b4d84bbc7f625bfc9f958a63a51bcc2de5f848ab4"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/5",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 6,
+          "row_sha256": "fe2432268cea83b0743d7c3f4ab6d6ab8d9467f92a6d500fe8d97cf843ac192e",
+          "body_sha256": "211a0e75748564550cf71bd88cc5fee73b2d94cf1f92268efe3d48680b2fa042"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/6",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 7,
+          "row_sha256": "aae9cac9097b45b8fccaeb49efe5590b45b958b3b9a8ac459786d2cf27fa7463",
+          "body_sha256": "04d783b934dd9f2c834bbc55c078edf9ec6f470410b462addc4b26f9041bd193"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/eingangsformel",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 8,
+          "row_sha256": "8435834140027a3b5699ae34ff17aed797d84de6ab057a5dea3fc92bca6a9ec0",
+          "body_sha256": "990485c07787bf1329308fdae7526ca519d847c0f92d60d29637b393e69161ad"
+        },
+        {
+          "citation_path": "de/regulation/kizdav/schlussformel",
+          "expression_date": "2026-09-08",
+          "source_url": "https://www.gesetze-im-internet.de/kizdav/xml.zip",
+          "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+          "line": 9,
+          "row_sha256": "ff63700a6e3ac3aeb7079eff8bfe936a292c9312718142617485067df1ebf58c",
+          "body_sha256": "f14db442cd88fe7f0dc86b122a9fb18e3e0f9fcdfac74f2879621a7c595d5f37"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-017",
+      "text_sha256": "113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/guidance/ristbv-2023/inhalt",
+          "expression_date": "2023-03-28",
+          "source_url": "https://www.verwaltungsvorschriften-im-internet.de/bsvwvbund_28032023_BMJRB3313104000060001.htm",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl",
+          "line": 2,
+          "row_sha256": "da151cc8581fb28e6a8c3e895be85a8f212a4344f12422086b9db3f575ccb3be",
+          "body_sha256": "113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263"
+        }
+      ]
+    }
+  ],
+  "receipt_sha256": "547255ccfcc36ffddae6f850805772f8ea2a5542d8f2924390876af675990052"
+}
