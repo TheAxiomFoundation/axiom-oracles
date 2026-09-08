@@ -88,6 +88,19 @@
   unclassified inputs, 96 bearing instruments). The open count is now the
   honest size of the encoder work: the entitlement layer (§§ 62–65, § 32
   EStG) is unencoded and every DA-KG rule on it stays open until it is.
+- Spine and leaf dispositions (2026-09-08): 13 of 18 spine rows recorded —
+  § 66 partially-encoded by the captured module; §§ 67–69, 71–77 excluded
+  (procedure, data, payout routing, set-off, attachment, appeal costs,
+  repealed); § 70 excluded as fixing/payout/correction machinery on the
+  strength of Abs. 1 Satz 3. §§ 62–65 and § 78 stay pending by decision:
+  they define the four law-derived inputs and can only leave the spine as
+  encoded. The four unclassified § 66 inputs are typed law-derived (month
+  window from §§ 62–65/§ 32; § 31/§ 32 Abs. 6 increase; increased amount).
+  V 23.4 and V 24.2 re-dispositioned non-bearing to match the § 70 / § 76
+  spine rows. Spine 5 pending; frontier 45 of 465; 102 open dependencies
+  (8 law-derived, 0 unclassified, 94 bearing). Provision texts were
+  fetched from axiom-corpus at the pinned commit and hash-verified — no
+  local corpus checkout needed for spine reads.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

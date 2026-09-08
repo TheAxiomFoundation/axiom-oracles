@@ -180,6 +180,50 @@ instruments. The central gate (`scripts/closure_gate.py`) re-derives that
 verdict from the committed block; a hand-edited `closed: true` fails the
 producer's exact rederivation before it reaches certify.
 
+## Spine and leaf dispositions (2026-09-08)
+
+`committed_decisions.provisions` now carries 13 of the 18 spine rows, each
+bound to the pinned corpus row's `body_sha256` (texts re-fetched from
+`TheAxiomFoundation/axiom-corpus` at the pinned commit and hash-verified):
+
+- § 66 — `partially-encoded` by the captured module `de:statutes/estg/66`
+  (Abs. 1 dual-version amount, Abs. 2 month window, Abs. 3 increase and
+  whole-euro rounding). What remains: the entitlement tests behind Abs. 2
+  and the § 31 / § 32 Abs. 6 increase behind Abs. 3 enter the module only
+  as inputs.
+- §§ 67, 68, 69, 71, 74, 75, 76, 77 and the repealed §§ 72, 73, 76a —
+  `excluded-with-reason` (application procedure, cooperation and data
+  powers, data transmission, provisional suspension, payout routing,
+  set-off, attachment, appeal costs). § 70 is excluded as fixing, payout
+  and correction machinery: Abs. 1 Satz 3 says in terms that the payout
+  limitation of Satz 2 leaves the claim untouched, and the claim per month
+  is what the module computes.
+- §§ 62, 63, 64, 65 and § 78 (Abs. 5 priority exception) stay `pending`
+  by decision: they define the law-derived inputs `claimant_entitlement`,
+  `qualifying_child_count`, `recipient_priority`,
+  `substitute_child_benefit_exclusion`, bear on the computed output, and
+  under CERTIFIED.md v3 have no honest non-encoded disposition. They leave
+  the spine only as `encoded`, mirroring the DK ledger, which likewise
+  records only exclusions until the entitlement provisions are encoded.
+
+`leaf_classifications` types the four previously unclassified § 66 module
+inputs as `law_derived`: the first- and last-qualifying-month conditions
+(defined by §§ 62–65 with § 32 EStG), the § 31 / § 32 Abs. 6 Satz 1
+allowance-increase trigger (EStG § 31, discovered candidate
+`de-kg-instr-003`), and the correspondingly increased amount (§ 66 Abs. 3
+Satz 1). None is an observable act; all stay open.
+
+Two Kapitel V rows were re-dispositioned to match the spine: V 23.4
+(payout limitation, § 70 Abs. 1 Satz 2–3) and V 24.2 (attachment-purpose
+attribution, § 76) are now non-bearing, each reason citing the spine row.
+V 14.3 (month principle) and V 23.1 (unrounded payout against the module's
+whole-euro rounding rule) remain open bearing rows against the
+partially-encoded § 66.
+
+Result: spine 5 pending of 18; frontier 45 of 465 pending; 102 open
+dependencies (8 law-derived inputs, 0 unclassified inputs, 94 bearing
+instruments).
+
 ## Reads log
 
 - 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26

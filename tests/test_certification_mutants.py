@@ -50,8 +50,8 @@ def _load(name: str):
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
     "closed: instrument frontier incomplete — 45 of 465 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
-    "closed: dependency closure open — 104 open dependencies (4 law-derived "
-    "inputs, 4 unclassified inputs, 96 bearing instruments) (CERTIFIED.md v3)",
+    "closed: dependency closure open — 102 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 94 bearing instruments) (CERTIFIED.md v3)",
 ]
 
 
@@ -3904,8 +3904,8 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["instrument_frontier"]["complete"] is False
     assert closed["instrument_frontier"]["instrument_count"] == 465
     assert closed["dependency_closure"]["closed"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 104
-    assert len(closed["dependency_closure"]["unclassified_inputs"]) == 4
+    assert closed["dependency_closure"]["open_dependency_count"] == 102
+    assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0
@@ -5758,10 +5758,10 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
     assert closed["instrument_frontier"]["instrument_count"] == 465
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 104
-    assert closed["dependency_closure"]["unclassified_inputs"]
+    assert closed["dependency_closure"]["open_dependency_count"] == 102
+    assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
-    assert closed["provision_counts"]["pending"] == 18
+    assert closed["provision_counts"]["pending"] == 5
     # The exact-path summary still contributes its scope fields only.
     assert closed["rulespec_commit"] == "d83ba3db30e2f63376aacf822d116687589b8564"
     assert closed["by_signature_state"] is not None

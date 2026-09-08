@@ -6596,7 +6596,73 @@ generated_facts:
       - de-kg-leaf-004
       uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
-  provisions: []
+  provisions:
+  - citation_path: de/statute/estg/66
+    body_sha256: 2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e
+    status: partially-encoded
+    encoded_by: de:statutes/estg/66
+    reason: 'Encoded by the captured module de:statutes/estg/66 (5 rules): Abs. 1 as the dual-version parameter monthly_kindergeld_per_child (255 EUR from 2025-01-01, 259 EUR from 2026-01-01, proof atoms bound to the Steuerfortentwicklungsgesetz), Abs. 2 as kindergeld_payable_for_month (the conjunction of the first- and last-qualifying-month conditions), Abs. 3 Satz 1 and 2 as kindergeld_before_whole_euro_rounding and kindergeld_after_child_allowance_increase with whole_euro_rounding_multiple. Unencoded: the tests behind Abs. 2 — whether ''die Anspruchsvoraussetzungen erfüllt sind'' in a month (§§ 62–65 with § 32 EStG) — enter the module only as the inputs month_is_on_or_after_first_qualifying_month and month_is_on_or_before_last_qualifying_month; the Abs. 3 trigger (an increase of the Freibeträge under § 31 Satz 1 with § 32 Abs. 6 Satz 1) and the ''entsprechend'' increased amount enter only as the inputs child_allowances_under_sections_31_and_32_6_1_are_increased and correspondingly_increased_kindergeld_amount.
+      Those four inputs are classified law-derived leaves and stay open dependencies.'
+  - citation_path: de/statute/estg/67
+    body_sha256: b10adfa9101cd1af9e27d0cba61f1b8774bf6d1b5943c84d44c36daeeb634540
+    status: excluded-with-reason
+    classification: application_procedure
+    reason: '§ 67 governs how Kindergeld is applied for: electronically via the official interface or in writing with a handwritten signature (Satz 1), by the claimant or a person with a legitimate interest (Satz 2), the IdNr requirement of § 62 Abs. 1 Satz 2 and 3 applying in that case (Satz 3), with the claimant''s duty to disclose the IdNr and the Familienkasse''s fallback disclosure (Satz 4 and 5). It fixes the form and the filer of the application; the entitlement it triggers is tested under §§ 62–65 and the amount under § 66. No amount or entitlement rule.'
+  - citation_path: de/statute/estg/68
+    body_sha256: 6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861
+    status: excluded-with-reason
+    classification: cooperation_and_data_disclosure
+    reason: § 68 imposes the duty to report changes in circumstances and the adult child's duty to cooperate (Abs. 1), Abs. 2 is '(weggefallen)', Abs. 3 gives a certificate of the Kindergeld paid in a calendar year, and Abs. 4 to 7 authorise automated data retrieval between the Familienkassen, public-service pay offices, social-benefit providers, EU institutions and the pension-insurance data office, with regulation-making powers. Procedural duties and information-sharing powers; no entitlement or amount rule.
+  - citation_path: de/statute/estg/69
+    body_sha256: 93f80e3daec0e47864f22d981345b4120b425e722da59cac589b739294cbc79b
+    status: excluded-with-reason
+    classification: data_transmission
+    reason: § 69 obliges the Bundeszentralamt für Steuern to transmit register data of a child (moves, ex officio deregistration, a newly issued IdNr at birth, and the data of persons for whom a Kinderfreibetrag is considered) to the competent Familienkasse and, on request, to the tax offices, for checking the lawfulness of Kindergeld receipt. Inter-agency data flow; no entitlement or amount rule.
+  - citation_path: de/statute/estg/70
+    body_sha256: 6f131d87cc89b61e1c10f817c3781bcc1c6b5a1fac4aa2776f827adb8ddb7c52
+    status: excluded-with-reason
+    classification: fixing_payout_and_correction
+    reason: '§ 70 governs the administrative fixing and payment of the Kindergeld due under § 62: fixing and payment by notice (Abs. 1 Satz 1); the retroactive PAYOUT of fixed Kindergeld only for the six months before the month the application was received (Abs. 1 Satz 2), while by Abs. 1 Satz 3 ''Der Anspruch auf Kindergeld nach § 62 bleibt von dieser Auszahlungsbeschränkung unberührt'' — the monthly claim the captured § 66 module computes is, by the provision''s own words, untouched; revocation or amendment of the fixing from the change in circumstances (Abs. 2), with a written notice dispensable for a mere rate increase under § 66 Abs. 1; correction of material errors for the future with § 176 AO (Abs. 3); Abs. 4 ''(weggefallen)''. Disbursement-stage and correction machinery operating on a fixed entitlement, parallel to the DK ledger''s treatment of disbursement provisions; the amount per month is unchanged. The DA-KG restatement V 23.4 is dispositioned consistently as non-bearing.'
+  - citation_path: de/statute/estg/71
+    body_sha256: 040591e59cc2975df59221d1b5aa41c03acadd0a27b58ae06286d402c250f2d4
+    status: excluded-with-reason
+    classification: provisional_payment_suspension
+    reason: § 71 lets the Familienkasse provisionally stop payment without a notice on learning of facts that by law suspend or end the claim where the fixing must be revoked retroactively (Abs. 1), with notification and a hearing (Abs. 2) and mandatory catch-up payment if the fixing is not revoked or amended within two months (Abs. 3). Payment-procedure safeguard; it neither creates nor changes the monthly claim.
+  - citation_path: de/statute/estg/72
+    body_sha256: 766cab28eb7582f35619b67a1f50e763c5303a04d6c557b60a0a52cd7ae416a0
+    status: excluded-with-reason
+    classification: repealed
+    reason: The complete text of § 72 is '(weggefallen)'; it contains no current rule.
+  - citation_path: de/statute/estg/73
+    body_sha256: 3973e022e93220f9212c18d0d0c543ae7c309e46640da93a4a0314de999f5112
+    status: excluded-with-reason
+    classification: repealed
+    reason: 'The complete text of § 73 in the pinned corpus row is ''-'': repealed, no current rule.'
+  - citation_path: de/statute/estg/74
+    body_sha256: 28449f93643c4726739d44693ba2e14a6f05923c518ccf0740098941ee75434f
+    status: excluded-with-reason
+    classification: payout_routing
+    reason: § 74 permits payment of the Kindergeld fixed for a child under § 66 Abs. 1 to the child itself, or to the person or body maintaining the child, where the claimant does not meet the statutory maintenance duty, cannot afford it, or owes less than the Kindergeld (Abs. 1), and applies §§ 102–109 and 111–113 SGB X to refund claims of social-benefit providers against the Familienkasse (Abs. 2). It redirects to whom a fixed amount is paid and settles inter-agency refunds; the amount fixed under § 66 Abs. 1 is taken as given.
+  - citation_path: de/statute/estg/75
+    body_sha256: 912edd85878e84da861a0cf5864f0fd1a3b669ad32018a82370c6547464b6141
+    status: excluded-with-reason
+    classification: set_off_recovery
+    reason: § 75 allows the Familienkasse to set off Kindergeld refund claims against Kindergeld claims up to half their amount unless the claimant proves resulting need under SGB XII or SGB II (Abs. 1), extended to the later claim of a household member for a child considered with both (Abs. 2). Collections machinery operating on disbursement of an existing entitlement, parallel to the DK ledger's exclusion of set-off; it does not alter the monthly claim.
+  - citation_path: de/statute/estg/76
+    body_sha256: ddbad1d111e235079ae1fdc903d9c80acfbc223ba2145b64989448166453260e
+    status: excluded-with-reason
+    classification: attachment_restriction
+    reason: § 76 restricts attachment of the Kindergeld claim to statutory maintenance claims of a child for whom Kindergeld is fixed and paid to the claimant. Creditor-enforcement shield on a fixed and paid entitlement, parallel to the DK ledger's exclusion of the execution shield; no entitlement or amount rule. The DA-KG restatement V 24.2 (attachment-purpose attribution of the paid amount to a child) is dispositioned consistently as non-bearing.
+  - citation_path: de/statute/estg/76a
+    body_sha256: 3973e022e93220f9212c18d0d0c543ae7c309e46640da93a4a0314de999f5112
+    status: excluded-with-reason
+    classification: repealed
+    reason: 'The complete text of § 76a in the pinned corpus row is ''-'': repealed, no current rule.'
+  - citation_path: de/statute/estg/77
+    body_sha256: a1426884fadc630dbb48c1e526de8f19f0a0dbce6b09b05e6f68b2353be18e1b
+    status: excluded-with-reason
+    classification: appeal_costs
+    reason: § 77 obliges the Familienkasse to reimburse the necessary costs of a successful objection against a Kindergeld fixing (Abs. 1), including a tax adviser's fees where necessary (Abs. 2), fixed on application (Abs. 3). Costs of the pre-court appeal; no entitlement or amount rule.
   instrument_dispositions:
   - id: de-kg-dakg-A1
     status: classified-with-reason
@@ -8579,9 +8645,9 @@ committed_decisions:
   - id: de-kg-dakg-V23.4
     status: classified-with-reason
     body_sha256: af525cbf50dce8ff1e8658de1559874c626e79e6d1a89cdff3c2a07441c59bc6
-    classification: spine_restatement
-    reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. This is a rule on how much is paid for past months — a computed-surface rule restating § 70 Abs. 1 Satz 2 and 3 EStG on the spine. Open until that provision is encoded or excluded at spine level.
-    bears_on_computed_surface: true
+    classification: payout_limitation
+    reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. Restates the disbursement-stage payout limitation of § 70 Abs. 1 Satz 2, which the spine row excludes because Satz 3 leaves the monthly claim the captured § 66 module computes untouched; how much of a fixed claim is paid out for past months is not on the computed surface. Non-bearing, consistent with the § 70 spine disposition.
+    bears_on_computed_surface: false
   - id: de-kg-dakg-V24
     status: excluded-with-reason
     body_sha256: 3aaff7248b7c25363a94a5d87c75df5c6ee2f70803dfc6cb96ba8eca193b1de2
@@ -8597,9 +8663,9 @@ committed_decisions:
   - id: de-kg-dakg-V24.2
     status: classified-with-reason
     body_sha256: e16138a780f98f79b6e482bb4e2f48b1be50c11c514d81fecab206df53f7aee2
-    classification: spine_restatement
-    reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). This defines how the household total is split into a per-child share — a computed-surface rule (per-child amount and its attribution) restating § 76 EStG on the spine. Open until the per-child attribution is encoded and bound to that provision.
-    bears_on_computed_surface: true
+    classification: attachment_attribution
+    reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). Attribution of a paid household total to one child for the purpose of the § 76 attachment shield, which the spine row excludes as creditor enforcement; the captured § 66 module already computes the claim per child (monthly_kindergeld_per_child, entity Person), so the attribution neither defines nor changes a computed amount. Non-bearing, consistent with the § 76 spine disposition.
+    bears_on_computed_surface: false
   - id: de-kg-dakg-V24.3
     status: excluded-with-reason
     body_sha256: cc483be4acb524974de1e1fe539914bb4162fee8dab06a95a42e5620ee665c98
@@ -9134,7 +9200,23 @@ committed_decisions:
     classification: administration_only
     reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
     bears_on_computed_surface: false
-  leaf_classifications: []
+  leaf_classifications:
+  - input: child_allowances_under_sections_31_and_32_6_1_are_increased
+    leaf_kind: law_derived
+    reason: Whether the Freibeträge für Kinder 'nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben' were raised (§ 66 Abs. 3 Satz 1 EStG) is read off the amending acts that change § 32 Abs. 6 Satz 1 — a quantity the law defines (EStG § 31 is the pending discovered candidate de-kg-instr-003), not an observable act. Open until the § 31 / § 32 Abs. 6 allowance history is encoded and the increase derived from it.
+    defining_citation_path: de/statute/estg/31
+  - input: correspondingly_increased_kindergeld_amount
+    leaf_kind: law_derived
+    reason: The amount to which Kindergeld is 'entsprechend erhöht' when the Freibeträge are raised (§ 66 Abs. 3 Satz 1 EStG) is defined by the provision in proportion to the allowance increase and then rounded under Satz 2; the module encodes the rounding but takes the increased amount as an input. Law-derived; open until the proportional increase is encoded from the § 32 Abs. 6 allowance history.
+    defining_citation_path: de/statute/estg/66
+  - input: month_is_on_or_after_first_qualifying_month
+    leaf_kind: law_derived
+    reason: Whether a month is at or after the first month in which 'die Anspruchsvoraussetzungen erfüllt sind' (§ 66 Abs. 2 EStG) is decided by the entitlement conditions of §§ 62–65 EStG with § 32 EStG (claimant, child, priority, exclusion) — a quantity the law defines how to compute, not an observable act. Open until those provisions are encoded and the first qualifying month derived from them.
+    defining_citation_path: de/statute/estg/62
+  - input: month_is_on_or_before_last_qualifying_month
+    leaf_kind: law_derived
+    reason: Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (§ 66 Abs. 2 EStG) is decided by the same entitlement conditions of §§ 62–65 EStG with § 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.
+    defining_citation_path: de/statute/estg/62
   supplemental_instruments:
   - id: de-kg-suppl-001
     identity: Einkommensteuer-Richtlinien (EStR)
@@ -9323,7 +9405,10 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 261
-    status: pending
+    status: partially-encoded
+    reason: 'Encoded by the captured module de:statutes/estg/66 (5 rules): Abs. 1 as the dual-version parameter monthly_kindergeld_per_child (255 EUR from 2025-01-01, 259 EUR from 2026-01-01, proof atoms bound to the Steuerfortentwicklungsgesetz), Abs. 2 as kindergeld_payable_for_month (the conjunction of the first- and last-qualifying-month conditions), Abs. 3 Satz 1 and 2 as kindergeld_before_whole_euro_rounding and kindergeld_after_child_allowance_increase with whole_euro_rounding_multiple. Unencoded: the tests behind Abs. 2 — whether ''die Anspruchsvoraussetzungen erfüllt sind'' in a month (§§ 62–65 with § 32 EStG) — enter the module only as the inputs month_is_on_or_after_first_qualifying_month and month_is_on_or_before_last_qualifying_month; the Abs. 3 trigger (an increase of the Freibeträge under § 31 Satz 1 with § 32 Abs. 6 Satz 1) and the ''entsprechend'' increased amount enter only as the inputs child_allowances_under_sections_31_and_32_6_1_are_increased and correspondingly_increased_kindergeld_amount.
+      Those four inputs are classified law-derived leaves and stay open dependencies.'
+    encoded_by: de:statutes/estg/66
   - ordinal: 6
     corpus_ordinal: 67
     citation_path: de/statute/estg/67
@@ -9333,7 +9418,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 262
-    status: pending
+    status: excluded-with-reason
+    classification: application_procedure
+    reason: '§ 67 governs how Kindergeld is applied for: electronically via the official interface or in writing with a handwritten signature (Satz 1), by the claimant or a person with a legitimate interest (Satz 2), the IdNr requirement of § 62 Abs. 1 Satz 2 and 3 applying in that case (Satz 3), with the claimant''s duty to disclose the IdNr and the Familienkasse''s fallback disclosure (Satz 4 and 5). It fixes the form and the filer of the application; the entitlement it triggers is tested under §§ 62–65 and the amount under § 66. No amount or entitlement rule.'
   - ordinal: 7
     corpus_ordinal: 68
     citation_path: de/statute/estg/68
@@ -9343,7 +9430,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 263
-    status: pending
+    status: excluded-with-reason
+    classification: cooperation_and_data_disclosure
+    reason: § 68 imposes the duty to report changes in circumstances and the adult child's duty to cooperate (Abs. 1), Abs. 2 is '(weggefallen)', Abs. 3 gives a certificate of the Kindergeld paid in a calendar year, and Abs. 4 to 7 authorise automated data retrieval between the Familienkassen, public-service pay offices, social-benefit providers, EU institutions and the pension-insurance data office, with regulation-making powers. Procedural duties and information-sharing powers; no entitlement or amount rule.
   - ordinal: 8
     corpus_ordinal: 69
     citation_path: de/statute/estg/69
@@ -9353,7 +9442,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 264
-    status: pending
+    status: excluded-with-reason
+    classification: data_transmission
+    reason: § 69 obliges the Bundeszentralamt für Steuern to transmit register data of a child (moves, ex officio deregistration, a newly issued IdNr at birth, and the data of persons for whom a Kinderfreibetrag is considered) to the competent Familienkasse and, on request, to the tax offices, for checking the lawfulness of Kindergeld receipt. Inter-agency data flow; no entitlement or amount rule.
   - ordinal: 9
     corpus_ordinal: 70
     citation_path: de/statute/estg/70
@@ -9363,7 +9454,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 271
-    status: pending
+    status: excluded-with-reason
+    classification: fixing_payout_and_correction
+    reason: '§ 70 governs the administrative fixing and payment of the Kindergeld due under § 62: fixing and payment by notice (Abs. 1 Satz 1); the retroactive PAYOUT of fixed Kindergeld only for the six months before the month the application was received (Abs. 1 Satz 2), while by Abs. 1 Satz 3 ''Der Anspruch auf Kindergeld nach § 62 bleibt von dieser Auszahlungsbeschränkung unberührt'' — the monthly claim the captured § 66 module computes is, by the provision''s own words, untouched; revocation or amendment of the fixing from the change in circumstances (Abs. 2), with a written notice dispensable for a mere rate increase under § 66 Abs. 1; correction of material errors for the future with § 176 AO (Abs. 3); Abs. 4 ''(weggefallen)''. Disbursement-stage and correction machinery operating on a fixed entitlement, parallel to the DK ledger''s treatment of disbursement provisions; the amount per month is unchanged. The DA-KG restatement V 23.4 is dispositioned consistently as non-bearing.'
   - ordinal: 10
     corpus_ordinal: 71
     citation_path: de/statute/estg/71
@@ -9373,7 +9466,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 272
-    status: pending
+    status: excluded-with-reason
+    classification: provisional_payment_suspension
+    reason: § 71 lets the Familienkasse provisionally stop payment without a notice on learning of facts that by law suspend or end the claim where the fixing must be revoked retroactively (Abs. 1), with notification and a hearing (Abs. 2) and mandatory catch-up payment if the fixing is not revoked or amended within two months (Abs. 3). Payment-procedure safeguard; it neither creates nor changes the monthly claim.
   - ordinal: 11
     corpus_ordinal: 72
     citation_path: de/statute/estg/72
@@ -9383,7 +9478,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 273
-    status: pending
+    status: excluded-with-reason
+    classification: repealed
+    reason: The complete text of § 72 is '(weggefallen)'; it contains no current rule.
   - ordinal: 12
     corpus_ordinal: 73
     citation_path: de/statute/estg/73
@@ -9393,7 +9490,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 274
-    status: pending
+    status: excluded-with-reason
+    classification: repealed
+    reason: 'The complete text of § 73 in the pinned corpus row is ''-'': repealed, no current rule.'
   - ordinal: 13
     corpus_ordinal: 74
     citation_path: de/statute/estg/74
@@ -9403,7 +9502,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 275
-    status: pending
+    status: excluded-with-reason
+    classification: payout_routing
+    reason: § 74 permits payment of the Kindergeld fixed for a child under § 66 Abs. 1 to the child itself, or to the person or body maintaining the child, where the claimant does not meet the statutory maintenance duty, cannot afford it, or owes less than the Kindergeld (Abs. 1), and applies §§ 102–109 and 111–113 SGB X to refund claims of social-benefit providers against the Familienkasse (Abs. 2). It redirects to whom a fixed amount is paid and settles inter-agency refunds; the amount fixed under § 66 Abs. 1 is taken as given.
   - ordinal: 14
     corpus_ordinal: 75
     citation_path: de/statute/estg/75
@@ -9413,7 +9514,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 276
-    status: pending
+    status: excluded-with-reason
+    classification: set_off_recovery
+    reason: § 75 allows the Familienkasse to set off Kindergeld refund claims against Kindergeld claims up to half their amount unless the claimant proves resulting need under SGB XII or SGB II (Abs. 1), extended to the later claim of a household member for a child considered with both (Abs. 2). Collections machinery operating on disbursement of an existing entitlement, parallel to the DK ledger's exclusion of set-off; it does not alter the monthly claim.
   - ordinal: 15
     corpus_ordinal: 76
     citation_path: de/statute/estg/76
@@ -9423,7 +9526,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 277
-    status: pending
+    status: excluded-with-reason
+    classification: attachment_restriction
+    reason: § 76 restricts attachment of the Kindergeld claim to statutory maintenance claims of a child for whom Kindergeld is fixed and paid to the claimant. Creditor-enforcement shield on a fixed and paid entitlement, parallel to the DK ledger's exclusion of the execution shield; no entitlement or amount rule. The DA-KG restatement V 24.2 (attachment-purpose attribution of the paid amount to a child) is dispositioned consistently as non-bearing.
   - ordinal: 16
     corpus_ordinal: 76
     citation_path: de/statute/estg/76a
@@ -9433,7 +9538,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 278
-    status: pending
+    status: excluded-with-reason
+    classification: repealed
+    reason: 'The complete text of § 76a in the pinned corpus row is ''-'': repealed, no current rule.'
   - ordinal: 17
     corpus_ordinal: 77
     citation_path: de/statute/estg/77
@@ -9443,7 +9550,9 @@ computed:
     citation_receipt:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 279
-    status: pending
+    status: excluded-with-reason
+    classification: appeal_costs
+    reason: § 77 obliges the Familienkasse to reimburse the necessary costs of a successful objection against a Kindergeld fixing (Abs. 1), including a tax adviser's fees where necessary (Abs. 2), fixed on application (Abs. 3). Costs of the pre-court appeal; no entitlement or amount rule.
   - ordinal: 18
     corpus_ordinal: 78
     citation_path: de/statute/estg/78
@@ -9457,45 +9566,29 @@ computed:
   provision_counts:
     total: 18
     encoded: 0
-    partially-encoded: 0
+    partially-encoded: 1
     classified-with-reason: 0
-    excluded-with-reason: 0
-    pending: 18
-  partially_encoded: []
+    excluded-with-reason: 12
+    pending: 5
+  partially_encoded:
+  - de/statute/estg/66
   pending:
   - de/statute/estg/62
   - de/statute/estg/63
   - de/statute/estg/64
   - de/statute/estg/65
-  - de/statute/estg/66
-  - de/statute/estg/67
-  - de/statute/estg/68
-  - de/statute/estg/69
-  - de/statute/estg/70
-  - de/statute/estg/71
-  - de/statute/estg/72
-  - de/statute/estg/73
-  - de/statute/estg/74
-  - de/statute/estg/75
-  - de/statute/estg/76
-  - de/statute/estg/76a
-  - de/statute/estg/77
   - de/statute/estg/78
   boundary_frontier:
     input_count: 8
-    pending_count: 8
-    law_derived_count: 4
-    unclassified_count: 4
+    pending_count: 4
+    law_derived_count: 8
+    unclassified_count: 0
     pending:
-    - child_allowances_under_sections_31_and_32_6_1_are_increased
     - claimant_entitlement
-    - correspondingly_increased_kindergeld_amount
-    - month_is_on_or_after_first_qualifying_month
-    - month_is_on_or_before_last_qualifying_month
     - qualifying_child_count
     - recipient_priority
     - substitute_child_benefit_exclusion
-    complete: false
+    complete: true
     inputs:
     - id: de-kg-leaf-b329e1f74fcb6509
       input: child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -9503,8 +9596,10 @@ computed:
       - de:statutes/estg/66#input.child_allowances_under_sections_31_and_32_6_1_are_increased
       read_by:
       - kindergeld_before_whole_euro_rounding
-      leaf_kind: unclassified
-      status: pending
+      leaf_kind: law_derived
+      status: classified
+      reason: Whether the Freibeträge für Kinder 'nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben' were raised (§ 66 Abs. 3 Satz 1 EStG) is read off the amending acts that change § 32 Abs. 6 Satz 1 — a quantity the law defines (EStG § 31 is the pending discovered candidate de-kg-instr-003), not an observable act. Open until the § 31 / § 32 Abs. 6 allowance history is encoded and the increase derived from it.
+      defining_citation_path: de/statute/estg/31
     - id: de-kg-leaf-001
       input: claimant_entitlement
       slots: []
@@ -9521,24 +9616,30 @@ computed:
       - de:statutes/estg/66#input.correspondingly_increased_kindergeld_amount
       read_by:
       - kindergeld_before_whole_euro_rounding
-      leaf_kind: unclassified
-      status: pending
+      leaf_kind: law_derived
+      status: classified
+      reason: The amount to which Kindergeld is 'entsprechend erhöht' when the Freibeträge are raised (§ 66 Abs. 3 Satz 1 EStG) is defined by the provision in proportion to the allowance increase and then rounded under Satz 2; the module encodes the rounding but takes the increased amount as an input. Law-derived; open until the proportional increase is encoded from the § 32 Abs. 6 allowance history.
+      defining_citation_path: de/statute/estg/66
     - id: de-kg-leaf-28c8b07ec06f361f
       input: month_is_on_or_after_first_qualifying_month
       slots:
       - de:statutes/estg/66#input.month_is_on_or_after_first_qualifying_month
       read_by:
       - kindergeld_payable_for_month
-      leaf_kind: unclassified
-      status: pending
+      leaf_kind: law_derived
+      status: classified
+      reason: Whether a month is at or after the first month in which 'die Anspruchsvoraussetzungen erfüllt sind' (§ 66 Abs. 2 EStG) is decided by the entitlement conditions of §§ 62–65 EStG with § 32 EStG (claimant, child, priority, exclusion) — a quantity the law defines how to compute, not an observable act. Open until those provisions are encoded and the first qualifying month derived from them.
+      defining_citation_path: de/statute/estg/62
     - id: de-kg-leaf-9dcc1cbc40e7ed0b
       input: month_is_on_or_before_last_qualifying_month
       slots:
       - de:statutes/estg/66#input.month_is_on_or_before_last_qualifying_month
       read_by:
       - kindergeld_payable_for_month
-      leaf_kind: unclassified
-      status: pending
+      leaf_kind: law_derived
+      status: classified
+      reason: Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (§ 66 Abs. 2 EStG) is decided by the same entitlement conditions of §§ 62–65 EStG with § 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.
+      defining_citation_path: de/statute/estg/62
     - id: de-kg-leaf-002
       input: qualifying_child_count
       slots: []
@@ -15214,9 +15315,9 @@ computed:
       heading_sha256: 5a2eccea6f7fe424ba2a63a05d91b8fbfb2569c483db637f33da34cb1dd1f2b3
       section_located: true
       body_sha256: af525cbf50dce8ff1e8658de1559874c626e79e6d1a89cdff3c2a07441c59bc6
-      classification: spine_restatement
-      reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. This is a rule on how much is paid for past months — a computed-surface rule restating § 70 Abs. 1 Satz 2 and 3 EStG on the spine. Open until that provision is encoded or excluded at spine level.
-      bears_on_computed_surface: true
+      classification: payout_limitation
+      reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. Restates the disbursement-stage payout limitation of § 70 Abs. 1 Satz 2, which the spine row excludes because Satz 3 leaves the monthly claim the captured § 66 module computes untouched; how much of a fixed claim is paid out for past months is not on the computed surface. Non-bearing, consistent with the § 70 spine disposition.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V24
       status: excluded-with-reason
       discovery_refs:
@@ -15265,9 +15366,9 @@ computed:
       heading_sha256: 97f48a746befb625c766ac2a1dee2332a5f12330a3ea1b67613082bf9d036ecf
       section_located: true
       body_sha256: e16138a780f98f79b6e482bb4e2f48b1be50c11c514d81fecab206df53f7aee2
-      classification: spine_restatement
-      reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). This defines how the household total is split into a per-child share — a computed-surface rule (per-child amount and its attribution) restating § 76 EStG on the spine. Open until the per-child attribution is encoded and bound to that provision.
-      bears_on_computed_surface: true
+      classification: attachment_attribution
+      reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). Attribution of a paid household total to one child for the purpose of the § 76 attachment shield, which the spine row excludes as creditor enforcement; the captured § 66 module already computes the claim per child (monthly_kindergeld_per_child, entity Person), so the attribution neither defines nor changes a computed amount. Non-bearing, consistent with the § 76 spine disposition.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V24.3
       status: excluded-with-reason
       discovery_refs:
@@ -17269,17 +17370,17 @@ computed:
       provenance: DA-KG 2025 S 1.2 Satz 2 (ergänzend heranzuziehen im Rahmen des § 386 AO)
   dependency_closure:
     law_derived_inputs:
-    - claimant_entitlement
-    - qualifying_child_count
-    - recipient_priority
-    - substitute_child_benefit_exclusion
-    law_derived_input_count: 4
-    unclassified_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
+    - claimant_entitlement
     - correspondingly_increased_kindergeld_amount
     - month_is_on_or_after_first_qualifying_month
     - month_is_on_or_before_last_qualifying_month
-    unclassified_input_count: 4
+    - qualifying_child_count
+    - recipient_priority
+    - substitute_child_benefit_exclusion
+    law_derived_input_count: 8
+    unclassified_inputs: []
+    unclassified_input_count: 0
     instruments_bearing_on_computed:
     - de-kg-dakg-A1
     - de-kg-dakg-A10.1
@@ -17375,15 +17476,13 @@ computed:
     - de-kg-dakg-A9
     - de-kg-dakg-V14.3
     - de-kg-dakg-V23.1
-    - de-kg-dakg-V23.4
-    - de-kg-dakg-V24.2
-    instruments_bearing_on_computed_count: 96
-    open_dependency_count: 104
+    instruments_bearing_on_computed_count: 94
+    open_dependency_count: 102
     closed: false
   measured_denominators:
     spine_rows: 18
     bearing_candidate_instruments: 465
-    law_derived_leaf_nodes: 4
+    law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
     remaining_executable_work: 0
