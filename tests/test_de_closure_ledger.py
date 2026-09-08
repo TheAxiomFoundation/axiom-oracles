@@ -511,7 +511,8 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
         assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program] - {
             "birth_record_child_identifier", "birth_record_delivery_date",
             "birth_record_person_identifier", "candidate_child_identifier",
-            "candidate_person_identifier",
+            "candidate_person_identifier", "event_or_intraday_timepoint_date",
+            "beginning_of_day_start_date", "recorded_birth_date",
         }
         assert len(dependency_inputs) == 8
         # Every leaf is typed, so the boundary is complete; the eight
