@@ -32,6 +32,19 @@ they are not current release verification results. No new signed RuleSpec
 modules exist yet, so module declarations and legal dispositions are not
 promoted merely because a source became available.
 
+The next corpus tranche is in draft axiom-corpus PR #648 at
+`273fcedd7ac44036feeb215717b41b22a9f4dd9c`. Its unpublished selector
+`de-rulespec-2026-09-08-kindergeld-civil` preserves the fourteen published
+scopes and adds three: full BGB/Unification Treaty, the German C-411/20
+judgment, and all eight previously missing BMF handbook pages. The planned
+release has 7,637 rows in seventeen scopes. All three new scopes have signed
+ingest manifests; the signature guard and deep release dry-run pass. The
+handbook scope has sixteen rows with explicit ISO capture expression dates;
+119 focused adapter/release-quality tests pass. Publication, signature and
+public-mirror verification must precede repinning this consumer. This ledger
+still binds the earlier published release, and no handbook page-capture hash
+has yet been replaced using the unpublished tranche.
+
 Remaining work: exhaust the official BMF/BZSt registers; verify individual
 case identities and BStBl II publication against official records; reconcile
 duplicate identities; capture operative texts; disposition each member and
