@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "a81c43bb637ad0a76eb9d568d0ad11157d17c163534192c0e1c6a0b23cb09cf6"
+      "sha256": "f72f0bcaf07866fe0c93dbe80b9b0f295e247f0c7bbecb4b7e704bf7ee98a1fc"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "3d19b21e6c6c190fae0634920980438f4cc2e06bcf200ab7eb0dd1966f030d4e",
+      "sha256": "92a82898a43e690b12f3101ba4a49997928ada57d74fcba4661ef587856d55a4",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "4ece35fadb5905d3b5d0188e9bf09aaeef51f8e84dfd606c5fc8e9120a2748dd"
+      "sha256": "58a3e289ac47fca6d26c65a1e01fb5ce9cf2c80ea0679db156ba85a505a3b66f"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-08-kindergeld-context",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-2025-history",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -233,7 +233,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "635b28e1b236186e71216ff3af1535fa37518b53c4ce2bab23fdbffb8e3f1259",
+      "subgraph_sha256": "d7905eb4312dd1a1c4e287f8b0e42472d013d8a40ffb4db509e4296129e2556d",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"

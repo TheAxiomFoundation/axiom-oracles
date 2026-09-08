@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-08T20:54:54Z",
+  "generated_at": "2026-09-08T22:05:04Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73"
+    "sha256": "e651e1a305a6fa385140b3a3e49adefec47d471d8842152c16d02402980917e2"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-08-kindergeld-context",
-      "commit": "069407610ff961a075665d08c96ad08f54a9767b",
-      "release_content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c",
+      "release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+      "commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
+      "release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-08-kindergeld-context/32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c.json",
-        "raw_sha256": "8d2e0039a1ddddaff96fd5ed67b593dd233fcc9c3a8d2014bafda25a5e07b7e6",
-        "content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c"
+        "path": "releases/de-rulespec-2026-09-08-kindergeld-2025-history/38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98.json",
+        "raw_sha256": "d43fd48f2a530337b698d0843d8794daadbee5bd6f68b990667cfb1a34244885",
+        "content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98"
       },
       "scans": [
         {
@@ -71,6 +71,19 @@
           "provisions": {
             "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
             "sha256": "b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85",
+            "row_count": 4
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json",
+            "sha256": "f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl",
+            "sha256": "1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39",
             "row_count": 4
           }
         },
@@ -246,6 +259,19 @@
         {
           "document_class": "statute",
           "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json",
+            "sha256": "80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95",
+            "row_count": 18
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl",
+            "sha256": "656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510",
+            "row_count": 18
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
             "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json",
             "sha256": "f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6",
             "row_count": 2
@@ -283,23 +309,23 @@
           }
         }
       ],
-      "scanned_row_count": 8176,
+      "scanned_row_count": 8198,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 8176,
-        "body_row_count": 8125,
-        "mapped_row_count": 8176,
+        "row_count": 8198,
+        "body_row_count": 8136,
+        "mapped_row_count": 8198,
         "unmapped_row_count": 0,
-        "act_count": 80,
+        "act_count": 91,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 5241,
+          "explicit_cross_reference_body": 5260,
           "law_metadata_changed_by": 24,
           "law_metadata_fundstelle": 31
         },
-        "row_scan_sha256": "4ba4d97855bbceda2e045b00b108a875323c5434b6d680629544813ca7c5ac12",
-        "canonical_index_sha256": "7370716d54f9c7f8bec4893e4224f06fc0880c14aa7ec40f05c3144da70723b4",
-        "per_act_sha256": "5501439d1d4e688fa11cf09ea6471dc3b3cff5f5f2395c42857bc0e1b66bfabd",
+        "row_scan_sha256": "3c53a12b8c4b0d507affde4777ef9b2f7af87dd7976d651aa959b6047db788cc",
+        "canonical_index_sha256": "63de0afea3a0dbb8371a8841723c71117f9cb944fe2e987f30dbcdaaa137c9fb",
+        "per_act_sha256": "cd8101de2585e1f1fb71a2745217c4d65141e798dc539373f57c9692a803c173",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -446,6 +472,92 @@
                 "source_row_sha256": "8e3a76241aa46c169bb85a133a168a0b5b76e574df8f72ca1360b27dddd8daaf",
                 "matched_text": "ZPO",
                 "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09",
+            "document_row_sha256": "a5a7d22a9a755409d65fe8cc538bde924a0464c3d57443d16d4f0ab248a9037c",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 4,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "1dfa237e053ccf93d756030afd43ce03d7daf254ed5e8bed6083e33c6155eefc",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+                "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+                "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+                "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+                "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+                "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+                "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+                "matched_text": "Grundgesetz",
+                "unresolved_identity": "named-instrument:grundgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+                "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+                "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2025-06-03",
+            "document_row_sha256": "8ad82a7de3b0f05dd372b34c15d7a2f0860035e59def4a2673fb257ea618b6f6",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 3,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "b17d887597316c87828029c5aa62f041a807575f158a7cf72b3a5c721bd16157",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt",
+                "source_body_sha256": "2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567",
+                "source_row_sha256": "92b9ef7571ed1e05aac213a2e99ce5381c57bd100256a437ba0c4fb9b9b2dd5e",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt",
+                "source_body_sha256": "2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567",
+                "source_row_sha256": "92b9ef7571ed1e05aac213a2e99ce5381c57bd100256a437ba0c4fb9b9b2dd5e",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt",
+                "source_body_sha256": "2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567",
+                "source_row_sha256": "92b9ef7571ed1e05aac213a2e99ce5381c57bd100256a437ba0c4fb9b9b2dd5e",
+                "matched_text": "Grundgesetz",
+                "unresolved_identity": "named-instrument:grundgesetz"
               }
             ]
           },
@@ -13232,6 +13344,237 @@
                 "source_citation_path": "de/statute/bgb",
                 "source_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee",
                 "raw_reference": "RGBl 1896, 195"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2002-01-01/1594",
+            "document_row_sha256": "75b374e494212ffa72cf9c82f4a907b85fa0ff30f85c3bed6992e36f0b97debf",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "03dac939948ad50f749a7702be8396e49b73e459f444142e9c1b9b058d6f6a30",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2002-01-01/1594/inhalt",
+                "source_body_sha256": "3d47ea714a93a9e1ad8ef414f4c2f0e4dc031f67676e8a99fe2c9e33e89ff9c4",
+                "source_row_sha256": "a367a6421546a8558cc38555c04bb694813f2689bd03f466a214ce95c95619a1",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2002-01-01/1595",
+            "document_row_sha256": "c203319f672b85d8fe997d266247df8e024a68099cb868c79ef26e630a98d2e4",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "c2478d8a636392a8c77d3c0c15e941c413a43e1131325e955b97e3cfc85649c4",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2002-01-01/1595/inhalt",
+                "source_body_sha256": "61f3d13013f754937844abd006b80ee4e9e657724f3e7a1ac7d0c146cb68f5e1",
+                "source_row_sha256": "4ed31921257e0169b64baa4634a273c4811ac588266bf9222c5dc85bf4f970e9",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2004-04-30/1600a",
+            "document_row_sha256": "8468ecd7ddffe0edcf25afb5ef3e93b51b19cb4ecaf1ceb7d221235dfbc1eaaa",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "a9653794883c6b82e8f4645de193974eb224465765efd9c45eb3a9ba51c51756",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2004-04-30/1600a/inhalt",
+                "source_body_sha256": "4342918d253a65725495bb4ba0affea2d743b61ac70f64774774c8c69f96e011",
+                "source_row_sha256": "fdc37f0ef3c1801726c62a8586bf7aa418dbd31c8a0ef8bbf678895356f186d5",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2009-01-01/1597",
+            "document_row_sha256": "2865ee88fb5bb8f2b196d0547efe749bab053cf9c225e128ae407f8a1f2bddc4",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "652c91b0a110633aae09ff949d792bc1e646506ee88ad14ecef4b231ffe50286",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2009-01-01/1597/inhalt",
+                "source_body_sha256": "e7b4f85fd8342e8e6c084ab14c1685c2d3cd4da4e4d05e184959661e3669cc03",
+                "source_row_sha256": "445db2a8f813577f95fdd388b5b1a18095d7f010725eb110f6604bc168005389",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2009-01-01/1597/inhalt",
+                "source_body_sha256": "e7b4f85fd8342e8e6c084ab14c1685c2d3cd4da4e4d05e184959661e3669cc03",
+                "source_row_sha256": "445db2a8f813577f95fdd388b5b1a18095d7f010725eb110f6604bc168005389",
+                "matched_text": "Personenstandsrechtsreformgesetz",
+                "unresolved_identity": "named-instrument:personenstandsrechtsreformgesetz"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2015-11-26/1599",
+            "document_row_sha256": "d424a7acb7831678b13498ec854f145196ba6d83d811136589c904568ac86b67",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "7fd755f3c9b27bb9afd7e70b47c552541382348ccf0b01a4e8559b7792968dfc",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2015-11-26/1599/inhalt",
+                "source_body_sha256": "f452038a06e49217b0947ae6df397d3e0eef4b38f5ab88638d86ddfdcdde37a8",
+                "source_row_sha256": "f9687763b50a5ad007a2e8216fef303114b1095fb92b6a8197c19e7e75559720",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2017-07-29/1598",
+            "document_row_sha256": "585ccbba6378f4eca237a6b7b0d72c80039ddb41ae7b8f4e86b27ed0b435bbdf",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "39d9cb623b37a9b844068c49ddc00b402bc166d70f086652c193cd18e5f9bbb0",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2017-07-29/1598/inhalt",
+                "source_body_sha256": "61615068336a0a52d42c1411b1d751f1e687f8c4255a077a0176507f9c184d36",
+                "source_row_sha256": "033e700e4400fc0a77a27f109ce41b313eff759dc9887c73eafd712002507efc",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2017-07-29/1600",
+            "document_row_sha256": "93f6d95b5f71c426fc11bd61972cdf5cae2569bd8d3111754dc0f4380d5b8dd1",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 3,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "6215b6b9f838f328f4938bc9e561b9ee9aa5a4420f19636daa241ca6f8b9b658",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2017-07-29/1600/inhalt",
+                "source_body_sha256": "76544982f83e0a75b4d164e90263da192ecbb1181acf5c9feca728711e43609f",
+                "source_row_sha256": "f3f2d1d45446462574fd6f88b901a349da8c23f459b558e5bb31190b4dcdfed1",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2017-07-29/1600/inhalt",
+                "source_body_sha256": "76544982f83e0a75b4d164e90263da192ecbb1181acf5c9feca728711e43609f",
+                "source_row_sha256": "f3f2d1d45446462574fd6f88b901a349da8c23f459b558e5bb31190b4dcdfed1",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2017-07-29/1600/inhalt",
+                "source_body_sha256": "76544982f83e0a75b4d164e90263da192ecbb1181acf5c9feca728711e43609f",
+                "source_row_sha256": "f3f2d1d45446462574fd6f88b901a349da8c23f459b558e5bb31190b4dcdfed1",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2017-07-29/1600b",
+            "document_row_sha256": "68db795580ecf97dc28f953fb7e004f700be25ab565268b2f60d51ae7adfe5d2",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "ee9f6a7410e48e2a60aadb06f3b942b492527bf513d3dd689dca4d5f9fef1e17",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2017-07-29/1600b/inhalt",
+                "source_body_sha256": "1ff770a68881f6de69f0060627e06fe703df253990a1ca700baeff85cda4cffd",
+                "source_row_sha256": "4a198f14ab1ce4799cb0848ecb2bba39fa2375df39f0c68806f253f8cd3e4d58",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgb/fassung-2023-01-01/1596",
+            "document_row_sha256": "6ea49845aad492e0dd751f08df198baa2ab4a19a992e0268ffc4464a9ca249f1",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "2ce7f385f1e8f1565b6368d84e47257f18b1bcff27c72afb6caf5b6f7f6d736a",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/fassung-2023-01-01/1596/inhalt",
+                "source_body_sha256": "61e2642d6bf692f20f291a385c9fd8fff05e5f664e7b05d9b6cb489c06fe85b8",
+                "source_row_sha256": "ccd59065fbb369d904e5ade00ac1a3aa6a0341930f4c36fcb739a39a95711017",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               }
             ]
           },
@@ -45310,7 +45653,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "d1d6d74d4f282efef426b55a8f2a9bc6f936f0134a7582d4bba29e5bed4307a1"
+        "receipt_sha256": "733090ea9453bb022691c91fdeea41e98645d207eede21aea43314f42dd2cb1d"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -45592,6 +45935,16 @@
           "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
           "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
           "matched_text": "Ausländergesetz"
+        },
+        {
+          "id": "de-corpus-57fc131f81e313f8405c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+          "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+          "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+          "matched_text": "§ 1591 BGB",
+          "resolved_citation_path": "de/statute/bgb/1591"
         },
         {
           "id": "de-corpus-5f705aae8523970f1a25",
@@ -46345,7 +46698,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "8d994e6db8a49b4a4f7bda6a37b18e20ebb5a33575ed8f6876634e5b3e8254ef"
+      "receipt_sha256": "30883b13960392e2f51d68d62bceb85b5c1f755f9ac1bfa844bb290f54d7b927"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -46361,10 +46714,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "2ebf6213887cbc44a43c459c366468870e4883ba7c390da2c7385c0b4acbe432"
+          "receipt_sha256": "068c6559863cf5baf675009bf981521aa6014a4faadade92e4756f1bbbb31e0f"
         },
         {
           "id": "de-subject-002",
@@ -46374,14 +46727,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "3d145b96c046a6093e800968adec9f90136d7a0d041d4ef81ff9241680c1833a"
+          "receipt_sha256": "e5abe40c5413728119b53ecc9c498c1dfeb10478ca639a552a20086c709e0e50"
         },
         {
           "id": "de-subject-003",
@@ -46391,14 +46744,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "7483fb004db355fec49c1b8d2ef3446655164565c8e18475f0c1e70bd66ed0bf"
+          "receipt_sha256": "858191f81665e44dfa864505c9934040792883faab88fe033d7c1803edaa3b74"
         },
         {
           "id": "de-subject-004",
@@ -46408,14 +46761,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=ebcec66e-9940-44b9-895b-25aa75db8ff0&ssb=66331241268&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=1d784a13-ca3f-4bce-9beb-7858dda2e5a6&ssk=botmanager_support@radware.com&ssm=25181906638510326102989033772624&ssn=2850e6c65ec1d5af7e03cf1076012240414d0e9890da-f1cf-41c8-b078b5&sso=683d04cf-61fc2aba06ffdc96e7e82730b1340552cbb8f77182b892d8&ssp=00490425621788961039178891878602100&ssq=35451780097438621355900974198252239467087&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDAwZTk4OTBkYS1mMWNmLTQxYzgtYjRjZi02MWZjMmFiYTA2ZmYxLTE3ODg5MDA5NzQwNzIwLTAwNDNmMDU1NDZkZDhlZWQ0YjgxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUiLCJ1em14IjoiN2ZjMDAwNGQ5Mjk0OTktNzExNC00MDEwLWI3MDUtNTEwM2IzNGVhMDcwMS0xNzg4OTAwOTc0MDcyMC0wMDQyZGRkNjBkYzEyYTg5NThjMTAifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=e2a2bc80-8d8a-475c-b333-fca9fa7c97a4&ssb=34785295364&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=7d6c01d3-ca3f-4fbd-8c05-243fce83bcdd&ssk=botmanager_support@radware.com&ssm=75678010591049176105245602660359&ssn=3b1e3c49a38d77e2bc5f6c0695e802c2989f23a16f4d-5eb1-42fe-93966f&sso=0881bd6c-c82beaabfeded95cef94fc06e3661de6d50ddf3ef4b35eb0&ssp=50203484231788957011178898945059205&ssq=06765870518504370697205185308385727430044&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDAyM2ExNmY0ZC01ZWIxLTQyZmUtOWQ2Yy1jODJiZWFhYmZlZGUxLTE3ODg5MDUxODU3MDAwLTAwNGM1ZTg1NDA1YmY1MzdmMTkxMCIsInV6bXgiOiI3ZmMwMDBkNTdhOWYyMS00NDAwLTQ1NjktYjJmMy03Yzk1MTg5OTA0ZDMxLTE3ODg5MDUxODU3MDAwLTAwNDI4OTEzNDg4ZWI5MzUyMTAxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "0185a58c224cea336891d221ae825b4531ecef204eab77acc68ae987d9b2e740",
-          "receipt_sha256": "112bd85d3b4faafbf89008e3c4747ebd702058b9f717bc764cd27ac27a05983b"
+          "content_sha256": "903654ee59da2a27b304836383631cb001fa343d1f9c0f5b74979d0900078fb6",
+          "receipt_sha256": "c2b2ad2587e76872d06c43d20b9f1934bde65d2bc43b2deb97cef75c4ec32943"
         },
         {
           "id": "de-subject-005",
@@ -46426,14 +46779,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "bd6595326e85646aac257da96de84c84da6e5205c7224d03dc1b1b635cfc1d0e"
+          "receipt_sha256": "ff1d69d910504d384518eb7c8c5c003832ba910e29964a4d4d2b7dd511e741d7"
         },
         {
           "id": "de-subject-006",
@@ -46443,14 +46796,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "de94ecad112183dfac03bec2024d873cce56c01bf384af9f9af25e4d7b6b1735"
+          "receipt_sha256": "fd19bbe1450c8beaca950a9fdfed21c36e3a9fff3d837871ae1f9cd48d7b40c6"
         },
         {
           "id": "de-subject-007",
@@ -46460,14 +46813,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "12fa2642cb2f6bbecba36132315ecef925a97d6d10ba942f8a3d2b0e303a64ba"
+          "receipt_sha256": "79f3f329c254649355b590330fa99aa2ef1f6ab520292d56a158f1166f724f94"
         },
         {
           "id": "de-subject-008",
@@ -46477,10 +46830,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "e6f9e82b2c19ed13bcef003838408fe5647ad985f3e985e25bf2dbcd1a9a7190"
+          "receipt_sha256": "4c156f224eff164d51735402b4164fd00d1a1bb9910e95026749d698771bcee0"
         },
         {
           "id": "de-subject-009",
@@ -46490,14 +46843,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "09debf783791f39835fe8fbbfc36be31ea484137c4e231a2a7663eb1507bcbb0"
+          "receipt_sha256": "8cdce932501ee95c6e6070d148071bad88c524c500fe608b3e1a42a80d1d9792"
         },
         {
           "id": "de-subject-010",
@@ -46507,14 +46860,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "8fa038034567d956660176f2958da4b51cabd78f43524c6399b1b2dcc1f298e6"
+          "receipt_sha256": "1c3347f6e05fd9614a7d3d8ab683e4d0b2e61c6737a98ee26fa6824571a51d3d"
         },
         {
           "id": "de-subject-011",
@@ -46524,14 +46877,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "dff5601a6189dc3d30e00ddc32c4f372dcf46a73c2dffc9b1e75d3f456943105"
+          "receipt_sha256": "5c73a34f98510d424b11be3708e8cad9601578a5d207439385404d58187045b5"
         },
         {
           "id": "de-subject-012",
@@ -46541,10 +46894,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "1e6c2796c962875901252b4950a2a3fe88ba423f82eb5ac61d72e4387755016a"
+          "receipt_sha256": "62597f63e1217816257ed8d2837d5f80faa896cfe364cccc4e61914544273d5b"
         },
         {
           "id": "de-subject-013",
@@ -46554,14 +46907,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "254fe6a8b8c2be7679eb51f5455aba05146ba8b1859e23bd82ffe2d8a6446e61"
+          "receipt_sha256": "e9095ec9fb96ab8c24491df39b3dab12fb361873f868bfb3087a53641a78b85d"
         },
         {
           "id": "de-subject-014",
@@ -46571,14 +46924,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "f55b3ca5b69a7f84da31a0e963e2f5fd6a9d9cb3f5ed652d5db7f5f65407590f"
+          "receipt_sha256": "86163d6199839d36a9e5688045d0c8c0d69830e256cc90f6227c209390e36650"
         },
         {
           "id": "de-subject-015",
@@ -46588,13 +46941,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-08T20:54:54Z",
+          "captured_at": "2026-09-08T22:05:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "c30238fe004a648145191d968268e388883e9856b78d60270a74e4aeb10b9202"
+          "receipt_sha256": "a1c630a1fc3e40f141ca67e2fc392d6b8ba8ba8acfd3a44c6c07b0cf0db53afc"
         }
       ],
-      "receipt_sha256": "46a9f87a157229afab1fed86a5fe4991d6a3dad0b685979cff592ae1261bb53a"
+      "receipt_sha256": "12fdd04ebb21fd65d76d0da0d4b8dd84898b6176605c07bcf66d530f5866909d"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -46698,6 +47051,21 @@
           "citation_label": "lsth-2023-9",
           "document_citation_path": "de/guidance/lsth-2023-9",
           "title": "lsth-2023-9"
+        },
+        {
+          "id": "de-kg-instr-27f4132040a5484b",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-57fc131f81e313f8405c"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09",
+          "row_sha256": "a5a7d22a9a755409d65fe8cc538bde924a0464c3d57443d16d4f0ab248a9037c",
+          "document_class": "guidance",
+          "citation_label": "BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 — Vaterschaftsanfechtung / Fortgeltung",
+          "document_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09",
+          "title": "BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 — Vaterschaftsanfechtung / Fortgeltung",
+          "document_type": "court judgment"
         },
         {
           "id": "de-kg-instr-32a81be6d35e33be",
@@ -47131,8 +47499,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "8d994e6db8a49b4a4f7bda6a37b18e20ebb5a33575ed8f6876634e5b3e8254ef",
-            "subject_matter_search": "46a9f87a157229afab1fed86a5fe4991d6a3dad0b685979cff592ae1261bb53a",
+            "corpus_release": "30883b13960392e2f51d68d62bceb85b5c1f755f9ac1bfa844bb290f54d7b927",
+            "subject_matter_search": "12fdd04ebb21fd65d76d0da0d4b8dd84898b6176605c07bcf66d530f5866909d",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -47612,5 +47980,5 @@
       ]
     }
   ],
-  "receipt_sha256": "ad0f3b6d3085735c4cc44bbb889c8d0c21a3b826a614f10cefbef0415baceadf"
+  "receipt_sha256": "159101ae70fe2450e8b09b986b14099d1f19b33290a8aacfb2308988d5182e4a"
 }

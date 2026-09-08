@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 207 of 671 instruments
-pending, and dependency closure has 127 open dependencies: eight law-derived
-inputs and 119 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 207 of 674 instruments
+pending, and dependency closure has 129 open dependencies: eight law-derived
+inputs and 121 bearing instruments, with no unclassified inputs. The signed
 BGB §1591 prerequisite is declared at RuleSpec merge
 `0201d1f7225f2be5cbd61add704f8f0fa7ea3b76`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence.
@@ -293,9 +293,9 @@ method, `text_sha256` the hash):
 
 The original browser capture methods remain recorded in git history. All
 thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
-corpus rows from `de-rulespec-2026-09-08-kindergeld-context`, commit
-`069407610ff961a075665d08c96ad08f54a9767b`, content SHA-256
-`32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c`.
+corpus rows from `de-rulespec-2026-09-08-kindergeld-2025-history`, commit
+`ceab7b8fc768dbd78089df5a85bfc67deb6a75f9`, content SHA-256
+`38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
 expression date and official URL. Single-body instruments use that body's
@@ -304,7 +304,7 @@ newline in citation-path order, without a trailing newline. These hash
 changes replace the source receipt only; classifications and bearing remain
 unchanged. The BMF handbook bundles are now included in the release.
 
-The SHA-bound class discovery snapshot adds 201 pending candidate entries.
+The SHA-bound class discovery snapshot contains 203 candidate entries: 201 pending citation seeds and two corpus-receipted bearing parentage decisions. BStBl II publication of the two parentage decisions remains unverified; their class membership is explicitly provisional.
 It is explicitly incomplete and retains the four pending class rows;
 court citations still require identity deduplication and comprehensive
 register discovery. Current result: frontier 206 of 666 pending; 126 open

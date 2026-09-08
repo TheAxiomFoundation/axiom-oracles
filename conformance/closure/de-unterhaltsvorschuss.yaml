@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73
+    sha256: e651e1a305a6fa385140b3a3e49adefec47d471d8842152c16d02402980917e2
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 069407610ff961a075665d08c96ad08f54a9767b
-    release: de-rulespec-2026-09-08-kindergeld-context
-    release_content_sha256: 32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c
+    commit: ceab7b8fc768dbd78089df5a85bfc67deb6a75f9
+    release: de-rulespec-2026-09-08-kindergeld-2025-history
+    release_content_sha256: 38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -51,6 +51,9 @@ generated_facts:
       row_count: 16
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
       sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl
+      sha256: 1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39
       row_count: 4
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
       sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
@@ -91,6 +94,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
       sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl
+      sha256: 656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510
+      row_count: 18
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl
       sha256: 906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f
       row_count: 2
@@ -362,10 +368,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: bce845d382bacf80350af12a5a88a73cf39470cb92a3f7119dfb523c20df335d
+    snapshot_sha256: 60c12e1dbab8544f5949882cff6730bb9f84c8136f746b8c2dc38b50af0d1186
     channel_receipts:
-      corpus_release: 8d994e6db8a49b4a4f7bda6a37b18e20ebb5a33575ed8f6876634e5b3e8254ef
-      subject_matter_search: 46a9f87a157229afab1fed86a5fe4991d6a3dad0b685979cff592ae1261bb53a
+      corpus_release: 30883b13960392e2f51d68d62bceb85b5c1f755f9ac1bfa844bb290f54d7b927
+      subject_matter_search: 12fdd04ebb21fd65d76d0da0d4b8dd84898b6176605c07bcf66d530f5866909d
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

@@ -4,6 +4,28 @@
   "complete": false,
   "sources": [
     {
+      "path": "bverfg-parentage-2024-04-09.txt",
+      "sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+      "url": "https://www.bundesverfassungsgericht.de/SharedDocs/Entscheidungen/DE/2024/04/rs20240409_1bvr201721.html",
+      "corpus_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+      "corpus_commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+      "corpus_release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed release; court publication status in BStBl II remains unverified."
+    },
+    {
+      "path": "bverfg-parentage-2025-06-03.txt",
+      "sha256": "2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567",
+      "url": "https://www.bundesverfassungsgericht.de/SharedDocs/Entscheidungen/DE/2025/06/rs20250603_1bvr201721.html",
+      "corpus_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt",
+      "corpus_commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+      "corpus_release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed release; court publication status in BStBl II remains unverified."
+    },
+    {
       "path": "da-kg-2025.txt",
       "sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "extraction": "pdftotext -layout",
@@ -540,6 +562,17 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4a16231e30b5e62b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified)",
+      "discovery_excerpt": "1 BvR 2017/21",
+      "source_path": "bverfg-parentage-2024-04-09.txt",
+      "source_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "class_membership_state": "bstbl_ii_publication_unverified"
     },
     {
       "id": "de-kg-discovery-4b9b630b75ca91db",
@@ -1523,6 +1556,17 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-c49f3225984aa26f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified)",
+      "discovery_excerpt": "1 BvR 2017/21",
+      "source_path": "bverfg-parentage-2025-06-03.txt",
+      "source_sha256": "2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "class_membership_state": "bstbl_ii_publication_unverified"
+    },
+    {
       "id": "de-kg-discovery-c5da6ee5d3d1267d",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57",
@@ -2053,13 +2097,15 @@
   ],
   "remaining": [
     "Complete official BMF/BZSt registers beyond DA-KG citations",
-    "Verify case identities and BStBl II publication against official decision/register captures"
+    "Verify case identities and BStBl II publication against official decision/register captures",
+    "Verify BStBl II publication/class membership of BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
+    "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row."
   ],
   "counts": {
     "de-kg-suppl-007": 11,
     "de-kg-suppl-008": 2,
-    "de-kg-suppl-009": 165,
+    "de-kg-suppl-009": 167,
     "de-kg-suppl-010": 23
   },
-  "receipt_sha256": "474914dcea53d91905811812fa1c97e8ce2058fbbe9c9cdee52e8956529b079e"
+  "receipt_sha256": "730182d97840c8180d0466cb8c4f19d6bde982bbfc7b8a2df332ce6be7656eb9"
 }

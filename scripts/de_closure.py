@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = '4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73'
+SOURCE_SHA256 = 'e651e1a305a6fa385140b3a3e49adefec47d471d8842152c16d02402980917e2'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-08-kindergeld-context'
-RELEASE_CONTENT_SHA256 = '32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c'
-RELEASE_SELECTOR_SHA256 = '3f3392ce27bf299c991ef6305017a0491f550552bbd3e5e9fdd859519dca6b68'
-CORPUS_COMMIT = '069407610ff961a075665d08c96ad08f54a9767b'
+RELEASE = 'de-rulespec-2026-09-08-kindergeld-2025-history'
+RELEASE_CONTENT_SHA256 = '38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98'
+RELEASE_SELECTOR_SHA256 = '379332d080b513de848338be2495f29370d6280e487791228d12a4efc15687e0'
+CORPUS_COMMIT = 'ceab7b8fc768dbd78089df5a85bfc67deb6a75f9'
 RULESPEC_COMMIT = "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -88,6 +88,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json': ('21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc', 2),
     'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json': ('ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb', 16),
     'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json': ('4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178', 4),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json': ('f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28', 4),
     'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json': ('9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0', 2),
     'data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70', 172),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json': ('b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2', 2),
@@ -101,6 +102,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json': ('dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34', 3136),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json': ('9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e', 854),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json': ('8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76', 4),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json': ('80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95', 18),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json': ('f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6', 2),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json': ('ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c', 2),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json': ('6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64', 535),
@@ -110,6 +112,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl': ('8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff', 2),
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl': ('3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14', 16),
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl': ('b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85', 4),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl': ('1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39', 4),
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl': ('436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac', 2),
     'data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528', 172),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl': ('29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df', 2),
@@ -123,6 +126,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl': ('3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68', 3136),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl': ('a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac', 854),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl': ('6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a', 4),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl': ('656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510', 18),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl': ('906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f', 2),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl': ('9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf', 2),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl': ('c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059', 535),

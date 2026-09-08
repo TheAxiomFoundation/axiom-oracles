@@ -2,9 +2,9 @@
   "schema": "axiom_oracles.de_supplemental_corpus_bindings.v1",
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "069407610ff961a075665d08c96ad08f54a9767b",
-    "release": "de-rulespec-2026-09-08-kindergeld-context",
-    "release_content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c"
+    "commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
+    "release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+    "release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98"
   },
   "bindings": [
     {
@@ -387,5 +387,5 @@
       ]
     }
   ],
-  "receipt_sha256": "1e7bf8559d7bc37455ec01e0e20af47bdc55c350955d6a82f33e8fb58fddd634"
+  "receipt_sha256": "da08d977e6bf6f0c9c53a8ccb3edaaf353c6e6c50d26ea258bb5cf20188d4d5c"
 }

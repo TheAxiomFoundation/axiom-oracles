@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "069407610ff961a075665d08c96ad08f54a9767b",
-    "release": "de-rulespec-2026-09-08-kindergeld-context",
-    "release_content_sha256": "32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c",
-    "release_selector_sha256": "3f3392ce27bf299c991ef6305017a0491f550552bbd3e5e9fdd859519dca6b68",
+    "commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
+    "release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+    "release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98",
+    "release_selector_sha256": "379332d080b513de848338be2495f29370d6280e487791228d12a4efc15687e0",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -34,6 +34,11 @@
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json",
         "sha256": "4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json",
+        "sha256": "f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28",
         "row_count": 4
       },
       {
@@ -102,6 +107,11 @@
         "row_count": 4
       },
       {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json",
+        "sha256": "80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95",
+        "row_count": 18
+      },
+      {
         "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json",
         "sha256": "f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6",
         "row_count": 2
@@ -136,6 +146,11 @@
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
         "sha256": "b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl",
+        "sha256": "1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39",
         "row_count": 4
       },
       {
@@ -202,6 +217,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl",
         "sha256": "6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl",
+        "sha256": "656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510",
+        "row_count": 18
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
