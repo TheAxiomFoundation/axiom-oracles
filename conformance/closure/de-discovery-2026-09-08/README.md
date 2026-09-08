@@ -57,3 +57,27 @@ alone cannot demonstrate this distinction, because rounding already-integral
 amounts is numerically inert. The V23.1 row stays bearing and open until the
 assessment/payment boundary and any fractional amount cases are implemented
 and verified from the applicable sources. No disposition is changed here.
+
+## Signed encoding gate
+
+No new module has been applied. Protected DE run
+[34235202346](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34235202346)
+compiled a §64 candidate but failed the parent/grandparent priority test:
+`household_recipient_priority` expected `holds`, returned `not_holds`.
+The formula required a designation/court act even for that test's parental
+priority branch. Its inputs also did not distinguish a sole parent from
+multiple competing parents, so changing the expected result alone would not
+resolve the source-defined priority semantics. The candidate retained
+unresolved maintenance-priority, entitlement, child-qualification and §78(5)
+composition dependencies. Its claimed runtime limitations require verification
+against the engine; they are not established by generated prose.
+
+The signer reported zero signatures. Earlier run
+[34232900768](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34232900768)
+failed proof validation, and replacement-only repair dispatch
+[34234316564](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34234316564)
+was inapplicable to a new module. These rejected artifacts must not be treated
+as encoded dependencies or manually applied to bypass the signed workflow.
+Next encoding work needs source-grounded, child-scoped household/claimant
+relations and the missing upstream modules, followed by signed regeneration
+and successful proof and behavior checks.
