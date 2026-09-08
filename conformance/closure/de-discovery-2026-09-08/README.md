@@ -247,10 +247,32 @@ count. This supplies a tested alternative to a maximum-and-identity selector,
 without asserting a complete §64 rule or closing any legal dependency.
 The retained JSON is synthetic engine IR, not manually authored RuleSpec.
 
-The prerequisite maternal relationship under BGB §1591 is being attempted
-through protected run
-[34257259104](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34257259104),
-against the same signed civil release. It must derive the childbirth-based
-relationship from observable delivery records without accepting a precomputed
-legal-mother input or claiming the complete downstream parent status.
-No encoded-source declaration is added before supervised apply succeeds.
+### Signed maternal-relationship candidate awaiting repair
+
+Protected run
+[34257259104](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34257259104)
+succeeded with one signature and opened draft
+[rulespec-de PR #46](https://github.com/TheAxiomFoundation/rulespec-de/pull/46).
+The signature establishes provenance, not legal completeness. Review found an
+unsupported effective date of year 0001, a potentially incorrect current-sex
+input, and missing evidence that a childbirth fact persists after the event.
+The four isolated tests also do not establish that one shared dataset can
+represent a mother with multiple children without candidate/child collisions.
+The candidate is not merged or declared as an encoded source.
+
+[axiom-corpus PR #650](https://github.com/TheAxiomFoundation/axiom-corpus/pull/650)
+adds the original KindRG, EGBGB and SBGG in 537 rows. KindRG Article 17 §1
+provides the 1 July 1998 commencement. The original PDF is retained; its
+machine-readable body is OCR, with the operative maternity sentence and
+commencement visually checked. EGBGB Article 224 §1 concerns historical
+paternity and does not justify excluding all pre-July-1998 maternity.
+SBGG §11 makes the sex-register entry irrelevant to BGB §1591; a current
+register-sex gate must not defeat the childbirth-based relationship.
+The proposed parentage release passes local preflight with zero warnings,
+167 focused tests and the signed-ingest guard. Publication and a dedicated
+RuleSpec corpus-pin update remain prerequisites for the corrected run.
+
+The workflow's `repair_run_id` accepts only failed runs, so the successful
+signed run cannot be used as a failed-run replay. A fresh supervised generation
+must address commencement, persistent birth records, the SBGG rule and shared
+candidate/child composition. No handwritten RuleSpec repair is permitted.
