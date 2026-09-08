@@ -1442,3 +1442,40 @@ def test_class_discovery_rejects_unbound_or_incomplete_evidence(tmp_path, monkey
     monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
     with pytest.raises(module._SourceError):
         module._class_discovery_candidates("de/kindergeld", [])
+
+
+@pytest.mark.parametrize("missing_inventory", [False, True])
+def test_discovery_pairs_inventories_by_full_scope(tmp_path, monkeypatch, missing_inventory):
+    import hashlib
+
+    refresh = _load_refresh_script()
+    blobs = {}
+    source = {"corpus": {"commit": "1" * 40, "inventories": [], "provision_sources": []}}
+    artifacts = []
+    for version in ("2025-original", "2026-supplement"):
+        for kind, extension in (("inventory", "json"), ("provisions", "jsonl")):
+            if missing_inventory and kind == "inventory" and version == "2026-supplement":
+                continue
+            path = f"data/corpus/{kind}/de/statute/{version}.{extension}"
+            body = {"items": [{}]} if kind == "inventory" else {
+                "citation_path": f"de/statute/{version}", "document_class": "statute",
+                "body": "Official provision text", "level": 0,
+            }
+            raw = (json.dumps(body) + "\n").encode()
+            digest = hashlib.sha256(raw).hexdigest()
+            blobs[path] = raw
+            source["corpus"]["inventories" if kind == "inventory" else "provision_sources"].append({
+                "path": path, "sha256": digest, "row_count": 1,
+            })
+            artifacts.append({"path": path, "sha256": digest, "rows": 1})
+    monkeypatch.setattr(refresh, "_run", lambda *_args: b"")
+    monkeypatch.setattr(refresh, "_git_blob", lambda _root, _commit, path: blobs[path])
+    monkeypatch.setattr(refresh, "_release_object", lambda *_args: {"artifacts": artifacts})
+    if missing_inventory:
+        with pytest.raises(refresh.CaptureError, match="no matching inventory"):
+            refresh._load_corpus(tmp_path, source)
+    else:
+        corpus = refresh._load_corpus(tmp_path, source)
+        assert len(corpus.scans) == 2
+        for scan in corpus.scans:
+            assert Path(scan["inventory"]["path"]).stem == Path(scan["provisions"]["path"]).stem

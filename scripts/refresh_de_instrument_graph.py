@@ -228,10 +228,15 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     provisions = corpus.get("provision_sources")
     if not isinstance(inventories, list) or not isinstance(provisions, list):
         raise CaptureError("source.json must pin inventory and provision files")
-    inventory_by_class: dict[str, dict[str, Any]] = {}
+    inventory_by_scope: dict[tuple[str, str, str], dict[str, Any]] = {}
     for pin in inventories:
         path = str(pin.get("path", ""))
-        document_class = path.split("/")[4] if len(path.split("/")) > 4 else ""
+        parts = path.split("/")
+        if len(parts) != 6 or parts[:3] != ["data", "corpus", "inventory"]:
+            raise CaptureError(f"invalid scoped inventory path: {path}")
+        scope = (parts[3], parts[4], Path(path).stem)
+        if scope in inventory_by_scope:
+            raise CaptureError(f"duplicate inventory scope: {scope}")
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"inventory hash mismatch at pinned commit: {path}")
@@ -244,7 +249,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         artifact = release_artifacts.get(path)
         if not artifact or artifact.get("sha256") != pin.get("sha256"):
             raise CaptureError(f"inventory is not bound by the release object: {path}")
-        inventory_by_class[document_class] = {
+        inventory_by_scope[scope] = {
             "path": path,
             "sha256": pin["sha256"],
             "row_count": len(items),
@@ -256,7 +261,12 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     for pin in provisions:
         path = str(pin.get("path", ""))
         parts = path.split("/")
+        if len(parts) != 6 or parts[:3] != ["data", "corpus", "provisions"]:
+            raise CaptureError(f"invalid scoped provision path: {path}")
         document_class = parts[4] if len(parts) > 4 else ""
+        scope = (parts[3], document_class, Path(path).stem)
+        if scope not in inventory_by_scope:
+            raise CaptureError(f"provision scope has no matching inventory: {scope}")
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"provision hash mismatch at pinned commit: {path}")
@@ -292,7 +302,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         scans.append(
             {
                 "document_class": document_class,
-                "inventory": inventory_by_class[document_class],
+                "inventory": inventory_by_scope[scope],
                 "provisions": {
                     "path": path,
                     "sha256": pin["sha256"],
