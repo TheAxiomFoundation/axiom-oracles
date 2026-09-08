@@ -165,6 +165,24 @@ application-month cutoff, derive sentence-1 status from the residence,
 territory and continuing-child conditions, and credit the relevant same-child
 payments. No failed candidate is declared as an encoded source.
 
+After the expanded corpus pin merged in rulespec-de PR #45 as
+`18b23afe7079ee142bb05faa8183d7e5b26c81b8`, protected run
+[34252049347](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34252049347)
+used the source's literal `Dezember` as a String month parameter. That removed
+the numeric-month grounding failure, but the candidate's deferrals still
+failed validation and the signer again reported zero signatures. It also
+reintroduced an irrelevant parameter for a cross-referenced paragraph number.
+
+A read-only diagnostic isolated a validator issue: the source-bound dependency
+matcher rejects both the actual `1Abweichend von § 64 Absatz 2 und 3` clause
+and the clause making §64 applicable from the application month. Draft
+[axiom-encode PR #1588](https://github.com/TheAxiomFoundation/axiom-encode/pull/1588)
+adds bounded recognition of those forms, with ten positive/negative regression
+cases passing and independent review requested. It does not validate the
+unimplemented residence/qualification conditions or make the rejected
+candidate complete. The review cycle, CI and a dedicated gated validator-pin
+update must precede any use of changed validation semantics in RuleSpec.
+
 ### Captured amendment identity
 
 The raw EStG changed-by reference formerly identified by
