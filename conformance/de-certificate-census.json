@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae"
+    "sha256": "5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68"
   },
   "executable_observation": {
     "claim_mode": "computed",

@@ -29,8 +29,9 @@ object is byte-identical to the locally signature-verified publication receipt.
 That object was the first source-manifest repin; the expanded pin is recorded below. Snapshot member capture-state
 labels describe the original discovery time, before signing and publication;
 they are not current release verification results. No new signed RuleSpec
-modules exist yet, so module declarations and legal dispositions are not
-promoted merely because a source became available.
+module has been accepted on main; draft #46 now carries a signed candidate
+with unresolved review findings. Module declarations and legal dispositions
+are not promoted merely because a source became available.
 
 The expanded tranche in axiom-corpus PR #648 passed all required checks and
 merged as `15402878eed59a0ab56e7428fe6caa052b5c098a`. Publication run
@@ -68,27 +69,9 @@ python scripts/de_certificate_census.py
 python scripts/certify.py
 ```
 
-## V 23.1 reconciliation still requiring an implementation
-
-The receipted DA-KG section says, “Das festgesetzte Kindergeld ist ungerundet
-auszuzahlen.” That addresses payment of an amount already fixed. The signed
-§66 module's `kindergeld_before_whole_euro_rounding` instead feeds the
-§66(3) child-allowance-increase calculation. The statutory proof for rounding
-says “Das Kindergeld ist dabei auf volle Euro kaufmännisch zu runden.”
-
-These are different stages. The integration must constrain whole-euro
-rounding to that statutory increase calculation and pass an issued fixing's
-amount through payment without a second rounding step. In particular, the
-EU differential output must not acquire whole-euro rounding merely by being
-routed through a generic payment rule. The existing fixed €255/€259 cases
-alone cannot demonstrate this distinction, because rounding already-integral
-amounts is numerically inert. The V23.1 row stays bearing and open until the
-assessment/payment boundary and any fractional amount cases are implemented
-and verified from the applicable sources. No disposition is changed here.
-
 ## Signed encoding gate
 
-No new module has been applied. Protected DE run
+No new module has been accepted on main. Protected DE run
 [34235202346](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34235202346)
 compiled a §64 candidate but failed the parent/grandparent priority test:
 `household_recipient_priority` expected `holds`, returned `not_holds`.
@@ -268,14 +251,26 @@ commencement visually checked. EGBGB Article 224 §1 concerns historical
 paternity and does not justify excluding all pre-July-1998 maternity.
 SBGG §11 makes the sex-register entry irrelevant to BGB §1591; a current
 register-sex gate must not defeat the childbirth-based relationship.
-The proposed parentage release passes local preflight with zero warnings,
-167 focused tests and the signed-ingest guard. Publication and a dedicated
-RuleSpec corpus-pin update remain prerequisites for the corrected run.
+The parentage capture passed local preflight with zero warnings, 167 focused
+tests, the signed-ingest guard and all required CI. PR #650 merged as
+`bd481e0973df6286349bbbee53ef899b063beb05`. Publication run 34261313166
+and mirror run 34261816427 succeeded. The signed release
+`de-rulespec-2026-09-08-kindergeld-parentage` contains 8,174 rows in 19 scopes,
+preserving all 17 civil scopes, with content SHA-256
+`98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0`.
+Its signature and content address verify, and the anonymous mirror is
+byte-identical. Dedicated rulespec-de PR #47 passed all checks and merged as
+`c734e76183b478a628d7736679fb1c7b1e61d7ea`. Fresh protected generation
+34262819783 uses that pin and the signed parentage corpus. The oracle source manifest now binds this release.
 
 The workflow's `repair_run_id` accepts only failed runs, so the successful
 signed run cannot be used as a failed-run replay. A fresh supervised generation
 must address commencement, persistent birth records, the SBGG rule and shared
-candidate/child composition. No handwritten RuleSpec repair is permitted.
+candidate/child composition. No handwritten RuleSpec repair is permitted. The additional retained
+[parentage pair probe](runtime-probe/parentage-pairs/README.md) confirms
+identifier comparisons for two candidates and two children in one shared
+dataset: all eight assertions pass across explain and fast modes. This is
+synthetic runtime IR, not a legal encoding or companion-test proof.
 
 ### V 23.1 rounding reconciliation
 
@@ -317,3 +312,10 @@ examples test the payment boundary, not a claimed legal entitlement amount.
 V 23.1 remains an open bearing row until the signed composed implementation
 and its tests establish these boundaries. The narrow executable base-amount
 root is not grounds for excluding this row from the full dependency graph.
+
+Parentage repin validation: 111 ledger/parser tests pass with the isolated
+corpus configured, including both live-corpus tests previously skipped by
+the default local checkout setup. All three live ledger checks, source
+summary freshness, certificate freshness and focused Ruff pass. The
+forged-spine mutation retains committed decisions so its expected failure
+is specifically the source-hash mismatch. Closure counts remain unchanged.

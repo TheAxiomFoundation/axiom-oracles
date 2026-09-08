@@ -165,7 +165,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 7637
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8174
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -210,16 +210,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=7637)
-    assert index["row_count"] == index["mapped_row_count"] == 7637
-    assert index["body_row_count"] == 7588
+    refresh._validate_global_extraction_index(index, scanned_row_count=8174)
+    assert index["row_count"] == index["mapped_row_count"] == 8174
+    assert index["body_row_count"] == 8124
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 76
+    assert index["act_count"] == len(index["acts"]) == 79
     assert index["mechanism_counts"] == {
-        "amendment_targets": 38,
-        "explicit_cross_reference_body": 4772,
-        "law_metadata_changed_by": 23,
-        "law_metadata_fundstelle": 29,
+        "amendment_targets": 42,
+        "explicit_cross_reference_body": 5238,
+        "law_metadata_changed_by": 24,
+        "law_metadata_fundstelle": 31,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]
@@ -729,6 +729,7 @@ def test_live_corpus_reverification_rejects_a_forged_spine_receipt(
         generated["leaf_frontier"],
         generated["instrument_graph"],
         generated["measurement_basis"],
+        document["committed_decisions"],
     )
     mutant = tmp_path / "live-corpus-spine.yaml"
     _write_document(mutant, document)

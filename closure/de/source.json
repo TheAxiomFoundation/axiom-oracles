@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
-    "release": "de-rulespec-2026-09-08-kindergeld-civil",
-    "release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
-    "release_selector_sha256": "76600c66ac8b9b6c5740ca8fb300a975b717879f6751a4f6d2e061ce84258940",
+    "commit": "bd481e0973df6286349bbbee53ef899b063beb05",
+    "release": "de-rulespec-2026-09-08-kindergeld-parentage",
+    "release_content_sha256": "98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0",
+    "release_selector_sha256": "9aae8581d66731d1a72ae70784a59bd8b9503c3f4be901b1949321f35a3de95f",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -100,6 +100,16 @@
         "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json",
         "sha256": "8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json",
+        "sha256": "ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json",
+        "sha256": "6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64",
+        "row_count": 535
       }
     ],
     "provision_sources": [
@@ -187,6 +197,16 @@
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl",
         "sha256": "6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl",
+        "sha256": "9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl",
+        "sha256": "c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059",
+        "row_count": 535
       }
     ],
     "rows": [

@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
-  "corpus_release": "de-rulespec-2026-09-08-kindergeld-civil",
-  "corpus_release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
+  "corpus_commit": "bd481e0973df6286349bbbee53ef899b063beb05",
+  "corpus_release": "de-rulespec-2026-09-08-kindergeld-parentage",
+  "corpus_release_content_sha256": "98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -132,7 +132,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "eb83b2260f19e9ebaeee3f2ce907b571e513b200aa19e76f7f983ec845590673",
+      "subgraph_sha256": "2d782a78634012133e1ad4af8f6b6daddb7909deb32c5af47841eff1e70042eb",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +216,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "29625afe115f92b5ae34ef7a76ff15f9458d68fd968e0a2608a89e3ebecfba05",
+      "subgraph_sha256": "8e928a57dda0f95fb1cc4f09d664212983b20090d3b9ff402d508d53cfdd1268",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +299,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "5fc329cc2a13343f26a21fd0ef1fbcf3f26182fa63fe51ae60befd349caf89d3",
+      "subgraph_sha256": "4ee8771febee7504f2495eff92a9c1610f0719d921260c23137d1669ed5b6226",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -322,7 +322,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae"
+    "sha256": "5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68"
   },
   "spine_closed": false
 }

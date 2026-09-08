@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae
+    sha256: 5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 15402878eed59a0ab56e7428fe6caa052b5c098a
-    release: de-rulespec-2026-09-08-kindergeld-civil
-    release_content_sha256: 3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35
+    commit: bd481e0973df6286349bbbee53ef899b063beb05
+    release: de-rulespec-2026-09-08-kindergeld-parentage
+    release_content_sha256: 98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -93,6 +93,12 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
       sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl
+      sha256: 9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
+      sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
+      row_count: 535
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -163,10 +169,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 45f0c39e6b2529886c19c769328e2e23dd9870f18225756ca5f16d0e4841bfdf
+    snapshot_sha256: 56da987f0423fca08fa325a8a97ef68fbf8f14edffb4c85c92d0726631d9205e
     channel_receipts:
-      corpus_release: c7fa2fe1f41d039904b9830298cf7d1e365a73de6e98be56e4215c8034f391f3
-      subject_matter_search: 5cec747ebe1762d8f546c9d0f5f90f089e94b0d853d8ef1d7171fd84738bd48d
+      corpus_release: cb0180018770e678c68eafd8c86d1e214ae54bc0b6a9e531156d9d2affa6a717
+      subject_matter_search: 99fb12e0333764047a0c9285c4801833b9355ea72f6c5f2b3f8defeddac91a67
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

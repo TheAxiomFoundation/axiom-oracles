@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = 'b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae'
+SOURCE_SHA256 = '5420b7716849c2309516d257fe877efeb7107e595585a018d43457f7deb44b68'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-08-kindergeld-civil'
-RELEASE_CONTENT_SHA256 = '3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35'
-RELEASE_SELECTOR_SHA256 = '76600c66ac8b9b6c5740ca8fb300a975b717879f6751a4f6d2e061ce84258940'
-CORPUS_COMMIT = '15402878eed59a0ab56e7428fe6caa052b5c098a'
+RELEASE = 'de-rulespec-2026-09-08-kindergeld-parentage'
+RELEASE_CONTENT_SHA256 = '98ee18f6d9eb5241112fe386aa545d042002ecb8310689ed39cf14df32f669c0'
+RELEASE_SELECTOR_SHA256 = '9aae8581d66731d1a72ae70784a59bd8b9503c3f4be901b1949321f35a3de95f'
+CORPUS_COMMIT = 'bd481e0973df6286349bbbee53ef899b063beb05'
 RULESPEC_COMMIT = "d83ba3db30e2f63376aacf822d116687589b8564"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -100,6 +100,8 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json': ('dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34', 3136),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json': ('9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e', 854),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json': ('8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76', 4),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json': ('ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c', 2),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json': ('6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64', 535),
 }
 EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl': ('80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29', 2),
@@ -119,6 +121,8 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl': ('3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68', 3136),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl': ('a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac', 854),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl': ('6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a', 4),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl': ('9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf', 2),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl': ('c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059', 535),
 }
 
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -402,9 +406,10 @@ def _validate_boundaries(
                 f"{program}: boundary classification must be "
                 "excluded-with-reason or open-law-derived-dependency"
             )
-        if classification == "open-law-derived-dependency" and boundary.get(
-            "leaf_kind"
-        ) != "law_derived":
+        if (
+            classification == "open-law-derived-dependency"
+            and boundary.get("leaf_kind") != "law_derived"
+        ):
             raise ClosureError(
                 f"{program}: an open law-derived dependency must carry "
                 "leaf_kind: law_derived (CERTIFIED.md v3)"
@@ -644,7 +649,6 @@ def build(source: dict) -> dict:
                 for citation in signature_pending
             ],
             "signature_pending_citations": signature_pending,
-
             "subgraph_sha256": _canonical_sha256(
                 {
                     "boundaries": boundaries,
