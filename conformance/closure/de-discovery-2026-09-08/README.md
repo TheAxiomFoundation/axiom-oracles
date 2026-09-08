@@ -276,3 +276,44 @@ The workflow's `repair_run_id` accepts only failed runs, so the successful
 signed run cannot be used as a failed-run replay. A fresh supervised generation
 must address commencement, persistent birth records, the SBGG rule and shared
 candidate/child composition. No handwritten RuleSpec repair is permitted.
+
+### V 23.1 rounding reconciliation
+
+The retained DA-KG 2025 section `de-kg-dakg-V23.1` has body SHA-256
+`a05f55831bb8bc106689f9faf23c14230a143ccf5f2d9d3cf5b55153b2ae1fe7`
+and heading SHA-256
+`fa1b2d49432e94b3953965134e9de9e7d2338191766700d92bcf496d9c3f2df8`,
+as recorded in `de-subject-document-headings.json`. Paragraph 1 sentence 3
+states: “Das festgesetzte Kindergeld ist ungerundet auszuzahlen.”
+
+The pinned §66 module at rulespec-de commit `d83ba3d` binds corpus body
+`2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e`.
+Its §66(3) proof says “Das Kindergeld ist dabei auf volle Euro kaufmännisch
+zu runden.” The preceding sentence ties “dabei” to an increase following
+higher child allowances. This is rounding while calculating the increased
+statutory amount; V 23.1 addresses payment of the amount already assessed.
+The provisions therefore concern successive stages, not incompatible
+rounding directions for the same stage.
+
+`kindergeld_before_whole_euro_rounding` is an intermediate §66(3) amount,
+not the amount already assessed for payout. The existing
+`kindergeld_after_child_allowance_increase` rounds that intermediate amount.
+Its no-increase branch returns the integer base amount, so the rounding is
+an identity operation there. The 2025 base is EUR 255 and the 2026 base is
+EUR 259; the existing increase/rounding rules start in 2026. This observation
+does not supply their two unencoded allowance inputs or prove historical
+applicability of the full increase mechanism.
+
+The supervised §66/EU composition must preserve three boundaries: compute
+and round a §66(3) statutory increase at that stage; compute any coordinated
+differential under its own governing rules; pay the assessed amount without
+introducing another whole-euro rounding operation. In particular, do not
+route an already assessed fractional differential back through
+`kindergeld_after_child_allowance_increase`. Acceptance cases must cover the
+two annual base amounts, both sides of the statutory half-euro boundary,
+and preservation of cents in an assessed payout. Synthetic fractional
+examples test the payment boundary, not a claimed legal entitlement amount.
+
+V 23.1 remains an open bearing row until the signed composed implementation
+and its tests establish these boundaries. The narrow executable base-amount
+root is not grounds for excluding this row from the full dependency graph.
