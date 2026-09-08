@@ -450,6 +450,11 @@ def test_counts_lists_and_decisions_agree(program: str) -> None:
         assert instrument_counts[status] == sum(1 for row in instrument_ledger if row["status"] == status)
     assert frontier["pending"] == [row["id"] for row in instrument_ledger if row["status"] == "pending"]
     decided = {row["id"]: row for row in decisions["instrument_dispositions"]}
+    # Decided supplemental rows live in their own section and join the
+    # frontier ledger with the same status/reason/text binding.
+    decided.update(
+        {row["id"]: row for row in decisions["supplemental_instruments"] if row["status"] != "pending"}
+    )
     assert {row["id"] for row in instrument_ledger if row["status"] != "pending"} == set(decided)
     for row in instrument_ledger:
         if row["status"] != "pending":
@@ -1355,7 +1360,12 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
     assert len(supplemental) == 17
-    assert all(row["status"] == "pending" for row in supplemental)
+    # Only the four classes (members still to be enumerated by a discovery
+    # channel) remain pending; the 13 named documents are decided on
+    # captured text.
+    pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
+    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
+    assert all(row["text_sha256"] and row["text_source"] for row in supplemental if row["status"] != "pending")
     from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
     assert len(from_o24) == 15
     dispositions = {r["id"]: r for r in document["committed_decisions"]["instrument_dispositions"]}
@@ -1365,7 +1375,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
     assert frontier["instrument_count"] == 448 + 17
-    assert all(sid in frontier["pending"] for sid in (row["id"] for row in supplemental))
+    assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
 def test_duplicate_supplemental_ids_are_rejected() -> None:

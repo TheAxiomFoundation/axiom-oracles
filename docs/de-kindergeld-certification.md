@@ -261,6 +261,45 @@ Result: frontier 18 of 465 pending (the 17 supplementals and that amending
 act); 116 open dependencies (8 law-derived inputs, 0 unclassified inputs,
 108 bearing instruments).
 
+## Supplemental instruments (2026-09-08)
+
+13 of the 17 supplementals are decided in `supplemental_instruments`,
+each bound to captured text (`text_source` names the source and capture
+method, `text_sha256` the hash):
+
+- **Open bearing (10)**: EStR and EStH (BMF Einkommensteuer-Handbuch 2024
+  pages for §§ 3, 32, 32b, 33a — R 32.2 Kostkinder presumption, R 33a.1
+  cost lump sum, R 32b unused employee allowance, H 3.29 WÜD/WÜK), LStR
+  and LStH (Lohnsteuer-Handbuch 2023 pages for §§ 3b, 8, 9 — the 4.35
+  factor of the 20-hour test, R/H 9.2 training service relationship, R
+  9.1–9.13 work expenses, H 8.1 foreign-currency conversion), AEAO (AO-
+  Handbuch 2025 pages for §§ 8, 9 — the residence test the DA-KG copies),
+  Regulations (EC) 883/2004 (Art. 1 z, 3, 67, 68: children abroad,
+  priority, differential), 987/2009 (Art. 58–60), 1231/2010 and 859/2003
+  (third-country scope), and the Withdrawal Agreement (Art. 30–32). Each
+  reason quotes the captured text and names the law-derived input it
+  bears on.
+- **Excluded (3)**: AStBV (St) 2025 (penal procedure, AO-Handbuch 2025
+  Anhang 45), KiZDAV (data retrieval under § 68 Abs. 5, read in full from
+  the gesetze-im-internet PDF), RiStBV (prosecutor guidelines, Nr. 266–267
+  on tax offences).
+- **Still pending (4)**: the classes BMF-Schreiben, BZSt-Weisungen,
+  published BFH/BVerfG/EuGH decisions, bilateral social-security
+  agreements. A class cannot be decided; a discovery channel must
+  enumerate its members.
+
+Capture method: EUR-Lex and the BMF handbook sites sit behind bot
+challenges, so the texts were read through the in-app browser and hashed
+in-page (`innerText` for EUR-Lex and the AStBV page; whitespace-collapsed
+`textContent` for handbook pages, whose R/H sections are collapsed in the
+rendered view). Multi-page instruments bind the SHA-256 of their page
+hashes joined by newline in the listed order. These are page captures,
+not corpus rows; a corpus channel for guidance documents would replace
+them with receipted bytes.
+
+Result: frontier 5 of 465 pending; 126 open dependencies (8 law-derived
+inputs, 0 unclassified inputs, 118 bearing instruments).
+
 ## Reads log
 
 - 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26
