@@ -390,3 +390,20 @@ Encoder #1588 is now green at head `94d7f0719`: 14,034 CI tests pass,
 80 skip, and lint plus both platform builds pass. Independent review remains
 outstanding. No new legal module has been merged or declared encoded.
 The BGB candidate still needs substantive repair and an accepted encoder pin.
+
+### Reviewed encoder and visible commencement context
+
+Encoder #1588 completed independent agent review at `94d7f0719`, with
+no actionable findings and 63 independently passing focused tests. Full CI
+was green; it merged as `bbc54db6625c79de9fa3ef70846b46698cb3e159`. This
+is an agent review, not a human certification approval. Dedicated RuleSpec
+encoder-pin PR #50 also passed independent review and nine local layout
+tests; repository CI still gates merge. No other pins or waivers change.
+
+A live resolver/render check against the verified context release confirms
+the 7,339-character structured KindRG excerpt reaches injected context and
+contains the exact July 1998 commencement sentence. No document is dropped
+by the aggregate limit. The full 121,357-character act remains retained in
+the corpus and is still omitted from prompt bodies under the existing cap.
+This resolves the two diagnosed context obstacles without weakening limits;
+it does not resolve the candidate's legal or event-timing findings.
