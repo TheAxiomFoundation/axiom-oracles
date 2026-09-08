@@ -224,6 +224,43 @@ Result: spine 5 pending of 18; frontier 45 of 465 pending; 102 open
 dependencies (8 law-derived inputs, 0 unclassified inputs, 94 bearing
 instruments).
 
+## Discovered candidates (2026-09-08)
+
+The 28 candidates the citation scan and subject search put on the frontier
+are dispositioned in `instrument_dispositions` (ids `de-kg-instr-*`), 27
+of them; every reason quotes the citing spine sentence:
+
+- **Encoded (1)**: the Steuerfortentwicklungsgesetz (BGBl. 2024 I Nr. 449)
+  — its § 66 Abs. 1 amounts (255 EUR from 2025, 259 EUR from 2026) are the
+  two versions of `monthly_kindergeld_per_child` in the captured module,
+  whose proof atoms cite the act.
+- **Open bearing (14)**: EStG §§ 1, 2, 19, 31, 32, the BKGG, SGB III, SGB
+  VI, BEEG, and the unresolved references AufenthG, FreizügG/EU,
+  Abgabenordnung (§§ 139a, 139b), SGB VII (§ 217 Abs. 3 old version) and
+  the EEA Agreement. Each is a term of an entitlement condition, a child
+  condition, an exclusion comparator or the § 66 Abs. 3 trigger; each names
+  the law-derived input it bears on. AufenthG, FreizügG/EU, AO, SGB VII and
+  the EEA Agreement are not in the pinned corpus release and must be
+  captured before they can be encoded.
+- **Excluded (11)**: EStG § 39e, SGB I, SGB X, SGB II, SGB XII, StBerG,
+  Regulation (EC) 883/2004 and Regulation (EU) 2017/492 as cited in § 68
+  Abs. 6 (data purpose only — the Regulation's coordination bearing is
+  carried by its supplemental row), WoGG and UhVorschG (inbound
+  cross-programme references only), and EStG § 19a, which the scan
+  mis-resolved from "§ 19a Absatz 2 … des Ersten Buches Sozialgesetzbuch"
+  in § 68 Abs. 5.
+- **Container (1)**: the DA-KG 2025 subject seed, whose bearing content is
+  carried by its 420 heading rows; recorded non-bearing so the document is
+  not counted twice.
+- **Left pending (1)**: the `law_metadata_changed_by` string "zuletzt
+  geändert durch Art. 3 G v. 26.5.2026 I Nr. 156" on the EStG act row. The
+  amending act is not in the pinned corpus release; it cannot be read, so
+  it cannot be dispositioned.
+
+Result: frontier 18 of 465 pending (the 17 supplementals and that amending
+act); 116 open dependencies (8 law-derived inputs, 0 unclassified inputs,
+108 bearing instruments).
+
 ## Reads log
 
 - 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26
