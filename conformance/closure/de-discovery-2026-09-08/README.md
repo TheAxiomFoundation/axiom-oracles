@@ -119,6 +119,30 @@ Further work must implement the source-bound residence judgments and exact
 calendar boundaries, with valid monthly tests and temporal provenance; merely
 renaming those judgments as observable inputs would leave the frontier open.
 
+### Section 78 transition attempts
+
+Protected runs [34244951490](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34244951490)
+and [34246359794](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34246359794)
+produced zero signatures. Read-only diagnostics established that the source
+structure recognizer already omits repealed paragraphs 1–4, and that the
+dependency-reason matcher recognizes `de/statute/estg/78(5)(satz-1)` whereas
+the German display citation alone does not satisfy that matcher. Those are
+validator observations, not findings that the legal dependencies are closed.
+
+The corrected run compiled but rejected the numeric month `12` as ungrounded
+against the source's word “Dezember”. A repair then attached the unrelated
+income-tax excerpt “bis 12 096 Euro” to the month parameter. That is not a
+valid justification for December and must not be accepted even if a numeric
+matcher could be made to pass. The rejected candidate also duplicated the
+sentence-1 deferral and left `payment_was_made_under_sentence_1` as a legal
+conclusion input. These semantic issues survive any calendar-literal fix.
+
+Further implementation must distinguish the December 1990 payment reference
+month from disbursement date, use receipt by the competent office for the
+application-month cutoff, derive sentence-1 status from the residence,
+territory and continuing-child conditions, and credit the relevant same-child
+payments. No failed candidate is declared as an encoded source.
+
 ### Captured amendment identity
 
 The raw EStG changed-by reference formerly identified by
