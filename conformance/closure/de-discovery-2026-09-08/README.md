@@ -397,8 +397,9 @@ Encoder #1588 completed independent agent review at `94d7f0719`, with
 no actionable findings and 63 independently passing focused tests. Full CI
 was green; it merged as `bbc54db6625c79de9fa3ef70846b46698cb3e159`. This
 is an agent review, not a human certification approval. Dedicated RuleSpec
-encoder-pin PR #50 also passed independent review and nine local layout
-tests; repository CI still gates merge. No other pins or waivers change.
+encoder-pin PR #50 also passed independent review, nine local layout
+tests and all repository CI; it merged as
+`5f630cc26c97977a2f86cfa98d9525b07263a7ad`. No other pins or waivers change.
 
 A live resolver/render check against the verified context release confirms
 the 7,339-character structured KindRG excerpt reaches injected context and
@@ -407,3 +408,10 @@ by the aggregate limit. The full 121,357-character act remains retained in
 the corpus and is still omitted from prompt bodies under the existing cap.
 This resolves the two diagnosed context obstacles without weakening limits;
 it does not resolve the candidate's legal or event-timing findings.
+
+Fresh supervised BGB generation run 34269494948 now binds that RuleSpec
+merge, encoder `bbc54db6625c79de9fa3ef70846b46698cb3e159`, and corpus
+`069407610ff961a075665d08c96ad08f54a9767b`. It requires actual date
+comparison, visible commencement proof and the retained pair tests.
+Generation is still running; no new signature, accepted module or encoded
+source declaration is claimed.
