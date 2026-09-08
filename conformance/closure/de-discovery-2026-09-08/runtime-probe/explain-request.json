@@ -1,0 +1,399 @@
+{
+  "mode": "explain",
+  "program": {
+    "relations": [
+      {
+        "name": "comparison_of_candidate",
+        "arity": 2
+      }
+    ],
+    "derived": [
+      {
+        "name": "other_payment_is_higher",
+        "entity": "Comparison",
+        "dtype": "judgment",
+        "unit": null,
+        "semantics": "judgment",
+        "expr": {
+          "kind": "comparison",
+          "left": {
+            "kind": "input",
+            "name": "other_payment"
+          },
+          "op": "gt",
+          "right": {
+            "kind": "input",
+            "name": "candidate_payment"
+          }
+        }
+      },
+      {
+        "name": "other_payment_is_equal",
+        "entity": "Comparison",
+        "dtype": "judgment",
+        "unit": null,
+        "semantics": "judgment",
+        "expr": {
+          "kind": "comparison",
+          "left": {
+            "kind": "input",
+            "name": "other_payment"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "input",
+            "name": "candidate_payment"
+          }
+        }
+      },
+      {
+        "name": "higher_payment_count",
+        "entity": "Candidate",
+        "dtype": "integer",
+        "unit": null,
+        "semantics": "scalar",
+        "expr": {
+          "kind": "count_related",
+          "relation": "comparison_of_candidate",
+          "current_slot": 1,
+          "related_slot": 0,
+          "where": {
+            "kind": "derived",
+            "name": "other_payment_is_higher"
+          }
+        }
+      },
+      {
+        "name": "equal_other_payment_count",
+        "entity": "Candidate",
+        "dtype": "integer",
+        "unit": null,
+        "semantics": "scalar",
+        "expr": {
+          "kind": "count_related",
+          "relation": "comparison_of_candidate",
+          "current_slot": 1,
+          "related_slot": 0,
+          "where": {
+            "kind": "derived",
+            "name": "other_payment_is_equal"
+          }
+        }
+      }
+    ]
+  },
+  "dataset": {
+    "inputs": [
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "unequal:a:b",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 100
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "unequal:a:b",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 250
+        }
+      },
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "unequal:b:a",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 250
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "unequal:b:a",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 100
+        }
+      },
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "tie:c:d",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 200
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "tie:c:d",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 200
+        }
+      },
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "tie:d:c",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 200
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "tie:d:c",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 200
+        }
+      },
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "zero:e:f",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "zero:e:f",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "candidate_payment",
+        "entity": "Comparison",
+        "entity_id": "zero:f:e",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "other_payment",
+        "entity": "Comparison",
+        "entity_id": "zero:f:e",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      }
+    ],
+    "relations": [
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "unequal:a:b",
+          "a"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      },
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "unequal:b:a",
+          "b"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      },
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "tie:c:d",
+          "c"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      },
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "tie:d:c",
+          "d"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      },
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "zero:e:f",
+          "e"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      },
+      {
+        "name": "comparison_of_candidate",
+        "tuple": [
+          "zero:f:e",
+          "f"
+        ],
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        }
+      }
+    ]
+  },
+  "queries": [
+    {
+      "entity_id": "a",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "b",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "c",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "d",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "e",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "f",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    },
+    {
+      "entity_id": "g",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "higher_payment_count",
+        "equal_other_payment_count"
+      ]
+    }
+  ]
+}

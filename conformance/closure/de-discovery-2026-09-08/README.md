@@ -235,3 +235,22 @@ supports the required comparisons. Do not relax deferral validation or rerun
 the same prompt to turn this empty module into encoding progress. Upstream
 entitlement/relationship outputs and a verified same-child relation design
 are still required.
+
+### Verified relation comparison capability
+
+The isolated [runtime probe](runtime-probe/README.md) builds engine commit
+`05eac9d2f89dabe5c6673176260762cef3a58f47` and executes candidate-linked
+higher/equal payment counts in both explain and fast modes. All 28 numeric
+assertions pass; a removed payment input fails explicitly. Child-scoped
+comparison pairs keep an unrelated child's much larger payment out of the
+count. This supplies a tested alternative to a maximum-and-identity selector,
+without asserting a complete §64 rule or closing any legal dependency.
+The retained JSON is synthetic engine IR, not manually authored RuleSpec.
+
+The prerequisite maternal relationship under BGB §1591 is being attempted
+through protected run
+[34257259104](https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34257259104),
+against the same signed civil release. It must derive the childbirth-based
+relationship from observable delivery records without accepting a precomputed
+legal-mother input or claiming the complete downstream parent status.
+No encoded-source declaration is added before supervised apply succeeds.
