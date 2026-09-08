@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "c3623fe4bfea336be6b990a947f69e270d8bf951",
-  "corpus_release": "de-rulespec-2026-09-08-kindergeld-frontier",
-  "corpus_release_content_sha256": "39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a",
+  "corpus_commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
+  "corpus_release": "de-rulespec-2026-09-08-kindergeld-civil",
+  "corpus_release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -132,7 +132,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "4b54764a1c7d37f2939675abdca939cd0c829f103982ee429bbc918b96c552ae",
+      "subgraph_sha256": "eb83b2260f19e9ebaeee3f2ce907b571e513b200aa19e76f7f983ec845590673",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +216,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "433a1efc906706fc21a30237cfe792af085948dc0038e2ad4a54b080b334c800",
+      "subgraph_sha256": "29625afe115f92b5ae34ef7a76ff15f9458d68fd968e0a2608a89e3ebecfba05",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +299,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "145ef62031095f467206bf38f7728e8e0f162f63b30cee996b6e3c2bc856ae21",
+      "subgraph_sha256": "5fc329cc2a13343f26a21fd0ef1fbcf3f26182fa63fe51ae60befd349caf89d3",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -322,7 +322,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06"
+    "sha256": "b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae"
   },
   "spine_closed": false
 }

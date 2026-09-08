@@ -2,11 +2,206 @@
   "schema": "axiom_oracles.de_supplemental_corpus_bindings.v1",
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "c3623fe4bfea336be6b990a947f69e270d8bf951",
-    "release": "de-rulespec-2026-09-08-kindergeld-frontier",
-    "release_content_sha256": "39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a"
+    "commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
+    "release": "de-rulespec-2026-09-08-kindergeld-civil",
+    "release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35"
   },
   "bindings": [
+    {
+      "id": "de-kg-suppl-001",
+      "text_sha256": "2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/guidance/esth-2024-3/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/II-Einkommen-2-24b/2-Steuerfreie-Einnahmen-3-3c/Paragraf-3/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
+          "line": 2,
+          "row_sha256": "08a85fd1be035820e053609ef05566631008c9845922788fff1f1ae74b21c466",
+          "body_sha256": "62b8f81e5cfd966bc91c7069c017f5aa9280b6856f8844fbb1d12e9fb90c0cbe"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-32/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-32/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 2,
+          "row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
+          "body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-32b/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-32b/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 4,
+          "row_sha256": "b8ce379ce1771dd8c0bbfeaa8f5c8d55bbc23a10ee015ed9844afc6d4155a40d",
+          "body_sha256": "6cdd0886175c7aabe3fb9fb182ddbbe593d198eb3f662274e0d130e5bca5590b"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-33a/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-33a/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 6,
+          "row_sha256": "9ab3aff01986d5efee21c5b6bb78c712ecda21b6e2a1551792822bac8cd128d1",
+          "body_sha256": "5bfedb0c3f57cf2aae99fcd99923eb618c12c257e117dbb623f83df94c6fea56"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-002",
+      "text_sha256": "2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/guidance/esth-2024-3/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/II-Einkommen-2-24b/2-Steuerfreie-Einnahmen-3-3c/Paragraf-3/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
+          "line": 2,
+          "row_sha256": "08a85fd1be035820e053609ef05566631008c9845922788fff1f1ae74b21c466",
+          "body_sha256": "62b8f81e5cfd966bc91c7069c017f5aa9280b6856f8844fbb1d12e9fb90c0cbe"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-32/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-32/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 2,
+          "row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
+          "body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-32b/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-32b/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 4,
+          "row_sha256": "b8ce379ce1771dd8c0bbfeaa8f5c8d55bbc23a10ee015ed9844afc6d4155a40d",
+          "body_sha256": "6cdd0886175c7aabe3fb9fb182ddbbe593d198eb3f662274e0d130e5bca5590b"
+        },
+        {
+          "citation_path": "de/guidance/esth-2024-33a/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/A-Einkommensteuergesetz/IV-Tarif-31-34b/Paragraf-33a/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 6,
+          "row_sha256": "9ab3aff01986d5efee21c5b6bb78c712ecda21b6e2a1551792822bac8cd128d1",
+          "body_sha256": "5bfedb0c3f57cf2aae99fcd99923eb618c12c257e117dbb623f83df94c6fea56"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-003",
+      "text_sha256": "71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/guidance/lsth-2023-3b/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/2-Steuerfreie-Einnahmen/Paragraf-3b/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 8,
+          "row_sha256": "df5c83fa1426f5d6d925d556de89923ff98d31438b149608bc6f9819f78e3862",
+          "body_sha256": "3efad3b4166b5c686af9957363a11be90795829a4a4ba46a785fd2b10cd956ca"
+        },
+        {
+          "citation_path": "de/guidance/lsth-2023-8/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/4-Ueberschuss-der-Einnahmen-ueber-die-Werbungskosten/Paragraf-8/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 10,
+          "row_sha256": "c2844321b83403b47c1d5ee8adc1affa0e6daffe56da3936f38dda7eea424f2f",
+          "body_sha256": "b5ae770e20e69604b5c9f7052c4fb7be99e831c3aa9d971bf8a26e21f9a9c607"
+        },
+        {
+          "citation_path": "de/guidance/lsth-2023-9/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/4-Ueberschuss-der-Einnahmen-ueber-die-Werbungskosten/Paragraf-9/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 12,
+          "row_sha256": "a6203be93b6070be299cc12fea088abc437066664aca42255e94f8f541aeb33b",
+          "body_sha256": "703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-004",
+      "text_sha256": "71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/guidance/lsth-2023-3b/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/2-Steuerfreie-Einnahmen/Paragraf-3b/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 8,
+          "row_sha256": "df5c83fa1426f5d6d925d556de89923ff98d31438b149608bc6f9819f78e3862",
+          "body_sha256": "3efad3b4166b5c686af9957363a11be90795829a4a4ba46a785fd2b10cd956ca"
+        },
+        {
+          "citation_path": "de/guidance/lsth-2023-8/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/4-Ueberschuss-der-Einnahmen-ueber-die-Werbungskosten/Paragraf-8/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 10,
+          "row_sha256": "c2844321b83403b47c1d5ee8adc1affa0e6daffe56da3936f38dda7eea424f2f",
+          "body_sha256": "b5ae770e20e69604b5c9f7052c4fb7be99e831c3aa9d971bf8a26e21f9a9c607"
+        },
+        {
+          "citation_path": "de/guidance/lsth-2023-9/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/lsth/2023/A-Einkommensteuergesetz/II-Einkommen/4-Ueberschuss-der-Einnahmen-ueber-die-Werbungskosten/Paragraf-9/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 12,
+          "row_sha256": "a6203be93b6070be299cc12fea088abc437066664aca42255e94f8f541aeb33b",
+          "body_sha256": "703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-005",
+      "text_sha256": "f223bc4b422abd0214c657f151e66cd5f8811da81ffbd7798475d8ea6f87c568",
+      "hash_method": "SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline",
+      "rows": [
+        {
+          "citation_path": "de/guidance/aeao-2025-8/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/ao/2025/Abgabenordnung/Erster-Teil/Zweiter-Abschnitt/Paragraf-8/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
+          "line": 4,
+          "row_sha256": "f003735504151932cfa06c33755940bbe4f2fbff7b502512c9a02468445f53da",
+          "body_sha256": "2d661fec2f62c732154184e92bd269b90e9a478405c415a9ba313dd8d67c9c22"
+        },
+        {
+          "citation_path": "de/guidance/aeao-2025-9/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/ao/2025/Abgabenordnung/Erster-Teil/Zweiter-Abschnitt/Paragraf-9/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 14,
+          "row_sha256": "db05ee6c8882830e02a00078056a0b8c7501c1e3c0ebc6c06c0dfcdeebbb0923",
+          "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5"
+        }
+      ]
+    },
+    {
+      "id": "de-kg-suppl-006",
+      "text_sha256": "4116f64e7d94424497c781f1322843fd220d8d43c4b0588d117fafc9a311206a",
+      "hash_method": "SHA-256 of UTF-8 corpus body",
+      "rows": [
+        {
+          "citation_path": "de/guidance/astbv-2025/inhalt",
+          "expression_date": "2026-09-08",
+          "source_url": "https://amtliche-handbuecher.bundesfinanzministerium.de/ao/2025/Anhaenge/BMF-Schreiben-und-gleichlautende-Laendererlasse/Anhang-45/inhalt.html",
+          "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+          "line": 16,
+          "row_sha256": "8e3a76241aa46c169bb85a133a168a0b5b76e574df8f72ca1360b27dddd8daaf",
+          "body_sha256": "4116f64e7d94424497c781f1322843fd220d8d43c4b0588d117fafc9a311206a"
+        }
+      ]
+    },
     {
       "id": "de-kg-suppl-011",
       "text_sha256": "5304565b00d908bd9d8f58a5d9da59b6e83cfe1a76a5a2867b2d39b7794ea05d",
@@ -192,5 +387,5 @@
       ]
     }
   ],
-  "receipt_sha256": "547255ccfcc36ffddae6f850805772f8ea2a5542d8f2924390876af675990052"
+  "receipt_sha256": "3925f752a55dc93bb12f309e8d82a85ab841e9747dd10a815fcb21e2d2df6a45"
 }

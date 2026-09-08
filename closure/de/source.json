@@ -11,15 +11,25 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "c3623fe4bfea336be6b990a947f69e270d8bf951",
-    "release": "de-rulespec-2026-09-08-kindergeld-frontier",
-    "release_content_sha256": "39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a",
-    "release_selector_sha256": "9d5fd12e8110bfa1cad19cf46645989941da3457e1c998c8db7e251440939404",
+    "commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
+    "release": "de-rulespec-2026-09-08-kindergeld-civil",
+    "release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
+    "release_selector_sha256": "76600c66ac8b9b6c5740ca8fb300a975b717879f6751a4f6d2e061ce84258940",
     "inventories": [
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
+        "sha256": "74e8dfa9aded09d34cad08c04249da5016ac478b0bace29562d11343e74ef21e",
+        "row_count": 2
+      },
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json",
         "sha256": "21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json",
+        "sha256": "ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb",
+        "row_count": 16
       },
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json",
@@ -77,6 +87,11 @@
         "row_count": 2
       },
       {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json",
+        "sha256": "dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34",
+        "row_count": 3136
+      },
+      {
         "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json",
         "sha256": "9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e",
         "row_count": 854
@@ -89,9 +104,19 @@
     ],
     "provision_sources": [
       {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl",
+        "sha256": "80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29",
+        "row_count": 2
+      },
+      {
         "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl",
         "sha256": "8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+        "sha256": "3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14",
+        "row_count": 16
       },
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
@@ -147,6 +172,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl",
         "sha256": "80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_count": 3136
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl",

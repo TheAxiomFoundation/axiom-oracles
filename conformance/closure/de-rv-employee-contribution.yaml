@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 89418df96fc8de98ea4f882df5ac8f306cd83883bb88efe9222724a4634f0b06
+    sha256: b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: c3623fe4bfea336be6b990a947f69e270d8bf951
-    release: de-rulespec-2026-09-08-kindergeld-frontier
-    release_content_sha256: 39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a
+    commit: 15402878eed59a0ab56e7428fe6caa052b5c098a
+    release: de-rulespec-2026-09-08-kindergeld-civil
+    release_content_sha256: 3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -42,9 +42,15 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl
+      sha256: 80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29
+      row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
       sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl
+      sha256: 3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14
+      row_count: 16
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
       sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
       row_count: 4
@@ -78,6 +84,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
       sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
       row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl
+      sha256: 3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68
+      row_count: 3136
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
       sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
       row_count: 854
@@ -154,10 +163,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: a131faa7bf1ada4f28b7b68ad479d2551632376ad56556f5d903337ac7baa881
+    snapshot_sha256: 45f0c39e6b2529886c19c769328e2e23dd9870f18225756ca5f16d0e4841bfdf
     channel_receipts:
-      corpus_release: 42c3faf9a9df05388dfb9d9343f08b0499b721e25c3839033ebd1aad555cbdbf
-      subject_matter_search: d29eb01e9d8c8c60ceb52a5f355cdb4f462cdfe9b5c6befb2b0db07c0aa672fe
+      corpus_release: c7fa2fe1f41d039904b9830298cf7d1e365a73de6e98be56e4215c8034f391f3
+      subject_matter_search: 5cec747ebe1762d8f546c9d0f5f90f089e94b0d853d8ef1d7171fd84738bd48d
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

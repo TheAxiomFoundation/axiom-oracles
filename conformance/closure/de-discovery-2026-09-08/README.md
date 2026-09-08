@@ -26,24 +26,33 @@ published as `de-rulespec-2026-09-08-kindergeld-frontier` from commit
 `39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a`.
 Publication run 34239272192 and mirror run 34239946209 succeeded. The public
 object is byte-identical to the locally signature-verified publication receipt.
-The source manifest is repinned to that object. Snapshot member capture-state
+That object was the first source-manifest repin; the expanded pin is recorded below. Snapshot member capture-state
 labels describe the original discovery time, before signing and publication;
 they are not current release verification results. No new signed RuleSpec
 modules exist yet, so module declarations and legal dispositions are not
 promoted merely because a source became available.
 
-The next corpus tranche is in draft axiom-corpus PR #648 at
-`273fcedd7ac44036feeb215717b41b22a9f4dd9c`. Its unpublished selector
-`de-rulespec-2026-09-08-kindergeld-civil` preserves the fourteen published
-scopes and adds three: full BGB/Unification Treaty, the German C-411/20
-judgment, and all eight previously missing BMF handbook pages. The planned
-release has 7,637 rows in seventeen scopes. All three new scopes have signed
-ingest manifests; the signature guard and deep release dry-run pass. The
-handbook scope has sixteen rows with explicit ISO capture expression dates;
-119 focused adapter/release-quality tests pass. Publication, signature and
-public-mirror verification must precede repinning this consumer. This ledger
-still binds the earlier published release, and no handbook page-capture hash
-has yet been replaced using the unpublished tranche.
+The expanded tranche in axiom-corpus PR #648 passed all required checks and
+merged as `15402878eed59a0ab56e7428fe6caa052b5c098a`. Publication run
+34250312875 produced `de-rulespec-2026-09-08-kindergeld-civil`, content SHA
+`3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35`,
+selector SHA `76600c66ac8b9b6c5740ca8fb300a975b717879f6751a4f6d2e061ce84258940`.
+Its signature verifies against the trusted public key. Mirror run 34250674219
+succeeded, and the anonymous public object is byte-identical to the signed
+publication receipt. It preserves all
+fourteen frontier scopes and adds full BGB/Unification Treaty, the German
+C-411/20 judgment, and all eight previously missing BMF handbook pages:
+7,637 rows in seventeen scopes. The three new scopes have signed ingest
+manifests; the signature guard and deep release dry-run pass. The handbook
+scope has sixteen rows with explicit ISO capture expression dates; 119
+focused adapter/release-quality tests pass.
+
+The source manifest now binds this expanded release. Supplemental entries
+001–006 and 011–017 bind 32 corpus rows through
+`supplemental-corpus-bindings.json`, replacing their earlier page captures.
+The thirteen entries retain their existing bearing and legal dispositions.
+No new executable RuleSpec module has been accepted. The release did not
+activate or change a serving pointer.
 
 Remaining work: exhaust the official BMF/BZSt registers; verify individual
 case identities and BStBl II publication against official records; reconcile
