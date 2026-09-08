@@ -291,19 +291,18 @@ method, `text_sha256` the hash):
   agreements. A class cannot be decided; a discovery channel must
   enumerate its members.
 
-The original browser capture methods remain recorded in git history. Seven
-supplementals (011–017: the five EU instruments, KiZDAV and RiStBV) now bind
-receipted corpus bodies from `de-rulespec-2026-09-08-kindergeld-frontier`,
-commit `c3623fe4bfea336be6b990a947f69e270d8bf951`, content SHA-256
-`39ddd6b5090e25f8eb8822c4492e5e2c18d4a5f077fd0ca481feed5e67391a9a`.
+The original browser capture methods remain recorded in git history. All
+thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
+corpus rows from `de-rulespec-2026-09-08-kindergeld-context`, commit
+`069407610ff961a075665d08c96ad08f54a9767b`, content SHA-256
+`32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
 expression date and official URL. Single-body instruments use that body's
 SHA-256 directly. KiZDAV uses the SHA-256 of the nine body hashes joined by
 newline in citation-path order, without a trailing newline. These hash
 changes replace the source receipt only; classifications and bearing remain
-unchanged. The missing BMF handbook pages still prevent replacement of the
-complete EStR/EStH, LStR/LStH, AEAO and AStBV page bundles.
+unchanged. The BMF handbook bundles are now included in the release.
 
 The SHA-bound class discovery snapshot adds 201 pending candidate entries.
 It is explicitly incomplete and retains the four pending class rows;
