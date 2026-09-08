@@ -52,6 +52,7 @@ from .dk_child_youth_benefit import (
     dk_child_youth_benefit_cases,
     dk_child_youth_benefit_couple_cases,
 )
+from .de_kindergeld import de_kindergeld_eligibility_cases
 from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
@@ -137,6 +138,7 @@ def available_suites() -> tuple[str, ...]:
         "dk-child-youth-benefit-2023",
         "dk-child-youth-benefit-couple",
         "de-worker-dual-oracle",
+        "de-kindergeld-eligibility",
         "uk-worker-pit",
         "uk-personal-allowance",
         "uk-worker-nic",
@@ -250,6 +252,8 @@ def load_suite(name: str):
         return dk_child_youth_benefit_couple_cases()
     if name == "de-worker-dual-oracle":
         return de_worker_dual_oracle_cases()
+    if name == "de-kindergeld-eligibility":
+        return de_kindergeld_eligibility_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
     if name == "uk-personal-allowance":
