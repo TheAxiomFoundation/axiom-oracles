@@ -121,6 +121,18 @@
   corpus channel for guidance documents should replace these page
   captures. Frontier 5 of 465; 126 open dependencies (8 law-derived, 0
   unclassified, 118 bearing).
+- Corpus repin (2026-09-08): closure source and instrument graph moved to
+  the encoder's signed release de-rulespec-2026-09-08-kindergeld-civil (17
+  scopes, 7,637 rows; July scopes byte-identical, so no binding broke).
+  Capture script fixed for multi-scope releases. AO resolved to its act
+  row; four handbook/CJEU inbound rows and the 2026 amending act
+  dispositioned; 13 supplementals rebound to corpus rows; the bilateral
+  agreements and ARB 3/80 enrolled as 23 pending members of the class.
+  Toolchain now runs end to end on this host (corpus and rulespec-de
+  blobless clones, release objects from the public mirror). Frontier 27 of
+  492; 130 open dependencies (8 law-derived, 0 unclassified, 122 bearing).
+  Next: read the 23 agreement texts; rebind AufenthG/FreizügG/EEA/SGB
+  VI–VII rows once the resolver matches inflected act names.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

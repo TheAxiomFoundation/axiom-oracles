@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
-  "corpus_release": "de-rulespec-2026-07-21",
-  "corpus_release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+  "corpus_commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
+  "corpus_release": "de-rulespec-2026-09-08-kindergeld-civil",
+  "corpus_release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -132,7 +132,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "f71795568853f918bde0f777a4ea6a1de2da3d9cf106fcd154337216e128c382",
+      "subgraph_sha256": "eb83b2260f19e9ebaeee3f2ce907b571e513b200aa19e76f7f983ec845590673",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +216,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "subgraph_sha256": "29625afe115f92b5ae34ef7a76ff15f9458d68fd968e0a2608a89e3ebecfba05",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +299,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "subgraph_sha256": "5fc329cc2a13343f26a21fd0ef1fbcf3f26182fa63fe51ae60befd349caf89d3",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -322,7 +322,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
+    "sha256": "b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae"
   },
   "spine_closed": false
 }
