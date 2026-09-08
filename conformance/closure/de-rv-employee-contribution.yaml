@@ -163,10 +163,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 47f0a28512fecd92b696a55b09358275277e8af174f9e0a5a93caf3049a131fe
+    snapshot_sha256: 39169c1a158644ea307788bfac9e10a7d17620358c3317adc2dfc6ef841dff39
     channel_receipts:
-      corpus_release: 61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b
-      subject_matter_search: 61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8
+      corpus_release: bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3
+      subject_matter_search: 4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

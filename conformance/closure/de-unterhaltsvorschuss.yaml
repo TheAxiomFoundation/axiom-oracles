@@ -353,16 +353,32 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 47f0a28512fecd92b696a55b09358275277e8af174f9e0a5a93caf3049a131fe
+    snapshot_sha256: 39169c1a158644ea307788bfac9e10a7d17620358c3317adc2dfc6ef841dff39
     channel_receipts:
-      corpus_release: 61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b
-      subject_matter_search: 61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8
+      corpus_release: bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3
+      subject_matter_search: 4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
       unretrieved: 4
     candidate_count: 23
     candidates:
+    - id: de-uhv-instr-0d081243aac4ae0a
+      status: pending
+      discovery_refs:
+      - de-corpus-1e9553bf1c3cab4a25c7
+      - de-corpus-2002f578d218f40e319b
+      - de-corpus-260839e931365124a64e
+      - de-corpus-5d6c1275ed07d4e7d9f7
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgb
+      row_sha256: a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee
+      document_class: statute
+      citation_label: Bürgerliches Gesetzbuch
+      body_sha256: 80f8ea02d7d4e9a41016ec4eccbe4694c0c87c92298ba244e0536bdc784a2be3
+      document_citation_path: de/statute/bgb
+      legal_authority_url: https://www.gesetze-im-internet.de/bgb/
+      fundstelle: RGBl 1896, 195
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
@@ -434,16 +450,6 @@ generated_facts:
       body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
-    - id: de-uhv-instr-3875634198c25414
-      status: pending
-      discovery_refs:
-      - de-corpus-e92cecd8d59a1d6a94f5
-      - de-corpus-f1d16fb6c3d26e8d4286
-      - de-corpus-ffd851e9123ab32ab5fd
-      identity_kind: unresolved_reference
-      raw_references:
-      - Aufenthaltsgesetz
-      - Aufenthaltsgesetzes
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -476,16 +482,6 @@ generated_facts:
       document_citation_path: de/statute/ao-1977
       legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
       fundstelle: BGBl I 1976, 613 (1977 I 269)
-    - id: de-uhv-instr-7aa5943b5f0a6e6c
-      status: pending
-      discovery_refs:
-      - de-corpus-5f705aae8523970f1a25
-      - de-corpus-6df13af136332e8c23b6
-      - de-corpus-caf0f56af53ffc8164d1
-      - de-corpus-e0b2258a581a1bcb29a4
-      identity_kind: unresolved_reference
-      raw_references:
-      - Bürgerlichen Gesetzbuchs
     - id: de-uhv-instr-7d7a5efb6250df56
       status: pending
       discovery_refs:
@@ -583,6 +579,21 @@ generated_facts:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-uhv-instr-e5490882a4dcdc9f
+      status: pending
+      discovery_refs:
+      - de-corpus-3b1811ff87ddb92550bf
+      - de-corpus-d71d75de222657a31909
+      - de-corpus-f86b5f745e199d0f26e7
+      identity_kind: corpus_citation
+      citation_path: de/statute/aufenthg-2004
+      row_sha256: 213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b
+      document_class: statute
+      citation_label: Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet
+      body_sha256: 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a
+      document_citation_path: de/statute/aufenthg-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/aufenthg_2004/
+      fundstelle: BGBl I 2004, 1950
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:
@@ -871,6 +882,7 @@ computed:
       excluded-with-reason: 0
       pending: 23
     pending:
+    - de-uhv-instr-0d081243aac4ae0a
     - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-1808736a82828a59
     - de-uhv-instr-1a53a8fa58131ff1
@@ -878,11 +890,9 @@ computed:
     - de-uhv-instr-2a29967484296d20
     - de-uhv-instr-2b0a8f983f861591
     - de-uhv-instr-333ba26c32e038d3
-    - de-uhv-instr-3875634198c25414
     - de-uhv-instr-703d3b12aaab39f8
     - de-uhv-instr-73cb585362978769
     - de-uhv-instr-78841044a219e9b8
-    - de-uhv-instr-7aa5943b5f0a6e6c
     - de-uhv-instr-7d7a5efb6250df56
     - de-uhv-instr-8939b62ab3b44a39
     - de-uhv-instr-906e7387d896596c
@@ -893,9 +903,26 @@ computed:
     - de-uhv-instr-c29a0cb26e4cbc1d
     - de-uhv-instr-c795a7af57079afc
     - de-uhv-instr-db7693cd9f018ff4
+    - de-uhv-instr-e5490882a4dcdc9f
     - de-uhv-instr-guidance
     complete: false
     ledger:
+    - id: de-uhv-instr-0d081243aac4ae0a
+      status: pending
+      discovery_refs:
+      - de-corpus-1e9553bf1c3cab4a25c7
+      - de-corpus-2002f578d218f40e319b
+      - de-corpus-260839e931365124a64e
+      - de-corpus-5d6c1275ed07d4e7d9f7
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgb
+      row_sha256: a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee
+      document_class: statute
+      citation_label: Bürgerliches Gesetzbuch
+      body_sha256: 80f8ea02d7d4e9a41016ec4eccbe4694c0c87c92298ba244e0536bdc784a2be3
+      document_citation_path: de/statute/bgb
+      legal_authority_url: https://www.gesetze-im-internet.de/bgb/
+      fundstelle: RGBl 1896, 195
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
@@ -967,16 +994,6 @@ computed:
       body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
-    - id: de-uhv-instr-3875634198c25414
-      status: pending
-      discovery_refs:
-      - de-corpus-e92cecd8d59a1d6a94f5
-      - de-corpus-f1d16fb6c3d26e8d4286
-      - de-corpus-ffd851e9123ab32ab5fd
-      identity_kind: unresolved_reference
-      raw_references:
-      - Aufenthaltsgesetz
-      - Aufenthaltsgesetzes
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -1009,16 +1026,6 @@ computed:
       document_citation_path: de/statute/ao-1977
       legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
       fundstelle: BGBl I 1976, 613 (1977 I 269)
-    - id: de-uhv-instr-7aa5943b5f0a6e6c
-      status: pending
-      discovery_refs:
-      - de-corpus-5f705aae8523970f1a25
-      - de-corpus-6df13af136332e8c23b6
-      - de-corpus-caf0f56af53ffc8164d1
-      - de-corpus-e0b2258a581a1bcb29a4
-      identity_kind: unresolved_reference
-      raw_references:
-      - Bürgerlichen Gesetzbuchs
     - id: de-uhv-instr-7d7a5efb6250df56
       status: pending
       discovery_refs:
@@ -1116,6 +1123,21 @@ computed:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-uhv-instr-e5490882a4dcdc9f
+      status: pending
+      discovery_refs:
+      - de-corpus-3b1811ff87ddb92550bf
+      - de-corpus-d71d75de222657a31909
+      - de-corpus-f86b5f745e199d0f26e7
+      identity_kind: corpus_citation
+      citation_path: de/statute/aufenthg-2004
+      row_sha256: 213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b
+      document_class: statute
+      citation_label: Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet
+      body_sha256: 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a
+      document_citation_path: de/statute/aufenthg-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/aufenthg_2004/
+      fundstelle: BGBl I 2004, 1950
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:

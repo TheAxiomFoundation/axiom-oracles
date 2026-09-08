@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-08T18:03:22Z",
+  "generated_at": "2026-09-08T19:44:23Z",
   "source": {
     "path": "closure/de/source.json",
     "sha256": "b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae"
@@ -254,13 +254,13 @@
         "act_count": 76,
         "mechanism_counts": {
           "amendment_targets": 38,
-          "explicit_cross_reference_body": 4772,
+          "explicit_cross_reference_body": 4766,
           "law_metadata_changed_by": 23,
           "law_metadata_fundstelle": 29
         },
-        "row_scan_sha256": "239ab2b73246024f09f462c277f16bb6e6f0cbed1be1d6eb3e639f6f48a4c997",
-        "canonical_index_sha256": "16d8fa1e3b579d778fc95a41bef6d2720c14016ede63885c024d1e5eb68f33c6",
-        "per_act_sha256": "adcd8250c2c2283572c51b66dcc12b6d1057a6d6665fbef33997ab5bfcae4f79",
+        "row_scan_sha256": "f308e38605cb6d6c0c2aa6a857db2358c2aa5a5661275aede2472d5a789d44af",
+        "canonical_index_sha256": "8cbd02414a2452fad8a8a479b086addc390f1a45649210aa5c61802361af0379",
+        "per_act_sha256": "368df70722cf9551fc2e754a71e4ebee301e1e1cdb1846ac4a5fa535240bcc85",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -420,7 +420,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "13da226c3fa96be7ada52656a474277ca28a5614ef320133ba43075aef1add35",
+            "findings_sha256": "3c12ffcb12261b0675e9727e17616a9cefb50f1acd085603065fd7764a8b53cb",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -428,7 +428,8 @@
                 "source_body_sha256": "3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5",
                 "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -453,7 +454,8 @@
                 "source_body_sha256": "3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5",
                 "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
                 "matched_text": "Freizügigkeitsgesetz/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -461,7 +463,8 @@
                 "source_body_sha256": "3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5",
                 "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -512,7 +515,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "ceed1c4f0a72af40f7f940dc9ca6dcea8c3e270da68ea0c1f39f14637cd0c63f",
+            "findings_sha256": "fcddd758ef5498294388463c75d4b2a4d97d1c6894c15ab26b81e2c5c4413d56",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -529,7 +532,8 @@
                 "source_body_sha256": "62b8f81e5cfd966bc91c7069c017f5aa9280b6856f8844fbb1d12e9fb90c0cbe",
                 "source_row_sha256": "08a85fd1be035820e053609ef05566631008c9845922788fff1f1ae74b21c466",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -706,7 +710,8 @@
                 "source_body_sha256": "62b8f81e5cfd966bc91c7069c017f5aa9280b6856f8844fbb1d12e9fb90c0cbe",
                 "source_row_sha256": "08a85fd1be035820e053609ef05566631008c9845922788fff1f1ae74b21c466",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1241,7 +1246,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "7a35c41b0e4761cc07e6532f794b3854323f89100cd0713393dcf6574892347f",
+            "findings_sha256": "afbf01ac449f28efcf37e077f2d40b2e54489f549984b6fb88c43eae44ea388d",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1258,7 +1263,8 @@
                 "source_body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785",
                 "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1652,7 +1658,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "d7194fb6452f835bfe1f143c06d78d6b3ac9b1deeb6d2b718d505cf0a759fd98",
+            "findings_sha256": "9285f264790a03b3ff9410ca31000215a3f5ce8e5c872a7be0bb4787bc824eac",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1669,7 +1675,8 @@
                 "source_body_sha256": "5bfedb0c3f57cf2aae99fcd99923eb618c12c257e117dbb623f83df94c6fea56",
                 "source_row_sha256": "9ab3aff01986d5efee21c5b6bb78c712ecda21b6e2a1551792822bac8cd128d1",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1874,7 +1881,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "3763a695b1acceeed56c004472d09eaf2a5fe04d49005115339c5298c7a631b4",
+            "findings_sha256": "e92e62e5886770ac6a69cea8b6d447f4dddb43fb71e485b11ef17522eb6232a3",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1882,7 +1889,8 @@
                 "source_body_sha256": "703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251",
                 "source_row_sha256": "a6203be93b6070be299cc12fea088abc437066664aca42255e94f8f541aeb33b",
                 "matched_text": "Abkommen über den europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1938,7 +1946,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "e8e1096b37a559336c979afcedf64d916aa73c39d459d3305124ddc4c8f87f1b",
+            "findings_sha256": "32dcc1791f7d3619801a284dd70733277d61e93fb2ba031e18127d0da3a50b92",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -1995,7 +2003,8 @@
                 "source_body_sha256": "113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263",
                 "source_row_sha256": "da151cc8581fb28e6a8c3e895be85a8f212a4344f12422086b9db3f575ccb3be",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3484,21 +3493,12 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 1,
+              "explicit_cross_reference_body": 0,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "4efaa2b2d6b1ea1beffb4d95051bb71cbd9e70cc65bf4c1986c65534bbe46e8d",
-            "findings": [
-              {
-                "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/regulation/eea-agreement/document-1",
-                "source_body_sha256": "3c7045ad694acf462da974a05bfd28144e3bf0a708f81312f4500d29b7377435",
-                "source_row_sha256": "c75ba95ba44d7e26faa4698415de3c26b88b32b3fd2d909002952c5855ce77b2",
-                "matched_text": "ABKOMMEN ÜBER DEN EUROPÄISCHEN WIRTSCHAFTSRAUM",
-                "unresolved_identity": "law:ewr-abkommen"
-              }
-            ]
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
           },
           {
             "document_citation_path": "de/regulation/eec-turkey/arb-3-80",
@@ -6671,7 +6671,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "3d4ee5f494928d6e6e3ac58dffa6c653881c3a47c583861c730dd5881bbbbe2f",
+            "findings_sha256": "aa29196464d8f4938dcd8df254daa33a22027f58a84b0d3ec585f95193e504fa",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6679,7 +6679,8 @@
                 "source_body_sha256": "a2e34fdbc13f7836cc2c6954f025366718a6826531b183f830234300f616046c",
                 "source_row_sha256": "cd605501f18ae69c712438ee3ff2195050701c9e66c079bc5bafae0d9f705bd8",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6687,7 +6688,8 @@
                 "source_body_sha256": "dc5fe67760f3cd298fd3ce3c7fa2625e4ea1bb60216be9cf05353316c44c3b7a",
                 "source_row_sha256": "f8974764234a0f8740ca9c8d1fb0c137dd98ee39d1662efaee665e5e7e348839",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7312,7 +7314,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "f8b804880cac97a16748d650621918932e7f01a523960843fce2ae3cd07c868a",
+            "findings_sha256": "c1635ed8582c9f7763f4074ce6691fb413879e1ec97abe1b4504258bf8de4607",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7320,7 +7322,8 @@
                 "source_body_sha256": "200e8de41ccc3f36f27ebe2c35eb8e6fcab1104c315535092cd466ee97186bdb",
                 "source_row_sha256": "cdf31276fe356b36247b587f1ddafd404d6bf76c314a24f3991a6befbad9fa82",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7328,7 +7331,8 @@
                 "source_body_sha256": "f7e3e34f6eea7a51169a490b91655f695825a5e86eb53f4e14c756f90bf070f6",
                 "source_row_sha256": "7002682aa4034d97cbecbdc5bb2f8a5a5bd5bdaa12bc53405217637bea5d7402",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7368,7 +7372,8 @@
                 "source_body_sha256": "73dc2cf8cbcf5c0df40cc06a053826519aaeb901541ff8be0962f6f2f32acf13",
                 "source_row_sha256": "a22eb7f29b117f40fe75b0424f26885a52710ac709bc032a4aa7ce12208fd66c",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7659,7 +7664,8 @@
                 "source_body_sha256": "0db0ce53a5df9092e99b1d0862f0c0e1b953c81da4dc768e83ca0ba561369619",
                 "source_row_sha256": "afafc825ae264abe5e226cd7b0efc325af3464ffcdf6ab9da0718c34a681af2d",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7667,7 +7673,8 @@
                 "source_body_sha256": "1182421da0bdd54f4c53d5f2996cb78f3d319d09680112966f524d8eaade8599",
                 "source_row_sha256": "a914948638dcc61f17d29a89483be88d92dc89f95cefa717576f9798c971af88",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7675,7 +7682,8 @@
                 "source_body_sha256": "1fadbc7f8826591fe58d3807435b95408b29bfaaf072dbe8778ce8eb793b64cb",
                 "source_row_sha256": "f8fcdafcbc0e0e8549287ed67f29e9cd0b2e7054f1098a32c9614fcc3fb8b419",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7683,7 +7691,8 @@
                 "source_body_sha256": "6634bf6d0c946f5ea4280925ba0a1e46f8c54694fdf54928ac3c7e541c383eac",
                 "source_row_sha256": "32cc2216caa1048bdbf355ae6c7e528f1f0b88030755e0e40f40104ca1db68f3",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7691,7 +7700,8 @@
                 "source_body_sha256": "670aab15a61874a05baa2c0b1c2c229f8125670cda967b9f48c0626aa4054965",
                 "source_row_sha256": "59a30d7844f6d623b0e438abd626f2ffed9632fa09ea72f652088c35d8f083e2",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7699,7 +7709,8 @@
                 "source_body_sha256": "6c975e7a51a26f27916f4e1c23be9269ef56ed38ed677736dc4891aa4e0fa28c",
                 "source_row_sha256": "b46593efc7cc9a6d2314435f9b18e819534f9d0adf9b4cbf0f17fdc97934073b",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7707,7 +7718,8 @@
                 "source_body_sha256": "7ae9eadf4260e7c9545de3eb87f79cd6efa5333999726499cb8e1f124367b5a9",
                 "source_row_sha256": "c62eb25ec5d20a6bf3a11ca3dd88d35c9b03f78f302215444b190816f3873fd7",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7715,7 +7727,8 @@
                 "source_body_sha256": "7e8af00e2f39b57c743270853414f32cbc617dbabb2bcc3a1a1ba29a267e4eaf",
                 "source_row_sha256": "3235eb3606152aa9d1c61c2624f90c60cbc5aa55ab82193c977b62f310c08c72",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7723,7 +7736,8 @@
                 "source_body_sha256": "94bd8ec0fecc587df75abed679ab18e2b8973f37716edde92a020e01dd49662d",
                 "source_row_sha256": "577a003f40265e3a782878a7dfa41ca7a860ec5b3bc540327725db4133d8e0c2",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7731,7 +7745,8 @@
                 "source_body_sha256": "a34cc744e6423727a2949640af418fb14374805c6212e7f3f56150f03dd7cebc",
                 "source_row_sha256": "6d99c0dc53621b724c982dc769126dde8895539eb0e84a3b13b31a0f78b01f84",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7739,7 +7754,8 @@
                 "source_body_sha256": "b3078fc452fe7e3417aabb7b310c74c295d0660544330a4ce1d069a2eae2c90f",
                 "source_row_sha256": "fc04625277597bfce344be256082849c49a37da30530db1429ceb5443a5bcc4e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7747,7 +7763,8 @@
                 "source_body_sha256": "b8f224187c2b8ef14c6e1ce34e6add92cec1fe55749be85a0a5cd229e2dc5367",
                 "source_row_sha256": "96b8ae3561faa9512d069fd7f003964974f4a4e3ea4da1851a3d94f78a0b335f",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7755,7 +7772,8 @@
                 "source_body_sha256": "ca8055ff6fa5d427c1fc72ba10ae7594a3314713a44bfd9d3c1abb0980cf7553",
                 "source_row_sha256": "841b93f7c54c0bd2accd284e41fa80c8a7fffa08e65be6ad5b93281281874475",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -9350,11 +9368,11 @@
             "row_count": 230,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 278,
+              "explicit_cross_reference_body": 274,
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "f7468010876ad7465a13c0ea26e413f4646a5ee0f1e287ba2625d13079378a8e",
+            "findings_sha256": "3ce1a1f0b27806da1f1e91719934c419fc449ad3c10bd015bc50e13ef7535ad5",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -9759,38 +9777,6 @@
               },
               {
                 "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/statute/aufenthg-2004/104",
-                "source_body_sha256": "40be455a2e04b34f6aebdb6828e7b3473433a6367720c2b37ac1a40d1941da23",
-                "source_row_sha256": "dceeff72719356601707977c44c662242d2eb71c454f2235362d242c1a16ff42",
-                "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
-              },
-              {
-                "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/statute/aufenthg-2004/60d",
-                "source_body_sha256": "85dc6823915f7c2a204b1b8ff39319ca503c2dd95a560a969cffb44f51351452",
-                "source_row_sha256": "b84730250d895888ad60e4022bf2d0eb8d3e17c1eb6a3940961076e97b0085c4",
-                "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
-              },
-              {
-                "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/statute/aufenthg-2004/19d",
-                "source_body_sha256": "abb060a49e53255a325fcbe76775330e3101c9dadca789ac03f26495b240cb06",
-                "source_row_sha256": "d4ad993b90ea0067c7f13c4fb1fe84e67e130584911310d90e756e6773f82d90",
-                "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
-              },
-              {
-                "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/statute/aufenthg-2004/104a",
-                "source_body_sha256": "f4ae6d5ebfecce42d6781a32d02218a98cb4844de4b5b5f62e468e86f15b681c",
-                "source_row_sha256": "eec58a555e6d3d9fc2fb1f35f3558167f0b5a422b09811b3c6695d122d80215f",
-                "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
-              },
-              {
-                "mechanism": "explicit_cross_reference_body",
                 "source_citation_path": "de/statute/aufenthg-2004/78",
                 "source_body_sha256": "d92244173fc6acfe48c59440cf8bb759f6e07eb9234e33e96a93f4512ba35c69",
                 "source_row_sha256": "10e834b947afe4f342c2357edb77176b91a6a80fd5c7dec1baf9b457ab1e4a00",
@@ -10084,7 +10070,8 @@
                 "source_body_sha256": "14ea710a8a8018b47abe018a142fa607a87051436bc073f72f0fda8d59e2da70",
                 "source_row_sha256": "4af70e1bd05e5e420fee37232bf43bd8a6e721edff61131d2006143b349c5ca5",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10092,7 +10079,8 @@
                 "source_body_sha256": "93825f08500c3a0b22fea1ba59119e0d1a4496f5b52d5f820161504c883b6390",
                 "source_row_sha256": "bd7977574556aaf5e3127a01dd56b6bcf21eccc5451396c2dc7e6e777364b933",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10100,7 +10088,8 @@
                 "source_body_sha256": "a4df25a7709c7eb52288f7e499565238a8c0fb105f6283954fb45e1000b70843",
                 "source_row_sha256": "a186b9ce080aee2e80be7838010c5b838a87e2d6d9c1145517700646998ae3c4",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10108,7 +10097,8 @@
                 "source_body_sha256": "af58cfa7c341d6caa4ad808f11583593e8983c82dd03b2ad4c1ca7b6bbda0482",
                 "source_row_sha256": "9bbafa60019e1e6e18fef0c3efced701607eea9f74cccdd00438cc4ad4abb090",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10116,7 +10106,8 @@
                 "source_body_sha256": "d9e7fd2ba83fe9cf08ee29a25cbea5feceb7787ea9ecbac3920d75f86beaadf2",
                 "source_row_sha256": "e533e69f324a61e23c4232afcdaac453da29ed2bbc0beca50e6abfb48e4ac46e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10124,7 +10115,8 @@
                 "source_body_sha256": "e42b93b3873fb618cf5539ddf530f786c1eca5eef030fe293f27808b24f40e9c",
                 "source_row_sha256": "2d816012788780ece3a68741db76651d90aed5a1ac0db6d43df39d8d98d0bfb1",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10380,7 +10372,8 @@
                 "source_body_sha256": "8b58ffee03cb1675245a83c059605ae22698952450ceefd497e593451aa42e6e",
                 "source_row_sha256": "762b82d23e8c7a3b9976122bc438df47d7060726c1f8fe375272d6ea593cb232",
                 "matched_text": "Freizügigkeitsgesetz/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -10388,7 +10381,8 @@
                 "source_body_sha256": "aaa19b63c33f2f4224affc8748b3dbf7c6c5cb6ddb4d8b154f3caa16a8be17ea",
                 "source_row_sha256": "cb58fb931e911e673ced33f58089dba8a0229fd0e55451111cdc6bc8af230e50",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -11672,7 +11666,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "d99681059b53164fdb82c1f0bba1dc9698c9d2fff61aa92f0e86e3777c667a8f",
+            "findings_sha256": "031a275e2cbd97d18143da1ee3b058eba4488c3da0a19ec081ff8fff3e11bf48",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -11704,7 +11698,8 @@
                 "source_body_sha256": "015bb9687789da7b56561c6207cfa2536cbb138d7ecf9772854b29e27a0c5b40",
                 "source_row_sha256": "695ef17e65eb6a4253d076edb3f63424beeefac68ae73f1c3b41df9a48fb3633",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -11761,7 +11756,8 @@
                 "source_body_sha256": "015bb9687789da7b56561c6207cfa2536cbb138d7ecf9772854b29e27a0c5b40",
                 "source_row_sha256": "695ef17e65eb6a4253d076edb3f63424beeefac68ae73f1c3b41df9a48fb3633",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -11769,7 +11765,8 @@
                 "source_body_sha256": "6b9742e2f4cdb95807cae75ccd8992394c41fab8d786c3b01e637ec862488bc9",
                 "source_row_sha256": "ee15c2746d5da753944207f88132b88eb32f7e88a1516d8dad6bc7adcb714b2e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -11777,7 +11774,8 @@
                 "source_body_sha256": "78b6df3f4c18024fb54fb6b05a8c53a7f7444a85ec399d3a5c33906d5c0344de",
                 "source_row_sha256": "4441794c4e0a48ad51b5a200b1bf7725e28e09ca5da4ee1dc1d62503bb1b9d62",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -12313,11 +12311,11 @@
             "row_count": 2841,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 105,
+              "explicit_cross_reference_body": 104,
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "97105626e87d2cb379bbebde3694ade04b11f3019cd0305e3a4bdea0b92c436a",
+            "findings_sha256": "036f2d20fd5a70f6cc929a3f9d5dd17e039e4d085ce62a3d0fea2cc82ec9077f",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -12357,7 +12355,8 @@
                 "source_body_sha256": "f91be3ab343ce77101ffa56e430d4134ca32bc253ea717a93ac74fbc5629b117",
                 "source_row_sha256": "4bd1c1df512de8bac44ff6f6e87c7b5601398185a386f4cb0bc70391ac4d707b",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -12486,14 +12485,6 @@
                 "source_row_sha256": "438e66008deab951fc8581f20176c692d1504885a381e4a022c2a94169530e9b",
                 "matched_text": "Börsengesetzes",
                 "unresolved_identity": "named-instrument:börsengesetzes"
-              },
-              {
-                "mechanism": "explicit_cross_reference_body",
-                "source_citation_path": "de/statute/bgb/1696",
-                "source_body_sha256": "6c7d528707ba1a227ae0e00da4041dab76c5aa4b3d259612160c29cc20689d46",
-                "source_row_sha256": "cc64f899e67bd5c514b8d31e9ce9dc1bbe4998742b079a05f6d08a85d6e8bbe7",
-                "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13487,7 +13478,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "d38e31ed988c3959a78f8d32896d8efc7f82643a1c940ea6bd96d82a9e8ae86c",
+            "findings_sha256": "609fd57fb3df9dccbb8b01f5fdbc2b434295bb93a37862a841f8c8b4e0902818",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13544,7 +13535,8 @@
                 "source_body_sha256": "17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28",
                 "source_row_sha256": "1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13560,7 +13552,8 @@
                 "source_body_sha256": "17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28",
                 "source_row_sha256": "1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13823,7 +13816,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "4df0e0bef6070822e031ffbd9aa553fb33980857907e15b3bc90e15968e584f1",
+            "findings_sha256": "5a4e3f1683da2c41f915ffca9afe88ba720f8814851cfdeed7717f3258f89c19",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13849,7 +13842,8 @@
                 "source_body_sha256": "0252164470e3bf5574420db35a6acfee72eca2e49456edf948f22c47d3fdcc67",
                 "source_row_sha256": "3cdff7449d1379dafbd0c6fbfa16d17a4d099e272739b0ea608a0420c330e57f",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13857,7 +13851,8 @@
                 "source_body_sha256": "a59d582dc9d274986253b0b1ef1d23c11e1a376a3f9904bdaf78f476dae3fa7f",
                 "source_row_sha256": "6be28288fe6b343c0439bca19b2389fbd59179f7e7df6d56498fb403ae46b490",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13865,7 +13860,8 @@
                 "source_body_sha256": "a59d582dc9d274986253b0b1ef1d23c11e1a376a3f9904bdaf78f476dae3fa7f",
                 "source_row_sha256": "6be28288fe6b343c0439bca19b2389fbd59179f7e7df6d56498fb403ae46b490",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -13873,7 +13869,8 @@
                 "source_body_sha256": "b4d94f244a424925a3e721ba350cf7efc45b97b164f6738a5500125c99abc184",
                 "source_row_sha256": "66c0bc455640a24d7de0487ccd06bb59b92b68d26f1ab3f985ca80083ba9f747",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -14551,7 +14548,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "ee9b3ea36df265da49c7b14fb86fd8172d5ef54bf5149aeea1e46cd5343ab8a8",
+            "findings_sha256": "843743549202865702bbef2bf69b11f43c1f9a9d5d017fd02fabc59e71e2cffe",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -15452,7 +15449,8 @@
                 "source_body_sha256": "d9b7446a9ccb8b35bafaa761e58fd440b0dc2fa6c673a5472b240ff1b1a8dafc",
                 "source_row_sha256": "6008948391ebc9b09bd40097e75be478ef3278bf816d6ba23f191eed05ac8590",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19347,7 +19345,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "3d584ff81ba5111f1ddf4ba04d8744ec87e8fa5587279e8bddef27fda7eff535",
+            "findings_sha256": "de76d2bb3a9529445d64b420a7fb30a4b8fd78e0bbf4d8ed60fcda5eeb1af9eb",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20137,7 +20135,8 @@
                 "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
                 "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20145,7 +20144,8 @@
                 "source_body_sha256": "12b01c9b0c9cfed15c0a1056ce05b01ccc146eb8338dbde1c4875699a41fe8c1",
                 "source_row_sha256": "a97a56d04e8fe14b79c19dd75d5fcafb64d7f74a3a2d2aa817efd5dcc3f24b7a",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20153,7 +20153,8 @@
                 "source_body_sha256": "2719c950c71741503bdb93e669c893339f6454a28d56b646946acf850eb5e2b0",
                 "source_row_sha256": "20df54c34a8fcc318b36e62bddeff9eda701d455cfd828e75469b47a88df0b74",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20161,7 +20162,8 @@
                 "source_body_sha256": "575ea236099c22a16ffe3490c96efa5e1ec1f2d037644130ba303bb5278fb65e",
                 "source_row_sha256": "c1968c4b139a46cb98d01e38853e36a57e78418989be5d5d8f8ed679375a0d04",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20169,7 +20171,8 @@
                 "source_body_sha256": "57ef6bdfbcadc3ac7ad0f8e6dcb2b76cc7620ff79a250669016d8cab3f6af4fa",
                 "source_row_sha256": "510c1f40f79f8dab4fcf7bc5e01e42e42b42dad457c188cdbd850df861bd73f6",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20177,7 +20180,8 @@
                 "source_body_sha256": "595e1cf377964ed21da504b37e6f37570c0b4c26ae9cf2dda1e17b18188ed696",
                 "source_row_sha256": "93fff14d1e60dea3aed745cac1d362acfeab110853704e3a3ba392439bb7063f",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20185,7 +20189,8 @@
                 "source_body_sha256": "6a54a92acaab10e058ee9f9c8c6b77779e0dd2db274781d588e6cd75f31438c2",
                 "source_row_sha256": "9ca9d9cc0cc814be53cf6025a6f845c39380313aff21cb5334d8f353895c250c",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20193,7 +20198,8 @@
                 "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
                 "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20201,7 +20207,8 @@
                 "source_body_sha256": "72e3a530e9fdb238e1602da4a5a5d5e7685c6874dc14542efc983ae2343dd77e",
                 "source_row_sha256": "58d338fb9285564af72dbdbbe5319c68c9fc50baa9a5b85c971cbb5984829434",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20209,7 +20216,8 @@
                 "source_body_sha256": "7491e09bda306e1d1cd1f26f1c2d9ac5ec70c4c2858dfbb6a2eb16db22c2813a",
                 "source_row_sha256": "31e152dc9448f58b8ca3ed8831aaa1afc52b8ad9460106b74d0fc027313c9d8e",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20217,7 +20225,8 @@
                 "source_body_sha256": "7edbecaae6a71375d05e8089c48d2f46869886399d973ff9e5cd742fc8f067a3",
                 "source_row_sha256": "78e89fbde6b27971e0f8465e5dfda7b46b23e72f01090bbe051ec4be2885f645",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20225,7 +20234,8 @@
                 "source_body_sha256": "8080ec4d1e8622ee4ecb1aba371c613d9cf3b15643164cb7a8b49b2c6b8c2d85",
                 "source_row_sha256": "80b1268f401b36b062b627de707a35a10e6b25297072446eacaa488e68f1d203",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20233,7 +20243,8 @@
                 "source_body_sha256": "857655303bbb340e7024ec76b5bdf8b1cdce7e9403377fbe3d1b1116d8f5c727",
                 "source_row_sha256": "8125ea38f9d9749e03e7ba16f978527e7594a17b0d1352a51ea8ccca3281d8aa",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20241,7 +20252,8 @@
                 "source_body_sha256": "95867dc9559c41e62422d744d057f282376c54083eefe324795a5670d96fbba9",
                 "source_row_sha256": "a14810a969e25ebdec631228f6eff22ff9c6f87d313b5a009b0f5b06312f3222",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20249,7 +20261,8 @@
                 "source_body_sha256": "a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416",
                 "source_row_sha256": "b423d370b2816d7a5012cd27fdc0de5939d4db3ce89ea4be02b64b16ac403a0d",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20257,7 +20270,8 @@
                 "source_body_sha256": "a8bc03806fe56c7c9961861ad8d84ea23b78b3379f91e049cbdcbd78df3efde9",
                 "source_row_sha256": "a78b0ed3757a79dacf202975d216d18e816b02a1e0eec91693d60018f498b813",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20265,7 +20279,8 @@
                 "source_body_sha256": "af3426d4c532dd8ce8a1c55306d85f8537c1cb5594da8e74712c7695ed2bba07",
                 "source_row_sha256": "13c82e05046acf5948ee96987722905859e05221ae745f4ac5dcdd8d159eb160",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20273,7 +20288,8 @@
                 "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
                 "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20281,7 +20297,8 @@
                 "source_body_sha256": "ed56975ce44b4aae9f0476555b17e135c63cb2dcba420d805738f38cb15f8f16",
                 "source_row_sha256": "7231f9a308b7a98b150d5f0fba02dc66d49211bfbb3e3198fc782be7ed047819",
                 "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20473,7 +20490,8 @@
                 "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
                 "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20883,7 +20901,8 @@
                 "source_body_sha256": "547ecc179c205c32ee6d7ce55ee2b08f2c7563296554f267ec6f21b732b0dda9",
                 "source_row_sha256": "0aa06842b74f15eb80231b1a043ee00ef61940362688cfd8af8a0612795ae42e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20891,7 +20910,8 @@
                 "source_body_sha256": "595e1cf377964ed21da504b37e6f37570c0b4c26ae9cf2dda1e17b18188ed696",
                 "source_row_sha256": "93fff14d1e60dea3aed745cac1d362acfeab110853704e3a3ba392439bb7063f",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20899,7 +20919,8 @@
                 "source_body_sha256": "c604838659b9a4695aee77bcbb0e53cbc71cf59d5df82b7097bc63eaafc756d7",
                 "source_row_sha256": "da26f825452697d1003e02461139ca4e152892a97bbcfef559749742351de985",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20907,7 +20928,8 @@
                 "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
                 "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20915,7 +20937,8 @@
                 "source_body_sha256": "ed56975ce44b4aae9f0476555b17e135c63cb2dcba420d805738f38cb15f8f16",
                 "source_row_sha256": "7231f9a308b7a98b150d5f0fba02dc66d49211bfbb3e3198fc782be7ed047819",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21105,7 +21128,8 @@
                 "source_body_sha256": "12b01c9b0c9cfed15c0a1056ce05b01ccc146eb8338dbde1c4875699a41fe8c1",
                 "source_row_sha256": "a97a56d04e8fe14b79c19dd75d5fcafb64d7f74a3a2d2aa817efd5dcc3f24b7a",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21113,7 +21137,8 @@
                 "source_body_sha256": "575ea236099c22a16ffe3490c96efa5e1ec1f2d037644130ba303bb5278fb65e",
                 "source_row_sha256": "c1968c4b139a46cb98d01e38853e36a57e78418989be5d5d8f8ed679375a0d04",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21121,7 +21146,8 @@
                 "source_body_sha256": "595e1cf377964ed21da504b37e6f37570c0b4c26ae9cf2dda1e17b18188ed696",
                 "source_row_sha256": "93fff14d1e60dea3aed745cac1d362acfeab110853704e3a3ba392439bb7063f",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21129,7 +21155,8 @@
                 "source_body_sha256": "6a54a92acaab10e058ee9f9c8c6b77779e0dd2db274781d588e6cd75f31438c2",
                 "source_row_sha256": "9ca9d9cc0cc814be53cf6025a6f845c39380313aff21cb5334d8f353895c250c",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21137,7 +21164,8 @@
                 "source_body_sha256": "a8bc03806fe56c7c9961861ad8d84ea23b78b3379f91e049cbdcbd78df3efde9",
                 "source_row_sha256": "a78b0ed3757a79dacf202975d216d18e816b02a1e0eec91693d60018f498b813",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21145,7 +21173,8 @@
                 "source_body_sha256": "af3426d4c532dd8ce8a1c55306d85f8537c1cb5594da8e74712c7695ed2bba07",
                 "source_row_sha256": "13c82e05046acf5948ee96987722905859e05221ae745f4ac5dcdd8d159eb160",
                 "matched_text": "EWR-Abkommen",
-                "unresolved_identity": "law:ewr-abkommen"
+                "target_citation_path": "de/regulation/eea-agreement",
+                "target_row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -21392,7 +21421,8 @@
                 "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
                 "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23826,7 +23856,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "944722eb8170cb69f3f9a847cc1a9719e1924a89397d43ae5a64b1c814ded09d",
+            "findings_sha256": "d714cbbc3c3f7c1893dc3cfe6e840e07874260e7aed2079d1af7485f1004cb71",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23834,7 +23864,8 @@
                 "source_body_sha256": "e05badc5dc12233f3a7952f3eb79c4448ebce5d89e5aa164f72a1bd04150fd43",
                 "source_row_sha256": "5176201548fd5589a2bdd40584eb83f8da2a2443b61d47cbc918deae2c2a9be3",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23842,7 +23873,8 @@
                 "source_body_sha256": "5ff33ef9c41c1c5c8ae7c5bf421e189dc50ca462386cad8a59c26cb4221f5b5e",
                 "source_row_sha256": "75d4b9d6ad7e1a266df3b9bc3103f10e1fb2a8ae260d89a93b5d5d0fa46148b7",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23850,7 +23882,8 @@
                 "source_body_sha256": "6d014a1b3edf75f78fcb41dd5bda0492742cbc45f9e2ffceff6b0ea81ca5322c",
                 "source_row_sha256": "1f243d0e74a05bdc6ecb396464690951f4a7fbbd81005683dfb0b4aa0a090ab4",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23858,7 +23891,8 @@
                 "source_body_sha256": "8a4ab95b40837848a1119d5b9a13cfee0a5b257da51cf9eacf506d6893cea48e",
                 "source_row_sha256": "77e12a3cfd06d7e9d495911bda945b41fe6482bb58284a1061163248ecc67fd0",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23866,7 +23900,8 @@
                 "source_body_sha256": "e05badc5dc12233f3a7952f3eb79c4448ebce5d89e5aa164f72a1bd04150fd43",
                 "source_row_sha256": "5176201548fd5589a2bdd40584eb83f8da2a2443b61d47cbc918deae2c2a9be3",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23874,7 +23909,8 @@
                 "source_body_sha256": "fe7f87a19f6ca00fc29870aae921912bd32972cececc0926cf10eb9b44ff0710",
                 "source_row_sha256": "80cd54e240f5549d30d674a6ad211046450a54b9241866de5267add796a16bc8",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -23890,7 +23926,8 @@
                 "source_body_sha256": "f07229697293d624ed8b8996b17539abf6b6da57edaede2c0404a3c10fbd586c",
                 "source_row_sha256": "a101eec48c706cda1965ad681678c22249b2f709cb977f96539047b7269cb18d",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -24192,7 +24229,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "6c312b891289010b67dbdc592173521b0406fee0e27d0cccb8e06f362549f031",
+            "findings_sha256": "d3e4d5c8586e16c03f4a82a6c9805c9d0e2f581ab2c29bd1d8c448906cb10468",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -24370,7 +24407,8 @@
                 "source_body_sha256": "6c047777683c4d9aa9bcff75392744edc687e3cf0020ae425f2ec9829d4629ab",
                 "source_row_sha256": "b85846b764fec00176d576f6d53b7203eeeb9fe9be40b0a41640e063dec25261",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26100,7 +26138,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "f6bf8863a48fde95ac45c1e3338d01cb143163efd3f44d39b9943effec8322f5",
+            "findings_sha256": "6f8346714831c0c96818fa15e8c819062da4ab1f0443a680fae04048a4fd3ea0",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26140,7 +26178,8 @@
                 "source_body_sha256": "532822474eabc8a4aa6260d84733ae64d21423704876f49a56c12792a5c9fd9a",
                 "source_row_sha256": "bc760ca6447327fa4b0b215878e7649bacf7966aa4891db549be1ae80c3412cb",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26148,7 +26187,8 @@
                 "source_body_sha256": "6206b8027a1fea307abeea40393a89aef19e892d4dc9c9bb2778f2d4ecc22bd0",
                 "source_row_sha256": "672a195877ae76f9c5a77077a034f4dc9cf5ae60f992875861e67c8d55ecdcaf",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26156,7 +26196,8 @@
                 "source_body_sha256": "8bdd4d875e59b82f8057ceaa71684c2588ea924005cdac6217d11924827d4168",
                 "source_row_sha256": "3bd468e8f73ba83de8f6af1fbe2121ab30c45a8c99c5167e050460a836001483",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26276,7 +26317,8 @@
                 "source_body_sha256": "7388da1e92fac92dda0d6304704f96442b88bdc56ed8f3ba6f1a8b672c9cf930",
                 "source_row_sha256": "ef258ff6c4cf7d210b3b8c811444635c0703dab3f7b221f04f8e933c78377742",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26284,7 +26326,8 @@
                 "source_body_sha256": "73a27dc0701d06098413fdbdea374290b932fdb2606bada10fd9ef1fb75aa813",
                 "source_row_sha256": "f521a292600bfa5d99befab40bb535f0e37bd703934edd313e2984b4f9de8c0a",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26292,7 +26335,8 @@
                 "source_body_sha256": "80abd94ad2ad60520a47fd13a312c8e69ef217be1f2fbb887b9ce2daf2ddc46e",
                 "source_row_sha256": "8e4b279bf1f4f1ef267cf7ef29fc14e3a8935e81ad03071139b16a3f6b8e1496",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26300,7 +26344,8 @@
                 "source_body_sha256": "8c7cc603b527c99563043720b0906a796ce56dd3dc2f9883fe8bb84b039c45eb",
                 "source_row_sha256": "1a76646be74dd74cf5ac55ba4e8554d6195e451b6cbcd37b52203d58bcd56f4a",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26308,7 +26353,8 @@
                 "source_body_sha256": "dc910d3bcb4ffe5e4197654c1071bd0bbf7524f91c6102cd52b94ee6eceba3f1",
                 "source_row_sha256": "770600347febda4c689a5e6b06f419365e3b2af2abd06257337bffc2ea1be843",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26537,7 +26583,8 @@
                 "source_body_sha256": "6206b8027a1fea307abeea40393a89aef19e892d4dc9c9bb2778f2d4ecc22bd0",
                 "source_row_sha256": "672a195877ae76f9c5a77077a034f4dc9cf5ae60f992875861e67c8d55ecdcaf",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27278,7 +27325,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "22647884afec4cb7356be0a73bd88648a8e2bd6521ae2c40ddaaa562da493e1f",
+            "findings_sha256": "dd6e40a88a0628826e064fe1453905f316dc66e5320850dcfec5e737aff61948",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27326,7 +27373,8 @@
                 "source_body_sha256": "14185b77afc6065ee73c24aa7c0928f7c19886456ba81c7da5a86b66deba5e03",
                 "source_row_sha256": "eea51fbb7bd30d7b5507af009b583ac44f3a42f7da123cf604e8d39c5fff0108",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27334,7 +27382,8 @@
                 "source_body_sha256": "1856deac36141d8d3293f19604910a82e14c9e425bce137cf8831f30f1d4c384",
                 "source_row_sha256": "2e9f16758dfa49870cff11e041ddda3d6ece5add02ed55fdd3900746c16e475a",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27342,7 +27391,8 @@
                 "source_body_sha256": "1a3f7e8b5983a09c20b17a1f178eb8c65349f0ed30be55effe9dce2e4b33618b",
                 "source_row_sha256": "63c0ed22c695c64d722763183540c2f9eeef48863259cc62c944f69222c5139e",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27350,7 +27400,8 @@
                 "source_body_sha256": "4008175c10f121e159c80c62c2a2c852b21bbe07767fec34ee95ccb5aee8d059",
                 "source_row_sha256": "52a657ea07f79efe68bc0c2e087275e3dfd700788162823e26070b1b3b5f5b9c",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27358,7 +27409,8 @@
                 "source_body_sha256": "4ffa04f34a954014306a44a14afdd735c56a314378872b27511b465d26ed849a",
                 "source_row_sha256": "1bc1771a0da8606a2981112d52a2551b2607e27033690ce5fe71a17e0e828106",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27366,7 +27418,8 @@
                 "source_body_sha256": "74c382b3583b130c7686d38ed65fdf18d975840a2d842abaacdade298c49261e",
                 "source_row_sha256": "653402352c946780ffb078a85c657b54bd161cdb342ecbd12e4b90fe3831e471",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27374,7 +27427,8 @@
                 "source_body_sha256": "80d3ccc1f1122110ab537ba806b8085f02882b4aa2c7b6c201fe5ae8f679e0c6",
                 "source_row_sha256": "eb75767a64e304b97a581d49d2a099177d7e0988027a30182a1abc2b277de487",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27382,7 +27436,8 @@
                 "source_body_sha256": "8ff87cf4d132fc5e92a639247198ac44d264c28c8cc007f2f13b2e7398957991",
                 "source_row_sha256": "218c593c4f8e8f4eb1341bc292690adfeb9f03da799a891386aa42b6c58cc145",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27390,7 +27445,8 @@
                 "source_body_sha256": "b5b456540cc955ce33dc9447e98c21167e8755332ff7c2c44a6b1814fe2f578f",
                 "source_row_sha256": "b3b693870a31bb5bd5043b621c5c8d0182d4023ca79bb9ec2b41eb6eda352314",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27398,7 +27454,8 @@
                 "source_body_sha256": "f135c83b987572ed83ffffb1baecd1a8eefd1fa0b4b88227037b69adce8f5f8e",
                 "source_row_sha256": "1a6849f8a632515859479e05af77d362ff84b4d3801e54e9f4a3e16eb941c650",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27627,7 +27684,8 @@
                 "source_body_sha256": "49d6c3af0235cd0e2d6ce1d391382d2fda66aaeb4ee300ebbfbfd3bba069d531",
                 "source_row_sha256": "e2f5d002f952a9bad9f0fb966bdbbc61eac82d41154bf4156679d1da9dcccb65",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27635,7 +27693,8 @@
                 "source_body_sha256": "9c1d5ed8e99e42ecb825556208777d97224f821641853dc1efea13c5137a28b5",
                 "source_row_sha256": "6375aff71ffbcab2d6d3499b0376191fb79d87fdbe507d77202575e847f286ba",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27643,7 +27702,8 @@
                 "source_body_sha256": "b2795d5a483190fb49bd0516ce72af8f3b9a45e0f1654baaf72868bb107239e2",
                 "source_row_sha256": "e913bffb4f7256469f5d32ef29ddd4c4d5cf59cfc8b8424b28fd6b0676672d6e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27651,7 +27711,8 @@
                 "source_body_sha256": "d98cb801e051bc3994efeb2ca5e44911cbc5e604e3825313da7e47af3ab11402",
                 "source_row_sha256": "77bad8f2dd53ac92cd92ef734e9e5f1784a713db3509239f12aba3af9b2c33ac",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27659,7 +27720,8 @@
                 "source_body_sha256": "ebe69dc97218c8068c063c7aabc39b3eedf48708b5f6d6f972d6270468baaa5b",
                 "source_row_sha256": "e6ec5a595ae93dd212520927884f857c705f219221d73f1b6545d24c10bbcb10",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28023,7 +28085,8 @@
                 "source_body_sha256": "b5b456540cc955ce33dc9447e98c21167e8755332ff7c2c44a6b1814fe2f578f",
                 "source_row_sha256": "b3b693870a31bb5bd5043b621c5c8d0182d4023ca79bb9ec2b41eb6eda352314",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28586,7 +28649,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "eab51febdaa68539317074ed5975cc27d1e9c1d66ba36c03ff13d3787239597c",
+            "findings_sha256": "40f16cbe880f82715f50f3f08f33660470d5d5f7d2b017752317982d25becb49",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28770,7 +28833,8 @@
                 "source_body_sha256": "5c9a1a8cce44caf3045c15d8dec75bf896f59e97e7d42e3223878fb38146ad9a",
                 "source_row_sha256": "55fa167540d0916127440915eff1219a9e05b1b996b65ffabac8d761eaebcbec",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28778,7 +28842,8 @@
                 "source_body_sha256": "71f41c07ff58cde7a1a36e3c9f23a89e8f3c9fb6c0140abead237a14f60167cd",
                 "source_row_sha256": "10b335d1fe5663a26bd3de69c1989d7deaf6398b9cfecbc5b339e92da12ecf8f",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28786,7 +28851,8 @@
                 "source_body_sha256": "0f384d8e4d53a2c9b712fbd9df4071daf42251da78d5e08824e33bf988cc73d5",
                 "source_row_sha256": "4470f79a0f20fd4a21059616fe0df2fe5aa7c1ba3c2e852b0950438e5d713cbb",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28794,7 +28860,8 @@
                 "source_body_sha256": "3509f3b6201fad053f3a6ef9bcb786040089e047af5d4ce5ebbe366506b2b2ea",
                 "source_row_sha256": "b17eb549a90fa6b30f8b4217428c3f79a34f05c2493937386976a53cb1ac401b",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28802,7 +28869,8 @@
                 "source_body_sha256": "71f41c07ff58cde7a1a36e3c9f23a89e8f3c9fb6c0140abead237a14f60167cd",
                 "source_row_sha256": "10b335d1fe5663a26bd3de69c1989d7deaf6398b9cfecbc5b339e92da12ecf8f",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28810,7 +28878,8 @@
                 "source_body_sha256": "8a66fddc2bca8877cbbd2487da532e9a105205d3313ec99685a20541f26c0b5d",
                 "source_row_sha256": "0d154ce7898373dada8b4914fb4ebfc1a0c3488b9c4a2708e3c0135462684a46",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28818,7 +28887,8 @@
                 "source_body_sha256": "9e978f145b52f449c3ab47a2864b32e225337f00ca6bab1462e5f94b34d562c1",
                 "source_row_sha256": "1e7d656aa4c62700044a9de3f800da05c665cb5ead45aceee832d2340b6d46d8",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28826,7 +28896,8 @@
                 "source_body_sha256": "a41ff2a52bd9758a7e627a0d4e5da40000488dd77552e939bdfa696f798090fb",
                 "source_row_sha256": "a21b2501fcf598b5794caa4aa61916fff6d067f86b39e2d09b4f95510a7ef6af",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28834,7 +28905,8 @@
                 "source_body_sha256": "b19fd81a20d4913618ac4ca5d4da8d3aa3f3bc372750d4b16b35b295bca561d3",
                 "source_row_sha256": "6685488328d9965712f33dfaf577b5250144bf6669e7cd41022b4228bf9c64cd",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -28842,7 +28914,8 @@
                 "source_body_sha256": "e4320dc7119455fa15295fec0f2e99f0b5b3543ef6908d36d08951ff5ab1c220",
                 "source_row_sha256": "930ba5e467e1789a419d0d226f3996be6693bd949ae7699a31764bf21b67199a",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -29324,7 +29397,8 @@
                 "source_body_sha256": "5c9378709e568e3dc2b44b902c918d5aee9949004a0e5b6457c2ee3dfcef5e07",
                 "source_row_sha256": "6b93f4ea1618b259900da34d3511e4cbdf134a171ff39a358334b0a167c23a36",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -29332,7 +29406,8 @@
                 "source_body_sha256": "7ecf6ecf8ceb894c4aa36508e6f7baa67ed16643e4ee67847610f2a62a32639b",
                 "source_row_sha256": "0e859675ec4decbff260d6c6297b094eef8721238a1cdc91308d1a18fdad183d",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -29340,7 +29415,8 @@
                 "source_body_sha256": "f84619f1941ef9d67f81f4354de749427f11270113a449a48cf808e240945cb9",
                 "source_row_sha256": "af594bead2c71fbfddc7843b1699e3a833e1a6e51e607c2431fe769e8d1abda2",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -29467,7 +29543,8 @@
                 "source_body_sha256": "e4320dc7119455fa15295fec0f2e99f0b5b3543ef6908d36d08951ff5ab1c220",
                 "source_row_sha256": "930ba5e467e1789a419d0d226f3996be6693bd949ae7699a31764bf21b67199a",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -30754,7 +30831,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "d5b77ad549c527a9c342a3457ca234a685ca6b34953e844f9e83e6b437309171",
+            "findings_sha256": "34c485ef079f16b27ae2ecf43262b86d42ff876413f22883e5e9f07891e343c5",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -30811,7 +30888,8 @@
                 "source_body_sha256": "026d9f7f04f47515ab9fdc3389f476c1222ea8bbcc0f75034f7d1841f6cb1737",
                 "source_row_sha256": "c227f1da940a0e70e8eefdf0a3b9d881a60218a5b0c71d6e123cd96ce5b53764",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -30979,7 +31057,8 @@
                 "source_body_sha256": "088201e2dba8e3bf95f51743bd07cfd0d042343e5c2fde3172df388ee7b34986",
                 "source_row_sha256": "5bed499d6cf1fda0738667ecf7c58cdb71097452f21efb784bd0d887bb7077f7",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -30987,7 +31066,8 @@
                 "source_body_sha256": "1d1c6860cf847e24ab72d7802dd0fbe578977de5802c5a6c63e03a99a1da6dd2",
                 "source_row_sha256": "ad1107e631f5d5f6fdea63cfe36388f608679beaaee8f024a0bb15f47ab135fd",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -30995,7 +31075,8 @@
                 "source_body_sha256": "1de0abace2760c3a38220646e89ea6a4eeee896d1e4272036e861db27107400f",
                 "source_row_sha256": "003369e4ff0a28358fbbf7dd1f0c8d8da775e3aa43b2b208990a33b010139f96",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -31003,7 +31084,8 @@
                 "source_body_sha256": "6a8b81e08e57051f02f7e13662bccf021c378a7a70f16c53843edef1b3e4b99b",
                 "source_row_sha256": "8b140eb46e3a9876864ef3849bf6cbecfdacc857490722e09cdb2adf6457ddd4",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -31011,7 +31093,8 @@
                 "source_body_sha256": "854c4fdb1a82a77b6ed9513f2f8f33a10b4a109319fba63c128b2401a5f99d00",
                 "source_row_sha256": "92a815194feab2b4748509ddf6c25de6e8c2d584bb59891587ea93b98ecaf780",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32015,7 +32098,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "57559e87dee002fd0f0087dad7504a24de38538ed3d48e081b27b54448fb57ee",
+            "findings_sha256": "42e2d3495ca310bda284d84a57cdecc92d923b97f6600f59ae619890fcfabc72",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32425,7 +32508,8 @@
                 "source_body_sha256": "736592e25df290d697cc8ca2e978cdf0d46be5ead6dfe98e08416968544ccfed",
                 "source_row_sha256": "d8ee451f113f307308084beb69ff1a75da76bc5f32f673d15427f37cf14a88f1",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32433,7 +32517,8 @@
                 "source_body_sha256": "8e47d4baaecd2462ddd68959cd4f8ecd5ca419c5df967ffd0f1557f3d98e1fe8",
                 "source_row_sha256": "053f2e7ad6454f8cbabb275b9663741d6dbdfc2e9630c81b28f8104641e418e9",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32441,7 +32526,8 @@
                 "source_body_sha256": "463d3dab6eb1a31fb6366a684f6fbc75924b51ca9034b5a64ce9ed1d6517c6c1",
                 "source_row_sha256": "53826e5780440c97e7e32d1d8e1d6fa3621ae6919ff3eb79bc95fcf12f1237e6",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32449,7 +32535,8 @@
                 "source_body_sha256": "5cf1e4056820f79167d9fad15904d0c44726f3992bfa2afe6e36cc5c15921f33",
                 "source_row_sha256": "e79dcd8912cc69bd2e7897b39e8bfe41a421c477b478d145c9269bd7d0ce9a63",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32457,7 +32544,8 @@
                 "source_body_sha256": "736592e25df290d697cc8ca2e978cdf0d46be5ead6dfe98e08416968544ccfed",
                 "source_row_sha256": "d8ee451f113f307308084beb69ff1a75da76bc5f32f673d15427f37cf14a88f1",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32465,7 +32553,8 @@
                 "source_body_sha256": "74caf7337bcd2c027b16ed11afc1897cfa543f4fd97973035ec03d6945b96878",
                 "source_row_sha256": "2094633aa01af5d6e243d6d9c7ba5a8340c4e4b58d2d9ad7d5f801c7918eb121",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32473,7 +32562,8 @@
                 "source_body_sha256": "8e47d4baaecd2462ddd68959cd4f8ecd5ca419c5df967ffd0f1557f3d98e1fe8",
                 "source_row_sha256": "053f2e7ad6454f8cbabb275b9663741d6dbdfc2e9630c81b28f8104641e418e9",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32481,7 +32571,8 @@
                 "source_body_sha256": "ef4885aaf88504a16eae838d2d8acdfc927d96079d28ec7ef80621f4e7e9a563",
                 "source_row_sha256": "985258cdc34165128b76f71443b89c9f493614fdd33ea5fee11a00570b7dd460",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32865,7 +32956,8 @@
                 "source_body_sha256": "08ca5005a3baa0b955ac30ffa10ce11b4c5e460114747b30bf262d3841e4b487",
                 "source_row_sha256": "7aac6993367f22574069b2982ebb7f008450780b9268e11989e379c9350c252e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32873,7 +32965,8 @@
                 "source_body_sha256": "2c61b5162fd25c1e4c0954f40cdb1ed930b405ff511b0f57e4468a50349aa3c2",
                 "source_row_sha256": "c64c991c8792b9d6878a066c6203d2475188a9cbbe1f6944248a78fd572506ca",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32881,7 +32974,8 @@
                 "source_body_sha256": "49f054d3e62146bc25cd75cfe960e41f0dbb4ead0132e8c977ea1d056fe1ac68",
                 "source_row_sha256": "4bcc61835ed34db6e88e0c0edfa6372669be5a20d3fb531b883e0bfd9e920ba3",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32889,7 +32983,8 @@
                 "source_body_sha256": "590f3d16d8f5076e9a748beb0a838833c35bd1ca1bd543ae0b18e9b1e0b4eee8",
                 "source_row_sha256": "0a160014aff62fbef6d253b5ce291d3a39e378637019b9d7fd22119053cd6dee",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32897,7 +32992,8 @@
                 "source_body_sha256": "5bc0a3d6ab1c96c79a650b3cf9a1b3a4a876c6376fd4d18dd000027be3ca1b7b",
                 "source_row_sha256": "d5582fa418f3b625a70a3fd663cd09d10db5d657284947097b5e0a2c6e809416",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32905,7 +33001,8 @@
                 "source_body_sha256": "5c33f37ec9fc40fab0b964561559c3c0f901835c4b832ec112123eae42551728",
                 "source_row_sha256": "b99ec94d0037e9375678c24668ce01284f3aed8a224b66ea844642f7dc47aea2",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32913,7 +33010,8 @@
                 "source_body_sha256": "5f45400c2202db2e1aa86093b1f73f6e50475b65511066c21c05ac6cf6c3894e",
                 "source_row_sha256": "749f81b948d262055646bd49a92664a57abfd2646e8c8e1f2aca363a406e3ea6",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32921,7 +33019,8 @@
                 "source_body_sha256": "7b14109839a8fac2ae24305cf1d8f5b7748513e1a33d98fa5c2aa8aeb631529b",
                 "source_row_sha256": "e0ff380e2c8ff351aa9bfe25177883941c920d4aa3191464bc7895a715f5120b",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32929,7 +33028,8 @@
                 "source_body_sha256": "8615c4e64709d64c5a6656af7e50049a2412eb213f0cb430de7261a485655287",
                 "source_row_sha256": "4326adc1f2a9e91c2a3988fb6e6a68c92b1278f73c53f5f8ecdd97df960ccaaa",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32937,7 +33037,8 @@
                 "source_body_sha256": "93dd593ca41f265b516deee535dde4ed12342715d598c1452cb80fe725060502",
                 "source_row_sha256": "f25a50e0cf15c21c0d8741c55830a1f13fad9ca31497150d8ad4d2df667b79d5",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32945,7 +33046,8 @@
                 "source_body_sha256": "9dc9fadb4b8c740a5d6b9c13773970ef2f0a50d70a75fd2f6214c3a02d6e4f32",
                 "source_row_sha256": "6e5a9fc7fa363aeb77f4ef0ad301b2f97336f974bdb3f118d841a397cd71f68e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32953,7 +33055,8 @@
                 "source_body_sha256": "a64c7d061b1db4fb5524450b6089537944f8b705d953d0d1c6c5a319b5eae8c1",
                 "source_row_sha256": "86499b2da449044e2dd6fbc2f3a76cbd2c8dfbfa5bf66af2a6c6590e0be9a9af",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32961,7 +33064,8 @@
                 "source_body_sha256": "ac20b9b4be4cc6b60a8bf25db5a5158c479d8b5e1fa080d1dcd1d2fb690b1ac4",
                 "source_row_sha256": "d1e69eda691ef68148324c110c44eeef990d90a6e99cfe0b58b4a17e9ea534ad",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32969,7 +33073,8 @@
                 "source_body_sha256": "b4b41560e5f38e2666a44536e533dd3a146df2fa6aa308966eab51f09b23eb43",
                 "source_row_sha256": "fbf55e7069907e3874565dc932fd79676d7899fab90e76f8f52fe1eb13d263e2",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32977,7 +33082,8 @@
                 "source_body_sha256": "c5fb863c7c20033ed7a7f2dc48503c344f62e89dc7c851dfeeaca80cfee3857d",
                 "source_row_sha256": "c463c6ff183c3b37c96fdb51e85c512e908fd1ec0a29b6ca991116302bf014ca",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32985,7 +33091,8 @@
                 "source_body_sha256": "ca8ba8447cce34bca33c177e726df6839ac29ff21c9a95efadc37ea4a1cae2ee",
                 "source_row_sha256": "023bbf2f8208e5c8b92c86966cb337bf057a1469f543adf27a6d51f9d3d0f79f",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -32993,7 +33100,8 @@
                 "source_body_sha256": "ce02a0dad2f7d535af16610ad161aef52d379d3ab500d34f333046daa37db712",
                 "source_row_sha256": "322a7d4587e6b367b3bcc2e554333eab3488b19ad2e2c50f23bfebf6cece3e3b",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -33001,7 +33109,8 @@
                 "source_body_sha256": "e4e42ca86ee4b0876ad2675717df7337402336f3f50f81c893004ea49cca914b",
                 "source_row_sha256": "9ccf3612c51b75b524afbe48f5cb56d00cb0c5aa5f9a27e6358feceebe868cf5",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -33009,7 +33118,8 @@
                 "source_body_sha256": "ed805964a7bf076fc402af5e15346cec58e76ce73698b78881c73b5529f0129c",
                 "source_row_sha256": "902cc47b55ae7657ad35913ced097177a907f51b20453ce30e098dc8a638c297",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -33017,7 +33127,8 @@
                 "source_body_sha256": "fba5a015cf641abc4cec3d758f7a8ef54ce556a70ceeb6659eda8db3bc70b0e8",
                 "source_row_sha256": "d5e3e5f46c21c6f085fed2fc1a7b45fae2eb94a67507cd853092eee66a4a3443",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -33931,7 +34042,8 @@
                 "source_body_sha256": "736592e25df290d697cc8ca2e978cdf0d46be5ead6dfe98e08416968544ccfed",
                 "source_row_sha256": "d8ee451f113f307308084beb69ff1a75da76bc5f32f673d15427f37cf14a88f1",
                 "matched_text": "Freizügigkeitsgesetzes/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -37681,7 +37793,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "5343e61c1dd44a46a9f6c2fb8bd6c44ee5e43335b907cdf05ec1f0b9ff469d03",
+            "findings_sha256": "aea539f9f08c8f468b5c7ef2d3e5229312c337f9bf07e0df9dc1629e84d851bd",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -37858,7 +37970,8 @@
                 "source_body_sha256": "f53cc07b147ce5f6f9ac92a4e16594c75576c3fe15a71c6ade0a8eea91baf61c",
                 "source_row_sha256": "801d13f46ad0db40495840f4581f36ef740e113ad82cd96c05886523d0a49947",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -37866,7 +37979,8 @@
                 "source_body_sha256": "f53cc07b147ce5f6f9ac92a4e16594c75576c3fe15a71c6ade0a8eea91baf61c",
                 "source_row_sha256": "801d13f46ad0db40495840f4581f36ef740e113ad82cd96c05886523d0a49947",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -38074,7 +38188,8 @@
                 "source_body_sha256": "5939d0a4db6de5ab24f9dc659a08c6655b6318dd223641b10486e81baa168670",
                 "source_row_sha256": "40962d3e9cc0e6404b0e262f4ebac3e3881bd185ed5d653e2f722d8503beb258",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -38082,7 +38197,8 @@
                 "source_body_sha256": "f85c0095bc17297c6e3c0effa47b97b591d28c0a6fa476c3695d3b6e32666827",
                 "source_row_sha256": "90915b26450b03cf8c9ead5b829831880a4d6d5eee064a80fc3ccc511b6e7c1f",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40201,7 +40317,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "826abd8d1051c09c3d36958b860ebb45566a8ae2be070a43bd9a1f0b4166e9a0",
+            "findings_sha256": "edc555a2e0f7e9cd4ecfe29e7c5f875b09a8886f1fca1db27c6e7a273fce8ade",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40226,7 +40342,8 @@
                 "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
                 "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40234,7 +40351,8 @@
                 "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
                 "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40242,7 +40360,8 @@
                 "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
                 "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40276,7 +40395,8 @@
                 "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
                 "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40284,7 +40404,8 @@
                 "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
                 "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40292,7 +40413,8 @@
                 "source_body_sha256": "ec27df3e950a5c8c01ceda457a11dc8dc20bcb153302437395352fb89bd5cdde",
                 "source_row_sha256": "fe53ea4cb37156d4a5fc7110a07d13ac5efa2814c7d07a1cba74781a8202274e",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
-                "unresolved_identity": "law:bgb"
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40455,7 +40577,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "91ef4af6b33a09651af7e0a1e8dd5d0f0ca167ed99e0cddd250f1439d2aec6c5",
+            "findings_sha256": "90f59a169d3fe0223dacc4b89d6564eb1ae7f1f07a274195838b76a4a3e534e1",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40511,7 +40633,8 @@
                 "source_body_sha256": "95967c73346324758e21b1aa45aa66c258956f129690cb25652eca95adcebb36",
                 "source_row_sha256": "beedbd52b2d0d248b2c1b1524048b136504889a9b959b6e17caf1f8c041c68c3",
                 "matched_text": "Aufenthaltsgesetz",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40519,7 +40642,8 @@
                 "source_body_sha256": "45abcfadd6621497d5b6259c3d02d3f1009813515773887f4343a38933faf378",
                 "source_row_sha256": "4d6093531b394fccaa50799f21ad6173f7bc545caafaee844a88062d87e0191f",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40527,7 +40651,8 @@
                 "source_body_sha256": "52b981e4d325b1ebf283958090922872fd20ce0d49af1c5702279ba2408f105e",
                 "source_row_sha256": "43d7f92ad2dbbddfa812b29e9b06bec58428226f97e900d91cd8613e6fb31f9e",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40535,7 +40660,8 @@
                 "source_body_sha256": "95967c73346324758e21b1aa45aa66c258956f129690cb25652eca95adcebb36",
                 "source_row_sha256": "beedbd52b2d0d248b2c1b1524048b136504889a9b959b6e17caf1f8c041c68c3",
                 "matched_text": "Aufenthaltsgesetzes",
-                "unresolved_identity": "law:aufenthaltsgesetz"
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40795,7 +40921,8 @@
                 "source_body_sha256": "95967c73346324758e21b1aa45aa66c258956f129690cb25652eca95adcebb36",
                 "source_row_sha256": "beedbd52b2d0d248b2c1b1524048b136504889a9b959b6e17caf1f8c041c68c3",
                 "matched_text": "Freizügigkeitsgesetz/EU",
-                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -41375,7 +41502,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "85d3790cc17240c5c2847a66ef72d0cf95a73e351a71c6d38f4627bc62f33c81"
+        "receipt_sha256": "90e719928949db7c5fede98bcbc01640f43fb864cc84600e5ead6efb8efab901"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -41405,6 +41532,16 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Zweiten Buch",
           "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-0676fb4896605ba0400a",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
+          "resolved_citation_path": "de/regulation/eea-agreement"
         },
         {
           "id": "de-corpus-0968fed57876c5e3f015",
@@ -41440,6 +41577,46 @@
           "source_citation_path": "de/statute/sgb-6",
           "source_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56",
           "raw_reference": "BGBl I 1989, 2261 (1990 I 1337)"
+        },
+        {
+          "id": "de-corpus-1e9553bf1c3cab4a25c7",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/7",
+          "source_body_sha256": "ec27df3e950a5c8c01ceda457a11dc8dc20bcb153302437395352fb89bd5cdde",
+          "source_row_sha256": "fe53ea4cb37156d4a5fc7110a07d13ac5efa2814c7d07a1cba74781a8202274e",
+          "matched_text": "Bürgerlichen Gesetzbuchs",
+          "resolved_citation_path": "de/statute/bgb"
+        },
+        {
+          "id": "de-corpus-2002f578d218f40e319b",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Bürgerlichen Gesetzbuchs",
+          "resolved_citation_path": "de/statute/bgb"
+        },
+        {
+          "id": "de-corpus-22f275a6aeadaa95586f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Aufenthaltsgesetzes",
+          "resolved_citation_path": "de/statute/aufenthg-2004"
+        },
+        {
+          "id": "de-corpus-260839e931365124a64e",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/2",
+          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+          "matched_text": "Bürgerlichen Gesetzbuchs",
+          "resolved_citation_path": "de/statute/bgb"
         },
         {
           "id": "de-corpus-262a6432328a23e9d801",
@@ -41490,15 +41667,6 @@
           "resolved_citation_path": "de/statute/sgb-3"
         },
         {
-          "id": "de-corpus-334b97469237730f3b68",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/estg/63",
-          "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
-          "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
-          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
-        },
-        {
           "id": "de-corpus-35d2c47e54a9b17d43f6",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -41507,15 +41675,6 @@
           "source_row_sha256": "9ab3aff01986d5efee21c5b6bb78c712ecda21b6e2a1551792822bac8cd128d1",
           "matched_text": "§ 63 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-3829f704c28eb570310c",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/estg/62",
-          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
-          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
-          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
         },
         {
           "id": "de-corpus-3945410495307f7f8a69",
@@ -41546,6 +41705,16 @@
           "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
           "matched_text": "§ 66 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-3b1811ff87ddb92550bf",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Aufenthaltsgesetzes",
+          "resolved_citation_path": "de/statute/aufenthg-2004"
         },
         {
           "id": "de-corpus-3b7b161daf8fe143921a",
@@ -41602,15 +41771,6 @@
           "resolved_citation_path": "de/statute/estg/32"
         },
         {
-          "id": "de-corpus-4b0837db61b89b31ba27",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/estg/62",
-          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
-          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
-          "matched_text": "Freizügigkeitsgesetzes/EU"
-        },
-        {
           "id": "de-corpus-4ee998583657193d78b4",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -41659,13 +41819,14 @@
           "matched_text": "Ausländergesetz"
         },
         {
-          "id": "de-corpus-5f705aae8523970f1a25",
+          "id": "de-corpus-5d6c1275ed07d4e7d9f7",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/2",
-          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
-          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
-          "matched_text": "Bürgerlichen Gesetzbuchs"
+          "source_citation_path": "de/regulation/minuhv/1",
+          "source_body_sha256": "dc5fe67760f3cd298fd3ce3c7fa2625e4ea1bb60216be9cf05353316c44c3b7a",
+          "source_row_sha256": "f8974764234a0f8740ca9c8d1fb0c137dd98ee39d1662efaee665e5e7e348839",
+          "matched_text": "Bürgerlichen Gesetzbuchs",
+          "resolved_citation_path": "de/statute/bgb"
         },
         {
           "id": "de-corpus-60d4295a9edb13e2c1c3",
@@ -41726,6 +41887,16 @@
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
+          "id": "de-corpus-6a03673a9187c8662edc",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/63",
+          "source_body_sha256": "6b281396a09b50fc083b5e63761e050068e208a436f49ad43e5ee6a0a1a6180a",
+          "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
+          "matched_text": "Abkommen über den Europäischen Wirtschaftsraum",
+          "resolved_citation_path": "de/regulation/eea-agreement"
+        },
+        {
           "id": "de-corpus-6cfe20544c79114bedad",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -41744,15 +41915,6 @@
           "matched_targets": [
             "de/statute/estg/66"
           ]
-        },
-        {
-          "id": "de-corpus-6df13af136332e8c23b6",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/regulation/minuhv/1",
-          "source_body_sha256": "dc5fe67760f3cd298fd3ce3c7fa2625e4ea1bb60216be9cf05353316c44c3b7a",
-          "source_row_sha256": "f8974764234a0f8740ca9c8d1fb0c137dd98ee39d1662efaee665e5e7e348839",
-          "matched_text": "Bürgerlichen Gesetzbuchs"
         },
         {
           "id": "de-corpus-6f0371332ecc12225a78",
@@ -42039,6 +42201,16 @@
           "raw_reference": "BGBl. I 2024, Nr. 365"
         },
         {
+          "id": "de-corpus-a8e9584af9544b92136c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/estg/62",
+          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
+          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
+          "matched_text": "Freizügigkeitsgesetzes/EU",
+          "resolved_citation_path": "de/statute/freiz-gg-eu-2004"
+        },
+        {
           "id": "de-corpus-a908aed35b7d1ceeda30",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -42177,24 +42349,6 @@
           "matched_text": "Zivilprozessordnung"
         },
         {
-          "id": "de-corpus-caf0f56af53ffc8164d1",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/1",
-          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
-          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
-          "matched_text": "Bürgerlichen Gesetzbuchs"
-        },
-        {
-          "id": "de-corpus-d4040ccf15ddd057ae22",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/estg/62",
-          "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
-          "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
-          "matched_text": "Aufenthaltsgesetzes"
-        },
-        {
           "id": "de-corpus-d6536f114ca5cb12800d",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -42202,6 +42356,16 @@
           "source_body_sha256": "3cb54e150504edefb540fb32559e4044d69031e3b74ec8631cc990c1307af4e2",
           "source_row_sha256": "16c3780e5f0f82a4f8561bfb66e2cb378e78fa343e4455be37e9eb01f66c5daa",
           "matched_text": "Zehnten Buches Sozialgesetzbuch"
+        },
+        {
+          "id": "de-corpus-d71d75de222657a31909",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/11",
+          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
+          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
+          "matched_text": "Aufenthaltsgesetz",
+          "resolved_citation_path": "de/statute/aufenthg-2004"
         },
         {
           "id": "de-corpus-d86ed2cbef8616230759",
@@ -42244,15 +42408,6 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
-          "id": "de-corpus-e0b2258a581a1bcb29a4",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/7",
-          "source_body_sha256": "ec27df3e950a5c8c01ceda457a11dc8dc20bcb153302437395352fb89bd5cdde",
-          "source_row_sha256": "fe53ea4cb37156d4a5fc7110a07d13ac5efa2814c7d07a1cba74781a8202274e",
-          "matched_text": "Bürgerlichen Gesetzbuchs"
-        },
-        {
           "id": "de-corpus-e5939ec18630d1b88fda",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -42270,15 +42425,6 @@
           "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
           "matched_text": "Abgabenordnung",
           "resolved_citation_path": "de/statute/ao-1977"
-        },
-        {
-          "id": "de-corpus-e92cecd8d59a1d6a94f5",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/1",
-          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
-          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
-          "matched_text": "Aufenthaltsgesetzes"
         },
         {
           "id": "de-corpus-ea9a43c8df78b3a1c389",
@@ -42316,15 +42462,6 @@
           "source_row_sha256": "e44e87ce90c18ecaac47b90792c5ca0c45c036acd195a58c65a6953270e2636e",
           "matched_text": "Abgabenordnung",
           "resolved_citation_path": "de/statute/ao-1977"
-        },
-        {
-          "id": "de-corpus-f1d16fb6c3d26e8d4286",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/11",
-          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
-          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
-          "matched_text": "Aufenthaltsgesetz"
         },
         {
           "id": "de-corpus-f1fb74119d4f695df860",
@@ -42373,6 +42510,16 @@
           "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156"
         },
         {
+          "id": "de-corpus-f86b5f745e199d0f26e7",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_outbound",
+          "source_citation_path": "de/statute/uhvorschg/1",
+          "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
+          "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
+          "matched_text": "Aufenthaltsgesetzes",
+          "resolved_citation_path": "de/statute/aufenthg-2004"
+        },
+        {
           "id": "de-corpus-fe32452ac5c22dc84324",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -42381,18 +42528,9 @@
           "source_row_sha256": "1d9e6909303278d1c7f8533774e4ffa05ff49de197fd6a081d45947df97366a6",
           "matched_text": "Abgabenordnung",
           "resolved_citation_path": "de/statute/ao-1977"
-        },
-        {
-          "id": "de-corpus-ffd851e9123ab32ab5fd",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_outbound",
-          "source_citation_path": "de/statute/uhvorschg/11",
-          "source_body_sha256": "2d1f47686d2294fd9b0a101ca5f210ae76904de7ee45ad66e93880fc170479c1",
-          "source_row_sha256": "81f8b58b6b6549a9e9a0039151dbd338a1ed239c0332cdf28e3e94cc02845b01",
-          "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b"
+      "receipt_sha256": "bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -42408,10 +42546,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "87d0d15471d016baaedd0fbf629c739d2ce34c07708b6579a2a25741962c7a0c"
+          "receipt_sha256": "61ddc512c04ae7303dfe67464e8d67037f89b16dca1154d17366f0b4095387b5"
         },
         {
           "id": "de-subject-002",
@@ -42421,14 +42559,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "4e4b80acf9bdfb8283acdb2d9da6216d645648927a65884ff4b10529ba4b641a"
+          "receipt_sha256": "be33d3fb897e52562fc45086b6dfb123153328950c7a2906fb18ae448e8f8607"
         },
         {
           "id": "de-subject-003",
@@ -42438,14 +42576,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "a3930bfb78e9bef2f317909e9cde4c8e2e1b27d9a622e1779c5b64eab19ae636"
+          "receipt_sha256": "6cf61fe84b3f6aa6061274c5ccf82922b157ea7f858cfd6c64859755f31dbe17"
         },
         {
           "id": "de-subject-004",
@@ -42455,14 +42593,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=6086f2d4-64e4-4cb1-970b-2b01b769dbc6&ssb=13492205842&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=5c6c6fc3-ca3f-4434-8006-2464e5b950ab&ssk=botmanager_support@radware.com&ssm=30809164458575294103890705942637&ssn=12864b3df54099a1a6166a519666f81c98f5f15549ae-ed24-4899-ac8ba5&sso=7f0acc22-59c52a7ea5dcf5e04d0b91e5568141bf7f8f10f5226335f2&ssp=69517333541788821227178882877262743&ssq=37900739066975600682190669460257268112350&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwiX191em1mIjoiN2Y5MDAwZjE1NTQ5YWUtZWQyNC00ODk5LWFjMjItNTljNTJhN2VhNWRjMS0xNzg4ODkwNjY5NDQwMC0wMDQ4ODg0YmUxZmFkOTRkMmYzMTAiLCJ1em14IjoiN2ZjMDAwNGI3YWIyOWUtMmIzYy00NzQ5LTk4ZmYtNzU2MDY3MmFlMDFlMS0xNzg4ODkwNjY5NDQwMC0wMDQ5YjQ4M2U0OTEwNzkyNGU4MTAifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=12855cab-2290-4f20-b5b4-ed9cb2df0b3a&ssb=98817203874&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=a670ab86-ca3f-4cf6-81d7-bcc3f86aee2c&ssk=botmanager_support@radware.com&ssm=96922730675299355103624446891500&ssn=030ff3625dfd9b1ff31891e70b84683a0251c6a329eb-e9c1-4bfd-a68a14&sso=075cf2eb-b37ec144bbec0fcfb45911b39858e0b7589df19046469516&ssp=24113597611788853659178882404947443&ssq=43382609673392858882396733512225952335347&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDBjNmEzMjllYi1lOWMxLTRiZmQtYTJlYi1iMzdlYzE0NGJiZWMxLTE3ODg4OTY3MzMxMDYwLTAwNGVjN2EzMDg4OTg4M2YxMTcxMCIsInV6bXgiOiI3ZmMwMDBmMjdhMzhkNC0wZDY3LTQ0MmQtYmZhZC03MGRkOGIyYzMwOGIxLTE3ODg4OTY3MzMxMDYwLTAwNGM1NTA4OWI0OGM3YTg5NmYxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "ec2954dbfac784bb25f459e5f8928d6ebe55e985bcbe10b0a1596b09d9760ad3",
-          "receipt_sha256": "35d27fdc3ceb5ef303acb8fb0ec2a62aae7557179a23118e246b4ed09acc4f9c"
+          "content_sha256": "e9dfbcdcf3ae17b168c3af08d68768d36a1d4f8ff4401e4303121e271f64a7cb",
+          "receipt_sha256": "fb7807e7ec4a61c71957f2dfa33b368e8f61451f359074fee52caf4118690934"
         },
         {
           "id": "de-subject-005",
@@ -42473,14 +42611,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "255aad1b3206ca45bdd3c4cbad0038449d3bde24853635c5afe41ead5ac3111a"
+          "receipt_sha256": "0cf3d52b5fc7175a24d05c884a3353b4cedcc78112c1cea9ba4c74467ca216f6"
         },
         {
           "id": "de-subject-006",
@@ -42490,14 +42628,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "555aa6e8e0d086c6aface8557a1176cce79ea9737a8b11d470241d7ecf252556"
+          "receipt_sha256": "0e82fe25c01179268f31c9b6334b1b0d73d76f85dba141665dab3ae120ba2194"
         },
         {
           "id": "de-subject-007",
@@ -42507,14 +42645,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "22dcae60a548b3e519c9d0779ea477cdc2e6610eb25d777450854e8fb438309b"
+          "receipt_sha256": "be76a2b1a96b7305733d303e621bb5f345da3a62e97e20758de26f6c608bff7b"
         },
         {
           "id": "de-subject-008",
@@ -42524,10 +42662,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "3cad6929bf62ca232f522b26336e614b5bac44372f16562660175a1ebe0ead09"
+          "receipt_sha256": "a06b47b40981c97ac0253c485738fcac6e4f0ac6bc29f43aa098e819c3241c40"
         },
         {
           "id": "de-subject-009",
@@ -42537,14 +42675,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "a2dd97b0d9150ca3b6bb47008f6f6e92fa5514004f5fb02edf18b4ab4650ea09"
+          "receipt_sha256": "d60db057b92c85d64bc927fecfce4195feed99699d5a159add0b4d847a228d41"
         },
         {
           "id": "de-subject-010",
@@ -42554,14 +42692,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "031478b0e57486a211fa7b0d6d6fbb0e1524e6e377d940902524c7d51e70c560"
+          "receipt_sha256": "5664337e2b8f6edbbd46fdf4f82010e668e541735c84d831e94e28140e6a0870"
         },
         {
           "id": "de-subject-011",
@@ -42571,14 +42709,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "3e766a7902d11179392039c8dc2d9b8e9bb19be3b76126a2779668d414fb2e1a"
+          "receipt_sha256": "f1c0ef92885581c01286a010c987e29fe18e98fc8b14d35eae1e6baa33a8c479"
         },
         {
           "id": "de-subject-012",
@@ -42588,10 +42726,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "04a25e33e014293caeebf5ce01fb8836baf76e4f41e2a1926fa51fe5882d83d6"
+          "receipt_sha256": "06a4cfea1d0c99162a8660ce3917e329143287d2f6ed4310b6c9214bdd9e7ebe"
         },
         {
           "id": "de-subject-013",
@@ -42601,14 +42739,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "1cdd65dd60cbd284ea29f780a5ff81bcb6cbe76dcf6aed0614432ec9673df298"
+          "receipt_sha256": "0883fbd9a24d39f8c5c17a65fd28aeb8e4aa87617ad83c2e4a9682679eea3fba"
         },
         {
           "id": "de-subject-014",
@@ -42618,14 +42756,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "19fa000843ce7b0ae6f2ffd2b12c60703cba97183686e72b1d0a2edd098f4290"
+          "receipt_sha256": "499b71d457dccdc45bd52cdb0688a51cbf91710810c4d0549ecb54d4616c5191"
         },
         {
           "id": "de-subject-015",
@@ -42635,13 +42773,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-08T18:03:22Z",
+          "captured_at": "2026-09-08T19:44:23Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "6aecf98677a82a2bf42ad8691c7a45c5cecbe6dc66459c321c4d8d3717cbe1d1"
+          "receipt_sha256": "67001910bc488cce7f52f0b126ef3c7641e00b0e2dc6da555602319f4229c649"
         }
       ],
-      "receipt_sha256": "61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8"
+      "receipt_sha256": "4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -42747,17 +42885,6 @@
           "title": "lsth-2023-9"
         },
         {
-          "id": "de-kg-instr-32a81be6d35e33be",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-4b0837db61b89b31ba27"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "Freizügigkeitsgesetzes/EU"
-          ]
-        },
-        {
           "id": "de-kg-instr-3841260753e31d86",
           "status": "pending",
           "discovery_refs": [
@@ -42773,17 +42900,6 @@
           "document_citation_path": "de/statute/sgb-6",
           "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_6/",
           "fundstelle": "BGBl I 1989, 2261 (1990 I 1337)"
-        },
-        {
-          "id": "de-kg-instr-3875634198c25414",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-d4040ccf15ddd057ae22"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "Aufenthaltsgesetzes"
-          ]
         },
         {
           "id": "de-kg-instr-43b69c0fdc7079aa",
@@ -42952,18 +43068,6 @@
           "title": "esth-2024-32"
         },
         {
-          "id": "de-kg-instr-87d3e50373adabc2",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-334b97469237730f3b68",
-            "de-corpus-3829f704c28eb570310c"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "Abkommen über den Europäischen Wirtschaftsraum"
-          ]
-        },
-        {
           "id": "de-kg-instr-8939b62ab3b44a39",
           "status": "pending",
           "discovery_refs": [
@@ -43058,6 +43162,22 @@
           "fundstelle": "BGBl I 2003, 2954, 2955"
         },
         {
+          "id": "de-kg-instr-cb904458feb0fc04",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-0676fb4896605ba0400a",
+            "de-corpus-6a03673a9187c8662edc"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/regulation/eea-agreement",
+          "row_sha256": "3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9",
+          "document_class": "regulation",
+          "citation_label": "Abkommen über den Europäischen Wirtschaftsraum (Auszüge)",
+          "document_citation_path": "de/regulation/eea-agreement",
+          "title": "Abkommen über den Europäischen Wirtschaftsraum (Auszüge)",
+          "document_type": "international agreement"
+        },
+        {
           "id": "de-kg-instr-ce168756ed1a28cb",
           "status": "pending",
           "discovery_refs": [
@@ -43106,6 +43226,22 @@
           "fundstelle": "BGBl I 2006, 2748"
         },
         {
+          "id": "de-kg-instr-deae252c91737d46",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-a8e9584af9544b92136c"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/freiz-gg-eu-2004",
+          "row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132",
+          "document_class": "statute",
+          "citation_label": "Gesetz über die allgemeine Freizügigkeit von Unionsbürgern",
+          "body_sha256": "cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01",
+          "document_citation_path": "de/statute/freiz-gg-eu-2004",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/freiz_gg_eu_2004/",
+          "fundstelle": "BGBl I 2004, 1950, 1986"
+        },
+        {
           "id": "de-kg-instr-e1efdfd629d56e5f",
           "status": "pending",
           "discovery_refs": [
@@ -43118,6 +43254,22 @@
           "citation_label": "esth-2024-33a",
           "document_citation_path": "de/guidance/esth-2024-33a",
           "title": "esth-2024-33a"
+        },
+        {
+          "id": "de-kg-instr-e5490882a4dcdc9f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-22f275a6aeadaa95586f"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/aufenthg-2004",
+          "row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b",
+          "document_class": "statute",
+          "citation_label": "Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet",
+          "body_sha256": "1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a",
+          "document_citation_path": "de/statute/aufenthg-2004",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/aufenthg_2004/",
+          "fundstelle": "BGBl I 2004, 1950"
         },
         {
           "id": "de-kg-instr-f480bf90ee72ae1d",
@@ -43161,8 +43313,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b",
-            "subject_matter_search": "61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8",
+            "corpus_release": "bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3",
+            "subject_matter_search": "4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -43321,6 +43473,25 @@
       "id": "de/unterhaltsvorschuss",
       "instruments": [
         {
+          "id": "de-uhv-instr-0d081243aac4ae0a",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1e9553bf1c3cab4a25c7",
+            "de-corpus-2002f578d218f40e319b",
+            "de-corpus-260839e931365124a64e",
+            "de-corpus-5d6c1275ed07d4e7d9f7"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgb",
+          "row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee",
+          "document_class": "statute",
+          "citation_label": "Bürgerliches Gesetzbuch",
+          "body_sha256": "80f8ea02d7d4e9a41016ec4eccbe4694c0c87c92298ba244e0536bdc784a2be3",
+          "document_citation_path": "de/statute/bgb",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/bgb/",
+          "fundstelle": "RGBl 1896, 195"
+        },
+        {
           "id": "de-uhv-instr-11739679bb0a1df4",
           "status": "pending",
           "discovery_refs": [
@@ -43417,20 +43588,6 @@
           "legal_authority_url": "https://www.gesetze-im-internet.de/estg/"
         },
         {
-          "id": "de-uhv-instr-3875634198c25414",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-e92cecd8d59a1d6a94f5",
-            "de-corpus-f1d16fb6c3d26e8d4286",
-            "de-corpus-ffd851e9123ab32ab5fd"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "Aufenthaltsgesetz",
-            "Aufenthaltsgesetzes"
-          ]
-        },
-        {
           "id": "de-uhv-instr-703d3b12aaab39f8",
           "status": "pending",
           "discovery_refs": [
@@ -43471,20 +43628,6 @@
           "document_citation_path": "de/statute/ao-1977",
           "legal_authority_url": "https://www.gesetze-im-internet.de/ao_1977/",
           "fundstelle": "BGBl I 1976, 613 (1977 I 269)"
-        },
-        {
-          "id": "de-uhv-instr-7aa5943b5f0a6e6c",
-          "status": "pending",
-          "discovery_refs": [
-            "de-corpus-5f705aae8523970f1a25",
-            "de-corpus-6df13af136332e8c23b6",
-            "de-corpus-caf0f56af53ffc8164d1",
-            "de-corpus-e0b2258a581a1bcb29a4"
-          ],
-          "identity_kind": "unresolved_reference",
-          "raw_references": [
-            "Bürgerlichen Gesetzbuchs"
-          ]
         },
         {
           "id": "de-uhv-instr-7d7a5efb6250df56",
@@ -43620,6 +43763,24 @@
           "fundstelle": "BGBl I 2006, 2748"
         },
         {
+          "id": "de-uhv-instr-e5490882a4dcdc9f",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-3b1811ff87ddb92550bf",
+            "de-corpus-d71d75de222657a31909",
+            "de-corpus-f86b5f745e199d0f26e7"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/aufenthg-2004",
+          "row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b",
+          "document_class": "statute",
+          "citation_label": "Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet",
+          "body_sha256": "1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a",
+          "document_citation_path": "de/statute/aufenthg-2004",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/aufenthg_2004/",
+          "fundstelle": "BGBl I 2004, 1950"
+        },
+        {
           "id": "de-uhv-instr-guidance",
           "status": "pending",
           "discovery_refs": [
@@ -43636,5 +43797,5 @@
       ]
     }
   ],
-  "receipt_sha256": "fab0b5ea5f46f8d3662587989c653211bb7c012056f704a96fcb954a3f9da9c1"
+  "receipt_sha256": "5f86b75ec74eaf2db88903229362618e72c39fc8fe82d42de5a4c15d4a755749"
 }

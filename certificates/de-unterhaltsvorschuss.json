@@ -76,7 +76,7 @@
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "9cd98b1955ea4bbdc3588756547850c5483a9467dac6d4242eaf94e863187fa7",
+      "sha256": "efe2e289c5811b05f08b8457e6dc112aaada1161be390433a146599982fe5b2b",
       "verification": "producer_artifact_validation"
     },
     {
@@ -303,6 +303,7 @@
         },
         "instrument_count": 23,
         "pending": [
+          "de-uhv-instr-0d081243aac4ae0a",
           "de-uhv-instr-11739679bb0a1df4",
           "de-uhv-instr-1808736a82828a59",
           "de-uhv-instr-1a53a8fa58131ff1",
@@ -310,11 +311,9 @@
           "de-uhv-instr-2a29967484296d20",
           "de-uhv-instr-2b0a8f983f861591",
           "de-uhv-instr-333ba26c32e038d3",
-          "de-uhv-instr-3875634198c25414",
           "de-uhv-instr-703d3b12aaab39f8",
           "de-uhv-instr-73cb585362978769",
           "de-uhv-instr-78841044a219e9b8",
-          "de-uhv-instr-7aa5943b5f0a6e6c",
           "de-uhv-instr-7d7a5efb6250df56",
           "de-uhv-instr-8939b62ab3b44a39",
           "de-uhv-instr-906e7387d896596c",
@@ -325,6 +324,7 @@
           "de-uhv-instr-c29a0cb26e4cbc1d",
           "de-uhv-instr-c795a7af57079afc",
           "de-uhv-instr-db7693cd9f018ff4",
+          "de-uhv-instr-e5490882a4dcdc9f",
           "de-uhv-instr-guidance"
         ],
         "supplemental_count": null

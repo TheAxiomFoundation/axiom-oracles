@@ -343,11 +343,16 @@ What the new scopes changed in the Kindergeld frontier:
   Tunisia, plus Tunisia's Zusatzprotokoll) and ARB 3/80 are enrolled as
   `de-kg-suppl-018`–`040`, pending until read. The class row itself stays
   pending until every member is decided.
-- AufenthG, FreizügG/EU, SGB VI § 270 (old), SGB VII § 217 (old), the EEA
-  Agreement, BGB and the Einigungsvertrag are captured but the citation
-  scan still records them as unresolved references or does not reach them;
-  their existing dispositions stand and can be rebound once the resolver
-  recognises the inflected act names.
+- AufenthG, FreizügG/EU and the EEA Agreement now resolve to their captured
+  rows through the capture script's raw-reference hint table
+  (`_RAW_REFERENCE_CORPUS_HINTS`, shared by the global index and the
+  program projection): the EStG text cites the inflected short titles
+  ("Aufenthaltsgesetzes", "Freizügigkeitsgesetzes/EU"), which the rows'
+  title metadata never carries, so alias matching cannot reach them. Their
+  dispositions moved to the corpus-bound candidate ids; UHV's AufenthG and
+  BGB references resolved the same way. SGB VI § 270 and SGB VII § 217 are
+  captured only as historical single-section rows and stay referenced from
+  the § 65 comparator dispositions rather than resolved as acts.
 
 The executable contract (`conformance/executable/de-kindergeld-manifest.json`)
 still binds the July release: the signed § 66 module's source hash is the
