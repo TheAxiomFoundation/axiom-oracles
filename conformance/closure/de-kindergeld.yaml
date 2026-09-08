@@ -9719,7 +9719,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Bosnien und Herzegowina as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident
+      in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:2, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
+    bears_on_computed_surface: true
   - id: de-kg-suppl-019
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit Bosnien und Herzegowina — corpus row de/regulation/dvka/bosnien-sp (text in de/regulation/dvka/bosnien-sp/document-1, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955)
     title_short: SP Bosnien und Herzegowina
@@ -9727,7 +9733,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Bosnien und Herzegowina. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state
+      count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:4, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
+    bears_on_computed_surface: true
   - id: de-kg-suppl-020
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit Bosnien und Herzegowina — corpus row de/regulation/dvka/bosnien-dv (text in de/regulation/dvka/bosnien-dv/document-1, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6)
     title_short: DV Bosnien und Herzegowina
@@ -9735,7 +9747,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Bosnien und Herzegowina) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:6, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
+    bears_on_computed_surface: false
   - id: de-kg-suppl-021
     identity: Abkommen zwischen der Bundesrepublik Deutschland und der Republik Kosovo über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/kosovo-sva (text in de/regulation/dvka/kosovo-sva/document-1, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270)
     title_short: SVA Kosovo
@@ -9743,7 +9760,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to dem Kosovo as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the
+      treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:8, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
+    bears_on_computed_surface: true
   - id: de-kg-suppl-022
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit dem Kosovo — corpus row de/regulation/dvka/kosovo-sp (text in de/regulation/dvka/kosovo-sp/document-1, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955)
     title_short: SP Kosovo
@@ -9751,7 +9774,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Yugoslavia agreement, applied in relation to dem Kosovo. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and
+      on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:10, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
+    bears_on_computed_surface: true
   - id: de-kg-suppl-023
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit dem Kosovo — corpus row de/regulation/dvka/kosovo-dv (text in de/regulation/dvka/kosovo-dv/document-1, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6)
     title_short: DV Kosovo
@@ -9759,7 +9788,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to dem Kosovo) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:12, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
+    bears_on_computed_surface: false
   - id: de-kg-suppl-024
     identity: Abkommen zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/marokko-sva (text in de/regulation/dvka/marokko-sva/document-1, body_sha256 65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a)
     title_short: SVA Marokko
@@ -9767,7 +9801,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement with the Kingdom of Morocco of 25.3.1981 (BGBl. 1986 II S. 552). In the captured extract Art. 2 Abs. 1 lists the German legislation covered (Buchst. a–d: health insurance and maternity protection, accident insurance, pension insurance, farmers'' old-age assistance) — the extract''s text breaks at that point (''Auszug aus dem Sozialversicherungsabkommen (SVA) Marokko (2) auf die marokkanischen Rechtsvorschriften …''), so whether the German Kindergeld entry is missing from the treaty or lost in the reprint cannot be settled from this row; Art. 3 defines the personal scope (nationals, recognised refugees, stateless persons and persons deriving rights from them), Art. 4 Abs. 1 equates them with own nationals when habitually resident in a contracting state and Abs. 2 extends benefits to nationals resident outside both territories, Art. 5 disapplies domestic-residence conditions, Art. 6 subjects employees to the legislation of the state of employment. The DA-KG applies
+      this agreement to Kindergeld: A 4.5 Abs. 1 (Moroccan workers need not meet § 62 Abs. 2), A 23.2 Abs. 2 (children resident in Morocco count) and A 31 Abs. 2 (rates under the agreement; for Morocco the § 66 rate applies only from the month after entry). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:14, body_sha256 65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a
+    bears_on_computed_surface: true
   - id: de-kg-suppl-025
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit Marokko — corpus row de/regulation/dvka/marokko-sp (text in de/regulation/dvka/marokko-sp/document-1, body_sha256 ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9)
     title_short: SP Marokko
@@ -9775,7 +9815,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Morocco agreement. The captured extract qualifies Art. 2 (scope; precedence over other agreements and supranational rules, the EEC–Morocco cooperation agreement of 27.4.1976 unaffected; insurance-burden rules), Art. 4 (equal treatment extended to German unemployment-insurance contributions and benefits; self-administration rules untouched; no voluntary pension insurance while habitually resident outside the state) and Art. 5 (benefits from accidents and insurance periods outside federal law). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions
+      are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:16, body_sha256 ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9
+    bears_on_computed_surface: true
   - id: de-kg-suppl-026
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit Marokko — corpus row de/regulation/dvka/marokko-dv (text in de/regulation/dvka/marokko-dv/document-1, body_sha256 3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06)
     title_short: DV Marokko
@@ -9783,7 +9829,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 19.4.1984 to the Morocco agreement (BGBl. 1986 II S. 571)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds the liaison bodies, certificates for posted workers (Art. 7 and 11 of the agreement, the 36-month period), direct payment of cash benefits abroad and the postal-payment procedure.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:18, body_sha256 3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06
+    bears_on_computed_surface: false
   - id: de-kg-suppl-027
     identity: Abkommen zwischen der Bundesrepublik Deutschland und Montenegro über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/montenegro-sva (text in de/regulation/dvka/montenegro-sva/document-1, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270)
     title_short: SVA Montenegro
@@ -9791,7 +9842,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Montenegro as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the
+      treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:20, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
+    bears_on_computed_surface: true
   - id: de-kg-suppl-028
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit Montenegro — corpus row de/regulation/dvka/montenegro-sp (text in de/regulation/dvka/montenegro-sp/document-1, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955)
     title_short: SP Montenegro
@@ -9799,7 +9856,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Montenegro. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and
+      on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:22, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
+    bears_on_computed_surface: true
   - id: de-kg-suppl-029
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit Montenegro — corpus row de/regulation/dvka/montenegro-dv (text in de/regulation/dvka/montenegro-dv/document-1, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6)
     title_short: DV Montenegro
@@ -9807,7 +9870,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Montenegro) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:24, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
+    bears_on_computed_surface: false
   - id: de-kg-suppl-030
     identity: Abkommen zwischen der Bundesrepublik Deutschland und der Republik Serbien über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/serbien-sva (text in de/regulation/dvka/serbien-sva/document-1, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270)
     title_short: SVA Serbien
@@ -9815,7 +9883,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Serbien as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty
+      state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:26, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
+    bears_on_computed_surface: true
   - id: de-kg-suppl-031
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit Serbien — corpus row de/regulation/dvka/serbien-sp (text in de/regulation/dvka/serbien-sp/document-1, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955)
     title_short: SP Serbien
@@ -9823,7 +9897,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Serbien. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on
+      the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:28, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
+    bears_on_computed_surface: true
   - id: de-kg-suppl-032
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit Serbien — corpus row de/regulation/dvka/serbien-dv (text in de/regulation/dvka/serbien-dv/document-1, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6)
     title_short: DV Serbien
@@ -9831,7 +9911,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Serbien) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:30, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
+    bears_on_computed_surface: false
   - id: de-kg-suppl-033
     identity: Abkommen zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/tuerkei-sva (text in de/regulation/dvka/tuerkei-sva/document-1, body_sha256 957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7)
     title_short: SVA Türkei
@@ -9839,7 +9924,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement with the Republic of Türkiye of 30.4.1964 (BGBl. 1965 II S. 1170) as amended 1969, 1974 and 1984. In the captured extract Art. 1 Nr. 15 defines ''Kindergeld'' for Germany as the benefits named in Art. 2 Nr. 1 Buchst. d and for Türkiye as the benefits for children of employees; Art. 2 Nr. 1 Buchst. e lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered; Art. 3 defines the personal scope (nationals, refugees, stateless persons, nationals of third states under other agreements, and persons deriving rights); Art. 4 equates the listed persons habitually resident in a contracting party with own nationals; Art. 4a disapplies residence conditions for persons staying in the other party; Art. 5 subjects employees to the legislation of the state of employment. The DA-KG applies it in A 4.5 Abs. 1 (Turkish workers exempt from § 62 Abs. 2), A 4.5 Abs. 2 Satz 6 (other Turkish nationals via the VEA), A 23.2 Abs. 2 (children resident in Türkiye) and A
+      31 Abs. 2 (agreement rates). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:32, body_sha256 957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7
+    bears_on_computed_surface: true
   - id: de-kg-suppl-034
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit der Türkei — corpus row de/regulation/dvka/tuerkei-sp (text in de/regulation/dvka/tuerkei-sp/document-1, body_sha256 c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8)
     title_short: SP Türkei
@@ -9847,7 +9938,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Türkiye agreement. The captured extract qualifies Art. 1 (Turkish decrees count as regulations), Art. 2 (''Abschnitt V des Abkommens'' does not apply to the miners'' supplementary insurance and farmers'' old-age assistance; precedence over other agreements; insurance-burden rules), Art. 3 (no supranational law for Türkiye yet), Art. 3 and 4 (the refugee/stateless clauses apply once the conventions bind Türkiye), Art. 4 and 4a (discretionary pensions, insurance-burden and self-administration rules untouched, no voluntary pension insurance while abroad). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten
+      Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:34, body_sha256 c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8
+    bears_on_computed_surface: true
   - id: de-kg-suppl-035
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit der Türkei — corpus row de/regulation/dvka/tuerkei-dv (text in de/regulation/dvka/tuerkei-dv/document-1, body_sha256 4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452)
     title_short: DV Türkei
@@ -9855,7 +9952,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 2.11.1984 to the Türkiye agreement (BGBl. 1986 II S. 1055)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds certificates for posted workers, direct payment of cash benefits abroad, applications and appeals lodged with the other party''s bodies (Art. 46 of the agreement), the maternity lump sum and data protection.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:36, body_sha256 4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452
+    bears_on_computed_surface: false
   - id: de-kg-suppl-036
     identity: Abkommen zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Soziale Sicherheit (Sozialversicherungsabkommen) — corpus row de/regulation/dvka/tunesien-sva (text in de/regulation/dvka/tunesien-sva/document-1, body_sha256 5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7)
     title_short: SVA Tunesien
@@ -9863,7 +9965,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'The agreement with the Tunisian Republic of 16.4.1984 (BGBl. 1986 II S. 584). In the captured extract Art. 2 Abs. 1 Nr. 1 lists the German legislation covered (Buchst. a–d: health insurance and maternity protection, accident insurance, pension insurance, farmers'' old-age assistance) and Nr. 2 the Tunisian systems ''mit Ausnahme der Systeme der Familienleistungen, soweit solche oder entsprechende Leistungen nicht nach den deutschen Rechtsvorschriften für Empfänger von Renten vorgesehen sind'' — the German Kindergeld entry is not visible in this extract; Art. 3 defines the personal scope, Art. 4 equal treatment for persons habitually resident in a contracting state, Art. 5 disapplies domestic-residence conditions, Art. 6 subjects employees to the legislation of the state of employment. The DA-KG applies the agreement to Kindergeld: A 4.5 Abs. 1 (Tunisian workers exempt from § 62 Abs. 2), A 23.2 Abs. 2 (children resident in Tunisia count) and A 31 Abs. 2 (for Tunisia the § 66
+      rate applies only from the month after entry). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:38, body_sha256 5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7
+    bears_on_computed_surface: true
   - id: de-kg-suppl-037
     identity: Schlussprotokoll zum Sozialversicherungsabkommen mit Tunesien — corpus row de/regulation/dvka/tunesien-sp (text in de/regulation/dvka/tunesien-sp/document-1, body_sha256 962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f)
     title_short: SP Tunesien
@@ -9871,7 +9979,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: 'Final protocol to the Tunisia agreement. The captured extract qualifies Art. 2 (Title II Chapter 3 not applicable to Tunisian public-service contract staff, the miners'' supplementary insurance and farmers'' old-age assistance; precedence over other agreements; insurance-burden rules; ILO conventions untouched), Art. 4 (insurance-burden rules of German agreements with other states do not apply to Tunisian nationals; self-administration rules untouched; no voluntary German pension insurance while abroad) and Art. 5 (German benefits from accidents and insurance periods outside federal law untouched). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über
+      Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:40, body_sha256 962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f
+    bears_on_computed_surface: true
   - id: de-kg-suppl-038
     identity: Durchführungsvereinbarung zum Sozialversicherungsabkommen mit Tunesien — corpus row de/regulation/dvka/tunesien-dv (text in de/regulation/dvka/tunesien-dv/document-1, body_sha256 eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330)
     title_short: DV Tunesien
@@ -9879,7 +9993,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'The implementation agreement (Durchführungsvereinbarung of 16.4.1984 to the Tunisia agreement (BGBl. 1986 II S. 602)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds certificates for posted workers, direct payment of cash benefits, data protection, applications lodged with the other state''s bodies (Art. 28 of the agreement), benefits in kind under Art. 14 and 15, and the health-insurance procedures of Title II Chapter 1.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:42, body_sha256 eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330
+    bears_on_computed_surface: false
   - id: de-kg-suppl-039
     identity: Zusatzprotokoll zum Sozialversicherungsabkommen mit Tunesien — corpus row de/regulation/dvka/tunesien-zp (text in de/regulation/dvka/tunesien-zp/document-1, body_sha256 420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96)
     title_short: ZP Tunesien
@@ -9887,7 +10006,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
-    status: pending
+    status: excluded-with-reason
+    classification: implementation_procedure
+    reason: 'Additional protocol of 16.4.1984 to the Tunisia agreement (BGBl. 1986 II S. 600). The captured extract has three articles: mutual assistance between the courts applying the agreement (Art. 1), recognition and enforcement of enforceable court decisions and institutions'' instruments (Art. 2), and settlement of disputes between the states over interpretation and application (Art. 3). Judicial-cooperation machinery; no condition of entitlement and no amount.'
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-zp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:44, body_sha256 420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: 420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96
+    bears_on_computed_surface: false
   - id: de-kg-suppl-040
     identity: Beschluss Nr. 3/80 des Assoziationsrates EWG–Türkei vom 19. September 1980 über die Anwendung der Systeme der sozialen Sicherheit — corpus row de/regulation/eec-turkey/arb-3-80 (text in de/regulation/eec-turkey/arb-3-80/document-1, body_sha256 fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e)
     title_short: ARB 3/80
@@ -9895,7 +10019,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-A4.5
     discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
     provenance: DA-KG 2025 A 4.5 Abs. 2 Satz 1 ('Für türkische Arbeitnehmer ergibt sich ein Anspruch auf Kindergeld ferner aus dem Beschluss Nr. 3/80 des Assoziationsrates vom 19.09.1980'); captured in corpus scope 2026-09-08-de-kindergeld-arb. Pending until read.
-    status: pending
+    status: classified-with-reason
+    classification: coordination_rule
+    reason: Decision No 3/80 of the EEC–Turkey Association Council of 19 September 1980 on the application of the social security schemes of the Member States to Turkish workers and members of their families (OJ C 110, 25.4.1983). In the captured text Art. 1 takes the definitions of 'Familienleistungen' and 'Familienbeihilfen' from Regulation (EEC) No 1408/71; Art. 2 sets the personal scope (workers who are or have been subject to a Member State's legislation and are Turkish nationals, their family members and survivors); Art. 3 Abs. 1 grants equal treatment with nationals to persons resident in a Member State; Art. 4 Abs. 1 Buchst. h brings family benefits within the material scope; Chapter 6 (Art. 18–19) applies Art. 72 and Art. 77–79 of Regulation 1408/71 to the acquisition of the right and to pensioners' and orphans' family allowances. The DA-KG applies it in A 4.5 Abs. 2 Satz 1 ('Für türkische Arbeitnehmer ergibt sich ein Anspruch auf Kindergeld ferner aus dem Beschluss Nr. 3/80').
+      Bears on the law-derived input claimant_entitlement (open dependency); open until the equal-treatment and family-benefit rules are encoded against §§ 62, 63 EStG.
+    text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/eec-turkey/arb-3-80/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl:2, body_sha256 fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e); DVKA reprint read on 2026-09-08 from the corpus row'
+    text_sha256: fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e
+    bears_on_computed_surface: true
 computed:
   ledger:
   - ordinal: 1
@@ -10217,37 +10347,14 @@ computed:
     counts:
       total: 492
       encoded: 1
-      classified-with-reason: 126
-      excluded-with-reason: 338
-      pending: 27
+      classified-with-reason: 141
+      excluded-with-reason: 346
+      pending: 4
     pending:
     - de-kg-suppl-007
     - de-kg-suppl-008
     - de-kg-suppl-009
     - de-kg-suppl-010
-    - de-kg-suppl-018
-    - de-kg-suppl-019
-    - de-kg-suppl-020
-    - de-kg-suppl-021
-    - de-kg-suppl-022
-    - de-kg-suppl-023
-    - de-kg-suppl-024
-    - de-kg-suppl-025
-    - de-kg-suppl-026
-    - de-kg-suppl-027
-    - de-kg-suppl-028
-    - de-kg-suppl-029
-    - de-kg-suppl-030
-    - de-kg-suppl-031
-    - de-kg-suppl-032
-    - de-kg-suppl-033
-    - de-kg-suppl-034
-    - de-kg-suppl-035
-    - de-kg-suppl-036
-    - de-kg-suppl-037
-    - de-kg-suppl-038
-    - de-kg-suppl-039
-    - de-kg-suppl-040
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -18126,7 +18233,7 @@ computed:
       text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/guidance/ristbv-2023/inhalt (data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl:2, body_sha256 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263). Read on 2026-09-08 from the same official pages (see the reason); the corpus rows are the receipted capture of those pages.'
       text_sha256: 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263
     - id: de-kg-suppl-018
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18135,8 +18242,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Bosnien und Herzegowina as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children
+        resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:2, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
     - id: de-kg-suppl-019
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18145,8 +18258,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Bosnien und Herzegowina. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty
+        state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:4, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
     - id: de-kg-suppl-020
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18155,8 +18274,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Bosnien und Herzegowina) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/bosnien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:6, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
     - id: de-kg-suppl-021
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18165,8 +18289,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to dem Kosovo as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the
+        treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:8, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
     - id: de-kg-suppl-022
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18175,8 +18305,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Yugoslavia agreement, applied in relation to dem Kosovo. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count)
+        and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:10, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
     - id: de-kg-suppl-023
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18185,8 +18321,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to dem Kosovo) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/kosovo-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:12, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
     - id: de-kg-suppl-024
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18195,8 +18336,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement with the Kingdom of Morocco of 25.3.1981 (BGBl. 1986 II S. 552). In the captured extract Art. 2 Abs. 1 lists the German legislation covered (Buchst. a–d: health insurance and maternity protection, accident insurance, pension insurance, farmers'' old-age assistance) — the extract''s text breaks at that point (''Auszug aus dem Sozialversicherungsabkommen (SVA) Marokko (2) auf die marokkanischen Rechtsvorschriften …''), so whether the German Kindergeld entry is missing from the treaty or lost in the reprint cannot be settled from this row; Art. 3 defines the personal scope (nationals, recognised refugees, stateless persons and persons deriving rights from them), Art. 4 Abs. 1 equates them with own nationals when habitually resident in a contracting state and Abs. 2 extends benefits to nationals resident outside both territories, Art. 5 disapplies domestic-residence conditions, Art. 6 subjects employees to the legislation of the state of employment. The DA-KG applies
+        this agreement to Kindergeld: A 4.5 Abs. 1 (Moroccan workers need not meet § 62 Abs. 2), A 23.2 Abs. 2 (children resident in Morocco count) and A 31 Abs. 2 (rates under the agreement; for Morocco the § 66 rate applies only from the month after entry). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:14, body_sha256 65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a
     - id: de-kg-suppl-025
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18205,8 +18352,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Morocco agreement. The captured extract qualifies Art. 2 (scope; precedence over other agreements and supranational rules, the EEC–Morocco cooperation agreement of 27.4.1976 unaffected; insurance-burden rules), Art. 4 (equal treatment extended to German unemployment-insurance contributions and benefits; self-administration rules untouched; no voluntary pension insurance while habitually resident outside the state) and Art. 5 (benefits from accidents and insurance periods outside federal law). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions
+        are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:16, body_sha256 ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9
     - id: de-kg-suppl-026
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18215,8 +18368,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 19.4.1984 to the Morocco agreement (BGBl. 1986 II S. 571)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds the liaison bodies, certificates for posted workers (Art. 7 and 11 of the agreement, the 36-month period), direct payment of cash benefits abroad and the postal-payment procedure.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/marokko-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:18, body_sha256 3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06
     - id: de-kg-suppl-027
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18225,8 +18383,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Montenegro as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the
+        treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:20, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
     - id: de-kg-suppl-028
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18235,8 +18399,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Montenegro. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count)
+        and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:22, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
     - id: de-kg-suppl-029
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18245,8 +18415,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Montenegro) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/montenegro-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:24, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
     - id: de-kg-suppl-030
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18255,8 +18430,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement of 12.10.1968 with the Socialist Federal Republic of Yugoslavia (BGBl. 1969 II S. 1438) as amended 30.9.1974, applied in relation to Serbien as successor state. In the captured extract Art. 2 Abs. 1 Nr. 1 Buchst. d lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered and Nr. 2 Buchst. d ''das Kindergeld'' on the Yugoslav side; Art. 3 Abs. 1 equates nationals of the other state, recognised refugees and persons deriving rights from them with own nationals, Abs. 2 grants benefits to the other state''s nationals habitually resident outside both territories on the same conditions; Art. 4 Abs. 1 disapplies domestic-residence conditions for those persons while they stay in the other state; Art. 5 subjects employees to the legislation of the state of employment. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the
+        treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:26, body_sha256 cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270
     - id: de-kg-suppl-031
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18265,8 +18446,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Yugoslavia agreement, applied in relation to Serbien. The captured extract qualifies the articles that carry the agreement''s Kindergeld coverage: Nr. 1 to Art. 2 (scope clarifications and insurance-burden rules), Nr. 2 to Art. 3 (Yugoslav approval requirements for payments abroad are not applied to German nationals outside both territories; insurance-burden and self-administration rules untouched), Nr. 3 to Art. 4 (German rules on benefits from accidents and insurance periods outside federal law untouched; Yugoslav approval requirements not applied to non-Yugoslav persons under Art. 3 Abs. 1), Nr. 4 to Art. 5 (insurance exemption on drawing a benefit). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and
+        on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:28, body_sha256 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955
     - id: de-kg-suppl-032
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18275,8 +18462,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 9.11.1969 to the Yugoslavia agreement, applied in relation to Serbien) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/serbien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:30, body_sha256 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6
     - id: de-kg-suppl-033
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18285,8 +18477,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement with the Republic of Türkiye of 30.4.1964 (BGBl. 1965 II S. 1170) as amended 1969, 1974 and 1984. In the captured extract Art. 1 Nr. 15 defines ''Kindergeld'' for Germany as the benefits named in Art. 2 Nr. 1 Buchst. d and for Türkiye as the benefits for children of employees; Art. 2 Nr. 1 Buchst. e lists ''das Kindergeld für Arbeitnehmer'' among the German legislation covered; Art. 3 defines the personal scope (nationals, refugees, stateless persons, nationals of third states under other agreements, and persons deriving rights); Art. 4 equates the listed persons habitually resident in a contracting party with own nationals; Art. 4a disapplies residence conditions for persons staying in the other party; Art. 5 subjects employees to the legislation of the state of employment. The DA-KG applies it in A 4.5 Abs. 1 (Turkish workers exempt from § 62 Abs. 2), A 4.5 Abs. 2 Satz 6 (other Turkish nationals via the VEA), A 23.2 Abs. 2 (children resident in Türkiye) and
+        A 31 Abs. 2 (agreement rates). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:32, body_sha256 957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7
     - id: de-kg-suppl-034
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18295,8 +18493,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Türkiye agreement. The captured extract qualifies Art. 1 (Turkish decrees count as regulations), Art. 2 (''Abschnitt V des Abkommens'' does not apply to the miners'' supplementary insurance and farmers'' old-age assistance; precedence over other agreements; insurance-burden rules), Art. 3 (no supranational law for Türkiye yet), Art. 3 and 4 (the refugee/stateless clauses apply once the conventions bind Türkiye), Art. 4 and 4a (discretionary pensions, insurance-burden and self-administration rules untouched, no voluntary pension insurance while abroad). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten
+        Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:34, body_sha256 c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8
     - id: de-kg-suppl-035
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18305,8 +18509,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 2.11.1984 to the Türkiye agreement (BGBl. 1986 II S. 1055)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds certificates for posted workers, direct payment of cash benefits abroad, applications and appeals lodged with the other party''s bodies (Art. 46 of the agreement), the maternity lump sum and data protection.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tuerkei-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:36, body_sha256 4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452
     - id: de-kg-suppl-036
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18315,8 +18524,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'The agreement with the Tunisian Republic of 16.4.1984 (BGBl. 1986 II S. 584). In the captured extract Art. 2 Abs. 1 Nr. 1 lists the German legislation covered (Buchst. a–d: health insurance and maternity protection, accident insurance, pension insurance, farmers'' old-age assistance) and Nr. 2 the Tunisian systems ''mit Ausnahme der Systeme der Familienleistungen, soweit solche oder entsprechende Leistungen nicht nach den deutschen Rechtsvorschriften für Empfänger von Renten vorgesehen sind'' — the German Kindergeld entry is not visible in this extract; Art. 3 defines the personal scope, Art. 4 equal treatment for persons habitually resident in a contracting state, Art. 5 disapplies domestic-residence conditions, Art. 6 subjects employees to the legislation of the state of employment. The DA-KG applies the agreement to Kindergeld: A 4.5 Abs. 1 (Tunisian workers exempt from § 62 Abs. 2), A 23.2 Abs. 2 (children resident in Tunisia count) and A 31 Abs. 2 (for Tunisia the § 66
+        rate applies only from the month after entry). Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-sva/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:38, body_sha256 5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7
     - id: de-kg-suppl-037
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18325,8 +18540,14 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: coordination_rule
+      reason: 'Final protocol to the Tunisia agreement. The captured extract qualifies Art. 2 (Title II Chapter 3 not applicable to Tunisian public-service contract staff, the miners'' supplementary insurance and farmers'' old-age assistance; precedence over other agreements; insurance-burden rules; ILO conventions untouched), Art. 4 (insurance-burden rules of German agreements with other states do not apply to Tunisian nationals; self-administration rules untouched; no voluntary German pension insurance while abroad) and Art. 5 (German benefits from accidents and insurance periods outside federal law untouched). It modifies the scope and equal-treatment clauses through which the agreement reaches Kindergeld. Bears on the law-derived inputs claimant_entitlement (A 4.5: treaty-state workers need not meet § 62 Abs. 2 EStG) and qualifying_child_count (A 23.2 Abs. 2: children resident in the treaty state count) and on the monthly amount (A 31 Abs. 2: Kindergeld ''in der durch ein Abkommen über
+        Soziale Sicherheit bestimmten Höhe''); open until the agreement''s Kindergeld provisions are captured in full and encoded against §§ 62, 63, 66 EStG. Capture gap: the corpus row is the DVKA ''Auszug'' (health-insurance liaison extract); it carries the general provisions quoted here but not the agreement''s Kindergeld chapter, so the rule that fixes the Kindergeld for children resident in the treaty state is not yet captured.'
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-sp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:40, body_sha256 962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f
     - id: de-kg-suppl-038
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18335,8 +18556,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'The implementation agreement (Durchführungsvereinbarung of 16.4.1984 to the Tunisia agreement (BGBl. 1986 II S. 602)) in the captured extract: definitions by reference to the agreement, the liaison bodies'' duty to inform the insured population, mutual information between the bodies named in the agreement, notification of incapacity for work and payment procedures. Administrative machinery for applying the agreement; it states no condition of entitlement and no amount. The extract adds certificates for posted workers, direct payment of cash benefits, data protection, applications lodged with the other state''s bodies (Art. 28 of the agreement), benefits in kind under Art. 14 and 15, and the health-insurance procedures of Title II Chapter 1.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-dv/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:42, body_sha256 eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330
     - id: de-kg-suppl-039
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18345,8 +18571,13 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 1 Satz 1–2 names the treaty states (Bosnien und Herzegowina, Kosovo, Marokko, Montenegro, Serbien, Türkei und Tunesien); the class row de-kg-suppl-010 enrolled from O 2.4 is enumerated by the corpus scope 2026-09-08-de-kindergeld-bilateral (DVKA reprints). Member pending until read.
+      classification: implementation_procedure
+      reason: 'Additional protocol of 16.4.1984 to the Tunisia agreement (BGBl. 1986 II S. 600). The captured extract has three articles: mutual assistance between the courts applying the agreement (Art. 1), recognition and enforcement of enforceable court decisions and institutions'' instruments (Art. 2), and settlement of disputes between the states over interpretation and application (Art. 3). Judicial-cooperation machinery; no condition of entitlement and no amount.'
+      bears_on_computed_surface: false
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/dvka/tunesien-zp/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl:44, body_sha256 420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: 420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96
     - id: de-kg-suppl-040
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A4.5
       identity_kind: supplemental
@@ -18355,6 +18586,12 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 69b43b46ec2bb2d10d9db4c0e8a47928245d2f9ee9692094c0b3a8c39bbc6ac2
       provenance: DA-KG 2025 A 4.5 Abs. 2 Satz 1 ('Für türkische Arbeitnehmer ergibt sich ein Anspruch auf Kindergeld ferner aus dem Beschluss Nr. 3/80 des Assoziationsrates vom 19.09.1980'); captured in corpus scope 2026-09-08-de-kindergeld-arb. Pending until read.
+      classification: coordination_rule
+      reason: Decision No 3/80 of the EEC–Turkey Association Council of 19 September 1980 on the application of the social security schemes of the Member States to Turkish workers and members of their families (OJ C 110, 25.4.1983). In the captured text Art. 1 takes the definitions of 'Familienleistungen' and 'Familienbeihilfen' from Regulation (EEC) No 1408/71; Art. 2 sets the personal scope (workers who are or have been subject to a Member State's legislation and are Turkish nationals, their family members and survivors); Art. 3 Abs. 1 grants equal treatment with nationals to persons resident in a Member State; Art. 4 Abs. 1 Buchst. h brings family benefits within the material scope; Chapter 6 (Art. 18–19) applies Art. 72 and Art. 77–79 of Regulation 1408/71 to the acquisition of the right and to pensioners' and orphans' family allowances. The DA-KG applies it in A 4.5 Abs. 2 Satz 1 ('Für türkische Arbeitnehmer ergibt sich ein Anspruch auf Kindergeld ferner aus dem Beschluss Nr. 3/80').
+        Bears on the law-derived input claimant_entitlement (open dependency); open until the equal-treatment and family-benefit rules are encoded against §§ 62, 63 EStG.
+      bears_on_computed_surface: true
+      text_source: 'corpus release de-rulespec-2026-09-08-kindergeld-civil (TheAxiomFoundation/axiom-corpus commit 15402878eed59a0ab56e7428fe6caa052b5c098a): de/regulation/eec-turkey/arb-3-80/document-1 (data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl:2, body_sha256 fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e); DVKA reprint read on 2026-09-08 from the corpus row'
+      text_sha256: fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -18491,8 +18728,23 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 122
-    open_dependency_count: 130
+    - de-kg-suppl-018
+    - de-kg-suppl-019
+    - de-kg-suppl-021
+    - de-kg-suppl-022
+    - de-kg-suppl-024
+    - de-kg-suppl-025
+    - de-kg-suppl-027
+    - de-kg-suppl-028
+    - de-kg-suppl-030
+    - de-kg-suppl-031
+    - de-kg-suppl-033
+    - de-kg-suppl-034
+    - de-kg-suppl-036
+    - de-kg-suppl-037
+    - de-kg-suppl-040
+    instruments_bearing_on_computed_count: 137
+    open_dependency_count: 145
     closed: false
   measured_denominators:
     spine_rows: 18

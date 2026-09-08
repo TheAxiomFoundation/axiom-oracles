@@ -133,6 +133,12 @@
   492; 130 open dependencies (8 law-derived, 0 unclassified, 122 bearing).
   Next: read the 23 agreement texts; rebind AufenthG/FreizügG/EEA/SGB
   VI–VII rows once the resolver matches inflected act names.
+- Agreement members (2026-09-08): the 23 enrolled rows decided on their
+  corpus texts — 7 SVA + 7 Schlussprotokolle + ARB 3/80 open bearing, 7
+  Durchführungsvereinbarungen + Tunisia ZP excluded. Capture gap flagged:
+  the DVKA extracts omit the Kindergeld chapters; full BGBl II texts are
+  needed to encode. Frontier 4 of 492 (classes only); 145 open dependencies
+  (8 law-derived, 0 unclassified, 137 bearing).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

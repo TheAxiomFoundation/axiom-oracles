@@ -358,6 +358,36 @@ Result: spine 5 pending of 18; frontier 27 of 492 pending (4 classes and
 23 enrolled members); 130 open dependencies (8 law-derived inputs, 0
 unclassified inputs, 122 bearing instruments).
 
+## Bilateral agreements and ARB 3/80 (2026-09-08)
+
+The 23 members enrolled from the corpus scopes are decided on the corpus
+rows themselves (`de-kg-suppl-018`–`040`, each bound to its
+`…/document-1` body hash):
+
+- **Open bearing (15)**: the seven Sozialversicherungsabkommen (the
+  Yugoslavia agreement of 1968 as applied to Bosnia and Herzegovina,
+  Kosovo, Montenegro and Serbia; Morocco 1981; Türkiye 1964; Tunisia 1984),
+  their seven Schlussprotokolle, and ARB 3/80. The captured extracts carry
+  each agreement's material scope (the Yugoslavia and Türkiye extracts name
+  "das Kindergeld für Arbeitnehmer"), personal scope, equal-treatment and
+  export clauses and the employment-state rule; the DA-KG applies them in
+  A 4.5 (treaty-state workers exempt from § 62 Abs. 2), A 23.2 Abs. 2
+  (children resident in the treaty state) and A 31 Abs. 2 (agreement
+  rates). ARB 3/80 brings family benefits within its scope (Art. 4 Abs. 1
+  Buchst. h) and applies Regulation 1408/71's family-benefit rules
+  (Art. 18–19).
+- **Excluded (8)**: the seven Durchführungsvereinbarungen and Tunisia's
+  Zusatzprotokoll — liaison bodies, information duties, payment routing,
+  judicial cooperation.
+- **Capture gap, recorded in every bearing reason**: the corpus rows are
+  the DVKA "Auszüge" for health-insurance liaison; none carries the
+  agreement's Kindergeld chapter, and the Morocco and Tunisia extracts are
+  lossy at the scope list. Encoding needs the full BGBl II texts.
+
+Result: frontier 4 of 492 pending (the four classes only); 145 open
+dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing
+instruments).
+
 ## Reads log
 
 - 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26
