@@ -66,7 +66,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 465, 8, 1, 0, 0),
+    "de/kindergeld": (18, 666, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1360,8 +1360,8 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
     assert len(supplemental) == 17
-    # Only the four classes (members still to be enumerated by a discovery
-    # channel) remain pending; the 13 named documents are decided on
+    # The four classes remain pending because enumeration is incomplete;
+    # citation seeds have their own frontier rows. The 13 named documents are decided on
     # captured text.
     pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
     assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
@@ -1374,7 +1374,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 448 + 17
+    assert frontier["instrument_count"] == 448 + 17 + 201
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
@@ -1390,3 +1390,55 @@ def test_duplicate_supplemental_ids_are_rejected() -> None:
         },
     )
     assert any("duplicate or colliding supplemental instrument id" in error for error in errors), errors
+
+
+def test_class_discovery_keeps_citation_evidence_separate_from_operative_text():
+    module = _load_script()
+    facts, rows = module._class_discovery_candidates("de/kindergeld", [])
+    assert facts["complete"] is False
+    assert len(rows) == 201
+    assert facts["counts"] == {
+        "de-kg-suppl-007": 11, "de-kg-suppl-008": 2,
+        "de-kg-suppl-009": 165, "de-kg-suppl-010": 23,
+    }
+    assert all(row["status"] == "pending" and "body_sha256" not in row for row in rows)
+    assert module._class_discovery_candidates("de/unterhaltsvorschuss", []) == (None, [])
+
+
+@pytest.mark.parametrize("mutation", ["source", "receipt", "excerpt", "duplicate", "escape", "count", "complete", "missing"])
+def test_class_discovery_rejects_unbound_or_incomplete_evidence(tmp_path, monkeypatch, mutation):
+    import hashlib
+    import shutil
+
+    module = _load_script()
+    source = module.CLASS_DISCOVERY_PATH.parent
+    target = tmp_path / "discovery"
+    shutil.copytree(source, target)
+    path = target / "snapshot.json"
+    payload = json.loads(path.read_text())
+    if mutation == "source":
+        (target / payload["sources"][0]["path"]).write_text("changed source")
+    elif mutation == "receipt":
+        payload["captured_at"] = "changed timestamp"
+    elif mutation == "excerpt":
+        payload["members"][0]["discovery_excerpt"] = "invented citation not in source"
+    elif mutation == "duplicate":
+        payload["members"].append(copy.deepcopy(payload["members"][0]))
+    elif mutation == "escape":
+        payload["sources"][0]["path"] = "../outside.txt"
+    elif mutation == "count":
+        payload["counts"]["de-kg-suppl-007"] = 0
+    elif mutation == "complete":
+        payload["complete"] = True
+    if mutation != "receipt":
+        payload["receipt_sha256"] = hashlib.sha256(json.dumps(
+            {k: v for k, v in payload.items() if k != "receipt_sha256"},
+            ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode()).hexdigest()
+    path.write_text(json.dumps(payload))
+    if mutation == "missing":
+        path.unlink()
+    monkeypatch.setattr(module, "CLASS_DISCOVERY_PATH", path)
+    monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+    with pytest.raises(module._SourceError):
+        module._class_discovery_candidates("de/kindergeld", [])

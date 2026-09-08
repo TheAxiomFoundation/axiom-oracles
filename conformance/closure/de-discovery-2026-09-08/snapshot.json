@@ -1,0 +1,2065 @@
+{
+  "schema": "axiom.de_kindergeld.discovery_snapshot.v1",
+  "captured_at": "2026-09-08T13:36:06.113866+00:00",
+  "complete": false,
+  "sources": [
+    {
+      "path": "da-kg-2025.txt",
+      "sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "extraction": "pdftotext -layout",
+      "pdf_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
+      "receipt_origin": "conformance/closure/de-instrument-graph.json#de-subject-003"
+    },
+    {
+      "path": "dvka-bilateral.html",
+      "sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "url": "https://www.dvka.de/de/informationen/rechtsquellen/bilaterales-abkommen/"
+    }
+  ],
+  "members": [
+    {
+      "id": "de-kg-discovery-00aab547379e68f7",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 12.11.2020, III R 49/18, BStBl II 2021 S. 390",
+      "discovery_excerpt": "BFH vom 12.11.2020, III R 49/18, BStBl II 2021 S. 390",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-00f6a665fab961c6",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 05.10.2023, Abschnitt A.II – BStBl I S. 1726",
+      "discovery_excerpt": "BMF-Schreiben vom 05.10.2023, Abschnitt A.II – BStBl I S. 1726",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-03c2fbbc23e2307d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.08.2013, III R 22/12, BStBl II 2014 S. 838",
+      "discovery_excerpt": "BFH vom 08.08.2013, III R 22/12, BStBl II 2014 S. 838",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-05b9e1f2aa436208",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.06.1999, VI R 33/98 und VI R 143/98, BStBl II S. 701",
+      "discovery_excerpt": "BFH vom 09.06.1999, VI R 33/98 und VI R 143/98, BStBl II S. 701",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-067415d0d456a49f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.04.2013, III R 24/12, BStBl II S. 866",
+      "discovery_excerpt": "BFH vom 11.04.2013, III R 24/12, BStBl II S. 866",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-073ce2d05cd37be4",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.04.2002, VIII R 50/01, BStBl II S. 575",
+      "discovery_excerpt": "BFH vom 16.04.2002, VIII R 50/01, BStBl II S. 575",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-09f5f9534b6b1d86",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.02.2009, III R 37/07, BStBl II S. 928",
+      "discovery_excerpt": "BFH vom 09.02.2009, III R 37/07, BStBl II S. 928",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-0a5820943b10e4f9",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.12.2021, III R 43/20, BStBl II 2022 S. 472",
+      "discovery_excerpt": "BFH vom 15.12.2021, III R 43/20, BStBl II 2022 S. 472",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-0a6eec2d664292e0",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.01.2006, III R 89/03, BStBl II S. 544",
+      "discovery_excerpt": "BFH vom 26.01.2006, III R 89/03, BStBl II S. 544",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-0c43ba45962d536b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 28.03.2012, VI R 31/11, BStBl II S. 769",
+      "discovery_excerpt": "BFH vom 28.03.2012, VI R 31/11, BStBl II S. 769",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-0d38fbb82aecb654",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 02.04.2009, III R 92/06, BStBl II 2010 S. 345",
+      "discovery_excerpt": "BFH vom 02.04.2009, III R 92/06, BStBl II 2010 S. 345",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-0d45d56b2bad4eb9",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 13.01.2023, BStBl I S. 182",
+      "discovery_excerpt": "BMF-Schreiben vom 13.01.2023, BStBl I S. 182",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1707afd8485770c7",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.11.2009, III R 67/07, BStBl II 2010 S. 476",
+      "discovery_excerpt": "BFH vom 26.11.2009, III R 67/07, BStBl II 2010 S. 476",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-175a2b2bae32af40",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.02.2023, III R 23/22, BStBl II S. 714",
+      "discovery_excerpt": "BFH vom 16.02.2023, III R 23/22, BStBl II S. 714",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-179e5bbf757e6529",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 21.02.2008, III R 79/03, BStBl II 2009 S. 916",
+      "discovery_excerpt": "BFH vom 21.02.2008, III R 79/03, BStBl II 2009 S. 916",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-17bc04f83ae1dc83",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.09.2018, III R 19/17, BStBl II 2019 S. 187",
+      "discovery_excerpt": "BFH vom 13.09.2018, III R 19/17, BStBl II 2019 S. 187",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-18243162e57ce9f6",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.02.2004, VIII R 58/03, BStBl II 2006 S. 130",
+      "discovery_excerpt": "BFH vom 17.02.2004, VIII R 58/03, BStBl II 2006 S. 130",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-18d7ddc0a8189df2",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.11.1970, II B 42/70, BStBl II 1971 S. 110",
+      "discovery_excerpt": "BFH vom 24.11.1970, II B 42/70, BStBl II 1971 S. 110",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1994bef940f3cf3c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.09.1998, XI R 11/98, BStBl II 1999 S. 133",
+      "discovery_excerpt": "BFH vom 23.09.1998, XI R 11/98, BStBl II 1999 S. 133",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1a073a94bb11f0da",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.07.1985, I R 172/79, BStBl II 1986 S. 122",
+      "discovery_excerpt": "BFH vom 17.07.1985, I R 172/79, BStBl II 1986 S. 122",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1adb457cf303c2b1",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.09.1987, III R 235/84, BStBl II 1988 S. 249",
+      "discovery_excerpt": "BFH vom 17.09.1987, III R 235/84, BStBl II 1988 S. 249",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1ba7598d59138424",
+      "identity": "Sozialversicherungsabkommen mit Marokko\n (PDF, 169 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-1de49ebec0a559f7",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.09.2013, V R 9/12, BStBl II 2014 S. 715",
+      "discovery_excerpt": "BFH vom 19.09.2013, V R 9/12, BStBl II 2014 S. 715",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-1def91f5a9f89211",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.12.2018, III R 26/18, BStBl II 2019 S. 765",
+      "discovery_excerpt": "BFH vom 11.12.2018, III R 26/18, BStBl II 2019 S. 765",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-20d4058656e75e8c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.09.2017, III R 19/16, BStBl II 2018 S. 131",
+      "discovery_excerpt": "BFH vom 14.09.2017, III R 19/16, BStBl II 2018 S. 131",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-220823c8e347c5c0",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.10.1969, IV 290/64, BStBl II 1970 S. 109",
+      "discovery_excerpt": "BFH vom 24.10.1969, IV 290/64, BStBl II 1970 S. 109",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-237000cd7ae7e260",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.12.2021, III R 48/20, BStBl II S. 444",
+      "discovery_excerpt": "BFH vom 15.12.2021, III R 48/20, BStBl II S. 444",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-258c3463a611bbff",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.01.2023, III R 36/21, BStBl II S. 711",
+      "discovery_excerpt": "BFH vom 19.01.2023, III R 36/21, BStBl II S. 711",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-289b0e7c3d8d6b13",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 12.06.1991, III R 108/89, BStBl II 1992 S. 20",
+      "discovery_excerpt": "BFH vom 12.06.1991, III R 108/89, BStBl II 1992 S. 20",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-2bc27aa817f87a52",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.11.2014, III R 21/12, BStBl II 2015 S. 135",
+      "discovery_excerpt": "BFH vom 08.11.2014, III R 21/12, BStBl II 2015 S. 135",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-2cc6ce9a628d09b1",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 25.07.2007, III R 55/02, BStBl II 2008 S. 758",
+      "discovery_excerpt": "BFH vom 25.07.2007, III R 55/02, BStBl II 2008 S. 758",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-2d6286809c5f1a19",
+      "identity": "Durchführungsvereinbarung mit Serbien\n (PDF, 92 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-2e35ab29f2750a4c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.06.1999, VI R 16/99, BStBl II S. 713",
+      "discovery_excerpt": "BFH vom 09.06.1999, VI R 16/99, BStBl II S. 713",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-32f5cf2350c58f79",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.08.2004, VIII R 50/03, BStBl II 2010 S. 1052",
+      "discovery_excerpt": "BFH vom 24.08.2004, VIII R 50/03, BStBl II 2010 S. 1052",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-33b5b7772fffd60a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.03.1997, I R 69/96, BStBl II S. 447",
+      "discovery_excerpt": "BFH vom 19.03.1997, I R 69/96, BStBl II S. 447",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-341ead2934294036",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 04.07.2002, III R 58/98, BStBl II S. 765",
+      "discovery_excerpt": "BFH vom 04.07.2002, III R 58/98, BStBl II S. 765",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-34498b60301c9605",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 27.02.2014, III R 40/13, BStBl II S. 783",
+      "discovery_excerpt": "BFH vom 27.02.2014, III R 40/13, BStBl II S. 783",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-345366269efcd1c7",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 03.11.2020, III R 59/19, BStBl II 2021 S. 467",
+      "discovery_excerpt": "BFH vom 03.11.2020, III R 59/19, BStBl II 2021 S. 467",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-359e9a2ce0db9b88",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.11.2008, III R 105/07, BStBl II 2010 S. 1057",
+      "discovery_excerpt": "BFH vom 19.11.2008, III R 105/07, BStBl II 2010 S. 1057",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-37736435a414ade5",
+      "identity": "Sozialversicherungsabkommen mit Bosnien und Herzegowina\n (PDF, 169 KB) Zwischen der Republik Bosnien und Herzegowina und der Bundesrepublik Deutschland liegt noch kein eigenständiges Sozialversicherungsabkommen vor. Es ist daher derzeit noch das Abkommen zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit vom 12.10.1968 im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina anzuwenden (vgl. auch Bekanntmachung vom 16.11.1992 - BGBl. II, S. 1196). Die Regelungen gelten in Bezug auf Bosnien und Herzegowina im Föderationsgebiet, der Republik Srpska sowie dem Brčko-Destrikt.",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-3bc77e77ffba6699",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.03.1976, VII R 102/75, BStBl II S. 440",
+      "discovery_excerpt": "BFH vom 09.03.1976, VII R 102/75, BStBl II S. 440",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-3c8055571628b365",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.08.2013, VI R 45/12, BStBl II 2014 S. 836",
+      "discovery_excerpt": "BFH vom 08.08.2013, VI R 45/12, BStBl II 2014 S. 836",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-3ca0118229d10269",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 03.07.2014, III R 52/13, BStBl II 2015 S. 152",
+      "discovery_excerpt": "BFH vom 03.07.2014, III R 52/13, BStBl II 2015 S. 152",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-3fcdf94af133d909",
+      "identity": "Zusatzprotokoll mit Tunesien\n (PDF, 97 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_zp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_zp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-402c4be6d4ba5e86",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2003, VIII R 79/99, BStBl II S. 843",
+      "discovery_excerpt": "BFH vom 15.07.2003, VIII R 79/99, BStBl II S. 843",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-40eb9034b5fd3c08",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 04.02.2016, III R 14/15, BStBl II S. 615",
+      "discovery_excerpt": "BFH vom 04.02.2016, III R 14/15, BStBl II S. 615",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4170f7c50f96a483",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2003, VIII R 77/00, BStBl II S. 845",
+      "discovery_excerpt": "BFH vom 15.07.2003, VIII R 77/00, BStBl II S. 845",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-42e097086379ffd3",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.05.2000, VI R 143/99, BStBl II S. 473",
+      "discovery_excerpt": "BFH vom 24.05.2000, VI R 143/99, BStBl II S. 473",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-464251f2bd834837",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 28.04.2010, III R 44/08, BStBl II 2013 S. 580",
+      "discovery_excerpt": "BFH vom 28.04.2010, III R 44/08, BStBl II 2013 S. 580",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-46df3d0e1aeea3c8",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF- Schreiben vom 22.11.2010 Abschnitt VI – BStBl I S. 1346",
+      "discovery_excerpt": "BMF- Schreiben vom 22.11.2010 Abschnitt VI – BStBl I S. 1346",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-48b4061786c299a9",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.09.2015, III R 6/15, BStBl II 2016 S. 281",
+      "discovery_excerpt": "BFH vom 16.09.2015, III R 6/15, BStBl II 2016 S. 281",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-493177f979995cb2",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.08.2023, III R 26/22, BStBl II 2024 S. 94",
+      "discovery_excerpt": "BFH vom 17.08.2023, III R 26/22, BStBl II 2024 S. 94",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4b9b630b75ca91db",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.01.2018, III R 16/17, BStBl II S. 402",
+      "discovery_excerpt": "BFH vom 18.01.2018, III R 16/17, BStBl II S. 402",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4c21d9bf902eb3be",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.06.2014, III R 21/13, BStBl II 2015 S. 886",
+      "discovery_excerpt": "BFH vom 26.06.2014, III R 21/13, BStBl II 2015 S. 886",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4c786677f4d2fd35",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 07.08.1992, III R 20/92, BStBl II 1993 S. 103",
+      "discovery_excerpt": "BFH vom 07.08.1992, III R 20/92, BStBl II 1993 S. 103",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-4f546afb8b93005e",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.11.1988, II R 139/87, BStBl II 1989 S. 182",
+      "discovery_excerpt": "BFH vom 23.11.1988, II R 139/87, BStBl II 1989 S. 182",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-501023fa0c9422ed",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 27.11.2019, III R 28/17, BStBl II 2021 S. 807",
+      "discovery_excerpt": "BFH vom 27.11.2019, III R 28/17, BStBl II 2021 S. 807",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5197632008351213",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.06.2015, III R 38/14, BStBl II 2016 S. 102",
+      "discovery_excerpt": "BFH vom 23.06.2015, III R 38/14, BStBl II 2016 S. 102",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-51b487925db9cb3f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 28.07.2005, III R 68/04, BStBl II 2008 S. 350",
+      "discovery_excerpt": "BFH vom 28.07.2005, III R 68/04, BStBl II 2008 S. 350",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-551339d77f667e79",
+      "identity": "Schlussprotokoll mit Montenegro\n (PDF, 91 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-55cae2ad021d0c6d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 25.09.2014, III R 10/14, BStBl II 2015 S. 655",
+      "discovery_excerpt": "BFH vom 25.09.2014, III R 10/14, BStBl II 2015 S. 655",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-58e01ee2c123071d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 25.01.2007, III R 23/06, BStBl II 2008 S. 664",
+      "discovery_excerpt": "BFH vom 25.01.2007, III R 23/06, BStBl II 2008 S. 664",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-592df3483b5da708",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.04.2015, V R 27/14, BStBl II 2016 S. 163",
+      "discovery_excerpt": "BFH vom 15.04.2015, V R 27/14, BStBl II 2016 S. 163",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5981eddb4072977a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.04.2021, III R 36/20, BStBl II 2022 S. 337",
+      "discovery_excerpt": "BFH vom 14.04.2021, III R 36/20, BStBl II 2022 S. 337",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5a013524e2cad256",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.05.2005, VI R 38/02, BStBl II S. 776",
+      "discovery_excerpt": "BFH vom 11.05.2005, VI R 38/02, BStBl II S. 776",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5c2c0c0c4425666d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 21.03.2019, III R 17/18, BStBl II S. 772",
+      "discovery_excerpt": "BFH vom 21.03.2019, III R 17/18, BStBl II S. 772",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5d0c9fd69252ed4d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.07.2004, VIII R 23/02, BStBl II S. 999",
+      "discovery_excerpt": "BFH vom 13.07.2004, VIII R 23/02, BStBl II S. 999",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-5dc2122414500fd4",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.01.1964, V 94/61 U, BStBl II S. 149",
+      "discovery_excerpt": "BFH vom 16.01.1964, V 94/61 U, BStBl II S. 149",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-615a8221c10c0f1f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.10.1972, I R 125/70, 102 BStBl II 1973 S. 271",
+      "discovery_excerpt": "BFH vom 26.10.1972, I R 125/70, 102 BStBl II 1973 S. 271",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-61fcede419943392",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 13.01.2020 (BStBl I S. 143",
+      "discovery_excerpt": "BMF-Schreiben vom 13.01.2020 (BStBl I S. 143",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-633a957a7f53c971",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.10.2022, III R 13/21, BStBl II 2023 S. 655",
+      "discovery_excerpt": "BFH vom 20.10.2022, III R 13/21, BStBl II 2023 S. 655",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-6345beace50409bf",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.03.2009, III R 33/07, BStBl II S. 1010",
+      "discovery_excerpt": "BFH vom 18.03.2009, III R 33/07, BStBl II S. 1010",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-64bfbc5d52b4f334",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 29.08.1991, V R 78/86, BStBl II S. 906",
+      "discovery_excerpt": "BFH vom 29.08.1991, V R 78/86, BStBl II S. 906",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-662011c820ffbb02",
+      "identity": "Schlussprotokoll mit Marokko\n (PDF, 95 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-66a9b87630c2063b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 22.09.2022, III R 23/21, BStBl II 2023 S. 338",
+      "discovery_excerpt": "BFH vom 22.09.2022, III R 23/21, BStBl II 2023 S. 338",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-68d02c914f7d3807",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.04.2021, III R 1/20, BStBl II S. 700",
+      "discovery_excerpt": "BFH vom 14.04.2021, III R 1/20, BStBl II S. 700",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-68e996762a6ab631",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2003, VIII R 19/02, BStBl II 2007 S. 247",
+      "discovery_excerpt": "BFH vom 15.07.2003, VIII R 19/02, BStBl II 2007 S. 247",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-69469ab37f301181",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.06.2013, III R 58/12, BStBl II 2014 S. 834",
+      "discovery_excerpt": "BFH vom 13.06.2013, III R 58/12, BStBl II 2014 S. 834",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-6de6a5a8165850e6",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 04.02.1997, VII R 50/96, BStBl II S. 479",
+      "discovery_excerpt": "BFH vom 04.02.1997, VII R 50/96, BStBl II S. 479",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-700c57ff6f10473b",
+      "identity": "Sozialversicherungsabkommen mit Tunesien\n (PDF, 151 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-7027129fca0edcad",
+      "identity": "Schlussprotokoll mit der Türkei\n (PDF, 104 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-7239541e7ad93ef2",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 22.09.2022, III R 40/21, BStBl II 2023 S. 251",
+      "discovery_excerpt": "BFH vom 22.09.2022, III R 40/21, BStBl II 2023 S. 251",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-72d51e3daaea5eea",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2003, VIII R 105/01, BStBl II S. 847",
+      "discovery_excerpt": "BFH vom 15.07.2003, VIII R 105/01, BStBl II S. 847",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-73e9e033ebfde669",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.06.2001, VI R 224/98, BStBl II S. 713",
+      "discovery_excerpt": "BFH vom 20.06.2001, VI R 224/98, BStBl II S. 713",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-740e76246747a2be",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 02.06.2022, III R 9/21, BStBl II S. 840",
+      "discovery_excerpt": "BFH vom 02.06.2022, III R 9/21, BStBl II S. 840",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-756b8977705fa113",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 22.09.2022, III R 37/21, BStBl II S. 649",
+      "discovery_excerpt": "BFH vom 22.09.2022, III R 37/21, BStBl II S. 649",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-76c82b8ffe35fc59",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.03.2017, III R 32/15, BStBl II S. 963",
+      "discovery_excerpt": "BFH vom 15.03.2017, III R 32/15, BStBl II S. 963",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-77e24ec30aa0b588",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.04.2023, III R 7/21, BStBl II S. 911",
+      "discovery_excerpt": "BFH vom 20.04.2023, III R 7/21, BStBl II S. 911",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-78f494ec90cd368b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 01.09.2021, III R 18/21, BStBl II S. 117",
+      "discovery_excerpt": "BFH vom 01.09.2021, III R 18/21, BStBl II S. 117",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-78fe440c4b3bff9e",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.06.2015, VI R 10/14, BStBl II S. 940",
+      "discovery_excerpt": "BFH vom 18.06.2015, VI R 10/14, BStBl II S. 940",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-7a2ec2123c2f5ae8",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 05.11.2015, III R 57/13, BStBl II 2016 S. 403",
+      "discovery_excerpt": "BFH vom 05.11.2015, III R 57/13, BStBl II 2016 S. 403",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-7ab667641308947c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.04.2021, III R 50/20, BStBl II S. 866",
+      "discovery_excerpt": "BFH vom 14.04.2021, III R 50/20, BStBl II S. 866",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-7d4411713295f2d1",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.04.1969, V R 21/66, BStBl II S. 474",
+      "discovery_excerpt": "BFH vom 17.04.1969, V R 21/66, BStBl II S. 474",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-7fbda1344edd8822",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 07.09.1995, III R 95/93, BStBl II 1996 S. 63",
+      "discovery_excerpt": "BFH vom 07.09.1995, III R 95/93, BStBl II 1996 S. 63",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-817f8403a5c9840a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.03.2018, III R 5/17, BStBl II S. 482",
+      "discovery_excerpt": "BFH vom 14.03.2018, III R 5/17, BStBl II S. 482",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-822d1b65adf440dc",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 27.08.1991, VIII R 84/89, BStBl II 1992 S. 9",
+      "discovery_excerpt": "BFH vom 27.08.1991, VIII R 84/89, BStBl II 1992 S. 9",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-832345d008a9b63d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.11.1985, II R 208/82, BStBl II 1986 S. 241",
+      "discovery_excerpt": "BFH vom 13.11.1985, II R 208/82, BStBl II 1986 S. 241",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-8399bd1ae4a798f1",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.12.2013, XI R 42/11, BStBl II 2014 S. 840",
+      "discovery_excerpt": "BFH vom 11.12.2013, XI R 42/11, BStBl II 2014 S. 840",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-84559749608a46b9",
+      "identity": "Sozialversicherungsabkommen mit Serbien\n (PDF, 161 KB) Zwischen der Republik Serbien und der Bundesrepublik Deutschland liegt noch kein eigenständiges Sozialversicherungsabkommen vor. Es ist daher derzeit noch das Abkommen zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit vom 12.10.1968 im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Serbien anzuwenden (vgl. auch Bekanntmachung vom 16.11.1992 - BGBl. II, S. 1196).",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-8498999f6901e128",
+      "class_id": "de-kg-suppl-008",
+      "identity": "Weisung des BZSt vom 08.07.2013 – BStBl I S. 848",
+      "discovery_excerpt": "Weisung des BZSt vom 08.07.2013 – BStBl I S. 848",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-84ff9e87323265e8",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.10.2019, III R 14/18, BStBl II 2020 S. 785",
+      "discovery_excerpt": "BFH vom 23.10.2019, III R 14/18, BStBl II 2020 S. 785",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-85006ff4c6d2a17e",
+      "identity": "Durchführungsvereinbarung mit der Türkei\n (PDF, 99 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-8591668f1fafa50d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 21.06.2023, III R 11/21, BStBl II S. 970",
+      "discovery_excerpt": "BFH vom 21.06.2023, III R 11/21, BStBl II S. 970",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-8c04d87c0388495b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.01.1995, III R 14/94, BStBl II S. 582",
+      "discovery_excerpt": "BFH vom 20.01.1995, III R 14/94, BStBl II S. 582",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-8c6a71dafb7dfcd3",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.02.1994, VII R 88/92, BStBl II S. 552",
+      "discovery_excerpt": "BFH vom 08.02.1994, VII R 88/92, BStBl II S. 552",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-8e2d552de7522aa4",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.04.2013, III R 35/11, BStBl II S. 1037",
+      "discovery_excerpt": "BFH vom 11.04.2013, III R 35/11, BStBl II S. 1037",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-90238268a8dee863",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465",
+      "discovery_excerpt": "BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-906d91a4ef4c0871",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.08.2002, VIII R 17/02 und VIII R 51/01, BStBl II 2003 S. 88",
+      "discovery_excerpt": "BFH vom 19.08.2002, VIII R 17/02 und VIII R 51/01, BStBl II 2003 S. 88",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-916b53202a012a36",
+      "identity": "Durchführungsvereinbarung mit Marokko\n (PDF, 97 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-918ab3081a058973",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.02.2002, VIII R 83/00, BStBl II S. 469",
+      "discovery_excerpt": "BFH vom 19.02.2002, VIII R 83/00, BStBl II S. 469",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-92a8b69b3c59a0b2",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 07.11.1985, IV R 6/85, BStBl II 1986 S. 435",
+      "discovery_excerpt": "BFH vom 07.11.1985, IV R 6/85, BStBl II 1986 S. 435",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-9375617094688485",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 05.08.1977, VI R 187/74, BStBl II S. 832",
+      "discovery_excerpt": "BFH vom 05.08.1977, VI R 187/74, BStBl II S. 832",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-949482e500000d24",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.08.2013, III R 3/13, BStBl II 2014 S. 576",
+      "discovery_excerpt": "BFH vom 08.08.2013, III R 3/13, BStBl II 2014 S. 576",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-94b8bf3c969f58f9",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 30.08.1989, I R 215/85, BStBl II S. 956",
+      "discovery_excerpt": "BFH vom 30.08.1989, I R 215/85, BStBl II S. 956",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-957b1d766d1aa0c0",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.03.2012, III R 29/09, BStBl II S. 892",
+      "discovery_excerpt": "BFH vom 15.03.2012, III R 29/09, BStBl II S. 892",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-98c4f002a09d52fc",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.11.2001, VI R 125/00, BStBl II 2002 S. 296",
+      "discovery_excerpt": "BFH vom 23.11.2001, VI R 125/00, BStBl II 2002 S. 296",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-9a4f325687f3bf74",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.04.2002, VIII R 62/99, BStBl II S. 738",
+      "discovery_excerpt": "BFH vom 16.04.2002, VIII R 62/99, BStBl II S. 738",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-9ac19deb6d7191de",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 18.03.2013 – BStBl I S. 404",
+      "discovery_excerpt": "BMF-Schreiben vom 18.03.2013 – BStBl I S. 404",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-9edcef34552f75e5",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2003, VIII R 47/02, BStBl II S. 848",
+      "discovery_excerpt": "BFH vom 15.07.2003, VIII R 47/02, BStBl II S. 848",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-9fbaf836677171e7",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 19.08.2013, Abschnitt C – BStBl I S. 1087",
+      "discovery_excerpt": "BMF-Schreiben vom 19.08.2013, Abschnitt C – BStBl I S. 1087",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a044d750bba05d0a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 31.08.2006, III R 71/05, BStBl II 2010 S. 1054",
+      "discovery_excerpt": "BFH vom 31.08.2006, III R 71/05, BStBl II 2010 S. 1054",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a0c34c0284062b2c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.12.2014, XI R 15/12, BStBl II 2016 S. 100",
+      "discovery_excerpt": "BFH vom 17.12.2014, XI R 15/12, BStBl II 2016 S. 100",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a0d21607d2b68262",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 02.06.2005, III R 86/03, BStBl II S. 756",
+      "discovery_excerpt": "BFH vom 02.06.2005, III R 86/03, BStBl II S. 756",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a1eac264f26a3761",
+      "identity": "Schlussprotokoll mit dem Kosovo\n (PDF, 91 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-a2d03a0a29d3cfc7",
+      "identity": "Schlussprotokoll mit Serbien\n (PDF, 91 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-a49901260a7486e4",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF vom 14.11.2014 – BStBl I S. 1450",
+      "discovery_excerpt": "BMF vom 14.11.2014 – BStBl I S. 1450",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a6c69e0f5cc29a7f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.05.2012, III R 68/11, BStBl II 2013 S. 864",
+      "discovery_excerpt": "BFH vom 24.05.2012, III R 68/11, BStBl II 2013 S. 864",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a6d0f0f9ae0e99c4",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.08.2010, III R 16/08, BStBl II 2013 S. 617",
+      "discovery_excerpt": "BFH vom 26.08.2010, III R 16/08, BStBl II 2013 S. 617",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a6ffe067295c997c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.11.2000, VI R 165/99 und VI R 107/99, BStBl II 2001 S. 279",
+      "discovery_excerpt": "BFH vom 23.11.2000, VI R 165/99 und VI R 107/99, BStBl II 2001 S. 279",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-a9aa071bb8822494",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.02.2012, III R 15/09, BStBl II S. 739",
+      "discovery_excerpt": "BFH vom 09.02.2012, III R 15/09, BStBl II S. 739",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ad4651ffeb67da09",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.05.1995, I R 8/94, BStBl II 1996 S. 2",
+      "discovery_excerpt": "BFH vom 17.05.1995, I R 8/94, BStBl II 1996 S. 2",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-aea87d20a6b26432",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 10.05.2012, VI R 72/11, BStBl II S. 895",
+      "discovery_excerpt": "BFH vom 10.05.2012, VI R 72/11, BStBl II S. 895",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-af97005d21aaba92",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.07.2022, III R 28/21, BStBl II 2023 S. 32",
+      "discovery_excerpt": "BFH vom 14.07.2022, III R 28/21, BStBl II 2023 S. 32",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b41c8a1be86eb5c2",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.05.2014, III R 21/12, BStBl II 2015 S. 135",
+      "discovery_excerpt": "BFH vom 08.05.2014, III R 21/12, BStBl II 2015 S. 135",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b470cdb544d3e6e0",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.03.2009, III R 26/06, BStBl II 2010 S. 296",
+      "discovery_excerpt": "BFH vom 18.03.2009, III R 26/06, BStBl II 2010 S. 296",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b54c31b087ac0265",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.04.2006, III R 64/04, BStBl II 2007 S. 240",
+      "discovery_excerpt": "BFH vom 20.04.2006, III R 64/04, BStBl II 2007 S. 240",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b88635d70c7e1487",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.04.2016, III R 28/15, BStBl II S. 648",
+      "discovery_excerpt": "BFH vom 13.04.2016, III R 28/15, BStBl II S. 648",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b8b7b0fae40a3f3a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.02.2012, III R 73/09, BStBl II S. 463",
+      "discovery_excerpt": "BFH vom 09.02.2012, III R 73/09, BStBl II S. 463",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-b8e05478b09fa623",
+      "identity": "Durchführungsvereinbarung mit Bosnien und Herzegowina\n (PDF, 93 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-b92c910ca6ffcca0",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 10.02.2000, VI B 108/99, BStBl II S. 398",
+      "discovery_excerpt": "BFH vom 10.02.2000, VI B 108/99, BStBl II S. 398",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ba19a6df8eb8382f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.05.2014, III R 41/13, BStBl II S. 717",
+      "discovery_excerpt": "BFH vom 08.05.2014, III R 41/13, BStBl II S. 717",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-bae8a5d401a8555b",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 24.10.2012, V R 43/11, BStBl II 2013 S. 491",
+      "discovery_excerpt": "BFH vom 24.10.2012, V R 43/11, BStBl II 2013 S. 491",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-bcbf7a7f58ab9ab3",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 10.01.2022 – BStBl I S. 36",
+      "discovery_excerpt": "BMF-Schreiben vom 10.01.2022 – BStBl I S. 36",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-bd4b036e878b7a0a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.07.2010, III R 89/09, BStBl II 2013 S. 695",
+      "discovery_excerpt": "BFH vom 15.07.2010, III R 89/09, BStBl II 2013 S. 695",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-bf9afd8fd875c4cc",
+      "identity": "Sozialversicherungsabkommen mit Montenegro\n (PDF, 169 KB) Zwischen der Republik Montenegro und der Bundesrepublik Deutschland liegt noch kein eigenständiges Sozialversicherungsabkommen vor. Es ist daher derzeit noch das Abkommen zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit vom 12.10.1968 im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Montenegro anzuwenden (vgl. auch Bekanntmachung vom 16.11.1992 - BGBl. II, S. 1196).",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-c08ad24b80a921b5",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 30.08.1994, VII R 101/92, BStBl II 1995 S. 278",
+      "discovery_excerpt": "BFH vom 30.08.1994, VII R 101/92, BStBl II 1995 S. 278",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c1c217a0f58f2d0a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.11.2005, I R 47/04, BStBl II 2006 S. 374",
+      "discovery_excerpt": "BFH vom 09.11.2005, I R 47/04, BStBl II 2006 S. 374",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c306fddfde187836",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 15.10.1999, VI R 40/98 und VI R 182/98, BStBl II 2000 S. 75",
+      "discovery_excerpt": "BFH vom 15.10.1999, VI R 40/98 und VI R 182/98, BStBl II 2000 S. 75",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c37028de6c676351",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 10.11.1994 (BStBl I S. 853",
+      "discovery_excerpt": "BMF-Schreiben vom 10.11.1994 (BStBl I S. 853",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c5da6ee5d3d1267d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57",
+      "discovery_excerpt": "BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c711d29acbcee070",
+      "identity": "Schlussprotokoll mit Tunesien\n (PDF, 116 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-c9646b036cc3ccbd",
+      "identity": "Durchführungsvereinbarung mit dem Kosovo\n (PDF, 93 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-ca1314db19ffa550",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 04.08.2011, III R 71/10, BStBl II 2013 S. 380",
+      "discovery_excerpt": "BFH vom 04.08.2011, III R 71/10, BStBl II 2013 S. 380",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-caf426e77d16a7e5",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 31.10.1990, II R 180/87, BStBl II 1991 S. 204",
+      "discovery_excerpt": "BFH vom 31.10.1990, II R 180/87, BStBl II 1991 S. 204",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-cb95788ab61f48f5",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.06.1999, VI R 50/98, BStBl II S. 706",
+      "discovery_excerpt": "BFH vom 09.06.1999, VI R 50/98, BStBl II S. 706",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-cd6afe35c0309034",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.04.2013, V R 48/11, BStBl II S. 697",
+      "discovery_excerpt": "BFH vom 18.04.2013, V R 48/11, BStBl II S. 697",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-cf4f24605f936d2c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.11.2000, VI R 107/99, BStBl II 2001 S. 294",
+      "discovery_excerpt": "BFH vom 23.11.2000, VI R 107/99, BStBl II 2001 S. 294",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-cfca8f1559b38268",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 17.06.2021 (BStBl I S. 809",
+      "discovery_excerpt": "BMF-Schreiben vom 17.06.2021 (BStBl I S. 809",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d0b17ac3407e1714",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.04.2002, VIII R 58/01, BStBl II 2002 S. 523",
+      "discovery_excerpt": "BFH vom 16.04.2002, VIII R 58/01, BStBl II 2002 S. 523",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d1622e687602ffd5",
+      "identity": "Durchführungsvereinbarung mit Tunesien\n (PDF, 106 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-d2134218f42bcd1a",
+      "identity": "Sozialversicherungsabkommen mit dem Kosovo\n (PDF, 169 KB) Das Parlament in Pristina erklärte am 17.02.2008 die Unabhängigkeit der Republik Kosovo. Sie wurde von der Bundesrepublik Deutschland völkerrechtlich anerkannt. Da die Bundesrepublik Deutschland und die Republik Kosovo seit dem kein seperates Sozialversicherungsabkommen geschlossen haben, sind die zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien geschlossenen Verträge für den Bereich der sozialen Sicherheit grundsätzlich weiterhin anwendbar. Die Leistungsaushilfe im Bereich der Krankenversicherung ist allerdings mangels der fehlenden Verwaltungsstrukturen im Kososvo ausgesetzt.",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-d23d34e8179f022a",
+      "identity": "Durchführungsvereinbarung mit Montenegro\n (PDF, 93 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf"
+    },
+    {
+      "id": "de-kg-discovery-d730067060742965",
+      "class_id": "de-kg-suppl-008",
+      "identity": "Weisung des BZSt vom 09.08.2016 – BStBl I S. 801",
+      "discovery_excerpt": "Weisung des BZSt vom 09.08.2016 – BStBl I S. 801",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d743efa2606d5620",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Beschluss Nr. 3/80 des Assoziationsrates vom 19.09.1980 (ABl. EG 1983 Nr. C 110 S. 60)",
+      "discovery_excerpt": "Beschluss Nr. 3/80 des Assoziationsrates vom 19.09.1980 (ABl. EG 1983 Nr. C 110 S. 60)",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_url": "https://publications.europa.eu/resource/cellar/fba26a64-1ef1-42d6-87c3-b841c3218831.0002.01/DOC_1"
+    },
+    {
+      "id": "de-kg-discovery-d830798a28c4e42c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 03.09.2015, VI R 9/15, BStBl II 2016 S. 166",
+      "discovery_excerpt": "BFH vom 03.09.2015, VI R 9/15, BStBl II 2016 S. 166",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d8507d27fb02cb6a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 07.07.2021, III R 40/19, BStBl II S. 864",
+      "discovery_excerpt": "BFH vom 07.07.2021, III R 40/19, BStBl II S. 864",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d8ad76f29086b7d4",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.02.2006, III R 65/04, BStBl II 2008 S. 753",
+      "discovery_excerpt": "BFH vom 23.02.2006, III R 65/04, BStBl II 2008 S. 753",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d8f8732223baa754",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 16.04.2015, III R 54/13, BStBl II 2016 S. 25",
+      "discovery_excerpt": "BFH vom 16.04.2015, III R 54/13, BStBl II 2016 S. 25",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-d9d5d0f4ff95db48",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 22.02.2018, III R 10/17, BStBl II S. 717",
+      "discovery_excerpt": "BFH vom 22.02.2018, III R 10/17, BStBl II S. 717",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-dc687b40f4c59ca6",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 07.04.2011, III R 72/07, BStBl II S. 974",
+      "discovery_excerpt": "BFH vom 07.04.2011, III R 72/07, BStBl II S. 974",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-dc867c1deb47738a",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 28.04.2010, III R 93/08, BStBl II S. 1060",
+      "discovery_excerpt": "BFH vom 28.04.2010, III R 93/08, BStBl II S. 1060",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-dddc7d9e98dca509",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.06.2015, III R 37/14, BStBl II 2016 S. 55",
+      "discovery_excerpt": "BFH vom 23.06.2015, III R 37/14, BStBl II 2016 S. 55",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-dea62e69a11f31da",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 12.08.1997, VII R 107/96, BStBl II 1998 S. 131",
+      "discovery_excerpt": "BFH vom 12.08.1997, VII R 107/96, BStBl II 1998 S. 131",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ded3b056040a529c",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.06.2013, III R 10/11 und III R 63/11, BStBl II 2014 S. 706",
+      "discovery_excerpt": "BFH vom 13.06.2013, III R 10/11 und III R 63/11, BStBl II 2014 S. 706",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-def3fd7aa3abe640",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 11.11.2008, VII R 19/08, BStBl II 2009 S. 342",
+      "discovery_excerpt": "BFH vom 11.11.2008, VII R 19/08, BStBl II 2009 S. 342",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e14615f8317fca14",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 21.01.2004, XI R 3/03, BStBl II S. 919",
+      "discovery_excerpt": "BFH vom 21.01.2004, XI R 3/03, BStBl II S. 919",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e1d5e5794321bcbd",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 08.09.2016, III R 27/15, BStBl II 2017 S. 278",
+      "discovery_excerpt": "BFH vom 08.09.2016, III R 27/15, BStBl II 2017 S. 278",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e403daefa2e34575",
+      "identity": "Sozialversicherungsabkommen mit der Türkei\n (PDF, 176 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-e41c039197f881bd",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 12.10.2023, III R 10/22, BStBl II 2024 S. 267",
+      "discovery_excerpt": "BFH vom 12.10.2023, III R 10/22, BStBl II 2024 S. 267",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e66d9bc7e06202a7",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 06.02.1985, I R 23/82, BStBl II S. 331",
+      "discovery_excerpt": "BFH vom 06.02.1985, I R 23/82, BStBl II S. 331",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e75ffe1f3768b706",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.12.2008, III R 6/07, BStBl II 2009 S. 926",
+      "discovery_excerpt": "BFH vom 17.12.2008, III R 6/07, BStBl II 2009 S. 926",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e83d1870feca6593",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF- Schreiben vom 12.01.2018, BStBl I S. 201",
+      "discovery_excerpt": "BMF- Schreiben vom 12.01.2018, BStBl I S. 201",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-e8b430429a792d04",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 19.01.2017, III R 31/15, BStBl II S. 642",
+      "discovery_excerpt": "BFH vom 19.01.2017, III R 31/15, BStBl II S. 642",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ea2aa34ed8aca2a5",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 02.04.2009, III R 85/08, BStBl II 2010 S. 298",
+      "discovery_excerpt": "BFH vom 02.04.2009, III R 85/08, BStBl II 2010 S. 298",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-eb3aec2cb9b22689",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 26.03.1991, VIII B 83/90, BStBl II S. 463",
+      "discovery_excerpt": "BFH vom 26.03.1991, VIII B 83/90, BStBl II S. 463",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ed501510ed8f63de",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.06.1999, VI R 92/98, BStBl II S. 708",
+      "discovery_excerpt": "BFH vom 09.06.1999, VI R 92/98, BStBl II S. 708",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-eef7d62870b6f494",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.04.2008, III R 33/05, BStBl II 2009 S. 919",
+      "discovery_excerpt": "BFH vom 17.04.2008, III R 33/05, BStBl II 2009 S. 919",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ef3260b7a46b5dac",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.03.1989, VI R 94/88, BStBl II S. 680",
+      "discovery_excerpt": "BFH vom 09.03.1989, VI R 94/88, BStBl II S. 680",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f4b517e3bc74d453",
+      "identity": "Schlußprotokoll zum Abkommen mit Bosnien und Herzegowina\n (PDF, 91 KB)",
+      "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_sp.pdf",
+      "status": "pending",
+      "class_id": "de-kg-suppl-010",
+      "source_path": "dvka-bilateral.html",
+      "text_capture_state": "corpus_capture_available_unsigned",
+      "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sp.pdf"
+    },
+    {
+      "id": "de-kg-discovery-f54f831776726c82",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 30.04.2014, XI R 24/13, BStBl II S. 1014",
+      "discovery_excerpt": "BFH vom 30.04.2014, XI R 24/13, BStBl II S. 1014",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f63aa58d598eb951",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 17.03.1961, VI 185/60 U, BStBl III S. 298) und sie innehat, um sie als solche zu nutzen (BFH vom 25.09.2014, III R 10/14, BStBl II 2015 S. 655",
+      "discovery_excerpt": "BFH vom 17.03.1961, VI 185/60 U, BStBl III S. 298) und sie innehat, um sie als solche zu nutzen (BFH vom 25.09.2014, III R 10/14, BStBl II 2015 S. 655",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f6c75bf981468784",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 14.11.1969, III R 95/68, BStBl II 1970 S. 153",
+      "discovery_excerpt": "BFH vom 14.11.1969, III R 95/68, BStBl II 1970 S. 153",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f6d9725395d2813f",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 09.06.1999, VI R 34/98, BStBl II S. 705",
+      "discovery_excerpt": "BFH vom 09.06.1999, VI R 34/98, BStBl II S. 705",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f77e03ead36772d1",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 23.11.2000, VI R 165/99, BStBl II 2001 S. 279",
+      "discovery_excerpt": "BFH vom 23.11.2000, VI R 165/99, BStBl II 2001 S. 279",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-f9b78e425b292d10",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 28.04.2010, III R 52/09, BStBl II S. 1013",
+      "discovery_excerpt": "BFH vom 28.04.2010, III R 52/09, BStBl II S. 1013",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-fa211934de6a061d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 13.07.2016, XI R 16/15, BStBl II S. 955",
+      "discovery_excerpt": "BFH vom 13.07.2016, XI R 16/15, BStBl II S. 955",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-fac36bcff190ec4e",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 20.02.2019, III R 42/18, BStBl II S. 769",
+      "discovery_excerpt": "BFH vom 20.02.2019, III R 42/18, BStBl II S. 769",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-fb7fcd49882d4698",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 06.03.1992, VI R 163/88, BStBl II S. 661",
+      "discovery_excerpt": "BFH vom 06.03.1992, VI R 163/88, BStBl II S. 661",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-fbc6d3709f27eb49",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 02.06.2005, III R 66/04, BStBl II 2006 S. 184",
+      "discovery_excerpt": "BFH vom 02.06.2005, III R 66/04, BStBl II 2006 S. 184",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ff3af97754355946",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 18.12.2014, III R 9/14, BStBl II 2015 S. 653",
+      "discovery_excerpt": "BFH vom 18.12.2014, III R 9/14, BStBl II 2015 S. 653",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-ff9019c2c2453a4d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 21.02.2018, III R 14/17, BStBl II S. 481",
+      "discovery_excerpt": "BFH vom 21.02.2018, III R 14/17, BStBl II S. 481",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only"
+    }
+  ],
+  "remaining": [
+    "Complete official BMF/BZSt registers beyond DA-KG citations",
+    "Verify case identities and BStBl II publication against official decision/register captures"
+  ],
+  "counts": {
+    "de-kg-suppl-007": 11,
+    "de-kg-suppl-008": 2,
+    "de-kg-suppl-009": 165,
+    "de-kg-suppl-010": 23
+  },
+  "receipt_sha256": "474914dcea53d91905811812fa1c97e8ce2058fbbe9c9cdee52e8956529b079e"
+}
