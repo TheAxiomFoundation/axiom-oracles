@@ -43,6 +43,11 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "birth_record_child_identifier",
+        "birth_record_delivery_date",
+        "birth_record_person_identifier",
+        "candidate_child_identifier",
+        "candidate_person_identifier",
         "child_allowances_under_sections_31_and_32_6_1_are_increased",
         "claimant_entitlement",
         "correspondingly_increased_kindergeld_amount",
@@ -66,7 +71,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 670, 8, 1, 0, 0),
+    "de/kindergeld": (18, 671, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 23, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -500,8 +505,12 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
         # ledger and stay pending; the four module inputs carry committed
         # law_derived classifications and remain open dependencies below.
         assert set(boundary["pending"]) == KINDERGELD_LAW_DERIVED
-        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program]
-        assert len(dependency_inputs) == len(leaves)
+        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program] - {
+            "birth_record_child_identifier", "birth_record_delivery_date",
+            "birth_record_person_identifier", "candidate_child_identifier",
+            "candidate_person_identifier",
+        }
+        assert len(dependency_inputs) == 8
         # Every leaf is typed, so the boundary is complete; the eight
         # law-derived leaves keep dependency closure (below) open.
         assert boundary["complete"] is True
@@ -1375,7 +1384,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 452 + 17 + 201
+    assert frontier["instrument_count"] == 453 + 17 + 201
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
@@ -1523,3 +1532,15 @@ def test_changed_by_resolution_requires_unique_dated_full_body(mutation):
     corpus = refresh.Corpus(rows, {r.path: r for r in rows}, documents, parents, [], {})
     result = refresh._resolved_changed_by_body(corpus, reference)
     assert result == (body.path if mutation == 'none' else None)
+
+
+def test_query_period_boundaries_are_context_not_dependency_leaves() -> None:
+    module = _load_script()
+    rows = module._module_inputs(
+        {"rules": [{"name": "eligible", "versions": [{"formula":
+            "event_date >= period_start and event_date <= period_end and unresolved_legal_condition"
+        }]}]},
+        "de:statutes/example/1",
+    )
+    assert [row["name"] for row in rows] == ["event_date", "unresolved_legal_condition"]
+    assert all(row["read_by"] == ["eligible"] for row in rows)

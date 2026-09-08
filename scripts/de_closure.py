@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = 'a6ebfdd42b00ac00686b6bd460435841fdacd240cfa42e354982223ffd4d91fa'
+SOURCE_SHA256 = '4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -36,7 +36,7 @@ RELEASE = 'de-rulespec-2026-09-08-kindergeld-context'
 RELEASE_CONTENT_SHA256 = '32f506ac4cee0b0e98aab5834b4ab0f98ea82f918890ddd2394c10a31286773c'
 RELEASE_SELECTOR_SHA256 = '3f3392ce27bf299c991ef6305017a0491f550552bbd3e5e9fdd859519dca6b68'
 CORPUS_COMMIT = '069407610ff961a075665d08c96ad08f54a9767b'
-RULESPEC_COMMIT = "d83ba3db30e2f63376aacf822d116687589b8564"
+RULESPEC_COMMIT = "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -48,6 +48,7 @@ RESOLUTION_PROTOCOL = {
 ESTG_66 = "de/statute/estg/66"
 STEFEG_ROOT = "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz"
 STEFEG_CONTENT = f"{STEFEG_ROOT}/document-1"
+KINDRG_CONTEXT_ROOT = "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract"
 KINDERGELD_BOUNDARIES = (
     "de/statute/estg/62",
     "de/statute/estg/63",
@@ -64,7 +65,7 @@ PROGRAM_ROOT_NODES = {
     "de/unterhaltsvorschuss": ("de:statutes/uhvorschg/2#advance_maintenance_amount",),
 }
 PROGRAM_SOURCE_PATHS = {
-    "de/kindergeld": (ESTG_66,),
+    "de/kindergeld": (ESTG_66, "de/statute/bgb/1591"),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",
         "de/regulation/svbezgrv-2025/4",
@@ -77,7 +78,7 @@ PROGRAM_SOURCE_PATHS = {
     ),
 }
 PROGRAM_EVIDENCE_ROOTS = {
-    "de/kindergeld": (STEFEG_ROOT,),
+    "de/kindergeld": (STEFEG_ROOT, KINDRG_CONTEXT_ROOT),
     "de/rv-employee-contribution": (),
     "de/unterhaltsvorschuss": (),
 }
@@ -348,24 +349,32 @@ def _validate_evidence_root(
     children: dict[str, list[str]],
 ) -> dict:
     citation = evidence.get("citation_path")
-    if citation != STEFEG_ROOT:
+    evidence_contracts = {
+        STEFEG_ROOT: (STEFEG_CONTENT, ESTG_66, "SteFeG"),
+        KINDRG_CONTEXT_ROOT: (
+            f"{KINDRG_CONTEXT_ROOT}/document-1", "de/statute/bgb", "KindRG"
+        ),
+    }
+    if citation not in evidence_contracts:
         raise ClosureError(f"unexpected DE evidence root {citation!r}")
+    content_path, expected_target, label = evidence_contracts[citation]
     if citation not in rows:
         raise ClosureError(f"evidence root does not resolve exactly: {citation}")
     if evidence.get("resolution") != "self_and_descendants":
-        raise ClosureError("SteFeG evidence must resolve by parent-linked descendants")
-    _require_nonempty(evidence.get("reason"), "SteFeG evidence reason")
+        raise ClosureError(f"{label} evidence must resolve by parent-linked descendants")
+    _require_nonempty(evidence.get("reason"), f"{label} evidence reason")
     descendants = _descendants(citation, children)
-    if descendants != [STEFEG_CONTENT]:
-        raise ClosureError("SteFeG evidence descendant denominator drifted")
-    child = rows[STEFEG_CONTENT]
+    if descendants != [content_path]:
+        raise ClosureError(f"{label} evidence descendant denominator drifted")
+    child = rows[content_path]
     if child.get("body_length", 0) <= 0 or child.get("body_sha256") is None:
-        raise ClosureError("SteFeG evidence child has no content-bearing body")
+        raise ClosureError(f"{label} evidence child has no content-bearing body")
     targets = rows[citation].get("amendment_targets")
     if not isinstance(targets, list) or targets != sorted(set(targets)):
-        raise ClosureError("SteFeG amendment targets must be unique and sorted")
-    if ESTG_66 not in targets:
-        raise ClosureError("SteFeG evidence does not target EStG 66")
+        raise ClosureError(f"{label} amendment targets must be unique and sorted")
+    if expected_target not in targets:
+        target_label = "EStG 66" if citation == STEFEG_ROOT else "BGB"
+        raise ClosureError(f"{label} evidence does not target {target_label}")
     return {
         "citation_path": citation,
         "classification": "evidence",

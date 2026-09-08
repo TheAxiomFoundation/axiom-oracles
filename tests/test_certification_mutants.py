@@ -43,15 +43,14 @@ def _load(name: str):
     return module
 
 
-#: The central gate's blocker lines for the committed all-pending kindergeld
-#: discovery ledger (18 spine rows / 463 candidate instruments (28 discovered + 420 DA-KG headings + 15 supplemental) / 4 law-derived
-#: + 4 unclassified leaves). Certificates and the DE census must both carry
-#: exactly these — they are derived, never typed, in the producers.
+#: Exact blockers derived from the committed Kindergeld ledger. Discovery is
+#: incomplete; the signed maternity prerequisite does not close the eight
+#: law-derived inputs or the remaining bearing instruments.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 206 of 666 subordinate/bearing "
+    "closed: instrument frontier incomplete — 207 of 671 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
-    "closed: dependency closure open — 126 open dependencies (8 law-derived "
-    "inputs, 0 unclassified inputs, 118 bearing instruments) (CERTIFIED.md v3)",
+    "closed: dependency closure open — 127 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 119 bearing instruments) (CERTIFIED.md v3)",
 ]
 
 
@@ -3825,6 +3824,31 @@ def test_de_closure_requires_stefeg_content_descendant_and_target():
         closure.build(missing_target)
 
 
+@pytest.mark.parametrize("mutation", ["missing_child", "wrong_target", "empty_body"])
+def test_de_closure_requires_kindrg_content_and_bgb_target(mutation):
+    """The added commencement evidence cannot resolve without its exact body/edge."""
+    closure = _load("de_closure")
+    source = copy.deepcopy(closure.load_source())
+    root_path = closure.KINDRG_CONTEXT_ROOT
+    child_path = f"{root_path}/document-1"
+    rows = source["corpus"]["rows"]
+    if mutation == "missing_child":
+        source["corpus"]["rows"] = [
+            row for row in rows if row["citation_path"] != child_path
+        ]
+        message = "KindRG evidence descendant denominator drifted"
+    elif mutation == "wrong_target":
+        root = next(row for row in rows if row["citation_path"] == root_path)
+        root["amendment_targets"] = ["de/statute/estg/66"]
+        message = "KindRG evidence does not target BGB"
+    else:
+        child = next(row for row in rows if row["citation_path"] == child_path)
+        child.update(body_length=0, body_sha256=None)
+        message = "KindRG evidence child has no content-bearing body"
+    with pytest.raises(closure.ClosureError, match=message):
+        closure.build(source)
+
+
 def test_de_closure_cannot_drop_kindergeld_boundary():
     """MUTANT: omit EStG 65 from the amount-subgraph boundary declaration."""
 
@@ -3902,9 +3926,9 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     # The v3 discovery ledger is consumed through the central gate: the
     # frontier and dependency blocks are DECLARED and open, not missing.
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["instrument_frontier"]["instrument_count"] == 666
+    assert closed["instrument_frontier"]["instrument_count"] == 671
     assert closed["dependency_closure"]["closed"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 126
+    assert closed["dependency_closure"]["open_dependency_count"] == 127
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
@@ -5756,9 +5780,9 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["mode"] == "computed"
     assert closed["value"] is False
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
-    assert closed["instrument_frontier"]["instrument_count"] == 666
+    assert closed["instrument_frontier"]["instrument_count"] == 671
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 126
+    assert closed["dependency_closure"]["open_dependency_count"] == 127
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5

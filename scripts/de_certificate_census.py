@@ -37,12 +37,14 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "d83ba3db30e2f63376aacf822d116687589b8564"
+RULESPEC_MAIN_COMMIT = "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/bgb/1591",
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/estg/66",
         "de/statute/estg/62",
         "de/statute/estg/63",
@@ -64,6 +66,8 @@ EXPECTED_ROOT_SETS = {
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
         "de/statute/estg/66": ("governing", "encoded", {"pending", "signed"}),
+        "de/statute/bgb/1591": ("child_relationship_prerequisite", "encoded", {"signed"}),
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract": ("evidence_root", "evidence", {"not_applicable"}),
         **{
             f"de/statute/estg/{section}": (
                 "boundary_input",
@@ -94,6 +98,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/statute/bgb/1591": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+        "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010",
+    },
     "de/regulation/svbezgrv-2025/4": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -148,6 +158,26 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/statute/bgb/1591",
+                role="child_relationship_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+                source_sha256="aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010",
+                reason=(
+                    "Signed BGB section 1591 module establishes birth-based maternity "
+                    "from an identified complete birth record at the query day; "
+                    "the section 32/63 child-eligibility composition remains open"
+                ),
+            ),
+            _root(
+                "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+                role="evidence_root",
+                classification="evidence",
+                signature_state="not_applicable",
+                reason="KindRG original pages 1 and 26 bind the maternity text and its 1 July 1998 commencement",
+            ),
             _root(
                 "de/statute/estg/66",
                 role="governing",

@@ -14,6 +14,8 @@ program:
   declared_sources:
   - citation_path: de/statute/estg/66
     role: amount_parameter
+  - citation_path: de/statute/bgb/1591
+    role: child_relationship_prerequisite
   spine_scope:
     kind: ordinal_range
     corpus_root: de/statute/estg
@@ -23,7 +25,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: a6ebfdd42b00ac00686b6bd460435841fdacd240cfa42e354982223ffd4d91fa
+    sha256: 4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 069407610ff961a075665d08c96ad08f54a9767b
@@ -260,16 +262,50 @@ generated_facts:
       path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       line: 280
   rulespec_modules:
+  - citation_path: de/statute/bgb/1591
+    state: captured
+    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    path: de/statutes/bgb/1591.yaml
+    sha256: bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b
+    module_id: de:statutes/bgb/1591
+    rule_count: 1
+    declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: d83ba3db30e2f63376aacf822d116687589b8564
-    commit: d83ba3db30e2f63376aacf822d116687589b8564
+    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
     rule_count: 5
     declared_imports: []
   module_inputs:
+  - slot: de:statutes/bgb/1591#input.birth_record_child_identifier
+    name: birth_record_child_identifier
+    module: de:statutes/bgb/1591
+    read_by:
+    - identified_birth_record_establishes_maternity
+  - slot: de:statutes/bgb/1591#input.birth_record_delivery_date
+    name: birth_record_delivery_date
+    module: de:statutes/bgb/1591
+    read_by:
+    - identified_birth_record_establishes_maternity
+  - slot: de:statutes/bgb/1591#input.birth_record_person_identifier
+    name: birth_record_person_identifier
+    module: de:statutes/bgb/1591
+    read_by:
+    - identified_birth_record_establishes_maternity
+  - slot: de:statutes/bgb/1591#input.candidate_child_identifier
+    name: candidate_child_identifier
+    module: de:statutes/bgb/1591
+    read_by:
+    - identified_birth_record_establishes_maternity
+  - slot: de:statutes/bgb/1591#input.candidate_person_identifier
+    name: candidate_person_identifier
+    module: de:statutes/bgb/1591
+    read_by:
+    - identified_birth_record_establishes_maternity
   - slot: de:statutes/estg/66#input.child_allowances_under_sections_31_and_32_6_1_are_increased
     name: child_allowances_under_sections_31_and_32_6_1_are_increased
     module: de:statutes/estg/66
@@ -291,6 +327,46 @@ generated_facts:
     read_by:
     - kindergeld_payable_for_month
   leaf_frontier:
+  - id: de-kg-leaf-e2801e88b2df7b0d
+    input: birth_record_child_identifier
+    slots:
+    - de:statutes/bgb/1591#input.birth_record_child_identifier
+    read_by:
+    - identified_birth_record_establishes_maternity
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-10ac0daa2ff92703
+    input: birth_record_delivery_date
+    slots:
+    - de:statutes/bgb/1591#input.birth_record_delivery_date
+    read_by:
+    - identified_birth_record_establishes_maternity
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-4a5b46ca4fa229e2
+    input: birth_record_person_identifier
+    slots:
+    - de:statutes/bgb/1591#input.birth_record_person_identifier
+    read_by:
+    - identified_birth_record_establishes_maternity
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-1a9d6cd7b1d6d142
+    input: candidate_child_identifier
+    slots:
+    - de:statutes/bgb/1591#input.candidate_child_identifier
+    read_by:
+    - identified_birth_record_establishes_maternity
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-3a3d69ecb5b9df85
+    input: candidate_person_identifier
+    slots:
+    - de:statutes/bgb/1591#input.candidate_person_identifier
+    read_by:
+    - identified_birth_record_establishes_maternity
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-b329e1f74fcb6509
     input: child_allowances_under_sections_31_and_32_6_1_are_increased
     slots:
@@ -369,15 +445,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: b46073d8bf3ffe47608626f901127a4bb75908583a9855a848fad1e96720eb2d
+    snapshot_sha256: bce845d382bacf80350af12a5a88a73cf39470cb92a3f7119dfb523c20df335d
     channel_receipts:
-      corpus_release: a86c385b43783b71ec7be4f6f41f09ad56840bdaff9d7b9ff1e297bf73c134a0
-      subject_matter_search: 80608485be5ee72d84ff6be82840f47309e3fb412b44fa748508e559b8b2b341
+      corpus_release: 8d994e6db8a49b4a4f7bda6a37b18e20ebb5a33575ed8f6876634e5b3e8254ef
+      subject_matter_search: 46a9f87a157229afab1fed86a5fe4991d6a3dad0b685979cff592ae1261bb53a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
       unretrieved: 4
-    candidate_count: 653
+    candidate_count: 654
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -8147,6 +8223,13 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Freizügigkeitsgesetzes/EU
+    - id: de-kg-instr-335d26552812f2f3
+      status: pending
+      discovery_refs:
+      - de-corpus-9d527daa13fc008a8fa0
+      identity_kind: unresolved_reference
+      raw_references:
+      - zuletzt geändert durch Art. 2 G v. 2.7.2026 I Nr. 198
     - id: de-kg-instr-3841260753e31d86
       status: pending
       discovery_refs:
@@ -8446,7 +8529,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 8bc76765829613436755fbed0da70c3de3d7e9c7f0f42811e4b5a9be052b57ec
+      sha256: f1eacd56c7fe992729fce89e8a54399040e17cf991e705cb245689c950d5fd02
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -8487,8 +8570,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: a86c385b43783b71ec7be4f6f41f09ad56840bdaff9d7b9ff1e297bf73c134a0
-        subject_matter_search: 80608485be5ee72d84ff6be82840f47309e3fb412b44fa748508e559b8b2b341
+        corpus_release: 8d994e6db8a49b4a4f7bda6a37b18e20ebb5a33575ed8f6876634e5b3e8254ef
+        subject_matter_search: 46a9f87a157229afab1fed86a5fe4991d6a3dad0b685979cff592ae1261bb53a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -8520,8 +8603,14 @@ generated_facts:
       root_nodes:
       - de:statutes/estg/66#monthly_kindergeld_per_child
       captured_module_ids:
+      - de:statutes/bgb/1591
       - de:statutes/estg/66
       frontier_input_ids:
+      - de-kg-leaf-e2801e88b2df7b0d
+      - de-kg-leaf-10ac0daa2ff92703
+      - de-kg-leaf-4a5b46ca4fa229e2
+      - de-kg-leaf-1a9d6cd7b1d6d142
+      - de-kg-leaf-3a3d69ecb5b9df85
       - de-kg-leaf-b329e1f74fcb6509
       - de-kg-leaf-001
       - de-kg-leaf-9795bf040172cda9
@@ -11311,6 +11400,21 @@ committed_decisions:
     reason: Unresolved reference 'Ersten Buches Sozialgesetzbuch' matched in § 68 Abs. 5 EStG, which names the benefit providers under §§ 19 Abs. 2, 19a Abs. 2, 25 Abs. 3 and 28 Abs. 2 SGB I to whom the Familienkassen may transmit case data. Part of the excluded data provision; no entitlement or amount rule.
     bears_on_computed_surface: false
   leaf_classifications:
+  - input: birth_record_child_identifier
+    leaf_kind: world_fact
+    reason: Identifier of the child in the identified birth record. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+  - input: birth_record_delivery_date
+    leaf_kind: world_fact
+    reason: Recorded date of the delivery in the identified birth record. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+  - input: birth_record_person_identifier
+    leaf_kind: world_fact
+    reason: Identifier of the person recorded as having delivered the child. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+  - input: candidate_child_identifier
+    leaf_kind: world_fact
+    reason: Identifier of the child in the candidate child/person pair. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+  - input: candidate_person_identifier
+    leaf_kind: world_fact
+    reason: Identifier of the person in the candidate child/person pair. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
   - input: child_allowances_under_sections_31_and_32_6_1_are_increased
     leaf_kind: law_derived
     reason: Whether the Freibeträge für Kinder 'nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben' were raised (§ 66 Abs. 3 Satz 1 EStG) is read off the amending acts that change § 32 Abs. 6 Satz 1 — a quantity the law defines (EStG § 31 is the pending discovered candidate de-kg-instr-003), not an observable act. Open until the § 31 / § 32 Abs. 6 allowance history is encoded and the increase derived from it.
@@ -11761,7 +11865,7 @@ computed:
   - de/statute/estg/65
   - de/statute/estg/78
   boundary_frontier:
-    input_count: 8
+    input_count: 13
     pending_count: 4
     law_derived_count: 8
     unclassified_count: 0
@@ -11772,6 +11876,51 @@ computed:
     - substitute_child_benefit_exclusion
     complete: true
     inputs:
+    - id: de-kg-leaf-e2801e88b2df7b0d
+      input: birth_record_child_identifier
+      slots:
+      - de:statutes/bgb/1591#input.birth_record_child_identifier
+      read_by:
+      - identified_birth_record_establishes_maternity
+      leaf_kind: world_fact
+      status: classified
+      reason: Identifier of the child in the identified birth record. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+    - id: de-kg-leaf-10ac0daa2ff92703
+      input: birth_record_delivery_date
+      slots:
+      - de:statutes/bgb/1591#input.birth_record_delivery_date
+      read_by:
+      - identified_birth_record_establishes_maternity
+      leaf_kind: world_fact
+      status: classified
+      reason: Recorded date of the delivery in the identified birth record. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+    - id: de-kg-leaf-4a5b46ca4fa229e2
+      input: birth_record_person_identifier
+      slots:
+      - de:statutes/bgb/1591#input.birth_record_person_identifier
+      read_by:
+      - identified_birth_record_establishes_maternity
+      leaf_kind: world_fact
+      status: classified
+      reason: Identifier of the person recorded as having delivered the child. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+    - id: de-kg-leaf-1a9d6cd7b1d6d142
+      input: candidate_child_identifier
+      slots:
+      - de:statutes/bgb/1591#input.candidate_child_identifier
+      read_by:
+      - identified_birth_record_establishes_maternity
+      leaf_kind: world_fact
+      status: classified
+      reason: Identifier of the child in the candidate child/person pair. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
+    - id: de-kg-leaf-3a3d69ecb5b9df85
+      input: candidate_person_identifier
+      slots:
+      - de:statutes/bgb/1591#input.candidate_person_identifier
+      read_by:
+      - identified_birth_record_establishes_maternity
+      leaf_kind: world_fact
+      status: classified
+      reason: Identifier of the person in the candidate child/person pair. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
     - id: de-kg-leaf-b329e1f74fcb6509
       input: child_allowances_under_sections_31_and_32_6_1_are_increased
       slots:
@@ -11853,13 +12002,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 670
+    instrument_count: 671
     counts:
-      total: 670
+      total: 671
       encoded: 1
       classified-with-reason: 126
       excluded-with-reason: 337
-      pending: 206
+      pending: 207
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12062,6 +12211,7 @@ computed:
     - de-kg-discovery-fbc6d3709f27eb49
     - de-kg-discovery-ff3af97754355946
     - de-kg-discovery-ff9019c2c2453a4d
+    - de-kg-instr-335d26552812f2f3
     - de-kg-instr-38f449529edd140f
     - de-kg-suppl-007
     - de-kg-suppl-008
@@ -21135,6 +21285,13 @@ computed:
       classification: entitlement_condition
       reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
+    - id: de-kg-instr-335d26552812f2f3
+      status: pending
+      discovery_refs:
+      - de-corpus-9d527daa13fc008a8fa0
+      identity_kind: unresolved_reference
+      raw_references:
+      - zuletzt geändert durch Art. 2 G v. 2.7.2026 I Nr. 198
     - id: de-kg-instr-3841260753e31d86
       status: classified-with-reason
       discovery_refs:
@@ -21886,7 +22043,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 670
+    bearing_candidate_instruments: 671
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

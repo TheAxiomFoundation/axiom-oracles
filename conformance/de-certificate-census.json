@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "a6ebfdd42b00ac00686b6bd460435841fdacd240cfa42e354982223ffd4d91fa"
+    "sha256": "4c9ba5c71105975eaaa5fb4e621c68e9dde75fedd4e79b68fd81ddeb3a8c2a73"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -16,12 +16,38 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 206 of 670 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 207 of 671 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 127 open dependencies (8 law-derived inputs, 0 unclassified inputs, 119 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
       "certificate_status": "pending",
       "declared_roots": [
+        {
+          "attestation": {
+            "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
+          },
+          "citation_path": "de/statute/bgb/1591",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB section 1591 module establishes birth-based maternity from an identified complete birth record at the query day; the section 32/63 child-eligibility composition remains open",
+          "role": "child_relationship_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "repository": "TheAxiomFoundation/rulespec-de"
+          },
+          "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+          "claim_mode": "attested",
+          "classification": "evidence",
+          "reason": "KindRG original pages 1 and 26 bind the maternity text and its 1 July 1998 commencement",
+          "role": "evidence_root",
+          "signature_state": "not_applicable"
+        },
         {
           "attestation": {
             "artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
@@ -42,7 +68,7 @@
         },
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/62",
@@ -54,7 +80,7 @@
         },
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/63",
@@ -66,7 +92,7 @@
         },
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/64",
@@ -78,7 +104,7 @@
         },
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/65",
@@ -90,7 +116,7 @@
         },
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -125,7 +151,7 @@
       "declared_roots": [
         {
           "attestation": {
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/regulation/bsv-2018/1",
@@ -138,7 +164,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
           },
@@ -189,7 +215,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-            "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
           },
@@ -245,7 +271,7 @@
   },
   "rulespec_observation": {
     "claim_mode": "attested",
-    "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
     "repository": "TheAxiomFoundation/rulespec-de"
   },
   "schema": "axiom_oracles.certificate_candidate_census.v1",

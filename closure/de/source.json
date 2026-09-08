@@ -254,6 +254,55 @@
         "body_length": 511
       },
       {
+        "citation_path": "de/statute/bgb",
+        "record_id": "06f8c2f9-3b77-54f4-906e-0598fa68769b",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "80f8ea02d7d4e9a41016ec4eccbe4694c0c87c92298ba244e0536bdc784a2be3",
+        "body_length": 3212
+      },
+      {
+        "citation_path": "de/statute/bgb/1591",
+        "record_id": "91f645ce-273b-5c2d-ab42-1daebebfcf17",
+        "line_number": 571,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "e3b36d26ff3903a9127b465572d32cf7351417b0c120d58af902c4b7b42366a5",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "d68b9cde00c3d0281babcd5265fb095b7dff16ab1f273c6f791066e352531699",
+        "body_length": 53,
+        "parent_citation_path": "de/statute/bgb"
+      },
+      {
+        "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+        "record_id": "85c5d9bd-61b3-5e56-8b37-0b3b9d43e532",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
+        "provision_file_sha256": "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
+        "row_sha256": "4d7f4c29c470f209e4206adcf2a7b64c90730213a536ac8ec825d36761d60fc4",
+        "source_sha256": "bd58391268f7d4103670967f86ab7642fe9bae34faf56ec36415b2dadc1e2c7b",
+        "body_sha256": null,
+        "body_length": 0,
+        "amendment_targets": [
+          "de/statute/bgb"
+        ]
+      },
+      {
+        "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
+        "record_id": "71aba030-0e3d-5a07-a6db-c62223430278",
+        "line_number": 2,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
+        "provision_file_sha256": "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
+        "row_sha256": "fde0a391b657f035aa722a86ad6486a59eae7fbf70cb72d55dac8a7ababfb386",
+        "source_sha256": "bd58391268f7d4103670967f86ab7642fe9bae34faf56ec36415b2dadc1e2c7b",
+        "body_sha256": "27b263683d2f4957e22e3dcee071fe2a4370167667550e1f2f5ee101702f65ac",
+        "body_length": 7339,
+        "parent_citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract"
+      },
+      {
         "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
         "record_id": "5ad57e6e-3a70-5315-82ab-885fbb90cdd4",
         "line_number": 3375,
@@ -374,7 +423,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "observed_main_commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
     "claim_mode": "attested",
     "modules": [
       {
@@ -391,7 +440,7 @@
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -405,11 +454,25 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
           "manifest_sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
+        }
+      },
+      {
+        "citation_path": "de/statute/bgb/1591",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
+        "artifact": {
+          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "path": "de/statutes/bgb/1591.yaml",
+          "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+          "manifest_sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
         }
       },
       {
@@ -419,7 +482,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
@@ -463,6 +526,10 @@
         {
           "citation_path": "de/statute/estg/66",
           "role": "amount_parameter"
+        },
+        {
+          "citation_path": "de/statute/bgb/1591",
+          "role": "child_relationship_prerequisite"
         }
       ],
       "evidence_roots": [
@@ -470,6 +537,11 @@
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
           "resolution": "self_and_descendants",
           "reason": "SteFeG Article 1 number 4 supplies the 2025-effective 255 EUR amount that the current consolidated EStG text no longer displays."
+        },
+        {
+          "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+          "resolution": "self_and_descendants",
+          "reason": "Retained original KindRG PDF pages 1 and 26 supply the BGB 1591 definition introduction and Article 17 section 1 commencement on 1 July 1998. The disclosed excerpt does not claim complete-act encoding."
         }
       ],
       "boundaries": [

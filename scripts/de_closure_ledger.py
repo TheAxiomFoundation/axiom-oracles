@@ -121,6 +121,9 @@ _RESERVED = frozenset(
         "ceil",
         "round",
         "abs",
+        # Engine-provided query boundaries, not observable or law-derived inputs.
+        "period_start",
+        "period_end",
     }
 )
 

@@ -4,11 +4,14 @@ The committed certificate computes `certified: no` under CERTIFIED.md v3.
 Three premises compute true — conformant (both live Axiom pair legs),
 exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
-all-pending v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`,
-#503), consumed through the same central gate (`scripts/closure_gate.py`)
-that judges every other closure artifact: the instrument frontier has 28 of
-28 candidates pending (oracles#491) and the dependency closure has 8 open
-dependencies — 4 law-derived and 4 unclassified leaves (CERTIFIED.md v3).
+v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
+through the same central gate (`scripts/closure_gate.py`) that judges every
+other closure artifact. The current frontier has 207 of 671 instruments
+pending, and dependency closure has 127 open dependencies: eight law-derived
+inputs and 119 bearing instruments, with no unclassified inputs. The signed
+BGB §1591 prerequisite is declared at RuleSpec merge
+`0201d1f7225f2be5cbd61add704f8f0fa7ea3b76`; the live amount-only oracle and
+replay pins remain scoped to their existing §66 evidence.
 The exact-citation-path summary (`closure/de/summary.json`) contributes only
 its source-universe and signature fields; nothing DE-specific decides the
 premise, and a forged ledger fails the producer's exact rederivation before
