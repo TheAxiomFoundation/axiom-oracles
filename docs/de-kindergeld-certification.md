@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 207 of 674 instruments
-pending, and dependency closure has 129 open dependencies: eight law-derived
-inputs and 121 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 211 of 679 instruments
+pending, and dependency closure has 130 open dependencies: eight law-derived
+inputs and 122 bearing instruments, with no unclassified inputs. The signed
 BGB §1591 prerequisite is declared at RuleSpec merge
 `0201d1f7225f2be5cbd61add704f8f0fa7ea3b76`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence.

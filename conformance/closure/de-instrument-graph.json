@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-08T22:05:04Z",
+  "generated_at": "2026-09-08T23:09:51Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "e651e1a305a6fa385140b3a3e49adefec47d471d8842152c16d02402980917e2"
+    "sha256": "d435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-08-kindergeld-2025-history",
-      "commit": "ceab7b8fc768dbd78089df5a85bfc67deb6a75f9",
-      "release_content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98",
+      "release": "de-rulespec-2026-09-09-kindergeld-allowance-context",
+      "commit": "4dece7ae257ccdda46d9e5f4589834d8a397c1d3",
+      "release_content_sha256": "e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-08-kindergeld-2025-history/38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98.json",
-        "raw_sha256": "d43fd48f2a530337b698d0843d8794daadbee5bd6f68b990667cfb1a34244885",
-        "content_sha256": "38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98"
+        "path": "releases/de-rulespec-2026-09-09-kindergeld-allowance-context/e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81.json",
+        "raw_sha256": "f2a04efaa98c697fb5fa8af280819ff67fd0757b251d23e7c3acda9fb773aa2a",
+        "content_sha256": "e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81"
       },
       "scans": [
         {
@@ -97,6 +97,19 @@
           "provisions": {
             "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl",
             "sha256": "436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.json",
+            "sha256": "0ff6f48069381b5e5c02392eceddd7495e450d4f0bb60f6f667fbf89d407504a",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl",
+            "sha256": "9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97",
             "row_count": 2
           }
         },
@@ -309,23 +322,23 @@
           }
         }
       ],
-      "scanned_row_count": 8198,
+      "scanned_row_count": 8200,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 8198,
-        "body_row_count": 8136,
-        "mapped_row_count": 8198,
+        "row_count": 8200,
+        "body_row_count": 8137,
+        "mapped_row_count": 8200,
         "unmapped_row_count": 0,
-        "act_count": 91,
+        "act_count": 92,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 5260,
+          "explicit_cross_reference_body": 5271,
           "law_metadata_changed_by": 24,
           "law_metadata_fundstelle": 31
         },
-        "row_scan_sha256": "3c53a12b8c4b0d507affde4777ef9b2f7af87dd7976d651aa959b6047db788cc",
-        "canonical_index_sha256": "63de0afea3a0dbb8371a8841723c71117f9cb944fe2e987f30dbcdaaa137c9fb",
-        "per_act_sha256": "cd8101de2585e1f1fb71a2745217c4d65141e798dc539373f57c9692a803c173",
+        "row_scan_sha256": "fc5cd6716db5a51900b1d1c121bd3bdde31dbe4bfbbcf5501769ef3c66af8931",
+        "canonical_index_sha256": "9a0edc6de1490cf8f0aed7465430dc52f0544be208d18f83c4930e92ac89bfac",
+        "per_act_sha256": "945b03ec40003a2ff7cf955e38c43fb6a6a9fedb4d3eb49c4aaf608b76ccad74",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -472,6 +485,117 @@
                 "source_row_sha256": "8e3a76241aa46c169bb85a133a168a0b5b76e574df8f72ca1360b27dddd8daaf",
                 "matched_text": "ZPO",
                 "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation",
+            "document_row_sha256": "1b58d02cb4691ca097f6ee478b5cab6b26eba77019f5a50f045119ba9e9b9a59",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 11,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "0dcd2038a3811402592e773a6c4844a50dd5a962b8cd73ec8a32f1d8cf635c2b",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Asylbewerberleistungsgesetz",
+                "unresolved_identity": "named-instrument:asylbewerberleistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "BKGG",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Bundeskindergeldgesetz (BKGG)",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Bundeskindergeldgesetz",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Einkommensteuergesetzes",
+                "unresolved_identity": "named-instrument:einkommensteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "SGB II",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "SGB XII",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Steuerfortentwicklungsgesetz",
+                "target_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
+                "target_row_sha256": "1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Zwölften Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+                "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+                "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
               }
             ]
           },
@@ -45653,7 +45777,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "733090ea9453bb022691c91fdeea41e98645d207eede21aea43314f42dd2cb1d"
+        "receipt_sha256": "97e7fbf400222f300fee2579fe5247d3c6312026fabab0e52f336f8cf61af480"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -45897,6 +46021,16 @@
           "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
           "matched_text": "Bundeskindergeldgesetzes",
           "resolved_citation_path": "de/statute/bkgg-1996"
+        },
+        {
+          "id": "de-corpus-4f2f3c7e944219085c34",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+          "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+          "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+          "matched_text": "§ 66 Absatz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-4fd223b074792f0bf060",
@@ -46335,6 +46469,16 @@
           "matched_text": "Zehnten Buches Sozialgesetzbuch"
         },
         {
+          "id": "de-corpus-a4207c2fad0ba9ab6084",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1",
+          "source_body_sha256": "9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a",
+          "source_row_sha256": "b27d4b21aa75b46a4aba812ee37fbe80188b3e195b515dfdd1298980a24ff1a5",
+          "matched_text": "§ 66 Absatz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-a45d95d8c19fc47aa094",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -46698,7 +46842,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "30883b13960392e2f51d68d62bceb85b5c1f755f9ac1bfa844bb290f54d7b927"
+      "receipt_sha256": "7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -46714,10 +46858,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "068c6559863cf5baf675009bf981521aa6014a4faadade92e4756f1bbbb31e0f"
+          "receipt_sha256": "5d070fbb4a5ebc580f4878d116ac3c13f6b562ecec8971335e9d32c1762022c2"
         },
         {
           "id": "de-subject-002",
@@ -46727,14 +46871,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "e5abe40c5413728119b53ecc9c498c1dfeb10478ca639a552a20086c709e0e50"
+          "receipt_sha256": "b8375a6676ab9444d4cf78059568178ad396c58d54d2a5288c3dfae299852d50"
         },
         {
           "id": "de-subject-003",
@@ -46744,14 +46888,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "858191f81665e44dfa864505c9934040792883faab88fe033d7c1803edaa3b74"
+          "receipt_sha256": "8d7052ae60fc0dc9a18b607f067ca7d434463dfbe30fd0e97fd5e35b51aed819"
         },
         {
           "id": "de-subject-004",
@@ -46761,14 +46905,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=e2a2bc80-8d8a-475c-b333-fca9fa7c97a4&ssb=34785295364&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=7d6c01d3-ca3f-4fbd-8c05-243fce83bcdd&ssk=botmanager_support@radware.com&ssm=75678010591049176105245602660359&ssn=3b1e3c49a38d77e2bc5f6c0695e802c2989f23a16f4d-5eb1-42fe-93966f&sso=0881bd6c-c82beaabfeded95cef94fc06e3661de6d50ddf3ef4b35eb0&ssp=50203484231788957011178898945059205&ssq=06765870518504370697205185308385727430044&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDAyM2ExNmY0ZC01ZWIxLTQyZmUtOWQ2Yy1jODJiZWFhYmZlZGUxLTE3ODg5MDUxODU3MDAwLTAwNGM1ZTg1NDA1YmY1MzdmMTkxMCIsInV6bXgiOiI3ZmMwMDBkNTdhOWYyMS00NDAwLTQ1NjktYjJmMy03Yzk1MTg5OTA0ZDMxLTE3ODg5MDUxODU3MDAwLTAwNDI4OTEzNDg4ZWI5MzUyMTAxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=5d226774-2fdf-4c51-b9c0-19a7242979e3&ssb=44371213740&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=544a9645-ca3f-4945-9872-eda3c5b84ed0&ssk=botmanager_support@radware.com&ssm=61445060097876263100128370517576&ssn=64792d5529e349b765c30fca378be466795703e960cd-0339-42f8-8db2e4&sso=c7ba1728-2f90c48ff12386781db71be9ec7bf1e25e2dce39b4e999dd&ssp=88738300421788943048178894669523794&ssq=78664940906707850395009067508101910561658&ssr=Mi4yNDIuNjYuMTcz&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwidXpteCI6IjdmYzAwMDAwM2YxYTk0LTkzYTYtNDc5Yi04Yzk4LTMwNmFhMDQ0M2M2YzEtMTc4ODkwOTA2NzMyMTAtMDA0NTZlZWEzMDY4MGRlMWQ2YzEwIiwiX191em1mIjoiN2Y5MDAwMDNlOTYwY2QtMDMzOS00MmY4LTg3MjgtMmY5MGM0OGZmMTIzMS0xNzg4OTA5MDY3MzIxMC0wMDQyZGQwY2YwOTJlYjZhNzM4MTAifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "903654ee59da2a27b304836383631cb001fa343d1f9c0f5b74979d0900078fb6",
-          "receipt_sha256": "c2b2ad2587e76872d06c43d20b9f1934bde65d2bc43b2deb97cef75c4ec32943"
+          "content_sha256": "894c2600e6daed4e1f99db3b727dbbb8f86c7db596c344f47aa0fc1c759b5b26",
+          "receipt_sha256": "809c7e28325dcbefd55fecfa27aa3547cdab4526063629b11fe35574418e7283"
         },
         {
           "id": "de-subject-005",
@@ -46779,14 +46923,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "ff1d69d910504d384518eb7c8c5c003832ba910e29964a4d4d2b7dd511e741d7"
+          "receipt_sha256": "9640328b70c69a88294ab65adf3fe78764096c67946bcf71cd581a0f96d0fa7a"
         },
         {
           "id": "de-subject-006",
@@ -46796,14 +46940,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "fd19bbe1450c8beaca950a9fdfed21c36e3a9fff3d837871ae1f9cd48d7b40c6"
+          "receipt_sha256": "273aa632b797985aeb3bbd72bccf8f04e126b1508f1ccb169fb536c866d58224"
         },
         {
           "id": "de-subject-007",
@@ -46813,14 +46957,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "79f3f329c254649355b590330fa99aa2ef1f6ab520292d56a158f1166f724f94"
+          "receipt_sha256": "5c14fc1131bb30f24c909403c778a51f89a2cfcda9a5da62eddc8fa1f9e78fde"
         },
         {
           "id": "de-subject-008",
@@ -46830,10 +46974,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "4c156f224eff164d51735402b4164fd00d1a1bb9910e95026749d698771bcee0"
+          "receipt_sha256": "c4751ee27558c28c70f807db27236d56a45bef04f67f6abd14b5b2982177e146"
         },
         {
           "id": "de-subject-009",
@@ -46843,14 +46987,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "8cdce932501ee95c6e6070d148071bad88c524c500fe608b3e1a42a80d1d9792"
+          "receipt_sha256": "039feccb7513f63c2c80863142c2d0dad7ce447fe3e77eaacb68b022e407766f"
         },
         {
           "id": "de-subject-010",
@@ -46860,14 +47004,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "1c3347f6e05fd9614a7d3d8ab683e4d0b2e61c6737a98ee26fa6824571a51d3d"
+          "receipt_sha256": "1fc370da7687920a593eb9b2d07d9a59ba990f8e420be9e0c9207cb94196678e"
         },
         {
           "id": "de-subject-011",
@@ -46877,14 +47021,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "5c73a34f98510d424b11be3708e8cad9601578a5d207439385404d58187045b5"
+          "receipt_sha256": "1fcfb6cee2ff80fca6ad38b5f14cbdae77ff07a42d8b2647ed454648b3b03908"
         },
         {
           "id": "de-subject-012",
@@ -46894,10 +47038,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "62597f63e1217816257ed8d2837d5f80faa896cfe364cccc4e61914544273d5b"
+          "receipt_sha256": "434a30ca18922f6eee6b311d3b1a9cc047c1971eb3e4132a4276af43a33db3bc"
         },
         {
           "id": "de-subject-013",
@@ -46907,14 +47051,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "e9095ec9fb96ab8c24491df39b3dab12fb361873f868bfb3087a53641a78b85d"
+          "receipt_sha256": "e37c6f76580ea15042b69d06485a805e4ca0cc09ee895c5918e1b30f3ba894fb"
         },
         {
           "id": "de-subject-014",
@@ -46924,14 +47068,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "86163d6199839d36a9e5688045d0c8c0d69830e256cc90f6227c209390e36650"
+          "receipt_sha256": "b64d9de455e8dd248a20a1cdce5e52e90b3842302dc4d360dfaebdf793162d0e"
         },
         {
           "id": "de-subject-015",
@@ -46941,13 +47085,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-08T22:05:04Z",
+          "captured_at": "2026-09-08T23:09:51Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "a1c630a1fc3e40f141ca67e2fc392d6b8ba8ba8acfd3a44c6c07b0cf0db53afc"
+          "receipt_sha256": "aa2261cf34c44e6bbd4f3a056f34d67008a7c33d32e8a01bece0e6fa56daebd0"
         }
       ],
-      "receipt_sha256": "12fdd04ebb21fd65d76d0da0d4b8dd84898b6176605c07bcf66d530f5866909d"
+      "receipt_sha256": "e635e35633294f8a1b2bcc5fa4a62f8ccfdfa6d58324fd6f7d3c70972a6bffee"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -47345,6 +47489,21 @@
           "fundstelle": "BGBl I 1979, 1184"
         },
         {
+          "id": "de-kg-instr-a5848a433a63d2cb",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-4f2f3c7e944219085c34"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation",
+          "row_sha256": "1b58d02cb4691ca097f6ee478b5cab6b26eba77019f5a50f045119ba9e9b9a59",
+          "document_class": "guidance",
+          "citation_label": "BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)",
+          "document_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation",
+          "title": "BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)",
+          "document_type": "legislative explanatory memorandum excerpt, not enacted law"
+        },
+        {
           "id": "de-kg-instr-a66a4cb13aaf0599",
           "status": "pending",
           "discovery_refs": [
@@ -47499,8 +47658,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "30883b13960392e2f51d68d62bceb85b5c1f755f9ac1bfa844bb290f54d7b927",
-            "subject_matter_search": "12fdd04ebb21fd65d76d0da0d4b8dd84898b6176605c07bcf66d530f5866909d",
+            "corpus_release": "7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324",
+            "subject_matter_search": "e635e35633294f8a1b2bcc5fa4a62f8ccfdfa6d58324fd6f7d3c70972a6bffee",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -47878,6 +48037,21 @@
           ]
         },
         {
+          "id": "de-uhv-instr-a5848a433a63d2cb",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-a4207c2fad0ba9ab6084"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation",
+          "row_sha256": "1b58d02cb4691ca097f6ee478b5cab6b26eba77019f5a50f045119ba9e9b9a59",
+          "document_class": "guidance",
+          "citation_label": "BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)",
+          "document_citation_path": "de/guidance/bt-drs-20-12778/kindergeld-explanation",
+          "title": "BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)",
+          "document_type": "legislative explanatory memorandum excerpt, not enacted law"
+        },
+        {
           "id": "de-uhv-instr-a66a4cb13aaf0599",
           "status": "pending",
           "discovery_refs": [
@@ -47980,5 +48154,5 @@
       ]
     }
   ],
-  "receipt_sha256": "159101ae70fe2450e8b09b986b14099d1f19b33290a8aacfb2308988d5182e4a"
+  "receipt_sha256": "1be6bcc395b07b19afd6751710ecb4e30f117d7e2854c0b8597e4c5648875d11"
 }

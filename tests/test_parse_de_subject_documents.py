@@ -147,8 +147,8 @@ def test_ledger_consumes_heading_rows_as_pending_document_heading_candidates(tmp
     for row in facts["candidates"]:
         kinds[row["identity_kind"]] = kinds.get(row["identity_kind"], 0) + 1
     assert kinds["document_heading"] == 420
-    assert kinds["class_member"] == 203
-    assert facts["candidate_count"] == len(facts["candidates"]) == 34 + 420 + 203
+    assert kinds["class_member"] == 207
+    assert facts["candidate_count"] == len(facts["candidates"]) == 35 + 420 + 207
     assert [row["id"] for row in facts["candidates"]] == sorted(row["id"] for row in facts["candidates"])
     heading = next(row for row in facts["candidates"] if row["id"] == "de-kg-dakg-O2.1")
     assert heading["status"] == "pending"
@@ -164,7 +164,7 @@ def test_ledger_consumes_heading_rows_as_pending_document_heading_candidates(tmp
     # Absent heading artifact: retain the instrument and class-discovery frontier.
     monkeypatch.setattr(ledger, "HEADINGS_PATH", tmp_path / "missing.json")
     bare = ledger._snapshot_facts("de/kindergeld", SNAPSHOT, REPO_ROOT / "closure" / "de" / "source.json")
-    assert bare["candidate_count"] == 34 + 203 and "document_headings" not in bare
+    assert bare["candidate_count"] == 35 + 207 and "document_headings" not in bare
 
     # A forged artifact fails closed in the ledger, not silently.
     forged = json.loads(HEADINGS.read_text())

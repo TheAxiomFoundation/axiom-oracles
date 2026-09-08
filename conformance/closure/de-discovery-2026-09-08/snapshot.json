@@ -36,6 +36,14 @@
       "path": "dvka-bilateral.html",
       "sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
       "url": "https://www.dvka.de/de/informationen/rechtsquellen/bilaterales-abkommen/"
+    },
+    {
+      "path": "bmf-positive-list-2025.txt",
+      "sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
+      "url": "https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Normenflut/2025-03-14-anlage-1.pdf?__blob=publicationFile&v=2",
+      "pdf_path": "bmf-positive-list-2025.pdf",
+      "pdf_sha256": "6d823ef55d7f44260c0f3ebfa358044e33d94ab9ab963f5afc9a60fe7e64e9b7",
+      "extraction": "pdftotext -layout; full official 2025 positive register retained. Page 56 entries visually verified. Register discovery only, not operative letter text."
     }
   ],
   "members": [
@@ -210,6 +218,17 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-18cfbbaa9e1b9112",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 28.06.2013, BStBl I 2013, 845 — Übertragung der Freibeträge für Kinder; BMF-Schreiben zu § 32 Absatz 6 Satz 6 bis 11 EStG",
+      "discovery_excerpt": "972   BMF   28.06.2013                                  BStBl I 2013, 845",
+      "source_path": "bmf-positive-list-2025.txt",
+      "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
+    },
+    {
       "id": "de-kg-discovery-18d7ddc0a8189df2",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 24.11.1970, II B 42/70, BStBl II 1971 S. 110",
@@ -370,6 +389,17 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-3296221dbf2fd2a2",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 18.12.2023, BStBl I 2023, 2236 — Berücksichtigung ausländischer Verhältnisse; Ländergruppeneinteilung ab 1. Januar 2024",
+      "discovery_excerpt": "983   BMF   18.12.2023                                  BStBl I 2023, 2236",
+      "source_path": "bmf-positive-list-2025.txt",
+      "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
     },
     {
       "id": "de-kg-discovery-32f5cf2350c58f79",
@@ -754,6 +784,17 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-6213d545d30f8c2c",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 08.02.2016, BStBl I 2016, 226 — Steuerliche Berücksichtigung volljähriger Kinder nach § 32 Absatz 4 Satz 2 und 3 EStG ab 2012",
+      "discovery_excerpt": "971   BMF   08.02.2016                                  BStBl I 2016, 226",
+      "source_path": "bmf-positive-list-2025.txt",
+      "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
     },
     {
       "id": "de-kg-discovery-633a957a7f53c971",
@@ -1773,6 +1814,17 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-da811c7c21203da5",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 17.01.2014, BStBl I 2014, 109 — Familienleistungsausgleich; Lebenspartner und Freibeträge für Kinder",
+      "discovery_excerpt": "973   BMF   17.01.2014                                  BStBl I 2014, 109    Familienleistungsausgleich; Lebenspartner und Freibeträge für Kinder",
+      "source_path": "bmf-positive-list-2025.txt",
+      "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
+    },
+    {
       "id": "de-kg-discovery-dc687b40f4c59ca6",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 07.04.2011, III R 72/07, BStBl II S. 974",
@@ -2099,13 +2151,14 @@
     "Complete official BMF/BZSt registers beyond DA-KG citations",
     "Verify case identities and BStBl II publication against official decision/register captures",
     "Verify BStBl II publication/class membership of BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
-    "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row."
+    "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
+    "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim."
   ],
   "counts": {
-    "de-kg-suppl-007": 11,
+    "de-kg-suppl-007": 15,
     "de-kg-suppl-008": 2,
     "de-kg-suppl-009": 167,
     "de-kg-suppl-010": 23
   },
-  "receipt_sha256": "730182d97840c8180d0466cb8c4f19d6bde982bbfc7b8a2df332ce6be7656eb9"
+  "receipt_sha256": "63140cecfe919f91f760ba512c63842e071dc9c4be0762b567052d1b3d2e3947"
 }

@@ -4,8 +4,8 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
-    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+    "closed: instrument frontier incomplete \u2014 23 of 24 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "f72f0bcaf07866fe0c93dbe80b9b0f295e247f0c7bbecb4b7e704bf7ee98a1fc"
+      "sha256": "691807207fb613707637c1fe7f17d780eb9245de9abe9f94bdccb4299916e6ca"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "b445bedb074de724435eed4fa5c7e3b9cfc64b345f5b47371fbcc408b363305b",
+      "sha256": "36f83b08e65319fc4ba905d1b9f900ced4c6740485e8b630b548df1950cf97e2",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "58a3e289ac47fca6d26c65a1e01fb5ce9cf2c80ea0679db156ba85a505a3b66f"
+      "sha256": "d1e4a69e52d18df4b3558d388123ec0e3a8da00a6a53977f3940017d2ee84ebe"
     }
   ],
   "period": "2025",
@@ -93,8 +93,8 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
-        "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+        "closed: instrument frontier incomplete \u2014 23 of 24 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
       "boundary_frontier": {
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-08-kindergeld-2025-history",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-allowance-context",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -276,9 +276,11 @@
       ],
       "dependency_closure": {
         "closed": false,
-        "instruments_bearing_on_computed": [],
+        "instruments_bearing_on_computed": [
+          "de-uhv-instr-a5848a433a63d2cb"
+        ],
         "law_derived_inputs": [],
-        "open_dependency_count": 9,
+        "open_dependency_count": 10,
         "unclassified_inputs": [
           "child_allowances_under_sections_31_and_32_6_1_are_increased",
           "child_is_in_first_age_stage_under_section_1612a",
@@ -295,13 +297,13 @@
       "instrument_frontier": {
         "complete": false,
         "counts": {
-          "classified-with-reason": 0,
+          "classified-with-reason": 1,
           "encoded": 0,
           "excluded-with-reason": 0,
           "pending": 23,
-          "total": 23
+          "total": 24
         },
-        "instrument_count": 23,
+        "instrument_count": 24,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
           "de-uhv-instr-1808736a82828a59",
@@ -357,7 +359,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "c433893c4315fb314adb6ef1201344bcfdfe266e04772664703abfd66cf6172c",
+      "subgraph_sha256": "5b77c542b3a1a102058ed9ea1b19dd0dbe913e3e19f7069b172fe8837d2f28cc",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
