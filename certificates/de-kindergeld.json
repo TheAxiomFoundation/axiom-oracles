@@ -13,8 +13,22 @@
     "citation_roots": [
       {
         "attestation": {
+          "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
+        },
+        "citation_path": "de/statute/bgb/187",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "Signed BGB section 187 first-included-day rules from event, beginning-of-day and birth dates; regime selection, deadline ends and complete legal ages remain open",
+        "role": "date_counting_prerequisite",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
         },
@@ -27,7 +41,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -57,7 +71,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/62",
@@ -69,7 +83,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/63",
@@ -81,7 +95,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/64",
@@ -93,7 +107,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/65",
@@ -105,7 +119,7 @@
       },
       {
         "attestation": {
-          "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -126,7 +140,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "691807207fb613707637c1fe7f17d780eb9245de9abe9f94bdccb4299916e6ca"
+      "sha256": "de9de0e357784083e86f72328bc8539b25676095d06062b75780cd88d2978c7c"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -150,14 +164,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "82d1c4b94ab9a7a4441a4f6e62c8bec8836a89efc1e5243e3b29bd7d2ebc4926",
+      "sha256": "f6f3de1d3125a63bd1a77a2fe16ce2c58a72aa3235cc1e101c9bddd54adc4bdf",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "d1e4a69e52d18df4b3558d388123ec0e3a8da00a6a53977f3940017d2ee84ebe"
+      "sha256": "b62fe5bbd42eaf0bc4a87a69ac641cbed67335db419c624a62610bc7b07380f8"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -226,8 +240,21 @@
       ],
       "boundary_frontier": {
         "complete": true,
-        "input_count": 13,
+        "input_count": 16,
         "inputs": [
+          {
+            "id": "de-kg-leaf-237fecd079e7eaca",
+            "input": "beginning_of_day_start_date",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "first_included_day_when_period_starts_at_beginning_of_day"
+            ],
+            "reason": "Date explicitly specified as the beginning-of-day start in the observed record. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.",
+            "slots": [
+              "de:statutes/bgb/187#input.beginning_of_day_start_date"
+            ],
+            "status": "classified"
+          },
           {
             "id": "de-kg-leaf-e2801e88b2df7b0d",
             "input": "birth_record_child_identifier",
@@ -335,6 +362,19 @@
             "status": "classified"
           },
           {
+            "id": "de-kg-leaf-564f888212a5ff1b",
+            "input": "event_or_intraday_timepoint_date",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "first_included_day_after_event_or_intraday_timepoint"
+            ],
+            "reason": "Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.",
+            "slots": [
+              "de:statutes/bgb/187#input.event_or_intraday_timepoint_date"
+            ],
+            "status": "classified"
+          },
+          {
             "defining_citation_path": "de/statute/estg/62",
             "id": "de-kg-leaf-28c8b07ec06f361f",
             "input": "month_is_on_or_after_first_qualifying_month",
@@ -389,6 +429,19 @@
             "status": "pending"
           },
           {
+            "id": "de-kg-leaf-78b369cb7f817283",
+            "input": "recorded_birth_date",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "first_included_day_for_life_age_calculation"
+            ],
+            "reason": "Birth date recorded for this person. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.",
+            "slots": [
+              "de:statutes/bgb/187#input.recorded_birth_date"
+            ],
+            "status": "classified"
+          },
+          {
             "citation_path": "de/statute/estg/65",
             "id": "de-kg-leaf-004",
             "input": "substitute_child_benefit_exclusion",
@@ -418,7 +471,7 @@
         "signed": 1
       },
       "by_status": {
-        "encoded": 2,
+        "encoded": 3,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -426,6 +479,7 @@
       },
       "citation_paths": [
         "de/statute/bgb/1591",
+        "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -436,7 +490,7 @@
         "de/statute/estg/65",
         "de/statute/estg/66"
       ],
-      "citation_root_count": 8,
+      "citation_root_count": 9,
       "closed_claim_mode": "computed",
       "corpus_release": "de-rulespec-2026-09-09-kindergeld-allowance-context",
       "declared_sources": [
@@ -473,6 +527,15 @@
           "classification": "encoded",
           "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
           "role": "child_relationship_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/187",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
+          "role": "date_counting_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
         }
@@ -895,9 +958,9 @@
       "source_universe": {
         "role": "citation-path closure snapshot",
         "role_claim_mode": "attested",
-        "rulespec_commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+        "rulespec_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "c5b230ed91a8b082368a84032b950e27fc8c8caf33913dd3699b4e16684da489",
+        "subgraph_sha256": "b5b3a2f06bb63435c487c9d06065565c2e6b5b837b819275dd91de09d1a75958",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,

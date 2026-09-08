@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = 'd435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e'
+SOURCE_SHA256 = "330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -36,7 +36,7 @@ RELEASE = 'de-rulespec-2026-09-09-kindergeld-allowance-context'
 RELEASE_CONTENT_SHA256 = 'e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81'
 RELEASE_SELECTOR_SHA256 = '064b0c353046849d896c4d36c56c63620ca54921ad5f6c00bcfc4aee7889ce78'
 CORPUS_COMMIT = '4dece7ae257ccdda46d9e5f4589834d8a397c1d3'
-RULESPEC_COMMIT = "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76"
+RULESPEC_COMMIT = "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -65,7 +65,7 @@ PROGRAM_ROOT_NODES = {
     "de/unterhaltsvorschuss": ("de:statutes/uhvorschg/2#advance_maintenance_amount",),
 }
 PROGRAM_SOURCE_PATHS = {
-    "de/kindergeld": (ESTG_66, "de/statute/bgb/1591"),
+    "de/kindergeld": (ESTG_66, "de/statute/bgb/1591", "de/statute/bgb/187"),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",
         "de/regulation/svbezgrv-2025/4",

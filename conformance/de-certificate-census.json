@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "d435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e"
+    "sha256": "330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -24,8 +24,22 @@
       "declared_roots": [
         {
           "attestation": {
+            "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
+          },
+          "citation_path": "de/statute/bgb/187",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB section 187 first-included-day rules from event, beginning-of-day and birth dates; regime selection, deadline ends and complete legal ages remain open",
+          "role": "date_counting_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
           },
@@ -38,7 +52,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -68,7 +82,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/62",
@@ -80,7 +94,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/63",
@@ -92,7 +106,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/64",
@@ -104,7 +118,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/65",
@@ -116,7 +130,7 @@
         },
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -151,7 +165,7 @@
       "declared_roots": [
         {
           "attestation": {
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/regulation/bsv-2018/1",
@@ -164,7 +178,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
           },
@@ -215,7 +229,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-            "ref": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
           },
@@ -271,7 +285,7 @@
   },
   "rulespec_observation": {
     "claim_mode": "attested",
-    "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+    "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
     "repository": "TheAxiomFoundation/rulespec-de"
   },
   "schema": "axiom_oracles.certificate_candidate_census.v1",

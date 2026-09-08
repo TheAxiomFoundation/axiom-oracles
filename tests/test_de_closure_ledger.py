@@ -43,6 +43,9 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "event_or_intraday_timepoint_date",
+        "beginning_of_day_start_date",
+        "recorded_birth_date",
         "birth_record_child_identifier",
         "birth_record_delivery_date",
         "birth_record_person_identifier",
@@ -1544,3 +1547,22 @@ def test_query_period_boundaries_are_context_not_dependency_leaves() -> None:
     )
     assert [row["name"] for row in rows] == ["event_date", "unresolved_legal_condition"]
     assert all(row["read_by"] == ["eligible"] for row in rows)
+
+
+@pytest.mark.parametrize("function", ["date_add_days", "date_add_months", "date_add_years"])
+def test_calendar_calls_keep_arguments_and_bare_identifiers_in_frontier(function: str) -> None:
+    spec = importlib.util.spec_from_file_location("calendar_leaf_test", SCRIPT)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    document = {"rules": [{"name": "shifted", "versions": [{
+        "formula": f"{function} (record_date, legal_duration)"
+    }]}]}
+    assert {row["name"] for row in module._module_inputs(document, "de:test")} == {
+        "record_date", "legal_duration"
+    }
+    document["rules"][0]["versions"][0]["formula"] = f"{function} + unknown_function(record_date)"
+    assert {row["name"] for row in module._module_inputs(document, "de:test")} == {
+        function, "unknown_function", "record_date"
+    }

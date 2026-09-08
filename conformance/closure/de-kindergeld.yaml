@@ -16,6 +16,8 @@ program:
     role: amount_parameter
   - citation_path: de/statute/bgb/1591
     role: child_relationship_prerequisite
+  - citation_path: de/statute/bgb/187
+    role: date_counting_prerequisite
   spine_scope:
     kind: ordinal_range
     corpus_root: de/statute/estg
@@ -25,7 +27,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: d435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e
+    sha256: 330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 4dece7ae257ccdda46d9e5f4589834d8a397c1d3
@@ -273,17 +275,26 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/statute/bgb/1591
     state: captured
-    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
-    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
     path: de/statutes/bgb/1591.yaml
     sha256: bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b
     module_id: de:statutes/bgb/1591
     rule_count: 1
     declared_imports: []
+  - citation_path: de/statute/bgb/187
+    state: captured
+    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    path: de/statutes/bgb/187.yaml
+    sha256: e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70
+    module_id: de:statutes/bgb/187
+    rule_count: 3
+    declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
-    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -315,6 +326,21 @@ generated_facts:
     module: de:statutes/bgb/1591
     read_by:
     - identified_birth_record_establishes_maternity
+  - slot: de:statutes/bgb/187#input.beginning_of_day_start_date
+    name: beginning_of_day_start_date
+    module: de:statutes/bgb/187
+    read_by:
+    - first_included_day_when_period_starts_at_beginning_of_day
+  - slot: de:statutes/bgb/187#input.event_or_intraday_timepoint_date
+    name: event_or_intraday_timepoint_date
+    module: de:statutes/bgb/187
+    read_by:
+    - first_included_day_after_event_or_intraday_timepoint
+  - slot: de:statutes/bgb/187#input.recorded_birth_date
+    name: recorded_birth_date
+    module: de:statutes/bgb/187
+    read_by:
+    - first_included_day_for_life_age_calculation
   - slot: de:statutes/estg/66#input.child_allowances_under_sections_31_and_32_6_1_are_increased
     name: child_allowances_under_sections_31_and_32_6_1_are_increased
     module: de:statutes/estg/66
@@ -336,6 +362,14 @@ generated_facts:
     read_by:
     - kindergeld_payable_for_month
   leaf_frontier:
+  - id: de-kg-leaf-237fecd079e7eaca
+    input: beginning_of_day_start_date
+    slots:
+    - de:statutes/bgb/187#input.beginning_of_day_start_date
+    read_by:
+    - first_included_day_when_period_starts_at_beginning_of_day
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-e2801e88b2df7b0d
     input: birth_record_child_identifier
     slots:
@@ -402,6 +436,14 @@ generated_facts:
     - kindergeld_before_whole_euro_rounding
     leaf_kind: unclassified
     status: pending
+  - id: de-kg-leaf-564f888212a5ff1b
+    input: event_or_intraday_timepoint_date
+    slots:
+    - de:statutes/bgb/187#input.event_or_intraday_timepoint_date
+    read_by:
+    - first_included_day_after_event_or_intraday_timepoint
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-28c8b07ec06f361f
     input: month_is_on_or_after_first_qualifying_month
     slots:
@@ -438,6 +480,14 @@ generated_facts:
     source_commitment:
       classification: open-law-derived-dependency
       reason: recipient_priority is a law-derived quantity (64 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
+  - id: de-kg-leaf-78b369cb7f817283
+    input: recorded_birth_date
+    slots:
+    - de:statutes/bgb/187#input.recorded_birth_date
+    read_by:
+    - first_included_day_for_life_age_calculation
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-004
     input: substitute_child_benefit_exclusion
     slots: []
@@ -454,10 +504,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 33d2642eb141f09fd5f55e226e2a775912e352e225a03fde5c6d63f1c2c4e76d
+    snapshot_sha256: 120c828856d77122e6c22408a31618f8015ecaeb4c4b7d4935ed42db45e7aaf2
     channel_receipts:
       corpus_release: 7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324
-      subject_matter_search: e635e35633294f8a1b2bcc5fa4a62f8ccfdfa6d58324fd6f7d3c70972a6bffee
+      subject_matter_search: 02b3f5eae781c2c4bc1e100ff63823f824580c3a74b747d634cd9116eac535e8
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -8616,7 +8666,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: a7c5020645bfc1628917b4f2a6fe005c708cc33aabc30c228e1c92e1c356c28f
+      sha256: 8eee932d75806157ba5216f2db3ed3bcf58d2d132657e2d5dd6f7d97f794a313
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -8661,7 +8711,7 @@ generated_facts:
       status: pending
       receipts:
         corpus_release: 7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324
-        subject_matter_search: e635e35633294f8a1b2bcc5fa4a62f8ccfdfa6d58324fd6f7d3c70972a6bffee
+        subject_matter_search: 02b3f5eae781c2c4bc1e100ff63823f824580c3a74b747d634cd9116eac535e8
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -8694,8 +8744,10 @@ generated_facts:
       - de:statutes/estg/66#monthly_kindergeld_per_child
       captured_module_ids:
       - de:statutes/bgb/1591
+      - de:statutes/bgb/187
       - de:statutes/estg/66
       frontier_input_ids:
+      - de-kg-leaf-237fecd079e7eaca
       - de-kg-leaf-e2801e88b2df7b0d
       - de-kg-leaf-10ac0daa2ff92703
       - de-kg-leaf-4a5b46ca4fa229e2
@@ -8704,10 +8756,12 @@ generated_facts:
       - de-kg-leaf-b329e1f74fcb6509
       - de-kg-leaf-001
       - de-kg-leaf-9795bf040172cda9
+      - de-kg-leaf-564f888212a5ff1b
       - de-kg-leaf-28c8b07ec06f361f
       - de-kg-leaf-9dcc1cbc40e7ed0b
       - de-kg-leaf-002
       - de-kg-leaf-003
+      - de-kg-leaf-78b369cb7f817283
       - de-kg-leaf-004
       uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
@@ -11510,6 +11564,9 @@ committed_decisions:
     reason: Unresolved reference 'Ersten Buches Sozialgesetzbuch' matched in § 68 Abs. 5 EStG, which names the benefit providers under §§ 19 Abs. 2, 19a Abs. 2, 25 Abs. 3 and 28 Abs. 2 SGB I to whom the Familienkassen may transmit case data. Part of the excluded data provision; no entitlement or amount rule.
     bears_on_computed_surface: false
   leaf_classifications:
+  - input: beginning_of_day_start_date
+    leaf_kind: world_fact
+    reason: Date explicitly specified as the beginning-of-day start in the observed record. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
   - input: birth_record_child_identifier
     leaf_kind: world_fact
     reason: Identifier of the child in the identified birth record. Observable evidence for de:statutes/bgb/1591 under de/statute/bgb/1591; the module derives the legal maternity judgment from a complete identified record. Missing evidence is an evaluation error, not a negative legal judgment.
@@ -11533,6 +11590,9 @@ committed_decisions:
     leaf_kind: law_derived
     reason: The amount to which Kindergeld is 'entsprechend erhöht' when the Freibeträge are raised (§ 66 Abs. 3 Satz 1 EStG) is defined by the provision in proportion to the allowance increase and then rounded under Satz 2; the module encodes the rounding but takes the increased amount as an input. Law-derived; open until the proportional increase is encoded from the § 32 Abs. 6 allowance history.
     defining_citation_path: de/statute/estg/66
+  - input: event_or_intraday_timepoint_date
+    leaf_kind: world_fact
+    reason: Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
   - input: month_is_on_or_after_first_qualifying_month
     leaf_kind: law_derived
     reason: Whether a month is at or after the first month in which 'die Anspruchsvoraussetzungen erfüllt sind' (§ 66 Abs. 2 EStG) is decided by the entitlement conditions of §§ 62–65 EStG with § 32 EStG (claimant, child, priority, exclusion) — a quantity the law defines how to compute, not an observable act. Open until those provisions are encoded and the first qualifying month derived from them.
@@ -11541,6 +11601,9 @@ committed_decisions:
     leaf_kind: law_derived
     reason: Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (§ 66 Abs. 2 EStG) is decided by the same entitlement conditions of §§ 62–65 EStG with § 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.
     defining_citation_path: de/statute/estg/62
+  - input: recorded_birth_date
+    leaf_kind: world_fact
+    reason: Birth date recorded for this person. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
   supplemental_instruments:
   - id: de-kg-suppl-001
     identity: Einkommensteuer-Richtlinien (EStR)
@@ -11975,7 +12038,7 @@ computed:
   - de/statute/estg/65
   - de/statute/estg/78
   boundary_frontier:
-    input_count: 13
+    input_count: 16
     pending_count: 4
     law_derived_count: 8
     unclassified_count: 0
@@ -11986,6 +12049,15 @@ computed:
     - substitute_child_benefit_exclusion
     complete: true
     inputs:
+    - id: de-kg-leaf-237fecd079e7eaca
+      input: beginning_of_day_start_date
+      slots:
+      - de:statutes/bgb/187#input.beginning_of_day_start_date
+      read_by:
+      - first_included_day_when_period_starts_at_beginning_of_day
+      leaf_kind: world_fact
+      status: classified
+      reason: Date explicitly specified as the beginning-of-day start in the observed record. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
     - id: de-kg-leaf-e2801e88b2df7b0d
       input: birth_record_child_identifier
       slots:
@@ -12061,6 +12133,15 @@ computed:
       status: classified
       reason: The amount to which Kindergeld is 'entsprechend erhöht' when the Freibeträge are raised (§ 66 Abs. 3 Satz 1 EStG) is defined by the provision in proportion to the allowance increase and then rounded under Satz 2; the module encodes the rounding but takes the increased amount as an input. Law-derived; open until the proportional increase is encoded from the § 32 Abs. 6 allowance history.
       defining_citation_path: de/statute/estg/66
+    - id: de-kg-leaf-564f888212a5ff1b
+      input: event_or_intraday_timepoint_date
+      slots:
+      - de:statutes/bgb/187#input.event_or_intraday_timepoint_date
+      read_by:
+      - first_included_day_after_event_or_intraday_timepoint
+      leaf_kind: world_fact
+      status: classified
+      reason: Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
     - id: de-kg-leaf-28c8b07ec06f361f
       input: month_is_on_or_after_first_qualifying_month
       slots:
@@ -12101,6 +12182,15 @@ computed:
       source_commitment:
         classification: open-law-derived-dependency
         reason: recipient_priority is a law-derived quantity (64 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
+    - id: de-kg-leaf-78b369cb7f817283
+      input: recorded_birth_date
+      slots:
+      - de:statutes/bgb/187#input.recorded_birth_date
+      read_by:
+      - first_included_day_for_life_age_calculation
+      leaf_kind: world_fact
+      status: classified
+      reason: Birth date recorded for this person. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
     - id: de-kg-leaf-004
       input: substitute_child_benefit_exclusion
       slots: []

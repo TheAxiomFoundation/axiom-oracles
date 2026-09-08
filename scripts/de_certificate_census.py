@@ -37,12 +37,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76"
+RULESPEC_MAIN_COMMIT = "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/bgb/187",
         "de/statute/bgb/1591",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/estg/66",
@@ -66,6 +67,7 @@ EXPECTED_ROOT_SETS = {
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
         "de/statute/estg/66": ("governing", "encoded", {"pending", "signed"}),
+        "de/statute/bgb/187": ("date_counting_prerequisite", "encoded", {"signed"}),
         "de/statute/bgb/1591": ("child_relationship_prerequisite", "encoded", {"signed"}),
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract": ("evidence_root", "evidence", {"not_applicable"}),
         **{
@@ -98,6 +100,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/statute/bgb/187": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+        "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188",
+    },
     "de/statute/bgb/1591": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -158,6 +166,19 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/statute/bgb/187",
+                role="date_counting_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/bgb/187.json",
+                source_sha256="96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188",
+                reason=(
+                    "Signed BGB section 187 first-included-day rules from event, "
+                    "beginning-of-day and birth dates; regime selection, deadline "
+                    "ends and complete legal ages remain open"
+                ),
+            ),
             _root(
                 "de/statute/bgb/1591",
                 role="child_relationship_prerequisite",

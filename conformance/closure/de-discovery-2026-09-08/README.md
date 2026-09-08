@@ -105,8 +105,16 @@ blocked before generation by the existing three-failed-attempt limit. The
 repository-wide override has not been enabled while concurrent US work runs.
 
 BGB187 run 34289192829 produced signed PR #58, but review found an unsupported
-1998 boundary copied from the maternity example. It remains unmerged pending
-supervised correction; a signature alone does not resolve a legal review finding.
+1998 boundary copied from the maternity example. PR #58 was closed unmerged. Supervised corrected run 34290391532 produced
+PR #59, which passed repository CI and merged at
+`8dd7d2e040ba99b84e9f92d8d63434c9ce46726b`. Its 2025 observation start is
+explicitly not a statutory commencement. Three date inputs drive the first
+included day; applicable-regime selection, deadline ends and full legal ages
+still require encoding. The consumer now declares this signed prerequisite.
+
+Encoder PR #1597 adds an expiring numeric retry limit for one exact citation.
+Independent review and initial CI passed; CI is rerunning after synchronization
+with main. No global override or repository variable has been changed.
 
 Regeneration (supply the pinned corpus and RuleSpec checkouts as needed):
 

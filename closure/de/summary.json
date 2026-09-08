@@ -70,10 +70,10 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 2
+        "signed": 3
       },
       "by_status": {
-        "encoded": 2,
+        "encoded": 3,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -81,6 +81,7 @@
       },
       "citation_paths": [
         "de/statute/bgb/1591",
+        "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -91,7 +92,7 @@
         "de/statute/estg/65",
         "de/statute/estg/66"
       ],
-      "citation_root_count": 8,
+      "citation_root_count": 9,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -115,6 +116,15 @@
           "classification": "encoded",
           "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
           "role": "child_relationship_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/187",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
+          "role": "date_counting_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
         }
@@ -158,7 +168,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "c5b230ed91a8b082368a84032b950e27fc8c8caf33913dd3699b4e16684da489",
+      "subgraph_sha256": "b5b3a2f06bb63435c487c9d06065565c2e6b5b837b819275dd91de09d1a75958",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -339,7 +349,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+  "rulespec_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -348,7 +358,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "d435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e"
+    "sha256": "330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b"
   },
   "spine_closed": false
 }

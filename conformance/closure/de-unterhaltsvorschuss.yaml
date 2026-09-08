@@ -27,7 +27,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: d435a4b9d94548803e5e450989a99213f9a2c7409dc68416ce8aaf5aea5d8e7e
+    sha256: 330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 4dece7ae257ccdda46d9e5f4589834d8a397c1d3
@@ -221,8 +221,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/minuhv/1
     state: captured
-    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
-    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
     path: de/regulations/minuhv/1.yaml
     sha256: c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc
     module_id: de:regulations/minuhv/1
@@ -230,8 +230,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
-    commit: 0201d1f7225f2be5cbd61add704f8f0fa7ea3b76
+    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -371,10 +371,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 33d2642eb141f09fd5f55e226e2a775912e352e225a03fde5c6d63f1c2c4e76d
+    snapshot_sha256: 120c828856d77122e6c22408a31618f8015ecaeb4c4b7d4935ed42db45e7aaf2
     channel_receipts:
       corpus_release: 7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324
-      subject_matter_search: e635e35633294f8a1b2bcc5fa4a62f8ccfdfa6d58324fd6f7d3c70972a6bffee
+      subject_matter_search: 02b3f5eae781c2c4bc1e100ff63823f824580c3a74b747d634cd9116eac535e8
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

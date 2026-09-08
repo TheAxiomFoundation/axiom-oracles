@@ -9,8 +9,8 @@ through the same central gate (`scripts/closure_gate.py`) that judges every
 other closure artifact. The current frontier has 211 of 679 instruments
 pending, and dependency closure has 130 open dependencies: eight law-derived
 inputs and 122 bearing instruments, with no unclassified inputs. The signed
-BGB §1591 prerequisite is declared at RuleSpec merge
-`0201d1f7225f2be5cbd61add704f8f0fa7ea3b76`; the live amount-only oracle and
+BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
+`8dd7d2e040ba99b84e9f92d8d63434c9ce46726b`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence.
 The exact-citation-path summary (`closure/de/summary.json`) contributes only
 its source-universe and signature fields; nothing DE-specific decides the

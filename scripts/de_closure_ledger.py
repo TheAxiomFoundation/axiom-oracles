@@ -106,6 +106,7 @@ SUPPLEMENTAL_RELATIONS = ("bears_on", "issued_under", "coordination", "guidance"
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
+_CALENDAR_FUNCTIONS = frozenset({"date_add_days", "date_add_months", "date_add_years"})
 _RESERVED = frozenset(
     {
         "and",
@@ -463,7 +464,10 @@ def _module_inputs(document: Mapping[str, Any], module_id: str) -> list[dict[str
             formula = version.get("formula")
             if not isinstance(formula, str):
                 continue
-            for token in _IDENTIFIER.findall(formula):
+            for match in _IDENTIFIER.finditer(formula):
+                token = match.group()
+                if token in _CALENDAR_FUNCTIONS and formula[match.end():].lstrip().startswith("("):
+                    continue
                 if token.lower() in _RESERVED or token in rule_names:
                     continue
                 readers.setdefault(token, set()).add(rule["name"])

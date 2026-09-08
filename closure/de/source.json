@@ -307,6 +307,18 @@
         "parent_citation_path": "de/statute/bgb"
       },
       {
+        "citation_path": "de/statute/bgb/187",
+        "record_id": "da2651a4-4cff-5064-9d83-2c5a5222082b",
+        "line_number": 854,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "e6a0f29c09f735e84e8f46d3ca0ce9e28f3061343c568d13eec7ee2904ccfd25",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "219010ff04683acddfa67bc918d459901fc00840e5ee1b9162842f05476572a7",
+        "body_length": 450,
+        "parent_citation_path": "de/statute/bgb"
+      },
+      {
         "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "record_id": "85c5d9bd-61b3-5e56-8b37-0b3b9d43e532",
         "line_number": 1,
@@ -453,7 +465,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+    "observed_main_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
     "claim_mode": "attested",
     "modules": [
       {
@@ -470,7 +482,7 @@
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -484,7 +496,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
@@ -498,11 +510,25 @@
         "claim_mode": "attested",
         "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
         "artifact": {
-          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "path": "de/statutes/bgb/1591.yaml",
           "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
           "manifest_sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
+        }
+      },
+      {
+        "citation_path": "de/statute/bgb/187",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
+        "artifact": {
+          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "path": "de/statutes/bgb/187.yaml",
+          "sha256": "e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+          "manifest_sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
         }
       },
       {
@@ -512,7 +538,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "0201d1f7225f2be5cbd61add704f8f0fa7ea3b76",
+          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
@@ -560,6 +586,10 @@
         {
           "citation_path": "de/statute/bgb/1591",
           "role": "child_relationship_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/bgb/187",
+          "role": "date_counting_prerequisite"
         }
       ],
       "evidence_roots": [

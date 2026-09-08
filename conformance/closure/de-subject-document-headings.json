@@ -5488,10 +5488,10 @@
       "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf"
     }
   ],
-  "receipt_sha256": "1639b790d2f09faa947f20c9d0fac20155684d35bb3b55e79328a79404bb7b19",
+  "receipt_sha256": "45e1aa517267162e4db3731945426c0807c089a305bda94aa754781bcbf85eb3",
   "schema": "axiom_oracles.closure.de_subject_document_headings.v1",
   "snapshot": {
     "path": "conformance/closure/de-instrument-graph.json",
-    "sha256": "33d2642eb141f09fd5f55e226e2a775912e352e225a03fde5c6d63f1c2c4e76d"
+    "sha256": "120c828856d77122e6c22408a31618f8015ecaeb4c4b7d4935ed42db45e7aaf2"
   }
 }
