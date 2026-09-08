@@ -217,12 +217,12 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
 
     refresh._validate_global_extraction_index(index, scanned_row_count=8198)
     assert index["row_count"] == index["mapped_row_count"] == 8198
-    assert index["body_row_count"] == 8125
+    assert index["body_row_count"] == 8136
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 80
+    assert index["act_count"] == len(index["acts"]) == 91
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 5241,
+        "explicit_cross_reference_body": 5260,
         "law_metadata_changed_by": 24,
         "law_metadata_fundstelle": 31,
     }
