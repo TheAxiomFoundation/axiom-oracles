@@ -319,3 +319,55 @@ the default local checkout setup. All three live ledger checks, source
 summary freshness, certificate freshness and focused Ruff pass. The
 forged-spine mutation retains committed decisions so its expected failure
 is specifically the source-hash mismatch. Closure counts remain unchanged.
+
+### Parentage generation outcome and context diagnosis
+
+Fresh protected run 34262819783 succeeded with one signature and opened
+[rulespec-de PR #48](https://github.com/TheAxiomFoundation/rulespec-de/pull/48),
+head `fe1f1efdcd5c7cbce1955e37d1e26ca212973a65`. Its pair-scoped companion
+now includes a four-row candidate/child table with ordered expectations.
+The formula no longer uses a current-sex marker. The candidate nevertheless
+retains year-0001 commencement without effective-period proof. Its declared
+birth date is unused; future/earlier-birth cases merely toggle a supplied
+query-relative Boolean. It therefore remains draft, unmerged and undeclared.
+The complete review findings are in PR #48.
+
+The retained context manifest has no context files. A local diagnostic against
+the signed parentage release reproduces zero discovered BGB amendments even
+though KindRG is recognized as an amendment and explicitly targets BGB.
+`_discover_amendment_documents` filters out its different capture-scope
+version before checking the structured target. Capture-scope version is not
+legal applicability. The original KindRG body has 121,357 characters, above
+the 12,000-character amendment context cap, and its commencement occurs on
+the final page. Fixing scope discovery alone will not expose that clause.
+A bounded, authenticated context solution remains necessary; repeating the
+same prompt or manually editing the signed module is not a repair.
+
+The isolated encoder PR #1588 now also has a proposed cross-scope discovery
+fix: exact canonical amendment targets can use another selected scope of
+the same verified release. Name-only matches stay in the target scope;
+unselected scopes and different target acts stay excluded. Five new cases
+and all 47 focused amendment-context tests pass. Independent review remains
+required, and no changed validator/context semantics are pinned in RuleSpec.
+
+Corpus PR #651 supplies the separate bounded-context capture: the unchanged
+original PDF, extracted through existing page windows for pages 1 and 26,
+produces a 7,339-character body containing both visually verified operative
+sentences. Its signed receipt, zero-warning release preflight and 119 focused
+capture tests pass. The additive 20-scope selector is proposed but not yet
+merged, published or pinned. The current oracle release remains parentage.
+
+PR #48 also failed repository CI run 34263375941 at the generated-change
+guard: its manifest names encoder `3647566df745320b87fc24f1b18902bc63f2fae7`,
+whereas repository validation pins `5c8e16891b39d400269ebd49d0ad3f88f77e9ec1`.
+A dedicated reviewed encoder-pin update is required; changing the feature
+PR's pin or bypassing the guard is not permitted. Earlier draft #46 is closed
+as superseded, without merging. These provenance and legal findings remain
+separate blockers.
+
+Encoder PR #1588 is now rebased on `a775370760e0d2a0a8ecec73c68aa9beeb434abd`
+and pushed at `94d7f0719` with version 0.2.1769. The full pre-rebase local
+suite passed 13,980 tests (132 skipped); after rebase, 6,977 focused tests
+pass, as do Ruff and compileall. The live signed-release diagnostic now
+discovers KindRG as a structured amendment. Fresh-head CI and independent
+review remain pending; the RuleSpec encoder pin is unchanged.
