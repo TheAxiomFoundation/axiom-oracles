@@ -11154,6 +11154,11 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
     bears_on_computed_surface: false
+  - id: de-kg-instr-26ba3514c162c52d
+    status: classified-with-reason
+    classification: document_container
+    reason: The pinned corpus row de/guidance/lsth-2023-9 has body=null and contains no independent operative text. Its single text child de/guidance/lsth-2023-9/inhalt (body_sha256 703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-003, de-kg-suppl-004. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+    bears_on_computed_surface: false
   - id: de-kg-instr-32a81be6d35e33be
     status: classified-with-reason
     classification: entitlement_condition
@@ -11229,6 +11234,11 @@ committed_decisions:
     classification: entitlement_condition
     reason: 'EStG § 19 (employment income), cited by § 62 Abs. 1a Satz 2 EStG: the domestic income that lifts the three-month exclusion excludes ''Einkünfte nach § 19 Absatz 1 Satz 1 Nummer 2'' (pensions and survivor benefits from a former employment). The second match, ''§ 19 Absatz 2'' in § 68 Abs. 5, is a citation of SGB I § 19 Abs. 2 (Arbeitsförderung) inside an excluded data provision and is not a reference to EStG § 19. The § 62 Abs. 1a citation delimits an entitlement condition (A 4.2 Abs. 4 Satz 2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-7d7a5efb6250df56
+    status: classified-with-reason
+    classification: document_container
+    reason: The pinned corpus row de/guidance/esth-2024-32 has body=null and contains no independent operative text. Its single text child de/guidance/esth-2024-32/inhalt (body_sha256 b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-001, de-kg-suppl-002. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+    bears_on_computed_surface: false
   - id: de-kg-instr-87d3e50373adabc2
     status: classified-with-reason
     classification: entitlement_condition
@@ -11269,12 +11279,22 @@ committed_decisions:
     classification: entitlement_condition
     reason: 'EStG § 1 (Steuerpflicht), cited by § 62 Abs. 1 Satz 1 Nr. 2 EStG: a person without domestic residence is entitled if ''nach § 1 Absatz 2 unbeschränkt einkommensteuerpflichtig'' (German nationals in public service abroad paid from a domestic public purse and their household members, subject to Abs. 2 Satz 2) or ''nach § 1 Absatz 3 als unbeschränkt einkommensteuerpflichtig behandelt wird'' (on application, with 90 percent of income subject to German tax or foreign income at most the Grundfreibetrag). § 1 Abs. 2 and 3 are therefore entitlement conditions in their own terms (A 2.2.1). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-d0ffa65a02a956b9
+    status: classified-with-reason
+    classification: entitlement_interpretation
+    reason: EuGH C-411/20, 1 August 2022, ECLI:EU:C:2022:602. The document parent is body=null; the complete German judgment is de/guidance/cjeu-c-411-20/document-1, body_sha256 3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5, in the pinned signed release. Paragraph 73 and the operative ruling interpret Regulation 883/2004 Article 4 as precluding the described first-three-month denial of family benefits to economically inactive nationals of another Member State where returning own nationals receive them; Directive 2004/38 Article 24(2) does not apply to that rule. Paragraphs 70-72 retain establishment of habitual residence and the individual factual assessment under Regulation 987/2009 Article 11. This bears on EStG 62(1a), claimant_entitlement and DA-KG A 4.2. It is not an unconditional arrival-month entitlement. Open until the non-application rule and its personal/residence scope are encoded and composed; no encoded_by is asserted.
+    bears_on_computed_surface: true
   - id: de-kg-instr-db7693cd9f018ff4
     status: classified-with-reason
     body_sha256: a8adb00ead8b612cd2acf62607433f9b6f77423a9e56ce7eccbd9deef8bf18af
     classification: entitlement_condition
     reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-e1efdfd629d56e5f
+    status: classified-with-reason
+    classification: document_container
+    reason: The pinned corpus row de/guidance/esth-2024-33a has body=null and contains no independent operative text. Its single text child de/guidance/esth-2024-33a/inhalt (body_sha256 5bfedb0c3f57cf2aae99fcd99923eb618c12c257e117dbb623f83df94c6fea56) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-001, de-kg-suppl-002. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+    bears_on_computed_surface: false
   - id: de-kg-instr-f480bf90ee72ae1d
     status: excluded-with-reason
     classification: data_and_procedure_reference
@@ -11827,9 +11847,9 @@ computed:
     counts:
       total: 670
       encoded: 1
-      classified-with-reason: 122
+      classified-with-reason: 126
       excluded-with-reason: 337
-      pending: 210
+      pending: 206
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12032,11 +12052,7 @@ computed:
     - de-kg-discovery-fbc6d3709f27eb49
     - de-kg-discovery-ff3af97754355946
     - de-kg-discovery-ff9019c2c2453a4d
-    - de-kg-instr-26ba3514c162c52d
     - de-kg-instr-38f449529edd140f
-    - de-kg-instr-7d7a5efb6250df56
-    - de-kg-instr-d0ffa65a02a956b9
-    - de-kg-instr-e1efdfd629d56e5f
     - de-kg-suppl-007
     - de-kg-suppl-008
     - de-kg-suppl-009
@@ -21085,7 +21101,7 @@ computed:
       reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
       bears_on_computed_surface: false
     - id: de-kg-instr-26ba3514c162c52d
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-2a7c60e49d15d9a78995
       identity_kind: corpus_citation
@@ -21095,6 +21111,9 @@ computed:
       citation_label: lsth-2023-9
       document_citation_path: de/guidance/lsth-2023-9
       title: lsth-2023-9
+      classification: document_container
+      reason: The pinned corpus row de/guidance/lsth-2023-9 has body=null and contains no independent operative text. Its single text child de/guidance/lsth-2023-9/inhalt (body_sha256 703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-003, de-kg-suppl-004. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+      bears_on_computed_surface: false
     - id: de-kg-instr-32a81be6d35e33be
       status: classified-with-reason
       discovery_refs:
@@ -21297,7 +21316,7 @@ computed:
       reason: 'EStG § 19 (employment income), cited by § 62 Abs. 1a Satz 2 EStG: the domestic income that lifts the three-month exclusion excludes ''Einkünfte nach § 19 Absatz 1 Satz 1 Nummer 2'' (pensions and survivor benefits from a former employment). The second match, ''§ 19 Absatz 2'' in § 68 Abs. 5, is a citation of SGB I § 19 Abs. 2 (Arbeitsförderung) inside an excluded data provision and is not a reference to EStG § 19. The § 62 Abs. 1a citation delimits an entitlement condition (A 4.2 Abs. 4 Satz 2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
     - id: de-kg-instr-7d7a5efb6250df56
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-3945410495307f7f8a69
       - de-corpus-72c90697807b0be4d86b
@@ -21308,6 +21327,9 @@ computed:
       citation_label: esth-2024-32
       document_citation_path: de/guidance/esth-2024-32
       title: esth-2024-32
+      classification: document_container
+      reason: The pinned corpus row de/guidance/esth-2024-32 has body=null and contains no independent operative text. Its single text child de/guidance/esth-2024-32/inhalt (body_sha256 b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-001, de-kg-suppl-002. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+      bears_on_computed_surface: false
     - id: de-kg-instr-87d3e50373adabc2
       status: classified-with-reason
       discovery_refs:
@@ -21417,7 +21439,7 @@ computed:
       reason: 'EStG § 1 (Steuerpflicht), cited by § 62 Abs. 1 Satz 1 Nr. 2 EStG: a person without domestic residence is entitled if ''nach § 1 Absatz 2 unbeschränkt einkommensteuerpflichtig'' (German nationals in public service abroad paid from a domestic public purse and their household members, subject to Abs. 2 Satz 2) or ''nach § 1 Absatz 3 als unbeschränkt einkommensteuerpflichtig behandelt wird'' (on application, with 90 percent of income subject to German tax or foreign income at most the Grundfreibetrag). § 1 Abs. 2 and 3 are therefore entitlement conditions in their own terms (A 2.2.1). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
     - id: de-kg-instr-d0ffa65a02a956b9
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-67a85788481346c5eb32
       - de-corpus-a45d95d8c19fc47aa094
@@ -21429,6 +21451,9 @@ computed:
       document_citation_path: de/guidance/cjeu-c-411-20
       title: EuGH, Urteil vom 1. August 2022, C-411/20, S gegen Familienkasse Niedersachsen-Bremen, ECLI:EU:C:2022:602
       document_type: court judgment
+      classification: entitlement_interpretation
+      reason: EuGH C-411/20, 1 August 2022, ECLI:EU:C:2022:602. The document parent is body=null; the complete German judgment is de/guidance/cjeu-c-411-20/document-1, body_sha256 3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5, in the pinned signed release. Paragraph 73 and the operative ruling interpret Regulation 883/2004 Article 4 as precluding the described first-three-month denial of family benefits to economically inactive nationals of another Member State where returning own nationals receive them; Directive 2004/38 Article 24(2) does not apply to that rule. Paragraphs 70-72 retain establishment of habitual residence and the individual factual assessment under Regulation 987/2009 Article 11. This bears on EStG 62(1a), claimant_entitlement and DA-KG A 4.2. It is not an unconditional arrival-month entitlement. Open until the non-application rule and its personal/residence scope are encoded and composed; no encoded_by is asserted.
+      bears_on_computed_surface: true
     - id: de-kg-instr-db7693cd9f018ff4
       status: classified-with-reason
       discovery_refs:
@@ -21447,7 +21472,7 @@ computed:
       reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
     - id: de-kg-instr-e1efdfd629d56e5f
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-35d2c47e54a9b17d43f6
       identity_kind: corpus_citation
@@ -21457,6 +21482,9 @@ computed:
       citation_label: esth-2024-33a
       document_citation_path: de/guidance/esth-2024-33a
       title: esth-2024-33a
+      classification: document_container
+      reason: The pinned corpus row de/guidance/esth-2024-33a has body=null and contains no independent operative text. Its single text child de/guidance/esth-2024-33a/inhalt (body_sha256 5bfedb0c3f57cf2aae99fcd99923eb618c12c257e117dbb623f83df94c6fea56) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-001, de-kg-suppl-002. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+      bears_on_computed_surface: false
     - id: de-kg-instr-f480bf90ee72ae1d
       status: excluded-with-reason
       discovery_refs:
@@ -21830,6 +21858,7 @@ computed:
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-b96e03076e143e8e
     - de-kg-instr-ce168756ed1a28cb
+    - de-kg-instr-d0ffa65a02a956b9
     - de-kg-instr-db7693cd9f018ff4
     - de-kg-suppl-001
     - de-kg-suppl-002
@@ -21841,8 +21870,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 118
-    open_dependency_count: 126
+    instruments_bearing_on_computed_count: 119
+    open_dependency_count: 127
     closed: false
   measured_denominators:
     spine_rows: 18
