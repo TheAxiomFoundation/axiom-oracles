@@ -383,7 +383,8 @@ The signature and content address verify and the anonymous mirror is
 byte-identical. Its 8,176 rows in 20 scopes preserve all 19 parentage scopes;
 the new context body is a disclosed excerpt, with the full act retained.
 The rebuilt global index covers 8,125 bodies and 80 acts. Corpus-pin PR #49
-has nine passing local layout tests and awaits required repository CI.
+passed all repository checks and merged as
+`76cdd576a672aeebb3eb3a642b89942ffe2e66c0`; nine local layout tests also pass.
 
 Encoder #1588 is now green at head `94d7f0719`: 14,034 CI tests pass,
 80 skip, and lint plus both platform builds pass. Independent review remains
