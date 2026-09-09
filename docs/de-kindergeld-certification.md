@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 210 of 681 instruments
+other closure artifact. The current frontier has 223 of 694 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
@@ -303,7 +303,7 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 209 entries: 204 pending citation seeds,
+The SHA-bound class snapshot contains 222 entries: 217 pending legal dispositions,
 four captured bearing entries and one captured non-bearing transfer letter.
 The latter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
@@ -311,7 +311,7 @@ child tests or §64 priority. The 2025 country-group letter remains bearing
 through §1(3) EStG and its specified allowance adjustments. C-328/20 and both
 parentage decisions remain bearing; their BStBl II membership is provisional.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 210 of 681 instruments pending, 132 open
+rows pending. Current result: 223 of 694 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 

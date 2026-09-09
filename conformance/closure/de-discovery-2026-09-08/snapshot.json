@@ -77,6 +77,269 @@
       "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
       "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl",
       "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official source snapshot is bound by the corpus ingest manifest."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_marokko-sva_document-1.txt",
+      "sha256": "65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/marokko-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_serbien-dv_document-1.txt",
+      "sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/serbien-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_bosnien-sva_document-1.txt",
+      "sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/bosnien-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tunesien-zp_document-1.txt",
+      "sha256": "420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_zp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tunesien-zp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_montenegro-sp_document-1.txt",
+      "sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/montenegro-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_marokko-sp_document-1.txt",
+      "sha256": "ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/marokko-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tunesien-sva_document-1.txt",
+      "sha256": "5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tunesien-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tuerkei-sp_document-1.txt",
+      "sha256": "c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tuerkei-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_serbien-sva_document-1.txt",
+      "sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/serbien-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tuerkei-dv_document-1.txt",
+      "sha256": "4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tuerkei-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_marokko-dv_document-1.txt",
+      "sha256": "3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/marokko_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/marokko-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_kosovo-sp_document-1.txt",
+      "sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/kosovo-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_serbien-sp_document-1.txt",
+      "sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/serbien-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_bosnien-dv_document-1.txt",
+      "sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/bosnien-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_montenegro-sva_document-1.txt",
+      "sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/montenegro-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tunesien-sp_document-1.txt",
+      "sha256": "962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tunesien-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_kosovo-dv_document-1.txt",
+      "sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/kosovo-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tunesien-dv_document-1.txt",
+      "sha256": "eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tunesien_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tunesien-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_kosovo-sva_document-1.txt",
+      "sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/kosovo-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_montenegro-dv_document-1.txt",
+      "sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf",
+      "corpus_citation_path": "de/regulation/dvka/montenegro-dv/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_eec-turkey_arb-3-80_document-1.txt",
+      "sha256": "fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e",
+      "url": "https://publications.europa.eu/resource/cellar/fba26a64-1ef1-42d6-87c3-b841c3218831.0002.01/DOC_1",
+      "corpus_citation_path": "de/regulation/eec-turkey/arb-3-80/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_tuerkei-sva_document-1.txt",
+      "sha256": "957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf",
+      "corpus_citation_path": "de/regulation/dvka/tuerkei-sva/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_dvka_bosnien-sp_document-1.txt",
+      "sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/bosnien_sp.pdf",
+      "corpus_citation_path": "de/regulation/dvka/bosnien-sp/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official PDF snapshot is bound by its corpus ingest manifest. No assertion that capture alone settles legal bearing or applicability."
+    },
+    {
+      "path": "bmas-bilateral-2026.txt",
+      "sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "pdf_path": "bmas-bilateral-2026.pdf",
+      "pdf_sha256": "f4e256639402420f45ffd16c3cc7474abf9aa72dec1737761e9069640212654b",
+      "publisher": "Bundesministerium für Arbeit und Soziales",
+      "publication_as_of": "2026-02-01",
+      "extraction": "pdftotext -layout; complete14-page official inventory. Pages8and13 visually checked for the distinct Morocco/Tunisia Kindergeld treaties. Citation inventory is not operative treaty text."
     }
   ],
   "members": [
@@ -310,9 +573,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_marokko-sva_document-1.txt",
+      "operative_body_sha256": "65304a89fe9c1a406751f907536e549ba08f7ba61618731b6ee32ea9d477c18a",
+      "operative_corpus_citation_path": "de/regulation/dvka/marokko-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-1de49ebec0a559f7",
@@ -375,6 +643,36 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-278a4e45324352a8",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)",
+      "discovery_excerpt": "Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 9,
+      "country_contexts": [
+        "Montenegro"
+      ]
+    },
+    {
+      "id": "de-kg-discovery-27defff615b684da",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld",
+      "discovery_excerpt": "Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 8,
+      "country_contexts": [
+        "Marokko"
+      ]
+    },
+    {
       "id": "de-kg-discovery-289b0e7c3d8d6b13",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 12.06.1991, III R 108/89, BStBl II 1992 S. 20",
@@ -383,6 +681,24 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-292ea49b00653bed",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung",
+      "discovery_excerpt": "Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 2,
+      "country_contexts": [
+        "Bosnien und Herzegowina",
+        "Kosovo",
+        "Montenegro",
+        "Serbien"
+      ]
     },
     {
       "id": "de-kg-discovery-2bc27aa817f87a52",
@@ -411,9 +727,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_serbien-dv_document-1.txt",
+      "operative_body_sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "operative_corpus_citation_path": "de/regulation/dvka/serbien-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-2e35ab29f2750a4c",
@@ -503,9 +824,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_bosnien-sva_document-1.txt",
+      "operative_body_sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "operative_corpus_citation_path": "de/regulation/dvka/bosnien-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-3a8452d6c8893e0d",
@@ -517,6 +843,21 @@
       "status": "pending",
       "text_capture_state": "corpus_receipted",
       "class_membership_state": "bstbl_ii_publication_unverified"
+    },
+    {
+      "id": "de-kg-discovery-3b2d619f6f35b010",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit",
+      "discovery_excerpt": "Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 12,
+      "country_contexts": [
+        "Türkei"
+      ]
     },
     {
       "id": "de-kg-discovery-3bc77e77ffba6699",
@@ -555,9 +896,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_zp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_zp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tunesien-zp_document-1.txt",
+      "operative_body_sha256": "420962685851fa2219d5e55324886a1ca0c40234a5fab5cc3ff9d4a59d4c2f96",
+      "operative_corpus_citation_path": "de/regulation/dvka/tunesien-zp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-402c4be6d4ba5e86",
@@ -727,9 +1073,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_montenegro-sp_document-1.txt",
+      "operative_body_sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "operative_corpus_citation_path": "de/regulation/dvka/montenegro-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-55cae2ad021d0c6d",
@@ -879,9 +1230,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_marokko-sp_document-1.txt",
+      "operative_body_sha256": "ea38699009fe54ad5e738eacf9e0fe438269c5ff3bb9d46d3fc03c24d46458b9",
+      "operative_corpus_citation_path": "de/regulation/dvka/marokko-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-66a9b87630c2063b",
@@ -940,9 +1296,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tunesien-sva_document-1.txt",
+      "operative_body_sha256": "5b52a27a365dcd4d5fb1f089cdda60e0f6f5882c77f837efe8f26f28868c49c7",
+      "operative_corpus_citation_path": "de/regulation/dvka/tunesien-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-7027129fca0edcad",
@@ -951,9 +1312,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tuerkei-sp_document-1.txt",
+      "operative_body_sha256": "c7344caa5c44bd6ca731631541f71ec5fef306e3ca87ab3fcc69a0be28d587d8",
+      "operative_corpus_citation_path": "de/regulation/dvka/tuerkei-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-7239541e7ad93ef2",
@@ -1126,15 +1492,35 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-8452b3a5b4e1d04d",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien; Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961",
+      "discovery_excerpt": "Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien - Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 11,
+      "country_contexts": [
+        "Serbien"
+      ]
+    },
+    {
       "id": "de-kg-discovery-84559749608a46b9",
       "identity": "Sozialversicherungsabkommen mit Serbien\n (PDF, 161 KB) Zwischen der Republik Serbien und der Bundesrepublik Deutschland liegt noch kein eigenständiges Sozialversicherungsabkommen vor. Es ist daher derzeit noch das Abkommen zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit vom 12.10.1968 im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Serbien anzuwenden (vgl. auch Bekanntmachung vom 16.11.1992 - BGBl. II, S. 1196).",
       "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf",
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_serbien-sva_document-1.txt",
+      "operative_body_sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "operative_corpus_citation_path": "de/regulation/dvka/serbien-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-8498999f6901e128",
@@ -1163,9 +1549,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tuerkei-dv_document-1.txt",
+      "operative_body_sha256": "4d7772f97c209a3783ceab120b05d726e08ede46a12651f5a02425e92e830452",
+      "operative_corpus_citation_path": "de/regulation/dvka/tuerkei-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-8591668f1fafa50d",
@@ -1176,6 +1567,21 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-86a6679bd3a849e1",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei",
+      "discovery_excerpt": "Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 12,
+      "country_contexts": [
+        "Türkei"
+      ]
     },
     {
       "id": "de-kg-discovery-8c04d87c0388495b",
@@ -1234,9 +1640,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/marokko_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_marokko-dv_document-1.txt",
+      "operative_body_sha256": "3428245cc489c4e069b745956ed8fad1413b4351f1aa9053e4db8de611befd06",
+      "operative_corpus_citation_path": "de/regulation/dvka/marokko-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-918ab3081a058973",
@@ -1297,6 +1708,21 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-97107fad2d0c468e",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina; Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)",
+      "discovery_excerpt": "Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina - Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 2,
+      "country_contexts": [
+        "Bosnien"
+      ]
     },
     {
       "id": "de-kg-discovery-98c4f002a09d52fc",
@@ -1379,15 +1805,35 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-a18520a380f21c85",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit",
+      "discovery_excerpt": "Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 12,
+      "country_contexts": [
+        "Türkei"
+      ]
+    },
+    {
       "id": "de-kg-discovery-a1eac264f26a3761",
       "identity": "Schlussprotokoll mit dem Kosovo\n (PDF, 91 KB)",
       "source_url": "https://www.dvka.de/media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf",
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_kosovo-sp_document-1.txt",
+      "operative_body_sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "operative_corpus_citation_path": "de/regulation/dvka/kosovo-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-a2d03a0a29d3cfc7",
@@ -1396,9 +1842,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/serbien_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_serbien-sp_document-1.txt",
+      "operative_body_sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "operative_corpus_citation_path": "de/regulation/dvka/serbien-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-a49901260a7486e4",
@@ -1511,6 +1962,21 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-b58bc58d4c191f98",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld",
+      "discovery_excerpt": "Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 13,
+      "country_contexts": [
+        "Tunesien"
+      ]
+    },
+    {
       "id": "de-kg-discovery-b88635d70c7e1487",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 13.04.2016, III R 28/15, BStBl II S. 648",
@@ -1537,9 +2003,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_bosnien-dv_document-1.txt",
+      "operative_body_sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "operative_corpus_citation_path": "de/regulation/dvka/bosnien-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-b92c910ca6ffcca0",
@@ -1598,9 +2069,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_montenegro-sva_document-1.txt",
+      "operative_body_sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "operative_corpus_citation_path": "de/regulation/dvka/montenegro-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-c08ad24b80a921b5",
@@ -1670,9 +2146,29 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tunesien-sp_document-1.txt",
+      "operative_body_sha256": "962db951b57543b2f6a9ffd86789733ec210b8106574ab4d3dc423fd4906787f",
+      "operative_corpus_citation_path": "de/regulation/dvka/tunesien-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
+    },
+    {
+      "id": "de-kg-discovery-c90da7dac810e267",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)",
+      "discovery_excerpt": "Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 7,
+      "country_contexts": [
+        "Kosovo"
+      ]
     },
     {
       "id": "de-kg-discovery-c9646b036cc3ccbd",
@@ -1681,9 +2177,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_kosovo-dv_document-1.txt",
+      "operative_body_sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "operative_corpus_citation_path": "de/regulation/dvka/kosovo-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-ca1314db19ffa550",
@@ -1762,9 +2263,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tunesien_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tunesien-dv_document-1.txt",
+      "operative_body_sha256": "eaf9ddb4537de522ab4c3c446716852b37e2550d22f4c459e37414d1a2cbe330",
+      "operative_corpus_citation_path": "de/regulation/dvka/tunesien-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-d2134218f42bcd1a",
@@ -1773,9 +2279,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/kosovo_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_kosovo-sva_document-1.txt",
+      "operative_body_sha256": "cda2ef1f64fdee37f854d5146913425da73ab0b9c75f1950b125dcf209490270",
+      "operative_corpus_citation_path": "de/regulation/dvka/kosovo-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-d23d34e8179f022a",
@@ -1784,9 +2295,32 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_montenegro-dv_document-1.txt",
+      "operative_body_sha256": "7a420a03da529dad5ca36d76b5c688f0be574fbaa0baf008f0f31cdc76140cd6",
+      "operative_corpus_citation_path": "de/regulation/dvka/montenegro-dv/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
+    },
+    {
+      "id": "de-kg-discovery-d282d6e59432e3e4",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung",
+      "discovery_excerpt": "Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 2,
+      "country_contexts": [
+        "Bosnien und Herzegowina",
+        "Kosovo",
+        "Montenegro",
+        "Serbien"
+      ]
     },
     {
       "id": "de-kg-discovery-d730067060742965",
@@ -1806,8 +2340,12 @@
       "source_path": "da-kg-2025.txt",
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
-      "text_capture_state": "corpus_capture_available_unsigned",
-      "source_url": "https://publications.europa.eu/resource/cellar/fba26a64-1ef1-42d6-87c3-b841c3218831.0002.01/DOC_1"
+      "text_capture_state": "corpus_receipted",
+      "source_url": "https://publications.europa.eu/resource/cellar/fba26a64-1ef1-42d6-87c3-b841c3218831.0002.01/DOC_1",
+      "operative_source_path": "agreement-bodies/de_regulation_eec-turkey_arb-3-80_document-1.txt",
+      "operative_body_sha256": "fa25d8fa2fac801b7bd638f680650bdd50dd909422ff1c4d2a4d70f979734b9e",
+      "operative_corpus_citation_path": "de/regulation/eec-turkey/arb-3-80/document-1",
+      "operative_text_scope": "captured_decision_text"
     },
     {
       "id": "de-kg-discovery-d830798a28c4e42c",
@@ -1931,6 +2469,39 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-dfa116e637bf386a",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit",
+      "discovery_excerpt": "Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 2,
+      "country_contexts": [
+        "Bosnien und Herzegowina",
+        "Kosovo",
+        "Montenegro",
+        "Serbien"
+      ]
+    },
+    {
+      "id": "de-kg-discovery-e0b5f3f789fcd50d",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld",
+      "discovery_excerpt": "Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld",
+      "source_path": "bmas-bilateral-2026.txt",
+      "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
+      "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "inventory_page": 8,
+      "country_contexts": [
+        "Marokko"
+      ]
+    },
+    {
       "id": "de-kg-discovery-e14615f8317fca14",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 21.01.2004, XI R 3/03, BStBl II S. 919",
@@ -1957,9 +2528,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_tuerkei-sva_document-1.txt",
+      "operative_body_sha256": "957f70414e4d2eb72e2d7dcd4d8fa8fa079b90c9e26c32da0ad580d0f54f3ec7",
+      "operative_corpus_citation_path": "de/regulation/dvka/tuerkei-sva/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-e41c039197f881bd",
@@ -2078,9 +2654,14 @@
       "status": "pending",
       "class_id": "de-kg-suppl-010",
       "source_path": "dvka-bilateral.html",
-      "text_capture_state": "corpus_capture_available_unsigned",
+      "text_capture_state": "corpus_receipted",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
-      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sp.pdf"
+      "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sp.pdf",
+      "operative_source_path": "agreement-bodies/de_regulation_dvka_bosnien-sp_document-1.txt",
+      "operative_body_sha256": "0346e48a552d966e533a34950b121873f5de959313cf68ade986ea414b6d4955",
+      "operative_corpus_citation_path": "de/regulation/dvka/bosnien-sp/document-1",
+      "operative_text_scope": "official_publisher_excerpt",
+      "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
     },
     {
       "id": "de-kg-discovery-f54f831776726c82",
@@ -2209,13 +2790,14 @@
     "Verify BStBl II publication/class membership of BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
     "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
     "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.",
-    "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode."
+    "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.",
+    "Recover complete Kindergeld-specific Morocco1981/1991 and Tunisia1991 treaty texts plus newly enumerated amendment/continuity instruments from the BMAS inventory. The22DVKA captures are publisher extracts; they do not supply this missing treaty text. Inventory legal/commencement references still need complete corpus-link reconciliation."
   ],
   "counts": {
     "de-kg-suppl-007": 16,
     "de-kg-suppl-008": 2,
     "de-kg-suppl-009": 168,
-    "de-kg-suppl-010": 23
+    "de-kg-suppl-010": 36
   },
-  "receipt_sha256": "ad0dc7ec613a71b4fb9cb9c9e8e2a8c5d0ff3ac6377eb14ce56ed07facc0a845"
+  "receipt_sha256": "ef994dae0ea533d9ed497f150596994f2456740f02f4364606bd44cfba8d3863"
 }

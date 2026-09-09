@@ -515,7 +515,7 @@ generated_facts:
     subject_search_state:
       total: 15
       unretrieved: 4
-    candidate_count: 664
+    candidate_count: 677
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -6658,6 +6658,24 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 19.01.2023, III R 36/21, BStBl II S. 711
+    - id: de-kg-discovery-278a4e45324352a8
+      status: pending
+      identity_kind: class_member
+      identity: Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)
+    - id: de-kg-discovery-27defff615b684da
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
     - id: de-kg-discovery-289b0e7c3d8d6b13
       status: pending
       identity_kind: class_member
@@ -6667,6 +6685,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 12.06.1991, III R 108/89, BStBl II 1992 S. 20
+    - id: de-kg-discovery-292ea49b00653bed
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
     - id: de-kg-discovery-2bc27aa817f87a52
       status: pending
       identity_kind: class_member
@@ -6784,6 +6811,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/cjeu-c-328-20.txt
       discovery_source_sha256: f79afa65d4a53b16a375f82f44215848d63f37297c341188b23b77ca8774f3a2
       discovery_excerpt: C-328/20
+    - id: de-kg-discovery-3b2d619f6f35b010
+      status: pending
+      identity_kind: class_member
+      identity: Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
     - id: de-kg-discovery-3bc77e77ffba6699
       status: pending
       identity_kind: class_member
@@ -7324,6 +7360,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.12.2013, XI R 42/11, BStBl II 2014 S. 840
+    - id: de-kg-discovery-8452b3a5b4e1d04d
+      status: pending
+      identity_kind: class_member
+      identity: Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien; Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien - Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961
     - id: de-kg-discovery-84559749608a46b9
       status: pending
       identity_kind: class_member
@@ -7369,6 +7414,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 21.06.2023, III R 11/21, BStBl II S. 970
+    - id: de-kg-discovery-86a6679bd3a849e1
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei
     - id: de-kg-discovery-8c04d87c0388495b
       status: pending
       identity_kind: class_member
@@ -7477,6 +7531,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 15.03.2012, III R 29/09, BStBl II S. 892
+    - id: de-kg-discovery-97107fad2d0c468e
+      status: pending
+      identity_kind: class_member
+      identity: Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina; Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina - Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)
     - id: de-kg-discovery-98c4f002a09d52fc
       status: pending
       identity_kind: class_member
@@ -7549,6 +7612,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 02.06.2005, III R 86/03, BStBl II S. 756
+    - id: de-kg-discovery-a18520a380f21c85
+      status: pending
+      identity_kind: class_member
+      identity: Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
     - id: de-kg-discovery-a1eac264f26a3761
       status: pending
       identity_kind: class_member
@@ -7666,6 +7738,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 20.04.2006, III R 64/04, BStBl II 2007 S. 240
+    - id: de-kg-discovery-b58bc58d4c191f98
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld
     - id: de-kg-discovery-b88635d70c7e1487
       status: pending
       identity_kind: class_member
@@ -7810,6 +7891,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf
+    - id: de-kg-discovery-c90da7dac810e267
+      status: pending
+      identity_kind: class_member
+      identity: Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)
     - id: de-kg-discovery-c9646b036cc3ccbd
       status: pending
       identity_kind: class_member
@@ -7909,6 +7999,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf
+    - id: de-kg-discovery-d282d6e59432e3e4
+      status: pending
+      identity_kind: class_member
+      identity: Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
     - id: de-kg-discovery-d730067060742965
       status: pending
       identity_kind: class_member
@@ -8035,6 +8134,24 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.11.2008, VII R 19/08, BStBl II 2009 S. 342
+    - id: de-kg-discovery-dfa116e637bf386a
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit
+    - id: de-kg-discovery-e0b5f3f789fcd50d
+      status: pending
+      identity_kind: class_member
+      identity: Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
     - id: de-kg-discovery-e14615f8317fca14
       status: pending
       identity_kind: class_member
@@ -8696,14 +8813,14 @@ generated_facts:
         sections_located: 420
     class_discovery:
       path: conformance/closure/de-discovery-2026-09-08/snapshot.json
-      sha256: 02781d75d3eae6361d8f713e79ad0a50c15fd85220191390819a38fd2011c4e2
-      receipt_sha256: ad0dc7ec613a71b4fb9cb9c9e8e2a8c5d0ff3ac6377eb14ce56ed07facc0a845
+      sha256: 86d573ed973a962e69af138debe55fcf9050d8776e29c218382fb34c02b7dd43
+      receipt_sha256: ef994dae0ea533d9ed497f150596994f2456740f02f4364606bd44cfba8d3863
       complete: false
       counts:
         de-kg-suppl-007: 16
         de-kg-suppl-008: 2
         de-kg-suppl-009: 168
-        de-kg-suppl-010: 23
+        de-kg-suppl-010: 36
       remaining:
       - Complete official BMF/BZSt registers beyond DA-KG citations
       - Verify case identities and BStBl II publication against official decision/register captures
@@ -8711,6 +8828,7 @@ generated_facts:
       - Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.
       - The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.
       - Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.
+      - Recover complete Kindergeld-specific Morocco1981/1991 and Tunisia1991 treaty texts plus newly enumerated amendment/continuity instruments from the BMAS inventory. The22DVKA captures are publisher extracts; they do not supply this missing treaty text. Inventory legal/commencement references still need complete corpus-link reconciliation.
     seed_bindings:
     - id: de-kg-instr-001
       binding_kind: instrument_candidate
@@ -12240,13 +12358,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 681
+    instrument_count: 694
     counts:
-      total: 681
+      total: 694
       encoded: 1
       classified-with-reason: 132
       excluded-with-reason: 338
-      pending: 210
+      pending: 223
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12276,7 +12394,10 @@ computed:
     - de-kg-discovery-220823c8e347c5c0
     - de-kg-discovery-237000cd7ae7e260
     - de-kg-discovery-258c3463a611bbff
+    - de-kg-discovery-278a4e45324352a8
+    - de-kg-discovery-27defff615b684da
     - de-kg-discovery-289b0e7c3d8d6b13
+    - de-kg-discovery-292ea49b00653bed
     - de-kg-discovery-2bc27aa817f87a52
     - de-kg-discovery-2cc6ce9a628d09b1
     - de-kg-discovery-2d6286809c5f1a19
@@ -12289,6 +12410,7 @@ computed:
     - de-kg-discovery-345366269efcd1c7
     - de-kg-discovery-359e9a2ce0db9b88
     - de-kg-discovery-37736435a414ade5
+    - de-kg-discovery-3b2d619f6f35b010
     - de-kg-discovery-3bc77e77ffba6699
     - de-kg-discovery-3c8055571628b365
     - de-kg-discovery-3ca0118229d10269
@@ -12348,11 +12470,13 @@ computed:
     - de-kg-discovery-822d1b65adf440dc
     - de-kg-discovery-832345d008a9b63d
     - de-kg-discovery-8399bd1ae4a798f1
+    - de-kg-discovery-8452b3a5b4e1d04d
     - de-kg-discovery-84559749608a46b9
     - de-kg-discovery-8498999f6901e128
     - de-kg-discovery-84ff9e87323265e8
     - de-kg-discovery-85006ff4c6d2a17e
     - de-kg-discovery-8591668f1fafa50d
+    - de-kg-discovery-86a6679bd3a849e1
     - de-kg-discovery-8c04d87c0388495b
     - de-kg-discovery-8c6a71dafb7dfcd3
     - de-kg-discovery-8e2d552de7522aa4
@@ -12365,6 +12489,7 @@ computed:
     - de-kg-discovery-949482e500000d24
     - de-kg-discovery-94b8bf3c969f58f9
     - de-kg-discovery-957b1d766d1aa0c0
+    - de-kg-discovery-97107fad2d0c468e
     - de-kg-discovery-98c4f002a09d52fc
     - de-kg-discovery-9a4f325687f3bf74
     - de-kg-discovery-9ac19deb6d7191de
@@ -12373,6 +12498,7 @@ computed:
     - de-kg-discovery-a044d750bba05d0a
     - de-kg-discovery-a0c34c0284062b2c
     - de-kg-discovery-a0d21607d2b68262
+    - de-kg-discovery-a18520a380f21c85
     - de-kg-discovery-a1eac264f26a3761
     - de-kg-discovery-a2d03a0a29d3cfc7
     - de-kg-discovery-a49901260a7486e4
@@ -12386,6 +12512,7 @@ computed:
     - de-kg-discovery-b41c8a1be86eb5c2
     - de-kg-discovery-b470cdb544d3e6e0
     - de-kg-discovery-b54c31b087ac0265
+    - de-kg-discovery-b58bc58d4c191f98
     - de-kg-discovery-b88635d70c7e1487
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-b8e05478b09fa623
@@ -12401,6 +12528,7 @@ computed:
     - de-kg-discovery-c37028de6c676351
     - de-kg-discovery-c5da6ee5d3d1267d
     - de-kg-discovery-c711d29acbcee070
+    - de-kg-discovery-c90da7dac810e267
     - de-kg-discovery-c9646b036cc3ccbd
     - de-kg-discovery-ca1314db19ffa550
     - de-kg-discovery-caf426e77d16a7e5
@@ -12412,6 +12540,7 @@ computed:
     - de-kg-discovery-d1622e687602ffd5
     - de-kg-discovery-d2134218f42bcd1a
     - de-kg-discovery-d23d34e8179f022a
+    - de-kg-discovery-d282d6e59432e3e4
     - de-kg-discovery-d730067060742965
     - de-kg-discovery-d743efa2606d5620
     - de-kg-discovery-d830798a28c4e42c
@@ -12426,6 +12555,8 @@ computed:
     - de-kg-discovery-dea62e69a11f31da
     - de-kg-discovery-ded3b056040a529c
     - de-kg-discovery-def3fd7aa3abe640
+    - de-kg-discovery-dfa116e637bf386a
+    - de-kg-discovery-e0b5f3f789fcd50d
     - de-kg-discovery-e14615f8317fca14
     - de-kg-discovery-e1d5e5794321bcbd
     - de-kg-discovery-e403daefa2e34575
@@ -19882,6 +20013,24 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 19.01.2023, III R 36/21, BStBl II S. 711
+    - id: de-kg-discovery-278a4e45324352a8
+      status: pending
+      identity_kind: class_member
+      identity: Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Bekanntmachung über die Fortgeltung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und Montenegro - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 745)
+    - id: de-kg-discovery-27defff615b684da
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
     - id: de-kg-discovery-289b0e7c3d8d6b13
       status: pending
       identity_kind: class_member
@@ -19891,6 +20040,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 12.06.1991, III R 108/89, BStBl II 1992 S. 20
+    - id: de-kg-discovery-292ea49b00653bed
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
     - id: de-kg-discovery-2bc27aa817f87a52
       status: pending
       identity_kind: class_member
@@ -20011,6 +20169,15 @@ computed:
       classification: eu_family_benefit_non_indexation
       reason: The corrected judgment’s operative point1 finds the Austrian family-benefit/child-tax-credit residence indexation contrary to Regulations883/2004 Articles4 and67 and492/2011 Article7(2). The BMF2December2025 letter expressly relies on C-328/20 in its EU/EEA child-allowance footnote. This remains a bearing coordination dependency for child-abroad treatment and the specified allowance territorial adjustment; no automatic German tax-rule scope beyond the text is inferred. BStBl II membership remains unverified. Open until encoded and composed. Official corpus body de/guidance/cjeu-c-328-20/document-1, SHA-256 f79afa65d4a53b16a375f82f44215848d63f37297c341188b23b77ca8774f3a2, release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
       bears_on_computed_surface: true
+    - id: de-kg-discovery-3b2d619f6f35b010
+      status: pending
+      identity_kind: class_member
+      identity: Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Zwischenabkommen vom 25. Oktober 1974 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
     - id: de-kg-discovery-3bc77e77ffba6699
       status: pending
       identity_kind: class_member
@@ -20554,6 +20721,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.12.2013, XI R 42/11, BStBl II 2014 S. 840
+    - id: de-kg-discovery-8452b3a5b4e1d04d
+      status: pending
+      identity_kind: class_member
+      identity: Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien; Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Bekanntmachung über die Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Bundesrepublik Jugoslawien - Bekanntmachung vom 20. März 1997, BGBl. 1997 II S. 961
     - id: de-kg-discovery-84559749608a46b9
       status: pending
       identity_kind: class_member
@@ -20599,6 +20775,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 21.06.2023, III R 11/21, BStBl II S. 970
+    - id: de-kg-discovery-86a6679bd3a849e1
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 28. Mai 1969 zur Änderung des Abkommens vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei
     - id: de-kg-discovery-8c04d87c0388495b
       status: pending
       identity_kind: class_member
@@ -20707,6 +20892,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 15.03.2012, III R 29/09, BStBl II S. 892
+    - id: de-kg-discovery-97107fad2d0c468e
+      status: pending
+      identity_kind: class_member
+      identity: Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina; Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Fortgeltung der deutsch-jugoslawischen Verträge im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Bosnien und Herzegowina - Bekanntmachung vom 16. November 1992 (BGBl. 1992 II S. 1196)
     - id: de-kg-discovery-98c4f002a09d52fc
       status: pending
       identity_kind: class_member
@@ -20779,6 +20973,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 02.06.2005, III R 86/03, BStBl II S. 756
+    - id: de-kg-discovery-a18520a380f21c85
+      status: pending
+      identity_kind: class_member
+      identity: Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Zusatzabkommen vom 2. November 1984 zum Abkommen vom 30. April 1964 zwischen der Bundesrepublik Deutschland und der Republik Türkei über Soziale Sicherheit
     - id: de-kg-discovery-a1eac264f26a3761
       status: pending
       identity_kind: class_member
@@ -20896,6 +21099,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 20.04.2006, III R 64/04, BStBl II 2007 S. 240
+    - id: de-kg-discovery-b58bc58d4c191f98
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 20. September 1991 zwischen der Bundesrepublik Deutschland und der Tunesischen Republik über Kindergeld
     - id: de-kg-discovery-b88635d70c7e1487
       status: pending
       identity_kind: class_member
@@ -21043,6 +21255,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/tunesien_sp.pdf
+    - id: de-kg-discovery-c90da7dac810e267
+      status: pending
+      identity_kind: class_member
+      identity: Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo; Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Fortgeltung beziehungsweise weitere Anwendung von Verträgen im Verhältnis zwischen der Bundesrepublik Deutschland und der Republik Kosovo - Bekanntmachung vom 29. Juni 2011 (BGBl. 2011 II S. 748)
     - id: de-kg-discovery-c9646b036cc3ccbd
       status: pending
       identity_kind: class_member
@@ -21142,6 +21363,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/montenegro_dv.pdf
+    - id: de-kg-discovery-d282d6e59432e3e4
+      status: pending
+      identity_kind: class_member
+      identity: Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Verwaltungsvereinbarung vom 16. Mai 1969 zur Durchführung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
     - id: de-kg-discovery-d730067060742965
       status: pending
       identity_kind: class_member
@@ -21268,6 +21498,24 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.11.2008, VII R 19/08, BStBl II 2009 S. 342
+    - id: de-kg-discovery-dfa116e637bf386a
+      status: pending
+      identity_kind: class_member
+      identity: Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 30. September 1974 zur Änderung des Abkommens vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Soziale Sicherheit
+    - id: de-kg-discovery-e0b5f3f789fcd50d
+      status: pending
+      identity_kind: class_member
+      identity: Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmas-bilateral-2026.txt
+      discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
+      discovery_excerpt: Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld und Zusatzabkommen vom 22. November 1991 zum Abkommen vom 25. März 1981 zwischen der Bundesrepublik Deutschland und dem Königreich Marokko über Kindergeld
     - id: de-kg-discovery-e14615f8317fca14
       status: pending
       identity_kind: class_member
@@ -22407,7 +22655,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 681
+    bearing_candidate_instruments: 694
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

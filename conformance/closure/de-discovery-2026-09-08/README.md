@@ -1,8 +1,9 @@
 # Kindergeld class discovery seeds
 
-This snapshot contains 209 candidate entries: 16 BMF letters, 2 BZSt
-instructions, 168 court candidates, and 23 bilateral or association instruments.
-Of these, 204 remain pending citation seeds. Four corpus-receipted entries are
+This snapshot contains 222 candidate entries: 16 BMF letters, 2 BZSt
+instructions, 168 court candidates, and 36 bilateral or association instruments.
+Of these, 217 remain pending legal disposition: 194 citation-only seeds and 23
+corpus-receipted bilateral/association instruments. Four other corpus-receipted entries are
 bearing dependencies (two parentage decisions, C-328/20 and the 2025 country-group
 letter); the 2013 transfer letter is non-bearing for this Kindergeld surface.
 The three courts’ BStBl II publication remains
@@ -16,6 +17,22 @@ already receipted as `de-subject-003` in `de-instrument-graph.json` (PDF SHA
 Whitespace-normalized citation excerpts identify each seed. The retained
 DVKA official bilateral index identifies the 22 linked instruments; DA-KG
 also explicitly identifies Association Council Decision 3/80.
+All 23 operative bodies are now copied byte-for-byte from the signed corpus
+release into `agreement-bodies/`, with citation, release, source URL and body
+hashes bound in the snapshot. This corrects the stale unsigned-capture labels.
+All 22 DVKA PDFs label themselves `Auszug`: these are publisher-selected
+extracts, not established complete treaty/protocol texts. Recover and compare
+the complete instruments before using an omitted Kindergeld provision as an
+exclusion. Receipt binding does not decide applicability, successor-state
+continuity, duplication or computational bearing; those rows remain pending.
+
+The BMAS bilateral inventory dated 1 February 2026 adds 13 separately identified
+agreements, amendments and continuity instruments missing from the DVKA links.
+These include the distinct Morocco Kindergeld agreement of 1981 and supplement
+of 1991, and the Tunisia Kindergeld agreement of 1991. The full inventory PDF
+and extracted text are retained; the operative texts remain pending. Common
+Yugoslav instruments are listed once with all four successor-state contexts.
+The inventory date does not itself establish application in the 2025 period.
 
 The full official BMF positive register dated 14 March 2025 is retained as
 `bmf-positive-list-2025.pdf`, with its extracted text and both SHA-256 values
@@ -67,14 +84,14 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 210 pending
-instruments out of 681. Dependency closure remains false: eight law-derived
+The regenerated ledger has 5 pending spine rows out of 18 and 223 pending
+instruments out of 694. Dependency closure remains false: eight law-derived
 inputs and 124 bearing instruments remain open, with no unclassified inputs.
 The eight birth-record and date inputs are committed world facts; engine-supplied query
 boundaries are not external inputs. The additional KindRG evidence candidate
 remains pending until its precise legal disposition is established.
 
-The 209 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
+The 222 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
 registers, verify case identities and BStBl II publication, reconcile duplicate
 identities, capture operative texts, and encode every bearing rule. All four
 class rows remain pending. No complete discovery or certified claim is made.
