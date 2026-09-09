@@ -320,10 +320,10 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-dakg` release at commit
-`d13e3839fce439f60e1c1fdfb4710a9b6930d4af`, content SHA-256
-`0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c`
-(9,168 rows, 37 scopes). The complete DA-KG 2026 edition is separately
+`de-rulespec-2026-09-09-kindergeld-marginal-employment` release at commit
+`629bd6dfa7f75b5c4040a0047425fa0294c512ff`, content SHA-256
+`473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904`
+(9,206 rows, 40 scopes). The complete DA-KG 2026 edition is separately
 receipted at `de/guidance/bzst-dakg-2026/document-1`, body SHA-256
 `2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58`.
 Its applicability remains pending; it does not replace the retained 2025 edition. The additive service captures cover JFDG, BFDG,
@@ -517,3 +517,12 @@ DA-KG Stand 2026 despite its legacy filename. `de-subject-017` binds that
 application to non-final cases has explicit temporal restrictions; applicability
 to the 2025 program remains pending. The retained 2025 heading evidence is
 not replaced by the new edition.
+
+
+The minimum-wage tranche adds complete official MiLoG and MiLoV5 sources and
+the DRV archive of SGB IV §8 effective from 1 March 2024 through 31 December
+2025 (`de/statute/sgb-4/fassung-2024-03-01/8/inhalt`). The archived body
+preserves the three-month/70-workday short-term-employment limit applicable
+in 2025. MiLoV5 supplies dated 2026 and 2027 rates; MiLoV4 remains the
+2025 rate source. The statutory SGB IV §8 employment classification and
+threshold calculation remain to be encoded and composed into EStG §32(4).

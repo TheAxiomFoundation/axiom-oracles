@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-09T09:25:52Z",
+  "generated_at": "2026-09-09T14:24:16Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
+    "sha256": "bc75734421229748ddca40892e563b1c98ab2a8121eb80b35ab5ae1a5a6b4c0c"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-09-kindergeld-dakg",
-      "commit": "d13e3839fce439f60e1c1fdfb4710a9b6930d4af",
-      "release_content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c",
+      "release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
+      "commit": "629bd6dfa7f75b5c4040a0047425fa0294c512ff",
+      "release_content_sha256": "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-09-kindergeld-dakg/0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c.json",
-        "raw_sha256": "691da82810b73b7111e3200230e36e8b839f69e856f0e12cbddb8855e8cd5713",
-        "content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c"
+        "path": "releases/de-rulespec-2026-09-09-kindergeld-marginal-employment/473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904.json",
+        "raw_sha256": "ce82b202c659c26d0fdb579aca0a52a6f8a2010037287ad1220c1df023ae6d13",
+        "content_sha256": "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904"
       },
       "scans": [
         {
@@ -298,6 +298,19 @@
         {
           "document_class": "regulation",
           "inventory": {
+            "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json",
+            "sha256": "829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+            "sha256": "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
+            "row_count": 4
+          }
+        },
+        {
+          "document_class": "regulation",
+          "inventory": {
             "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json",
             "sha256": "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
             "row_count": 4
@@ -493,6 +506,32 @@
         {
           "document_class": "statute",
           "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.json",
+            "sha256": "8b82e6de16963b2d1767d8d0d267a0c7d9c74a3e3758732e11e6690fc5fbac0c",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl",
+            "sha256": "1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json",
+            "sha256": "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
+            "row_count": 32
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+            "sha256": "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
+            "row_count": 32
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
             "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
             "sha256": "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
             "row_count": 4
@@ -504,23 +543,23 @@
           }
         }
       ],
-      "scanned_row_count": 9168,
+      "scanned_row_count": 9206,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9168,
-        "body_row_count": 8994,
-        "mapped_row_count": 9168,
+        "row_count": 9206,
+        "body_row_count": 9031,
+        "mapped_row_count": 9206,
         "unmapped_row_count": 0,
-        "act_count": 210,
+        "act_count": 213,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6309,
-          "law_metadata_changed_by": 31,
-          "law_metadata_fundstelle": 38
+          "explicit_cross_reference_body": 6343,
+          "law_metadata_changed_by": 32,
+          "law_metadata_fundstelle": 40
         },
-        "row_scan_sha256": "df74f2c77c4447f2bb30e392cdcd16579122c5880723933e83c49e5672ccc5d9",
-        "canonical_index_sha256": "75da2f8b92c6a0f72552de5472dceb911561103d92aebaafe23facb73ce76b02",
-        "per_act_sha256": "19cc02ba4f9bec9ae3ba22bb3e71731ac002532108c18d51447bbc6c2a88a956",
+        "row_scan_sha256": "ccbe13697a97b2edd7b2aaa6a81da17b934c74d1daaa064106318062fc636832",
+        "canonical_index_sha256": "a279eaf959b977856b11e917c56525346380bc6c8c5bc09315f95a337d2317a3",
+        "per_act_sha256": "e18b0325bc0155af619880c281efbccb9c259ff002c84349ac02e7914c19bcbc",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -13611,6 +13650,34 @@
                 "source_citation_path": "de/regulation/milov4",
                 "source_row_sha256": "10dc0b5e0cba3b534042b2b0003878ed003ff4e6835002b01ed1d5e3ddc7b6db",
                 "raw_reference": "BGBl I 2023, Nr. 321"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/regulation/milov5",
+            "document_row_sha256": "78e94c75f6d48bffea527362980e40680c3d8a4e49ec073849c78e4b9c8cd3f8",
+            "row_count": 4,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "0511d8a1e951bb71f8ccdba562187e8f2cc9989401f6e798a0b241c680b4f402",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/regulation/milov5/eingangsformel",
+                "source_body_sha256": "56e8c9e9b25f55853530b2d62d3160db707baf41602039cd594e0468d81cfeaf",
+                "source_row_sha256": "18e2ddf5975975b2f0b8a4c6b1bf20de74e22dede36acb6f059f524dd2fd3143",
+                "matched_text": "Mindestlohngesetzes",
+                "unresolved_identity": "named-instrument:mindestlohngesetzes"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/regulation/milov5",
+                "source_row_sha256": "78e94c75f6d48bffea527362980e40680c3d8a4e49ec073849c78e4b9c8cd3f8",
+                "raw_reference": "BGBl. I 2025, Nr. 268 (Nr. 312)"
               }
             ]
           },
@@ -36154,6 +36221,286 @@
             ]
           },
           {
+            "document_citation_path": "de/statute/milog",
+            "document_row_sha256": "2f296f53bad42cff21fd1296289b8175188461c091974ec81bdc3e7ca643686f",
+            "row_count": 32,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 31,
+              "law_metadata_changed_by": 1,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "1b6c2e9c23047d7a3880823ba6820606c2688db42402252be3e9b53a88c5e60c",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Arbeitnehmer-Entsendegesetzes",
+                "unresolved_identity": "named-instrument:arbeitnehmer-entsendegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/13",
+                "source_body_sha256": "bc4c22e322a5e9c441ab20708b4160899e444105845f87dbe21b44b3ad5a3a54",
+                "source_row_sha256": "69c100cd203f1dda4b6d33b75224f81e93e742dc8add33a5dfa4b21667545f33",
+                "matched_text": "Arbeitnehmer-Entsendegesetzes",
+                "unresolved_identity": "named-instrument:arbeitnehmer-entsendegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/16",
+                "source_body_sha256": "bc5f00a732b5d95521e75b8eaf73bf53419cc494cddf81c589ba40856e5aa07e",
+                "source_row_sha256": "b1e57f686ff5a125a9e9c03739de230ca91e046adb41c9cc942d6f26ca79b1e8",
+                "matched_text": "Arbeitnehmer-Entsendegesetzes",
+                "unresolved_identity": "named-instrument:arbeitnehmer-entsendegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/1",
+                "source_body_sha256": "fb067ba66224102db468182c1d9f471e796f7746d9238b654e14ea0fac5ef0c0",
+                "source_row_sha256": "9ae127c752e08b5e746a61a595962c661b8af50aec420847047df767309e080f",
+                "matched_text": "Arbeitnehmer-Entsendegesetzes",
+                "unresolved_identity": "named-instrument:arbeitnehmer-entsendegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/1",
+                "source_body_sha256": "fb067ba66224102db468182c1d9f471e796f7746d9238b654e14ea0fac5ef0c0",
+                "source_row_sha256": "9ae127c752e08b5e746a61a595962c661b8af50aec420847047df767309e080f",
+                "matched_text": "Arbeitnehmerüberlassungsgesetzes",
+                "unresolved_identity": "named-instrument:arbeitnehmerüberlassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/22",
+                "source_body_sha256": "ac42cb75eff9ab755102b6208f3d247f7d0d388a895c100d2839c8f0f36730a8",
+                "source_row_sha256": "b3cf040d911bb52b41bd4c56db7bd6b2e56eae0eb401008798930e2bbae74e28",
+                "matched_text": "Berufsbildungsgesetzes",
+                "unresolved_identity": "named-instrument:berufsbildungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/2",
+                "source_body_sha256": "e207fc1f388bfdb57fb5b69bcea664291cd45d803ade51cab8c15663765688bc",
+                "source_row_sha256": "5e212abd9a42f05d1dfcaee57634006e17f24c0a568fa23a5fe3a8d540cc464a",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/22",
+                "source_body_sha256": "ac42cb75eff9ab755102b6208f3d247f7d0d388a895c100d2839c8f0f36730a8",
+                "source_row_sha256": "b3cf040d911bb52b41bd4c56db7bd6b2e56eae0eb401008798930e2bbae74e28",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/22",
+                "source_body_sha256": "ac42cb75eff9ab755102b6208f3d247f7d0d388a895c100d2839c8f0f36730a8",
+                "source_row_sha256": "b3cf040d911bb52b41bd4c56db7bd6b2e56eae0eb401008798930e2bbae74e28",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Fahrpersonalverordnung",
+                "unresolved_identity": "named-instrument:fahrpersonalverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/21",
+                "source_body_sha256": "15f422c08c13a3c7ff76b034ad1d43b4363a459508d4e2865e6fc3462290a723",
+                "source_row_sha256": "6b00e5922b66901034749ca102f56102069a858267a993f0a497912ae7c91c3c",
+                "matched_text": "Gesetzes über Ordnungswidrigkeiten",
+                "unresolved_identity": "law:owig"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/22",
+                "source_body_sha256": "ac42cb75eff9ab755102b6208f3d247f7d0d388a895c100d2839c8f0f36730a8",
+                "source_row_sha256": "b3cf040d911bb52b41bd4c56db7bd6b2e56eae0eb401008798930e2bbae74e28",
+                "matched_text": "Jugendarbeitsschutzgesetzes",
+                "unresolved_identity": "named-instrument:jugendarbeitsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/15",
+                "source_body_sha256": "beb0a3d4e9ee3951cafc3076f47934f135e91aa41d945480a16497982aa3a250",
+                "source_row_sha256": "10146023fb4933d499afb97d686aa9f3c0fa131d9dd5a4b63b77fb9030bec6fe",
+                "matched_text": "Nachweisgesetzes",
+                "unresolved_identity": "named-instrument:nachweisgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/15",
+                "source_body_sha256": "beb0a3d4e9ee3951cafc3076f47934f135e91aa41d945480a16497982aa3a250",
+                "source_row_sha256": "10146023fb4933d499afb97d686aa9f3c0fa131d9dd5a4b63b77fb9030bec6fe",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetz",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/21",
+                "source_body_sha256": "15f422c08c13a3c7ff76b034ad1d43b4363a459508d4e2865e6fc3462290a723",
+                "source_row_sha256": "6b00e5922b66901034749ca102f56102069a858267a993f0a497912ae7c91c3c",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetzes",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetzes",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/18",
+                "source_body_sha256": "69a9546b19ed6783c42e9c703c62c2ce63014ffc3813125b8a1062e85322a9a4",
+                "source_row_sha256": "4ca3fe15427ced9206dffc59dc65d74aae8a17eb99cd928dd2ac2bf6bd005f6c",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetzes",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/16",
+                "source_body_sha256": "bc5f00a732b5d95521e75b8eaf73bf53419cc494cddf81c589ba40856e5aa07e",
+                "source_row_sha256": "b1e57f686ff5a125a9e9c03739de230ca91e046adb41c9cc942d6f26ca79b1e8",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetzes",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/15",
+                "source_body_sha256": "beb0a3d4e9ee3951cafc3076f47934f135e91aa41d945480a16497982aa3a250",
+                "source_row_sha256": "10146023fb4933d499afb97d686aa9f3c0fa131d9dd5a4b63b77fb9030bec6fe",
+                "matched_text": "Schwarzarbeitsbekämpfungsgesetzes",
+                "unresolved_identity": "named-instrument:schwarzarbeitsbekämpfungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Verordnung (EG) Nr. 1072/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1072/2009"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Verordnung (EG) Nr. 561/2006",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 561/2006"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Verordnung (EU) 2020/1054",
+                "unresolved_identity": "eu-regulation:verordnung (eu) 2020/1054"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Verordnung (EU) 2020/1055",
+                "unresolved_identity": "eu-regulation:verordnung (eu) 2020/1055"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/16",
+                "source_body_sha256": "bc5f00a732b5d95521e75b8eaf73bf53419cc494cddf81c589ba40856e5aa07e",
+                "source_row_sha256": "b1e57f686ff5a125a9e9c03739de230ca91e046adb41c9cc942d6f26ca79b1e8",
+                "matched_text": "Verordnung (EU) 2020/1055",
+                "unresolved_identity": "eu-regulation:verordnung (eu) 2020/1055"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/16",
+                "source_body_sha256": "bc5f00a732b5d95521e75b8eaf73bf53419cc494cddf81c589ba40856e5aa07e",
+                "source_row_sha256": "b1e57f686ff5a125a9e9c03739de230ca91e046adb41c9cc942d6f26ca79b1e8",
+                "matched_text": "Verordnung (EU) Nr. 1024/2012",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 1024/2012"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Verordnung (EU) Nr. 165/2014",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 165/2014"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/21",
+                "source_body_sha256": "15f422c08c13a3c7ff76b034ad1d43b4363a459508d4e2865e6fc3462290a723",
+                "source_row_sha256": "6b00e5922b66901034749ca102f56102069a858267a993f0a497912ae7c91c3c",
+                "matched_text": "Verwaltungs-Vollstreckungsgesetz",
+                "unresolved_identity": "named-instrument:verwaltungs-vollstreckungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/2",
+                "source_body_sha256": "e207fc1f388bfdb57fb5b69bcea664291cd45d803ade51cab8c15663765688bc",
+                "source_row_sha256": "5e212abd9a42f05d1dfcaee57634006e17f24c0a568fa23a5fe3a8d540cc464a",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/17",
+                "source_body_sha256": "2d9c7f67adf441da3f0b63571e065270d53007ff6b04ecfbb00c4129350cfda7",
+                "source_row_sha256": "2c55230c890d99305b76347f55c0ff1d8d170f056977eb883548178f5a40e2cd",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/milog/2",
+                "source_body_sha256": "e207fc1f388bfdb57fb5b69bcea664291cd45d803ade51cab8c15663765688bc",
+                "source_row_sha256": "5e212abd9a42f05d1dfcaee57634006e17f24c0a568fa23a5fe3a8d540cc464a",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": "de/statute/milog",
+                "source_row_sha256": "2f296f53bad42cff21fd1296289b8175188461c091974ec81bdc3e7ca643686f",
+                "raw_reference": "Zuletzt geändert durch Art. 8 Abs. 3 G v. 12.5.2026 I Nr. 137"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/statute/milog",
+                "source_row_sha256": "2f296f53bad42cff21fd1296289b8175188461c091974ec81bdc3e7ca643686f",
+                "raw_reference": "BGBl I 2014, 1348"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/statute/rbeg-2021",
             "document_row_sha256": "346642ea53ec13f4d3d3caf39c48e3f1924c457dcff708d6a6217011f9beae9a",
             "row_count": 10,
@@ -45419,6 +45766,36 @@
                 "source_citation_path": "de/statute/sgb-4",
                 "source_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e",
                 "raw_reference": "BGBl I 1976, 3845"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/sgb-4/fassung-2024-03-01/8",
+            "document_row_sha256": "a4fdcfe3bb11155bb98a942d67983bc3d38c4532ba5e545c6aef28f4e32ea53a",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "e1734c563286813f2d18af9aa477da1640eef12c70a37b5c51bbe2af9ae78c84",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/inhalt",
+                "source_body_sha256": "e862842c731c493118e8f95034e9202c214f8b8cb7ec82fb29729ed961b13b1e",
+                "source_row_sha256": "696a14ad51db0ef748380ee81050d91ed58c13724ba0863771a6a55673ed5386",
+                "matched_text": "Beschäftigungsverordnung",
+                "unresolved_identity": "named-instrument:beschäftigungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/inhalt",
+                "source_body_sha256": "e862842c731c493118e8f95034e9202c214f8b8cb7ec82fb29729ed961b13b1e",
+                "source_row_sha256": "696a14ad51db0ef748380ee81050d91ed58c13724ba0863771a6a55673ed5386",
+                "matched_text": "Mindestlohngesetzes",
+                "unresolved_identity": "named-instrument:mindestlohngesetzes"
               }
             ]
           },
@@ -56561,7 +56938,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "c62125fbed275b9a550b14e3c7790cb1e014c889767363256a65c8f8b4c5f581"
+        "receipt_sha256": "2994b17044ee9c8a71c8abede7bafa3e45ebb54554cb16a6c8214bf2662d1ca7"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -59597,7 +59974,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8"
+      "receipt_sha256": "476166a71993360715d35ec14630aa0c391ced13eafd722d68088630c08cba13"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -59613,10 +59990,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "2c7a3bc0b18e5ccf1cdcdc507a63d02e6715897abba7b9246acfc12b70fb93e1"
+          "receipt_sha256": "1a4ab0009c899fa82043225b037265baa24bd748ac101bf3b6d7f13cdf9b7f69"
         },
         {
           "id": "de-subject-002",
@@ -59626,14 +60003,14 @@
           "source_id": "bzst",
           "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf;charset=UTF-8",
+          "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "0ace9ff26d12cfc840bf92f861cdd07b053c4ab5748968341e445fcd04fd91b9"
+          "receipt_sha256": "911f066dd5340a9ad8dcc45ecdcf1d3f423f30e3769bbdbd3550e97c8b3e8605"
         },
         {
           "id": "de-subject-003",
@@ -59643,14 +60020,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "d6a95b9e4d567d3d39c1db61deb394cffd8fefa40be722391126ebb00b4d7d14"
+          "receipt_sha256": "04131a04f7af7dd9696d316d97ddc2aeca9e7583bb1c14fb5461e9f3961eab9a"
         },
         {
           "id": "de-subject-004",
@@ -59660,14 +60037,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=4ea18757-138e-47ff-ab66-eb4884b45c78&ssb=85256202583&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=4383c21a-ca3f-4e6f-bd10-805e4f9f8459&ssk=botmanager_support@radware.com&ssm=19055858790015240105524894585384&ssn=54ef198e3e7f47d42607d7690b6c0c2144740d1ef233-2549-44fb-a4eb3f&sso=0079316f-fedcb74a260e46bf86d85efbe6e6b532c072f438e5e24a47&ssp=77485985671788935272178897107319553&ssq=27784704609378102030846093585965168901820&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwidXpteCI6IjdmYzAwMGI5YjZkNTAyLTdmZDctNGMzYy04MmY0LTExOTU3MmRmOGJiMTEtMTc4ODk0NjA5MzM3NzAtMDA0MTE2MGJkMDQ4NDVkMGU0YTEwIiwiX191em1mIjoiN2Y5MDAwMGQxZWYyMzMtMjU0OS00NGZiLWExNmYtZmVkY2I3NGEyNjBlMS0xNzg4OTQ2MDkzMzc3MC0wMDQwNzNmY2U3MTZjOWFhNmE3MTAifQ==",
+          "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
           "http_status": 200,
-          "content_type": "text/html; charset=UTF-8",
-          "byte_count": 15113,
-          "content_sha256": "38bf41f61e11ad4b19b7e503897be3ea27ecead6603f91a496fdad092672a776",
-          "receipt_sha256": "f3525d94153d4e60509b0d6228472ca076c2cd32a20e8d7f28ade7e23ce3e2bb"
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 215724,
+          "content_sha256": "15fee7883c9650d0fc61003c67698d00e2c78517ac81cac525e7d64bec30a95e",
+          "receipt_sha256": "9b05478cc94931336a51587c35143085346691f8eff958e532e50e95eab6e152"
         },
         {
           "id": "de-subject-005",
@@ -59678,14 +60055,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "d3b95b86b14f2aa8427e92a3342c937752c3fa80d16e1682c9237c3fa1b629b5"
+          "receipt_sha256": "406f34a434d5906471671b40214faf1764dfc2bdb6b9ed6cab52a2f6665f3451"
         },
         {
           "id": "de-subject-006",
@@ -59695,14 +60072,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "1acc051b527d4c0698c32bd63886dee6a1f7a378f76069de429a5f24c96b1828"
+          "receipt_sha256": "fa60a07c10df9408f9a3b32d928509ec6bddeddad90989cb1fa0c1e6fe1c16ff"
         },
         {
           "id": "de-subject-007",
@@ -59712,14 +60089,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "6cfce6be8d0a4829a5fb4ad07a5d15c8df7d628d1a3e1d8fb2183bbfaf1b4451"
+          "receipt_sha256": "bafc38cbf8316badec10e69f3ce8756fbf3af18bbe807f71b36c54d1bb75828e"
         },
         {
           "id": "de-subject-008",
@@ -59729,10 +60106,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "200c94b1d9461d7caea845308feeabfb9cc86b6e8b683aa72ddffd74d056d7e5"
+          "receipt_sha256": "f876d4512cc43d01038b278c6218738281143abf2e1175296401a43c61723c63"
         },
         {
           "id": "de-subject-009",
@@ -59742,14 +60119,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "b52b6c51c16f5044acf078c37ab53fb90347898464d3139eb13e7893ee071eff"
+          "receipt_sha256": "a1b24542f536104af56223f176b60dfdacdd669a02f435f5c9482cdf3bbd8f1a"
         },
         {
           "id": "de-subject-010",
@@ -59759,14 +60136,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
-          "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "c1018e2eb5a82e18d1266d7a83f21d6f3668d7e43eef16b5ff9de0ce60b1f6a7"
+          "content_sha256": "4dc8889845e16118b49d561735374673eb732a09fd131b9d5c7f63a1d3dd46b0",
+          "receipt_sha256": "85901f375f423cd2896a8d240822438d395f73caee7e13db0f62860256fabd7e"
         },
         {
           "id": "de-subject-011",
@@ -59776,14 +60153,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
-          "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "75cb6beb0def189044006c19378f9c3769d41a183c43aeb643aee0642a8155ef"
+          "content_sha256": "1e533769501975598b36c8a48dc24e9f3222dc5f488730d04d233fa6896824fb",
+          "receipt_sha256": "65318fc69533f57739942bce51e44ee3179bf567bff40bfc1b1d8363baeb3273"
         },
         {
           "id": "de-subject-012",
@@ -59793,10 +60170,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "f1ee39e09155d282d7f2f4f84e205ce758ef1e85997f6d7a04324ac2cae69970"
+          "receipt_sha256": "78aa3a5c13d246557561c78f5c7f06560b5479271b018d5f93734f5728c4b3ec"
         },
         {
           "id": "de-subject-013",
@@ -59806,14 +60183,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "d94344ffe981870539cbc0f74cd8fdad0140cfcbd538a4696883e1d0c06961fc"
+          "receipt_sha256": "18aaf49a753cc513f1f403afbc544702bd7831a18c983545cf4e3ff95e910d99"
         },
         {
           "id": "de-subject-014",
@@ -59823,14 +60200,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
-          "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "ed54396d7b0ba669a14dc52bf48004973e610489380be1a325d2d537aaf42aa0"
+          "content_sha256": "dac1daae728d203a8f6a16847a9f129e9a6240ec527330754eb7c52bdc417517",
+          "receipt_sha256": "6d9ecf222005824917e9d5a4c86205720f531b5792c3c6a8272aa6cdb3c2a0a4"
         },
         {
           "id": "de-subject-015",
@@ -59840,10 +60217,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "cec2b372f3592fd96615ea182e3be619c1b32c2aeca95444f260a5adbfd20cea"
+          "receipt_sha256": "5ce0549ba9531fdf0ec2b97cf459147001a4921c5cb8c3bbbaeef4d3f07b64af"
         },
         {
           "id": "de-subject-016",
@@ -59853,14 +60230,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "cebce1d40ecdfe7aad009f1eac19d467c5dc3f019556f548cfce998563f591aa"
+          "receipt_sha256": "0e010169007d58506e0821153f1a8cd075faa324f1a639b0eee7b1df6b70c140"
         },
         {
           "id": "de-subject-017",
@@ -59870,17 +60247,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T09:25:52Z",
+          "captured_at": "2026-09-09T14:24:16Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf",
+          "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "67858403c10209afc8bad43b4e80f1257ea75430007ba90e8ee52d6eadcbbc12"
+          "receipt_sha256": "24e1cddfeee19c081903d17088a612f6ec54d7613d5716a42bb48e8925ae8f05"
         }
       ],
-      "receipt_sha256": "d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37"
+      "receipt_sha256": "513e3002f13384a5449db156fed6cac6beac55278a5a1ecd229663f1bc9d7e0e"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -61528,8 +61905,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8",
-            "subject_matter_search": "d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37",
+            "corpus_release": "476166a71993360715d35ec14630aa0c391ced13eafd722d68088630c08cba13",
+            "subject_matter_search": "513e3002f13384a5449db156fed6cac6beac55278a5a1ecd229663f1bc9d7e0e",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -62262,5 +62639,5 @@
       ]
     }
   ],
-  "receipt_sha256": "e252f79a6814c75e6858f602f9a71b4bcbf5b6ec208dafabb5c6e47a4b4c8818"
+  "receipt_sha256": "051dfd4e1624294da525eaa4a2776fdfa4aea2af7e69a1194f331b1cd7aaa4c6"
 }

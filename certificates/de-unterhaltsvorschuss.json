@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "3e7920f2c4d7331b231b2ae6cafde6a81813694eb1e7c743e5471213fb70f54a"
+      "sha256": "b00463d5201b79e3b8cc29d42de89a04afaf2b1831147e0e43dac9ea68b1be33"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "5ea87c13aac772a3b0a388d9b5b4be90a3ae33ee383d0c72a3c5156f93323720",
+      "sha256": "535f6566a0dacf628f09572216b028b70ae8dc9c38c17546af06a19295a722e2",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "b805a60c2abe291c400067a1e54a100a72061ae804c8936b9735055f1b147455"
+      "sha256": "75fa62c5d75586a506c188d21e5939104ac5ae9eeeeb352eed2c84caafac0e00"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-dakg",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -376,7 +376,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "a405f0aa449d0f284477fa35af99d1a09bcc050341dfa39cf077ccc9fce3479b",
+      "subgraph_sha256": "e6b3da01856b3f933c24fba01f56068757e91c416bb1f1484039b3228a333d56",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

@@ -28,18 +28,18 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
+SOURCE_SHA256 = "bc75734421229748ddca40892e563b1c98ab2a8121eb80b35ab5ae1a5a6b4c0c"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = "de-rulespec-2026-09-09-kindergeld-dakg"
+RELEASE = "de-rulespec-2026-09-09-kindergeld-marginal-employment"
 RELEASE_CONTENT_SHA256 = (
-    "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c"
+    "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904"
 )
 RELEASE_SELECTOR_SHA256 = (
-    "c09e67bd0c245bc5ab121f192cea129246c2cb129ec12ea945a6cc269482e62a"
+    "27a7a2058e3f56c57fa9c7e1a92bc08dc29d2b2c0a8e9e1cbba75f0549771074"
 )
-CORPUS_COMMIT = "d13e3839fce439f60e1c1fdfb4710a9b6930d4af"
+CORPUS_COMMIT = "629bd6dfa7f75b5c4040a0047425fa0294c512ff"
 RULESPEC_COMMIT = "73e92a4da6970693215edd28e24295c923cb807d"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -179,6 +179,10 @@ EXPECTED_INVENTORIES = {
         "9729eadd40744a601ab59b5301ac78969f50dca89254f9fba106ad2ed98a7691",
         16,
     ),
+    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json": (
+        "829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39",
+        4,
+    ),
     "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json": (
         "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
         4,
@@ -238,6 +242,14 @@ EXPECTED_INVENTORIES = {
     "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.json": (
         "6b4a7dc1c3467ba664ce03e0833dc6337b44caa2e42a91eb00cfdf069442651a",
         12,
+    ),
+    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.json": (
+        "8b82e6de16963b2d1767d8d0d267a0c7d9c74a3e3758732e11e6690fc5fbac0c",
+        2,
+    ),
+    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json": (
+        "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
+        32,
     ),
     "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json": (
         "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
@@ -329,6 +341,10 @@ EXPECTED_PROVISION_SOURCES = {
         "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
         16,
     ),
+    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl": (
+        "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
+        4,
+    ),
     "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl": (
         "6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e",
         4,
@@ -388,6 +404,14 @@ EXPECTED_PROVISION_SOURCES = {
     "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl": (
         "e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40",
         12,
+    ),
+    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl": (
+        "1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a",
+        2,
+    ),
+    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl": (
+        "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
+        32,
     ),
     "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl": (
         "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",

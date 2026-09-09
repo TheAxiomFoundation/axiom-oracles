@@ -33,12 +33,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489
+    sha256: bc75734421229748ddca40892e563b1c98ab2a8121eb80b35ab5ae1a5a6b4c0c
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: d13e3839fce439f60e1c1fdfb4710a9b6930d4af
-    release: de-rulespec-2026-09-09-kindergeld-dakg
-    release_content_sha256: 0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c
+    commit: 629bd6dfa7f75b5c4040a0047425fa0294c512ff
+    release: de-rulespec-2026-09-09-kindergeld-marginal-employment
+    release_content_sha256: 473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -109,6 +109,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl
       sha256: 3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c
       row_count: 16
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187
+      row_count: 4
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl
       sha256: 6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e
       row_count: 4
@@ -154,6 +157,12 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl
       sha256: e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40
       row_count: 12
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl
+      sha256: 1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2
+      row_count: 32
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
@@ -905,10 +914,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: af3fffb55b065e8894a2fed3c483f49f8ab645facae7be37456b3c385b9e3793
+    snapshot_sha256: cab606422c52dea38334d1212201560e117159f59437b3bedd423d47c7ed2d02
     channel_receipts:
-      corpus_release: 623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8
-      subject_matter_search: d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37
+      corpus_release: 476166a71993360715d35ec14630aa0c391ced13eafd722d68088630c08cba13
+      subject_matter_search: 513e3002f13384a5449db156fed6cac6beac55278a5a1ecd229663f1bc9d7e0e
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10130,7 +10139,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 6b9fe73194208507e1e5a90bad89f8b2efd4f805d812570397a0c2bf4db7f1a9
+      sha256: f3834434e6f76cffcfb8bdb9987cd0ac27a80d5dd68cb097920df27cc233d5f0
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10178,8 +10187,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8
-        subject_matter_search: d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37
+        corpus_release: 476166a71993360715d35ec14630aa0c391ced13eafd722d68088630c08cba13
+        subject_matter_search: 513e3002f13384a5449db156fed6cac6beac55278a5a1ecd229663f1bc9d7e0e
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
