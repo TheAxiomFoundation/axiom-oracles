@@ -70,10 +70,10 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 7
+        "signed": 8
       },
       "by_status": {
-        "encoded": 7,
+        "encoded": 8,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -82,6 +82,7 @@
       "citation_paths": [
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/regulation/milov4/1",
+        "de/regulation/milov5/1",
         "de/statute/bgb/1591",
         "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -96,7 +97,7 @@
         "de/statute/estg/66",
         "de/statute/estg/78"
       ],
-      "citation_root_count": 13,
+      "citation_root_count": 14,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -167,6 +168,15 @@
           "role": "minimum_wage_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/milov5/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+          "role": "minimum_wage_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
         }
       ],
       "evidence_roots": [
@@ -208,7 +218,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "5e0c07a8831a2f4c07aa4369c9c6911b004fc9897517f7358440a98902b2c0e8",
+      "subgraph_sha256": "56d4acc6618338bb443189663d633b776fddc660728b8cba19ea5bbdc7cf62bd",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -389,7 +399,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+  "rulespec_commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -398,7 +408,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "67e6dc3868ed591f0f98873d6591ba489ca57f634e11b1bc974c4c5347415a01"
+    "sha256": "3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46"
   },
   "spine_closed": false
 }

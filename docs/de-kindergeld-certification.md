@@ -11,8 +11,8 @@ pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
-historical minimum-wage parameter are declared at RuleSpec merge
-`00fb38eda17659da44e3ae0fff3bedf427c324bd`; the live amount-only oracle and
+historical minimum-wage parameter and MiLoV5 §1 future rates are declared at RuleSpec merge
+`b74d0004a69bb43f30e936d30f47432ca3c25058`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine stays pending.
@@ -527,3 +527,5 @@ preserves the three-month/70-workday short-term-employment limit applicable
 in 2025. MiLoV5 supplies dated 2026 and 2027 rates; MiLoV4 remains the
 2025 rate source. The statutory SGB IV §8 employment classification and
 threshold calculation remain to be encoded and composed into EStG §32(4).
+
+The MiLoV5 prerequisite starts in 2026 and has no 2025 version. Its declaration preserves explicit source accounting for the 2026/2027 wage schedule; the 2025 certificate retains the separately captured MiLoV4 prerequisite. Neither wage module establishes marginal-employment eligibility or child qualification.

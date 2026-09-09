@@ -17,7 +17,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
         },
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "1a89789e143f900c52d82909e9f3c2cc7f0704b73349e58b5290f51b81c9d277"
+      "sha256": "fc19ba1e12a479a0d0b76dbe1807f4ab05d21a24679c5b9228ef8e049952f3db"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "796c3e552225aa896825106a5ee4e5012fb4d36f9542577d1d8ff12c232489ec",
+      "sha256": "50f7663e9ffdf0476ff563a2abee0b8aeae82d530edc9f9f5078b8a97dee69a1",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "2a6568085609f85f94e6e589b1a2f0ad3f9064397fc9bcfd75ebad00fa980c8b"
+      "sha256": "ec5a1f937dbe5ad1e2723464898bda2ea047b22e619bf3851ec5c312bb15b4f6"
     }
   ],
   "period": "2025",
@@ -365,7 +365,7 @@
       "root_nodes": [
         "de:statutes/uhvorschg/2#advance_maintenance_amount"
       ],
-      "rulespec_commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+      "rulespec_commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
       "signature_blockers": [
         "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
       ],

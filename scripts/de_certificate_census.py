@@ -38,12 +38,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "00fb38eda17659da44e3ae0fff3bedf427c324bd"
+RULESPEC_MAIN_COMMIT = "b74d0004a69bb43f30e936d30f47432ca3c25058"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/regulation/milov5/1",
         "de/regulation/milov4/1",
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/statute/estg/32/absatz-3/document-1",
@@ -71,6 +72,7 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/regulation/milov5/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
         "de/regulation/milov4/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
         "de/regulation/eu-987-2009/article-59/document-1": (
             "coordination_payment_continuity_prerequisite",
@@ -125,6 +127,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/regulation/milov5/1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
+        "sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462",
+    },
     "de/regulation/milov4/1": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -215,6 +223,15 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/regulation/milov5/1",
+                role="minimum_wage_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/milov5/1.json",
+                source_sha256="7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462",
+                reason="Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+            ),
             _root(
                 "de/regulation/milov4/1",
                 role="minimum_wage_prerequisite",

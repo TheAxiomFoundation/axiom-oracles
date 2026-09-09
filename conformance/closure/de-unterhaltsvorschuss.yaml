@@ -27,7 +27,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 67e6dc3868ed591f0f98873d6591ba489ca57f634e11b1bc974c4c5347415a01
+    sha256: 3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 629bd6dfa7f75b5c4040a0047425fa0294c512ff
@@ -272,8 +272,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/minuhv/1
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/regulations/minuhv/1.yaml
     sha256: c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc
     module_id: de:regulations/minuhv/1
@@ -281,8 +281,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -422,10 +422,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 8417044ef925fad76cf7f254a1c66fed9b70ac72d183c6a04a061a6b2f1d2f8c
+    snapshot_sha256: c88274aa3a251555c62ae95b737828e23b314e3d9aa16761ddce489f54097d7e
     channel_receipts:
-      corpus_release: 7c65a5cb94c7d1762d657a2f41ec0b45e66630942b71051bdf61458c40bfdabb
-      subject_matter_search: 1fae31132dd509271dc8a40822ef0a96733a588910f9af5e89b4f05175e08c96
+      corpus_release: d23911a3c4304a3ecadfe4e13fac14c75a4a7f8b1e029ea3a5b17c22691af3fc
+      subject_matter_search: 6de83a41db2d90388c0c211770876c8cb3e9a70a6bd939298be760383238e285
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

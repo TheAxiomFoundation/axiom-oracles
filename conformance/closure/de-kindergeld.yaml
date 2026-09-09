@@ -26,6 +26,8 @@ program:
     role: coordination_payment_continuity_prerequisite
   - citation_path: de/regulation/milov4/1
     role: minimum_wage_prerequisite
+  - citation_path: de/regulation/milov5/1
+    role: minimum_wage_prerequisite
   spine_scope:
     kind: ordinal_range
     corpus_root: de/statute/estg
@@ -35,7 +37,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 67e6dc3868ed591f0f98873d6591ba489ca57f634e11b1bc974c4c5347415a01
+    sha256: 3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 629bd6dfa7f75b5c4040a0047425fa0294c512ff
@@ -334,8 +336,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/eu-987-2009/article-59/document-1
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/regulations/eu-987-2009/article-59/document-1.yaml
     sha256: 500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640
     module_id: de:regulations/eu-987-2009/article-59/document-1
@@ -343,17 +345,26 @@ generated_facts:
     declared_imports: []
   - citation_path: de/regulation/milov4/1
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/regulations/milov4/1.yaml
     sha256: 5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec
     module_id: de:regulations/milov4/1
     rule_count: 1
     declared_imports: []
+  - citation_path: de/regulation/milov5/1
+    state: captured
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    path: de/regulations/milov5/1.yaml
+    sha256: 6f2e281426c8471958b41a99b5ebc91212d8641041ed016257bd1f2d58b8b74e
+    module_id: de:regulations/milov5/1
+    rule_count: 1
+    declared_imports: []
   - citation_path: de/statute/bgb/1591
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/bgb/1591.yaml
     sha256: bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b
     module_id: de:statutes/bgb/1591
@@ -361,8 +372,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/bgb/187
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/bgb/187.yaml
     sha256: e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70
     module_id: de:statutes/bgb/187
@@ -370,8 +381,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/32/absatz-3/document-1
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/estg/32/absatz-3/document-1.yaml
     sha256: 37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d
     module_id: de:statutes/estg/32/absatz-3/document-1
@@ -379,8 +390,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -388,8 +399,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/78
     state: captured
-    ref: 00fb38eda17659da44e3ae0fff3bedf427c324bd
-    commit: 00fb38eda17659da44e3ae0fff3bedf427c324bd
+    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
+    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
     path: de/statutes/estg/78.yaml
     sha256: b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5
     module_id: de:statutes/estg/78
@@ -925,10 +936,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 8417044ef925fad76cf7f254a1c66fed9b70ac72d183c6a04a061a6b2f1d2f8c
+    snapshot_sha256: c88274aa3a251555c62ae95b737828e23b314e3d9aa16761ddce489f54097d7e
     channel_receipts:
-      corpus_release: 7c65a5cb94c7d1762d657a2f41ec0b45e66630942b71051bdf61458c40bfdabb
-      subject_matter_search: 1fae31132dd509271dc8a40822ef0a96733a588910f9af5e89b4f05175e08c96
+      corpus_release: d23911a3c4304a3ecadfe4e13fac14c75a4a7f8b1e029ea3a5b17c22691af3fc
+      subject_matter_search: 6de83a41db2d90388c0c211770876c8cb3e9a70a6bd939298be760383238e285
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10150,7 +10161,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 14aad576550bb4574ec35e676ae87f67305ec7c81c8a802276d1788ddabc75ff
+      sha256: 04d8a53c44691badcdf312b92a79ccfc2fbab996a6449c5456a8423ab435aa00
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10198,8 +10209,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 7c65a5cb94c7d1762d657a2f41ec0b45e66630942b71051bdf61458c40bfdabb
-        subject_matter_search: 1fae31132dd509271dc8a40822ef0a96733a588910f9af5e89b4f05175e08c96
+        corpus_release: d23911a3c4304a3ecadfe4e13fac14c75a4a7f8b1e029ea3a5b17c22691af3fc
+        subject_matter_search: 6de83a41db2d90388c0c211770876c8cb3e9a70a6bd939298be760383238e285
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -10233,6 +10244,7 @@ generated_facts:
       captured_module_ids:
       - de:regulations/eu-987-2009/article-59/document-1
       - de:regulations/milov4/1
+      - de:regulations/milov5/1
       - de:statutes/bgb/1591
       - de:statutes/bgb/187
       - de:statutes/estg/32/absatz-3/document-1

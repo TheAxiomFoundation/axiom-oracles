@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "67e6dc3868ed591f0f98873d6591ba489ca57f634e11b1bc974c4c5347415a01"
+    "sha256": "3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -24,8 +24,22 @@
       "declared_roots": [
         {
           "attestation": {
+            "path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462"
+          },
+          "citation_path": "de/regulation/milov5/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+          "role": "minimum_wage_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab"
           },
@@ -39,7 +53,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910"
           },
@@ -53,7 +67,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
           },
@@ -67,7 +81,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
           },
@@ -81,7 +95,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
           },
@@ -95,7 +109,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
           },
@@ -108,7 +122,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -138,7 +152,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/62",
@@ -150,7 +164,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/63",
@@ -162,7 +176,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/64",
@@ -174,7 +188,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/65",
@@ -186,7 +200,7 @@
         },
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -221,7 +235,7 @@
       "declared_roots": [
         {
           "attestation": {
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/regulation/bsv-2018/1",
@@ -234,7 +248,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
           },
@@ -285,7 +299,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-            "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+            "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
           },
@@ -341,7 +355,7 @@
   },
   "rulespec_observation": {
     "claim_mode": "attested",
-    "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+    "commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
     "repository": "TheAxiomFoundation/rulespec-de"
   },
   "schema": "axiom_oracles.certificate_candidate_census.v1",

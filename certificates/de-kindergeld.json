@@ -13,8 +13,22 @@
     "citation_roots": [
       {
         "attestation": {
+          "path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462"
+        },
+        "citation_path": "de/regulation/milov5/1",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+        "role": "minimum_wage_prerequisite",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab"
         },
@@ -28,7 +42,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910"
         },
@@ -42,7 +56,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
         },
@@ -56,7 +70,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
         },
@@ -70,7 +84,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
         },
@@ -84,7 +98,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
         },
@@ -97,7 +111,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -127,7 +141,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/62",
@@ -139,7 +153,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/63",
@@ -151,7 +165,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/64",
@@ -163,7 +177,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/65",
@@ -175,7 +189,7 @@
       },
       {
         "attestation": {
-          "ref": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "ref": "b74d0004a69bb43f30e936d30f47432ca3c25058",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -196,7 +210,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "1a89789e143f900c52d82909e9f3c2cc7f0704b73349e58b5290f51b81c9d277"
+      "sha256": "fc19ba1e12a479a0d0b76dbe1807f4ab05d21a24679c5b9228ef8e049952f3db"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -220,14 +234,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "fbd22fbf7139ad70a82e2c0d98f0966c33cd139682b765a56840387281c555af",
+      "sha256": "4b40da08a6fe8437efee7b4f211a78f5065d8eccbd9ed7468c8b59d47aa40cc9",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "2a6568085609f85f94e6e589b1a2f0ad3f9064397fc9bcfd75ebad00fa980c8b"
+      "sha256": "ec5a1f937dbe5ad1e2723464898bda2ea047b22e619bf3851ec5c312bb15b4f6"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -846,7 +860,7 @@
         "signed": 1
       },
       "by_status": {
-        "encoded": 7,
+        "encoded": 8,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -855,6 +869,7 @@
       "citation_paths": [
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/regulation/milov4/1",
+        "de/regulation/milov5/1",
         "de/statute/bgb/1591",
         "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -869,7 +884,7 @@
         "de/statute/estg/66",
         "de/statute/estg/78"
       ],
-      "citation_root_count": 13,
+      "citation_root_count": 14,
       "closed_claim_mode": "computed",
       "corpus_release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
       "declared_sources": [
@@ -950,6 +965,15 @@
           "claim_mode": "attested",
           "classification": "encoded",
           "reason": "Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+          "role": "minimum_wage_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/milov5/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
           "role": "minimum_wage_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
@@ -1458,9 +1482,9 @@
       "source_universe": {
         "role": "citation-path closure snapshot",
         "role_claim_mode": "attested",
-        "rulespec_commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+        "rulespec_commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "5e0c07a8831a2f4c07aa4369c9c6911b004fc9897517f7358440a98902b2c0e8",
+        "subgraph_sha256": "56d4acc6618338bb443189663d633b776fddc660728b8cba19ea5bbdc7cf62bd",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,
