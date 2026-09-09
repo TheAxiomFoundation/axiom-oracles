@@ -455,6 +455,7 @@ def test_committed_ledgers_are_valid_and_open(program: str) -> None:
     assert isinstance(document["computed"]["closed"], bool)
     assert document["computed"]["closed"] is False
     assert summary.closed is False
+    assert summary.partially_encoded_provisions == len(document["computed"]["partially_encoded"])
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
@@ -1778,3 +1779,32 @@ def test_rulespec_facts_verify_imported_artifact_bytes_before_resolving_inputs(
                 row["resolved_imports"][0]["unbound"] = True
             with pytest.raises(module._SourceError, match="committed RuleSpec import"):
                 module._committed_rulespec_facts(source, "de/test", bad)
+
+
+@pytest.mark.parametrize(
+    "status, expected_closed",
+    [("encoded", True), ("partially-encoded", False), ("pending", False)],
+)
+def test_partial_spine_cannot_close_after_other_frontiers_close(status, expected_closed):
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    result = module._computed(
+        spine=[{"citation_path": "de/statute/example/1"}],
+        leaves=[],
+        graph={
+            "candidates": [{"id": "fixture-instrument", "status": "encoded"}],
+            "subject_search_state": {"unretrieved": 0, "total": 1},
+        },
+        measurement_basis=document["generated_facts"]["measurement_basis"],
+        decisions={"provisions": [{
+            "citation_path": "de/statute/example/1",
+            "status": status,
+            "reason": "Fixture leaves an operative branch unencoded when partial.",
+        }]},
+    )
+    assert result["instrument_frontier"]["complete"] is True
+    assert result["dependency_closure"]["closed"] is True
+    assert result["closed"] is expected_closed
+    if status == "partially-encoded":
+        assert result["pending"] == []
+        assert result["partially_encoded"] == ["de/statute/example/1"]

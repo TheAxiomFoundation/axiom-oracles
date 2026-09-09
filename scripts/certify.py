@@ -1306,7 +1306,10 @@ def _producer_closed_verdict(
         "provision_counts": computed.get("provision_counts"),
         **(
             {
-                "spine_closed": summary.pending_provisions == 0,
+                "spine_closed": (
+                    summary.pending_provisions == 0
+                    and getattr(summary, "partially_encoded_provisions", 0) == 0
+                ),
                 "spine_closed_claim_mode": "computed",
             }
             if type(getattr(summary, "pending_provisions", None)) is int

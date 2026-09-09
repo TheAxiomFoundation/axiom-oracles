@@ -597,3 +597,9 @@ is likewise bearing through DA-KG A19.5: maintenance paid to the child's
 spouse does not reduce available income. The disposition preserves this
 open computation without importing the judgment's historical marriage
 exclusion, age limit or annual income ceiling into current eligibility.
+
+Spine closure requires both zero pending provisions and zero partially encoded
+provisions. The producer and certificate projection both enforce this rule:
+clearing pending rows alone cannot close the still-partial §78 transition
+helpers. The current ledger retains five pending provisions and one partial
+provision; all six must be resolved before the spine can close.

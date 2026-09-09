@@ -218,6 +218,7 @@ class ClosureSummary:
     pending_inputs: int
     open_dependencies: int
     non_encoded_reasons_complete: bool = True
+    partially_encoded_provisions: int = 0
 
 
 def _sha256(data: bytes) -> str:
@@ -1572,6 +1573,7 @@ def _computed(
     dependency_closed = open_dependencies == 0
     closed = (
         not pending_citations
+        and not partially_encoded
         and boundary_complete
         and instrument_complete
         and dependency_closed
@@ -2440,6 +2442,7 @@ def validate_artifact(document: Any) -> ClosureSummary:
         closed=expected["closed"] is True,
         spine_rows=len(spine),
         pending_provisions=len(expected["pending"]),
+        partially_encoded_provisions=len(expected["partially_encoded"]),
         pending_instruments=len(expected["instrument_frontier"]["pending"]),
         pending_inputs=len(expected["boundary_frontier"]["pending"]),
         open_dependencies=expected["dependency_closure"]["open_dependency_count"],

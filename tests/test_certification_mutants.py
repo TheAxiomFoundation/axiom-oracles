@@ -5887,3 +5887,22 @@ def test_de_census_and_certificate_carry_the_same_closure_blockers():
         )
         assert rows[program]["certificate_status"] == "pending"
         assert certificate["certified"]["value"] is False
+
+
+@pytest.mark.parametrize(
+    "pending, partial, expected",
+    [(0, 0, True), (1, 0, False), (0, 1, False)],
+)
+def test_partial_spine_is_not_reported_closed_by_certificate(monkeypatch, pending, partial, expected):
+    certify = _load("certify")
+    producer = SimpleNamespace(validate_artifact=lambda _document: SimpleNamespace(
+        closed=False,
+        pending_provisions=pending,
+        partially_encoded_provisions=partial,
+    ))
+    monkeypatch.setattr(certify, "_producer_module", lambda _name: producer)
+    result = certify._producer_closed_verdict(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"], []
+    )
+    assert result["spine_closed"] is expected
+    assert result["spine_closed_claim_mode"] == "computed"
