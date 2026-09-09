@@ -197,7 +197,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8236
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8412
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -242,14 +242,14 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=8236)
-    assert index["row_count"] == index["mapped_row_count"] == 8236
-    assert index["body_row_count"] == 8155
+    refresh._validate_global_extraction_index(index, scanned_row_count=8412)
+    assert index["row_count"] == index["mapped_row_count"] == 8412
+    assert index["body_row_count"] == 8243
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 110
+    assert index["act_count"] == len(index["acts"]) == 198
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 5320,
+        "explicit_cross_reference_body": 5785,
         "law_metadata_changed_by": 24,
         "law_metadata_fundstelle": 31,
     }
@@ -532,15 +532,11 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
         # ledger and stay pending; the four module inputs carry committed
         # law_derived classifications and remain open dependencies below.
         assert set(boundary["pending"]) == KINDERGELD_LAW_DERIVED
-        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program] - {
-            "birth_record_child_identifier", "birth_record_delivery_date",
-            "birth_record_person_identifier", "candidate_child_identifier",
-            "candidate_person_identifier", "event_or_intraday_timepoint_date",
-            "beginning_of_day_start_date", "recorded_birth_date",
-            "kindergeld_payment_record_exists",
-            "kindergeld_payment_record_reference_year",
-            "kindergeld_payment_record_reference_month",
-            "application_for_section_64_priority_received", "application_receipt_date",
+        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == KINDERGELD_LAW_DERIVED | {
+            "child_allowances_under_sections_31_and_32_6_1_are_increased",
+            "correspondingly_increased_kindergeld_amount",
+            "month_is_on_or_after_first_qualifying_month",
+            "month_is_on_or_before_last_qualifying_month",
         }
         assert len(dependency_inputs) == 8
         # Every leaf is typed, so the boundary is complete; the eight
