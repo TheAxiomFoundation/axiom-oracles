@@ -28,6 +28,8 @@ program:
     role: minimum_wage_prerequisite
   - citation_path: de/regulation/milov5/1
     role: minimum_wage_prerequisite
+  - citation_path: de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
+    role: marginal_employment_threshold_prerequisite
   spine_scope:
     kind: ordinal_range
     corpus_root: de/statute/estg
@@ -37,7 +39,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 2f56c92d85dd97d18f7aed0dcc611bfdb5ec858a175d6c4debef7c8a20faa79a
+    sha256: de0958a4be373ff440931bc06f4fea4b0c3dab70857dca078d630d033be0c640
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 9bc4f5f0afad97e8edc9834609a53a56435d0509
@@ -339,8 +341,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/eu-987-2009/article-59/document-1
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/regulations/eu-987-2009/article-59/document-1.yaml
     sha256: 500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640
     module_id: de:regulations/eu-987-2009/article-59/document-1
@@ -348,8 +350,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/regulation/milov4/1
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/regulations/milov4/1.yaml
     sha256: 5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec
     module_id: de:regulations/milov4/1
@@ -357,8 +359,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/regulation/milov5/1
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/regulations/milov5/1.yaml
     sha256: 6f2e281426c8471958b41a99b5ebc91212d8641041ed016257bd1f2d58b8b74e
     module_id: de:regulations/milov5/1
@@ -366,8 +368,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/bgb/1591
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/statutes/bgb/1591.yaml
     sha256: bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b
     module_id: de:statutes/bgb/1591
@@ -375,8 +377,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/bgb/187
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/statutes/bgb/187.yaml
     sha256: e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70
     module_id: de:statutes/bgb/187
@@ -384,8 +386,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/32/absatz-3/document-1
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/statutes/estg/32/absatz-3/document-1.yaml
     sha256: 37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d
     module_id: de:statutes/estg/32/absatz-3/document-1
@@ -393,8 +395,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -402,13 +404,28 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/78
     state: captured
-    ref: b74d0004a69bb43f30e936d30f47432ca3c25058
-    commit: b74d0004a69bb43f30e936d30f47432ca3c25058
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
     path: de/statutes/estg/78.yaml
     sha256: b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5
     module_id: de:statutes/estg/78
     rule_count: 4
     declared_imports: []
+  - citation_path: de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
+    state: captured
+    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    path: de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.yaml
+    sha256: 5306768441081fa65ea33cc75e23cb1f5eac281e26e592e697f986f341042c86
+    module_id: de:statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
+    rule_count: 4
+    declared_imports:
+    - de:regulations/milov4/1#hourly_minimum_wage
+    resolved_imports:
+    - target: de:regulations/milov4/1#hourly_minimum_wage
+      module_id: de:regulations/milov4/1
+      rules:
+      - hourly_minimum_wage
   module_inputs:
   - slot: de:regulations/eu-987-2009/article-59/document-1#input.affected_institution_id
     name: affected_institution_id
@@ -939,15 +956,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: da649f773233e635b73e26258c55806e04a6c38642aec1fbf2dfb3fa74ba3f1b
+    snapshot_sha256: 827726a0275cf41978a1ce2fc330b904d78249215776c04d89adc73d6aa4259f
     channel_receipts:
-      corpus_release: 0b1428295c51fa312b95d065cd23ba9ac45b09787f395a5541681f1645ff5aa6
-      subject_matter_search: d22e963a5b33e6e51e61f3a8c4dfc21a08a5d0f123650d1d667b0bf8151c5ffc
+      corpus_release: 1dc0bafe76599b79b4503ad854b58441ae8d5ce995d86bdaaa0ae776e17d46cc
+      subject_matter_search: 332afd709deaed329b8b7eb01207eb2f2cffdcc741d239f0cdd0793ad49d9bc1
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 752
+    candidate_count: 753
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10016,6 +10033,13 @@ generated_facts:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-kg-instr-dde9fcbc9faae4c7
+      status: pending
+      discovery_refs:
+      - de-corpus-fdab3616b38a493e9f26
+      identity_kind: unresolved_reference
+      raw_references:
+      - Mindestlohngesetzes
     - id: de-kg-instr-e0b7829aa64b55e5
       status: pending
       discovery_refs:
@@ -10164,7 +10188,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 766de7cfa7c513833debe84999ea649cf6497c26fd7f3f4acd16b3f21ab71698
+      sha256: 932829d65ca8ffb9dcaac549f2c2ef13e72ff0d54967dc08d2282a1babf549f6
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10212,8 +10236,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 0b1428295c51fa312b95d065cd23ba9ac45b09787f395a5541681f1645ff5aa6
-        subject_matter_search: d22e963a5b33e6e51e61f3a8c4dfc21a08a5d0f123650d1d667b0bf8151c5ffc
+        corpus_release: 1dc0bafe76599b79b4503ad854b58441ae8d5ce995d86bdaaa0ae776e17d46cc
+        subject_matter_search: 332afd709deaed329b8b7eb01207eb2f2cffdcc741d239f0cdd0793ad49d9bc1
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -10253,6 +10277,7 @@ generated_facts:
       - de:statutes/estg/32/absatz-3/document-1
       - de:statutes/estg/66
       - de:statutes/estg/78
+      - de:statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
       frontier_input_ids:
       - de-kg-leaf-72885c711d8b5233
       - de-kg-leaf-b1776705f5fc98bb
@@ -14090,13 +14115,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 769
+    instrument_count: 770
     counts:
-      total: 769
+      total: 770
       encoded: 2
       classified-with-reason: 135
       excluded-with-reason: 341
-      pending: 291
+      pending: 292
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14374,6 +14399,7 @@ computed:
     - de-kg-instr-c80165befa9ab1c1
     - de-kg-instr-ccf56f3091f029e7
     - de-kg-instr-dakg-2026
+    - de-kg-instr-dde9fcbc9faae4c7
     - de-kg-instr-e0b7829aa64b55e5
     - de-kg-instr-e832fabf332bce62
     - de-kg-instr-e92627717e6aac58
@@ -24876,6 +24902,13 @@ computed:
       classification: entitlement_condition
       reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
+    - id: de-kg-instr-dde9fcbc9faae4c7
+      status: pending
+      discovery_refs:
+      - de-corpus-fdab3616b38a493e9f26
+      identity_kind: unresolved_reference
+      raw_references:
+      - Mindestlohngesetzes
     - id: de-kg-instr-e0b7829aa64b55e5
       status: pending
       discovery_refs:
@@ -25413,7 +25446,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 769
+    bearing_candidate_instruments: 770
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

@@ -6,13 +6,13 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 291 of 769 instruments
+other closure artifact. The current frontier has 292 of 770 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
-historical minimum-wage parameter and MiLoV5 §1 future rates are declared at RuleSpec merge
-`b74d0004a69bb43f30e936d30f47432ca3c25058`; the live amount-only oracle and
+historical minimum-wage parameter, MiLoV5 §1 future rates, and historical SGB IV §8(1a) earnings threshold are declared at RuleSpec merge
+`af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine stays pending.
@@ -344,7 +344,7 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 291 of 769 instruments pending, 132 open
+rows pending. Current result: 292 of 770 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -358,8 +358,8 @@ reading its EStG amendments, transitions and commencement provisions.
 
 The BFH recovery contains 81 complete official PDFs (338 pages). Eighty existing
 single-case discovery rows now bind those texts; two individual case rows were
-added for the compound III R 10/11 / III R 63/11 citation. The compound seed stays
-pending reconciliation. The conflicting III R 21/12 seed date remains visible:
+added for the compound III R 10/11 / III R 63/11 citation. The compound seed is dispositioned as a container; both individual decisions remain
+pending. The conflicting III R 21/12 seed date remains visible:
 the court records 8 May 2014, while one seed says 8 November 2014. Neither case
 bearing nor exact BStBl issue/page verification is inferred from capture alone.
 
@@ -526,12 +526,12 @@ the DRV archive of SGB IV §8 effective from 1 March 2024 through 31 December
 2025 (`de/statute/sgb-4/fassung-2024-03-01/8/inhalt`). The archived body
 preserves the three-month/70-workday short-term-employment limit applicable
 in 2025. MiLoV5 supplies dated 2026 and 2027 rates; MiLoV4 remains the
-2025 rate source. The statutory SGB IV §8 employment classification and
-threshold calculation remain to be encoded and composed into EStG §32(4).
+2025 rate source. The historical SGB IV §8(1a) threshold calculation is signed; the remaining
+§8 employment classification and composition into EStG §32(4) stay pending.
 
 The MiLoV5 prerequisite starts in 2026 and has no 2025 version. Its declaration preserves explicit source accounting for the 2026/2027 wage schedule; the 2025 certificate retains the separately captured MiLoV4 prerequisite. Neither wage module establishes marginal-employment eligibility or child qualification.
 
-The threshold release adds a complete, independently captured historical SGB IV §8(1a) paragraph from the unchanged official DRV HTML. All 40 preceding scopes remain. The new paragraph is receipted source text; its numerical threshold has not yet been declared as an encoded module.
+The threshold release adds a complete, independently captured historical SGB IV §8(1a) paragraph from the unchanged official DRV HTML. All 40 preceding scopes remain. The new paragraph now binds the ninth signed declared module. It imports the signed MiLoV4 hourly wage and computes the monthly threshold as the ceiling of that wage multiplied by 130 and divided by three: EUR 538 from March 2024 and EUR 556 during 2025. It has no inputs or deferrals and no formula outside March 2024–December 2025. The declared import is resolved from hash-verified module bytes; this prerequisite does not establish marginal-employment classification or child qualification.
 
 The complete BFH decision III R 59/19 (3 November 2020) is dispositioned as non-bearing after review of all sixteen paragraphs. It concerns discretionary file access and litigation costs, consistent with the existing DA-KG V9 procedural exclusion; it does not determine a child entitlement or amount. Its exact corpus-body hash is recorded in the committed decision. This individual disposition does not resolve the separate BStBl II publication verification or exhaustive class-discovery requirement.
 
@@ -541,3 +541,5 @@ member remains pending. The combined III R 10/11 / III R 63/11 citation is a
 container for the two separately captured decisions, whose individual rows remain
 pending. These structural dispositions neither close their legal interpretations
 nor establish BStBl II issue/page membership.
+
+Declaring the historical threshold also enrolls its previously unlisted raw reference to the Mindestlohngesetz as `de-kg-instr-dde9fcbc9faae4c7`. The act is captured, but this raw identity still requires source-bound resolution and disposition. The frontier therefore has 292 pending instruments out of 770; adding a signed prerequisite does not suppress newly discovered references.

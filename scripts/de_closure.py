@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "2f56c92d85dd97d18f7aed0dcc611bfdb5ec858a175d6c4debef7c8a20faa79a"
+SOURCE_SHA256 = "de0958a4be373ff440931bc06f4fea4b0c3dab70857dca078d630d033be0c640"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -40,7 +40,7 @@ RELEASE_SELECTOR_SHA256 = (
     "751e5c7e7aa9cb97dbe1f38b4dca183f3482fd6f24cdf3fcf97587aa6c341212"
 )
 CORPUS_COMMIT = "9bc4f5f0afad97e8edc9834609a53a56435d0509"
-RULESPEC_COMMIT = "b74d0004a69bb43f30e936d30f47432ca3c25058"
+RULESPEC_COMMIT = "af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -78,6 +78,7 @@ PROGRAM_SOURCE_PATHS = {
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/regulation/milov4/1",
         "de/regulation/milov5/1",
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
     ),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",

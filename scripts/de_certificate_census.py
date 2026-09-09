@@ -38,12 +38,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "b74d0004a69bb43f30e936d30f47432ca3c25058"
+RULESPEC_MAIN_COMMIT = "af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
         "de/regulation/milov5/1",
         "de/regulation/milov4/1",
         "de/regulation/eu-987-2009/article-59/document-1",
@@ -72,6 +73,9 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": (
+            "marginal_employment_threshold_prerequisite", "encoded", {"signed"}
+        ),
         "de/regulation/milov5/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
         "de/regulation/milov4/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
         "de/regulation/eu-987-2009/article-59/document-1": (
@@ -127,6 +131,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
+        "sha256": "dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c",
+    },
     "de/regulation/milov5/1": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -137,7 +147,7 @@ ATTESTED_SIGNED_ROOTS = {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
         "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
-        "sha256": "112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab",
+        "sha256": "0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04",
     },
     "de/regulation/eu-987-2009/article-59/document-1": {
         "repository": RULESPEC_REPOSITORY,
@@ -224,6 +234,15 @@ PROGRAM_DECLARATIONS = {
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
             _root(
+                "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+                role="marginal_employment_threshold_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
+                source_sha256="dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c",
+                reason="SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
+            ),
+            _root(
                 "de/regulation/milov5/1",
                 role="minimum_wage_prerequisite",
                 classification="encoded",
@@ -238,7 +257,7 @@ PROGRAM_DECLARATIONS = {
                 classification="encoded",
                 signature_state="signed",
                 source_path=".axiom/encoding-manifests/de/regulations/milov4/1.json",
-                source_sha256="112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab",
+                source_sha256="0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04",
                 reason="Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
             ),
             _root(

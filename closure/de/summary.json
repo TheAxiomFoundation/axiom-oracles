@@ -70,10 +70,10 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 8
+        "signed": 9
       },
       "by_status": {
-        "encoded": 8,
+        "encoded": 9,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -95,9 +95,10 @@
         "de/statute/estg/64",
         "de/statute/estg/65",
         "de/statute/estg/66",
-        "de/statute/estg/78"
+        "de/statute/estg/78",
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt"
       ],
-      "citation_root_count": 14,
+      "citation_root_count": 15,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -177,6 +178,15 @@
           "role": "minimum_wage_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
+          "role": "marginal_employment_threshold_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
         }
       ],
       "evidence_roots": [
@@ -218,7 +228,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "f69af54283a77b52067605b599dd4575ec84f949b6f43f08cd1b668c7a82a504",
+      "subgraph_sha256": "a14da1e832f0f80a6ebe71c5e7f2b384750cce6bc3178ef9f94b5f7a9419a8c9",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -399,7 +409,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
+  "rulespec_commit": "af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -408,7 +418,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "2f56c92d85dd97d18f7aed0dcc611bfdb5ec858a175d6c4debef7c8a20faa79a"
+    "sha256": "de0958a4be373ff440931bc06f4fea4b0c3dab70857dca078d630d033be0c640"
   },
   "spine_closed": false
 }
