@@ -197,7 +197,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8412
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9166
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -242,16 +242,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=8412)
-    assert index["row_count"] == index["mapped_row_count"] == 8412
-    assert index["body_row_count"] == 8243
+    refresh._validate_global_extraction_index(index, scanned_row_count=9166)
+    assert index["row_count"] == index["mapped_row_count"] == 9166
+    assert index["body_row_count"] == 8993
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 198
+    assert index["act_count"] == len(index["acts"]) == 209
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 5785,
-        "law_metadata_changed_by": 24,
-        "law_metadata_fundstelle": 31,
+        "explicit_cross_reference_body": 6227,
+        "law_metadata_changed_by": 31,
+        "law_metadata_fundstelle": 38,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]

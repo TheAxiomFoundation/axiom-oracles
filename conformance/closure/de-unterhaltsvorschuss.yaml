@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb
+    sha256: e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4a225368e171b193d02590e7dd1866792174c705
-    release: de-rulespec-2026-09-09-kindergeld-bfh-decisions
-    release_content_sha256: 85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e
+    commit: 902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8
+    release: de-rulespec-2026-09-09-kindergeld-adult-services
+    release_content_sha256: 555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -58,6 +58,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
       sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2
+      row_count: 4
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
       sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
       row_count: 2
@@ -90,6 +93,9 @@ generated_facts:
       row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
       sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914
       row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl
       sha256: 3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c
@@ -127,6 +133,12 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
       sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
       row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl
+      sha256: 1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163
+      row_count: 746
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl
       sha256: 738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6
       row_count: 2
@@ -398,10 +410,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 3f8d93d138e3fb547d4022d2a825c374ab2019676e22dccb8a8da37bcdab97a0
+    snapshot_sha256: 97be48b49c8b8df27fa96be1771203f7eedef90080543f2f997a5823a6f3c266
     channel_receipts:
-      corpus_release: 3d700fba6a911b516a9f01d27ec6369406145aa99ee3e72e9f0299806bb925a5
-      subject_matter_search: 685f073c55656f0bdff7fce79ed3601e03c4fe0af3c1fe91d00929dfa7adcc91
+      corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
+      subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

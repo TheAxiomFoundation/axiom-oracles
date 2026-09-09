@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "18e6da5d910626523156fbde3cb60306a6481053af805ed3ab55cad3e5dd60de"
+      "sha256": "3ca535b759a5a1174ad6150f0f10bbbc3eea25557fba7495d5c80abac09f2733"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "7badcadf5a35577493b4474b17904b6f540d712c8243b2cad12cd7658f91d575",
+      "sha256": "2778f08e6e97bd00595fd9cceff518df3f5a81f79f67c4b7e4524921bec84e69",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "7bf7429a00f0881c8054965f9d4fc58535fedb1a56eb0d86e0407ea157a9c5e9"
+      "sha256": "b055954292f38ca0b7262e8ad97ec0b292761dd7a760502bcae3bce71666dc25"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-adult-services",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -375,7 +375,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "d5481759e373bb1301ba2eb4a37f4ca01e8f0aaba7c3859e092e0ed633d98dbc",
+      "subgraph_sha256": "009f2fa8721573b86ea58d8d4181802019ed03406ac03711876db7d5c8c3d220",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

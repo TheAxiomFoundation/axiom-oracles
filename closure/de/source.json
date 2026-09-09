@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "4a225368e171b193d02590e7dd1866792174c705",
-    "release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
-    "release_content_sha256": "85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e",
-    "release_selector_sha256": "587957360fd67dc5177f60f423b3ac28a556a47680de69e052d416bbc1860bc0",
+    "commit": "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8",
+    "release": "de-rulespec-2026-09-09-kindergeld-adult-services",
+    "release_content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48",
+    "release_selector_sha256": "a1555ce6f92447ad03509c75b789a4ecfd0ea96c4c0a8e79c5f77e5b3f97fb7a",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -45,6 +45,11 @@
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json",
         "sha256": "9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "d92f3f4c52b434dfe24a7acd8add10db4c757053dc6157a40d7d45356cf4b5b1",
+        "row_count": 4
       },
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.json",
@@ -99,6 +104,11 @@
       {
         "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json",
         "sha256": "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "6be92204b0dc064addeb7ef3e53be6e80e65fa78dd2a3c2bdc78be92db47d765",
         "row_count": 2
       },
       {
@@ -162,6 +172,16 @@
         "row_count": 535
       },
       {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-service-history.json",
+        "sha256": "fd02fe2e8a1ab9eec16f108ff2a87f7c66605c9bfa37077b5b4ce426800ff4f7",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "7817354353f3b27ab0de07101445431dafb6ef8488ac1e19f4df69c971110094",
+        "row_count": 746
+      },
+      {
         "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-bgb-amendment.json",
         "sha256": "7bee851dff8c8141f9554960f3148b1229a412acb4565b0ee720554923bd0eb9",
         "row_count": 2
@@ -207,6 +227,11 @@
         "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl",
         "sha256": "436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2",
+        "row_count": 4
       },
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl",
@@ -261,6 +286,11 @@
       {
         "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
         "sha256": "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914",
         "row_count": 2
       },
       {
@@ -322,6 +352,16 @@
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl",
         "sha256": "c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059",
         "row_count": 535
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl",
+        "sha256": "1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163",
+        "row_count": 746
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl",

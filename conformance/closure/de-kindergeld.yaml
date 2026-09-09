@@ -33,12 +33,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb
+    sha256: e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4a225368e171b193d02590e7dd1866792174c705
-    release: de-rulespec-2026-09-09-kindergeld-bfh-decisions
-    release_content_sha256: 85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e
+    commit: 902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8
+    release: de-rulespec-2026-09-09-kindergeld-adult-services
+    release_content_sha256: 555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -64,6 +64,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
       sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2
+      row_count: 4
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
       sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
       row_count: 2
@@ -96,6 +99,9 @@ generated_facts:
       row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
       sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914
       row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl
       sha256: 3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c
@@ -133,6 +139,12 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
       sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
       row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl
+      sha256: 1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163
+      row_count: 746
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl
       sha256: 738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6
       row_count: 2
@@ -890,10 +902,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 3f8d93d138e3fb547d4022d2a825c374ab2019676e22dccb8a8da37bcdab97a0
+    snapshot_sha256: 97be48b49c8b8df27fa96be1771203f7eedef90080543f2f997a5823a6f3c266
     channel_receipts:
-      corpus_release: 3d700fba6a911b516a9f01d27ec6369406145aa99ee3e72e9f0299806bb925a5
-      subject_matter_search: 685f073c55656f0bdff7fce79ed3601e03c4fe0af3c1fe91d00929dfa7adcc91
+      corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
+      subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -9305,13 +9317,6 @@ generated_facts:
       citation_label: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
       document_citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       title: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
-    - id: de-kg-instr-57142250c1d7c52f
-      status: pending
-      discovery_refs:
-      - de-corpus-b0eeca04259f7ddeb7ff
-      identity_kind: unresolved_reference
-      raw_references:
-      - Siebten Buches Sozialgesetzbuch
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
@@ -9858,6 +9863,20 @@ generated_facts:
       citation_label: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
       document_citation_path: de/guidance/bfh-iii-r-24-12-2013-04-11
       title: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
+    - id: de-kg-instr-c3642f7b68a0f9a8
+      status: pending
+      discovery_refs:
+      - de-corpus-3b23559a1d57ec0967aa
+      - de-corpus-b92763461ba3d89a297c
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-7
+      row_sha256: b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f
+      document_class: statute
+      citation_label: Siebtes Buch Sozialgesetzbuch - Gesetzliche Unfallversicherung - (Artikel 1 des Gesetzes vom 7. August 1996, BGBl. I S. 1254)
+      body_sha256: e85e823ebdddb123a4af2a99b39cfadb97d44433ef22d6f046c780d6d02751ea
+      document_citation_path: de/statute/sgb-7
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_7/
+      fundstelle: BGBl I 1996, 1254
     - id: de-kg-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -10074,7 +10093,7 @@ generated_facts:
       title: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: b7723576c50e588d861209df84d453a29021d823109695495d971aa665533b00
+      sha256: b1e1f6aedb98d50e28af73f4995c6d8314a50fa07961f1326beccbb7fca3afd6
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10122,8 +10141,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 3d700fba6a911b516a9f01d27ec6369406145aa99ee3e72e9f0299806bb925a5
-        subject_matter_search: 685f073c55656f0bdff7fce79ed3601e03c4fe0af3c1fe91d00929dfa7adcc91
+        corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
+        subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -12925,11 +12944,6 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
     bears_on_computed_surface: false
-  - id: de-kg-instr-57142250c1d7c52f
-    status: classified-with-reason
-    classification: exclusion_comparator
-    reason: Unresolved reference 'Siebten Buches Sozialgesetzbuch' matched in § 65 Satz 1 Nr. 1 EStG as the comparator 'der Kinderzulage aus der gesetzlichen Unfallversicherung nach § 217 Absatz 3 des Siebten Buches Sozialgesetzbuch in der bis zum 30. Juni 2020 geltenden Fassung'. As with the SGB VI child supplement, comparability with that (repealed) SGB VII child allowance is part of the exclusion test (A 28.2). SGB VII is not in the pinned corpus release; § 217 Abs. 3 in its pre-1.7.2020 version must be captured to encode the comparator. Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
-    bears_on_computed_surface: true
   - id: de-kg-instr-5fbc4ffc01cca130
     status: excluded-with-reason
     body_sha256: 91cefe81ddf95a56756f6e05c89a32ef60a4d268f8f97b583912eea3d96785a6
@@ -13010,6 +13024,12 @@ committed_decisions:
     body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
     classification: entitlement_condition
     reason: SGB III (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG — a study, recognition or job-search title or a humanitarian title qualifies only while the holder is employed, on parental leave or takes 'laufende Geldleistungen nach dem Dritten Buch Sozialgesetzbuch' — and by § 65 Satz 3 EStG, whose exception to the EU-official exclusion requires a 'Versicherungspflichtverhältnis zur Bundesagentur für Arbeit nach § 24 des Dritten Buches Sozialgesetzbuch' or insurance freedom 'nach § 28 Absatz 1 Nummer 1'. § 68 Abs. 7 adds a data-retrieval citation. The SGB III benefit and insurance concepts are therefore conditions of claimant_entitlement (A 4.3.4) and of substitute_child_benefit_exclusion (A 28.3 Abs. 4). Bears on both law-derived inputs (open dependencies); open until §§ 62, 65 EStG are encoded with those SGB III terms bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-c3642f7b68a0f9a8
+    status: classified-with-reason
+    body_sha256: e85e823ebdddb123a4af2a99b39cfadb97d44433ef22d6f046c780d6d02751ea
+    classification: exclusion_comparator
+    reason: The refreshed corpus graph now resolves the former raw reference Siebten Buches Sozialgesetzbuch to de/statute/sgb-7. EStG §65(1) expressly compares foreign benefits with the child allowance under SGB VII §217(3) in the version through 30 June 2020. That complete archived section is captured at de/statute/sgb-7/fassung-2015-07-01/217/inhalt, body SHA-256 4d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158; paragraph 3 continues the allowance under the specified historical RVO provisions. The new current-act capture does not replace that historical legal comparator. Keep this instrument bearing and open until the historic allowance rules and EStG §65 substitute_child_benefit_exclusion are encoded. This rebinds the same discovered comparator; it does not close it.
     bears_on_computed_surface: true
   - id: de-kg-instr-c795a7af57079afc
     status: excluded-with-reason
@@ -24031,16 +24051,6 @@ computed:
       citation_label: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
       document_citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       title: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
-    - id: de-kg-instr-57142250c1d7c52f
-      status: classified-with-reason
-      discovery_refs:
-      - de-corpus-b0eeca04259f7ddeb7ff
-      identity_kind: unresolved_reference
-      raw_references:
-      - Siebten Buches Sozialgesetzbuch
-      classification: exclusion_comparator
-      reason: Unresolved reference 'Siebten Buches Sozialgesetzbuch' matched in § 65 Satz 1 Nr. 1 EStG as the comparator 'der Kinderzulage aus der gesetzlichen Unfallversicherung nach § 217 Absatz 3 des Siebten Buches Sozialgesetzbuch in der bis zum 30. Juni 2020 geltenden Fassung'. As with the SGB VI child supplement, comparability with that (repealed) SGB VII child allowance is part of the exclusion test (A 28.2). SGB VII is not in the pinned corpus release; § 217 Abs. 3 in its pre-1.7.2020 version must be captured to encode the comparator. Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
-      bears_on_computed_surface: true
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
@@ -24631,6 +24641,23 @@ computed:
       citation_label: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
       document_citation_path: de/guidance/bfh-iii-r-24-12-2013-04-11
       title: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
+    - id: de-kg-instr-c3642f7b68a0f9a8
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-3b23559a1d57ec0967aa
+      - de-corpus-b92763461ba3d89a297c
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-7
+      row_sha256: b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f
+      document_class: statute
+      citation_label: Siebtes Buch Sozialgesetzbuch - Gesetzliche Unfallversicherung - (Artikel 1 des Gesetzes vom 7. August 1996, BGBl. I S. 1254)
+      body_sha256: e85e823ebdddb123a4af2a99b39cfadb97d44433ef22d6f046c780d6d02751ea
+      document_citation_path: de/statute/sgb-7
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_7/
+      fundstelle: BGBl I 1996, 1254
+      classification: exclusion_comparator
+      reason: The refreshed corpus graph now resolves the former raw reference Siebten Buches Sozialgesetzbuch to de/statute/sgb-7. EStG §65(1) expressly compares foreign benefits with the child allowance under SGB VII §217(3) in the version through 30 June 2020. That complete archived section is captured at de/statute/sgb-7/fassung-2015-07-01/217/inhalt, body SHA-256 4d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158; paragraph 3 continues the allowance under the specified historical RVO provisions. The new current-act capture does not replace that historical legal comparator. Keep this instrument bearing and open until the historic allowance rules and EStG §65 substitute_child_benefit_exclusion are encoded. This rebinds the same discovered comparator; it does not close it.
+      bears_on_computed_surface: true
     - id: de-kg-instr-c795a7af57079afc
       status: excluded-with-reason
       discovery_refs:
@@ -25223,13 +25250,13 @@ computed:
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
-    - de-kg-instr-57142250c1d7c52f
     - de-kg-instr-703d3b12aaab39f8
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-a5848a433a63d2cb
     - de-kg-instr-b96e03076e143e8e
+    - de-kg-instr-c3642f7b68a0f9a8
     - de-kg-instr-ce168756ed1a28cb
     - de-kg-instr-d0ffa65a02a956b9
     - de-kg-instr-db7693cd9f018ff4

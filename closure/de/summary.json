@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "4a225368e171b193d02590e7dd1866792174c705",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
-  "corpus_release_content_sha256": "85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e",
+  "corpus_commit": "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-adult-services",
+  "corpus_release_content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -198,7 +198,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "027a2bad51f2c73a38052ba3ced280015c048f2c395d8d18f7d8d5f93a501a28",
+      "subgraph_sha256": "5ec7b2b70156843b74b31b461688a12999ad19838b1d0bbce19eea236072f9ad",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -282,7 +282,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "7f462db89d21845255d280341cb98a0e9467caa7e1333f2e9d069a3be32015e4",
+      "subgraph_sha256": "4766785403f03dc4e7804128a31fd9cd93f76c0604c021a5dab283ab1c073ac9",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -365,7 +365,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "d5481759e373bb1301ba2eb4a37f4ca01e8f0aaba7c3859e092e0ed633d98dbc",
+      "subgraph_sha256": "009f2fa8721573b86ea58d8d4181802019ed03406ac03711876db7d5c8c3d220",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -388,7 +388,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb"
+    "sha256": "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
   },
   "spine_closed": false
 }

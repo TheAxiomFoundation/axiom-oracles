@@ -320,10 +320,16 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-bfh-decisions` release at commit
-`4a225368e171b193d02590e7dd1866792174c705`, content SHA-256
-`85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e`
-(8,412 rows, 32 scopes). The earlier supplemental receipts remain valid
+`de-rulespec-2026-09-09-kindergeld-adult-services` release at commit
+`902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8`, content SHA-256
+`555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48`
+(9,166 rows, 36 scopes). The additive service captures cover JFDG, BFDG,
+EhfG, ZDG, SG, WPflG and SGB VII, the European Solidarity Corps regulation,
+the statutorily referenced weltwärts guideline, and the IJFD guideline.
+A separate official archived SG §58b row preserves the wording applicable
+through 2025; its service duration differs from the current consolidation.
+The SGB VII discovery reference now resolves to the complete act; its historic
+§217(3) comparator remains bearing and unencoded. The earlier supplemental receipts remain valid
 and retain their original release identities. Eight article-level EU coordination
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its

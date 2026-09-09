@@ -182,7 +182,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "18e6da5d910626523156fbde3cb60306a6481053af805ed3ab55cad3e5dd60de"
+      "sha256": "3ca535b759a5a1174ad6150f0f10bbbc3eea25557fba7495d5c80abac09f2733"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -206,14 +206,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "9974bef9086b810c80a92801407a7bc0be2a33b007e75db39c173a8aaae296ac",
+      "sha256": "c2b376c9f899eae5d7a82641f0bf74c1c20be8de0ea5d4ff42f9db0e77ab954d",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "7bf7429a00f0881c8054965f9d4fc58535fedb1a56eb0d86e0407ea157a9c5e9"
+      "sha256": "b055954292f38ca0b7262e8ad97ec0b292761dd7a760502bcae3bce71666dc25"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -856,7 +856,7 @@
       ],
       "citation_root_count": 12,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-adult-services",
       "declared_sources": [
         {
           "checkout_observation": {
@@ -1038,13 +1038,13 @@
           "de-kg-instr-3841260753e31d86",
           "de-kg-instr-3875634198c25414",
           "de-kg-instr-43b69c0fdc7079aa",
-          "de-kg-instr-57142250c1d7c52f",
           "de-kg-instr-703d3b12aaab39f8",
           "de-kg-instr-78841044a219e9b8",
           "de-kg-instr-7b88fe63abf1deb1",
           "de-kg-instr-87d3e50373adabc2",
           "de-kg-instr-a5848a433a63d2cb",
           "de-kg-instr-b96e03076e143e8e",
+          "de-kg-instr-c3642f7b68a0f9a8",
           "de-kg-instr-ce168756ed1a28cb",
           "de-kg-instr-d0ffa65a02a956b9",
           "de-kg-instr-db7693cd9f018ff4",
@@ -1434,7 +1434,7 @@
         "role_claim_mode": "attested",
         "rulespec_commit": "73e92a4da6970693215edd28e24295c923cb807d",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "027a2bad51f2c73a38052ba3ced280015c048f2c395d8d18f7d8d5f93a501a28",
+        "subgraph_sha256": "5ec7b2b70156843b74b31b461688a12999ad19838b1d0bbce19eea236072f9ad",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,
