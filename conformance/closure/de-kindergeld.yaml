@@ -13013,6 +13013,11 @@ committed_decisions:
     reason: The complete BMF17January2014 letter is receipted at de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt, body SHA-25607a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c, in release de-rulespec-2026-09-09-kindergeld-treaty-texts at27510ad32be7e2111c20f3a7dd41a2ae40310c17. Its opening expressly applies EStG2(8), equating civil partners and spouses. The pinned EStG2(8) applies that equivalence across the Act; EStG63(1) sentence1 number2 and EStG64(2) sentence2 refer to spouses. This bridge therefore remains bearing on qualifying_child_count and recipient_priority until EStG2(8), the relevant civil-partnership status rules and the63/64 selection rules are encoded and composed. The remaining letter sections concern allocation, doubling and transfer of personal tax allowances, and its application paragraph addresses non-final income-tax assessments. In particular, the letter's statement that an unadopted child has a parent-child relationship only to its biological
       parent must not be misread as excluding the household child of a civil partner from EStG63. This is a conservative bearing disposition, not an encoded rule or a claim that the letter defines a separate Kindergeld amount.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-dc687b40f4c59ca6
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R72/07 decision (7 April 2011), paragraphs 1–18: paragraphs 14–17 explain why the child''s maintenance payments to a spouse do not reduce the child''s available income. DA-KG 2025 A19.5 sentence 3 expressly cites this holding for the disabled child''s disposable-net-income calculation under EStG32(4) sentence 1 number 3. This surviving computation bears on qualifying_child_count and remains unencoded. The historical annual ceiling, former age-27 limit and paragraph 12 marriage exclusion are not adopted into current eligibility by this disposition. Text-bound source: de/guidance/bfh-iii-r-72-07-2011-04-07/document-1, body SHA-256 ba7ea05bb496a84c5c3dba08291cd2d9cd23e81f695c26dcf6d557c81ecb304a, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-256 5e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-ded3b056040a529c
     status: classified-with-reason
     classification: compound_discovery_container
@@ -14197,9 +14202,9 @@ computed:
     counts:
       total: 770
       encoded: 2
-      classified-with-reason: 140
+      classified-with-reason: 141
       excluded-with-reason: 349
-      pending: 279
+      pending: 278
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14379,7 +14384,6 @@ computed:
     - de-kg-discovery-d8ad76f29086b7d4
     - de-kg-discovery-d8f8732223baa754
     - de-kg-discovery-d9d5d0f4ff95db48
-    - de-kg-discovery-dc687b40f4c59ca6
     - de-kg-discovery-dc867c1deb47738a
     - de-kg-discovery-dddc7d9e98dca509
     - de-kg-discovery-dea62e69a11f31da
@@ -23434,7 +23438,7 @@ computed:
         parent must not be misread as excluding the household child of a civil partner from EStG63. This is a conservative bearing disposition, not an encoded rule or a claim that the letter defines a separate Kindergeld amount.
       bears_on_computed_surface: true
     - id: de-kg-discovery-dc687b40f4c59ca6
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 07.04.2011, III R 72/07, BStBl II S. 974
       discovery_refs:
@@ -23442,6 +23446,9 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 07.04.2011, III R 72/07, BStBl II S. 974
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R72/07 decision (7 April 2011), paragraphs 1–18: paragraphs 14–17 explain why the child''s maintenance payments to a spouse do not reduce the child''s available income. DA-KG 2025 A19.5 sentence 3 expressly cites this holding for the disabled child''s disposable-net-income calculation under EStG32(4) sentence 1 number 3. This surviving computation bears on qualifying_child_count and remains unencoded. The historical annual ceiling, former age-27 limit and paragraph 12 marriage exclusion are not adopted into current eligibility by this disposition. Text-bound source: de/guidance/bfh-iii-r-72-07-2011-04-07/document-1, body SHA-256 ba7ea05bb496a84c5c3dba08291cd2d9cd23e81f695c26dcf6d557c81ecb304a, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-256 5e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-dc867c1deb47738a
       status: pending
       identity_kind: class_member
@@ -25532,6 +25539,7 @@ computed:
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-da811c7c21203da5
+    - de-kg-discovery-dc687b40f4c59ca6
     - de-kg-discovery-e90973e7e66e0913
     - de-kg-instr-002
     - de-kg-instr-003
@@ -25560,8 +25568,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 126
-    open_dependency_count: 134
+    instruments_bearing_on_computed_count: 127
+    open_dependency_count: 135
     closed: false
   measured_denominators:
     spine_rows: 18

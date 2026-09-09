@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 279 of 770 instruments
-pending, and dependency closure has 134 open dependencies: eight law-derived
-inputs and 126 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 278 of 770 instruments
+pending, and dependency closure has 135 open dependencies: eight law-derived
+inputs and 127 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, and historical SGB IV §8(1a) earnings threshold are declared at RuleSpec merge
@@ -346,8 +346,8 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 279 of 770 instruments pending, 134 open
-dependencies (eight law-derived inputs, 126 bearing instruments, no unclassified
+rows pending. Current result: 278 of 770 instruments pending, 135 open
+dependencies (eight law-derived inputs, 127 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 The latest release also retains complete EStG §32 paragraph captures and the
@@ -544,7 +544,7 @@ container for the two separately captured decisions, whose individual rows remai
 pending. These structural dispositions neither close their legal interpretations
 nor establish BStBl II issue/page membership.
 
-Declaring the historical threshold also enrolls its previously unlisted raw reference to the Mindestlohngesetz as `de-kg-instr-dde9fcbc9faae4c7`. The act is captured, but this raw identity still requires source-bound resolution and disposition. The frontier therefore has 279 pending instruments out of 770; adding a signed prerequisite does not suppress newly discovered references.
+Declaring the historical threshold also enrolls its previously unlisted raw reference to the Mindestlohngesetz as `de-kg-instr-dde9fcbc9faae4c7`. The act is captured, but this raw identity still requires source-bound resolution and disposition. The frontier therefore has 278 pending instruments out of 770; adding a signed prerequisite does not suppress newly discovered references.
 
 The complete captured BFH III R19/17 decision of 13 September 2018 concerns
 discretionary remission of an established recovery under AO §227, including
@@ -591,3 +591,9 @@ expressly uses it in the disabled child's disposable-income calculation.
 The discovery and corpus-parent identities are classified as bearing and
 remain unencoded; neither the historical ceiling nor the former age limit
 is imported into the 2025 computation.
+
+The companion BFH III R72/07 decision (7 April 2011), paragraphs 1–18,
+is likewise bearing through DA-KG A19.5: maintenance paid to the child's
+spouse does not reduce available income. The disposition preserves this
+open computation without importing the judgment's historical marriage
+exclusion, age limit or annual income ceiling into current eligibility.
