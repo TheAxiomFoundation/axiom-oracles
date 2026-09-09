@@ -603,3 +603,12 @@ provisions. The producer and certificate projection both enforce this rule:
 clearing pending rows alone cannot close the still-partial §78 transition
 helpers. The current ledger retains five pending provisions and one partial
 provision; all six must be resolved before the spine can close.
+
+EStG §32(4) native run `34403571398` exhausted its third standard attempt
+without an apply signature or RuleSpec PR. It removed the earlier law-derived
+caller inputs, retaining two birth-record fields, but still failed date
+arithmetic, proof, precise-deferral and behavior checks. The retained candidate
+uses an unsupported third `date_add_years` argument; the later candidate omits
+the leap-day correction and returns 28 February instead of 1 March. Neither
+candidate is declared as coverage. An additional scoped-attempt decision is
+pending; §32(6) and §66 retain their separately paused attempt decisions.
