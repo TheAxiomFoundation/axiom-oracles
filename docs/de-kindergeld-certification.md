@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 285 of 770 instruments
+other closure artifact. The current frontier has 281 of 770 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -308,11 +308,11 @@ citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
 The SHA-bound class snapshot contains 228 entries. With the committed dispositions,
-214 members remain pending, five captured members are bearing, and nine entries
+212 members remain pending, five captured members are bearing, and eleven entries
 are non-bearing or structural: the transfer letter, BFH file-access decision,
 misdated BFH duplicate, combined BFH citation, superseded country-group letter, BFH remission decision
 BFH objection-notice decision, BFH appeal-cost decision, and BFH inter-agency
-refund decision.
+refund decision, final-rejection decision, and non-reporting limitation decision.
 The transfer letter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
@@ -341,12 +341,12 @@ and retain their original release identities. Eight article-level EU coordinatio
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
 uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 108 citation-only seeds and
-106 receipted instruments. The 2023 country-group letter remains citation-only
+104 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 285 of 770 instruments pending, 132 open
+rows pending. Current result: 281 of 770 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -544,7 +544,7 @@ container for the two separately captured decisions, whose individual rows remai
 pending. These structural dispositions neither close their legal interpretations
 nor establish BStBl II issue/page membership.
 
-Declaring the historical threshold also enrolls its previously unlisted raw reference to the Mindestlohngesetz as `de-kg-instr-dde9fcbc9faae4c7`. The act is captured, but this raw identity still requires source-bound resolution and disposition. The frontier therefore has 285 pending instruments out of 770; adding a signed prerequisite does not suppress newly discovered references.
+Declaring the historical threshold also enrolls its previously unlisted raw reference to the Mindestlohngesetz as `de-kg-instr-dde9fcbc9faae4c7`. The act is captured, but this raw identity still requires source-bound resolution and disposition. The frontier therefore has 281 pending instruments out of 770; adding a signed prerequisite does not suppress newly discovered references.
 
 The complete captured BFH III R19/17 decision of 13 September 2018 concerns
 discretionary remission of an established recovery under AO §227, including
@@ -573,3 +573,13 @@ module subset, while `spine_closed` is derived from the validated provision
 ledger. Kindergeld therefore has `declared_sources_closed: true` and
 `spine_closed: false` with five pending provisions. Source resolution cannot
 substitute for the governing-act denominator or change the overall closure gate.
+
+Full-text review of BFH III R71/10 (4 August 2011), paragraphs 1–16,
+dispositions its final-rejection and objection-decision binding rules on the
+existing §70 administrative-fixing surface. BFH III R21/13 (26 June 2014),
+paragraphs 1–18, concerns suspension of assessment limitation and completion
+of an offence caused by failure to report loss of eligibility. Its residence
+facts are established lower-court findings; it defines no new AO §§8–9 test.
+Both decisions restate the §66 monthly principle while distinguishing their
+procedural questions. Their exact corpus bodies support the discovery and
+parent-row dispositions; the monthly-condition dependency remains open.

@@ -12978,6 +12978,12 @@ committed_decisions:
     classification: constitutional_parentage_applicability
     reason: The operative judgment declares BGB §1600(2) and (3) sentence 1 incompatible with Article 6(2) GG, orders continued application pending replacement legislation until at most 30 June 2025, and requires suspension of proceedings on the specified applicants' request. Read with the 3 June 2025 continuation order. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt, SHA-256 9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-4c21d9bf902eb3be
+    status: excluded-with-reason
+    classification: reporting_enforcement_and_limitations
+    reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
+      section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-78f494ec90cd368b
     status: excluded-with-reason
     classification: appeal_costs
@@ -12989,6 +12995,12 @@ committed_decisions:
     classification: constitutional_parentage_applicability
     reason: The operative order extends continued application of BGB §1600(2) and (3) sentence 1 beyond 30 June 2025 until replacement legislation enters force, at most 31 March 2026, and retains suspension on the specified applicants' request. It changes the outer deadline of the 9 April 2024 judgment. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt, SHA-256 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-ca1314db19ffa550
+    status: excluded-with-reason
+    classification: fixing_payout_and_correction
+    reason: 'Full three-page BFH III R71/10 decision (4 August 2011), paragraphs1–16: paragraphs9–14 define the temporal binding effect of a final rejection notice after an unsuccessful, temporally unrestricted objection. Its effect extends to the end of the month in which the objection decision is notified, so a later application can result in a new fixing only from the following month. Paragraph13 restates EStG66(2) monthly entitlement while distinguishing already arisen claims from the reach of an administrative decision. The disability qualification at paragraph3 is the lower court finding, not a new disability test decided here. Paragraphs7–8 and15–16 concern admissibility and costs. The additional rule is the finality/reassessment surface already excluded by the section70 spine; it does not redefine statutory claimant qualification, disability inability, recipient priority or the fixed section66 monthly amount. The section66 monthly-condition dependency remains open and is not dispositioned
+      by this procedural exclusion. Text-bound source: de/guidance/bfh-iii-r-71-10-2011-08-04/document-1, body SHA-256 01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-da811c7c21203da5
     status: classified-with-reason
     classification: civil_partner_spousal_equivalence
@@ -13085,6 +13097,12 @@ committed_decisions:
     reason: Read the complete captured Altersvorsorgereformgesetz (BGBl. 2026 I No. 156), including EStG Articles 1–3, §52 transitions and commencement Article14. Article14(1) commences general provisions on 30 May 2026, the day after publication; paragraphs2–3 commence their enumerated articles on 1 January 2027 and 1 January 2028. Article1 changes retirement-contribution and subsidy administration in EStG §§82,90,92,93. Articles2–3 change §§10a,22(5),52 and retirement-subsidy provisions79ff; the transitions retain pre-2027 retirement-contract treatment and regulate later elections, withdrawals and reporting, without a retroactive 2025 Kindergeld rule. The retirement Kinderzulage and data exchange consume established child/Kindergeld status rather than define EStG62–78 eligibility, child count, recipient priority, substitute-benefit exclusion or monthly amounts. The remaining amendments concern retirement-product certification and administration. This exclusion is limited to the program’s
       2025 period. Exact complete corpus body de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1, SHA256 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28. Article3 is retained and was read.
     bears_on_computed_surface: false
+  - id: de-kg-instr-3be04eb6d61b596b
+    status: excluded-with-reason
+    classification: fixing_payout_and_correction
+    reason: 'Full three-page BFH III R71/10 decision (4 August 2011), paragraphs1–16: paragraphs9–14 define the temporal binding effect of a final rejection notice after an unsuccessful, temporally unrestricted objection. Its effect extends to the end of the month in which the objection decision is notified, so a later application can result in a new fixing only from the following month. Paragraph13 restates EStG66(2) monthly entitlement while distinguishing already arisen claims from the reach of an administrative decision. The disability qualification at paragraph3 is the lower court finding, not a new disability test decided here. Paragraphs7–8 and15–16 concern admissibility and costs. The additional rule is the finality/reassessment surface already excluded by the section70 spine; it does not redefine statutory claimant qualification, disability inability, recipient priority or the fixed section66 monthly amount. The section66 monthly-condition dependency remains open and is not dispositioned
+      by this procedural exclusion. Text-bound source: de/guidance/bfh-iii-r-71-10-2011-08-04/document-1, body SHA-256 01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
   - id: de-kg-instr-43b69c0fdc7079aa
     status: classified-with-reason
     body_sha256: fb916ad7151c1e2440e28f2b117f74ebd73b325f48b6d54e98108fffd697012d
@@ -13161,6 +13179,12 @@ committed_decisions:
     body_sha256: 96106a6ca5a4a81da21e1522e43c2e633af31f8b1f88470b6715675750de2cca
     classification: misresolved_citation
     reason: 'The citation scan resolved ''§ 19a'' in § 68 Abs. 5 EStG to EStG § 19a (Sondervorschrift für Einkünfte aus nichtselbständiger Arbeit bei Vermögensbeteiligungen). The cited text reads ''für Leistungen der Grundsicherung für Arbeitsuchende nach § 19a Absatz 2 … des Ersten Buches Sozialgesetzbuch'': the reference is to SGB I § 19a Abs. 2, not to the EStG. EStG § 19a (employee share schemes) is not cited by any spine provision and has no bearing on Kindergeld; the SGB I reference sits in the excluded data provision and is dispositioned under the ''Ersten Buches Sozialgesetzbuch'' candidate.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-9a821bfac753742b
+    status: excluded-with-reason
+    classification: reporting_enforcement_and_limitations
+    reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
+      section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
   - id: de-kg-instr-a365b83505706342
     status: excluded-with-reason
@@ -14162,8 +14186,8 @@ computed:
       total: 770
       encoded: 2
       classified-with-reason: 138
-      excluded-with-reason: 345
-      pending: 285
+      excluded-with-reason: 349
+      pending: 281
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14220,7 +14244,6 @@ computed:
     - de-kg-discovery-46df3d0e1aeea3c8
     - de-kg-discovery-48b4061786c299a9
     - de-kg-discovery-4b9b630b75ca91db
-    - de-kg-discovery-4c21d9bf902eb3be
     - de-kg-discovery-4c786677f4d2fd35
     - de-kg-discovery-4f546afb8b93005e
     - de-kg-discovery-501023fa0c9422ed
@@ -14328,7 +14351,6 @@ computed:
     - de-kg-discovery-c711d29acbcee070
     - de-kg-discovery-c90da7dac810e267
     - de-kg-discovery-c9646b036cc3ccbd
-    - de-kg-discovery-ca1314db19ffa550
     - de-kg-discovery-caf426e77d16a7e5
     - de-kg-discovery-cb95788ab61f48f5
     - de-kg-discovery-cd6afe35c0309034
@@ -14396,7 +14418,6 @@ computed:
     - de-kg-instr-3815239cc1f2caaf
     - de-kg-instr-38f736839a5cd25b
     - de-kg-instr-3ae0493a66058fb3
-    - de-kg-instr-3be04eb6d61b596b
     - de-kg-instr-3f1f4f2a618a6442
     - de-kg-instr-3f476358fccfdc69
     - de-kg-instr-466db8bab9da1048
@@ -14416,7 +14437,6 @@ computed:
     - de-kg-instr-8a5bf72ed2cf253f
     - de-kg-instr-9728a65b720a8ab3
     - de-kg-instr-9886b8cf5a4c26e8
-    - de-kg-instr-9a821bfac753742b
     - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-9ea3370bf9f2ad0d
     - de-kg-instr-a2bd2172735c10fa
@@ -22220,7 +22240,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 18.01.2018, III R 16/17, BStBl II S. 402
     - id: de-kg-discovery-4c21d9bf902eb3be
-      status: pending
+      status: excluded-with-reason
       identity_kind: class_member
       identity: BFH vom 26.06.2014, III R 21/13, BStBl II 2015 S. 886
       discovery_refs:
@@ -22228,6 +22248,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 26.06.2014, III R 21/13, BStBl II 2015 S. 886
+      classification: reporting_enforcement_and_limitations
+      reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
+        section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-4c786677f4d2fd35
       status: pending
       identity_kind: class_member
@@ -23217,7 +23241,7 @@ computed:
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/kosovo_dv.pdf
     - id: de-kg-discovery-ca1314db19ffa550
-      status: pending
+      status: excluded-with-reason
       identity_kind: class_member
       identity: BFH vom 04.08.2011, III R 71/10, BStBl II 2013 S. 380
       discovery_refs:
@@ -23225,6 +23249,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 04.08.2011, III R 71/10, BStBl II 2013 S. 380
+      classification: fixing_payout_and_correction
+      reason: 'Full three-page BFH III R71/10 decision (4 August 2011), paragraphs1–16: paragraphs9–14 define the temporal binding effect of a final rejection notice after an unsuccessful, temporally unrestricted objection. Its effect extends to the end of the month in which the objection decision is notified, so a later application can result in a new fixing only from the following month. Paragraph13 restates EStG66(2) monthly entitlement while distinguishing already arisen claims from the reach of an administrative decision. The disability qualification at paragraph3 is the lower court finding, not a new disability test decided here. Paragraphs7–8 and15–16 concern admissibility and costs. The additional rule is the finality/reassessment surface already excluded by the section70 spine; it does not redefine statutory claimant qualification, disability inability, recipient priority or the fixed section66 monthly amount. The section66 monthly-condition dependency remains open and is not dispositioned
+        by this procedural exclusion. Text-bound source: de/guidance/bfh-iii-r-71-10-2011-08-04/document-1, body SHA-256 01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-caf426e77d16a7e5
       status: pending
       identity_kind: class_member
@@ -24135,7 +24163,7 @@ computed:
       document_citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
       title: 'BFH, V R 43/11, 2012-10-24: Monatsprinzip bei Kindergeldberechtigung bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
     - id: de-kg-instr-3be04eb6d61b596b
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-0c57c9fb8c0f37d506b4
       - de-corpus-3bb543f1851a0d787977
@@ -24148,6 +24176,10 @@ computed:
       citation_label: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
       document_citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
       title: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
+      classification: fixing_payout_and_correction
+      reason: 'Full three-page BFH III R71/10 decision (4 August 2011), paragraphs1–16: paragraphs9–14 define the temporal binding effect of a final rejection notice after an unsuccessful, temporally unrestricted objection. Its effect extends to the end of the month in which the objection decision is notified, so a later application can result in a new fixing only from the following month. Paragraph13 restates EStG66(2) monthly entitlement while distinguishing already arisen claims from the reach of an administrative decision. The disability qualification at paragraph3 is the lower court finding, not a new disability test decided here. Paragraphs7–8 and15–16 concern admissibility and costs. The additional rule is the finality/reassessment surface already excluded by the section70 spine; it does not redefine statutory claimant qualification, disability inability, recipient priority or the fixed section66 monthly amount. The section66 monthly-condition dependency remains open and is not dispositioned
+        by this procedural exclusion. Text-bound source: de/guidance/bfh-iii-r-71-10-2011-08-04/document-1, body SHA-256 01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-3f1f4f2a618a6442
       status: pending
       discovery_refs:
@@ -24586,7 +24618,7 @@ computed:
       reason: 'The citation scan resolved ''§ 19a'' in § 68 Abs. 5 EStG to EStG § 19a (Sondervorschrift für Einkünfte aus nichtselbständiger Arbeit bei Vermögensbeteiligungen). The cited text reads ''für Leistungen der Grundsicherung für Arbeitsuchende nach § 19a Absatz 2 … des Ersten Buches Sozialgesetzbuch'': the reference is to SGB I § 19a Abs. 2, not to the EStG. EStG § 19a (employee share schemes) is not cited by any spine provision and has no bearing on Kindergeld; the SGB I reference sits in the excluded data provision and is dispositioned under the ''Ersten Buches Sozialgesetzbuch'' candidate.'
       bears_on_computed_surface: false
     - id: de-kg-instr-9a821bfac753742b
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-16c4c6e5eda80ab9de1a
       - de-corpus-3573713d84d0945ea71f
@@ -24599,6 +24631,10 @@ computed:
       citation_label: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
       document_citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       title: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+      classification: reporting_enforcement_and_limitations
+      reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
+        section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-9dfa8fc6d1681fbb
       status: pending
       discovery_refs:
