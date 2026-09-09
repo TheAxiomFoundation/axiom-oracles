@@ -225,12 +225,12 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
 
     refresh._validate_global_extraction_index(index, scanned_row_count=8220)
     assert index["row_count"] == index["mapped_row_count"] == 8220
-    assert index["body_row_count"] == 8145
+    assert index["body_row_count"] == 8147
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 100
+    assert index["act_count"] == len(index["acts"]) == 102
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 5291,
+        "explicit_cross_reference_body": 5316,
         "law_metadata_changed_by": 24,
         "law_metadata_fundstelle": 31,
     }
@@ -518,6 +518,10 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
             "birth_record_person_identifier", "candidate_child_identifier",
             "candidate_person_identifier", "event_or_intraday_timepoint_date",
             "beginning_of_day_start_date", "recorded_birth_date",
+            "kindergeld_payment_record_exists",
+            "kindergeld_payment_record_reference_year",
+            "kindergeld_payment_record_reference_month",
+            "application_for_section_64_priority_received", "application_receipt_date",
         }
         assert len(dependency_inputs) == 8
         # Every leaf is typed, so the boundary is complete; the eight

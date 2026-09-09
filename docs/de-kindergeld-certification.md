@@ -295,9 +295,9 @@ method, `text_sha256` the hash):
 
 The original browser capture methods remain recorded in git history. All
 thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
-corpus bodies from `de-rulespec-2026-09-09-kindergeld-swiss-coordination`, commit
-`495236ce303398c8cea3d1d8f1e5fdcda5b09488`, content SHA-256
-`1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77`.
+corpus bodies from `de-rulespec-2026-09-09-kindergeld-treaty-texts`, commit
+`27510ad32be7e2111c20f3a7dd41a2ae40310c17`, content SHA-256
+`415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
 expression date and official URL. Single-body instruments use the body hash;
@@ -317,7 +317,12 @@ notices and the 2014 civil-partner letter are now receipted. The latter remains
 bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
-coordination rules remain pending. The snapshot has 190 citation-only and
+coordination rules remain pending. The consumer now pins the additive
+`de-rulespec-2026-09-09-kindergeld-swiss-coordination` release at commit
+`495236ce303398c8cea3d1d8f1e5fdcda5b09488`, content SHA-256
+`1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77`
+(8,220 rows, 28 scopes). The earlier supplemental receipts remain valid
+and retain their original release identities. The snapshot has 190 citation-only and
 30 receipted pending members. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
 rows pending. Current result: 226 of 698 instruments pending, 133 open
