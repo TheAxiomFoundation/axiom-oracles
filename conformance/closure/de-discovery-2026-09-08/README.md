@@ -2,10 +2,14 @@
 
 This snapshot contains 226 candidate entries: 16 BMF letters, 2 BZSt
 instructions, 168 court candidates, and 40 bilateral or association instruments.
-Of these, 220 remain pending legal disposition: 190 citation-only seeds and 30
+Of these, 219 remain pending legal disposition: 189 citation-only seeds and 30
 corpus-receipted instruments. Five other corpus-receipted entries are
 bearing dependencies (two parentage decisions, C-328/20, the 2025 country-group
-letter and the civil-partner bridge letter); the 2013 transfer letter is non-bearing for this Kindergeld surface.
+letter and the civil-partner bridge letter); the 2013 transfer letter is non-bearing for this Kindergeld surface. The 2023 country-group letter
+is separately excluded for 2025 because the receipted 2 December 2025 letter
+expressly replaces it from that assessment year. Its old body remains
+uncaptured; the exclusion binds the replacement clause, not a claimed read of
+the old schedule.
 The three courts’ BStBl II publication remains
 unverified and discovery-class membership is explicitly provisional. A court citation entry is not necessarily a
 unique case: spelling variants and duplicate legal identities still require
@@ -85,7 +89,7 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 226 pending
+The regenerated ledger has 5 pending spine rows out of 18 and 225 pending
 instruments out of 698. Dependency closure remains false: eight law-derived
 inputs and 124 bearing instruments remain open, with no unclassified inputs.
 The thirteen birth/payment-record and date inputs are committed world facts; engine-supplied query

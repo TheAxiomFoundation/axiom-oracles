@@ -11651,6 +11651,12 @@ committed_decisions:
     reason: Read paragraphs 1–17. Paragraphs 1–14 allocate the EStG32(6) sentences6–11 tax allowances between parents, stepparents and grandparents (including the75percent maintenance test and objections); paragraphs15–16 allocate a child’s section33b lump sum to parents; paragraph17 starts assessment-year2012 application. These allocation rules do not change the section32(6) sentence1 statutory allowance amounts used by EStG66(3), the section32(1)–(5) qualifying-child tests, or section64 Kindergeld recipient priority. Paragraph15 makes existing Kindergeld entitlement a condition of downstream lump-sum transfer, not vice versa. The allocated parental lump sum does not define the child’s own disability needs. No computable rule upstream of this monthly Kindergeld surface is added; this does not exclude other BMF letters or section33b need amounts. Official corpus body de/guidance/esth-2024/bmf-2013-06-28-child-allowance-transfer/inhalt, SHA-256 7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e,
       release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-3296221dbf2fd2a2
+    status: excluded-with-reason
+    classification: expressly_superseded_for_2025
+    reason: 'The 2025 replacement instrument expressly states: "Dieses Schreiben ersetzt ab dem Veranlagungszeitraum 2025 das BMF-Schreiben vom 18. Dezember 2023 (BStBl I 2023, Seite 2236)." The old letter is uniquely identified by date and BStBl citation in the retained positive-register entry. Its country-group schedule is therefore superseded for this program’s 2025 assessment period; no historical 2024 schedule is imported into 2025 computations. This exclusion relies on the replacement’s express operative clause, not on an assertion that the old letter’s full text was captured. The superseding body is de/guidance/bmf-2025-12-02-country-groups/document-1, SHA-256 a9613edef94146eb42eb8a6ddcbac4faba5a4ee1b257409e7bdede462674994e, retained byte-for-byte as bmf-2025-12-02-country-groups.txt in the sha-bound discovery snapshot and receipted in corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5 (preserved by the current release). The 2025
+      replacement, EU/EEA non-reduction and claimant/child rules remain bearing and unencoded; no prior-period exclusion or discovery-exhaustiveness claim is made.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-3a8452d6c8893e0d
     status: classified-with-reason
     classification: eu_family_benefit_non_indexation
@@ -12564,8 +12570,8 @@ computed:
       total: 698
       encoded: 2
       classified-with-reason: 132
-      excluded-with-reason: 338
-      pending: 226
+      excluded-with-reason: 339
+      pending: 225
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12603,7 +12609,6 @@ computed:
     - de-kg-discovery-2cc6ce9a628d09b1
     - de-kg-discovery-2d6286809c5f1a19
     - de-kg-discovery-2e35ab29f2750a4c
-    - de-kg-discovery-3296221dbf2fd2a2
     - de-kg-discovery-32f5cf2350c58f79
     - de-kg-discovery-339d5045ae38b36a
     - de-kg-discovery-33b5b7772fffd60a
@@ -20291,7 +20296,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 09.06.1999, VI R 16/99, BStBl II S. 713
     - id: de-kg-discovery-3296221dbf2fd2a2
-      status: pending
+      status: excluded-with-reason
       identity_kind: class_member
       identity: BMF-Schreiben vom 18.12.2023, BStBl I 2023, 2236 — Berücksichtigung ausländischer Verhältnisse; Ländergruppeneinteilung ab 1. Januar 2024
       discovery_refs:
@@ -20299,6 +20304,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmf-positive-list-2025.txt
       discovery_source_sha256: 6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c
       discovery_excerpt: 983   BMF   18.12.2023                                  BStBl I 2023, 2236
+      classification: expressly_superseded_for_2025
+      reason: 'The 2025 replacement instrument expressly states: "Dieses Schreiben ersetzt ab dem Veranlagungszeitraum 2025 das BMF-Schreiben vom 18. Dezember 2023 (BStBl I 2023, Seite 2236)." The old letter is uniquely identified by date and BStBl citation in the retained positive-register entry. Its country-group schedule is therefore superseded for this program’s 2025 assessment period; no historical 2024 schedule is imported into 2025 computations. This exclusion relies on the replacement’s express operative clause, not on an assertion that the old letter’s full text was captured. The superseding body is de/guidance/bmf-2025-12-02-country-groups/document-1, SHA-256 a9613edef94146eb42eb8a6ddcbac4faba5a4ee1b257409e7bdede462674994e, retained byte-for-byte as bmf-2025-12-02-country-groups.txt in the sha-bound discovery snapshot and receipted in corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5 (preserved by the current release). The
+        2025 replacement, EU/EEA non-reduction and claimant/child rules remain bearing and unencoded; no prior-period exclusion or discovery-exhaustiveness claim is made.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-32f5cf2350c58f79
       status: pending
       identity_kind: class_member

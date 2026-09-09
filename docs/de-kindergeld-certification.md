@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 226 of 698 instruments
+other closure artifact. The current frontier has 225 of 698 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites and EStG §78 record helpers are declared at RuleSpec merge
@@ -305,9 +305,10 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 226 entries: 220 pending legal dispositions,
-five captured bearing entries and one captured non-bearing transfer letter.
-The latter allocates parental tax allowances and a child's lump sum among
+The SHA-bound class snapshot contains 226 entries: 219 pending legal dispositions,
+five captured bearing entries, one captured non-bearing transfer letter, and
+one country-group letter expressly superseded for 2025.
+The transfer letter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
 through §1(3) EStG and its specified allowance adjustments. C-328/20 and both
@@ -325,10 +326,13 @@ coordination rules remain pending. The consumer now pins the additive
 and retain their original release identities. Eight article-level EU coordination
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
-uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The snapshot has 190 citation-only and
-30 receipted pending members. The 22 DVKA documents are publisher extracts.
+uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 189 citation-only seeds and
+30 receipted instruments. The 2023 country-group letter remains citation-only
+as a capture matter, but the receipted 2 December 2025 replacement expressly
+replaces it from assessment year 2025; that operative clause supports the
+period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 226 of 698 instruments pending, 132 open
+rows pending. Current result: 225 of 698 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
