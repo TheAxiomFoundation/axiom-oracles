@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8",
-    "release": "de-rulespec-2026-09-09-kindergeld-adult-services",
-    "release_content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48",
-    "release_selector_sha256": "a1555ce6f92447ad03509c75b789a4ecfd0ea96c4c0a8e79c5f77e5b3f97fb7a",
+    "commit": "d13e3839fce439f60e1c1fdfb4710a9b6930d4af",
+    "release": "de-rulespec-2026-09-09-kindergeld-dakg",
+    "release_content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c",
+    "release_selector_sha256": "c09e67bd0c245bc5ab121f192cea129246c2cb129ec12ea945a6cc269482e62a",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -69,6 +69,11 @@
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json",
         "sha256": "f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json",
+        "sha256": "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
         "row_count": 2
       },
       {
@@ -251,6 +256,11 @@
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl",
         "sha256": "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl",
+        "sha256": "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
         "row_count": 2
       },
       {

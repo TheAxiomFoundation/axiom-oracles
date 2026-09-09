@@ -33,12 +33,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869
+    sha256: 795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8
-    release: de-rulespec-2026-09-09-kindergeld-adult-services
-    release_content_sha256: 555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48
+    commit: d13e3839fce439f60e1c1fdfb4710a9b6930d4af
+    release: de-rulespec-2026-09-09-kindergeld-dakg
+    release_content_sha256: 0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -78,6 +78,9 @@ generated_facts:
       row_count: 6
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl
       sha256: 847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl
+      sha256: 4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b
       row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
@@ -902,10 +905,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 6190ff9fc96fe289872b30e8ea6fec7c3e8e30f669c96842479cc6a4b851b387
+    snapshot_sha256: af3fffb55b065e8894a2fed3c483f49f8ab645facae7be37456b3c385b9e3793
     channel_receipts:
-      corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-      subject_matter_search: 08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0
+      corpus_release: 623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8
+      subject_matter_search: d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -8848,13 +8851,11 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-subject-001
-      - de-subject-002
       - de-subject-003
       identity_kind: subject_seed
       raw_reference: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025
       subject_urls:
       - https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790
-      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
       - https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf
     - id: de-kg-instr-002
       status: pending
@@ -9942,11 +9943,31 @@ generated_facts:
     - id: de-kg-instr-dakg-2026
       status: pending
       discovery_refs:
+      - de-corpus-09e2683ba90ebc38a161
+      - de-corpus-20ea970d21a6ba340b2f
+      - de-corpus-370bbe7bc5877980d218
+      - de-corpus-4273e6fc3dfb25a2b4e4
+      - de-corpus-53f9b179189d8108cdd4
+      - de-corpus-5f4c58f5931a1170395c
+      - de-corpus-6cd69f2fb225e7d06889
+      - de-corpus-7a8d125ae362392f07e4
+      - de-corpus-82304cb623044519d3f6
+      - de-corpus-83df33321003ce9c56ec
+      - de-corpus-8c0e7466a8366b64b169
+      - de-corpus-8f2c91bb84034c948f35
+      - de-corpus-aaff4b0395adc300324b
+      - de-corpus-be8475da8b824aa74500
+      - de-corpus-d370335279a8689cbd96
+      - de-corpus-d3cd3ff26443c2ab5194
+      - de-subject-002
       - de-subject-017
-      identity_kind: subject_seed
-      raw_reference: Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.
-      subject_urls:
-      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2026
+      row_sha256: 50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9
+      document_class: guidance
+      citation_label: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
+      document_citation_path: de/guidance/bzst-dakg-2026
+      title: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
     - id: de-kg-instr-db7693cd9f018ff4
       status: pending
       discovery_refs:
@@ -10109,7 +10130,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 1055a5318753acf1dc7f11b4f4406c242eb6926e1aa0e261591d011286a5d915
+      sha256: 6b9fe73194208507e1e5a90bad89f8b2efd4f805d812570397a0c2bf4db7f1a9
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10157,8 +10178,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-        subject_matter_search: 08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0
+        corpus_release: 623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8
+        subject_matter_search: d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -23559,13 +23580,11 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-subject-001
-      - de-subject-002
       - de-subject-003
       identity_kind: subject_seed
       raw_reference: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025
       subject_urls:
       - https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790
-      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
       - https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf
       classification: document_container
       reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. de-subject-002 retrieved the 2024 Randstrichfassung (1 304 209 bytes), the edition the 2025 text replaces; it was not read separately.
@@ -24756,11 +24775,31 @@ computed:
     - id: de-kg-instr-dakg-2026
       status: pending
       discovery_refs:
+      - de-corpus-09e2683ba90ebc38a161
+      - de-corpus-20ea970d21a6ba340b2f
+      - de-corpus-370bbe7bc5877980d218
+      - de-corpus-4273e6fc3dfb25a2b4e4
+      - de-corpus-53f9b179189d8108cdd4
+      - de-corpus-5f4c58f5931a1170395c
+      - de-corpus-6cd69f2fb225e7d06889
+      - de-corpus-7a8d125ae362392f07e4
+      - de-corpus-82304cb623044519d3f6
+      - de-corpus-83df33321003ce9c56ec
+      - de-corpus-8c0e7466a8366b64b169
+      - de-corpus-8f2c91bb84034c948f35
+      - de-corpus-aaff4b0395adc300324b
+      - de-corpus-be8475da8b824aa74500
+      - de-corpus-d370335279a8689cbd96
+      - de-corpus-d3cd3ff26443c2ab5194
+      - de-subject-002
       - de-subject-017
-      identity_kind: subject_seed
-      raw_reference: Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.
-      subject_urls:
-      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2026
+      row_sha256: 50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9
+      document_class: guidance
+      citation_label: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
+      document_citation_path: de/guidance/bzst-dakg-2026
+      title: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
     - id: de-kg-instr-db7693cd9f018ff4
       status: classified-with-reason
       discovery_refs:

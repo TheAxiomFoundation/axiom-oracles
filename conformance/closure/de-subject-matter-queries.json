@@ -68,9 +68,9 @@
         "de/kindergeld"
       ],
       "source_id": "bzst",
-      "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
+      "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
       "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-      "candidate_seed": "de-kg-instr-001"
+      "candidate_seed": "de-kg-instr-dakg-2026"
     },
     {
       "id": "de-subject-003",

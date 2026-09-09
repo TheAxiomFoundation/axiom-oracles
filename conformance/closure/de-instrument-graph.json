@@ -1,25 +1,25 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-09T08:20:59Z",
+  "generated_at": "2026-09-09T09:25:52Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
+    "sha256": "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
-    "sha256": "5e2f5a1752635c2efbb32f2df5edf394b592ad4c415504f20958b5ec733a0964"
+    "sha256": "e01ae4c36613d53fbb1520ec8b8ac3cc26366d9b0c02f75858459fa4f775e786"
   },
   "channels": {
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-09-kindergeld-adult-services",
-      "commit": "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8",
-      "release_content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48",
+      "release": "de-rulespec-2026-09-09-kindergeld-dakg",
+      "commit": "d13e3839fce439f60e1c1fdfb4710a9b6930d4af",
+      "release_content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-09-kindergeld-adult-services/555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48.json",
-        "raw_sha256": "83597f6fac8dbfc15582d7823c9febc10d0f789e47e65919064a66c554121aa1",
-        "content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48"
+        "path": "releases/de-rulespec-2026-09-09-kindergeld-dakg/0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c.json",
+        "raw_sha256": "691da82810b73b7111e3200230e36e8b839f69e856f0e12cbddb8855e8cd5713",
+        "content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c"
       },
       "scans": [
         {
@@ -162,6 +162,19 @@
           "provisions": {
             "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl",
             "sha256": "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json",
+            "sha256": "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl",
+            "sha256": "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
             "row_count": 2
           }
         },
@@ -491,23 +504,23 @@
           }
         }
       ],
-      "scanned_row_count": 9166,
+      "scanned_row_count": 9168,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9166,
-        "body_row_count": 8993,
-        "mapped_row_count": 9166,
+        "row_count": 9168,
+        "body_row_count": 8994,
+        "mapped_row_count": 9168,
         "unmapped_row_count": 0,
-        "act_count": 209,
+        "act_count": 210,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6227,
+          "explicit_cross_reference_body": 6309,
           "law_metadata_changed_by": 31,
           "law_metadata_fundstelle": 38
         },
-        "row_scan_sha256": "906d382473cf817f85c3c510271970ba43034903418d445b0c840968b38408de",
-        "canonical_index_sha256": "8dc3528503cf0c5e61c95fc811ca6cdae319a403ac699a8e814298a151703c55",
-        "per_act_sha256": "f81039b4ee7f163075d964b8eedb5c503cd7dc080524366eec8147e68ea21fcd",
+        "row_scan_sha256": "df74f2c77c4447f2bb30e392cdcd16579122c5880723933e83c49e5672ccc5d9",
+        "canonical_index_sha256": "75da2f8b92c6a0f72552de5472dceb911561103d92aebaafe23facb73ce76b02",
+        "per_act_sha256": "19cc02ba4f9bec9ae3ba22bb3e71731ac002532108c18d51447bbc6c2a88a956",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -5929,6 +5942,706 @@
                 "source_row_sha256": "92b9ef7571ed1e05aac213a2e99ce5381c57bd100256a437ba0c4fb9b9b2dd5e",
                 "matched_text": "Grundgesetz",
                 "unresolved_identity": "named-instrument:grundgesetz"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bzst-dakg-2026",
+            "document_row_sha256": "50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 82,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "58255e7929342d6c9fdd902272b807a6dacc2f3725e3672f39c884ccb6835076",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Abgabenordnung",
+                "target_citation_path": "de/statute/ao-1977",
+                "target_row_sha256": "19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Altenpflegegesetz",
+                "unresolved_identity": "named-instrument:altenpflegegesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Asylbewerberleistungsgesetz",
+                "unresolved_identity": "named-instrument:asylbewerberleistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Asylgesetz",
+                "unresolved_identity": "named-instrument:asylgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "AufenthG",
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Aufenthaltsgesetz",
+                "unresolved_identity": "law:aufenthaltsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "BEEG",
+                "target_citation_path": "de/statute/beeg",
+                "target_row_sha256": "743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "BFDG",
+                "target_citation_path": "de/statute/bfdg",
+                "target_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "BKGG",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Beamtenstatusgesetz",
+                "unresolved_identity": "named-instrument:beamtenstatusgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Berufsausbildungsverordnung",
+                "unresolved_identity": "named-instrument:berufsausbildungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Berufsbildungsgesetz",
+                "unresolved_identity": "named-instrument:berufsbildungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Beschäftigungsverordnung",
+                "unresolved_identity": "named-instrument:beschäftigungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesausbildungsförderungsgesetz",
+                "unresolved_identity": "named-instrument:bundesausbildungsförderungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesbeamtengesetz",
+                "unresolved_identity": "named-instrument:bundesbeamtengesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesdatenschutzgesetz",
+                "unresolved_identity": "named-instrument:bundesdatenschutzgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesdatenschutzgesetzes",
+                "unresolved_identity": "named-instrument:bundesdatenschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesfreiwilligendienstgesetz",
+                "target_citation_path": "de/statute/bfdg",
+                "target_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundeskindergeldgesetz",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundesversorgungsgesetz",
+                "unresolved_identity": "named-instrument:bundesversorgungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bundeszentralregistergesetz",
+                "unresolved_identity": "named-instrument:bundeszentralregistergesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Bürgerliches Gesetzbuch",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Datenschutz-Grundverordnung",
+                "unresolved_identity": "named-instrument:datenschutz-grundverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Einkommensteuer-Durchführungsverordnung",
+                "target_citation_path": "de/regulation/estdv-1955",
+                "target_row_sha256": "d16b26eacb7efd952cd835a62b66b18d39daa5e0c0581fdd7dcbd4c6793133ec"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Einkommensteuergesetz (EStG)",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Einkommensteuergesetz",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Finanzverwaltungsgesetz",
+                "unresolved_identity": "named-instrument:finanzverwaltungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "FreizügG/EU",
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gerichtskostengesetz",
+                "unresolved_identity": "named-instrument:gerichtskostengesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gerichtsverfassungsgesetz",
+                "unresolved_identity": "named-instrument:gerichtsverfassungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gesetz zum Elterngeld und zur Elternzeit",
+                "target_citation_path": "de/statute/beeg",
+                "target_row_sha256": "743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gesetz über die allgemeine Freizügigkeit von Unionsbürgern",
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gesetzes über Ordnungswidrigkeiten",
+                "unresolved_identity": "law:owig"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Grundgesetz",
+                "unresolved_identity": "named-instrument:grundgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Hebammengesetz",
+                "unresolved_identity": "named-instrument:hebammengesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Inflationsausgleichsgesetz",
+                "unresolved_identity": "named-instrument:inflationsausgleichsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "JFDG",
+                "target_citation_path": "de/statute/jfdg",
+                "target_row_sha256": "6f593c489eea4d2933c9a08f3759a1a34146fc40a173eeb85b3dedd363dba684"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Jugendfreiwilligendienstegesetz",
+                "target_citation_path": "de/statute/jfdg",
+                "target_row_sha256": "6f593c489eea4d2933c9a08f3759a1a34146fc40a173eeb85b3dedd363dba684"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Jugendgerichtsgesetz",
+                "unresolved_identity": "named-instrument:jugendgerichtsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "KiZDAV",
+                "target_citation_path": "de/regulation/kizdav",
+                "target_row_sha256": "55ba9e46328e3010a47dedde6546a452d3d5830b4f4e7d7889a204fb0d6f042d"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Kinderzuschlag-Datenabrufverordnung",
+                "unresolved_identity": "named-instrument:kinderzuschlag-datenabrufverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Krankenpflegegesetz",
+                "unresolved_identity": "named-instrument:krankenpflegegesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Landespflegegeldgesetz",
+                "unresolved_identity": "named-instrument:landespflegegeldgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Mutterschutzgesetz",
+                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "OWiG",
+                "unresolved_identity": "law:owig"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Opferentschädigungsgesetz",
+                "unresolved_identity": "named-instrument:opferentschädigungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Ordnungswidrigkeitengesetz",
+                "unresolved_identity": "law:owig"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB II",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB III",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB IV",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB IX",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB V",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB VI",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB VII",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB VIII",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB X",
+                "unresolved_identity": "law:sgb-10"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB XI",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "SGB XII",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Signaturgesetz",
+                "unresolved_identity": "named-instrument:signaturgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Soldatengesetz",
+                "target_citation_path": "de/statute/sg",
+                "target_row_sha256": "ec06e47cd16b54689e48f7f7ec58489b0a7ddf260446b85e670e5fc5dd0a8e48"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Sozialversicherungsentgeltverordnung",
+                "unresolved_identity": "named-instrument:sozialversicherungsentgeltverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Staatsangehörigkeitsgesetz",
+                "unresolved_identity": "named-instrument:staatsangehörigkeitsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Steuerberatungsgesetzes",
+                "unresolved_identity": "law:steuerberatungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Steuerentlastungsgesetz",
+                "unresolved_identity": "named-instrument:steuerentlastungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Vermögensbildungsgesetz",
+                "unresolved_identity": "named-instrument:vermögensbildungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EG) Nr. 859/2003",
+                "target_citation_path": "de/regulation/eu-859-2003",
+                "target_row_sha256": "57daa273a6d5659195e3af1271440b4d7d2b321e6409826e4d7c751d661c7303"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EG) Nr. 883/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 883/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EG) Nr. 987/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr. 1288/2013",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 1288/2013"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr. 2018/1475",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 2018/1475"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr. 2021/888",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 2021/888"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr. 492/2011",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 492/2011"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr. 910/2014",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 910/2014"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verordnung (EU) Nr.1231/2010",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr.1231/2010"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verpflichtungsgesetz",
+                "unresolved_identity": "named-instrument:verpflichtungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verwaltungsvollstreckungsgesetzes",
+                "unresolved_identity": "named-instrument:verwaltungsvollstreckungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Verwaltungszustellungsgesetz",
+                "unresolved_identity": "named-instrument:verwaltungszustellungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Wohngeldgesetz",
+                "target_citation_path": "de/statute/wogg",
+                "target_row_sha256": "0c75816689d2cf1d91917c024d3bb2760ba821c2af162fd347863d5d5b4b5386"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "ZPO",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
               }
             ]
           },
@@ -55848,7 +56561,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "e5e543ef5c65c5574a6c483be83c536f7d0eeb4dc646f3f65c74d870a18c03ee"
+        "receipt_sha256": "c62125fbed275b9a550b14e3c7790cb1e014c889767363256a65c8f8b4c5f581"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -55926,6 +56639,16 @@
           "source_citation_path": "de/statute/estg",
           "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
           "raw_reference": "RGBl I 1934, 1005"
+        },
+        {
+          "id": "de-corpus-09e2683ba90ebc38a161",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 1591 BGB",
+          "resolved_citation_path": "de/statute/bgb/1591"
         },
         {
           "id": "de-corpus-0a272f4768b5aa643793",
@@ -56185,6 +56908,16 @@
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
+          "id": "de-corpus-20ea970d21a6ba340b2f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 76 EStG",
+          "resolved_citation_path": "de/statute/estg/76"
+        },
+        {
           "id": "de-corpus-2106da243fb5e024a263",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -56333,6 +57066,16 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-2f30a304d010e2c39c1c",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-31f4641c5fcedc0d42b9",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -56400,6 +57143,16 @@
           "source_row_sha256": "9ab3aff01986d5efee21c5b6bb78c712ecda21b6e2a1551792822bac8cd128d1",
           "matched_text": "§ 63 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-370bbe7bc5877980d218",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 78 Abs. 5 EStG",
+          "resolved_citation_path": "de/statute/estg/78"
         },
         {
           "id": "de-corpus-37e7adcc7f1833e1d40c",
@@ -56565,6 +57318,16 @@
           "source_row_sha256": "23d2e62a742eacea3fcc435d74542f83bbc645997d2b8141590e1cbaa6ed5d59",
           "matched_text": "§ 66 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-4273e6fc3dfb25a2b4e4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 67 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/67"
         },
         {
           "id": "de-corpus-42cb174d59c13ca15840",
@@ -56773,6 +57536,16 @@
           "resolved_citation_path": "de/statute/estg/74"
         },
         {
+          "id": "de-corpus-53f9b179189d8108cdd4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 62 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-54424a966f565cf32a11",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
@@ -56850,6 +57623,16 @@
           "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
           "matched_text": "§ 62 Abs 1 S 1, EStG",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-5f4c58f5931a1170395c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 64 EStG",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-5f705aae8523970f1a25",
@@ -57059,6 +57842,16 @@
           "resolved_citation_path": "de/statute/estg/64"
         },
         {
+          "id": "de-corpus-6cd69f2fb225e7d06889",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 65 EStG",
+          "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
           "id": "de-corpus-6cfe20544c79114bedad",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -57238,6 +58031,16 @@
           "resolved_citation_path": "de/statute/estg/65"
         },
         {
+          "id": "de-corpus-7a8d125ae362392f07e4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 75 EStG",
+          "resolved_citation_path": "de/statute/estg/75"
+        },
+        {
           "id": "de-corpus-7af973ef13e85403e536",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57345,6 +58148,16 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
+          "id": "de-corpus-82304cb623044519d3f6",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 77 EStG",
+          "resolved_citation_path": "de/statute/estg/77"
+        },
+        {
           "id": "de-corpus-8282919b6c7f38199d81",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57362,6 +58175,16 @@
           "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
           "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156",
           "resolved_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1"
+        },
+        {
+          "id": "de-corpus-83df33321003ce9c56ec",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 68 Abs. 4 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/68"
         },
         {
           "id": "de-corpus-86534602aca6487afa11",
@@ -57443,6 +58266,16 @@
           "resolved_citation_path": "de/statute/sgb-3"
         },
         {
+          "id": "de-corpus-8c0e7466a8366b64b169",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 187 Abs. 2 BGB",
+          "resolved_citation_path": "de/statute/bgb/187"
+        },
+        {
           "id": "de-corpus-8c59f324eb341ba46731",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57461,6 +58294,16 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Zweiten Buches Sozialgesetzbuch",
           "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-8f2c91bb84034c948f35",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 74 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
         },
         {
           "id": "de-corpus-8fbae7ccbaf5d47aaa5d",
@@ -57818,6 +58661,16 @@
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
+          "id": "de-corpus-aaff4b0395adc300324b",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-ac9f46b6e8a72dd09c5e",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57996,6 +58849,16 @@
           "source_row_sha256": "f30dca2fc8a8e5786480d34fa8ef5138c660fc081195c1f1d88faf1f96837e42",
           "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
           "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-be8475da8b824aa74500",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 70 Abs. 2 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
         },
         {
           "id": "de-corpus-bf0631b273ba225e34e0",
@@ -58196,6 +59059,16 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-d370335279a8689cbd96",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 63 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-d3bd8baa857af3f6c8fe",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58204,6 +59077,16 @@
           "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
           "matched_text": "§ 72 Abs. 1 Satz 3 des Einkommensteuergesetzes (EStG",
           "resolved_citation_path": "de/statute/estg/72"
+        },
+        {
+          "id": "de-corpus-d3cd3ff26443c2ab5194",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+          "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+          "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+          "matched_text": "§ 71 EStG",
+          "resolved_citation_path": "de/statute/estg/71"
         },
         {
           "id": "de-corpus-d4040ccf15ddd057ae22",
@@ -58714,7 +59597,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da"
+      "receipt_sha256": "623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -58730,10 +59613,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "ded869eec66fc34fa4b20baa0ddac823a6a25a5f379093f310a696f5a87a941c"
+          "receipt_sha256": "2c7a3bc0b18e5ccf1cdcdc507a63d02e6715897abba7b9246acfc12b70fb93e1"
         },
         {
           "id": "de-subject-002",
@@ -58741,16 +59624,16 @@
             "de/kindergeld"
           ],
           "source_id": "bzst",
-          "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
+          "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "474d9d3744b654fc07b29aff34817ca3a501c799b41d0b7dd37c77111b4a5f23"
+          "receipt_sha256": "0ace9ff26d12cfc840bf92f861cdd07b053c4ab5748968341e445fcd04fd91b9"
         },
         {
           "id": "de-subject-003",
@@ -58760,14 +59643,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "36b42e15fc38e861cb56267a26dbf4d52e0c34ff49fff791d120bed49c228220"
+          "receipt_sha256": "d6a95b9e4d567d3d39c1db61deb394cffd8fefa40be722391126ebb00b4d7d14"
         },
         {
           "id": "de-subject-004",
@@ -58777,14 +59660,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=d40a7942-91a3-405d-a8e3-66f60b9562ec&ssb=20510283467&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=c69ed823-ca3f-43ad-9f7b-86adedb15618&ssk=botmanager_support@radware.com&ssm=87559871012914669103987455175188&ssn=393b22eebd63110eb8c5463732fd61e73cd08f7aab36-1de8-4cad-b0312d&sso=39339b29-6cc4592daaa8232e50dcea6e80a6cbb27f429461a7cc43fc&ssp=65616370681788927538178894886513410&ssq=76474404219065314299442190052084722168791&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDA4ZjdhYWIzNi0xZGU4LTRjYWQtYmIyOS02Y2M0NTkyZGFhYTgxLTE3ODg5NDIxOTA4MDYwLTAwNDJlYzc0ZjkxZDVlMmQ3N2YxMCIsInV6bXgiOiI3ZmMwMDAzY2JmYzM1ZS04MDE0LTRlNjEtOWM5MS1jMGVlNTZkZjRmMWQxLTE3ODg5NDIxOTA4MDYwLTAwNDA3OGNiYTU3M2UyMDZlOTAxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=4ea18757-138e-47ff-ab66-eb4884b45c78&ssb=85256202583&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=4383c21a-ca3f-4e6f-bd10-805e4f9f8459&ssk=botmanager_support@radware.com&ssm=19055858790015240105524894585384&ssn=54ef198e3e7f47d42607d7690b6c0c2144740d1ef233-2549-44fb-a4eb3f&sso=0079316f-fedcb74a260e46bf86d85efbe6e6b532c072f438e5e24a47&ssp=77485985671788935272178897107319553&ssq=27784704609378102030846093585965168901820&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwidXpteCI6IjdmYzAwMGI5YjZkNTAyLTdmZDctNGMzYy04MmY0LTExOTU3MmRmOGJiMTEtMTc4ODk0NjA5MzM3NzAtMDA0MTE2MGJkMDQ4NDVkMGU0YTEwIiwiX191em1mIjoiN2Y5MDAwMGQxZWYyMzMtMjU0OS00NGZiLWExNmYtZmVkY2I3NGEyNjBlMS0xNzg4OTQ2MDkzMzc3MC0wMDQwNzNmY2U3MTZjOWFhNmE3MTAifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "f1bf7942aef28410c279aca54196360bf1af8b6f51b9ae6510106a8ca0392dc3",
-          "receipt_sha256": "5cb0f3b3b222fe8f33d5987ea4d42b8be8ab44956e58b1c6cd2e9260fc3cf4f5"
+          "content_sha256": "38bf41f61e11ad4b19b7e503897be3ea27ecead6603f91a496fdad092672a776",
+          "receipt_sha256": "f3525d94153d4e60509b0d6228472ca076c2cd32a20e8d7f28ade7e23ce3e2bb"
         },
         {
           "id": "de-subject-005",
@@ -58795,14 +59678,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "c21da9ab8c3d26f06d02baa1b2a9a77d7b8c7b21107c56756cec40b12c8af365"
+          "receipt_sha256": "d3b95b86b14f2aa8427e92a3342c937752c3fa80d16e1682c9237c3fa1b629b5"
         },
         {
           "id": "de-subject-006",
@@ -58812,14 +59695,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "0cdf4d13826b808d7b1b82f7bb5a8da2d9393d980bdc3222e4925d2a47ac11c5"
+          "receipt_sha256": "1acc051b527d4c0698c32bd63886dee6a1f7a378f76069de429a5f24c96b1828"
         },
         {
           "id": "de-subject-007",
@@ -58829,14 +59712,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "da7509f65c7696ba345868ad45a33ac3a2c5148cf187935d329dc12c156f329c"
+          "receipt_sha256": "6cfce6be8d0a4829a5fb4ad07a5d15c8df7d628d1a3e1d8fb2183bbfaf1b4451"
         },
         {
           "id": "de-subject-008",
@@ -58846,10 +59729,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "fa262644494bbcd2c47e6e84c8218967366be915b54ea3ce4d24bbb8c203a4cf"
+          "receipt_sha256": "200c94b1d9461d7caea845308feeabfb9cc86b6e8b683aa72ddffd74d056d7e5"
         },
         {
           "id": "de-subject-009",
@@ -58859,14 +59742,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "a077ad22720d52815fe20b46fd42a30cffcbd5974acaef160afdec9eb5a17c28"
+          "receipt_sha256": "b52b6c51c16f5044acf078c37ab53fb90347898464d3139eb13e7893ee071eff"
         },
         {
           "id": "de-subject-010",
@@ -58876,14 +59759,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "a6891b7d3f469916c8a6e23366bc57f11e2640ca157266e6184a05acd7a9d2bd"
+          "receipt_sha256": "c1018e2eb5a82e18d1266d7a83f21d6f3668d7e43eef16b5ff9de0ce60b1f6a7"
         },
         {
           "id": "de-subject-011",
@@ -58893,14 +59776,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "3c51b2bbd495049d6ce1cd6e7a8757c553df64c6aaeb24141f7ee13aa919de14"
+          "receipt_sha256": "75cb6beb0def189044006c19378f9c3769d41a183c43aeb643aee0642a8155ef"
         },
         {
           "id": "de-subject-012",
@@ -58910,10 +59793,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "52e0f2e9fd5a5f79c401f35906763288251663ec8c937c70b03ba15fb929576a"
+          "receipt_sha256": "f1ee39e09155d282d7f2f4f84e205ce758ef1e85997f6d7a04324ac2cae69970"
         },
         {
           "id": "de-subject-013",
@@ -58923,14 +59806,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "55b8f46db83689573673de4dcd810ac99097fa69248c81b6e63d3905fdc32eb8"
+          "receipt_sha256": "d94344ffe981870539cbc0f74cd8fdad0140cfcbd538a4696883e1d0c06961fc"
         },
         {
           "id": "de-subject-014",
@@ -58940,14 +59823,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "12d1e3da3d0bc3f3fc60e889424a25b637b4a126a1eeeea460276d29f89bcae4"
+          "receipt_sha256": "ed54396d7b0ba669a14dc52bf48004973e610489380be1a325d2d537aaf42aa0"
         },
         {
           "id": "de-subject-015",
@@ -58957,10 +59840,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "ce471a9b537f688e4fbfaf1f2877a30b19349195433e5b90f2de48172df2d8ff"
+          "receipt_sha256": "cec2b372f3592fd96615ea182e3be619c1b32c2aeca95444f260a5adbfd20cea"
         },
         {
           "id": "de-subject-016",
@@ -58970,14 +59853,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "8d57dcf03db885817016ed1e00a5a77b0a0a0ea8065ec6e2d02b8b1c001cceeb"
+          "receipt_sha256": "cebce1d40ecdfe7aad009f1eac19d467c5dc3f019556f548cfce998563f591aa"
         },
         {
           "id": "de-subject-017",
@@ -58987,17 +59870,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T08:20:59Z",
+          "captured_at": "2026-09-09T09:25:52Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf;charset=UTF-8",
+          "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "973b60d69ec3881c28fa051c5521a835434110c88fa8ccfd2a3cd104b96288ff"
+          "receipt_sha256": "67858403c10209afc8bad43b4e80f1257ea75430007ba90e8ee52d6eadcbbc12"
         }
       ],
-      "receipt_sha256": "08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0"
+      "receipt_sha256": "d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -59015,14 +59898,12 @@
           "status": "pending",
           "discovery_refs": [
             "de-subject-001",
-            "de-subject-002",
             "de-subject-003"
           ],
           "identity_kind": "subject_seed",
           "raw_reference": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "subject_urls": [
             "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-            "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
             "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf"
           ]
         },
@@ -60385,13 +61266,32 @@
           "id": "de-kg-instr-dakg-2026",
           "status": "pending",
           "discovery_refs": [
+            "de-corpus-09e2683ba90ebc38a161",
+            "de-corpus-20ea970d21a6ba340b2f",
+            "de-corpus-370bbe7bc5877980d218",
+            "de-corpus-4273e6fc3dfb25a2b4e4",
+            "de-corpus-53f9b179189d8108cdd4",
+            "de-corpus-5f4c58f5931a1170395c",
+            "de-corpus-6cd69f2fb225e7d06889",
+            "de-corpus-7a8d125ae362392f07e4",
+            "de-corpus-82304cb623044519d3f6",
+            "de-corpus-83df33321003ce9c56ec",
+            "de-corpus-8c0e7466a8366b64b169",
+            "de-corpus-8f2c91bb84034c948f35",
+            "de-corpus-aaff4b0395adc300324b",
+            "de-corpus-be8475da8b824aa74500",
+            "de-corpus-d370335279a8689cbd96",
+            "de-corpus-d3cd3ff26443c2ab5194",
+            "de-subject-002",
             "de-subject-017"
           ],
-          "identity_kind": "subject_seed",
-          "raw_reference": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
-          "subject_urls": [
-            "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2"
-          ]
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bzst-dakg-2026",
+          "row_sha256": "50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9",
+          "document_class": "guidance",
+          "citation_label": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026",
+          "document_citation_path": "de/guidance/bzst-dakg-2026",
+          "title": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026"
         },
         {
           "id": "de-kg-instr-db7693cd9f018ff4",
@@ -60628,8 +61528,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da",
-            "subject_matter_search": "08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0",
+            "corpus_release": "623e7d9d88c8611bdd255dd56fb9aaf660f95a13293f7c7a6071813585ef59f8",
+            "subject_matter_search": "d385b8655814924bc678570f25618c4f8f8179593979d32fea1e106116b69d37",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -60895,6 +61795,20 @@
           "raw_references": [
             "Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)"
           ]
+        },
+        {
+          "id": "de-uhv-instr-2cd7e8e12c8d39c4",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-2f30a304d010e2c39c1c"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bzst-dakg-2026",
+          "row_sha256": "50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9",
+          "document_class": "guidance",
+          "citation_label": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026",
+          "document_citation_path": "de/guidance/bzst-dakg-2026",
+          "title": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026"
         },
         {
           "id": "de-uhv-instr-333ba26c32e038d3",
@@ -61348,5 +62262,5 @@
       ]
     }
   ],
-  "receipt_sha256": "cc9f5004e3cfeed07bd264de7420944f0b63508689048ec556b1ad61c51e5d8f"
+  "receipt_sha256": "e252f79a6814c75e6858f602f9a71b4bcbf5b6ec208dafabb5c6e47a4b4c8818"
 }

@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
+    "sha256": "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -262,7 +262,7 @@
         "no comparison record has been declared",
         "de/statute/uhvorschg/2: final-amount encoding remains partial",
         "executable reproduction receipt pending",
-        "closed: instrument frontier incomplete — 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-unterhaltsvorschuss.json",

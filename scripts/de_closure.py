@@ -28,18 +28,18 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
+SOURCE_SHA256 = "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = "de-rulespec-2026-09-09-kindergeld-adult-services"
+RELEASE = "de-rulespec-2026-09-09-kindergeld-dakg"
 RELEASE_CONTENT_SHA256 = (
-    "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48"
+    "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c"
 )
 RELEASE_SELECTOR_SHA256 = (
-    "a1555ce6f92447ad03509c75b789a4ecfd0ea96c4c0a8e79c5f77e5b3f97fb7a"
+    "c09e67bd0c245bc5ab121f192cea129246c2cb129ec12ea945a6cc269482e62a"
 )
-CORPUS_COMMIT = "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8"
+CORPUS_COMMIT = "d13e3839fce439f60e1c1fdfb4710a9b6930d4af"
 RULESPEC_COMMIT = "73e92a4da6970693215edd28e24295c923cb807d"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -137,6 +137,10 @@ EXPECTED_INVENTORIES = {
     ),
     "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json": (
         "f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d",
+        2,
+    ),
+    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json": (
+        "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
         2,
     ),
     "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json": (
@@ -283,6 +287,10 @@ EXPECTED_PROVISION_SOURCES = {
     ),
     "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl": (
         "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
+        2,
+    ),
+    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl": (
+        "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
         2,
     ),
     "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl": (

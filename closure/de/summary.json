@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-adult-services",
-  "corpus_release_content_sha256": "555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48",
+  "corpus_commit": "d13e3839fce439f60e1c1fdfb4710a9b6930d4af",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-dakg",
+  "corpus_release_content_sha256": "0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -198,7 +198,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "5ec7b2b70156843b74b31b461688a12999ad19838b1d0bbce19eea236072f9ad",
+      "subgraph_sha256": "099c3a2944bc0f4608b517fcbef44cbefe726b91a2a64a15f1f60c5d3ec909bb",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -282,7 +282,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "4766785403f03dc4e7804128a31fd9cd93f76c0604c021a5dab283ab1c073ac9",
+      "subgraph_sha256": "ec34a6e921d7cfb9c2a097e1bef6feb71becfeae3cbb25cfbc7297253e5b4ceb",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -365,7 +365,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "009f2fa8721573b86ea58d8d4181802019ed03406ac03711876db7d5c8c3d220",
+      "subgraph_sha256": "a405f0aa449d0f284477fa35af99d1a09bcc050341dfa39cf077ccc9fce3479b",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -388,7 +388,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
+    "sha256": "795fd4c481bf3b6aecb29af1eaac9a7f3e5f23c05868f840794c0a579c6ac489"
   },
   "spine_closed": false
 }

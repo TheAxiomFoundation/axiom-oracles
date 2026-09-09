@@ -182,7 +182,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "edbac46e5abf75dae6955f44dda5d5925d12fd92ece1d383066835ad5273f0cb"
+      "sha256": "3e7920f2c4d7331b231b2ae6cafde6a81813694eb1e7c743e5471213fb70f54a"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -206,14 +206,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "c6b8ba272388ddf1cd38096a2ea148d4d6a3c4a0a58c7f5e5a985c9b8fcf1eb8",
+      "sha256": "2a7764bed820632b6347607e4d4c143e0b0fea51a3cc19783175d73879c06e93",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "b055954292f38ca0b7262e8ad97ec0b292761dd7a760502bcae3bce71666dc25"
+      "sha256": "b805a60c2abe291c400067a1e54a100a72061ae804c8936b9735055f1b147455"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -856,7 +856,7 @@
       ],
       "citation_root_count": 12,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-adult-services",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-dakg",
       "declared_sources": [
         {
           "checkout_observation": {
@@ -1436,7 +1436,7 @@
         "role_claim_mode": "attested",
         "rulespec_commit": "73e92a4da6970693215edd28e24295c923cb807d",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "5ec7b2b70156843b74b31b461688a12999ad19838b1d0bbce19eea236072f9ad",
+        "subgraph_sha256": "099c3a2944bc0f4608b517fcbef44cbefe726b91a2a64a15f1f60c5d3ec909bb",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,

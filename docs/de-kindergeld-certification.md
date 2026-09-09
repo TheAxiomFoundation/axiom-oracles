@@ -320,10 +320,13 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-adult-services` release at commit
-`902616a85e3f8aa1f6317cb5f00b6c8f4e380bb8`, content SHA-256
-`555a91a3c9f10900f70377b50cc846ed090ae632458b0312916bde2af2c42b48`
-(9,166 rows, 36 scopes). The additive service captures cover JFDG, BFDG,
+`de-rulespec-2026-09-09-kindergeld-dakg` release at commit
+`d13e3839fce439f60e1c1fdfb4710a9b6930d4af`, content SHA-256
+`0e138975cf6ef793275c285b163454a7240c1cdac56227a4837ad608b5161b8c`
+(9,168 rows, 37 scopes). The complete DA-KG 2026 edition is separately
+receipted at `de/guidance/bzst-dakg-2026/document-1`, body SHA-256
+`2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58`.
+Its applicability remains pending; it does not replace the retained 2025 edition. The additive service captures cover JFDG, BFDG,
 EhfG, ZDG, SG, WPflG and SGB VII, the European Solidarity Corps regulation,
 the statutorily referenced weltwärts guideline, and the IJFD guideline.
 A separate official archived SG §58b row preserves the wording applicable
