@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 294 of 769 instruments
+other closure artifact. The current frontier has 293 of 769 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -343,7 +343,7 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 294 of 769 instruments pending, 132 open
+rows pending. Current result: 293 of 769 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -531,3 +531,5 @@ threshold calculation remain to be encoded and composed into EStG §32(4).
 The MiLoV5 prerequisite starts in 2026 and has no 2025 version. Its declaration preserves explicit source accounting for the 2026/2027 wage schedule; the 2025 certificate retains the separately captured MiLoV4 prerequisite. Neither wage module establishes marginal-employment eligibility or child qualification.
 
 The threshold release adds a complete, independently captured historical SGB IV §8(1a) paragraph from the unchanged official DRV HTML. All 40 preceding scopes remain. The new paragraph is receipted source text; its numerical threshold has not yet been declared as an encoded module.
+
+The complete BFH decision III R 59/19 (3 November 2020) is dispositioned as non-bearing after review of all sixteen paragraphs. It concerns discretionary file access and litigation costs, consistent with the existing DA-KG V9 procedural exclusion; it does not determine a child entitlement or amount. Its exact corpus-body hash is recorded in the committed decision. This individual disposition does not resolve the separate BStBl II publication verification or exhaustive class-discovery requirement.

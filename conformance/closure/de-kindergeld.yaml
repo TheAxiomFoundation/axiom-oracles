@@ -12914,6 +12914,12 @@ committed_decisions:
     reason: 'The 2025 replacement instrument expressly states: "Dieses Schreiben ersetzt ab dem Veranlagungszeitraum 2025 das BMF-Schreiben vom 18. Dezember 2023 (BStBl I 2023, Seite 2236)." The old letter is uniquely identified by date and BStBl citation in the retained positive-register entry. Its country-group schedule is therefore superseded for this program’s 2025 assessment period; no historical 2024 schedule is imported into 2025 computations. This exclusion relies on the replacement’s express operative clause, not on an assertion that the old letter’s full text was captured. The superseding body is de/guidance/bmf-2025-12-02-country-groups/document-1, SHA-256 a9613edef94146eb42eb8a6ddcbac4faba5a4ee1b257409e7bdede462674994e, retained byte-for-byte as bmf-2025-12-02-country-groups.txt in the sha-bound discovery snapshot and receipted in corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5 (preserved by the current release). The 2025
       replacement, EU/EEA non-reduction and claimant/child rules remain bearing and unencoded; no prior-period exclusion or discovery-exhaustiveness claim is made.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-345366269efcd1c7
+    status: classified-with-reason
+    classification: procedural_file_access_and_costs
+    reason: Read the complete official BFH decision of 3 November 2020, III R 59/19 (paragraphs 1–16). The tenor allocates litigation costs after the file-access dispute became moot. Paragraphs 4–10 require an AO section 5 discretionary decision and balancing of file-access interests; paragraphs 11–15 find defective exercise of discretion in this individual access case. Paragraph 16 expressly leaves the additional GDPR Article 15 question open. Paragraph 5 describes the existing dual function of Kindergeld under EStG section 31 as background, without changing an entitlement test or amount. Paragraph 13 mentions possible correction of final notices only to establish a continuing interest in access, not a new correction or entitlement rule. This is the data-access procedure already excluded in DA-KG V9 and the procedural spine; it adds no rule upstream of claimant entitlement, qualifying-child count, recipient priority, substitute-benefit exclusion, coordination or monthly amount. Complete
+      corpus body de/guidance/bfh-iii-r-59-19-2020-11-03/document-1, SHA-256 1c50babc699c292020cc9a7705987e0724fadf4b34b7c1e92a2901ee5fd83692, release de-rulespec-2026-09-09-kindergeld-bfh-decisions at 4a225368e171b193d02590e7dd1866792174c705; the snapshot receipt matches those exact bytes. Exact BStBl II issue/page verification and exhaustive discovery remain pending independently.
+    bears_on_computed_surface: false
   - id: de-kg-discovery-3a8452d6c8893e0d
     status: classified-with-reason
     classification: eu_family_benefit_non_indexation
@@ -14078,9 +14084,9 @@ computed:
     counts:
       total: 769
       encoded: 2
-      classified-with-reason: 132
+      classified-with-reason: 133
       excluded-with-reason: 341
-      pending: 294
+      pending: 293
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14123,7 +14129,6 @@ computed:
     - de-kg-discovery-33b5b7772fffd60a
     - de-kg-discovery-341ead2934294036
     - de-kg-discovery-34498b60301c9605
-    - de-kg-discovery-345366269efcd1c7
     - de-kg-discovery-359e9a2ce0db9b88
     - de-kg-discovery-37736435a414ade5
     - de-kg-discovery-37a6c8c2b78ff64e
@@ -21932,7 +21937,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 27.02.2014, III R 40/13, BStBl II S. 783
     - id: de-kg-discovery-345366269efcd1c7
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 03.11.2020, III R 59/19, BStBl II 2021 S. 467
       discovery_refs:
@@ -21940,6 +21945,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 03.11.2020, III R 59/19, BStBl II 2021 S. 467
+      classification: procedural_file_access_and_costs
+      reason: Read the complete official BFH decision of 3 November 2020, III R 59/19 (paragraphs 1–16). The tenor allocates litigation costs after the file-access dispute became moot. Paragraphs 4–10 require an AO section 5 discretionary decision and balancing of file-access interests; paragraphs 11–15 find defective exercise of discretion in this individual access case. Paragraph 16 expressly leaves the additional GDPR Article 15 question open. Paragraph 5 describes the existing dual function of Kindergeld under EStG section 31 as background, without changing an entitlement test or amount. Paragraph 13 mentions possible correction of final notices only to establish a continuing interest in access, not a new correction or entitlement rule. This is the data-access procedure already excluded in DA-KG V9 and the procedural spine; it adds no rule upstream of claimant entitlement, qualifying-child count, recipient priority, substitute-benefit exclusion, coordination or monthly amount. Complete
+        corpus body de/guidance/bfh-iii-r-59-19-2020-11-03/document-1, SHA-256 1c50babc699c292020cc9a7705987e0724fadf4b34b7c1e92a2901ee5fd83692, release de-rulespec-2026-09-09-kindergeld-bfh-decisions at 4a225368e171b193d02590e7dd1866792174c705; the snapshot receipt matches those exact bytes. Exact BStBl II issue/page verification and exhaustive discovery remain pending independently.
+      bears_on_computed_surface: false
     - id: de-kg-discovery-359e9a2ce0db9b88
       status: pending
       identity_kind: class_member

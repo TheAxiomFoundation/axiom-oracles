@@ -67,7 +67,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "a359a4ef8bdd1c1ddcca8fe835c2082ad7fc59cee758387b1343160da669be5e"
+      "sha256": "66d24006f9a5daa7be0acaf02dbef77945c3d43e1a66121bc03ae3628b6ca551"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
