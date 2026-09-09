@@ -307,9 +307,10 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 228 entries: 221 pending legal dispositions,
-five captured bearing entries, one captured non-bearing transfer letter, and
-one country-group letter expressly superseded for 2025.
+The SHA-bound class snapshot contains 228 entries. With the committed dispositions,
+220 members remain pending, five captured members are bearing, two captured members
+are non-bearing (the transfer letter and BFH file-access decision), and one
+country-group letter is expressly superseded for 2025.
 The transfer letter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
@@ -338,7 +339,7 @@ and retain their original release identities. Eight article-level EU coordinatio
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
 uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 109 citation-only seeds and
-112 receipted instruments. The 2023 country-group letter remains citation-only
+111 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
