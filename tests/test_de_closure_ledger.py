@@ -1616,3 +1616,150 @@ def test_string_values_do_not_create_dependency_leaves(literal: str) -> None:
         {"slot": "de:test#input.unresolved_legal_condition", "name": "unresolved_legal_condition",
          "module": "de:test", "read_by": ["matches"]},
     ]
+
+
+def _import_test_documents():
+    return {
+        "de:regulations/wage/1": {
+            "rules": [{"name": "hourly_wage", "versions": [{"formula": "12.82"}]}]
+        },
+        "de:statutes/threshold/1": {
+            "imports": ["de:regulations/wage/1#hourly_wage"],
+            "rules": [
+                {
+                    "name": "threshold",
+                    "versions": [{"formula": "ceil(hourly_wage * 130 / 3)"}],
+                }
+            ],
+        },
+    }
+
+
+def test_exact_declared_import_resolves_rule_without_an_external_wage_leaf():
+    module = _load_script()
+    inputs, bindings = module._resolve_declared_module_imports(_import_test_documents())
+    assert inputs == []
+    assert bindings["de:statutes/threshold/1"] == [
+        {
+            "target": "de:regulations/wage/1#hourly_wage",
+            "module_id": "de:regulations/wage/1",
+            "rules": ["hourly_wage"],
+        }
+    ]
+
+
+def test_import_resolution_retains_upstream_law_derived_and_observable_inputs():
+    module = _load_script()
+    documents = _import_test_documents()
+    documents["de:regulations/wage/1"]["rules"][0]["versions"][0]["formula"] = (
+        "unencoded_statutory_rate + recorded_payment"
+    )
+    inputs, _ = module._resolve_declared_module_imports(documents)
+    assert {row["slot"] for row in inputs} == {
+        "de:regulations/wage/1#input.unencoded_statutory_rate",
+        "de:regulations/wage/1#input.recorded_payment",
+    }
+
+
+@pytest.mark.parametrize("fragment", ["#hourly_wage", ""])
+def test_transitive_imports_resolve_only_through_declared_modules(fragment):
+    module = _load_script()
+    documents = _import_test_documents()
+    documents["de:statutes/relay/1"] = {
+        "imports": ["de:regulations/wage/1" + fragment],
+        "rules": [],
+    }
+    documents["de:statutes/threshold/1"]["imports"] = [
+        "de:statutes/relay/1#hourly_wage"
+    ]
+    inputs, _ = module._resolve_declared_module_imports(documents)
+    assert inputs == []
+    del documents["de:regulations/wage/1"]
+    with pytest.raises(module._SourceError, match="not declared"):
+        module._resolve_declared_module_imports(documents)
+
+
+@pytest.mark.parametrize(
+    "mutation, diagnostic",
+    [
+        ("missing_module", "not declared"),
+        ("unknown_rule", "exported rule"),
+        ("input_as_export", "exported rule"),
+        ("empty_fragment", "exported rule"),
+        ("cycle", "cyclic"),
+        ("shadow_input", "shadowed"),
+        ("shadow_rule", "shadowed"),
+        ("duplicate_import", "shadowed"),
+        ("malformed", "malformed"),
+    ],
+)
+def test_import_resolution_rejects_missing_cyclic_and_shadowed_bindings(
+    mutation, diagnostic
+):
+    module = _load_script()
+    documents = _import_test_documents()
+    consumer = documents["de:statutes/threshold/1"]
+    if mutation == "missing_module":
+        del documents["de:regulations/wage/1"]
+    elif mutation == "unknown_rule":
+        consumer["imports"] = ["de:regulations/wage/1#unknown"]
+    elif mutation == "input_as_export":
+        documents["de:regulations/wage/1"]["inputs"] = [{"name": "recorded_wage"}]
+        consumer["imports"] = ["de:regulations/wage/1#recorded_wage"]
+    elif mutation == "empty_fragment":
+        consumer["imports"] = ["de:regulations/wage/1#"]
+    elif mutation == "cycle":
+        documents["de:regulations/wage/1"]["imports"] = [
+            "de:statutes/threshold/1#threshold"
+        ]
+    elif mutation == "shadow_input":
+        consumer["inputs"] = [{"name": "hourly_wage"}]
+    elif mutation == "shadow_rule":
+        consumer["rules"].append(
+            {"name": "hourly_wage", "versions": [{"formula": "1"}]}
+        )
+    elif mutation == "duplicate_import":
+        consumer["imports"] *= 2
+    else:
+        consumer["imports"] = [{"target": "de:regulations/wage/1#hourly_wage"}]
+    with pytest.raises(module._SourceError, match=diagnostic):
+        module._resolve_declared_module_imports(documents)
+
+
+@pytest.mark.parametrize("tamper_imported_bytes", [False, True])
+def test_rulespec_facts_verify_imported_artifact_bytes_before_resolving_inputs(
+    tmp_path, monkeypatch, tamper_imported_bytes
+):
+    import hashlib
+
+    module = _load_script()
+    documents = _import_test_documents()
+    commit = "a" * 40
+    blobs = {}
+    source_modules = []
+    declared_sources = []
+    for module_id, document in documents.items():
+        path = module_id.replace("de:", "de/") + ".yaml"
+        citation = "de/test/" + path
+        raw = yaml.safe_dump(document).encode()
+        blobs[path] = raw
+        source_modules.append({
+            "citation_path": citation,
+            "artifact": {"commit": commit, "path": path,
+                         "sha256": hashlib.sha256(raw).hexdigest()},
+        })
+        declared_sources.append({"citation_path": citation})
+    if tamper_imported_bytes:
+        blobs["de/regulations/wage/1.yaml"] = b"rules: []\n"
+    source = {"rulespec": {"modules": source_modules},
+              "programs": {"de/test": {"declared_sources": declared_sources}}}
+    monkeypatch.setattr(module, "_git", lambda *args: (commit + "\n").encode())
+    monkeypatch.setattr(module, "_git_blob", lambda _root, _commit, path: blobs[path])
+    if tamper_imported_bytes:
+        with pytest.raises(module._SourceError, match="artifact hash mismatch"):
+            module._rulespec_facts(source, "de/test", tmp_path)
+    else:
+        modules, inputs = module._rulespec_facts(source, "de/test", tmp_path)
+        assert inputs == []
+        consumer = next(row for row in modules if row["module_id"] == "de:statutes/threshold/1")
+        assert consumer["resolved_imports"][0]["target"] == "de:regulations/wage/1#hourly_wage"

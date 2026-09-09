@@ -486,6 +486,81 @@ def _module_inputs(document: Mapping[str, Any], module_id: str) -> list[dict[str
     ]
 
 
+def _resolve_declared_module_imports(
+    documents: Mapping[str, Mapping[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    """Resolve only imports whose exact target bytes were verified by the caller.
+
+    Every target must itself be a declared module. Its inputs remain in the
+    frontier, so resolving an imported rule cannot hide an upstream legal leaf.
+    """
+    exports: dict[str, set[str]] = {}
+    bindings: dict[str, list[dict[str, Any]]] = {}
+    imported_names: dict[str, set[str]] = {}
+    visiting: set[str] = set()
+
+    def resolve(module_id: str) -> set[str]:
+        if module_id in exports:
+            return exports[module_id]
+        if module_id in visiting:
+            raise _SourceError(f"cyclic declared RuleSpec import: {module_id}")
+        document = documents.get(module_id)
+        if document is None:
+            raise _SourceError(f"RuleSpec import target is not declared: {module_id}")
+        visiting.add(module_id)
+        local_names = {
+            row["name"]
+            for row in document.get("rules", [])
+            if isinstance(row, Mapping) and isinstance(row.get("name"), str)
+        }
+        local_inputs = {
+            row["name"]
+            for row in document.get("inputs", [])
+            if isinstance(row, Mapping) and isinstance(row.get("name"), str)
+        }
+        imported: set[str] = set()
+        resolved: list[dict[str, Any]] = []
+        imports = document.get("imports", [])
+        if imports is None:
+            imports = []
+        if not isinstance(imports, list):
+            raise _SourceError(f"RuleSpec imports is not a list: {module_id}")
+        for target in imports:
+            if not isinstance(target, str):
+                raise _SourceError(f"malformed RuleSpec import: {module_id}")
+            target_module, separator, fragment = target.partition("#")
+            target_names = resolve(target_module)
+            if separator:
+                if not fragment or fragment not in target_names:
+                    raise _SourceError(
+                        f"RuleSpec import does not name an exported rule: {target}"
+                    )
+                names = {fragment}
+            else:
+                names = set(target_names)
+            if names.intersection(local_names | local_inputs | imported):
+                raise _SourceError(f"ambiguous or shadowed RuleSpec import: {target}")
+            imported.update(names)
+            resolved.append(
+                {"target": target, "module_id": target_module, "rules": sorted(names)}
+            )
+        visiting.remove(module_id)
+        exports[module_id] = local_names | imported
+        imported_names[module_id] = imported
+        bindings[module_id] = resolved
+        return exports[module_id]
+
+    for module_id in documents:
+        resolve(module_id)
+    inputs = [
+        row
+        for module_id, document in documents.items()
+        for row in _module_inputs(document, module_id)
+        if row["name"] not in imported_names[module_id]
+    ]
+    return inputs, bindings
+
+
 def _rulespec_facts(
     source: Mapping[str, Any], program_id: str, rulespec_root: Path
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -502,7 +577,7 @@ def _rulespec_facts(
         if isinstance(row, Mapping) and isinstance(row.get("citation_path"), str)
     }
     modules: list[dict[str, Any]] = []
-    inputs: list[dict[str, Any]] = []
+    documents: dict[str, Mapping[str, Any]] = {}
     for declared in program.get("declared_sources", []):
         citation = declared.get("citation_path") if isinstance(declared, Mapping) else None
         if not isinstance(citation, str):
@@ -546,7 +621,14 @@ def _rulespec_facts(
                 "declared_imports": copy.deepcopy(imports),
             }
         )
-        inputs.extend(_module_inputs(document, module_id))
+        if module_id in documents:
+            raise _SourceError(f"duplicate declared RuleSpec module: {module_id}")
+        documents[module_id] = document
+    inputs, import_bindings = _resolve_declared_module_imports(documents)
+    for module in modules:
+        resolved = import_bindings.get(module.get("module_id", ""), [])
+        if resolved:
+            module["resolved_imports"] = resolved
     modules.sort(key=lambda row: row["citation_path"])
     inputs.sort(key=lambda row: row["slot"])
     return modules, inputs
