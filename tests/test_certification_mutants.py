@@ -5787,7 +5787,7 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5
     # The exact-path summary still contributes its scope fields only.
-    assert closed["rulespec_commit"] == "73e92a4da6970693215edd28e24295c923cb807d"
+    assert closed["rulespec_commit"] == "00fb38eda17659da44e3ae0fff3bedf427c324bd"
     assert closed["by_signature_state"] is not None
     claims = {row["claim"] for row in evidence}
     assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims

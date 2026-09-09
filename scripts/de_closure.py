@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "bc75734421229748ddca40892e563b1c98ab2a8121eb80b35ab5ae1a5a6b4c0c"
+SOURCE_SHA256 = "67e6dc3868ed591f0f98873d6591ba489ca57f634e11b1bc974c4c5347415a01"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -40,7 +40,7 @@ RELEASE_SELECTOR_SHA256 = (
     "27a7a2058e3f56c57fa9c7e1a92bc08dc29d2b2c0a8e9e1cbba75f0549771074"
 )
 CORPUS_COMMIT = "629bd6dfa7f75b5c4040a0047425fa0294c512ff"
-RULESPEC_COMMIT = "73e92a4da6970693215edd28e24295c923cb807d"
+RULESPEC_COMMIT = "00fb38eda17659da44e3ae0fff3bedf427c324bd"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -76,6 +76,7 @@ PROGRAM_SOURCE_PATHS = {
         "de/statute/estg/78",
         "de/statute/estg/32/absatz-3/document-1",
         "de/regulation/eu-987-2009/article-59/document-1",
+        "de/regulation/milov4/1",
     ),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",

@@ -10,8 +10,9 @@ other closure artifact. The current frontier has 294 of 769 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
-criterion and Regulation 987/2009 Article 59 payment-continuity rules are declared
-at RuleSpec merge `73e92a4da6970693215edd28e24295c923cb807d`; the live amount-only oracle and
+criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
+historical minimum-wage parameter are declared at RuleSpec merge
+`00fb38eda17659da44e3ae0fff3bedf427c324bd`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine stays pending.

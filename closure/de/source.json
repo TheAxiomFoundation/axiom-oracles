@@ -455,6 +455,29 @@
         "parent_citation_path": "de/regulation/eu-987-2009/article-59"
       },
       {
+        "citation_path": "de/regulation/milov4",
+        "record_id": "e87261e0-537a-5fb8-b205-ac69482485c5",
+        "line_number": 159,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "10dc0b5e0cba3b534042b2b0003878ed003ff4e6835002b01ed1d5e3ddc7b6db",
+        "source_sha256": "488eabecbcd214aa6b3364cd922b90b34ec5003ad15f94bcd614991565c26f77",
+        "body_sha256": "5cb36bb89766372cee267d62c2c47ba1ab7280afc933b803abc36c477f8a883f",
+        "body_length": 157
+      },
+      {
+        "citation_path": "de/regulation/milov4/1",
+        "record_id": "de391ae8-1b1b-5618-8492-d618659b5cde",
+        "line_number": 160,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "d45c58b1cefeee3ebff346ce65163da09c31dfe5a23cef2a26e47305b01afdfd",
+        "source_sha256": "488eabecbcd214aa6b3364cd922b90b34ec5003ad15f94bcd614991565c26f77",
+        "body_sha256": "bd76f94563148e548fb4483c59670560724223d703b4739c86999686415da214",
+        "body_length": 135,
+        "parent_citation_path": "de/regulation/milov4"
+      },
+      {
         "citation_path": "de/regulation/minuhv/1",
         "record_id": "509faa2d-58d7-5efa-8318-a46d7a9a86f3",
         "line_number": 114,
@@ -704,7 +727,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "73e92a4da6970693215edd28e24295c923cb807d",
+    "observed_main_commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
     "claim_mode": "attested",
     "modules": [
       {
@@ -721,11 +744,25 @@
         "claim_mode": "attested",
         "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/regulations/eu-987-2009/article-59/document-1.yaml",
           "sha256": "500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
           "manifest_sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
+        }
+      },
+      {
+        "citation_path": "de/regulation/milov4/1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+        "artifact": {
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
+          "path": "de/regulations/milov4/1.yaml",
+          "sha256": "5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
+          "manifest_sha256": "112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab"
         }
       },
       {
@@ -735,7 +772,7 @@
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -749,7 +786,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
@@ -763,7 +800,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/statutes/bgb/1591.yaml",
           "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
@@ -777,7 +814,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/statutes/bgb/187.yaml",
           "sha256": "e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
@@ -791,7 +828,7 @@
         "claim_mode": "attested",
         "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/statutes/estg/32/absatz-3/document-1.yaml",
           "sha256": "37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
@@ -805,7 +842,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
@@ -819,7 +856,7 @@
         "claim_mode": "attested",
         "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
         "artifact": {
-          "commit": "73e92a4da6970693215edd28e24295c923cb807d",
+          "commit": "00fb38eda17659da44e3ae0fff3bedf427c324bd",
           "path": "de/statutes/estg/78.yaml",
           "sha256": "b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
@@ -883,6 +920,10 @@
         {
           "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
           "role": "coordination_payment_continuity_prerequisite"
+        },
+        {
+          "citation_path": "de/regulation/milov4/1",
+          "role": "minimum_wage_prerequisite"
         }
       ],
       "evidence_roots": [

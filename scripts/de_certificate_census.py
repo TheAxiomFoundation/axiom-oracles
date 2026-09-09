@@ -38,12 +38,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "73e92a4da6970693215edd28e24295c923cb807d"
+RULESPEC_MAIN_COMMIT = "00fb38eda17659da44e3ae0fff3bedf427c324bd"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/regulation/milov4/1",
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/statute/estg/32/absatz-3/document-1",
         "de/statute/estg/78",
@@ -70,6 +71,7 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/regulation/milov4/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
         "de/regulation/eu-987-2009/article-59/document-1": (
             "coordination_payment_continuity_prerequisite",
             "encoded",
@@ -123,6 +125,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/regulation/milov4/1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
+        "sha256": "112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab",
+    },
     "de/regulation/eu-987-2009/article-59/document-1": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -207,6 +215,15 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/regulation/milov4/1",
+                role="minimum_wage_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/milov4/1.json",
+                source_sha256="112f137454fff6c08d6dbab742525f223b888b01d105cde8b1728e1d53131bab",
+                reason="Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+            ),
             _root(
                 "de/statute/estg/32/absatz-3/document-1",
                 role="child_age_prerequisite",
