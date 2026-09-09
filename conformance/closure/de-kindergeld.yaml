@@ -12927,6 +12927,12 @@ committed_decisions:
     classification: administration_only
     reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-17bc04f83ae1dc83
+    status: classified-with-reason
+    classification: recovery_remission_and_reporting_procedure
+    reason: Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad,
+      retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
+    bears_on_computed_surface: false
   - id: de-kg-discovery-18cfbbaa9e1b9112
     status: classified-with-reason
     classification: downstream_tax_allowance_allocation
@@ -12955,6 +12961,12 @@ committed_decisions:
     classification: eu_family_benefit_non_indexation
     reason: The corrected judgment’s operative point1 finds the Austrian family-benefit/child-tax-credit residence indexation contrary to Regulations883/2004 Articles4 and67 and492/2011 Article7(2). The BMF2December2025 letter expressly relies on C-328/20 in its EU/EEA child-allowance footnote. This remains a bearing coordination dependency for child-abroad treatment and the specified allowance territorial adjustment; no automatic German tax-rule scope beyond the text is inferred. BStBl II membership remains unverified. Open until encoded and composed. Official corpus body de/guidance/cjeu-c-328-20/document-1, SHA-256 f79afa65d4a53b16a375f82f44215848d63f37297c341188b23b77ca8774f3a2, release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-493177f979995cb2
+    status: classified-with-reason
+    classification: appeal_notice_and_filing_procedure
+    reason: Read the complete official BFH order of 17 August 2023, III R 26/22 (paragraphs 1–23). It decides whether an objection to an existing cancellation/recovery notice was timely. Paragraphs 9–12 apply AO355–357 and the one-month/one-year procedural filing periods; paragraphs 13–22 hold that reproducing the statutory written/electronic/oral-record filing methods gives sufficient notice without separately listing email or every technical channel. Paragraph23 allocates costs. The disputed EUR9109.65 is the amount in the existing recovery notice, not a statutory Kindergeld rate or a new eligibility computation. This is the appeals procedure already excluded by the DA-KG KapitelR dispositions; it supplies no upstream rule for entitlement, child count, priority, substitute-benefit exclusion, EU coordination or monthly amount. Complete corpus body de/guidance/bfh-iii-r-26-22-2023-08-17/document-1, SHA-256 20cedf57f5f6626bd9cd306260166002c67d87e60db08a948a6d030a3684419f, retained in pinned
+      corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive class discovery remain open independently.
+    bears_on_computed_surface: false
   - id: de-kg-discovery-4a16231e30b5e62b
     status: classified-with-reason
     classification: constitutional_parentage_applicability
@@ -13107,6 +13119,12 @@ committed_decisions:
     status: classified-with-reason
     classification: document_container
     reason: The pinned corpus row de/guidance/esth-2024-32 has body=null and contains no independent operative text. Its single text child de/guidance/esth-2024-32/inhalt (body_sha256 b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785) is receipted in supplemental-corpus-bindings.json under de-kg-suppl-001, de-kg-suppl-002. Those bearing supplemental rows remain open until their source-defined rules are encoded. This disposition avoids counting the empty document container again; it does not exclude or close the handbook text.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-8141e0894f7238f7
+    status: classified-with-reason
+    classification: recovery_remission_and_reporting_procedure
+    reason: This corpus parent identifies the same complete decision as discovery member de-kg-discovery-17bc04f83ae1dc83. Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete
+      corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad, retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
     bears_on_computed_surface: false
   - id: de-kg-instr-87d3e50373adabc2
     status: classified-with-reason
@@ -14119,9 +14137,9 @@ computed:
     counts:
       total: 770
       encoded: 2
-      classified-with-reason: 135
+      classified-with-reason: 138
       excluded-with-reason: 341
-      pending: 292
+      pending: 289
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14138,7 +14156,6 @@ computed:
     - de-kg-discovery-1707afd8485770c7
     - de-kg-discovery-175a2b2bae32af40
     - de-kg-discovery-179e5bbf757e6529
-    - de-kg-discovery-17bc04f83ae1dc83
     - de-kg-discovery-18243162e57ce9f6
     - de-kg-discovery-18d7ddc0a8189df2
     - de-kg-discovery-1994bef940f3cf3c
@@ -14179,7 +14196,6 @@ computed:
     - de-kg-discovery-464251f2bd834837
     - de-kg-discovery-46df3d0e1aeea3c8
     - de-kg-discovery-48b4061786c299a9
-    - de-kg-discovery-493177f979995cb2
     - de-kg-discovery-4b9b630b75ca91db
     - de-kg-discovery-4c21d9bf902eb3be
     - de-kg-discovery-4c786677f4d2fd35
@@ -14376,7 +14392,6 @@ computed:
     - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-77dbf6a1855cb84d
     - de-kg-instr-7e37eabb86048805
-    - de-kg-instr-8141e0894f7238f7
     - de-kg-instr-8570a332681be6e4
     - de-kg-instr-8a5bf72ed2cf253f
     - de-kg-instr-9728a65b720a8ab3
@@ -21711,7 +21726,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 21.02.2008, III R 79/03, BStBl II 2009 S. 916
     - id: de-kg-discovery-17bc04f83ae1dc83
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 13.09.2018, III R 19/17, BStBl II 2019 S. 187
       discovery_refs:
@@ -21719,6 +21734,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 13.09.2018, III R 19/17, BStBl II 2019 S. 187
+      classification: recovery_remission_and_reporting_procedure
+      reason: Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad,
+        retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
+      bears_on_computed_surface: false
     - id: de-kg-discovery-18243162e57ce9f6
       status: pending
       identity_kind: class_member
@@ -22143,7 +22162,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 16.09.2015, III R 6/15, BStBl II 2016 S. 281
     - id: de-kg-discovery-493177f979995cb2
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 17.08.2023, III R 26/22, BStBl II 2024 S. 94
       discovery_refs:
@@ -22151,6 +22170,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 17.08.2023, III R 26/22, BStBl II 2024 S. 94
+      classification: appeal_notice_and_filing_procedure
+      reason: Read the complete official BFH order of 17 August 2023, III R 26/22 (paragraphs 1–23). It decides whether an objection to an existing cancellation/recovery notice was timely. Paragraphs 9–12 apply AO355–357 and the one-month/one-year procedural filing periods; paragraphs 13–22 hold that reproducing the statutory written/electronic/oral-record filing methods gives sufficient notice without separately listing email or every technical channel. Paragraph23 allocates costs. The disputed EUR9109.65 is the amount in the existing recovery notice, not a statutory Kindergeld rate or a new eligibility computation. This is the appeals procedure already excluded by the DA-KG KapitelR dispositions; it supplies no upstream rule for entitlement, child count, priority, substitute-benefit exclusion, EU coordination or monthly amount. Complete corpus body de/guidance/bfh-iii-r-26-22-2023-08-17/document-1, SHA-256 20cedf57f5f6626bd9cd306260166002c67d87e60db08a948a6d030a3684419f, retained in pinned
+        corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive class discovery remain open independently.
+      bears_on_computed_surface: false
     - id: de-kg-discovery-4a16231e30b5e62b
       status: classified-with-reason
       identity_kind: class_member
@@ -24430,7 +24453,7 @@ computed:
       document_citation_path: de/guidance/bfh-iii-r-10-14-2014-09-25
       title: 'BFH, III R 10/14, 2014-09-25: Kindergeld - Beibehaltung des Wohnsitzes - mehrjähriger Auslandsaufenthalt - Auslandsstudium'
     - id: de-kg-instr-8141e0894f7238f7
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-48b002d52962878d6020
       - de-corpus-8282919b6c7f38199d81
@@ -24442,6 +24465,10 @@ computed:
       citation_label: 'BFH, III R 19/17, 2018-09-13: Billigkeitserlass bei Kindergeldrückforderung'
       document_citation_path: de/guidance/bfh-iii-r-19-17-2018-09-13
       title: 'BFH, III R 19/17, 2018-09-13: Billigkeitserlass bei Kindergeldrückforderung'
+      classification: recovery_remission_and_reporting_procedure
+      reason: This corpus parent identifies the same complete decision as discovery member de-kg-discovery-17bc04f83ae1dc83. Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete
+        corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad, retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
+      bears_on_computed_surface: false
     - id: de-kg-instr-8570a332681be6e4
       status: pending
       discovery_refs:
