@@ -248,7 +248,7 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "1a53be577846ed6356380ff7e63101fc7a42311fdfc5d586a4b511101287d41f",
+      "sha256": "2d4f0df09e8d0bb1a358e21a7ceb40da34f9c5da76d1a4ac6abf6e023a1bf512",
       "verification": "producer_artifact_validation"
     },
     {

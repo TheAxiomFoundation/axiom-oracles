@@ -953,7 +953,7 @@ generated_facts:
   dependency_enumeration:
     method: all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows
     scope: whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure
-    imports: captured per module; selected DE modules currently declare none
+    imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
     snapshot_sha256: 827726a0275cf41978a1ce2fc330b904d78249215776c04d89adc73d6aa4259f

@@ -76,7 +76,7 @@
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "958f94b16565d5df47cad94e04f8e39e8ff834dac3d37a309a0fe01639c4306b",
+      "sha256": "41dd3230e45807c042a5fdeeae95373636013d5358466f625536afaa259ca781",
       "verification": "producer_artifact_validation"
     },
     {

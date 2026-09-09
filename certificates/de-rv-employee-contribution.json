@@ -73,7 +73,7 @@
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "f25de917172de6f451e16dbeea5097d36a18da9044730faeebed776d5f7c02fe",
+      "sha256": "b10d8131dfcb33871d043d9c80dd273992fe98fac106eef2ab8342ac0081a6b7",
       "verification": "producer_artifact_validation"
     },
     {

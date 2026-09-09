@@ -1676,7 +1676,7 @@ def generate_document(
         "dependency_enumeration": {
             "method": "all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows",
             "scope": "whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure",
-            "imports": "captured per module; selected DE modules currently declare none",
+            "imports": "resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts",
         },
         "instrument_graph": graph,
         "measurement_basis": measurement_basis,
@@ -1861,6 +1861,44 @@ def _committed_rulespec_facts(
                 "declared_imports": copy.deepcopy(declared_imports),
             }
         )
+        if declared_imports:
+            # Like rule_count and module_inputs, export names are parsed from
+            # verified external bytes at generation and bound to committed HEAD.
+            # Preserve them during hermetic replay; never take them from the
+            # untrusted document being checked.
+            resolved = committed.get("resolved_imports")
+            if (
+                any(not isinstance(target, str) for target in declared_imports)
+                or len(set(declared_imports)) != len(declared_imports)
+                or not isinstance(resolved, list)
+                or len(resolved) != len(declared_imports)
+            ):
+                raise _SourceError(f"committed RuleSpec imports are malformed: {citation}")
+            imported_names: set[str] = set()
+            for target, binding in zip(declared_imports, resolved):
+                target_module, separator, fragment = target.partition("#")
+                names = binding.get("rules") if isinstance(binding, Mapping) else None
+                if (
+                    not isinstance(binding, Mapping)
+                    or set(binding) != {"target", "module_id", "rules"}
+                    or binding.get("target") != target
+                    or binding.get("module_id") != target_module
+                    or not isinstance(names, list)
+                    or any(not isinstance(name, str) or not name for name in names)
+                    or names != sorted(set(names))
+                    or (separator and (not fragment or names != [fragment]))
+                    or imported_names.intersection(names)
+                ):
+                    raise _SourceError(f"committed RuleSpec import binding is malformed: {target}")
+                imported_names.update(names)
+            expected[-1]["resolved_imports"] = copy.deepcopy(resolved)
+        elif "resolved_imports" in committed:
+            raise _SourceError(f"committed RuleSpec bindings lack declared imports: {citation}")
+    captured_ids = {row["module_id"] for row in expected if row["state"] == "captured"}
+    for row in expected:
+        for binding in row.get("resolved_imports", []):
+            if binding["module_id"] not in captured_ids:
+                raise _SourceError(f"committed RuleSpec import target is not declared: {binding['module_id']}")
     expected.sort(key=lambda row: row["citation_path"])
     if set(committed_by_citation) != {row["citation_path"] for row in expected}:
         raise _SourceError("committed RuleSpec module set differs from declared sources")
@@ -2064,7 +2102,7 @@ def _hermetic_rederivation(
     generated["dependency_enumeration"] = {
         "method": "all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows",
         "scope": "whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure",
-        "imports": "captured per module; selected DE modules currently declare none",
+        "imports": "resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts",
     }
     generated["instrument_graph"] = _snapshot_facts(
         program_id, snapshot_path, source_path

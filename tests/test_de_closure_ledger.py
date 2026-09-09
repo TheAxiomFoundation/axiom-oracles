@@ -1763,3 +1763,18 @@ def test_rulespec_facts_verify_imported_artifact_bytes_before_resolving_inputs(
         assert inputs == []
         consumer = next(row for row in modules if row["module_id"] == "de:statutes/threshold/1")
         assert consumer["resolved_imports"][0]["target"] == "de:regulations/wage/1#hourly_wage"
+        # The first real imported DE root must also survive the offline path.
+        assert module._committed_rulespec_facts(source, "de/test", modules) == modules
+        for mutation in ("missing", "wrong_export", "wrong_target", "extra_field"):
+            bad = copy.deepcopy(modules)
+            row = next(item for item in bad if item["module_id"] == "de:statutes/threshold/1")
+            if mutation == "missing":
+                row.pop("resolved_imports")
+            elif mutation == "wrong_export":
+                row["resolved_imports"][0]["rules"] = ["unrelated_rule"]
+            elif mutation == "wrong_target":
+                row["resolved_imports"][0]["module_id"] = "de:undeclared/1"
+            else:
+                row["resolved_imports"][0]["unbound"] = True
+            with pytest.raises(module._SourceError, match="committed RuleSpec import"):
+                module._committed_rulespec_facts(source, "de/test", bad)
