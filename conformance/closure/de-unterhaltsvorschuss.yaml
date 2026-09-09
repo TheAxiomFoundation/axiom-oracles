@@ -410,13 +410,13 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 97be48b49c8b8df27fa96be1771203f7eedef90080543f2f997a5823a6f3c266
+    snapshot_sha256: fd000d5ed9e914907c4a8c8855a9fdddf0b69eef941cda68e2774677728b3343
     channel_receipts:
       corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-      subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
+      subject_matter_search: 17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
-      total: 15
+      total: 16
       unretrieved: 4
     candidate_count: 40
     candidates:
@@ -1630,6 +1630,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 15 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 16 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

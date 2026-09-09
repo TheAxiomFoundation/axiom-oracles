@@ -902,15 +902,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 97be48b49c8b8df27fa96be1771203f7eedef90080543f2f997a5823a6f3c266
+    snapshot_sha256: fd000d5ed9e914907c4a8c8855a9fdddf0b69eef941cda68e2774677728b3343
     channel_receipts:
       corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-      subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
+      subject_matter_search: 17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
-      total: 15
+      total: 16
       unretrieved: 4
-    candidate_count: 750
+    candidate_count: 751
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10091,9 +10091,17 @@ generated_facts:
       citation_label: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
       document_citation_path: de/guidance/bfh-iii-r-14-18-2019-10-23
       title: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
+    - id: de-kg-instr-rvo-1996
+      status: pending
+      discovery_refs:
+      - de-subject-016
+      identity_kind: subject_seed
+      raw_reference: Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.
+      subject_urls:
+      - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: b1e1f6aedb98d50e28af73f4995c6d8314a50fa07961f1326beccbb7fca3afd6
+      sha256: cd2370c97b9785830045d80a66b0d64cb55b15127c95884856d994a9062e21e9
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10142,7 +10150,7 @@ generated_facts:
       status: pending
       receipts:
         corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-        subject_matter_search: 0e0529729e34009cf7ff357c82c755b6cc223eea032841250879558d3391c05b
+        subject_matter_search: 17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -12907,7 +12915,8 @@ committed_decisions:
   - id: de-kg-instr-32a81be6d35e33be
     status: classified-with-reason
     classification: entitlement_condition
-    reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act and its sections are now captured under de/statute/freiz-gg-eu-2004 (act body SHA-256 cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01). The raw-reference discovery identity remains unresolved by the parser; this explicit corpus binding corrects the former missing-source explanation. The grounds, effective versions and C-411/20 non-application still require encoding. Bears on the law-derived input claimant_entitlement (open dependency); open until
+      § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
   - id: de-kg-instr-335d26552812f2f3
     status: excluded-with-reason
@@ -12924,7 +12933,8 @@ committed_decisions:
   - id: de-kg-instr-3875634198c25414
     status: classified-with-reason
     classification: entitlement_condition
-    reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
+    reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act and requested sections are now captured under de/statute/aufenthg-2004 (act body SHA-256 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a). The raw-reference discovery identity remains unresolved by the parser; capture does not establish the applicability of every current title provision to each 2025 date. The source-bound residence-title and continuation rules still require encoding. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and
+      the cited rule is bound to it.
     bears_on_computed_surface: true
   - id: de-kg-instr-38f449529edd140f
     status: excluded-with-reason
@@ -12995,7 +13005,8 @@ committed_decisions:
   - id: de-kg-instr-87d3e50373adabc2
     status: classified-with-reason
     classification: entitlement_condition
-    reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
+    reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is now captured at de/regulation/eea-agreement/document-1 (body SHA-256 3c7045ad694acf462da974a05bfd28144e3bf0a708f81312f4500d29b7377435). The official contracting-party statement is captured at de/guidance/efta/eea-contracting-parties/contracting-parties (body SHA-256 988024fe72fad0d3409d6dbc19318854ea1d0f2a69142ce956bf25f022988ae9). These source receipts do not themselves encode territorial applicability; the raw discovery identity remains unresolved by
+      the parser. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
     bears_on_computed_surface: true
   - id: de-kg-instr-995400ec8f736a51
     status: excluded-with-reason
@@ -13998,13 +14009,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 767
+    instrument_count: 768
     counts:
-      total: 767
+      total: 768
       encoded: 2
       classified-with-reason: 132
       excluded-with-reason: 341
-      pending: 292
+      pending: 293
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14294,6 +14305,7 @@ computed:
     - de-kg-instr-fa626aa971b4e396
     - de-kg-instr-fbb51fe84fb002e1
     - de-kg-instr-ff357eb3a1b63fc7
+    - de-kg-instr-rvo-1996
     - de-kg-suppl-007
     - de-kg-suppl-008
     - de-kg-suppl-009
@@ -23814,7 +23826,8 @@ computed:
       raw_references:
       - Freizügigkeitsgesetzes/EU
       classification: entitlement_condition
-      reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act and its sections are now captured under de/statute/freiz-gg-eu-2004 (act body SHA-256 cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01). The raw-reference discovery identity remains unresolved by the parser; this explicit corpus binding corrects the former missing-source explanation. The grounds, effective versions and C-411/20 non-application still require encoding. Bears on the law-derived input claimant_entitlement (open dependency); open
+        until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
     - id: de-kg-instr-335d26552812f2f3
       status: excluded-with-reason
@@ -23902,7 +23915,8 @@ computed:
       raw_references:
       - Aufenthaltsgesetzes
       classification: entitlement_condition
-      reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
+      reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act and requested sections are now captured under de/statute/aufenthg-2004 (act body SHA-256 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a). The raw-reference discovery identity remains unresolved by the parser; capture does not establish the applicability of every current title provision to each 2025 date. The source-bound residence-title and continuation rules still require encoding. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded
+        and the cited rule is bound to it.
       bears_on_computed_surface: true
     - id: de-kg-instr-38f449529edd140f
       status: excluded-with-reason
@@ -24336,7 +24350,8 @@ computed:
       raw_references:
       - Abkommen über den Europäischen Wirtschaftsraum
       classification: entitlement_condition
-      reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
+      reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is now captured at de/regulation/eea-agreement/document-1 (body SHA-256 3c7045ad694acf462da974a05bfd28144e3bf0a708f81312f4500d29b7377435). The official contracting-party statement is captured at de/guidance/efta/eea-contracting-parties/contracting-parties (body SHA-256 988024fe72fad0d3409d6dbc19318854ea1d0f2a69142ce956bf25f022988ae9). These source receipts do not themselves encode territorial applicability; the raw discovery identity remains unresolved by
+        the parser. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
       bears_on_computed_surface: true
     - id: de-kg-instr-8a5bf72ed2cf253f
       status: pending
@@ -24890,6 +24905,14 @@ computed:
       citation_label: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
       document_citation_path: de/guidance/bfh-iii-r-14-18-2019-10-23
       title: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
+    - id: de-kg-instr-rvo-1996
+      status: pending
+      discovery_refs:
+      - de-subject-016
+      identity_kind: subject_seed
+      raw_reference: Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.
+      subject_urls:
+      - https://www.gesetze-im-internet.de/rvo/
     - id: de-kg-suppl-001
       status: classified-with-reason
       discovery_refs:
@@ -25275,7 +25298,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 767
+    bearing_candidate_instruments: 768
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
@@ -25287,6 +25310,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 15 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 16 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

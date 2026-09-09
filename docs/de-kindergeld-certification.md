@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 292 of 767 instruments
+other closure artifact. The current frontier has 293 of 768 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -339,7 +339,7 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 292 of 767 instruments pending, 132 open
+rows pending. Current result: 293 of 768 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -499,3 +499,11 @@ judgments). Working both lists to completion — then rerunning the closure,
 census, and certify chain through the central gate — is the path back to a
 certified claim. No certified claim is announced anywhere without Max's
 explicit clear.
+
+The historical SGB VII §217(3) capture expressly refers to RVO §§583,
+584(1) sentence 2, 585, 579(1) sentence 2 and 609(3) immediately before
+1 January 1997. Subject query `de-subject-016` enrolls that dependency as
+`de-kg-instr-rvo-1996` and binds the archived §217 body digest. The current
+official RVO index confirms the instrument identity, but marks those sections
+repealed; it does not supply their historical text. Historical capture and
+encoding remain pending.
