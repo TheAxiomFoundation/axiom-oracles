@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 211 of 679 instruments
-pending, and dependency closure has 130 open dependencies: eight law-derived
-inputs and 122 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 210 of 681 instruments
+pending, and dependency closure has 132 open dependencies: eight law-derived
+inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
 `8dd7d2e040ba99b84e9f92d8d63434c9ce46726b`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence.
@@ -293,23 +293,27 @@ method, `text_sha256` the hash):
 
 The original browser capture methods remain recorded in git history. All
 thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
-corpus rows from `de-rulespec-2026-09-08-kindergeld-2025-history`, commit
-`ceab7b8fc768dbd78089df5a85bfc67deb6a75f9`, content SHA-256
-`38e2eab36374c3b2f92b268dd1c000a913ca3e3613cc11b30a5b2c512813de98`.
+corpus bodies from `de-rulespec-2026-09-09-kindergeld-bmf-context`, commit
+`6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5`, content SHA-256
+`a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
-expression date and official URL. Single-body instruments use that body's
-SHA-256 directly. KiZDAV uses the SHA-256 of the nine body hashes joined by
-newline in citation-path order, without a trailing newline. These hash
-changes replace the source receipt only; classifications and bearing remain
-unchanged. The BMF handbook bundles are now included in the release.
+expression date and official URL. Single-body instruments use the body hash;
+multi-body instruments use the SHA-256 of body hashes joined by newline in
+citation-path order, without a trailing newline. Source receipt changes alone
+do not change bearing or close a legal dependency.
 
-The SHA-bound class discovery snapshot contains 203 candidate entries: 201 pending citation seeds and two corpus-receipted bearing parentage decisions. BStBl II publication of the two parentage decisions remains unverified; their class membership is explicitly provisional.
-It is explicitly incomplete and retains the four pending class rows;
-court citations still require identity deduplication and comprehensive
-register discovery. Current result: frontier 206 of 666 pending; 126 open
-dependencies (8 law-derived inputs, 0 unclassified inputs, 118 bearing
-instruments). Dependency closure remains false.
+The SHA-bound class snapshot contains 209 entries: 204 pending citation seeds,
+four captured bearing entries and one captured non-bearing transfer letter.
+The latter allocates parental tax allowances and a child's lump sum among
+adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
+child tests or §64 priority. The 2025 country-group letter remains bearing
+through §1(3) EStG and its specified allowance adjustments. C-328/20 and both
+parentage decisions remain bearing; their BStBl II membership is provisional.
+Enumeration and identity deduplication remain incomplete, with all four class
+rows pending. Current result: 210 of 681 instruments pending, 132 open
+dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
+inputs). Dependency closure remains false.
 
 ## Reads log
 

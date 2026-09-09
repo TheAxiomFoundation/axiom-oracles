@@ -1,9 +1,11 @@
 # Kindergeld class discovery seeds
 
-This snapshot contains 207 candidate entries: 15 BMF letters, 2 BZSt
-instructions, 167 court candidates, and 23 bilateral or association instruments.
-Of these, 205 remain pending citation seeds. The two corpus-receipted parentage
-decisions are bearing dependencies; their BStBl II publication remains
+This snapshot contains 209 candidate entries: 16 BMF letters, 2 BZSt
+instructions, 168 court candidates, and 23 bilateral or association instruments.
+Of these, 204 remain pending citation seeds. Four corpus-receipted entries are
+bearing dependencies (two parentage decisions, C-328/20 and the 2025 country-group
+letter); the 2013 transfer letter is non-bearing for this Kindergeld surface.
+The three courts’ BStBl II publication remains
 unverified and discovery-class membership is explicitly provisional. A court citation entry is not necessarily a
 unique case: spelling variants and duplicate legal identities still require
 reconciliation. These counts do not establish complete enumeration.
@@ -18,8 +20,8 @@ also explicitly identifies Association Council Decision 3/80.
 The full official BMF positive register dated 14 March 2025 is retained as
 `bmf-positive-list-2025.pdf`, with its extracted text and both SHA-256 values
 bound in the discovery snapshot. Visually checked page 56 adds the letters of
-8 February 2016, 28 June 2013, 17 January 2014 and 18 December 2023. Their
-operative text and applicability still require review; this register does not
+8 February 2016, 28 June 2013, 17 January 2014 and 18 December 2023. The 2013 letter’s operative text is now receipted and dispositioned below;
+the other three still require operative-text/applicability review; this register does not
 establish exhaustive BMF discovery.
 
 `snapshot.json` binds the retained discovery source files by SHA-256 and
@@ -31,12 +33,12 @@ Discovery-source hashes are deliberately not operative-body hashes.
 
 ## Current source and encoding pins
 
-The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-allowance-context`
-from merge `4dece7ae257ccdda46d9e5f4589834d8a397c1d3`, content SHA-256
-`e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81`.
-Its 8,200 rows in 23 scopes preserve the preceding frontier, civil and parentage
-captures. Publication 34287317880 and mirror 34288993586 succeeded; the
-signature verifies and the anonymous mirror is byte-identical. The new
+The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-bmf-context`
+from merge `6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5`, content SHA-256
+`a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e`.
+Its 8,206 rows in 24 scopes preserve the preceding frontier, civil and parentage
+captures. Publication 34293466751 and mirror 34293798326 succeeded; the
+signature verifies and the anonymous mirror is byte-identical. The retained
 BT-Drs.20/12778 excerpt retains PDF pages 1 and 64 and is expressly a draft
 explanatory memorandum, not enacted law. Its combined-allowance explanation
 remains bearing until implemented in the §32/§66 rules. The bounded
@@ -65,14 +67,14 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 211 pending
-instruments out of 679. Dependency closure remains false: eight law-derived
-inputs and 122 bearing instruments remain open, with no unclassified inputs.
-The five birth-record inputs are committed world facts; engine-supplied query
+The regenerated ledger has 5 pending spine rows out of 18 and 210 pending
+instruments out of 681. Dependency closure remains false: eight law-derived
+inputs and 124 bearing instruments remain open, with no unclassified inputs.
+The eight birth-record and date inputs are committed world facts; engine-supplied query
 boundaries are not external inputs. The additional KindRG evidence candidate
 remains pending until its precise legal disposition is established.
 
-The 207 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
+The 209 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
 registers, verify case identities and BStBl II publication, reconcile duplicate
 identities, capture operative texts, and encode every bearing rule. All four
 class rows remain pending. No complete discovery or certified claim is made.
@@ -113,8 +115,12 @@ included day; applicable-regime selection, deadline ends and full legal ages
 still require encoding. The consumer now declares this signed prerequisite.
 
 Encoder PR #1597 adds an expiring numeric retry limit for one exact citation.
-Independent review and initial CI passed; CI is rerunning after synchronization
-with main. No global override or repository variable has been changed.
+Independent review and full CI passed; it merged at
+`bf676a948578b2a5c2aeb43df6f63ed2107ca417`. Dedicated pin PR #60 passed
+CI and merged at `46d9c0559b90443662c564f0731fba9243c52ab7`. Retry
+34293870108 passed its exact-citation numeric attempt guard; the temporary
+entry was then removed. The global limit remains three and the global override
+remains false. The protected generation is running; no §78 output is yet declared.
 
 Regeneration (supply the pinned corpus and RuleSpec checkouts as needed):
 

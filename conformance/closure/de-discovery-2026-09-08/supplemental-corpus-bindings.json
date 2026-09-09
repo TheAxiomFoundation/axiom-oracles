@@ -2,9 +2,9 @@
   "schema": "axiom_oracles.de_supplemental_corpus_bindings.v1",
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "4dece7ae257ccdda46d9e5f4589834d8a397c1d3",
-    "release": "de-rulespec-2026-09-09-kindergeld-allowance-context",
-    "release_content_sha256": "e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81"
+    "commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+    "release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+    "release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e"
   },
   "bindings": [
     {
@@ -387,5 +387,5 @@
       ]
     }
   ],
-  "receipt_sha256": "9f25e30866df852858009948de84ec7626332bb39a3fcb62ac46f030345f6273"
+  "receipt_sha256": "255b969f874c4112540182deaae554c3afd8af1e9fedd3fdced35aeffe0873ea"
 }

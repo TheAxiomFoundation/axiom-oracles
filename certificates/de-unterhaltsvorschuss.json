@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "de9de0e357784083e86f72328bc8539b25676095d06062b75780cd88d2978c7c"
+      "sha256": "6eac0c3a2b06107d727f09bbe60198b3fa870c9c8e14713756395e33603f5efc"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "c40f8698e7aa5744365272080f96b9361b1cfee2f6e7749dc9a016e6dce368d0",
+      "sha256": "2c42f4e14ad2ca6422f19616340a4b003c55381cec178ce070e6ff712eed49ab",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "b62fe5bbd42eaf0bc4a87a69ac641cbed67335db419c624a62610bc7b07380f8"
+      "sha256": "f2834f83bf6ede227958a6d2ca4a28bbe7eb0320d59e8fc50ad1c36c8848e6d4"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-allowance-context",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -359,7 +359,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "5b77c542b3a1a102058ed9ea1b19dd0dbe913e3e19f7069b172fe8837d2f28cc",
+      "subgraph_sha256": "9f2b1eb108ed30d8d628c86846b109c9efcab627622976c9f5c21650bdaa8419",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

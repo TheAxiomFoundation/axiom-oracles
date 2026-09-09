@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 330509bbee457193cb95b7ec8df4e786a926af9b1cd29f50df134e389552597b
+    sha256: 9a58723a018b00c019cfe63f26d9a3557e3b14272c2486ba90f031a04a2c3997
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4dece7ae257ccdda46d9e5f4589834d8a397c1d3
-    release: de-rulespec-2026-09-09-kindergeld-allowance-context
-    release_content_sha256: e3385feff5b4f2661460adc36196694b7d92301135023ebf9e1e42e17e21cf81
+    commit: 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5
+    release: de-rulespec-2026-09-09-kindergeld-bmf-context
+    release_content_sha256: a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -61,6 +61,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
       sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
+      sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
+      row_count: 6
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -371,10 +374,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 120c828856d77122e6c22408a31618f8015ecaeb4c4b7d4935ed42db45e7aaf2
+    snapshot_sha256: 78f2718c9074af518aa383e4df18961330fb611db9000ecd62e16a88669cb657
     channel_receipts:
-      corpus_release: 7f3f90568327a8484e1de1cd1961e6ceb221c548c0522b402983bec75c2e5324
-      subject_matter_search: 02b3f5eae781c2c4bc1e100ff63823f824580c3a74b747d634cd9116eac535e8
+      corpus_release: 3eab130ff37fe99e9067d23a56f629c6a72ee6a78e27824d1e1d076978e4cfb3
+      subject_matter_search: f50dbc2cb211e61b4d989f6a2043e071ced208d826a1ff08ae091f4c0d0cda9b
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

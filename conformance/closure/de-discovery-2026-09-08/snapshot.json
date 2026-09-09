@@ -44,6 +44,39 @@
       "pdf_path": "bmf-positive-list-2025.pdf",
       "pdf_sha256": "6d823ef55d7f44260c0f3ebfa358044e33d94ab9ab963f5afc9a60fe7e64e9b7",
       "extraction": "pdftotext -layout; full official 2025 positive register retained. Page 56 entries visually verified. Register discovery only, not operative letter text."
+    },
+    {
+      "path": "bmf-2013-06-28-transfer.txt",
+      "sha256": "7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e",
+      "url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/C-Anhaenge/Anhang-19c/I/anhang-19c-I.html",
+      "corpus_citation_path": "de/guidance/esth-2024/bmf-2013-06-28-child-allowance-transfer/inhalt",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official source snapshot is bound by the corpus ingest manifest."
+    },
+    {
+      "path": "bmf-2025-12-02-country-groups.txt",
+      "sha256": "a9613edef94146eb42eb8a6ddcbac4faba5a4ee1b257409e7bdede462674994e",
+      "url": "https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Steuerarten/Einkommensteuer/2025-12-02-beruecks-auslaendischer-verhaeltnisse.pdf?__blob=publicationFile&v=4",
+      "corpus_citation_path": "de/guidance/bmf-2025-12-02-country-groups/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official source snapshot is bound by the corpus ingest manifest."
+    },
+    {
+      "path": "cjeu-c-328-20.txt",
+      "sha256": "f79afa65d4a53b16a375f82f44215848d63f37297c341188b23b77ca8774f3a2",
+      "url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:62020CJ0328",
+      "corpus_citation_path": "de/guidance/cjeu-c-328-20/document-1",
+      "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
+      "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl",
+      "extraction": "Exact UTF-8 corpus body from the signed immutable release; retained official source snapshot is bound by the corpus ingest manifest."
     }
   ],
   "members": [
@@ -225,8 +258,10 @@
       "source_path": "bmf-positive-list-2025.txt",
       "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
       "status": "pending",
-      "text_capture_state": "citation_only",
-      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
+      "text_capture_state": "corpus_receipted",
+      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency.",
+      "operative_source_path": "bmf-2013-06-28-transfer.txt",
+      "operative_body_sha256": "7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e"
     },
     {
       "id": "de-kg-discovery-18d7ddc0a8189df2",
@@ -471,6 +506,17 @@
       "text_capture_state": "corpus_capture_available_unsigned",
       "source_sha256": "22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0",
       "discovery_excerpt": "media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf"
+    },
+    {
+      "id": "de-kg-discovery-3a8452d6c8893e0d",
+      "class_id": "de-kg-suppl-009",
+      "identity": "EuGH C-328/20, Urteil vom 16.06.2022, berichtigt am 06.09.2022 (BStBl II publication unverified)",
+      "discovery_excerpt": "C-328/20",
+      "source_path": "cjeu-c-328-20.txt",
+      "source_sha256": "f79afa65d4a53b16a375f82f44215848d63f37297c341188b23b77ca8774f3a2",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "class_membership_state": "bstbl_ii_publication_unverified"
     },
     {
       "id": "de-kg-discovery-3bc77e77ffba6699",
@@ -1966,6 +2012,16 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-e90973e7e66e0913",
+      "class_id": "de-kg-suppl-007",
+      "identity": "BMF-Schreiben vom 02.12.2025, Ländergruppeneinteilung ab Veranlagungszeitraum 2025",
+      "discovery_excerpt": "2. Dezember 2025",
+      "source_path": "bmf-2025-12-02-country-groups.txt",
+      "source_sha256": "a9613edef94146eb42eb8a6ddcbac4faba5a4ee1b257409e7bdede462674994e",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted"
+    },
+    {
       "id": "de-kg-discovery-ea2aa34ed8aca2a5",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 02.04.2009, III R 85/08, BStBl II 2010 S. 298",
@@ -2152,13 +2208,14 @@
     "Verify case identities and BStBl II publication against official decision/register captures",
     "Verify BStBl II publication/class membership of BVerfG, Urteil vom 2024-04-09, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
     "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
-    "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim."
+    "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.",
+    "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode."
   ],
   "counts": {
-    "de-kg-suppl-007": 15,
+    "de-kg-suppl-007": 16,
     "de-kg-suppl-008": 2,
-    "de-kg-suppl-009": 167,
+    "de-kg-suppl-009": 168,
     "de-kg-suppl-010": 23
   },
-  "receipt_sha256": "63140cecfe919f91f760ba512c63842e071dc9c4be0762b567052d1b3d2e3947"
+  "receipt_sha256": "ad0dc7ec613a71b4fb9cb9c9e8e2a8c5d0ff3ac6377eb14ce56ed07facc0a845"
 }
