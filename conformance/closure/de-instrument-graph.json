@@ -1,13 +1,13 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-09T07:56:50Z",
+  "generated_at": "2026-09-09T08:20:59Z",
   "source": {
     "path": "closure/de/source.json",
     "sha256": "e414375804434918e9818c26818b4f615c64e8059cbcc43db3e10fe4c67c5869"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
-    "sha256": "58d44eee90a649d3698b0842514313b9d491f8774078fb161ea641869dfc72bb"
+    "sha256": "5e2f5a1752635c2efbb32f2df5edf394b592ad4c415504f20958b5ec733a0964"
   },
   "channels": {
     "corpus_release": {
@@ -58730,10 +58730,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "c8b6332513b2e984868c0e020cd0a5b01f215648c2dccbd1c229a5409368b3e9"
+          "receipt_sha256": "ded869eec66fc34fa4b20baa0ddac823a6a25a5f379093f310a696f5a87a941c"
         },
         {
           "id": "de-subject-002",
@@ -58743,14 +58743,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf",
+          "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "fa7a62c4fee0fd9488de9392537b6b0c9fa9f5d583732ac70de1b070fce64fdd"
+          "receipt_sha256": "474d9d3744b654fc07b29aff34817ca3a501c799b41d0b7dd37c77111b4a5f23"
         },
         {
           "id": "de-subject-003",
@@ -58760,14 +58760,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "eca30e895685cb9008c8899b586e7a9adefabd8471eff4fbee4d1b240847565f"
+          "receipt_sha256": "36b42e15fc38e861cb56267a26dbf4d52e0c34ff49fff791d120bed49c228220"
         },
         {
           "id": "de-subject-004",
@@ -58777,14 +58777,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=f36c00e6-6f02-4aae-9b85-7c12683a9597&ssb=94166254881&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=4f7961c6-ca3f-4e7c-a38c-b3fbb5628362&ssk=botmanager_support@radware.com&ssm=08646453645355090107417187645034&ssn=b673fd572b5b716fd67be457d9e6be7be76a1d0c4e6f-5806-4c58-ab4877&sso=bebff48b-35555a3f10a8f149a302aee08c1bba99053041a37a7b1d00&ssp=14544878991788989727178891520994624&ssq=13819364073621078838040736972821123035808&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwidXpteCI6IjdmYzAwMDQwYWQ3ZjRlLWY0OGUtNDgwYi04Mjk3LTBmOGE0NWUzZmQ4OTEtMTc4ODk0MDczNjk5MjAtMDA0M2YwMjRiZmZhMGM2NzA4OTEwIiwiX191em1mIjoiN2Y5MDAwMWQwYzRlNmYtNTgwNi00YzU4LWE0OGItMzU1NTVhM2YxMGE4MS0xNzg4OTQwNzM2OTkyMC0wMDQyNzZlNGRhYjU3Mjg5ZTY1MTAifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=d40a7942-91a3-405d-a8e3-66f60b9562ec&ssb=20510283467&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=c69ed823-ca3f-43ad-9f7b-86adedb15618&ssk=botmanager_support@radware.com&ssm=87559871012914669103987455175188&ssn=393b22eebd63110eb8c5463732fd61e73cd08f7aab36-1de8-4cad-b0312d&sso=39339b29-6cc4592daaa8232e50dcea6e80a6cbb27f429461a7cc43fc&ssp=65616370681788927538178894886513410&ssq=76474404219065314299442190052084722168791&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJfX3V6bWYiOiI3ZjkwMDA4ZjdhYWIzNi0xZGU4LTRjYWQtYmIyOS02Y2M0NTkyZGFhYTgxLTE3ODg5NDIxOTA4MDYwLTAwNDJlYzc0ZjkxZDVlMmQ3N2YxMCIsInV6bXgiOiI3ZmMwMDAzY2JmYzM1ZS04MDE0LTRlNjEtOWM5MS1jMGVlNTZkZjRmMWQxLTE3ODg5NDIxOTA4MDYwLTAwNDA3OGNiYTU3M2UyMDZlOTAxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "fcfa2c7be025c5517ffd12076c30cdbc0fe1e45090405be66446516e8e9d755a",
-          "receipt_sha256": "aa7f9641606c6d9be7e05c3565ade64f41fdb0212d582b31824fd67a99c85c55"
+          "content_sha256": "f1bf7942aef28410c279aca54196360bf1af8b6f51b9ae6510106a8ca0392dc3",
+          "receipt_sha256": "5cb0f3b3b222fe8f33d5987ea4d42b8be8ab44956e58b1c6cd2e9260fc3cf4f5"
         },
         {
           "id": "de-subject-005",
@@ -58795,14 +58795,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "e09bdca5f4e85c812f87f219a46a8436f20c3ea302d918de827668555403b6b5"
+          "receipt_sha256": "c21da9ab8c3d26f06d02baa1b2a9a77d7b8c7b21107c56756cec40b12c8af365"
         },
         {
           "id": "de-subject-006",
@@ -58812,14 +58812,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "e01c2211ce29c7611b51c532d845c76d434530aa6776e888ef9ec409a8123a24"
+          "receipt_sha256": "0cdf4d13826b808d7b1b82f7bb5a8da2d9393d980bdc3222e4925d2a47ac11c5"
         },
         {
           "id": "de-subject-007",
@@ -58829,14 +58829,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "e059efcfccae4f596d6636004f76d49e60fa4d703205d19689cfec52d2d4cff3"
+          "receipt_sha256": "da7509f65c7696ba345868ad45a33ac3a2c5148cf187935d329dc12c156f329c"
         },
         {
           "id": "de-subject-008",
@@ -58846,10 +58846,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "69ae971f288d85b0c04cb57232755fa9e5fd0876a65b193ce907091e6ac7f46a"
+          "receipt_sha256": "fa262644494bbcd2c47e6e84c8218967366be915b54ea3ce4d24bbb8c203a4cf"
         },
         {
           "id": "de-subject-009",
@@ -58859,14 +58859,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "c3d61e9d4206dc6c402fed18db6615ae1fed6d4cc7f9c2c356c34d8b17d536a5"
+          "receipt_sha256": "a077ad22720d52815fe20b46fd42a30cffcbd5974acaef160afdec9eb5a17c28"
         },
         {
           "id": "de-subject-010",
@@ -58876,14 +58876,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "8f354534373eb03ba28b434b07cb9787dfdf2fe0ebd7adf64a2675175de606e2"
+          "receipt_sha256": "a6891b7d3f469916c8a6e23366bc57f11e2640ca157266e6184a05acd7a9d2bd"
         },
         {
           "id": "de-subject-011",
@@ -58893,14 +58893,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "e4dda9780ed4f8958210874726e0b28ef4feed94ca1e19163b89106af7138f7a"
+          "receipt_sha256": "3c51b2bbd495049d6ce1cd6e7a8757c553df64c6aaeb24141f7ee13aa919de14"
         },
         {
           "id": "de-subject-012",
@@ -58910,10 +58910,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "09d18b533ff497bcf67db64dffa6e682bec44917abcfbaf0d4a01f1949b2ed7e"
+          "receipt_sha256": "52e0f2e9fd5a5f79c401f35906763288251663ec8c937c70b03ba15fb929576a"
         },
         {
           "id": "de-subject-013",
@@ -58923,14 +58923,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "bb7aba89b5549f973bb695d873516646f3089f8b96d651dd23fcf63820fad01d"
+          "receipt_sha256": "55b8f46db83689573673de4dcd810ac99097fa69248c81b6e63d3905fdc32eb8"
         },
         {
           "id": "de-subject-014",
@@ -58940,14 +58940,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "3b10a95c61cb4d895276e612dd7356675734a6046b20a7886dde83e15ebb694a"
+          "receipt_sha256": "12d1e3da3d0bc3f3fc60e889424a25b637b4a126a1eeeea460276d29f89bcae4"
         },
         {
           "id": "de-subject-015",
@@ -58957,10 +58957,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "197f9b14b72888ebde37b958b44f6709c93d102fb3442edf9940268970ab5be8"
+          "receipt_sha256": "ce471a9b537f688e4fbfaf1f2877a30b19349195433e5b90f2de48172df2d8ff"
         },
         {
           "id": "de-subject-016",
@@ -58970,17 +58970,34 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-09T07:56:50Z",
+          "captured_at": "2026-09-09T08:20:59Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "587e37c2b22bd655e433cb1523ca2f660b96f6700e70ae340031a45c0808dd45"
+          "receipt_sha256": "8d57dcf03db885817016ed1e00a5a77b0a0a0ea8065ec6e2d02b8b1c001cceeb"
+        },
+        {
+          "id": "de-subject-017",
+          "programs": [
+            "de/kindergeld"
+          ],
+          "source_id": "bzst",
+          "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
+          "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+          "captured_at": "2026-09-09T08:20:59Z",
+          "state": "retrieved",
+          "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+          "http_status": 200,
+          "content_type": "application/pdf;charset=UTF-8",
+          "byte_count": 1304209,
+          "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
+          "receipt_sha256": "973b60d69ec3881c28fa051c5521a835434110c88fa8ccfd2a3cd104b96288ff"
         }
       ],
-      "receipt_sha256": "17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981"
+      "receipt_sha256": "08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -60365,6 +60382,18 @@
           "document_type": "court judgment"
         },
         {
+          "id": "de-kg-instr-dakg-2026",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-017"
+          ],
+          "identity_kind": "subject_seed",
+          "raw_reference": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
+          "subject_urls": [
+            "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2"
+          ]
+        },
+        {
           "id": "de-kg-instr-db7693cd9f018ff4",
           "status": "pending",
           "discovery_refs": [
@@ -60600,7 +60629,7 @@
           "status": "pending",
           "receipts": {
             "corpus_release": "c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da",
-            "subject_matter_search": "17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981",
+            "subject_matter_search": "08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -61319,5 +61348,5 @@
       ]
     }
   ],
-  "receipt_sha256": "1ea985261b9b4ba0bf62878fc7626a634c0fa9189dffcfec3e32ee815ef8f342"
+  "receipt_sha256": "cc9f5004e3cfeed07bd264de7420944f0b63508689048ec556b1ad61c51e5d8f"
 }

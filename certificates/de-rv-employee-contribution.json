@@ -67,13 +67,13 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "f186097e45cf9c943c56889b063a3fb959eb91e207d30734ced7ccbfb905c55b"
+      "sha256": "edbac46e5abf75dae6955f44dda5d5925d12fd92ece1d383066835ad5273f0cb"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "2dad9644d53da3d8e8ad55a2b170a96ef620208d009a43c42d5e4be2c95e996c",
+      "sha256": "a1f9d86abd81b9173d91896978b6d3d7db8cc384f402b49f5d4037c29e8c08ec",
       "verification": "producer_artifact_validation"
     },
     {

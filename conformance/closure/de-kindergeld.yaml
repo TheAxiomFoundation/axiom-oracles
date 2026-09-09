@@ -902,15 +902,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: fd000d5ed9e914907c4a8c8855a9fdddf0b69eef941cda68e2774677728b3343
+    snapshot_sha256: 6190ff9fc96fe289872b30e8ea6fec7c3e8e30f669c96842479cc6a4b851b387
     channel_receipts:
       corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-      subject_matter_search: 17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981
+      subject_matter_search: 08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
-      total: 16
+      total: 17
       unretrieved: 4
-    candidate_count: 751
+    candidate_count: 752
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -9939,6 +9939,14 @@ generated_facts:
       document_citation_path: de/guidance/cjeu-c-411-20
       title: EuGH, Urteil vom 1. August 2022, C-411/20, S gegen Familienkasse Niedersachsen-Bremen, ECLI:EU:C:2022:602
       document_type: court judgment
+    - id: de-kg-instr-dakg-2026
+      status: pending
+      discovery_refs:
+      - de-subject-017
+      identity_kind: subject_seed
+      raw_reference: Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.
+      subject_urls:
+      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
     - id: de-kg-instr-db7693cd9f018ff4
       status: pending
       discovery_refs:
@@ -10101,7 +10109,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: cd2370c97b9785830045d80a66b0d64cb55b15127c95884856d994a9062e21e9
+      sha256: 1055a5318753acf1dc7f11b4f4406c242eb6926e1aa0e261591d011286a5d915
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10150,7 +10158,7 @@ generated_facts:
       status: pending
       receipts:
         corpus_release: c0930405673618bb6ed57ed04e527e32253e78882a41b20d77f02931bfbaa4da
-        subject_matter_search: 17c81de5d19e0b3e7e8bd1a239282deb2de855f9a289b4a2722d0d5bc35ce981
+        subject_matter_search: 08c68115066edb89d752b42158d2a1547082688bd6fbc4ec9a68fc0088c9d9f0
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -14009,13 +14017,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 768
+    instrument_count: 769
     counts:
-      total: 768
+      total: 769
       encoded: 2
       classified-with-reason: 132
       excluded-with-reason: 341
-      pending: 293
+      pending: 294
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14295,6 +14303,7 @@ computed:
     - de-kg-instr-c2c05925823952b6
     - de-kg-instr-c80165befa9ab1c1
     - de-kg-instr-ccf56f3091f029e7
+    - de-kg-instr-dakg-2026
     - de-kg-instr-e0b7829aa64b55e5
     - de-kg-instr-e832fabf332bce62
     - de-kg-instr-e92627717e6aac58
@@ -24744,6 +24753,14 @@ computed:
       classification: entitlement_interpretation
       reason: EuGH C-411/20, 1 August 2022, ECLI:EU:C:2022:602. The document parent is body=null; the complete German judgment is de/guidance/cjeu-c-411-20/document-1, body_sha256 3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5, in the pinned signed release. Paragraph 73 and the operative ruling interpret Regulation 883/2004 Article 4 as precluding the described first-three-month denial of family benefits to economically inactive nationals of another Member State where returning own nationals receive them; Directive 2004/38 Article 24(2) does not apply to that rule. Paragraphs 70-72 retain establishment of habitual residence and the individual factual assessment under Regulation 987/2009 Article 11. This bears on EStG 62(1a), claimant_entitlement and DA-KG A 4.2. It is not an unconditional arrival-month entitlement. Open until the non-application rule and its personal/residence scope are encoded and composed; no encoded_by is asserted.
       bears_on_computed_surface: true
+    - id: de-kg-instr-dakg-2026
+      status: pending
+      discovery_refs:
+      - de-subject-017
+      identity_kind: subject_seed
+      raw_reference: Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.
+      subject_urls:
+      - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
     - id: de-kg-instr-db7693cd9f018ff4
       status: classified-with-reason
       discovery_refs:
@@ -25298,7 +25315,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 768
+    bearing_candidate_instruments: 769
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
@@ -25310,6 +25327,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 16 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

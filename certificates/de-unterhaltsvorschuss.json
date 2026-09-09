@@ -70,13 +70,13 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "f186097e45cf9c943c56889b063a3fb959eb91e207d30734ced7ccbfb905c55b"
+      "sha256": "edbac46e5abf75dae6955f44dda5d5925d12fd92ece1d383066835ad5273f0cb"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "44f19f25fb59f107c0267587e5b54c230081d9c2faa63c43f169e8231533eb53",
+      "sha256": "c9e9b2526da5661c5a95c45efd68ccf9bb80fa676dacc02900b349c5fcfd0962",
       "verification": "producer_artifact_validation"
     },
     {

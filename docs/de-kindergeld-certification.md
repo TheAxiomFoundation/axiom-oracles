@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 293 of 768 instruments
+other closure artifact. The current frontier has 294 of 769 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -339,7 +339,7 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 293 of 768 instruments pending, 132 open
+rows pending. Current result: 294 of 769 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -507,3 +507,10 @@ The historical SGB VII §217(3) capture expressly refers to RVO §§583,
 official RVO index confirms the instrument identity, but marks those sections
 repealed; it does not supply their historical text. Historical capture and
 encoding remain pending.
+
+Direct retrieval of the BZSt endpoint in `de-subject-002` now returns
+DA-KG Stand 2026 despite its legacy filename. `de-subject-017` binds that
+173-page PDF digest and enrolls `de-kg-instr-dakg-2026` separately. Its
+application to non-final cases has explicit temporal restrictions; applicability
+to the 2025 program remains pending. The retained 2025 heading evidence is
+not replaced by the new edition.
