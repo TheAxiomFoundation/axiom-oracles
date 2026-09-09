@@ -99,7 +99,7 @@ EXPECTED_LEAVES = {
 }
 EXPECTED_MEASURED = {
     "de/kindergeld": (18, 769, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 40, 0, 2, 2, 1),
+    "de/unterhaltsvorschuss": (12, 41, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
