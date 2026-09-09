@@ -12990,6 +12990,12 @@ committed_decisions:
     reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
       9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-b8b7b0fae40a3f3a
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full four-page BFH III R73/09 decision (9 February 2012), paragraphs1–23: the original dispute concerns the 2002 annual income ceiling, but paragraphs17–22 explain why maintenance for the child''s own child does not reduce the child''s own available income. Current DA-KG2025 A19.5 sentence3 expressly applies this decision to the disposable-net-income calculation for the disability self-support test under EStG32(4) sentence1 number3. Therefore the decision cannot be excluded merely because the old annual ceiling is superseded. Its surviving maintenance-payment treatment bears on qualifying_child_count through the unencoded disability means calculation; it remains an open dependency until that computation is encoded and bound. This disposition does not import the former7188 EUR annual ceiling or former27-year age limit into2025. Text-bound source: de/guidance/bfh-iii-r-73-09-2012-02-09/document-1, body SHA-256 a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35, pinned
+      corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-2565e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-c49f3225984aa26f
     status: classified-with-reason
     classification: constitutional_parentage_applicability
@@ -13054,6 +13060,12 @@ committed_decisions:
     classification: document_container_with_separately_enrolled_operative_text
     reason: This corpus row is the body-null document container de/guidance/bverfg-1-bvr-2017-21-2024-04-09 (row SHA-256 a5a7d22a9a755409d65fe8cc538bde924a0464c3d57443d16d4f0ab248a9037c), not an additional operative provision. Its full child /inhalt is separately enrolled as bearing decision de-kg-discovery-4a16231e30b5e62b, bound to body SHA-256 9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e. That operative judgment and its 2025 continuation order remain open until encoded; excluding this empty container does not exclude their rules.
     bears_on_computed_surface: false
+  - id: de-kg-instr-295706eb9fcb6809
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full four-page BFH III R73/09 decision (9 February 2012), paragraphs1–23: the original dispute concerns the 2002 annual income ceiling, but paragraphs17–22 explain why maintenance for the child''s own child does not reduce the child''s own available income. Current DA-KG2025 A19.5 sentence3 expressly applies this decision to the disposable-net-income calculation for the disability self-support test under EStG32(4) sentence1 number3. Therefore the decision cannot be excluded merely because the old annual ceiling is superseded. Its surviving maintenance-payment treatment bears on qualifying_child_count through the unencoded disability means calculation; it remains an open dependency until that computation is encoded and bound. This disposition does not import the former7188 EUR annual ceiling or former27-year age limit into2025. Text-bound source: de/guidance/bfh-iii-r-73-09-2012-02-09/document-1, body SHA-256 a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35, pinned
+      corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-2565e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-2da01fc3ad71bd83
     status: excluded-with-reason
     classification: payout_routing
@@ -14185,9 +14197,9 @@ computed:
     counts:
       total: 770
       encoded: 2
-      classified-with-reason: 138
+      classified-with-reason: 140
       excluded-with-reason: 349
-      pending: 281
+      pending: 279
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14333,7 +14345,6 @@ computed:
     - de-kg-discovery-b54c31b087ac0265
     - de-kg-discovery-b58bc58d4c191f98
     - de-kg-discovery-b88635d70c7e1487
-    - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-b8e05478b09fa623
     - de-kg-discovery-b92c910ca6ffcca0
     - de-kg-discovery-ba19a6df8eb8382f
@@ -14408,7 +14419,6 @@ computed:
     - de-kg-instr-1c560d43302dedf2
     - de-kg-instr-1cf23bf8090c91b9
     - de-kg-instr-25b1ea0557c352eb
-    - de-kg-instr-295706eb9fcb6809
     - de-kg-instr-2b121051486857aa
     - de-kg-instr-2c28748809bc5f0a
     - de-kg-instr-2f1ac975f16fdbf6
@@ -23067,7 +23077,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 13.04.2016, III R 28/15, BStBl II S. 648
     - id: de-kg-discovery-b8b7b0fae40a3f3a
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 09.02.2012, III R 73/09, BStBl II S. 463
       discovery_refs:
@@ -23075,6 +23085,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 09.02.2012, III R 73/09, BStBl II S. 463
+      classification: entitlement_condition
+      reason: 'Full four-page BFH III R73/09 decision (9 February 2012), paragraphs1–23: the original dispute concerns the 2002 annual income ceiling, but paragraphs17–22 explain why maintenance for the child''s own child does not reduce the child''s own available income. Current DA-KG2025 A19.5 sentence3 expressly applies this decision to the disposable-net-income calculation for the disability self-support test under EStG32(4) sentence1 number3. Therefore the decision cannot be excluded merely because the old annual ceiling is superseded. Its surviving maintenance-payment treatment bears on qualifying_child_count through the unencoded disability means calculation; it remains an open dependency until that computation is encoded and bound. This disposition does not import the former7188 EUR annual ceiling or former27-year age limit into2025. Text-bound source: de/guidance/bfh-iii-r-73-09-2012-02-09/document-1, body SHA-256 a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35,
+        pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-2565e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-b8e05478b09fa623
       status: pending
       identity_kind: class_member
@@ -23935,7 +23949,7 @@ computed:
       reason: This corpus row is the body-null document container de/guidance/bverfg-1-bvr-2017-21-2024-04-09 (row SHA-256 a5a7d22a9a755409d65fe8cc538bde924a0464c3d57443d16d4f0ab248a9037c), not an additional operative provision. Its full child /inhalt is separately enrolled as bearing decision de-kg-discovery-4a16231e30b5e62b, bound to body SHA-256 9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e. That operative judgment and its 2025 continuation order remain open until encoded; excluding this empty container does not exclude their rules.
       bears_on_computed_surface: false
     - id: de-kg-instr-295706eb9fcb6809
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-d03b72fa03a92822b483
       - de-corpus-dd92f3a3dc57026670f7
@@ -23946,6 +23960,10 @@ computed:
       citation_label: 'BFH, III R 73/09, 2012-02-09: Keine Berücksichtigung von Kinderbetreuungskosten bei der Prüfung der Grenzbetragsüberschreitung'
       document_citation_path: de/guidance/bfh-iii-r-73-09-2012-02-09
       title: 'BFH, III R 73/09, 2012-02-09: Keine Berücksichtigung von Kinderbetreuungskosten bei der Prüfung der Grenzbetragsüberschreitung'
+      classification: entitlement_condition
+      reason: 'Full four-page BFH III R73/09 decision (9 February 2012), paragraphs1–23: the original dispute concerns the 2002 annual income ceiling, but paragraphs17–22 explain why maintenance for the child''s own child does not reduce the child''s own available income. Current DA-KG2025 A19.5 sentence3 expressly applies this decision to the disposable-net-income calculation for the disability self-support test under EStG32(4) sentence1 number3. Therefore the decision cannot be excluded merely because the old annual ceiling is superseded. Its surviving maintenance-payment treatment bears on qualifying_child_count through the unencoded disability means calculation; it remains an open dependency until that computation is encoded and bound. This disposition does not import the former7188 EUR annual ceiling or former27-year age limit into2025. Text-bound source: de/guidance/bfh-iii-r-73-09-2012-02-09/document-1, body SHA-256 a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35,
+        pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-2565e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
@@ -25511,11 +25529,13 @@ computed:
     - de-kg-dakg-V23.1
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
+    - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-e90973e7e66e0913
     - de-kg-instr-002
     - de-kg-instr-003
+    - de-kg-instr-295706eb9fcb6809
     - de-kg-instr-32a81be6d35e33be
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
@@ -25540,8 +25560,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 124
-    open_dependency_count: 132
+    instruments_bearing_on_computed_count: 126
+    open_dependency_count: 134
     closed: false
   measured_denominators:
     spine_rows: 18
