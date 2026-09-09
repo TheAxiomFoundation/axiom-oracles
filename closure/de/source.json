@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
-    "release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
-    "release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
-    "release_selector_sha256": "57f442572d728f35d821b9f8e4a994a0410040baeeb43e29287cd9190a3e0996",
+    "commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
+    "release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+    "release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
+    "release_selector_sha256": "fff38c38e07dce53e492e754a8812069641643b0e4ff3e47f03d5a54a0203721",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -95,6 +95,11 @@
         "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json",
         "sha256": "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json",
+        "sha256": "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
+        "row_count": 4
       },
       {
         "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json",
@@ -232,6 +237,11 @@
         "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
         "sha256": "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl",
+        "sha256": "6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e",
+        "row_count": 4
       },
       {
         "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl",
@@ -425,6 +435,17 @@
         "parent_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz"
       },
       {
+        "citation_path": "de/statute/estg",
+        "record_id": "7b940950-61f7-59e7-869b-58ca54691963",
+        "line_number": 77,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "78f6436e1bcf2d5941d793b40606a2a494c0019734c5ab418ac09907bd081ca9",
+        "body_length": 672
+      },
+      {
         "citation_path": "de/statute/estg/62",
         "record_id": "9e270815-0394-5cb9-a77d-7a9f87126090",
         "line_number": 257,
@@ -480,6 +501,18 @@
         "body_length": 461
       },
       {
+        "citation_path": "de/statute/estg/78",
+        "record_id": "72478e8f-eec5-5242-be1a-3a01b01ef16a",
+        "line_number": 280,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "7222c478fd5600a17110541318adaf995de36f3e58f8fd2c32c2af45547e1f0b",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "7105366cec1d12d8fb02bc1a87c7fd268517a0701b159e2134db5e0e7dc999a8",
+        "body_length": 700,
+        "parent_citation_path": "de/statute/estg"
+      },
+      {
         "citation_path": "de/statute/sgb-6/168",
         "record_id": "5d9e8fc7-3879-5e80-8656-2861b6d8d139",
         "line_number": 2772,
@@ -505,7 +538,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+    "observed_main_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
     "claim_mode": "attested",
     "modules": [
       {
@@ -522,7 +555,7 @@
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -536,7 +569,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
@@ -550,7 +583,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
         "artifact": {
-          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "path": "de/statutes/bgb/1591.yaml",
           "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
@@ -564,7 +597,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
         "artifact": {
-          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "path": "de/statutes/bgb/187.yaml",
           "sha256": "e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
@@ -578,11 +611,25 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
           "manifest_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a"
+        }
+      },
+      {
+        "citation_path": "de/statute/estg/78",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
+        "artifact": {
+          "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+          "path": "de/statutes/estg/78.yaml",
+          "sha256": "b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
+          "manifest_sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
         }
       },
       {
@@ -630,6 +677,10 @@
         {
           "citation_path": "de/statute/bgb/187",
           "role": "date_counting_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/estg/78",
+          "role": "legacy_priority_prerequisite"
         }
       ],
       "evidence_roots": [

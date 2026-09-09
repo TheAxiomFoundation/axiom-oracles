@@ -28,15 +28,15 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = '508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742'
+SOURCE_SHA256 = 'cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-09-kindergeld-treaty-texts'
-RELEASE_CONTENT_SHA256 = '415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f'
-RELEASE_SELECTOR_SHA256 = '57f442572d728f35d821b9f8e4a994a0410040baeeb43e29287cd9190a3e0996'
-CORPUS_COMMIT = '27510ad32be7e2111c20f3a7dd41a2ae40310c17'
-RULESPEC_COMMIT = "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b"
+RELEASE = 'de-rulespec-2026-09-09-kindergeld-swiss-coordination'
+RELEASE_CONTENT_SHA256 = '1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77'
+RELEASE_SELECTOR_SHA256 = 'fff38c38e07dce53e492e754a8812069641643b0e4ff3e47f03d5a54a0203721'
+CORPUS_COMMIT = '495236ce303398c8cea3d1d8f1e5fdcda5b09488'
+RULESPEC_COMMIT = "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -65,7 +65,7 @@ PROGRAM_ROOT_NODES = {
     "de/unterhaltsvorschuss": ("de:statutes/uhvorschg/2#advance_maintenance_amount",),
 }
 PROGRAM_SOURCE_PATHS = {
-    "de/kindergeld": (ESTG_66, "de/statute/bgb/1591", "de/statute/bgb/187"),
+    "de/kindergeld": (ESTG_66, "de/statute/bgb/1591", "de/statute/bgb/187", "de/statute/estg/78"),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",
         "de/regulation/svbezgrv-2025/4",
@@ -100,6 +100,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eea.json': ('c3bd7372757fdbe1f25e7caf47b14e233688e94b5e9096a915c731f2937c2558', 2),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eu.json': ('3b977d73c0702ed2e46684fb6695983d5f50d5b10474a2a36f686f2dbf3c8b58', 8),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json': ('540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240', 2),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json': ('37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28', 4),
     'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json': ('917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02', 4),
     'data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974', 3376),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json': ('deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604', 2),
@@ -129,6 +130,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl': ('5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b', 2),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl': ('5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1', 8),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl': ('22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6', 2),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl': ('6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e', 4),
     'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl': ('f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045', 4),
     'data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31', 3376),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl': ('80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de', 2),

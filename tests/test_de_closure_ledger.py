@@ -43,6 +43,11 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "kindergeld_payment_record_exists",
+        "kindergeld_payment_record_reference_year",
+        "kindergeld_payment_record_reference_month",
+        "application_for_section_64_priority_received",
+        "application_receipt_date",
         "event_or_intraday_timepoint_date",
         "beginning_of_day_start_date",
         "recorded_birth_date",
@@ -74,7 +79,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 696, 8, 1, 0, 0),
+    "de/kindergeld": (18, 698, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 24, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -173,7 +178,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8216
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 8220
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -218,8 +223,8 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=8216)
-    assert index["row_count"] == index["mapped_row_count"] == 8216
+    refresh._validate_global_extraction_index(index, scanned_row_count=8220)
+    assert index["row_count"] == index["mapped_row_count"] == 8220
     assert index["body_row_count"] == 8145
     assert index["unmapped_row_count"] == 0
     assert index["act_count"] == len(index["acts"]) == 100
@@ -1388,7 +1393,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 455 + 17 + 224
+    assert frontier["instrument_count"] == 455 + 17 + 226
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
@@ -1410,10 +1415,10 @@ def test_class_discovery_keeps_citation_evidence_separate_from_operative_text():
     module = _load_script()
     facts, rows = module._class_discovery_candidates("de/kindergeld", [])
     assert facts["complete"] is False
-    assert len(rows) == 224
+    assert len(rows) == 226
     assert facts["counts"] == {
         "de-kg-suppl-007": 16, "de-kg-suppl-008": 2,
-        "de-kg-suppl-009": 168, "de-kg-suppl-010": 38,
+        "de-kg-suppl-009": 168, "de-kg-suppl-010": 40,
     }
     assert all(row["status"] == "pending" and "body_sha256" not in row for row in rows)
     assert module._class_discovery_candidates("de/unterhaltsvorschuss", []) == (None, [])

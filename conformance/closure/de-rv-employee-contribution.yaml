@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742
+    sha256: cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 27510ad32be7e2111c20f3a7dd41a2ae40310c17
-    release: de-rulespec-2026-09-09-kindergeld-treaty-texts
-    release_content_sha256: 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f
+    commit: 495236ce303398c8cea3d1d8f1e5fdcda5b09488
+    release: de-rulespec-2026-09-09-kindergeld-swiss-coordination
+    release_content_sha256: 1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -90,6 +90,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
       sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
       row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl
+      sha256: 6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e
+      row_count: 4
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
       row_count: 4
@@ -156,8 +159,8 @@ generated_facts:
     state: no_artifact
   - citation_path: de/regulation/svbezgrv-2025/4
     state: captured
-    ref: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
-    commit: 8dd7d2e040ba99b84e9f92d8d63434c9ce46726b
+    ref: 25fe6cb5be81f6187ab2ba37e918165ae8e58cf5
+    commit: 25fe6cb5be81f6187ab2ba37e918165ae8e58cf5
     path: de/regulations/svbezgrv-2025/4.yaml
     sha256: 970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8
     module_id: de:regulations/svbezgrv-2025/4
@@ -193,10 +196,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 61cfd05c238f678ef38941599914d6acb32e9b0634bb0217a6537bb44afaae29
+    snapshot_sha256: 3a81d40d36a466deec6bb9e2216857690ea5090c195a42c763962e67941c6cd3
     channel_receipts:
-      corpus_release: 2490262f4e76ce6a23ee7010e5997579caa8b36508cffc81232e396726c2a10f
-      subject_matter_search: 5b4d2175704e6ea1685e95fc55db7acfffa3f8c68613fd7d7ac098d31a0d9a66
+      corpus_release: 3b62cdc84d355d2a7b24922a7e3a2d7de869c10e527b94c84b502a5a1efe3c2c
+      subject_matter_search: 120bac06a209f246f6738b8784a2f8196f3030fc9fe02f75291477eae834e0ea
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

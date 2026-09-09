@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742"
+    "sha256": "cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -16,7 +16,7 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 224 of 696 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 226 of 698 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 133 open dependencies (8 law-derived inputs, 0 unclassified inputs, 125 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
@@ -24,8 +24,22 @@
       "declared_roots": [
         {
           "attestation": {
+            "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
+          },
+          "citation_path": "de/statute/estg/78",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed payment-record and receipt-date helpers only; full transition recipient priority and same-child credit remain unencoded, so the section 78 spine stays pending",
+          "role": "legacy_priority_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
           },
@@ -39,7 +53,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
           },
@@ -52,7 +66,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -82,7 +96,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/62",
@@ -94,7 +108,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/63",
@@ -106,7 +120,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/64",
@@ -118,7 +132,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/65",
@@ -130,7 +144,7 @@
         },
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -165,7 +179,7 @@
       "declared_roots": [
         {
           "attestation": {
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/regulation/bsv-2018/1",
@@ -178,7 +192,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
           },
@@ -229,7 +243,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-            "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
           },
@@ -285,7 +299,7 @@
   },
   "rulespec_observation": {
     "claim_mode": "attested",
-    "commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+    "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
     "repository": "TheAxiomFoundation/rulespec-de"
   },
   "schema": "axiom_oracles.certificate_candidate_census.v1",

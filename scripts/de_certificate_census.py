@@ -37,12 +37,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b"
+RULESPEC_MAIN_COMMIT = "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/estg/78",
         "de/statute/bgb/187",
         "de/statute/bgb/1591",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -66,6 +67,7 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/statute/estg/78": ("legacy_priority_prerequisite", "encoded", {"signed"}),
         "de/statute/estg/66": ("governing", "encoded", {"pending", "signed"}),
         "de/statute/bgb/187": ("date_counting_prerequisite", "encoded", {"signed"}),
         "de/statute/bgb/1591": ("child_relationship_prerequisite", "encoded", {"signed"}),
@@ -100,6 +102,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/statute/estg/78": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
+        "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab",
+    },
     "de/statute/bgb/187": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -166,6 +174,19 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/statute/estg/78",
+                role="legacy_priority_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/estg/78.json",
+                source_sha256="ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab",
+                reason=(
+                    "Signed payment-record and receipt-date helpers only; "
+                    "full transition recipient priority and same-child credit "
+                    "remain unencoded, so the section 78 spine stays pending"
+                ),
+            ),
             _root(
                 "de/statute/bgb/187",
                 role="date_counting_prerequisite",

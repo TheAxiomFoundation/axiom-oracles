@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
-  "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+  "corpus_commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+  "corpus_release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -70,10 +70,10 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 3
+        "signed": 4
       },
       "by_status": {
-        "encoded": 3,
+        "encoded": 4,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -90,9 +90,10 @@
         "de/statute/estg/63",
         "de/statute/estg/64",
         "de/statute/estg/65",
-        "de/statute/estg/66"
+        "de/statute/estg/66",
+        "de/statute/estg/78"
       ],
-      "citation_root_count": 9,
+      "citation_root_count": 10,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -125,6 +126,15 @@
           "classification": "encoded",
           "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
           "role": "date_counting_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/estg/78",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
+          "role": "legacy_priority_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
         }
@@ -168,7 +178,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "258cbbe061c46298bea23a6b72f132dad654fd4350ad5268ab4d285aeae19f87",
+      "subgraph_sha256": "f709b5a5813c98c78cfc5180d7037b31ce6b448297621dbd185e0b94fb20f824",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -252,7 +262,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "d138488a2ff7b77ec98a5789671ef51871b2f2f1b0db350b0f7818232507d1ce",
+      "subgraph_sha256": "0f94fc5373793eeaeee33c45e52fa987f0c24614e2483aa26be1de50f9874857",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -335,7 +345,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "db6325d9955eda81b25e695a27e26af977f29dac390d1f6e5de2e9cc3a3a71a9",
+      "subgraph_sha256": "eb240ba3c50b416484466fc8b1d3aa3bda5eea9676e4a8eeb48d63f87cc280ee",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -349,7 +359,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+  "rulespec_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -358,7 +368,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742"
+    "sha256": "cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62"
   },
   "spine_closed": false
 }

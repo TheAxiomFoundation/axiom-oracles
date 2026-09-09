@@ -6,12 +6,14 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 224 of 696 instruments
+other closure artifact. The current frontier has 226 of 698 instruments
 pending, and dependency closure has 133 open dependencies: eight law-derived
 inputs and 125 bearing instruments, with no unclassified inputs. The signed
-BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
-`8dd7d2e040ba99b84e9f92d8d63434c9ce46726b`; the live amount-only oracle and
-replay pins remain scoped to their existing §66 evidence.
+BGB §§1591 and 187 prerequisites and EStG §78 record helpers are declared at RuleSpec merge
+`25fe6cb5be81f6187ab2ba37e918165ae8e58cf5`; the live amount-only oracle and
+replay pins remain scoped to their existing §66 evidence. The §78 helpers
+add five observable payment-record and filing facts; full transition priority
+and same-child credit remain deferred to §64, and the §78 spine stays pending.
 The exact-citation-path summary (`closure/de/summary.json`) contributes only
 its source-universe and signature fields; nothing DE-specific decides the
 premise, and a forged ledger fails the producer's exact rederivation before
@@ -293,9 +295,9 @@ method, `text_sha256` the hash):
 
 The original browser capture methods remain recorded in git history. All
 thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
-corpus bodies from `de-rulespec-2026-09-09-kindergeld-treaty-texts`, commit
-`27510ad32be7e2111c20f3a7dd41a2ae40310c17`, content SHA-256
-`415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f`.
+corpus bodies from `de-rulespec-2026-09-09-kindergeld-swiss-coordination`, commit
+`495236ce303398c8cea3d1d8f1e5fdcda5b09488`, content SHA-256
+`1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
 expression date and official URL. Single-body instruments use the body hash;
@@ -303,7 +305,7 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 224 entries: 218 pending legal dispositions,
+The SHA-bound class snapshot contains 226 entries: 220 pending legal dispositions,
 five captured bearing entries and one captured non-bearing transfer letter.
 The latter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
@@ -313,9 +315,12 @@ parentage decisions remain bearing; their BStBl II membership is provisional.
 The complete Morocco/Tunisia Kindergeld treaty publications, their commencement
 notices and the 2014 civil-partner letter are now receipted. The latter remains
 bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
-encoding is pending. Treaty applicability and encoding remain pending. The 22 DVKA documents are publisher extracts.
+encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
+Decision 1/2012 are now receipted discovery members; their applicability and
+coordination rules remain pending. The snapshot has 190 citation-only and
+30 receipted pending members. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 224 of 696 instruments pending, 133 open
+rows pending. Current result: 226 of 698 instruments pending, 133 open
 dependencies (eight law-derived inputs, 125 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 

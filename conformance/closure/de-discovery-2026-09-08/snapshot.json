@@ -395,6 +395,28 @@
       "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
       "receipt_origin": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
       "extraction": "Exact UTF-8 body from the signed immutable corpus release. Treaty approval publications retain the complete captured PDF; commencement notices use native page-window bounds. Original source bytes are retained in the corpus. OCR is not manually corrected and requires visual proof review before encoding."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_eu-ch-free-movement-2021_document-1.txt",
+      "sha256": "9c724714f453d31b37c194b9c1293443e2b9665f494e4e32605685921407bbd4",
+      "url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:02002A0430(01)-20210101",
+      "corpus_citation_path": "de/regulation/eu-ch-free-movement-2021/document-1",
+      "corpus_commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+      "corpus_release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl",
+      "extraction": "Exact UTF-8 native corpus body from retained complete official German EUR-Lex PDF. AnnexII Article1 was visually checked. Consolidation is not commencement; personal scope, adaptations, protocols and amending instruments remain subject to legal disposition."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_eu-ch-decision-2012-195_document-1.txt",
+      "sha256": "33968511da4da144693bcb5b25950b49ca7033c29b4856db5d478db502ad5d46",
+      "url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:22012D0195",
+      "corpus_citation_path": "de/regulation/eu-ch-decision-2012-195/document-1",
+      "corpus_commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+      "corpus_release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl",
+      "extraction": "Exact UTF-8 native corpus body from retained complete official German EUR-Lex PDF. AnnexII Article1 was visually checked. Consolidation is not commencement; personal scope, adaptations, protocols and amending instruments remain subject to legal disposition."
     }
   ],
   "members": [
@@ -828,6 +850,22 @@
       "text_capture_state": "citation_only"
     },
     {
+      "id": "de-kg-discovery-339d5045ae38b36a",
+      "class_id": "de-kg-suppl-010",
+      "identity": "EU–Switzerland free-movement agreement, consolidated1January2021, AnnexII social-security coordination",
+      "discovery_excerpt": "auch auf die Schweiz anzuwenden.",
+      "source_path": "agreement-bodies/de_regulation_eu-ch-free-movement-2021_document-1.txt",
+      "source_sha256": "9c724714f453d31b37c194b9c1293443e2b9665f494e4e32605685921407bbd4",
+      "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:02002A0430(01)-20210101",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "operative_source_path": "agreement-bodies/de_regulation_eu-ch-free-movement-2021_document-1.txt",
+      "operative_body_sha256": "9c724714f453d31b37c194b9c1293443e2b9665f494e4e32605685921407bbd4",
+      "operative_corpus_citation_path": "de/regulation/eu-ch-free-movement-2021/document-1",
+      "operative_text_scope": "complete_official_consolidated_agreement",
+      "discovery_note": "Distinct Swiss treaty bridge required for child-abroad coordination; Switzerland is not an EEA contracting state. Full text available; personal scope, referenced acts, adaptations, protocols and later amendments remain legal disposition and encoding work. No exhaustive discovery claim."
+    },
+    {
       "id": "de-kg-discovery-33b5b7772fffd60a",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 19.03.1997, I R 69/96, BStBl II S. 447",
@@ -1141,6 +1179,22 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-548d5f721c597717",
+      "class_id": "de-kg-suppl-010",
+      "identity": "EU–Switzerland Joint Committee Decision1/2012,31March2012,2012/195/EU, replacing AnnexII",
+      "discovery_excerpt": "auch auf die Schweiz anzuwenden.",
+      "source_path": "agreement-bodies/de_regulation_eu-ch-decision-2012-195_document-1.txt",
+      "source_sha256": "33968511da4da144693bcb5b25950b49ca7033c29b4856db5d478db502ad5d46",
+      "source_url": "https://eur-lex.europa.eu/legal-content/DE/TXT/PDF/?uri=CELEX:22012D0195",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "operative_source_path": "agreement-bodies/de_regulation_eu-ch-decision-2012-195_document-1.txt",
+      "operative_body_sha256": "33968511da4da144693bcb5b25950b49ca7033c29b4856db5d478db502ad5d46",
+      "operative_corpus_citation_path": "de/regulation/eu-ch-decision-2012-195/document-1",
+      "operative_text_scope": "complete_official_annex_replacement_decision",
+      "discovery_note": "Distinct Swiss treaty bridge required for child-abroad coordination; Switzerland is not an EEA contracting state. Full text available; personal scope, referenced acts, adaptations, protocols and later amendments remain legal disposition and encoding work. No exhaustive discovery claim."
     },
     {
       "id": "de-kg-discovery-551339d77f667e79",
@@ -2897,13 +2951,14 @@
     "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
     "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.",
     "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.",
-    "The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim."
+    "The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.",
+    "The Swiss free-movement agreement and2012AnnexII replacement are receipted. Encode the Swiss coordination bridge and investigate all bearing amendments and administrative decisions referenced by AnnexII; the requested Swiss override cannot be inferred from the EEA Agreement."
   ],
   "counts": {
     "de-kg-suppl-007": 16,
     "de-kg-suppl-008": 2,
     "de-kg-suppl-009": 168,
-    "de-kg-suppl-010": 38
+    "de-kg-suppl-010": 40
   },
-  "receipt_sha256": "42c58f79896991ec9d794e7e716c6d309d50b48bd22b69dd97a79901b1e88579"
+  "receipt_sha256": "bd2f5b368288a79540c8dafa4946aa27fcc5d3954f4cb4547d217b4b5cd9ccac"
 }

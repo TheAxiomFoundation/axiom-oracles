@@ -17,7 +17,7 @@
     "citation_roots": [
       {
         "attestation": {
-          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/regulation/bsv-2018/1",
@@ -30,7 +30,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-          "ref": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+          "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
         },
@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "4bcde5b5c3a2638bb281b18ed71ce58f0e7adc2d0e399b838e85b6ab9c0fd59a"
+      "sha256": "e8bf2ceba0c3915513667950106008705f1c7b0a1cea42ea475747dbd7bc4394"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "1876b8a68b858d0c41e3dcacc48d3e5160587c90e8a96b9e953fbfef00786572",
+      "sha256": "7d0819674badbdb89e32d332dd1c6b80306478f167938a976a53ce2111da787d",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "32b1c4067889a9e97f20338acb494693c86bb94ae92ccc03c709eff08f594608"
+      "sha256": "736c0bce153be25fe4543d20576ccf601ffe49ae05d51a3b24d4d1e64316254a"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -220,7 +220,7 @@
         "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
         "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
       ],
-      "rulespec_commit": "8dd7d2e040ba99b84e9f92d8d63434c9ce46726b",
+      "rulespec_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
       "signature_blockers": [
         "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
         "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"
@@ -233,7 +233,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "d138488a2ff7b77ec98a5789671ef51871b2f2f1b0db350b0f7818232507d1ce",
+      "subgraph_sha256": "0f94fc5373793eeaeee33c45e52fa987f0c24614e2483aa26be1de50f9874857",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
