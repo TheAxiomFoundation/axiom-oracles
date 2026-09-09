@@ -11558,6 +11558,12 @@ committed_decisions:
     classification: constitutional_parentage_applicability
     reason: The operative order extends continued application of BGB §1600(2) and (3) sentence 1 beyond 30 June 2025 until replacement legislation enters force, at most 31 March 2026, and retains suspension on the specified applicants' request. It changes the outer deadline of the 9 April 2024 judgment. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt, SHA-256 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-da811c7c21203da5
+    status: classified-with-reason
+    classification: civil_partner_spousal_equivalence
+    reason: The complete BMF17January2014 letter is receipted at de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt, body SHA-25607a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c, in release de-rulespec-2026-09-09-kindergeld-treaty-texts at27510ad32be7e2111c20f3a7dd41a2ae40310c17. Its opening expressly applies EStG2(8), equating civil partners and spouses. The pinned EStG2(8) applies that equivalence across the Act; EStG63(1) sentence1 number2 and EStG64(2) sentence2 refer to spouses. This bridge therefore remains bearing on qualifying_child_count and recipient_priority until EStG2(8), the relevant civil-partnership status rules and the63/64 selection rules are encoded and composed. The remaining letter sections concern allocation, doubling and transfer of personal tax allowances, and its application paragraph addresses non-final income-tax assessments. In particular, the letter's statement that an unadopted child has a parent-child relationship only to its biological
+      parent must not be misread as excluding the household child of a civil partner from EStG63. This is a conservative bearing disposition, not an encoded rule or a claim that the letter defines a separate Kindergeld amount.
+    bears_on_computed_surface: true
   - id: de-kg-discovery-e90973e7e66e0913
     status: classified-with-reason
     classification: country_group_income_thresholds
@@ -12389,9 +12395,9 @@ computed:
     counts:
       total: 696
       encoded: 1
-      classified-with-reason: 132
+      classified-with-reason: 133
       excluded-with-reason: 338
-      pending: 225
+      pending: 224
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12577,7 +12583,6 @@ computed:
     - de-kg-discovery-d8ad76f29086b7d4
     - de-kg-discovery-d8f8732223baa754
     - de-kg-discovery-d9d5d0f4ff95db48
-    - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-dc687b40f4c59ca6
     - de-kg-discovery-dc867c1deb47738a
     - de-kg-discovery-dddc7d9e98dca509
@@ -21483,7 +21488,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 22.02.2018, III R 10/17, BStBl II S. 717
     - id: de-kg-discovery-da811c7c21203da5
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BMF-Schreiben vom 17.01.2014, BStBl I 2014, 109 — Familienleistungsausgleich; Lebenspartner und Freibeträge für Kinder
       discovery_refs:
@@ -21491,6 +21496,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/bmf-positive-list-2025.txt
       discovery_source_sha256: 6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c
       discovery_excerpt: 973   BMF   17.01.2014                                  BStBl I 2014, 109    Familienleistungsausgleich; Lebenspartner und Freibeträge für Kinder
+      classification: civil_partner_spousal_equivalence
+      reason: The complete BMF17January2014 letter is receipted at de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt, body SHA-25607a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c, in release de-rulespec-2026-09-09-kindergeld-treaty-texts at27510ad32be7e2111c20f3a7dd41a2ae40310c17. Its opening expressly applies EStG2(8), equating civil partners and spouses. The pinned EStG2(8) applies that equivalence across the Act; EStG63(1) sentence1 number2 and EStG64(2) sentence2 refer to spouses. This bridge therefore remains bearing on qualifying_child_count and recipient_priority until EStG2(8), the relevant civil-partnership status rules and the63/64 selection rules are encoded and composed. The remaining letter sections concern allocation, doubling and transfer of personal tax allowances, and its application paragraph addresses non-final income-tax assessments. In particular, the letter's statement that an unadopted child has a parent-child relationship only to its biological
+        parent must not be misread as excluding the household child of a civil partner from EStG63. This is a conservative bearing disposition, not an encoded rule or a claim that the letter defines a separate Kindergeld amount.
+      bears_on_computed_surface: true
     - id: de-kg-discovery-dc687b40f4c59ca6
       status: pending
       identity_kind: class_member
@@ -22670,6 +22679,7 @@ computed:
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
     - de-kg-discovery-c49f3225984aa26f
+    - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-e90973e7e66e0913
     - de-kg-instr-002
     - de-kg-instr-003
@@ -22697,8 +22707,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 124
-    open_dependency_count: 132
+    instruments_bearing_on_computed_count: 125
+    open_dependency_count: 133
     closed: false
   measured_denominators:
     spine_rows: 18

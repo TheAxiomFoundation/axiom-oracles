@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 225 of 696 instruments
-pending, and dependency closure has 132 open dependencies: eight law-derived
-inputs and 124 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 224 of 696 instruments
+pending, and dependency closure has 133 open dependencies: eight law-derived
+inputs and 125 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
 `8dd7d2e040ba99b84e9f92d8d63434c9ce46726b`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence.
@@ -303,19 +303,20 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 224 entries: 219 pending legal dispositions,
-four captured bearing entries and one captured non-bearing transfer letter.
+The SHA-bound class snapshot contains 224 entries: 218 pending legal dispositions,
+five captured bearing entries and one captured non-bearing transfer letter.
 The latter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
 through §1(3) EStG and its specified allowance adjustments. C-328/20 and both
 parentage decisions remain bearing; their BStBl II membership is provisional.
 The complete Morocco/Tunisia Kindergeld treaty publications, their commencement
-notices and the 2014 civil-partner letter are now receipted, with applicability
-and encoding still pending. The 22 DVKA documents are publisher extracts.
+notices and the 2014 civil-partner letter are now receipted. The latter remains
+bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
+encoding is pending. Treaty applicability and encoding remain pending. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 225 of 696 instruments pending, 132 open
-dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
+rows pending. Current result: 224 of 696 instruments pending, 133 open
+dependencies (eight law-derived inputs, 125 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 ## Reads log
