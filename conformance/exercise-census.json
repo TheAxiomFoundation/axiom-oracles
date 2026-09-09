@@ -8943,7 +8943,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-self-employed-nic.json",
-      "report_sha256": "ac395da506038d06626c9e9112b0d171f6f85da2b2dc59bf1eebb8b1072415c4",
+      "report_sha256": "9dd1e530e5552c575d99f232dac4b0b59f7e75ca2d3f158baf608951b696574a",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
