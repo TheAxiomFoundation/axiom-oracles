@@ -32,17 +32,20 @@ LEDGER_DIR = REPO_ROOT / "conformance" / "closure"
 if str(REPO_ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import closure_gate  # noqa: E402
+
 EXECUTABLE_MANIFEST_PATH = (
     REPO_ROOT / "conformance" / "executable" / "de-kindergeld-manifest.json"
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5"
+RULESPEC_MAIN_COMMIT = "73e92a4da6970693215edd28e24295c923cb807d"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/regulation/eu-987-2009/article-59/document-1",
+        "de/statute/estg/32/absatz-3/document-1",
         "de/statute/estg/78",
         "de/statute/bgb/187",
         "de/statute/bgb/1591",
@@ -67,11 +70,29 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/regulation/eu-987-2009/article-59/document-1": (
+            "coordination_payment_continuity_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
+        "de/statute/estg/32/absatz-3/document-1": (
+            "child_age_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
         "de/statute/estg/78": ("legacy_priority_prerequisite", "encoded", {"signed"}),
         "de/statute/estg/66": ("governing", "encoded", {"pending", "signed"}),
         "de/statute/bgb/187": ("date_counting_prerequisite", "encoded", {"signed"}),
-        "de/statute/bgb/1591": ("child_relationship_prerequisite", "encoded", {"signed"}),
-        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract": ("evidence_root", "evidence", {"not_applicable"}),
+        "de/statute/bgb/1591": (
+            "child_relationship_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract": (
+            "evidence_root",
+            "evidence",
+            {"not_applicable"},
+        ),
         **{
             f"de/statute/estg/{section}": (
                 "boundary_input",
@@ -102,6 +123,18 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    "de/regulation/eu-987-2009/article-59/document-1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+        "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda",
+    },
+    "de/statute/estg/32/absatz-3/document-1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+        "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910",
+    },
     "de/statute/estg/78": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -174,6 +207,24 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                "de/statute/estg/32/absatz-3/document-1",
+                role="child_age_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+                source_sha256="fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910",
+                reason="Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+            ),
+            _root(
+                "de/regulation/eu-987-2009/article-59/document-1",
+                role="coordination_payment_continuity_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+                source_sha256="de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda",
+                reason="Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+            ),
             _root(
                 "de/statute/estg/78",
                 role="legacy_priority_prerequisite",
@@ -668,9 +719,9 @@ def build(declarations: dict | None = None) -> dict:
             # must never call this certificate ready while the certificate
             # itself computes certified=no, and it carries the gate's own
             # blocker lines so the two cannot disagree.
-            blockers = list(executable.get("blockers") or []) + _ledger_closure_blockers(
-                program
-            )
+            blockers = list(
+                executable.get("blockers") or []
+            ) + _ledger_closure_blockers(program)
         elif program == "de/rv-employee-contribution":
             blockers = [
                 "no comparison record has been declared",

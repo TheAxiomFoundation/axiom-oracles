@@ -6,11 +6,12 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 225 of 698 instruments
+other closure artifact. The current frontier has 292 of 767 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
-BGB §§1591 and 187 prerequisites and EStG §78 record helpers are declared at RuleSpec merge
-`25fe6cb5be81f6187ab2ba37e918165ae8e58cf5`; the live amount-only oracle and
+BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
+criterion and Regulation 987/2009 Article 59 payment-continuity rules are declared
+at RuleSpec merge `73e92a4da6970693215edd28e24295c923cb807d`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine stays pending.
@@ -305,7 +306,7 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 226 entries: 219 pending legal dispositions,
+The SHA-bound class snapshot contains 228 entries: 221 pending legal dispositions,
 five captured bearing entries, one captured non-bearing transfer letter, and
 one country-group letter expressly superseded for 2025.
 The transfer letter allocates parental tax allowances and a child's lump sum among
@@ -319,22 +320,46 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-eu-articles` release at commit
-`5f00c6f11f2d1924aa721b903395d6d9db0e21cd`, content SHA-256
-`a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20`
-(8,236 rows, 29 scopes). The earlier supplemental receipts remain valid
+`de-rulespec-2026-09-09-kindergeld-bfh-decisions` release at commit
+`4a225368e171b193d02590e7dd1866792174c705`, content SHA-256
+`85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e`
+(8,412 rows, 32 scopes). The earlier supplemental receipts remain valid
 and retain their original release identities. Eight article-level EU coordination
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
-uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 189 citation-only seeds and
-30 receipted instruments. The 2023 country-group letter remains citation-only
+uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 109 citation-only seeds and
+112 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 225 of 698 instruments pending, 132 open
+rows pending. Current result: 292 of 767 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
+
+The latest release also retains complete EStG §32 paragraph captures and the
+complete official BGBl. 2026 I No. 198 act. The latter’s Article 2 commences on
+1 July 2027. Its raw BGB amendment reference is explicitly dispositioned from
+that body for the 2025 scope; the conservative automatic resolver still retains
+the raw identity because optional document-date metadata is absent. The captured
+BGBl. 2026 I No. 156 retirement reform is likewise excluded only for 2025 after
+reading its EStG amendments, transitions and commencement provisions.
+
+The BFH recovery contains 81 complete official PDFs (338 pages). Eighty existing
+single-case discovery rows now bind those texts; two individual case rows were
+added for the compound III R 10/11 / III R 63/11 citation. The compound seed stays
+pending reconciliation. The conflicting III R 21/12 seed date remains visible:
+the court records 8 May 2014, while one seed says 8 November 2014. Neither case
+bearing nor exact BStBl issue/page verification is inferred from capture alone.
+
+The new §32(3) module derives birth-month and age-at-month-start conditions from
+two birth-register facts. Article 59 derives calendar continuity from identified
+coordination and original-payment records; successor payment is not a prerequisite
+for its takeover duty. Its date helpers are consumed only with the applicable
+original-payer or successor predicate. Nineteen new record facts are classified.
+Full §32/§63 child qualification, national eligibility, priority, EU scope and
+benefit differentials remain open; DA-KG A8 stays bearing because its adult-child
+and disability provisions are not covered by the age criterion.
 
 ## Reads log
 

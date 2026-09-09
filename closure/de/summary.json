@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "5f00c6f11f2d1924aa721b903395d6d9db0e21cd",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
-  "corpus_release_content_sha256": "a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20",
+  "corpus_commit": "4a225368e171b193d02590e7dd1866792174c705",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
+  "corpus_release_content_sha256": "85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -70,22 +70,24 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 4
+        "signed": 6
       },
       "by_status": {
-        "encoded": 4,
+        "encoded": 6,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
         "pending": 0
       },
       "citation_paths": [
+        "de/regulation/eu-987-2009/article-59/document-1",
         "de/statute/bgb/1591",
         "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+        "de/statute/estg/32/absatz-3/document-1",
         "de/statute/estg/62",
         "de/statute/estg/63",
         "de/statute/estg/64",
@@ -93,7 +95,7 @@
         "de/statute/estg/66",
         "de/statute/estg/78"
       ],
-      "citation_root_count": 10,
+      "citation_root_count": 12,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -137,6 +139,24 @@
           "role": "legacy_priority_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/estg/32/absatz-3/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+          "role": "child_age_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+          "role": "coordination_payment_continuity_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
         }
       ],
       "evidence_roots": [
@@ -178,7 +198,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "3f41e306fdb1a9cc6527f1d9fa2d786a1de663e74cb5d615c640cc156d809f06",
+      "subgraph_sha256": "027a2bad51f2c73a38052ba3ced280015c048f2c395d8d18f7d8d5f93a501a28",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -262,7 +282,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "09778f070a94aaab51646de1c0871fd23dbefc8eee1c9b060bbee2c365fffcfb",
+      "subgraph_sha256": "7f462db89d21845255d280341cb98a0e9467caa7e1333f2e9d069a3be32015e4",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -345,7 +365,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "0f66c7fdfaa7b82262a9993b7fb97f2c9c4fccf2997475ecf039c1297509115a",
+      "subgraph_sha256": "d5481759e373bb1301ba2eb4a37f4ca01e8f0aaba7c3859e092e0ed633d98dbc",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -359,7 +379,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+  "rulespec_commit": "73e92a4da6970693215edd28e24295c923cb807d",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -368,7 +388,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "b8adcd9fc7ef98b9b07b095ed0b3f1fc033524229b163eee7554192037ea2c79"
+    "sha256": "3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb"
   },
   "spine_closed": false
 }

@@ -47,7 +47,7 @@ def _load(name: str):
 #: incomplete; the signed maternity prerequisite does not close the eight
 #: law-derived inputs or the remaining bearing instruments.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 225 of 698 subordinate/bearing "
+    "closed: instrument frontier incomplete — 292 of 767 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
     "closed: dependency closure open — 132 open dependencies (8 law-derived "
     "inputs, 0 unclassified inputs, 124 bearing instruments) (CERTIFIED.md v3)",
@@ -3926,7 +3926,7 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     # The v3 discovery ledger is consumed through the central gate: the
     # frontier and dependency blocks are DECLARED and open, not missing.
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["instrument_frontier"]["instrument_count"] == 698
+    assert closed["instrument_frontier"]["instrument_count"] == 767
     assert closed["dependency_closure"]["closed"] is False
     assert closed["dependency_closure"]["open_dependency_count"] == 132
     assert closed["dependency_closure"]["unclassified_inputs"] == []
@@ -5780,14 +5780,14 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["mode"] == "computed"
     assert closed["value"] is False
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
-    assert closed["instrument_frontier"]["instrument_count"] == 698
+    assert closed["instrument_frontier"]["instrument_count"] == 767
     assert closed["instrument_frontier"]["complete"] is False
     assert closed["dependency_closure"]["open_dependency_count"] == 132
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5
     # The exact-path summary still contributes its scope fields only.
-    assert closed["rulespec_commit"] == "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5"
+    assert closed["rulespec_commit"] == "73e92a4da6970693215edd28e24295c923cb807d"
     assert closed["by_signature_state"] is not None
     claims = {row["claim"] for row in evidence}
     assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims

@@ -17,7 +17,7 @@
     "citation_roots": [
       {
         "attestation": {
-          "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+          "ref": "73e92a4da6970693215edd28e24295c923cb807d",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/regulation/bsv-2018/1",
@@ -30,7 +30,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-          "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+          "ref": "73e92a4da6970693215edd28e24295c923cb807d",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
         },
@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "914351e502102962b27ca6f4783fa3383ba6fb8d6f3bbdd87e15a97bcf6b0971"
+      "sha256": "18e6da5d910626523156fbde3cb60306a6481053af805ed3ab55cad3e5dd60de"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "dff4fe430099a0de0d6adc5db0789ba25cb918cd5802ea21e27bcf0a2cbe756f",
+      "sha256": "e4f3a5460896d60f5e28f5b0f90c260830d5aeb53e7bb316edefc22fc09fbb2e",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "7ff0c792d87a9ec9de7dc003f3fb28344c97fd4907bb35ba18e2febe303aaeb1"
+      "sha256": "7bf7429a00f0881c8054965f9d4fc58535fedb1a56eb0d86e0407ea157a9c5e9"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -220,7 +220,7 @@
         "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
         "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
       ],
-      "rulespec_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+      "rulespec_commit": "73e92a4da6970693215edd28e24295c923cb807d",
       "signature_blockers": [
         "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
         "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"
@@ -233,7 +233,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "09778f070a94aaab51646de1c0871fd23dbefc8eee1c9b060bbee2c365fffcfb",
+      "subgraph_sha256": "7f462db89d21845255d280341cb98a0e9467caa7e1333f2e9d069a3be32015e4",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"

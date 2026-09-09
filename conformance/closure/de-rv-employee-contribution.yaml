@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: b8adcd9fc7ef98b9b07b095ed0b3f1fc033524229b163eee7554192037ea2c79
+    sha256: 3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 5f00c6f11f2d1924aa721b903395d6d9db0e21cd
-    release: de-rulespec-2026-09-09-kindergeld-eu-articles
-    release_content_sha256: a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20
+    commit: 4a225368e171b193d02590e7dd1866792174c705
+    release: de-rulespec-2026-09-09-kindergeld-bfh-decisions
+    release_content_sha256: 85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -63,6 +63,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
       sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl
+      sha256: b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc
+      row_count: 162
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
       sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
       row_count: 6
@@ -126,6 +129,12 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
       sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
       row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl
+      sha256: 738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl
+      sha256: e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40
+      row_count: 12
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
@@ -162,8 +171,8 @@ generated_facts:
     state: no_artifact
   - citation_path: de/regulation/svbezgrv-2025/4
     state: captured
-    ref: 25fe6cb5be81f6187ab2ba37e918165ae8e58cf5
-    commit: 25fe6cb5be81f6187ab2ba37e918165ae8e58cf5
+    ref: 73e92a4da6970693215edd28e24295c923cb807d
+    commit: 73e92a4da6970693215edd28e24295c923cb807d
     path: de/regulations/svbezgrv-2025/4.yaml
     sha256: 970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8
     module_id: de:regulations/svbezgrv-2025/4
@@ -199,10 +208,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: fac20ce141684715dee4770b10def862ce169e6f3a71c6582aa4ea018d6143c1
+    snapshot_sha256: 3f8d93d138e3fb547d4022d2a825c374ab2019676e22dccb8a8da37bcdab97a0
     channel_receipts:
-      corpus_release: 0fd947b6a49cc9979d173c619ce5f7072d3e2bcf74a9fa6e0b8453723bf8e28c
-      subject_matter_search: 4cffe64ae4f02cebe4dd0542b3abbf059955145e5df72cc00c91f6ffe024af75
+      corpus_release: 3d700fba6a911b516a9f01d27ec6369406145aa99ee3e72e9f0299806bb925a5
+      subject_matter_search: 685f073c55656f0bdff7fce79ed3601e03c4fe0af3c1fe91d00929dfa7adcc91
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

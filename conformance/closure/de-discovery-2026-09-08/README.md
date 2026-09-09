@@ -1,8 +1,8 @@
 # Kindergeld class discovery seeds
 
-This snapshot contains 226 candidate entries: 16 BMF letters, 2 BZSt
-instructions, 168 court candidates, and 40 bilateral or association instruments.
-Of these, 219 remain pending legal disposition: 189 citation-only seeds and 30
+This snapshot contains 228 candidate entries: 16 BMF letters, 2 BZSt
+instructions, 170 court candidates, and 40 bilateral or association instruments.
+Of these, 221 remain pending legal disposition: 109 citation-only seeds and 112
 corpus-receipted instruments. Five other corpus-receipted entries are
 bearing dependencies (two parentage decisions, C-328/20, the 2025 country-group
 letter and the civil-partner bridge letter); the 2013 transfer letter is non-bearing for this Kindergeld surface. The 2023 country-group letter
@@ -54,9 +54,9 @@ Discovery-source hashes are deliberately not operative-body hashes.
 
 ## Current source pin and encoding history
 
-The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-eu-articles`
-from merge `5f00c6f11f2d1924aa721b903395d6d9db0e21cd`, content SHA-256
-`a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20`.
+The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-bfh-decisions`
+from merge `4a225368e171b193d02590e7dd1866792174c705`, content SHA-256
+`85b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e`.
 Its 8,236 rows in 29 scopes preserve the preceding frontier, civil, parentage,
 bilateral and Swiss captures and add eight complete EU article units.
 Publication 34310484192 and mirror 34310871440 succeeded; the
@@ -89,14 +89,14 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 225 pending
-instruments out of 698. Dependency closure remains false: eight law-derived
+The regenerated ledger has 5 pending spine rows out of 18 and 292 pending
+instruments out of 767. Dependency closure remains false: eight law-derived
 inputs and 124 bearing instruments remain open, with no unclassified inputs.
 The thirteen birth/payment-record and date inputs are committed world facts; engine-supplied query
 boundaries are not external inputs. The additional KindRG evidence candidate
 remains pending until its precise legal disposition is established.
 
-The 226 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
+The 228 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
 registers, verify case identities and BStBl II publication, reconcile duplicate
 identities, capture operative texts, and encode every bearing rule. All four
 class rows remain pending. No complete discovery or certified claim is made.
@@ -181,3 +181,15 @@ This disposition binds the current amount restatement. Eligibility, priority,
 treaty rates, A 31 monthly switching and EU differentials remain separate open
 dependencies. A 30 does not supply the 2026 rate; that version has its own
 statutory proof in §66. No certificate claim follows.
+
+The BFH release adds 81 complete official decisions. The court’s case headers and
+complete PDF text were checked across 338 pages. Two individual cases split the
+compound III R10/11 / III R63/11 seed, which remains pending reconciliation;
+III R21/12’s conflicting seed date is retained explicitly. Capture does not decide
+bearing or establish exact BStBl issue/page publication.
+
+Signed EStG32(3) and Regulation987/2009 Article59 prerequisites are declared at
+RuleSpec merge `73e92a4da6970693215edd28e24295c923cb807d`. They add the monthly
+birth/age criterion and payment-continuity rules, respectively. Full child
+qualification, national eligibility, coordination priority and differential
+amounts remain unencoded.

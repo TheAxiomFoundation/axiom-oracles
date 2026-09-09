@@ -4,7 +4,7 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 23 of 24 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: instrument frontier incomplete \u2014 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
     "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
@@ -17,7 +17,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-          "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+          "ref": "73e92a4da6970693215edd28e24295c923cb807d",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
         },
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "914351e502102962b27ca6f4783fa3383ba6fb8d6f3bbdd87e15a97bcf6b0971"
+      "sha256": "18e6da5d910626523156fbde3cb60306a6481053af805ed3ab55cad3e5dd60de"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "195f14d3486c2901f06aaaf9192e39a6cec3b1b58aed6ea78f06e13decf7b58c",
+      "sha256": "7badcadf5a35577493b4474b17904b6f540d712c8243b2cad12cd7658f91d575",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "7ff0c792d87a9ec9de7dc003f3fb28344c97fd4907bb35ba18e2febe303aaeb1"
+      "sha256": "7bf7429a00f0881c8054965f9d4fc58535fedb1a56eb0d86e0407ea157a9c5e9"
     }
   ],
   "period": "2025",
@@ -93,7 +93,7 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 23 of 24 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete \u2014 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-bfh-decisions",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -300,33 +300,49 @@
           "classified-with-reason": 1,
           "encoded": 0,
           "excluded-with-reason": 0,
-          "pending": 23,
-          "total": 24
+          "pending": 39,
+          "total": 40
         },
-        "instrument_count": 24,
+        "instrument_count": 40,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
+          "de-uhv-instr-13c9a46f75b99498",
           "de-uhv-instr-1808736a82828a59",
           "de-uhv-instr-1a53a8fa58131ff1",
+          "de-uhv-instr-1c560d43302dedf2",
           "de-uhv-instr-2079e2162cee1404",
           "de-uhv-instr-2a29967484296d20",
           "de-uhv-instr-2b0a8f983f861591",
           "de-uhv-instr-333ba26c32e038d3",
+          "de-uhv-instr-337d81a4694fca6a",
+          "de-uhv-instr-33c1190039335beb",
+          "de-uhv-instr-360df2059e09e33e",
+          "de-uhv-instr-3815239cc1f2caaf",
           "de-uhv-instr-3875634198c25414",
           "de-uhv-instr-38f449529edd140f",
+          "de-uhv-instr-3ae0493a66058fb3",
+          "de-uhv-instr-3be04eb6d61b596b",
+          "de-uhv-instr-3f476358fccfdc69",
+          "de-uhv-instr-5c0851a954940f82",
           "de-uhv-instr-703d3b12aaab39f8",
           "de-uhv-instr-73cb585362978769",
+          "de-uhv-instr-75c3f434723fb3e9",
           "de-uhv-instr-78841044a219e9b8",
           "de-uhv-instr-7aa5943b5f0a6e6c",
           "de-uhv-instr-7d7a5efb6250df56",
           "de-uhv-instr-906e7387d896596c",
+          "de-uhv-instr-9886b8cf5a4c26e8",
+          "de-uhv-instr-9a821bfac753742b",
+          "de-uhv-instr-a2bd2172735c10fa",
           "de-uhv-instr-a303758d3667d729",
           "de-uhv-instr-a66a4cb13aaf0599",
           "de-uhv-instr-a9efdae38748dd9f",
           "de-uhv-instr-b96e03076e143e8e",
+          "de-uhv-instr-bf9c57bd5c2a3d58",
           "de-uhv-instr-c29a0cb26e4cbc1d",
           "de-uhv-instr-c795a7af57079afc",
           "de-uhv-instr-db7693cd9f018ff4",
+          "de-uhv-instr-fbb51fe84fb002e1",
           "de-uhv-instr-guidance"
         ],
         "supplemental_count": null
@@ -348,7 +364,7 @@
       "root_nodes": [
         "de:statutes/uhvorschg/2#advance_maintenance_amount"
       ],
-      "rulespec_commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+      "rulespec_commit": "73e92a4da6970693215edd28e24295c923cb807d",
       "signature_blockers": [
         "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
       ],
@@ -359,7 +375,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "0f66c7fdfaa7b82262a9993b7fb97f2c9c4fccf2997475ecf039c1297509115a",
+      "subgraph_sha256": "d5481759e373bb1301ba2eb4a37f4ca01e8f0aaba7c3859e092e0ed633d98dbc",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

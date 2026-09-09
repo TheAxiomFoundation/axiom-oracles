@@ -43,6 +43,25 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "live_birth_register_entry_exists",
+        "recorded_live_birth_date",
+        "coordination_decision_record_exists",
+        "beginning_of_change_month_payment_record_exists",
+        "recorded_effective_transition_date",
+        "current_case_id",
+        "decision_case_id",
+        "payment_record_case_id",
+        "current_child_id",
+        "decision_child_id",
+        "payment_record_child_id",
+        "current_institution_id",
+        "current_institution_member_state_id",
+        "original_payer_at_start_of_change_month_institution_id",
+        "original_payer_at_start_of_change_month_member_state_id",
+        "affected_institution_id",
+        "affected_institution_member_state_id",
+        "decision_originating_member_state_id",
+        "decision_receiving_member_state_id",
         "kindergeld_payment_record_exists",
         "kindergeld_payment_record_reference_year",
         "kindergeld_payment_record_reference_month",
@@ -79,8 +98,8 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 698, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 24, 0, 2, 2, 1),
+    "de/kindergeld": (18, 767, 8, 1, 0, 0),
+    "de/unterhaltsvorschuss": (12, 40, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -1397,7 +1416,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 455 + 17 + 226
+    assert frontier["instrument_count"] == 522 + 17 + 228
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
@@ -1419,10 +1438,10 @@ def test_class_discovery_keeps_citation_evidence_separate_from_operative_text():
     module = _load_script()
     facts, rows = module._class_discovery_candidates("de/kindergeld", [])
     assert facts["complete"] is False
-    assert len(rows) == 226
+    assert len(rows) == 228
     assert facts["counts"] == {
         "de-kg-suppl-007": 16, "de-kg-suppl-008": 2,
-        "de-kg-suppl-009": 168, "de-kg-suppl-010": 40,
+        "de-kg-suppl-009": 170, "de-kg-suppl-010": 40,
     }
     assert all(row["status"] == "pending" and "body_sha256" not in row for row in rows)
     assert module._class_discovery_candidates("de/unterhaltsvorschuss", []) == (None, [])

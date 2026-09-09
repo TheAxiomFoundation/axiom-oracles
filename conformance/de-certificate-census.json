@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "b8adcd9fc7ef98b9b07b095ed0b3f1fc033524229b163eee7554192037ea2c79"
+    "sha256": "3b43cfef8f5452eec19bd49c2fd84f98db59261690534d8dd05e0d612048dddb"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -16,7 +16,7 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 225 of 698 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 292 of 767 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 132 open dependencies (8 law-derived inputs, 0 unclassified inputs, 124 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
@@ -24,8 +24,36 @@
       "declared_roots": [
         {
           "attestation": {
+            "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910"
+          },
+          "citation_path": "de/statute/estg/32/absatz-3/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+          "role": "child_age_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
+            "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
+            "repository": "TheAxiomFoundation/rulespec-de",
+            "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
+          },
+          "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+          "role": "coordination_payment_continuity_prerequisite",
+          "signature_state": "signed"
+        },
+        {
+          "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
           },
@@ -39,7 +67,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
           },
@@ -53,7 +81,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
           },
@@ -66,7 +94,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -96,7 +124,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/62",
@@ -108,7 +136,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/63",
@@ -120,7 +148,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/64",
@@ -132,7 +160,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/estg/65",
@@ -144,7 +172,7 @@
         },
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -179,7 +207,7 @@
       "declared_roots": [
         {
           "attestation": {
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de"
           },
           "citation_path": "de/regulation/bsv-2018/1",
@@ -192,7 +220,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
           },
@@ -234,7 +262,7 @@
         "no comparison record has been declared",
         "de/statute/uhvorschg/2: final-amount encoding remains partial",
         "executable reproduction receipt pending",
-        "closed: instrument frontier incomplete — 23 of 24 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-unterhaltsvorschuss.json",
@@ -243,7 +271,7 @@
         {
           "attestation": {
             "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-            "ref": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+            "ref": "73e92a4da6970693215edd28e24295c923cb807d",
             "repository": "TheAxiomFoundation/rulespec-de",
             "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
           },
@@ -299,7 +327,7 @@
   },
   "rulespec_observation": {
     "claim_mode": "attested",
-    "commit": "25fe6cb5be81f6187ab2ba37e918165ae8e58cf5",
+    "commit": "73e92a4da6970693215edd28e24295c923cb807d",
     "repository": "TheAxiomFoundation/rulespec-de"
   },
   "schema": "axiom_oracles.certificate_candidate_census.v1",
