@@ -70,7 +70,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "144e6625ed74f0281872c61701913340623d120fd4fab0e70adf7438a2ab05fd"
+      "sha256": "6bd88138c47e5e3cd15299d7ee3503064584c45c10f79f3843682336c2c065f4"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",

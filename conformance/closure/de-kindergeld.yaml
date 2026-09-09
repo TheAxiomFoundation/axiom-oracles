@@ -12939,6 +12939,12 @@ committed_decisions:
     reason: Read paragraphs 1–17. Paragraphs 1–14 allocate the EStG32(6) sentences6–11 tax allowances between parents, stepparents and grandparents (including the75percent maintenance test and objections); paragraphs15–16 allocate a child’s section33b lump sum to parents; paragraph17 starts assessment-year2012 application. These allocation rules do not change the section32(6) sentence1 statutory allowance amounts used by EStG66(3), the section32(1)–(5) qualifying-child tests, or section64 Kindergeld recipient priority. Paragraph15 makes existing Kindergeld entitlement a condition of downstream lump-sum transfer, not vice versa. The allocated parental lump sum does not define the child’s own disability needs. No computable rule upstream of this monthly Kindergeld surface is added; this does not exclude other BMF letters or section33b need amounts. Official corpus body de/guidance/esth-2024/bmf-2013-06-28-child-allowance-transfer/inhalt, SHA-256 7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e,
       release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-258c3463a611bbff
+    status: excluded-with-reason
+    classification: payout_routing
+    reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion at
+      paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-2bc27aa817f87a52
     status: classified-with-reason
     classification: duplicate_discovery_reference
@@ -12972,6 +12978,12 @@ committed_decisions:
     classification: constitutional_parentage_applicability
     reason: The operative judgment declares BGB §1600(2) and (3) sentence 1 incompatible with Article 6(2) GG, orders continued application pending replacement legislation until at most 30 June 2025, and requires suspension of proceedings on the specified applicants' request. Read with the 3 June 2025 continuation order. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt, SHA-256 9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-78f494ec90cd368b
+    status: excluded-with-reason
+    classification: appeal_costs
+    reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
+      9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-c49f3225984aa26f
     status: classified-with-reason
     classification: constitutional_parentage_applicability
@@ -13029,6 +13041,18 @@ committed_decisions:
     status: excluded-with-reason
     classification: document_container_with_separately_enrolled_operative_text
     reason: This corpus row is the body-null document container de/guidance/bverfg-1-bvr-2017-21-2024-04-09 (row SHA-256 a5a7d22a9a755409d65fe8cc538bde924a0464c3d57443d16d4f0ab248a9037c), not an additional operative provision. Its full child /inhalt is separately enrolled as bearing decision de-kg-discovery-4a16231e30b5e62b, bound to body SHA-256 9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e. That operative judgment and its 2025 continuation order remain open until encoded; excluding this empty container does not exclude their rules.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-2da01fc3ad71bd83
+    status: excluded-with-reason
+    classification: payout_routing
+    reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion at
+      paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-2e3e1e94e8491798
+    status: excluded-with-reason
+    classification: appeal_costs
+    reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
+      9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
   - id: de-kg-instr-32a81be6d35e33be
     status: classified-with-reason
@@ -14138,8 +14162,8 @@ computed:
       total: 770
       encoded: 2
       classified-with-reason: 138
-      excluded-with-reason: 341
-      pending: 289
+      excluded-with-reason: 345
+      pending: 285
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14167,7 +14191,6 @@ computed:
     - de-kg-discovery-20d4058656e75e8c
     - de-kg-discovery-220823c8e347c5c0
     - de-kg-discovery-237000cd7ae7e260
-    - de-kg-discovery-258c3463a611bbff
     - de-kg-discovery-278a4e45324352a8
     - de-kg-discovery-27defff615b684da
     - de-kg-discovery-289b0e7c3d8d6b13
@@ -14234,7 +14257,6 @@ computed:
     - de-kg-discovery-756b8977705fa113
     - de-kg-discovery-76c82b8ffe35fc59
     - de-kg-discovery-77e24ec30aa0b588
-    - de-kg-discovery-78f494ec90cd368b
     - de-kg-discovery-78fe440c4b3bff9e
     - de-kg-discovery-7a2ec2123c2f5ae8
     - de-kg-discovery-7ab667641308947c
@@ -14367,8 +14389,6 @@ computed:
     - de-kg-instr-295706eb9fcb6809
     - de-kg-instr-2b121051486857aa
     - de-kg-instr-2c28748809bc5f0a
-    - de-kg-instr-2da01fc3ad71bd83
-    - de-kg-instr-2e3e1e94e8491798
     - de-kg-instr-2f1ac975f16fdbf6
     - de-kg-instr-337d81a4694fca6a
     - de-kg-instr-33c1190039335beb
@@ -21851,7 +21871,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 15.12.2021, III R 48/20, BStBl II S. 444
     - id: de-kg-discovery-258c3463a611bbff
-      status: pending
+      status: excluded-with-reason
       identity_kind: class_member
       identity: BFH vom 19.01.2023, III R 36/21, BStBl II S. 711
       discovery_refs:
@@ -21859,6 +21879,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 19.01.2023, III R 36/21, BStBl II S. 711
+      classification: payout_routing
+      reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion
+        at paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-278a4e45324352a8
       status: pending
       identity_kind: class_member
@@ -22529,7 +22553,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 20.04.2023, III R 7/21, BStBl II S. 911
     - id: de-kg-discovery-78f494ec90cd368b
-      status: pending
+      status: excluded-with-reason
       identity_kind: class_member
       identity: BFH vom 01.09.2021, III R 18/21, BStBl II S. 117
       discovery_refs:
@@ -22537,6 +22561,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 01.09.2021, III R 18/21, BStBl II S. 117
+      classification: appeal_costs
+      reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
+        9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-78fe440c4b3bff9e
       status: pending
       identity_kind: class_member
@@ -23915,7 +23943,7 @@ computed:
       document_citation_path: de/guidance/bfh-xi-r-15-12-2014-12-17
       title: 'BFH, XI R 15/12, 2014-12-17: Aufhebung der Kindergeldfestsetzung mit Wirkung vom Zeitpunkt des Überschreitens der Altersgrenze'
     - id: de-kg-instr-2da01fc3ad71bd83
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-0c48d85dd9d39c651f1d
       - de-corpus-15717a23d99060611837
@@ -23928,8 +23956,12 @@ computed:
       citation_label: 'BFH, III R 36/21, 2023-01-19: Allgemeine Leistungsklage des Jobcenters gegen die Familienkasse wegen Erstattung'
       document_citation_path: de/guidance/bfh-iii-r-36-21-2023-01-19
       title: 'BFH, III R 36/21, 2023-01-19: Allgemeine Leistungsklage des Jobcenters gegen die Familienkasse wegen Erstattung'
+      classification: payout_routing
+      reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion
+        at paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-2e3e1e94e8491798
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-0fdec1e9559d2bc13c14
       - de-corpus-275b8f6521b0915443ed
@@ -23942,6 +23974,10 @@ computed:
       citation_label: 'BFH, III R 18/21, 2021-09-01: Keine Kostenerstattungspflicht im Kindergeldverfahren bei erfolgreichem Rechtsbehelf gegen Hinterziehungszinsen'
       document_citation_path: de/guidance/bfh-iii-r-18-21-2021-09-01
       title: 'BFH, III R 18/21, 2021-09-01: Keine Kostenerstattungspflicht im Kindergeldverfahren bei erfolgreichem Rechtsbehelf gegen Hinterziehungszinsen'
+      classification: appeal_costs
+      reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
+        9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-2f1ac975f16fdbf6
       status: pending
       discovery_refs:
