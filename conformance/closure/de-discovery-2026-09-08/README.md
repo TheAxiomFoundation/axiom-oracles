@@ -1,8 +1,8 @@
 # Kindergeld class discovery seeds
 
-This snapshot contains 224 candidate entries: 16 BMF letters, 2 BZSt
-instructions, 168 court candidates, and 38 bilateral or association instruments.
-Of these, 218 remain pending legal disposition: 190 citation-only seeds and 28
+This snapshot contains 226 candidate entries: 16 BMF letters, 2 BZSt
+instructions, 168 court candidates, and 40 bilateral or association instruments.
+Of these, 220 remain pending legal disposition: 190 citation-only seeds and 30
 corpus-receipted instruments. Five other corpus-receipted entries are
 bearing dependencies (two parentage decisions, C-328/20, the 2025 country-group
 letter and the civil-partner bridge letter); the 2013 transfer letter is non-bearing for this Kindergeld surface.
@@ -48,13 +48,14 @@ producer verifies every source hash and every whitespace-normalized
 excerpt, rejects duplicates and missing snapshots, and adds pending rows.
 Discovery-source hashes are deliberately not operative-body hashes.
 
-## Current source and encoding pins
+## Current source pin and encoding history
 
-The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-bmf-context`
-from merge `6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5`, content SHA-256
-`a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e`.
-Its 8,206 rows in 24 scopes preserve the preceding frontier, civil and parentage
-captures. Publication 34293466751 and mirror 34293798326 succeeded; the
+The consumer binds corpus release `de-rulespec-2026-09-09-kindergeld-eu-articles`
+from merge `5f00c6f11f2d1924aa721b903395d6d9db0e21cd`, content SHA-256
+`a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20`.
+Its 8,236 rows in 29 scopes preserve the preceding frontier, civil, parentage,
+bilateral and Swiss captures and add eight complete EU article units.
+Publication 34310484192 and mirror 34310871440 succeeded; the
 signature verifies and the anonymous mirror is byte-identical. The retained
 BT-Drs.20/12778 excerpt retains PDF pages 1 and 64 and is expressly a draft
 explanatory memorandum, not enacted law. Its combined-allowance explanation
