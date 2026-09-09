@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 293 of 769 instruments
+other closure artifact. The current frontier has 291 of 769 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -308,9 +308,9 @@ citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
 The SHA-bound class snapshot contains 228 entries. With the committed dispositions,
-220 members remain pending, five captured members are bearing, two captured members
-are non-bearing (the transfer letter and BFH file-access decision), and one
-country-group letter is expressly superseded for 2025.
+218 members remain pending, five captured members are bearing, and five entries
+are non-bearing or structural: the transfer letter, BFH file-access decision,
+misdated BFH duplicate, combined BFH citation, and superseded country-group letter.
 The transfer letter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
@@ -338,13 +338,13 @@ The SGB VII discovery reference now resolves to the complete act; its historic
 and retain their original release identities. Eight article-level EU coordination
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
-uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 109 citation-only seeds and
-111 receipted instruments. The 2023 country-group letter remains citation-only
+uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 108 citation-only seeds and
+110 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 293 of 769 instruments pending, 132 open
+rows pending. Current result: 291 of 769 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -534,3 +534,10 @@ The MiLoV5 prerequisite starts in 2026 and has no 2025 version. Its declaration 
 The threshold release adds a complete, independently captured historical SGB IV §8(1a) paragraph from the unchanged official DRV HTML. All 40 preceding scopes remain. The new paragraph is receipted source text; its numerical threshold has not yet been declared as an encoded module.
 
 The complete BFH decision III R 59/19 (3 November 2020) is dispositioned as non-bearing after review of all sixteen paragraphs. It concerns discretionary file access and litigation costs, consistent with the existing DA-KG V9 procedural exclusion; it does not determine a child entitlement or amount. Its exact corpus-body hash is recorded in the committed decision. This individual disposition does not resolve the separate BStBl II publication verification or exhaustive class-discovery requirement.
+
+The misdated III R 21/12 seed and the correctly dated 8 May 2014 seed bind the same
+complete official body. The former is recorded as a duplicate; the correctly dated
+member remains pending. The combined III R 10/11 / III R 63/11 citation is a
+container for the two separately captured decisions, whose individual rows remain
+pending. These structural dispositions neither close their legal interpretations
+nor establish BStBl II issue/page membership.

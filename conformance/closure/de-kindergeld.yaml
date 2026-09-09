@@ -12908,6 +12908,11 @@ committed_decisions:
     reason: Read paragraphs 1–17. Paragraphs 1–14 allocate the EStG32(6) sentences6–11 tax allowances between parents, stepparents and grandparents (including the75percent maintenance test and objections); paragraphs15–16 allocate a child’s section33b lump sum to parents; paragraph17 starts assessment-year2012 application. These allocation rules do not change the section32(6) sentence1 statutory allowance amounts used by EStG66(3), the section32(1)–(5) qualifying-child tests, or section64 Kindergeld recipient priority. Paragraph15 makes existing Kindergeld entitlement a condition of downstream lump-sum transfer, not vice versa. The allocated parental lump sum does not define the child’s own disability needs. No computable rule upstream of this monthly Kindergeld surface is added; this does not exclude other BMF letters or section33b need amounts. Official corpus body de/guidance/esth-2024/bmf-2013-06-28-child-allowance-transfer/inhalt, SHA-256 7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e,
       release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-2bc27aa817f87a52
+    status: classified-with-reason
+    classification: duplicate_discovery_reference
+    reason: The seed says 8 November 2014, III R 21/12, but the complete official decision header says 8 May 2014, III R 21/12. This row and de-kg-discovery-b41c8a1be86eb5c2 bind the identical corpus body de/guidance/bfh-iii-r-21-12-2014-05-08/document-1, SHA-256 0a415c2dd2ac667797c358fdf1113a271bdae2517ba22b7313379d9976042022, in the receipted BFH release at 4a225368e171b193d02590e7dd1866792174c705. This is a duplicate discovery reference with a date discrepancy, not a second judgment or an exclusion of the residence interpretation. The correctly dated member remains pending and carries the entire decision. Its BStBl II issue/page membership and legal encoding remain open. Preserve the misdated seed as discovery provenance without counting a second operative instrument.
+    bears_on_computed_surface: false
   - id: de-kg-discovery-3296221dbf2fd2a2
     status: excluded-with-reason
     classification: expressly_superseded_for_2025
@@ -12941,6 +12946,11 @@ committed_decisions:
     reason: The complete BMF17January2014 letter is receipted at de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt, body SHA-25607a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c, in release de-rulespec-2026-09-09-kindergeld-treaty-texts at27510ad32be7e2111c20f3a7dd41a2ae40310c17. Its opening expressly applies EStG2(8), equating civil partners and spouses. The pinned EStG2(8) applies that equivalence across the Act; EStG63(1) sentence1 number2 and EStG64(2) sentence2 refer to spouses. This bridge therefore remains bearing on qualifying_child_count and recipient_priority until EStG2(8), the relevant civil-partnership status rules and the63/64 selection rules are encoded and composed. The remaining letter sections concern allocation, doubling and transfer of personal tax allowances, and its application paragraph addresses non-final income-tax assessments. In particular, the letter's statement that an unadopted child has a parent-child relationship only to its biological
       parent must not be misread as excluding the household child of a civil partner from EStG63. This is a conservative bearing disposition, not an encoded rule or a claim that the letter defines a separate Kindergeld amount.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-ded3b056040a529c
+    status: classified-with-reason
+    classification: compound_discovery_container
+    reason: 'The SHA-bound DA-KG seed cites two distinct decisions of 13 June 2013: III R 10/11 and III R 63/11. It is a combined citation, not a third decision. Its complete member set is retained as de-kg-discovery-c2042f69f19b6bdc (III R 10/11, corpus body de/guidance/bfh-iii-r-10-11-2013-06-13/document-1, SHA-256 3c955d5bc78494d693f931691eecfade5316942fe4ce20bd4e586696eb009393) and de-kg-discovery-433dc05c4b6592e2 (III R 63/11, corpus body de/guidance/bfh-iii-r-63-11-2013-06-13/document-1, SHA-256 972eeee693cd85419d8b50a673d31cc3af2ba2ab99d73e25f061bb7cd35c6bb4). Both official headers confirm the individual case numbers and date; both bodies are receipted at corpus commit 4a225368e171b193d02590e7dd1866792174c705. Both individual members remain pending, including their foreign-benefit interpretation and BStBl II issue/page verification. This disposition removes only double counting of their citation container; no substantive rule is declared non-bearing.'
+    bears_on_computed_surface: false
   - id: de-kg-discovery-e90973e7e66e0913
     status: classified-with-reason
     classification: country_group_income_thresholds
@@ -14084,9 +14094,9 @@ computed:
     counts:
       total: 769
       encoded: 2
-      classified-with-reason: 133
+      classified-with-reason: 135
       excluded-with-reason: 341
-      pending: 293
+      pending: 291
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14120,7 +14130,6 @@ computed:
     - de-kg-discovery-27defff615b684da
     - de-kg-discovery-289b0e7c3d8d6b13
     - de-kg-discovery-292ea49b00653bed
-    - de-kg-discovery-2bc27aa817f87a52
     - de-kg-discovery-2cc6ce9a628d09b1
     - de-kg-discovery-2d6286809c5f1a19
     - de-kg-discovery-2e35ab29f2750a4c
@@ -14278,7 +14287,6 @@ computed:
     - de-kg-discovery-dc867c1deb47738a
     - de-kg-discovery-dddc7d9e98dca509
     - de-kg-discovery-dea62e69a11f31da
-    - de-kg-discovery-ded3b056040a529c
     - de-kg-discovery-def3fd7aa3abe640
     - de-kg-discovery-dfa116e637bf386a
     - de-kg-discovery-e0b5f3f789fcd50d
@@ -21843,7 +21851,7 @@ computed:
       discovery_source_sha256: c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5
       discovery_excerpt: Abkommen vom 12. Oktober 1968 zwischen der Bundesrepublik Deutschland und der Sozialistischen Föderativen Republik Jugoslawien über Arbeitslosenversicherung
     - id: de-kg-discovery-2bc27aa817f87a52
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 08.11.2014, III R 21/12, BStBl II 2015 S. 135
       discovery_refs:
@@ -21851,6 +21859,9 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 08.11.2014, III R 21/12, BStBl II 2015 S. 135
+      classification: duplicate_discovery_reference
+      reason: The seed says 8 November 2014, III R 21/12, but the complete official decision header says 8 May 2014, III R 21/12. This row and de-kg-discovery-b41c8a1be86eb5c2 bind the identical corpus body de/guidance/bfh-iii-r-21-12-2014-05-08/document-1, SHA-256 0a415c2dd2ac667797c358fdf1113a271bdae2517ba22b7313379d9976042022, in the receipted BFH release at 4a225368e171b193d02590e7dd1866792174c705. This is a duplicate discovery reference with a date discrepancy, not a second judgment or an exclusion of the residence interpretation. The correctly dated member remains pending and carries the entire decision. Its BStBl II issue/page membership and legal encoding remain open. Preserve the misdated seed as discovery provenance without counting a second operative instrument.
+      bears_on_computed_surface: false
     - id: de-kg-discovery-2cc6ce9a628d09b1
       status: pending
       identity_kind: class_member
@@ -23340,7 +23351,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 12.08.1997, VII R 107/96, BStBl II 1998 S. 131
     - id: de-kg-discovery-ded3b056040a529c
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 13.06.2013, III R 10/11 und III R 63/11, BStBl II 2014 S. 706
       discovery_refs:
@@ -23348,6 +23359,9 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 13.06.2013, III R 10/11 und III R 63/11, BStBl II 2014 S. 706
+      classification: compound_discovery_container
+      reason: 'The SHA-bound DA-KG seed cites two distinct decisions of 13 June 2013: III R 10/11 and III R 63/11. It is a combined citation, not a third decision. Its complete member set is retained as de-kg-discovery-c2042f69f19b6bdc (III R 10/11, corpus body de/guidance/bfh-iii-r-10-11-2013-06-13/document-1, SHA-256 3c955d5bc78494d693f931691eecfade5316942fe4ce20bd4e586696eb009393) and de-kg-discovery-433dc05c4b6592e2 (III R 63/11, corpus body de/guidance/bfh-iii-r-63-11-2013-06-13/document-1, SHA-256 972eeee693cd85419d8b50a673d31cc3af2ba2ab99d73e25f061bb7cd35c6bb4). Both official headers confirm the individual case numbers and date; both bodies are receipted at corpus commit 4a225368e171b193d02590e7dd1866792174c705. Both individual members remain pending, including their foreign-benefit interpretation and BStBl II issue/page verification. This disposition removes only double counting of their citation container; no substantive rule is declared non-bearing.'
+      bears_on_computed_surface: false
     - id: de-kg-discovery-def3fd7aa3abe640
       status: pending
       identity_kind: class_member
