@@ -566,3 +566,10 @@ the §74 spine and DA-KG V34.1. Both complete texts support non-bearing
 dispositions of their discovery and corpus parent identities; this does not
 exclude a new entitlement or amount surface. Reasons bind the exact corpus
 body hashes and preserve outstanding BStBl II enumeration verification.
+
+The certificate distinguishes declared-source resolution from full-spine
+disposition: `declared_sources_closed` reports resolution of the declared
+module subset, while `spine_closed` is derived from the validated provision
+ledger. Kindergeld therefore has `declared_sources_closed: true` and
+`spine_closed: false` with five pending provisions. Source resolution cannot
+substitute for the governing-act denominator or change the overall closure gate.

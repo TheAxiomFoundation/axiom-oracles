@@ -3930,6 +3930,11 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["dependency_closure"]["closed"] is False
     assert closed["dependency_closure"]["open_dependency_count"] == 132
     assert closed["dependency_closure"]["unclassified_inputs"] == []
+    # Resolving all declared roots does not close the governing-act spine.
+    assert closed["declared_sources_closed"] is True
+    assert closed["provision_counts"]["pending"] == 5
+    assert closed["spine_closed"] is False
+    assert closed["spine_closed_claim_mode"] == "computed"
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0

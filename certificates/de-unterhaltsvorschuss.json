@@ -274,6 +274,8 @@
           "state": "encoded"
         }
       ],
+      "declared_sources_closed": false,
+      "declared_sources_closed_claim_mode": "computed",
       "dependency_closure": {
         "closed": false,
         "instruments_bearing_on_computed": [

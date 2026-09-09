@@ -1003,6 +1003,8 @@
           "state": "encoded"
         }
       ],
+      "declared_sources_closed": true,
+      "declared_sources_closed_claim_mode": "computed",
       "dependency_closure": {
         "closed": false,
         "instruments_bearing_on_computed": [
@@ -1502,7 +1504,7 @@
         "subgraph_sha256": "a14da1e832f0f80a6ebe71c5e7f2b384750cce6bc3178ef9f94b5f7a9419a8c9",
         "subgraph_sha256_claim_mode": "computed"
       },
-      "spine_closed": true,
+      "spine_closed": false,
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
