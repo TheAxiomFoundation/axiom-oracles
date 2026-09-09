@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
-  "corpus_release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
+  "corpus_commit": "5f00c6f11f2d1924aa721b903395d6d9db0e21cd",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
+  "corpus_release_content_sha256": "a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -178,7 +178,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "f709b5a5813c98c78cfc5180d7037b31ce6b448297621dbd185e0b94fb20f824",
+      "subgraph_sha256": "3f41e306fdb1a9cc6527f1d9fa2d786a1de663e74cb5d615c640cc156d809f06",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -262,7 +262,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "0f94fc5373793eeaeee33c45e52fa987f0c24614e2483aa26be1de50f9874857",
+      "subgraph_sha256": "09778f070a94aaab51646de1c0871fd23dbefc8eee1c9b060bbee2c365fffcfb",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -345,7 +345,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "eb240ba3c50b416484466fc8b1d3aa3bda5eea9676e4a8eeb48d63f87cc280ee",
+      "subgraph_sha256": "0f66c7fdfaa7b82262a9993b7fb97f2c9c4fccf2997475ecf039c1297509115a",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -368,7 +368,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62"
+    "sha256": "b8adcd9fc7ef98b9b07b095ed0b3f1fc033524229b163eee7554192037ea2c79"
   },
   "spine_closed": false
 }

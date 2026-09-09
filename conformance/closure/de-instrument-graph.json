@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-09T04:00:12Z",
+  "generated_at": "2026-09-09T04:27:56Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "cb8ae24d75abff21fd57afed5f07448bef65c2f289ddbb4b0fd1b762bcdf0c62"
+    "sha256": "b8adcd9fc7ef98b9b07b095ed0b3f1fc033524229b163eee7554192037ea2c79"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
-      "commit": "495236ce303398c8cea3d1d8f1e5fdcda5b09488",
-      "release_content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77",
+      "release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
+      "commit": "5f00c6f11f2d1924aa721b903395d6d9db0e21cd",
+      "release_content_sha256": "a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-09-kindergeld-swiss-coordination/1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77.json",
-        "raw_sha256": "4ed9c80c03f25e11c2cd8e445df02a807f8f45342b0fb0f6b89639b2d3c53d0d",
-        "content_sha256": "1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77"
+        "path": "releases/de-rulespec-2026-09-09-kindergeld-eu-articles/a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20.json",
+        "raw_sha256": "f9931532216c80cfb913a3612132763d5763bdea6b2c6cf6a6b782cc10619990",
+        "content_sha256": "a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20"
       },
       "scans": [
         {
@@ -233,6 +233,19 @@
         {
           "document_class": "regulation",
           "inventory": {
+            "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-eu-articles.json",
+            "sha256": "9729eadd40744a601ab59b5301ac78969f50dca89254f9fba106ad2ed98a7691",
+            "row_count": 16
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl",
+            "sha256": "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
+            "row_count": 16
+          }
+        },
+        {
+          "document_class": "regulation",
+          "inventory": {
             "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json",
             "sha256": "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
             "row_count": 4
@@ -387,23 +400,23 @@
           }
         }
       ],
-      "scanned_row_count": 8220,
+      "scanned_row_count": 8236,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 8220,
-        "body_row_count": 8147,
-        "mapped_row_count": 8220,
+        "row_count": 8236,
+        "body_row_count": 8155,
+        "mapped_row_count": 8236,
         "unmapped_row_count": 0,
-        "act_count": 102,
+        "act_count": 110,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 5316,
+          "explicit_cross_reference_body": 5320,
           "law_metadata_changed_by": 24,
           "law_metadata_fundstelle": 31
         },
-        "row_scan_sha256": "3fbf01d00c537661f2462d18250a3da134b481f0059d916c6f1f2eaa33785976",
-        "canonical_index_sha256": "e0cee8dde73adcf476a6ffe55243ef227f7350b0f82323f03cadf88d884c32cd",
-        "per_act_sha256": "2c37ab41473a21728472e7ec70d668c78568dd96ec6162810718afbd8d979a77",
+        "row_scan_sha256": "5543207489e1075af3898eb538d2179f314e2b48407aa8de2f0d676828b4e6e5",
+        "canonical_index_sha256": "8fd281ff03bd7319674e96aa6675f8f90117250176a29b3e5467b4336eca9ddf",
+        "per_act_sha256": "5d44dd23189b205b0dd87f463f85a9c7762040183ff16d75d19e19a1985ccf15",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -4929,6 +4942,80 @@
             ]
           },
           {
+            "document_citation_path": "de/regulation/eu-883-2004/article-1-z",
+            "document_row_sha256": "34eafb43cdc749a8305f1ab298ee73e176a0ea25d436a254be71b28ca4a8af46",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/regulation/eu-883-2004/article-2",
+            "document_row_sha256": "4804ca0e7b6446d075b03f59c19c6ffee52775c40819836e5eae493b1d7513f4",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/regulation/eu-883-2004/article-3",
+            "document_row_sha256": "e5fdd09259cb4de80888d1560f3b0ba7ad2ff41d97a8c3a3f52015a4117469f8",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/regulation/eu-883-2004/article-67",
+            "document_row_sha256": "ace92172d042159126e2271fba585ec860e3a581fb595a0d415ee2e69ea26918",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/regulation/eu-883-2004/article-68",
+            "document_row_sha256": "ff4eb6756da0c27b402ea846cd60e58661f4eb82e05cdc6695f910e5c5a83a88",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "ab5df4e50c4c21525297532e8d5a7cf6053fa9b41411eac66e366d461b82600f",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/regulation/eu-883-2004/article-68/document-1",
+                "source_body_sha256": "7313670ac5c0b7a9e3ac9bac05caf0546e81b0962b981002bd4571326eb5edb8",
+                "source_row_sha256": "b7b636487204f1da35181375ddeb7b927e4b4106a9314bad28837c28690360dc",
+                "matched_text": "Durchführungsverordnung",
+                "unresolved_identity": "named-instrument:durchführungsverordnung"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/regulation/eu-987-2009",
             "document_row_sha256": "5d80e61bb2c88f29ea6eeaf031f74199ad49ee6ef7f487655f1445f4e47b4d25",
             "row_count": 2,
@@ -5028,6 +5115,71 @@
                 "source_row_sha256": "6bdf7e5c373be012e2f27406ef502b8926a84fa8a0eb76aba8254118a10b3cee",
                 "matched_text": "Verordnung (EU) Nr. 465/2012",
                 "unresolved_identity": "eu-regulation:verordnung (eu) nr. 465/2012"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/regulation/eu-987-2009/article-58",
+            "document_row_sha256": "22791a87feeb1ae896d7a925f03ff26e1b5204eb81c59c3511bb66b4fc06e389",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "0c00a47499fed461c27009589751c4b55417e4985b60fc4422b33ee77d3a6d9c",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/regulation/eu-987-2009/article-58/document-1",
+                "source_body_sha256": "7914e8d3b0c9d486ad4d702081be1389dc5eedd12f1422479f09109529e90b25",
+                "source_row_sha256": "27e5d370bb7d11a1bf3a8894e857a0c3e1850a56d1a0a8565282786f96f7e782",
+                "matched_text": "Grundverordnung",
+                "unresolved_identity": "named-instrument:grundverordnung"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/regulation/eu-987-2009/article-59",
+            "document_row_sha256": "8093500ea1669003a0324ccff6e1d8290c214144b909281d6fd76d258300e1aa",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/regulation/eu-987-2009/article-60",
+            "document_row_sha256": "13916d77c0ea058e3cbcba46167cfc1ca04a9f914e5312b4d74dca33c7b5eadb",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "3af8289cdbdf8659e250747fb2b8cb3c8fb4dc28ec431d5d8b4cfea5cf92c2d1",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/regulation/eu-987-2009/article-60/document-1",
+                "source_body_sha256": "da247a81b89332cc175f830e1e4352fdb3dd47011939ec19c6bf36f83c8be4f2",
+                "source_row_sha256": "24a48559ce15732c038bc4e9af2a9d48c69b0f2bbd902d96150cbe3e825a5fe2",
+                "matched_text": "Durchführungsverordnung",
+                "unresolved_identity": "named-instrument:durchführungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/regulation/eu-987-2009/article-60/document-1",
+                "source_body_sha256": "da247a81b89332cc175f830e1e4352fdb3dd47011939ec19c6bf36f83c8be4f2",
+                "source_row_sha256": "24a48559ce15732c038bc4e9af2a9d48c69b0f2bbd902d96150cbe3e825a5fe2",
+                "matched_text": "Grundverordnung",
+                "unresolved_identity": "named-instrument:grundverordnung"
               }
             ]
           },
@@ -46347,7 +46499,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "def7d6fc4f3f6c1981c03c8757a426ecd1ce611d9031c58719a749087ac5cf09"
+        "receipt_sha256": "29d197b6801cfb8eb0b05575048bf15cdac905da20c4f942e97bc6da1e77e2bd"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -47412,7 +47564,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "3b62cdc84d355d2a7b24922a7e3a2d7de869c10e527b94c84b502a5a1efe3c2c"
+      "receipt_sha256": "0fd947b6a49cc9979d173c619ce5f7072d3e2bcf74a9fa6e0b8453723bf8e28c"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -47428,10 +47580,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "7a1af40451b53be3cec6062e028ba09381d268f45e5967b2ac36e46b30947180"
+          "receipt_sha256": "755fea23df534d697f5106b4a3ec57234d7564295b668edd2586aad595304f70"
         },
         {
           "id": "de-subject-002",
@@ -47441,14 +47593,14 @@
           "source_id": "bzst",
           "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "0b778ec79ffb3d431644700efde610b5e23beb1275b3fd45e4fb12f73aa0749e"
+          "receipt_sha256": "661d9f853a32b1288d767b1df14fc6bbdc57db4d798e61294cd4b4655d12bbc7"
         },
         {
           "id": "de-subject-003",
@@ -47458,14 +47610,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "cf1156d043a6ebf9a2d2e877272fac8dcfa71c97ec61d0629e5403051895ad45"
+          "receipt_sha256": "c2311b62cc03a5214e4f0a8c2bf32cd582067d1a870900b240944bdf6c631dc1"
         },
         {
           "id": "de-subject-004",
@@ -47475,14 +47627,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=4fb3ab32-7eee-4404-bd83-c10fc438765a&ssb=83849272664&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=ac1438a3-ca3f-4004-81af-834dff5f1a88&ssk=botmanager_support@radware.com&ssm=13939566632342258103894527038711&ssn=41c51a93c8b5e0e54f6979ef6666db10042d68d05747-dca1-4c71-a87f14&sso=da65575b-c88320cd9f96ac523b227935c484829351bc8b237eae9ea8&ssp=22955001461788920602178893753381344&ssq=52662652649200049811626492694412515743233&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJ1em14IjoiN2ZjMDAwNzNiZTM3N2UtMTg5OS00NTg1LWIzNWEtYWQwMjczOWQ0YjhhMS0xNzg4OTI2NDkyODE2MC0wMDQ0MzhkNmI4NzIxNWM0ODUyMTAiLCJfX3V6bWYiOiI3ZjkwMDA2OGQwNTc0Ny1kY2ExLTRjNzEtYTc1Yi1jODgzMjBjZDlmOTYxLTE3ODg5MjY0OTI4MTYwLTAwNDZmZTkwMDY1MjE5OWJlNzMxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
+          "final_url": "https://validate.perfdrive.com/?ssa=c97d6a25-ff9f-4a6f-8e74-690a57e21f90&ssb=90256269770&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=7df97439-ca3f-4d9f-9d04-a3d3219c4529&ssk=botmanager_support@radware.com&ssm=60470871857491409106550123318953&ssn=66dd521d95f298cd65bfa8bfe6d1ae6a82820c15f12c-1f30-4364-a9315b&sso=432ae293-f089bd0f0a0d594c5009fe3c260c3d9e56a12253bdd99d7f&ssp=70404302941788948338178893327387711&ssq=67293842815605435674728156786171324228832&ssr=NzcuMTEuMTkuMTg3&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwidXpteCI6IjdmYzAwMDMzMjEyMWZiLTVkNzYtNDFjMi1iYTQ3LTcwOWY2ZmUwODc3MzEtMTc4ODkyODE1Njk3MTAtMDA0YTNlZmQ5YzgyMjM2ZGJlZjEwIiwiX191em1mIjoiN2Y5MDAwMGMxNWYxMmMtMWYzMC00MzY0LWEyOTMtZjA4OWJkMGYwYTBkMS0xNzg4OTI4MTU2OTcxMC0wMDQ4ZWEyODA3NWYzMjg2NmY5MTAifQ==",
           "http_status": 200,
           "content_type": "text/html; charset=UTF-8",
           "byte_count": 15113,
-          "content_sha256": "80beb5e346bf088fb4c5949abc29a70995c7cad1bab11e3a0c7ca0a5369c511c",
-          "receipt_sha256": "981680d09e53217f8f1420312d91c4672c69aef0916b0da565dae3ff2bb786de"
+          "content_sha256": "2957c344a3af9e18401a57b76a76f5cb8be55fe0e2d36d1006e3fdcc7631c4be",
+          "receipt_sha256": "107374a133ecad6c82dcb5e27376192dcaf417f56c249f946ea463561f77a540"
         },
         {
           "id": "de-subject-005",
@@ -47493,14 +47645,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "13c1e44d3ea8ce7e77ebd21389e23f441ce83eed08d838a9c47d6469e6bfab7a"
+          "receipt_sha256": "3699ac72c03ec98407dc9f42cd5c25e1b2bbf90c0cb9fb6f68245863c2ade35f"
         },
         {
           "id": "de-subject-006",
@@ -47510,14 +47662,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "228c7341fc68441fc11187b21b4ffaa42e2353fb4d0ba2ddb6bba7cc80c338c2"
+          "receipt_sha256": "49a35f7385397cb12414a404f84b988223c9f166800ee01639e8e65afc358938"
         },
         {
           "id": "de-subject-007",
@@ -47527,14 +47679,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "2e89573043bd8f49baded15c9f2c6afe1e477e675c14ca77c9a4149c08f500ee"
+          "receipt_sha256": "eae254207811d971685f8e07c810fd195b193ad855976378e4e7465498293c67"
         },
         {
           "id": "de-subject-008",
@@ -47544,10 +47696,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "2c35eb5191ca84cf96c327d392ac625539e423953948b22edaa6ea5f68d40baf"
+          "receipt_sha256": "7226b1353161ea1a6939ee13d1633b2ce1520ecdf68d565e9c22721d9a2270d5"
         },
         {
           "id": "de-subject-009",
@@ -47557,14 +47709,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "d8ddd292860ab768896c2c0d73ae07c02b799fa7dfe74db3551466a0c045b7f4"
+          "receipt_sha256": "96bd4d8d7a0c24380e7b13c4fbb8f04cf9674004b3e371388392280449700b67"
         },
         {
           "id": "de-subject-010",
@@ -47574,14 +47726,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "c7e1d0c4df161bae942cc360b3ac2971aa4de8790c2e8e2900667c5b29cd97f0",
-          "receipt_sha256": "b17ba1b984850601cc34fff83e506d2eb0b09651cec97893ed2b00ee30309b5a"
+          "receipt_sha256": "15f5044a4cf73ca767a0b99b5cd211f8c4653dc10386e3b72713327e456a02d1"
         },
         {
           "id": "de-subject-011",
@@ -47591,14 +47743,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "203747bb9fc506e806e30bd11ef6fbdb6aed44264df0fd44153d4637f5bd6db5",
-          "receipt_sha256": "2b80ad9673a15adaeb81b564133684d628ac1b49f9c3d33214c62aaf09975701"
+          "receipt_sha256": "3a1a89778ccaf956598739f45561319b355d71b38f9a9bbf665924f691afcec8"
         },
         {
           "id": "de-subject-012",
@@ -47608,10 +47760,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "f97961647300d793028f6b212c1dbcd4e991fe7cd5cdb32fea9a6e37e4b5f0af"
+          "receipt_sha256": "31d7f244887ae466dcda1717b737bae5955fe0f31c1e9a3006cdfb8bdea3cc96"
         },
         {
           "id": "de-subject-013",
@@ -47621,14 +47773,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "1c187cf4da3b4080730fc84f2ff4a43a19849959bc90edf15559b74b41939f5f"
+          "receipt_sha256": "313e3c93a407cdc4674fa60a40216129c3101d83a2eb92917c47c53b44b5ae58"
         },
         {
           "id": "de-subject-014",
@@ -47638,14 +47790,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "40b416801cb88c43a32095bf63c64cb42e8c81d27a6fea2b258d2832a6b19bbc",
-          "receipt_sha256": "afe37e88c48be9b788374144d9b7d51310f1fc95d26bf326af4f1908c9f71453"
+          "receipt_sha256": "2bab6efd0385df07c73980fe8eaefd91de5aa6f0987f11208060bd3d666572a5"
         },
         {
           "id": "de-subject-015",
@@ -47655,13 +47807,13 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-09T04:00:12Z",
+          "captured_at": "2026-09-09T04:27:56Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "1aaf5c163195030e0f0951a3ed49e36e0536e11e9fa8272855d5e4830f6b2ca3"
+          "receipt_sha256": "36912c9a7b140e335b41bc258c082d0a12646f612a4f4201bf8bc8acef4b6d70"
         }
       ],
-      "receipt_sha256": "120bac06a209f246f6738b8784a2f8196f3030fc9fe02f75291477eae834e0ea"
+      "receipt_sha256": "4cffe64ae4f02cebe4dd0542b3abbf059955145e5df72cc00c91f6ffe024af75"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -48228,8 +48380,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "3b62cdc84d355d2a7b24922a7e3a2d7de869c10e527b94c84b502a5a1efe3c2c",
-            "subject_matter_search": "120bac06a209f246f6738b8784a2f8196f3030fc9fe02f75291477eae834e0ea",
+            "corpus_release": "0fd947b6a49cc9979d173c619ce5f7072d3e2bcf74a9fa6e0b8453723bf8e28c",
+            "subject_matter_search": "4cffe64ae4f02cebe4dd0542b3abbf059955145e5df72cc00c91f6ffe024af75",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -48724,5 +48876,5 @@
       ]
     }
   ],
-  "receipt_sha256": "a118c0e01bfe46ae84433109b718acb4c1db9eaad4bf8383518c6bce7cb481e9"
+  "receipt_sha256": "d4beef8d6ac3ed48022ceee02d04b652bac7442069cfbb1d05b191cf72ee5ec9"
 }

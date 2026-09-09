@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "e8bf2ceba0c3915513667950106008705f1c7b0a1cea42ea475747dbd7bc4394"
+      "sha256": "57189d75ba5496392728d8a3cfa5720b3818d15f731a1eb612bd84f3e67d22ab"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "867b58450f5bb73cbfbfd7dc19a4d46277dac7e973ab3a5f3f87742d31c6df12",
+      "sha256": "195f14d3486c2901f06aaaf9192e39a6cec3b1b58aed6ea78f06e13decf7b58c",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "736c0bce153be25fe4543d20576ccf601ffe49ae05d51a3b24d4d1e64316254a"
+      "sha256": "7ff0c792d87a9ec9de7dc003f3fb28344c97fd4907bb35ba18e2febe303aaeb1"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -359,7 +359,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "eb240ba3c50b416484466fc8b1d3aa3bda5eea9676e4a8eeb48d63f87cc280ee",
+      "subgraph_sha256": "0f66c7fdfaa7b82262a9993b7fb97f2c9c4fccf2997475ecf039c1297509115a",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

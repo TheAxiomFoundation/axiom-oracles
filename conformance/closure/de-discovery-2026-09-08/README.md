@@ -84,14 +84,14 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 224 pending
-instruments out of 696. Dependency closure remains false: eight law-derived
-inputs and 125 bearing instruments remain open, with no unclassified inputs.
-The eight birth-record and date inputs are committed world facts; engine-supplied query
+The regenerated ledger has 5 pending spine rows out of 18 and 226 pending
+instruments out of 698. Dependency closure remains false: eight law-derived
+inputs and 124 bearing instruments remain open, with no unclassified inputs.
+The thirteen birth/payment-record and date inputs are committed world facts; engine-supplied query
 boundaries are not external inputs. The additional KindRG evidence candidate
 remains pending until its precise legal disposition is established.
 
-The 224 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
+The 226 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
 registers, verify case identities and BStBl II publication, reconcile duplicate
 identities, capture operative texts, and encode every bearing rule. All four
 class rows remain pending. No complete discovery or certified claim is made.
@@ -158,3 +158,21 @@ The treaty-text release `de-rulespec-2026-09-09-kindergeld-treaty-texts` is publ
 The complete Morocco 1981 treaty and 1991 supplement share their retained 1995 approval publication; Tunisia's 1991 treaty has its separate publication. Two notices establish treaty commencement on 1 August 1996. Their texts and the recovered BMF 17 January 2014 civil-partner letter now replace citation-only discovery for those members. The Morocco supplement's age change from 18 to 16 was visually checked. The treaty captures remain pending legal disposition and encoding; historical DM rates must not be silently treated as current euro amounts. The 22 DVKA captures remain publisher extracts. Discovery completeness is still false.
 
 The 2014 civil-partner letter is now a bearing dependency: its opening restates EStG §2(8), which applies the spouse references in §§63 and64 to civil partners. The bridge and civil-status conditions remain unencoded. Its personal tax-allowance allocation rules must not be misread as excluding an unadopted civil partner's household child under §63.
+
+## A 30 amount restatement
+
+A 30 is bound to the signed EStG §66 module for the 2025 certificate period.
+Its 2025 column gives EUR 255 for every child, matching
+`de:statutes/estg/66#monthly_kindergeld_per_child`. The table and footnote were
+visually checked on PDF page 78. The footnote expressly ends the
+Zählkindvorteil from 01.01.2023 because all children receive the same amount.
+Its 2021/2022 tiered rates and bonuses and 2023/2024 column are historical
+values outside this certificate period. Birth order cannot change the uniform
+2025 per-child rate; it does not make another recipient's child eligible for
+this claimant. The signed parameter carries amendment and commencement proofs
+and executable 2025 fixtures.
+
+This disposition binds the current amount restatement. Eligibility, priority,
+treaty rates, A 31 monthly switching and EU differentials remain separate open
+dependencies. A 30 does not supply the 2026 rate; that version has its own
+statutory proof in §66. No certificate claim follows.

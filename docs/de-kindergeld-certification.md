@@ -7,8 +7,8 @@ replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
 other closure artifact. The current frontier has 226 of 698 instruments
-pending, and dependency closure has 133 open dependencies: eight law-derived
-inputs and 125 bearing instruments, with no unclassified inputs. The signed
+pending, and dependency closure has 132 open dependencies: eight law-derived
+inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites and EStG §78 record helpers are declared at RuleSpec merge
 `25fe6cb5be81f6187ab2ba37e918165ae8e58cf5`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
@@ -318,15 +318,18 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-swiss-coordination` release at commit
-`495236ce303398c8cea3d1d8f1e5fdcda5b09488`, content SHA-256
-`1a6201bd7521952f52bcce2261a6b1a5cf15e30b145d7daba189cfe1b7fe1f77`
-(8,220 rows, 28 scopes). The earlier supplemental receipts remain valid
-and retain their original release identities. The snapshot has 190 citation-only and
+`de-rulespec-2026-09-09-kindergeld-eu-articles` release at commit
+`5f00c6f11f2d1924aa721b903395d6d9db0e21cd`, content SHA-256
+`a2c37b8785ff517c496a5041bb70e4dcd32f2dd83467c1c671b639588e0afb20`
+(8,236 rows, 29 scopes). The earlier supplemental receipts remain valid
+and retain their original release identities. Eight article-level EU coordination
+captures supplement the complete regulation bodies without creating eight new
+instrument identities. DA-KG A30 is now bound to the signed §66 module for its
+uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The snapshot has 190 citation-only and
 30 receipted pending members. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 226 of 698 instruments pending, 133 open
-dependencies (eight law-derived inputs, 125 bearing instruments, no unclassified
+rows pending. Current result: 226 of 698 instruments pending, 132 open
+dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 ## Reads log

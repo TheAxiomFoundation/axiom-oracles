@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "e8bf2ceba0c3915513667950106008705f1c7b0a1cea42ea475747dbd7bc4394"
+      "sha256": "57189d75ba5496392728d8a3cfa5720b3818d15f731a1eb612bd84f3e67d22ab"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "7d0819674badbdb89e32d332dd1c6b80306478f167938a976a53ce2111da787d",
+      "sha256": "dff4fe430099a0de0d6adc5db0789ba25cb918cd5802ea21e27bcf0a2cbe756f",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "736c0bce153be25fe4543d20576ccf601ffe49ae05d51a3b24d4d1e64316254a"
+      "sha256": "7ff0c792d87a9ec9de7dc003f3fb28344c97fd4907bb35ba18e2febe303aaeb1"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-swiss-coordination",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-eu-articles",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -233,7 +233,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "0f94fc5373793eeaeee33c45e52fa987f0c24614e2483aa26be1de50f9874857",
+      "subgraph_sha256": "09778f070a94aaab51646de1c0871fd23dbefc8eee1c9b060bbee2c365fffcfb",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
