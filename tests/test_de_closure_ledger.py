@@ -1412,7 +1412,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 522 + 17 + 228
+    assert frontier["instrument_count"] == 523 + 17 + 228
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
