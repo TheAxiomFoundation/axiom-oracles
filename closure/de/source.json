@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "629bd6dfa7f75b5c4040a0047425fa0294c512ff",
-    "release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
-    "release_content_sha256": "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904",
-    "release_selector_sha256": "27a7a2058e3f56c57fa9c7e1a92bc08dc29d2b2c0a8e9e1cbba75f0549771074",
+    "commit": "9bc4f5f0afad97e8edc9834609a53a56435d0509",
+    "release": "de-rulespec-2026-09-09-kindergeld-threshold",
+    "release_content_sha256": "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162",
+    "release_selector_sha256": "751e5c7e7aa9cb97dbe1f38b4dca183f3482fd6f24cdf3fcf97587aa6c341212",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -210,6 +210,11 @@
         "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json",
         "sha256": "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
         "row_count": 32
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json",
+        "sha256": "2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54",
+        "row_count": 2
       },
       {
         "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
@@ -412,6 +417,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl",
         "sha256": "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
         "row_count": 32
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl",
+        "sha256": "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
+        "row_count": 2
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",

@@ -321,10 +321,10 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-09-kindergeld-marginal-employment` release at commit
-`629bd6dfa7f75b5c4040a0047425fa0294c512ff`, content SHA-256
-`473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904`
-(9,206 rows, 40 scopes). The complete DA-KG 2026 edition is separately
+`de-rulespec-2026-09-09-kindergeld-threshold` release at commit
+`9bc4f5f0afad97e8edc9834609a53a56435d0509`, content SHA-256
+`7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162`
+(9,208 rows, 41 scopes). The complete DA-KG 2026 edition is separately
 receipted at `de/guidance/bzst-dakg-2026/document-1`, body SHA-256
 `2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58`.
 Its applicability remains pending; it does not replace the retained 2025 edition. The additive service captures cover JFDG, BFDG,
@@ -529,3 +529,5 @@ in 2025. MiLoV5 supplies dated 2026 and 2027 rates; MiLoV4 remains the
 threshold calculation remain to be encoded and composed into EStG §32(4).
 
 The MiLoV5 prerequisite starts in 2026 and has no 2025 version. Its declaration preserves explicit source accounting for the 2026/2027 wage schedule; the 2025 certificate retains the separately captured MiLoV4 prerequisite. Neither wage module establishes marginal-employment eligibility or child qualification.
+
+The threshold release adds a complete, independently captured historical SGB IV §8(1a) paragraph from the unchanged official DRV HTML. All 40 preceding scopes remain. The new paragraph is receipted source text; its numerical threshold has not yet been declared as an encoded module.

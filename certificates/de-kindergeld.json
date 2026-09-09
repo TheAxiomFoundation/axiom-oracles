@@ -210,7 +210,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "fc19ba1e12a479a0d0b76dbe1807f4ab05d21a24679c5b9228ef8e049952f3db"
+      "sha256": "a359a4ef8bdd1c1ddcca8fe835c2082ad7fc59cee758387b1343160da669be5e"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -234,14 +234,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "4b40da08a6fe8437efee7b4f211a78f5065d8eccbd9ed7468c8b59d47aa40cc9",
+      "sha256": "c39374303d7371032d9442caa0b50176ec4dbfbaafcd5188fc35730be2c93bd1",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "ec5a1f937dbe5ad1e2723464898bda2ea047b22e619bf3851ec5c312bb15b4f6"
+      "sha256": "96200a1afcfafa756d84fc7e9045a68c247d3a74fd1d9d8f970ca3b760b8b621"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -886,7 +886,7 @@
       ],
       "citation_root_count": 14,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-threshold",
       "declared_sources": [
         {
           "checkout_observation": {
@@ -1484,7 +1484,7 @@
         "role_claim_mode": "attested",
         "rulespec_commit": "b74d0004a69bb43f30e936d30f47432ca3c25058",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "56d4acc6618338bb443189663d633b776fddc660728b8cba19ea5bbdc7cf62bd",
+        "subgraph_sha256": "f69af54283a77b52067605b599dd4575ec84f949b6f43f08cd1b668c7a82a504",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": true,

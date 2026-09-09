@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "fc19ba1e12a479a0d0b76dbe1807f4ab05d21a24679c5b9228ef8e049952f3db"
+      "sha256": "a359a4ef8bdd1c1ddcca8fe835c2082ad7fc59cee758387b1343160da669be5e"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "8156321f3fc52e1309cf1926d1a531291e8746017ea812fc8f92f80250d2bc55",
+      "sha256": "e9377084cb3cd8c51e63507dfcfb75a61e2a6ca59ce583a7774d14f289cb631d",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "ec5a1f937dbe5ad1e2723464898bda2ea047b22e619bf3851ec5c312bb15b4f6"
+      "sha256": "96200a1afcfafa756d84fc7e9045a68c247d3a74fd1d9d8f970ca3b760b8b621"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-threshold",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -233,7 +233,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "07e852f0d2a66a1ec1be7b219b98271e23bb7335d447158c559cff33692e616a",
+      "subgraph_sha256": "fc5dec08e723f1576c95c8e6f9f8a327140bbbb1a5ca41829c7be452df0b48fa",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"

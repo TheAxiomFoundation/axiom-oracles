@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "629bd6dfa7f75b5c4040a0047425fa0294c512ff",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-marginal-employment",
-  "corpus_release_content_sha256": "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904",
+  "corpus_commit": "9bc4f5f0afad97e8edc9834609a53a56435d0509",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-threshold",
+  "corpus_release_content_sha256": "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -218,7 +218,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "56d4acc6618338bb443189663d633b776fddc660728b8cba19ea5bbdc7cf62bd",
+      "subgraph_sha256": "f69af54283a77b52067605b599dd4575ec84f949b6f43f08cd1b668c7a82a504",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -302,7 +302,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "07e852f0d2a66a1ec1be7b219b98271e23bb7335d447158c559cff33692e616a",
+      "subgraph_sha256": "fc5dec08e723f1576c95c8e6f9f8a327140bbbb1a5ca41829c7be452df0b48fa",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -385,7 +385,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "e6b3da01856b3f933c24fba01f56068757e91c416bb1f1484039b3228a333d56",
+      "subgraph_sha256": "cb77e8032cff7c5ab3476ddb7c18d91dd5b7b46685e9334395ddf1aead36fa32",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -408,7 +408,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46"
+    "sha256": "2f56c92d85dd97d18f7aed0dcc611bfdb5ec858a175d6c4debef7c8a20faa79a"
   },
   "spine_closed": false
 }

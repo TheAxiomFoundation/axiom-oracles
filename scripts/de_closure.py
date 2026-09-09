@@ -28,18 +28,18 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "3d29e21b4951a7425ac8492ad3fc59cbe4bdd18516663b6e0543977474a62a46"
+SOURCE_SHA256 = "2f56c92d85dd97d18f7aed0dcc611bfdb5ec858a175d6c4debef7c8a20faa79a"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = "de-rulespec-2026-09-09-kindergeld-marginal-employment"
+RELEASE = "de-rulespec-2026-09-09-kindergeld-threshold"
 RELEASE_CONTENT_SHA256 = (
-    "473563bf713f7ada7073bd89511cdaf416c66f353c1dd9257bacff9bdc2a2904"
+    "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162"
 )
 RELEASE_SELECTOR_SHA256 = (
-    "27a7a2058e3f56c57fa9c7e1a92bc08dc29d2b2c0a8e9e1cbba75f0549771074"
+    "751e5c7e7aa9cb97dbe1f38b4dca183f3482fd6f24cdf3fcf97587aa6c341212"
 )
-CORPUS_COMMIT = "629bd6dfa7f75b5c4040a0047425fa0294c512ff"
+CORPUS_COMMIT = "9bc4f5f0afad97e8edc9834609a53a56435d0509"
 RULESPEC_COMMIT = "b74d0004a69bb43f30e936d30f47432ca3c25058"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -253,6 +253,10 @@ EXPECTED_INVENTORIES = {
         "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
         32,
     ),
+    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json": (
+        "2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54",
+        2,
+    ),
     "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json": (
         "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
         4,
@@ -414,6 +418,10 @@ EXPECTED_PROVISION_SOURCES = {
     "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl": (
         "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
         32,
+    ),
+    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl": (
+        "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
+        2,
     ),
     "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl": (
         "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
