@@ -120,7 +120,11 @@ Independent review and full CI passed; it merged at
 CI and merged at `46d9c0559b90443662c564f0731fba9243c52ab7`. Retry
 34293870108 passed its exact-citation numeric attempt guard; the temporary
 entry was then removed. The global limit remains three and the global override
-remains false. The protected generation is running; no §78 output is yet declared.
+remains false. The protected generation failed validation and produced zero signatures.
+Its final candidate deferred the priority, competence and credit dependencies
+without accepted exact dependency bindings. The source recognizer also folded
+`2§ 64` into sentence1; a bounded parser fix is under independent review.
+No §78 output is declared or manually applied.
 
 Regeneration (supply the pinned corpus and RuleSpec checkouts as needed):
 
