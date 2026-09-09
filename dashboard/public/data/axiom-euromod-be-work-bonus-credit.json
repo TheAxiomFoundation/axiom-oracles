@@ -407,7 +407,7 @@
       "axiom_rules_engine_sha": "f6b0d15246a7db1403836628576f11e0d334348c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-09T16:47:12Z",
+    "generated_at": "2026-09-09T21:02:08Z",
     "generated_by": "scripts/run_comparison.py::be-work-bonus-credit",
     "oracle": {
       "euromod_country": "BE",
