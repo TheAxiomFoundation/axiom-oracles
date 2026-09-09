@@ -197,7 +197,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9166
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9168
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -235,6 +235,13 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
         f"de-kg-instr-{number:03d}" for number in range(1, 6)
     ]
     assert all(row["status"] == "pending" for row in kindergeld["seed_bindings"])
+    by_id = {row["id"]: row for row in kindergeld["instruments"]}
+    edition_2026 = by_id["de-kg-instr-dakg-2026"]
+    assert edition_2026["citation_path"] == "de/guidance/bzst-dakg-2026"
+    assert {"de-subject-002", "de-subject-017"} <= set(edition_2026["discovery_refs"])
+    assert "de-subject-003" not in edition_2026["discovery_refs"]
+    assert "de-subject-003" in by_id["de-kg-instr-001"]["discovery_refs"]
+    assert "de-subject-002" not in by_id["de-kg-instr-001"]["discovery_refs"]
 
 
 def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
@@ -242,14 +249,14 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=9166)
-    assert index["row_count"] == index["mapped_row_count"] == 9166
-    assert index["body_row_count"] == 8993
+    refresh._validate_global_extraction_index(index, scanned_row_count=9168)
+    assert index["row_count"] == index["mapped_row_count"] == 9168
+    assert index["body_row_count"] == 8994
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 209
+    assert index["act_count"] == len(index["acts"]) == 210
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 6227,
+        "explicit_cross_reference_body": 6309,
         "law_metadata_changed_by": 31,
         "law_metadata_fundstelle": 38,
     }
