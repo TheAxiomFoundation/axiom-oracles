@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 223 of 694 instruments
+other closure artifact. The current frontier has 225 of 696 instruments
 pending, and dependency closure has 132 open dependencies: eight law-derived
 inputs and 124 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites are declared at RuleSpec merge
@@ -293,9 +293,9 @@ method, `text_sha256` the hash):
 
 The original browser capture methods remain recorded in git history. All
 thirteen decided supplementals (001–006 and 011–017) now bind 32 receipted
-corpus bodies from `de-rulespec-2026-09-09-kindergeld-bmf-context`, commit
-`6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5`, content SHA-256
-`a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e`.
+corpus bodies from `de-rulespec-2026-09-09-kindergeld-treaty-texts`, commit
+`27510ad32be7e2111c20f3a7dd41a2ae40310c17`, content SHA-256
+`415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f`.
 [Supplemental corpus bindings](../conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json)
 records each citation path, pinned JSONL path and line, row hash, body hash,
 expression date and official URL. Single-body instruments use the body hash;
@@ -303,15 +303,18 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 222 entries: 217 pending legal dispositions,
+The SHA-bound class snapshot contains 224 entries: 219 pending legal dispositions,
 four captured bearing entries and one captured non-bearing transfer letter.
 The latter allocates parental tax allowances and a child's lump sum among
 adults; it does not alter the statutory §32(6) sentence1 amount, the qualifying
 child tests or §64 priority. The 2025 country-group letter remains bearing
 through §1(3) EStG and its specified allowance adjustments. C-328/20 and both
 parentage decisions remain bearing; their BStBl II membership is provisional.
+The complete Morocco/Tunisia Kindergeld treaty publications, their commencement
+notices and the 2014 civil-partner letter are now receipted, with applicability
+and encoding still pending. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 223 of 694 instruments pending, 132 open
+rows pending. Current result: 225 of 696 instruments pending, 132 open
 dependencies (eight law-derived inputs, 124 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 

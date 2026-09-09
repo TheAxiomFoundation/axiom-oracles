@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 9a58723a018b00c019cfe63f26d9a3557e3b14272c2486ba90f031a04a2c3997
+    sha256: 508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5
-    release: de-rulespec-2026-09-09-kindergeld-bmf-context
-    release_content_sha256: a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e
+    commit: 27510ad32be7e2111c20f3a7dd41a2ae40310c17
+    release: de-rulespec-2026-09-09-kindergeld-treaty-texts
+    release_content_sha256: 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -64,6 +64,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
       sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
       row_count: 6
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl
+      sha256: 847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -85,6 +88,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
       sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
       row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
+      row_count: 4
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
@@ -112,6 +118,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
       sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
       row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 62
@@ -507,15 +516,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 78f2718c9074af518aa383e4df18961330fb611db9000ecd62e16a88669cb657
+    snapshot_sha256: 61cfd05c238f678ef38941599914d6acb32e9b0634bb0217a6537bb44afaae29
     channel_receipts:
-      corpus_release: 3eab130ff37fe99e9067d23a56f629c6a72ee6a78e27824d1e1d076978e4cfb3
-      subject_matter_search: f50dbc2cb211e61b4d989f6a2043e071ced208d826a1ff08ae091f4c0d0cda9b
+      corpus_release: 2490262f4e76ce6a23ee7010e5997579caa8b36508cffc81232e396726c2a10f
+      subject_matter_search: 5b4d2175704e6ea1685e95fc55db7acfffa3f8c68613fd7d7ac098d31a0d9a66
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
       unretrieved: 4
-    candidate_count: 677
+    candidate_count: 679
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -6802,6 +6811,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf
+    - id: de-kg-discovery-37a6c8c2b78ff64e
+      status: pending
+      identity_kind: class_member
+      identity: 'Bekanntmachung vom 17. September 1996, BGBl. II S.2522: Inkrafttreten des deutsch-tunesischen Kindergeldabkommens am 1. August 1996'
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/agreement-bodies/de_regulation_bgbl-1996-ii-2522_kindergeld-tunesien-inkrafttreten_document-1.txt
+      discovery_source_sha256: 57688ae5141e7333c05abd12556e4861c8babc2297fa30ecf9c04caf0748a72b
+      discovery_excerpt: 1. August 1996
     - id: de-kg-discovery-3a8452d6c8893e0d
       status: pending
       identity_kind: class_member
@@ -7882,6 +7900,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57
+    - id: de-kg-discovery-c5dc988364156b5a
+      status: pending
+      identity_kind: class_member
+      identity: 'Bekanntmachung vom 23. Juli 1996, BGBl. II S.1455: Inkrafttreten des deutsch-marokkanischen Kindergeldabkommens und Zusatzabkommens am 1. August 1996'
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/agreement-bodies/de_regulation_bgbl-1996-ii-1455_kindergeld-marokko-inkrafttreten_document-1.txt
+      discovery_source_sha256: d74044e2a41ebd165b63ce83ac6f3ef806a1d6ebe60a896489584c6f033a388f
+      discovery_excerpt: 1. August 1996
     - id: de-kg-discovery-c711d29acbcee070
       status: pending
       identity_kind: class_member
@@ -8804,7 +8831,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 0215c42aebdf3c6909d4ef85ca6c899740dd28b79626b6f9393e9d1037cacfd3
+      sha256: 02246ad214fd6dd95459e885d42bd338da1afd3ca60132db797d2f59a2c1072b
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -8813,14 +8840,14 @@ generated_facts:
         sections_located: 420
     class_discovery:
       path: conformance/closure/de-discovery-2026-09-08/snapshot.json
-      sha256: 86d573ed973a962e69af138debe55fcf9050d8776e29c218382fb34c02b7dd43
-      receipt_sha256: ef994dae0ea533d9ed497f150596994f2456740f02f4364606bd44cfba8d3863
+      sha256: 24ee3d3e2e945083466e0f95631cf81148142108719330df04adc87a63be1996
+      receipt_sha256: 42c58f79896991ec9d794e7e716c6d309d50b48bd22b69dd97a79901b1e88579
       complete: false
       counts:
         de-kg-suppl-007: 16
         de-kg-suppl-008: 2
         de-kg-suppl-009: 168
-        de-kg-suppl-010: 36
+        de-kg-suppl-010: 38
       remaining:
       - Complete official BMF/BZSt registers beyond DA-KG citations
       - Verify case identities and BStBl II publication against official decision/register captures
@@ -8828,7 +8855,7 @@ generated_facts:
       - Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.
       - The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.
       - Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.
-      - Recover complete Kindergeld-specific Morocco1981/1991 and Tunisia1991 treaty texts plus newly enumerated amendment/continuity instruments from the BMAS inventory. The22DVKA captures are publisher extracts; they do not supply this missing treaty text. Inventory legal/commencement references still need complete corpus-link reconciliation.
+      - The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.
     seed_bindings:
     - id: de-kg-instr-001
       binding_kind: instrument_candidate
@@ -8850,8 +8877,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 3eab130ff37fe99e9067d23a56f629c6a72ee6a78e27824d1e1d076978e4cfb3
-        subject_matter_search: f50dbc2cb211e61b4d989f6a2043e071ced208d826a1ff08ae091f4c0d0cda9b
+        corpus_release: 2490262f4e76ce6a23ee7010e5997579caa8b36508cffc81232e396726c2a10f
+        subject_matter_search: 5b4d2175704e6ea1685e95fc55db7acfffa3f8c68613fd7d7ac098d31a0d9a66
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -11772,7 +11799,7 @@ committed_decisions:
     classification: entitlement_guidance
     reason: 'The EStR, read in the BMF Amtliches Einkommensteuer-Handbuch 2024 at the places the DA-KG cites: R 32.2 (Pflegekinder — a foster relationship requires the child to have its home in the foster household in a family-like, long-term relationship; ''Zu Erwerbszwecken in den Haushalt aufgenommen sind z. B. Kostkinder. Hat der Stpfl. mehr als sechs Kinder in seinem Haushalt aufgenommen, spricht eine Vermutung dafür, dass es sich um Kostkinder handelt''; the care relationship to the natural parents must have ended), cited by A 11.3 Abs. 6 Satz 3 for the six-child presumption; R 33a.1 Abs. 3 (Bezüge as all receipts outside the income computation, the cost lump sum), cited by A 19.5.2 Abs. 2 Satz 1 for the 180 EUR Kostenpauschale; R 32b Abs. 2 Satz 3 (''Der bei der Ermittlung der Einkünfte aus nichtselbständiger Arbeit nicht ausgeschöpfte Arbeitnehmer-Pauschbetrag ist auch von Entgelt-, Lohn- und Einkommensersatzleistungen abzuziehen''), cited by A 19.5.2 Abs. 2 Satz 2. The same handbook
       section carries R 32.1–R 32.11, the guidance on §§ 32 Abs. 1–5 children for the allowance side, which mirrors the Kindergeld conditions. These rules refine which children count and how a disabled child''s own means are computed. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-001; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-001; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063
     bears_on_computed_surface: true
   - id: de-kg-suppl-002
@@ -11785,7 +11812,7 @@ committed_decisions:
     status: classified-with-reason
     classification: entitlement_guidance
     reason: 'The EStH, read in the BMF Amtliches Einkommensteuer-Handbuch 2024 at the places the DA-KG cites: H 3.29 (Wiener Übereinkommen: under the WÜD/WÜK a foreign diplomat or consular officer who is neither a German national nor permanently resident is exempt from domestic taxes and only limitedly taxable, as are household family members — Art. 34, 37 Abs. 1 WÜD, Art. 49 Abs. 1, 71 WÜK), cited by A 5 Abs. 1 Satz 2 for the personal scope of the residence fiction; H 32.2 (which itself quotes A 11.3 DA-KG 2024 on the family-like bond of foster children); and the H 32.x, H 32b and H 33a.1 hints attached to the EStR places cited under de-kg-suppl-001. They refine the claimant residence fiction and the foster-child condition. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63, 32 EStG are encoded and the guidance is bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-002; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-002; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063
     bears_on_computed_surface: true
   - id: de-kg-suppl-003
@@ -11799,7 +11826,7 @@ committed_decisions:
     classification: entitlement_guidance
     reason: 'The LStR 2023, read in the BMF Amtliches Lohnsteuer-Handbuch 2023 at the places the DA-KG cites: R 3b Abs. 2 Nr. 2 Buchst. a (''Bei einem monatlichen Lohnzahlungszeitraum ergibt sich die Stundenzahl der regelmäßigen Arbeitszeit aus dem 4,35fachen der wöchentlichen Arbeitszeit''), cited by A 20.3.1 Abs. 1 Satz 3 to convert a monthly working time into the weekly hours tested against the 20-hour limit of § 32 Abs. 4 Satz 3 EStG; R 9.2 (''Werbungskosten liegen dagegen nach § 9 Abs. 6 EStG vor, wenn … die Berufsausbildung oder das Studium Gegenstand eines Dienstverhältnisses (Ausbildungsdienstverhältnis) ist''), cited by A 20.3.2 Abs. 1 Satz 2 as the definition of the harmless training service relationship; R 9.1–R 9.13 (Werbungskosten: travel, meals, moving, commuting, work equipment, home office), cited by A 19.5.1 Satz 4 for computing a disabled child''s employment income. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded
       and the guidance is bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-003; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-003; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093
     bears_on_computed_surface: true
   - id: de-kg-suppl-004
@@ -11812,7 +11839,7 @@ committed_decisions:
     status: classified-with-reason
     classification: entitlement_guidance
     reason: 'The LStH 2023, read in the BMF Amtliches Lohnsteuer-Handbuch 2023 at the places the DA-KG cites: H 8.1 (1-4) ''Ausländische Währung'' (wage paid in a foreign currency is income in money; ''Umrechnungsmaßstab ist – soweit vorhanden – der auf den Umrechnungszeitpunkt bezogene Euro-Referenzkurs der Europäischen Zentralbank'', converted at the ECB monthly average reference rates, BFH BStBl II 2010 S. 698), cited by A 19.4 Abs. 2 Satz 5 for converting a disabled child''s non-euro means; H 9.2 ''Ausbildungsdienstverhältnis'' (examples: Referendariat, Beamtenanwärter, Bundeswehr officers seconded to study), cited by A 20.3.2 Abs. 1 Satz 2. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-004; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-004; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093
     bears_on_computed_surface: true
   - id: de-kg-suppl-005
@@ -11826,7 +11853,7 @@ committed_decisions:
     classification: entitlement_guidance
     reason: 'The AEAO, read in the BMF Amtliches AO-Handbuch 2025 at the places the DA-KG cites (A 2.1.1 Abs. 1 Satz 2 and 3, A 23.1 Abs. 1 Satz 3 and Abs. 2 Satz 1): AEAO zu § 8 (Wohnsitz — Nr. 1 Allgemeines, 2 Wohnung, 3 Innehaben, 4 Nutzung zu Wohnzwecken with the six-month indicator of § 9 Satz 2 AO, 5 Familienwohnsitz, 6 Wohnsitz bei Aufenthalt in einem anderen Staat including 6.2 Auslandsaufenthalt eines Kindes, 7 NATO-Truppenstatut, 8 Wiener Übereinkommen, 9 Protokoll Nr. 7) and AEAO zu § 9 (gewöhnlicher Aufenthalt — the irrebuttable presumption after a continuous stay of more than six months, short interruptions, cross-border commuters, abandonment after more than six months abroad). The DA-KG''s A 2.1.1–A 2.1.10 and A 23.1 reproduce this text almost verbatim as the residence test of § 62 Abs. 1 Satz 1 Nr. 1 and § 63 Abs. 1 Satz 6 EStG. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the
       §§ 8, 9 AO residence rules bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-005; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/aeao-2025-8/inhalt, de/guidance/aeao-2025-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-005; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/aeao-2025-8/inhalt, de/guidance/aeao-2025-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: f223bc4b422abd0214c657f151e66cd5f8811da81ffbd7798475d8ea6f87c568
     bears_on_computed_surface: true
   - id: de-kg-suppl-006
@@ -11839,7 +11866,7 @@ committed_decisions:
     status: excluded-with-reason
     classification: penal_procedure
     reason: 'Anweisungen für das Straf- und Bußgeldverfahren (Steuer) — AStBV (St) 2025, gleich lautende Erlasse der obersten Finanzbehörden der Länder vom 7.2.2025 (BStBl I S. 574), read in the BMF Amtliches AO-Handbuch 2025, Anhang 45. Its Einführung states the purpose: ''der einheitlichen Handhabung der Gesetze dienen und die reibungslose Zusammenarbeit der zur Verfolgung von Steuerstraftaten und Steuerordnungswidrigkeiten berufenen Stellen der Finanzbehörden … gewährleisten'', and Teil 1 Nr. 1 limits its scope to ''Straf- und Bußgeldverfahren, in denen die Finanzbehörde ermittelt oder zur Mitwirkung berufen ist''. The DA-KG cites it only in Kapitel S (penal procedure, all excluded). No entitlement or amount rule; the word Kindergeld does not occur in the text.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-006; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/astbv-2025/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-006; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/astbv-2025/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 4116f64e7d94424497c781f1322843fd220d8d43c4b0588d117fafc9a311206a
     bears_on_computed_surface: false
   - id: de-kg-suppl-007
@@ -11885,7 +11912,7 @@ committed_decisions:
     classification: coordination_rule
     reason: Regulation (EC) No 883/2004, consolidated text of 31.07.2019 read on EUR-Lex. Art. 1 Buchst. z defines Familienleistungen as 'alle Sach- oder Geldleistungen zum Ausgleich von Familienlasten, mit Ausnahme von Unterhaltsvorschüssen', Art. 3 Abs. 1 Buchst. j brings them into scope; Art. 67 gives a claim for family members resident in another member state 'als ob die Familienangehörigen in diesem Mitgliedstaat wohnen würden'; Art. 68 Abs. 1 ranks concurrent claims (employment before pension before residence; then the children's residence), and Abs. 2 suspends the subordinate claim 'bis zur Höhe des nach den vorrangig geltenden Rechtsvorschriften vorgesehenen Betrags; erforderlichenfalls ist ein Unterschiedsbetrag in Höhe des darüber hinausgehenden Betrags der Leistungen zu gewähren', with no differential owed for children resident in another state where the claim rests on residence alone. These rules override § 63 Abs. 1 Satz 6 (children in the EU/EEA count, A 23.1), the § 65 concurrence
       (A 28.1 Abs. 1 Satz 3, A 29) and fix the differential amount — a computed-surface quantity (A 29 Satz 2 and 4). Bears on the law-derived inputs qualifying_child_count and substitute_child_benefit_exclusion and on the amount; open until the coordination rules are encoded and bound to §§ 63, 65, 66 EStG.
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-011; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-883-2004/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-011; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-883-2004/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 5304565b00d908bd9d8f58a5d9da59b6e83cfe1a76a5a2867b2d39b7794ea05d
     bears_on_computed_surface: true
   - id: de-kg-suppl-012
@@ -11899,7 +11926,7 @@ committed_decisions:
     classification: coordination_rule
     reason: 'Regulation (EC) No 987/2009, consolidated text of 01.01.2018 read on EUR-Lex, Titel III Kapitel VI Familienleistungen: Art. 58 (where the children''s residence does not settle priority, each state computes the benefit including children resident elsewhere; the state with the higher amount pays it in full and the other refunds half, capped at its own rate); Art. 59 (on a change of applicable legislation during a month the paying institution continues to the end of that month); Art. 60 Abs. 1 (''ist … die Situation der gesamten Familie in einer Weise zu berücksichtigen, als würden alle beteiligten Personen unter die Rechtsvorschriften des betreffenden Mitgliedstaats fallen und dort wohnen'', and the other parent''s application counts where the entitled person does not apply), Abs. 2–5 (provisional decisions and the differential under Art. 68 Abs. 2 of the basic regulation). These procedures determine which state pays, for which month, and the differential amount. Bears on the
       law-derived inputs qualifying_child_count and substitute_child_benefit_exclusion and on the monthly amount; open until the coordination rules are encoded and bound to §§ 63, 65, 66 EStG.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-012; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-987-2009/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-012; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-987-2009/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 1bff0ae62efaf9d01b2959b0d312b291c2a96f1d68d6a546b1bdc54ad70afa1a
     bears_on_computed_surface: true
   - id: de-kg-suppl-013
@@ -11913,7 +11940,7 @@ committed_decisions:
     classification: coordination_rule
     reason: 'Withdrawal Agreement EU/UK (ABl. L 29 vom 31.1.2020), read on EUR-Lex, Teil Zwei Titel III Koordinierung der Systeme der sozialen Sicherheit: Art. 30 defines the covered persons (EU citizens subject to UK legislation or resident in the UK at the end of the transition period and vice versa, with their family members, as long as their situation continues without interruption); Art. 31 Abs. 1 applies ''die Vorschriften und Ziele des Artikels 48 AEUV, der Verordnung (EG) Nr. 883/2004 und der Verordnung (EG) Nr. 987/2009'' to them; Art. 32 Abs. 1 Buchst. d keeps Art. 67, 68 and 69 of Regulation 883/2004 applicable to family benefits due at the end of the transition period for persons with family members resident in the UK, and Buchst. e extends derived rights. The DA-KG applies this in A 4.2 Abs. 2 (British nationals resident before 01.01.2021 treated as free-movement citizens) and A 23.1 Abs. 1 Satz 2 (children resident in the UK count where the residence predates 01.01.2021). Bears
       on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the Withdrawal Agreement''s continued coordination bound to them.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-013; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-uk-withdrawal-agreement/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-013; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-uk-withdrawal-agreement/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: e996b8f48d0df1dafd5a104f187d0482c7cb535b1fc8d8920e8794f8948a62b3
     bears_on_computed_surface: true
   - id: de-kg-suppl-014
@@ -11927,7 +11954,7 @@ committed_decisions:
     classification: coordination_rule
     reason: 'Regulation (EC) No 859/2003, read on EUR-Lex: Art. 1 extends Regulations (EEC) 1408/71 and 574/72 to third-country nationals ''die ausschließlich aufgrund ihrer Staatsangehörigkeit nicht bereits unter diese Bestimmungen fallen, sowie auf ihre Familienangehörigen und ihre Hinterbliebenen, wenn sie ihren rechtmäßigen Wohnsitz in einem Mitgliedstaat haben und ihre Situation mit einem Element über die Grenzen eines Mitgliedstaats hinausweist''; Art. 2 sets the temporal rules from 1 June 2003. Repealed by Regulation (EU) 1231/2010 for the member states bound by it, it remains the reference for third-country nationals in the UK stock cases under Art. 30 Abs. 1 Buchst. g, Art. 31 Abs. 3 and Art. 32 of the Withdrawal Agreement — the scope the DA-KG names in O 2.4 (''im Verhältnis zum Vereinigten Königreich in Bestandsfällen''). Within that scope it decides whether the coordination rules, and with them the § 63 Abs. 1 Satz 6 override and the differential, apply to a third-country-national
       claimant. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until the coordination scope rules are encoded and bound to §§ 62, 63 EStG.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-014; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-859-2003/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-014; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-859-2003/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 41d2bb94ad19d788ab915949c0a258a1029ef5f903a703bf1547c1692b3f25e7
     bears_on_computed_surface: true
   - id: de-kg-suppl-015
@@ -11940,7 +11967,7 @@ committed_decisions:
     status: classified-with-reason
     classification: coordination_rule
     reason: 'Regulation (EU) No 1231/2010, read on EUR-Lex: Art. 1 extends Regulations (EC) 883/2004 and 987/2009 to third-country nationals ''die ausschließlich aufgrund ihrer Staatsangehörigkeit nicht bereits unter die genannten Verordnungen fallen, sowie für ihre Familienangehörigen und ihre Hinterbliebenen, wenn sie ihren rechtmäßigen Wohnsitz im Hoheitsgebiet eines Mitgliedstaats haben und sich in einer Lage befinden, die nicht ausschließlich einen einzigen Mitgliedstaat betrifft''; Art. 2 repeals Regulation 859/2003 for the bound member states. It decides whether the coordination rules of de-kg-suppl-011 and -012 (children in the EU/EEA counting under § 63 Abs. 1 Satz 6, priority and differential under § 65 and § 66) apply to a third-country-national claimant. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until the coordination scope rules are encoded and bound to §§ 62, 63 EStG.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-015; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-1231-2010/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-015; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-1231-2010/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 371ee3422bfbe096bd82b2b0ad471a7193e6bf58ff786de9ac259bd142117f09
     bears_on_computed_surface: true
   - id: de-kg-suppl-016
@@ -11953,7 +11980,7 @@ committed_decisions:
     status: excluded-with-reason
     classification: data_retrieval_regulation
     reason: 'Kinderzuschlag-Datenabrufverordnung (KiZDAV) vom 15. Dezember 2023 (BGBl. 2023 I Nr. 376), read in full from the gesetze-im-internet PDF (§§ 1–6). Issued ''Auf Grund des § 68 Absatz 5 des Einkommensteuergesetzes'', it governs the automated retrieval of Kindergeld data by the Kinderzuschlag units of the Familienkasse: scope (§ 1), retrieval authorisations (§ 2), the retrieval procedure and the closed list of child, claimant and fixing data that may be retrieved, including whether § 65 benefits or Regulation 883/2004 family benefits were taken into account (§ 3), notification duties on fixing and revocation (§ 4), audit and documentation duties via the Steuerdaten-Abrufverordnung (§ 5), entry into force 1 January 2024 (§ 6). It reads Kindergeld data for the Kinderzuschlag; it neither creates nor changes any Kindergeld entitlement or amount, and § 68 Abs. 5 EStG under which it is issued is excluded on the spine.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-016; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/regulation/kizdav, de/regulation/kizdav/1, de/regulation/kizdav/2, de/regulation/kizdav/3, de/regulation/kizdav/4, de/regulation/kizdav/5, de/regulation/kizdav/6, de/regulation/kizdav/eingangsformel, de/regulation/kizdav/schlussformel. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-016; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/regulation/kizdav, de/regulation/kizdav/1, de/regulation/kizdav/2, de/regulation/kizdav/3, de/regulation/kizdav/4, de/regulation/kizdav/5, de/regulation/kizdav/6, de/regulation/kizdav/eingangsformel, de/regulation/kizdav/schlussformel. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a
     bears_on_computed_surface: false
   - id: de-kg-suppl-017
@@ -11966,7 +11993,7 @@ committed_decisions:
     status: excluded-with-reason
     classification: criminal_procedure_guideline
     reason: 'Richtlinien für das Strafverfahren und das Bußgeldverfahren (RiStBV), Neufassung vom 28. März 2023 (BAnz AT 19.06.2023 B1), in force for the Federation from 30 March 2023, read from verwaltungsvorschriften-im-internet. They instruct prosecutors on the conduct of criminal and administrative-fine proceedings; tax matters appear only in Nr. 266 (Zusammenwirken mit den Finanzbehörden: a prosecutor investigating a Steuerstraftat/Zollstraftat informs the otherwise competent Finanzamt/Hauptzollamt) and Nr. 267 (when the prosecutor takes over a tax-offence case), and § 30 AO is named once for tax secrecy. The DA-KG cites them only in S 1.2 (penal procedure, excluded). No entitlement or amount rule; the word Kindergeld does not occur in the text.'
-    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+    text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263
     bears_on_computed_surface: false
 computed:
@@ -12358,13 +12385,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 694
+    instrument_count: 696
     counts:
-      total: 694
+      total: 696
       encoded: 1
       classified-with-reason: 132
       excluded-with-reason: 338
-      pending: 223
+      pending: 225
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -12410,6 +12437,7 @@ computed:
     - de-kg-discovery-345366269efcd1c7
     - de-kg-discovery-359e9a2ce0db9b88
     - de-kg-discovery-37736435a414ade5
+    - de-kg-discovery-37a6c8c2b78ff64e
     - de-kg-discovery-3b2d619f6f35b010
     - de-kg-discovery-3bc77e77ffba6699
     - de-kg-discovery-3c8055571628b365
@@ -12527,6 +12555,7 @@ computed:
     - de-kg-discovery-c306fddfde187836
     - de-kg-discovery-c37028de6c676351
     - de-kg-discovery-c5da6ee5d3d1267d
+    - de-kg-discovery-c5dc988364156b5a
     - de-kg-discovery-c711d29acbcee070
     - de-kg-discovery-c90da7dac810e267
     - de-kg-discovery-c9646b036cc3ccbd
@@ -20157,6 +20186,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/dvka-bilateral.html
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/bosnien_sva.pdf
+    - id: de-kg-discovery-37a6c8c2b78ff64e
+      status: pending
+      identity_kind: class_member
+      identity: 'Bekanntmachung vom 17. September 1996, BGBl. II S.2522: Inkrafttreten des deutsch-tunesischen Kindergeldabkommens am 1. August 1996'
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/agreement-bodies/de_regulation_bgbl-1996-ii-2522_kindergeld-tunesien-inkrafttreten_document-1.txt
+      discovery_source_sha256: 57688ae5141e7333c05abd12556e4861c8babc2297fa30ecf9c04caf0748a72b
+      discovery_excerpt: 1. August 1996
     - id: de-kg-discovery-3a8452d6c8893e0d
       status: classified-with-reason
       identity_kind: class_member
@@ -21246,6 +21284,15 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57
+    - id: de-kg-discovery-c5dc988364156b5a
+      status: pending
+      identity_kind: class_member
+      identity: 'Bekanntmachung vom 23. Juli 1996, BGBl. II S.1455: Inkrafttreten des deutsch-marokkanischen Kindergeldabkommens und Zusatzabkommens am 1. August 1996'
+      discovery_refs:
+      - de-kg-suppl-010
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/agreement-bodies/de_regulation_bgbl-1996-ii-1455_kindergeld-marokko-inkrafttreten_document-1.txt
+      discovery_source_sha256: d74044e2a41ebd165b63ce83ac6f3ef806a1d6ebe60a896489584c6f033a388f
+      discovery_excerpt: 1. August 1996
     - id: de-kg-discovery-c711d29acbcee070
       status: pending
       identity_kind: class_member
@@ -22284,7 +22331,7 @@ computed:
       reason: 'The EStR, read in the BMF Amtliches Einkommensteuer-Handbuch 2024 at the places the DA-KG cites: R 32.2 (Pflegekinder — a foster relationship requires the child to have its home in the foster household in a family-like, long-term relationship; ''Zu Erwerbszwecken in den Haushalt aufgenommen sind z. B. Kostkinder. Hat der Stpfl. mehr als sechs Kinder in seinem Haushalt aufgenommen, spricht eine Vermutung dafür, dass es sich um Kostkinder handelt''; the care relationship to the natural parents must have ended), cited by A 11.3 Abs. 6 Satz 3 for the six-child presumption; R 33a.1 Abs. 3 (Bezüge as all receipts outside the income computation, the cost lump sum), cited by A 19.5.2 Abs. 2 Satz 1 for the 180 EUR Kostenpauschale; R 32b Abs. 2 Satz 3 (''Der bei der Ermittlung der Einkünfte aus nichtselbständiger Arbeit nicht ausgeschöpfte Arbeitnehmer-Pauschbetrag ist auch von Entgelt-, Lohn- und Einkommensersatzleistungen abzuziehen''), cited by A 19.5.2 Abs. 2 Satz 2. The same handbook
         section carries R 32.1–R 32.11, the guidance on §§ 32 Abs. 1–5 children for the allowance side, which mirrors the Kindergeld conditions. These rules refine which children count and how a disabled child''s own means are computed. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-001; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-001; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063
     - id: de-kg-suppl-002
       status: classified-with-reason
@@ -22299,7 +22346,7 @@ computed:
       classification: entitlement_guidance
       reason: 'The EStH, read in the BMF Amtliches Einkommensteuer-Handbuch 2024 at the places the DA-KG cites: H 3.29 (Wiener Übereinkommen: under the WÜD/WÜK a foreign diplomat or consular officer who is neither a German national nor permanently resident is exempt from domestic taxes and only limitedly taxable, as are household family members — Art. 34, 37 Abs. 1 WÜD, Art. 49 Abs. 1, 71 WÜK), cited by A 5 Abs. 1 Satz 2 for the personal scope of the residence fiction; H 32.2 (which itself quotes A 11.3 DA-KG 2024 on the family-like bond of foster children); and the H 32.x, H 32b and H 33a.1 hints attached to the EStR places cited under de-kg-suppl-001. They refine the claimant residence fiction and the foster-child condition. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63, 32 EStG are encoded and the guidance is bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-002; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-002; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/esth-2024-3/inhalt, de/guidance/esth-2024-32/inhalt, de/guidance/esth-2024-32b/inhalt, de/guidance/esth-2024-33a/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 2904eec992553b23f46da7b6bc635b54c15a461b968bf2a333176b7e7fb9d063
     - id: de-kg-suppl-003
       status: classified-with-reason
@@ -22315,7 +22362,7 @@ computed:
       reason: 'The LStR 2023, read in the BMF Amtliches Lohnsteuer-Handbuch 2023 at the places the DA-KG cites: R 3b Abs. 2 Nr. 2 Buchst. a (''Bei einem monatlichen Lohnzahlungszeitraum ergibt sich die Stundenzahl der regelmäßigen Arbeitszeit aus dem 4,35fachen der wöchentlichen Arbeitszeit''), cited by A 20.3.1 Abs. 1 Satz 3 to convert a monthly working time into the weekly hours tested against the 20-hour limit of § 32 Abs. 4 Satz 3 EStG; R 9.2 (''Werbungskosten liegen dagegen nach § 9 Abs. 6 EStG vor, wenn … die Berufsausbildung oder das Studium Gegenstand eines Dienstverhältnisses (Ausbildungsdienstverhältnis) ist''), cited by A 20.3.2 Abs. 1 Satz 2 as the definition of the harmless training service relationship; R 9.1–R 9.13 (Werbungskosten: travel, meals, moving, commuting, work equipment, home office), cited by A 19.5.1 Satz 4 for computing a disabled child''s employment income. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are
         encoded and the guidance is bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-003; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-003; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093
     - id: de-kg-suppl-004
       status: classified-with-reason
@@ -22330,7 +22377,7 @@ computed:
       classification: entitlement_guidance
       reason: 'The LStH 2023, read in the BMF Amtliches Lohnsteuer-Handbuch 2023 at the places the DA-KG cites: H 8.1 (1-4) ''Ausländische Währung'' (wage paid in a foreign currency is income in money; ''Umrechnungsmaßstab ist – soweit vorhanden – der auf den Umrechnungszeitpunkt bezogene Euro-Referenzkurs der Europäischen Zentralbank'', converted at the ECB monthly average reference rates, BFH BStBl II 2010 S. 698), cited by A 19.4 Abs. 2 Satz 5 for converting a disabled child''s non-euro means; H 9.2 ''Ausbildungsdienstverhältnis'' (examples: Referendariat, Beamtenanwärter, Bundeswehr officers seconded to study), cited by A 20.3.2 Abs. 1 Satz 2. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-004; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-004; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/lsth-2023-3b/inhalt, de/guidance/lsth-2023-8/inhalt, de/guidance/lsth-2023-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 71ae77017f4987a344b7ee0891a2932da7c5226ba4d907653706d29f8be8b093
     - id: de-kg-suppl-005
       status: classified-with-reason
@@ -22346,7 +22393,7 @@ computed:
       reason: 'The AEAO, read in the BMF Amtliches AO-Handbuch 2025 at the places the DA-KG cites (A 2.1.1 Abs. 1 Satz 2 and 3, A 23.1 Abs. 1 Satz 3 and Abs. 2 Satz 1): AEAO zu § 8 (Wohnsitz — Nr. 1 Allgemeines, 2 Wohnung, 3 Innehaben, 4 Nutzung zu Wohnzwecken with the six-month indicator of § 9 Satz 2 AO, 5 Familienwohnsitz, 6 Wohnsitz bei Aufenthalt in einem anderen Staat including 6.2 Auslandsaufenthalt eines Kindes, 7 NATO-Truppenstatut, 8 Wiener Übereinkommen, 9 Protokoll Nr. 7) and AEAO zu § 9 (gewöhnlicher Aufenthalt — the irrebuttable presumption after a continuous stay of more than six months, short interruptions, cross-border commuters, abandonment after more than six months abroad). The DA-KG''s A 2.1.1–A 2.1.10 and A 23.1 reproduce this text almost verbatim as the residence test of § 62 Abs. 1 Satz 1 Nr. 1 and § 63 Abs. 1 Satz 6 EStG. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with
         the §§ 8, 9 AO residence rules bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-005; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/aeao-2025-8/inhalt, de/guidance/aeao-2025-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-005; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/guidance/aeao-2025-8/inhalt, de/guidance/aeao-2025-9/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: f223bc4b422abd0214c657f151e66cd5f8811da81ffbd7798475d8ea6f87c568
     - id: de-kg-suppl-006
       status: excluded-with-reason
@@ -22361,7 +22408,7 @@ computed:
       classification: penal_procedure
       reason: 'Anweisungen für das Straf- und Bußgeldverfahren (Steuer) — AStBV (St) 2025, gleich lautende Erlasse der obersten Finanzbehörden der Länder vom 7.2.2025 (BStBl I S. 574), read in the BMF Amtliches AO-Handbuch 2025, Anhang 45. Its Einführung states the purpose: ''der einheitlichen Handhabung der Gesetze dienen und die reibungslose Zusammenarbeit der zur Verfolgung von Steuerstraftaten und Steuerordnungswidrigkeiten berufenen Stellen der Finanzbehörden … gewährleisten'', and Teil 1 Nr. 1 limits its scope to ''Straf- und Bußgeldverfahren, in denen die Finanzbehörde ermittelt oder zur Mitwirkung berufen ist''. The DA-KG cites it only in Kapitel S (penal procedure, all excluded). No entitlement or amount rule; the word Kindergeld does not occur in the text.'
       bears_on_computed_surface: false
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-006; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/astbv-2025/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-006; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/astbv-2025/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 4116f64e7d94424497c781f1322843fd220d8d43c4b0588d117fafc9a311206a
     - id: de-kg-suppl-007
       status: pending
@@ -22417,7 +22464,7 @@ computed:
       reason: Regulation (EC) No 883/2004, consolidated text of 31.07.2019 read on EUR-Lex. Art. 1 Buchst. z defines Familienleistungen as 'alle Sach- oder Geldleistungen zum Ausgleich von Familienlasten, mit Ausnahme von Unterhaltsvorschüssen', Art. 3 Abs. 1 Buchst. j brings them into scope; Art. 67 gives a claim for family members resident in another member state 'als ob die Familienangehörigen in diesem Mitgliedstaat wohnen würden'; Art. 68 Abs. 1 ranks concurrent claims (employment before pension before residence; then the children's residence), and Abs. 2 suspends the subordinate claim 'bis zur Höhe des nach den vorrangig geltenden Rechtsvorschriften vorgesehenen Betrags; erforderlichenfalls ist ein Unterschiedsbetrag in Höhe des darüber hinausgehenden Betrags der Leistungen zu gewähren', with no differential owed for children resident in another state where the claim rests on residence alone. These rules override § 63 Abs. 1 Satz 6 (children in the EU/EEA count, A 23.1), the § 65 concurrence
         (A 28.1 Abs. 1 Satz 3, A 29) and fix the differential amount — a computed-surface quantity (A 29 Satz 2 and 4). Bears on the law-derived inputs qualifying_child_count and substitute_child_benefit_exclusion and on the amount; open until the coordination rules are encoded and bound to §§ 63, 65, 66 EStG.
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-011; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-883-2004/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-011; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-883-2004/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 5304565b00d908bd9d8f58a5d9da59b6e83cfe1a76a5a2867b2d39b7794ea05d
     - id: de-kg-suppl-012
       status: classified-with-reason
@@ -22433,7 +22480,7 @@ computed:
       reason: 'Regulation (EC) No 987/2009, consolidated text of 01.01.2018 read on EUR-Lex, Titel III Kapitel VI Familienleistungen: Art. 58 (where the children''s residence does not settle priority, each state computes the benefit including children resident elsewhere; the state with the higher amount pays it in full and the other refunds half, capped at its own rate); Art. 59 (on a change of applicable legislation during a month the paying institution continues to the end of that month); Art. 60 Abs. 1 (''ist … die Situation der gesamten Familie in einer Weise zu berücksichtigen, als würden alle beteiligten Personen unter die Rechtsvorschriften des betreffenden Mitgliedstaats fallen und dort wohnen'', and the other parent''s application counts where the entitled person does not apply), Abs. 2–5 (provisional decisions and the differential under Art. 68 Abs. 2 of the basic regulation). These procedures determine which state pays, for which month, and the differential amount. Bears on the
         law-derived inputs qualifying_child_count and substitute_child_benefit_exclusion and on the monthly amount; open until the coordination rules are encoded and bound to §§ 63, 65, 66 EStG.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-012; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-987-2009/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-012; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-987-2009/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 1bff0ae62efaf9d01b2959b0d312b291c2a96f1d68d6a546b1bdc54ad70afa1a
     - id: de-kg-suppl-013
       status: classified-with-reason
@@ -22449,7 +22496,7 @@ computed:
       reason: 'Withdrawal Agreement EU/UK (ABl. L 29 vom 31.1.2020), read on EUR-Lex, Teil Zwei Titel III Koordinierung der Systeme der sozialen Sicherheit: Art. 30 defines the covered persons (EU citizens subject to UK legislation or resident in the UK at the end of the transition period and vice versa, with their family members, as long as their situation continues without interruption); Art. 31 Abs. 1 applies ''die Vorschriften und Ziele des Artikels 48 AEUV, der Verordnung (EG) Nr. 883/2004 und der Verordnung (EG) Nr. 987/2009'' to them; Art. 32 Abs. 1 Buchst. d keeps Art. 67, 68 and 69 of Regulation 883/2004 applicable to family benefits due at the end of the transition period for persons with family members resident in the UK, and Buchst. e extends derived rights. The DA-KG applies this in A 4.2 Abs. 2 (British nationals resident before 01.01.2021 treated as free-movement citizens) and A 23.1 Abs. 1 Satz 2 (children resident in the UK count where the residence predates 01.01.2021).
         Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the Withdrawal Agreement''s continued coordination bound to them.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-013; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-uk-withdrawal-agreement/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-013; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-uk-withdrawal-agreement/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: e996b8f48d0df1dafd5a104f187d0482c7cb535b1fc8d8920e8794f8948a62b3
     - id: de-kg-suppl-014
       status: classified-with-reason
@@ -22465,7 +22512,7 @@ computed:
       reason: 'Regulation (EC) No 859/2003, read on EUR-Lex: Art. 1 extends Regulations (EEC) 1408/71 and 574/72 to third-country nationals ''die ausschließlich aufgrund ihrer Staatsangehörigkeit nicht bereits unter diese Bestimmungen fallen, sowie auf ihre Familienangehörigen und ihre Hinterbliebenen, wenn sie ihren rechtmäßigen Wohnsitz in einem Mitgliedstaat haben und ihre Situation mit einem Element über die Grenzen eines Mitgliedstaats hinausweist''; Art. 2 sets the temporal rules from 1 June 2003. Repealed by Regulation (EU) 1231/2010 for the member states bound by it, it remains the reference for third-country nationals in the UK stock cases under Art. 30 Abs. 1 Buchst. g, Art. 31 Abs. 3 and Art. 32 of the Withdrawal Agreement — the scope the DA-KG names in O 2.4 (''im Verhältnis zum Vereinigten Königreich in Bestandsfällen''). Within that scope it decides whether the coordination rules, and with them the § 63 Abs. 1 Satz 6 override and the differential, apply to a third-country-national
         claimant. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until the coordination scope rules are encoded and bound to §§ 62, 63 EStG.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-014; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-859-2003/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-014; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-859-2003/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 41d2bb94ad19d788ab915949c0a258a1029ef5f903a703bf1547c1692b3f25e7
     - id: de-kg-suppl-015
       status: classified-with-reason
@@ -22480,7 +22527,7 @@ computed:
       classification: coordination_rule
       reason: 'Regulation (EU) No 1231/2010, read on EUR-Lex: Art. 1 extends Regulations (EC) 883/2004 and 987/2009 to third-country nationals ''die ausschließlich aufgrund ihrer Staatsangehörigkeit nicht bereits unter die genannten Verordnungen fallen, sowie für ihre Familienangehörigen und ihre Hinterbliebenen, wenn sie ihren rechtmäßigen Wohnsitz im Hoheitsgebiet eines Mitgliedstaats haben und sich in einer Lage befinden, die nicht ausschließlich einen einzigen Mitgliedstaat betrifft''; Art. 2 repeals Regulation 859/2003 for the bound member states. It decides whether the coordination rules of de-kg-suppl-011 and -012 (children in the EU/EEA counting under § 63 Abs. 1 Satz 6, priority and differential under § 65 and § 66) apply to a third-country-national claimant. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until the coordination scope rules are encoded and bound to §§ 62, 63 EStG.'
       bears_on_computed_surface: true
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-015; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-1231-2010/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-015; SHA-256 of UTF-8 corpus body. Citation paths: de/regulation/eu-1231-2010/document-1. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 371ee3422bfbe096bd82b2b0ad471a7193e6bf58ff786de9ac259bd142117f09
     - id: de-kg-suppl-016
       status: excluded-with-reason
@@ -22495,7 +22542,7 @@ computed:
       classification: data_retrieval_regulation
       reason: 'Kinderzuschlag-Datenabrufverordnung (KiZDAV) vom 15. Dezember 2023 (BGBl. 2023 I Nr. 376), read in full from the gesetze-im-internet PDF (§§ 1–6). Issued ''Auf Grund des § 68 Absatz 5 des Einkommensteuergesetzes'', it governs the automated retrieval of Kindergeld data by the Kinderzuschlag units of the Familienkasse: scope (§ 1), retrieval authorisations (§ 2), the retrieval procedure and the closed list of child, claimant and fixing data that may be retrieved, including whether § 65 benefits or Regulation 883/2004 family benefits were taken into account (§ 3), notification duties on fixing and revocation (§ 4), audit and documentation duties via the Steuerdaten-Abrufverordnung (§ 5), entry into force 1 January 2024 (§ 6). It reads Kindergeld data for the Kinderzuschlag; it neither creates nor changes any Kindergeld entitlement or amount, and § 68 Abs. 5 EStG under which it is issued is excluded on the spine.'
       bears_on_computed_surface: false
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-016; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/regulation/kizdav, de/regulation/kizdav/1, de/regulation/kizdav/2, de/regulation/kizdav/3, de/regulation/kizdav/4, de/regulation/kizdav/5, de/regulation/kizdav/6, de/regulation/kizdav/eingangsformel, de/regulation/kizdav/schlussformel. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-016; SHA-256 of body_sha256 values joined by newline, in citation_path order; no trailing newline. Citation paths: de/regulation/kizdav, de/regulation/kizdav/1, de/regulation/kizdav/2, de/regulation/kizdav/3, de/regulation/kizdav/4, de/regulation/kizdav/5, de/regulation/kizdav/6, de/regulation/kizdav/eingangsformel, de/regulation/kizdav/schlussformel. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a
     - id: de-kg-suppl-017
       status: excluded-with-reason
@@ -22510,7 +22557,7 @@ computed:
       classification: criminal_procedure_guideline
       reason: 'Richtlinien für das Strafverfahren und das Bußgeldverfahren (RiStBV), Neufassung vom 28. März 2023 (BAnz AT 19.06.2023 B1), in force for the Federation from 30 March 2023, read from verwaltungsvorschriften-im-internet. They instruct prosecutors on the conduct of criminal and administrative-fine proceedings; tax matters appear only in Nr. 266 (Zusammenwirken mit den Finanzbehörden: a prosecutor investigating a Steuerstraftat/Zollstraftat informs the otherwise competent Finanzamt/Hauptzollamt) and Nr. 267 (when the prosecutor takes over a tax-offence case), and § 30 AO is named once for tax secrecy. The DA-KG cites them only in S 1.2 (penal procedure, excluded). No entitlement or amount rule; the word Kindergeld does not occur in the text.'
       bears_on_computed_surface: false
-      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5, content SHA-256 a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
+      text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263
   dependency_closure:
     law_derived_inputs:
@@ -22655,7 +22702,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 694
+    bearing_candidate_instruments: 696
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

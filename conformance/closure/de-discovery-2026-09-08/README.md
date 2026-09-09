@@ -1,9 +1,9 @@
 # Kindergeld class discovery seeds
 
-This snapshot contains 222 candidate entries: 16 BMF letters, 2 BZSt
-instructions, 168 court candidates, and 36 bilateral or association instruments.
-Of these, 217 remain pending legal disposition: 194 citation-only seeds and 23
-corpus-receipted bilateral/association instruments. Four other corpus-receipted entries are
+This snapshot contains 224 candidate entries: 16 BMF letters, 2 BZSt
+instructions, 168 court candidates, and 38 bilateral or association instruments.
+Of these, 219 remain pending legal disposition: 190 citation-only seeds and 29
+corpus-receipted instruments. Four other corpus-receipted entries are
 bearing dependencies (two parentage decisions, C-328/20 and the 2025 country-group
 letter); the 2013 transfer letter is non-bearing for this Kindergeld surface.
 The three courts’ BStBl II publication remains
@@ -84,14 +84,14 @@ review and green CI. These reviews are not human certification approval.
 
 ## Remaining frontier
 
-The regenerated ledger has 5 pending spine rows out of 18 and 223 pending
-instruments out of 694. Dependency closure remains false: eight law-derived
+The regenerated ledger has 5 pending spine rows out of 18 and 225 pending
+instruments out of 696. Dependency closure remains false: eight law-derived
 inputs and 124 bearing instruments remain open, with no unclassified inputs.
 The eight birth-record and date inputs are committed world facts; engine-supplied query
 boundaries are not external inputs. The additional KindRG evidence candidate
 remains pending until its precise legal disposition is established.
 
-The 222 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
+The 224 discovery candidates are incomplete seeds: exhaust official BMF/BZSt
 registers, verify case identities and BStBl II publication, reconcile duplicate
 identities, capture operative texts, and encode every bearing rule. All four
 class rows remain pending. No complete discovery or certified claim is made.
@@ -151,3 +151,8 @@ python scripts/de_closure_ledger.py --generate --artifact de/kindergeld
 python scripts/de_certificate_census.py
 python scripts/certify.py
 ```
+
+
+The treaty-text release `de-rulespec-2026-09-09-kindergeld-treaty-texts` is published at commit `27510ad32be7e2111c20f3a7dd41a2ae40310c17`, content SHA-256 `415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f`. Its 8,216 rows span 27 scopes. The public object verifies and is byte-identical to the signed publication artifact.
+
+The complete Morocco 1981 treaty and 1991 supplement share their retained 1995 approval publication; Tunisia's 1991 treaty has its separate publication. Two notices establish treaty commencement on 1 August 1996. Their texts and the recovered BMF 17 January 2014 civil-partner letter now replace citation-only discovery for those members. The Morocco supplement's age change from 18 to 16 was visually checked. These captures remain pending legal disposition and encoding; historical DM rates must not be silently treated as current euro amounts. The 22 DVKA captures remain publisher extracts. Discovery completeness is still false.

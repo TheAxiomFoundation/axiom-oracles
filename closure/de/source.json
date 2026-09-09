@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
-    "release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
-    "release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
-    "release_selector_sha256": "f45b1dc24d2187706b6e0680819deabbe76182580dbcd4785f53dc6707f8b95f",
+    "commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+    "release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+    "release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+    "release_selector_sha256": "57f442572d728f35d821b9f8e4a994a0410040baeeb43e29287cd9190a3e0996",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -57,6 +57,11 @@
         "row_count": 6
       },
       {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json",
+        "sha256": "f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d",
+        "row_count": 2
+      },
+      {
         "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
         "row_count": 172
@@ -90,6 +95,11 @@
         "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json",
         "sha256": "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json",
+        "sha256": "917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02",
+        "row_count": 4
       },
       {
         "path": "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
@@ -135,6 +145,11 @@
         "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json",
         "sha256": "6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64",
         "row_count": 535
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
+        "sha256": "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
+        "row_count": 4
       }
     ],
     "provision_sources": [
@@ -179,6 +194,11 @@
         "row_count": 6
       },
       {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl",
+        "sha256": "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
+        "row_count": 2
+      },
+      {
         "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
         "row_count": 172
@@ -212,6 +232,11 @@
         "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
         "sha256": "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+        "sha256": "f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045",
+        "row_count": 4
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
@@ -257,6 +282,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl",
         "sha256": "c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059",
         "row_count": 535
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+        "sha256": "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
+        "row_count": 4
       }
     ],
     "rows": [

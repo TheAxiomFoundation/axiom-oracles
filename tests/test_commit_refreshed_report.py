@@ -397,7 +397,7 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     # subordinate-instrument frontier is undeclared: a refresh must rebind
     # every artifact while keeping the honest certified=no.
     assert certificate["blockers"] == [
-        'closed: instrument frontier incomplete — 223 of 694 subordinate/bearing instruments pending disposition (oracles#491)',
+        'closed: instrument frontier incomplete — 225 of 696 subordinate/bearing instruments pending disposition (oracles#491)',
         'closed: dependency closure open — 132 open dependencies (8 law-derived inputs, 0 unclassified inputs, 124 bearing instruments) (CERTIFIED.md v3)',
     ]
     assert certificate["certified"]["value"] is False

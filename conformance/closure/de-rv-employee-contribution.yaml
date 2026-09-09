@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 9a58723a018b00c019cfe63f26d9a3557e3b14272c2486ba90f031a04a2c3997
+    sha256: 508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5
-    release: de-rulespec-2026-09-09-kindergeld-bmf-context
-    release_content_sha256: a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e
+    commit: 27510ad32be7e2111c20f3a7dd41a2ae40310c17
+    release: de-rulespec-2026-09-09-kindergeld-treaty-texts
+    release_content_sha256: 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -66,6 +66,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
       sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
       row_count: 6
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl
+      sha256: 847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -87,6 +90,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
       sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
       row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
+      row_count: 4
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
@@ -114,6 +120,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
       sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
       row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -184,10 +193,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 78f2718c9074af518aa383e4df18961330fb611db9000ecd62e16a88669cb657
+    snapshot_sha256: 61cfd05c238f678ef38941599914d6acb32e9b0634bb0217a6537bb44afaae29
     channel_receipts:
-      corpus_release: 3eab130ff37fe99e9067d23a56f629c6a72ee6a78e27824d1e1d076978e4cfb3
-      subject_matter_search: f50dbc2cb211e61b4d989f6a2043e071ced208d826a1ff08ae091f4c0d0cda9b
+      corpus_release: 2490262f4e76ce6a23ee7010e5997579caa8b36508cffc81232e396726c2a10f
+      subject_matter_search: 5b4d2175704e6ea1685e95fc55db7acfffa3f8c68613fd7d7ac098d31a0d9a66
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15

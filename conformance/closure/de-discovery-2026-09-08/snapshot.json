@@ -340,6 +340,61 @@
       "publisher": "Bundesministerium für Arbeit und Soziales",
       "publication_as_of": "2026-02-01",
       "extraction": "pdftotext -layout; complete14-page official inventory. Pages8and13 visually checked for the distinct Morocco/Tunisia Kindergeld treaties. Citation inventory is not operative treaty text."
+    },
+    {
+      "path": "bmf-2014-01-17-civil-partners.txt",
+      "sha256": "07a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c",
+      "url": "https://amtliche-handbuecher.bundesfinanzministerium.de/esth/2024/C-Anhaenge/Anhang-19c/II/anhang-19c-II.html",
+      "corpus_citation_path": "de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt",
+      "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl",
+      "extraction": "Exact complete native HTML extraction of the official EStH 2024 reproduction of BMF 17 January 2014; sections I–V were read. Capture does not determine legal bearing."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_bgbl-1996-ii-1455_kindergeld-marokko-inkrafttreten_document-1.txt",
+      "sha256": "d74044e2a41ebd165b63ce83ac6f3ef806a1d6ebe60a896489584c6f033a388f",
+      "url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl296s1455b.pdf%27%5D",
+      "corpus_citation_path": "de/regulation/bgbl-1996-ii-1455/kindergeld-marokko-inkrafttreten/document-1",
+      "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+      "extraction": "Exact UTF-8 body from the signed immutable corpus release. Treaty approval publications retain the complete captured PDF; commencement notices use native page-window bounds. Original source bytes are retained in the corpus. OCR is not manually corrected and requires visual proof review before encoding."
+    },
+    {
+      "path": "agreement-bodies/de_regulation_bgbl-1996-ii-2522_kindergeld-tunesien-inkrafttreten_document-1.txt",
+      "sha256": "57688ae5141e7333c05abd12556e4861c8babc2297fa30ecf9c04caf0748a72b",
+      "url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl296s2522a.pdf%27%5D",
+      "corpus_citation_path": "de/regulation/bgbl-1996-ii-2522/kindergeld-tunesien-inkrafttreten/document-1",
+      "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+      "receipt_origin": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+      "extraction": "Exact UTF-8 body from the signed immutable corpus release. Treaty approval publications retain the complete captured PDF; commencement notices use native page-window bounds. Original source bytes are retained in the corpus. OCR is not manually corrected and requires visual proof review before encoding."
+    },
+    {
+      "path": "agreement-bodies/de_statute_bgbl-1995-ii-634_kindergeld-marokko_document-1.txt",
+      "sha256": "0d3a03d7a1e6d2e92c92a7b620a8638edb8e231de7956f383651919733b8cf46",
+      "url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl295s0634.pdf%27%5D",
+      "corpus_citation_path": "de/statute/bgbl-1995-ii-634/kindergeld-marokko/document-1",
+      "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+      "receipt_origin": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+      "extraction": "Exact UTF-8 body from the signed immutable corpus release. Treaty approval publications retain the complete captured PDF; commencement notices use native page-window bounds. Original source bytes are retained in the corpus. OCR is not manually corrected and requires visual proof review before encoding."
+    },
+    {
+      "path": "agreement-bodies/de_statute_bgbl-1995-ii-641_kindergeld-tunesien_document-1.txt",
+      "sha256": "8b88f7e1f1e1fdf7f4b0e318ef5bd50edcc2e02d852aa1d70c22a7efa7493d14",
+      "url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl295s0641.pdf%27%5D",
+      "corpus_citation_path": "de/statute/bgbl-1995-ii-641/kindergeld-tunesien/document-1",
+      "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+      "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+      "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
+      "receipt_origin": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+      "extraction": "Exact UTF-8 body from the signed immutable corpus release. Treaty approval publications retain the complete captured PDF; commencement notices use native page-window bounds. Original source bytes are retained in the corpus. OCR is not manually corrected and requires visual proof review before encoding."
     }
   ],
   "members": [
@@ -666,11 +721,16 @@
       "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
       "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
       "status": "pending",
-      "text_capture_state": "citation_only",
+      "text_capture_state": "corpus_receipted",
       "inventory_page": 8,
       "country_contexts": [
         "Marokko"
-      ]
+      ],
+      "operative_source_path": "agreement-bodies/de_statute_bgbl-1995-ii-634_kindergeld-marokko_document-1.txt",
+      "operative_body_sha256": "0d3a03d7a1e6d2e92c92a7b620a8638edb8e231de7956f383651919733b8cf46",
+      "operative_corpus_citation_path": "de/statute/bgbl-1995-ii-634/kindergeld-marokko/document-1",
+      "operative_text_scope": "complete_approval_publication",
+      "discovery_note": "Full source capture is available; applicability and executable rules remain pending. The Morocco1991supplement changes Article7(4) from18to16; both the base treaty and supplement are retained in the same publication."
     },
     {
       "id": "de-kg-discovery-289b0e7c3d8d6b13",
@@ -832,6 +892,22 @@
       "operative_corpus_citation_path": "de/regulation/dvka/bosnien-sva/document-1",
       "operative_text_scope": "official_publisher_excerpt",
       "remaining_text_review": "The retained DVKA PDF labels itself Auszug. Recover and compare complete treaty/protocol text before treating absence of a Kindergeld rule as non-bearing or encoding omitted provisions."
+    },
+    {
+      "id": "de-kg-discovery-37a6c8c2b78ff64e",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Bekanntmachung vom 17. September 1996, BGBl. II S.2522: Inkrafttreten des deutsch-tunesischen Kindergeldabkommens am 1. August 1996",
+      "discovery_excerpt": "1. August 1996",
+      "source_path": "agreement-bodies/de_regulation_bgbl-1996-ii-2522_kindergeld-tunesien-inkrafttreten_document-1.txt",
+      "source_sha256": "57688ae5141e7333c05abd12556e4861c8babc2297fa30ecf9c04caf0748a72b",
+      "source_url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl296s2522a.pdf%27%5D",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "operative_source_path": "agreement-bodies/de_regulation_bgbl-1996-ii-2522_kindergeld-tunesien-inkrafttreten_document-1.txt",
+      "operative_body_sha256": "57688ae5141e7333c05abd12556e4861c8babc2297fa30ecf9c04caf0748a72b",
+      "operative_corpus_citation_path": "de/regulation/bgbl-1996-ii-2522/kindergeld-tunesien-inkrafttreten/document-1",
+      "operative_text_scope": "complete_operative_commencement_notice",
+      "discovery_note": "The notice establishes treaty commencement; it is distinct from the approval law and remains pending applicability/encoding review."
     },
     {
       "id": "de-kg-discovery-3a8452d6c8893e0d",
@@ -1970,11 +2046,16 @@
       "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
       "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
       "status": "pending",
-      "text_capture_state": "citation_only",
+      "text_capture_state": "corpus_receipted",
       "inventory_page": 13,
       "country_contexts": [
         "Tunesien"
-      ]
+      ],
+      "operative_source_path": "agreement-bodies/de_statute_bgbl-1995-ii-641_kindergeld-tunesien_document-1.txt",
+      "operative_body_sha256": "8b88f7e1f1e1fdf7f4b0e318ef5bd50edcc2e02d852aa1d70c22a7efa7493d14",
+      "operative_corpus_citation_path": "de/statute/bgbl-1995-ii-641/kindergeld-tunesien/document-1",
+      "operative_text_scope": "complete_approval_publication",
+      "discovery_note": "Full source capture is available; applicability and executable rules remain pending."
     },
     {
       "id": "de-kg-discovery-b88635d70c7e1487",
@@ -2138,6 +2219,22 @@
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
       "text_capture_state": "citation_only"
+    },
+    {
+      "id": "de-kg-discovery-c5dc988364156b5a",
+      "class_id": "de-kg-suppl-010",
+      "identity": "Bekanntmachung vom 23. Juli 1996, BGBl. II S.1455: Inkrafttreten des deutsch-marokkanischen Kindergeldabkommens und Zusatzabkommens am 1. August 1996",
+      "discovery_excerpt": "1. August 1996",
+      "source_path": "agreement-bodies/de_regulation_bgbl-1996-ii-1455_kindergeld-marokko-inkrafttreten_document-1.txt",
+      "source_sha256": "d74044e2a41ebd165b63ce83ac6f3ef806a1d6ebe60a896489584c6f033a388f",
+      "source_url": "https://www.bgbl.de/xaver/bgbl/start.xav?start=%2F%2F%2A%5B%40attr_id%3D%27bgbl296s1455b.pdf%27%5D",
+      "status": "pending",
+      "text_capture_state": "corpus_receipted",
+      "operative_source_path": "agreement-bodies/de_regulation_bgbl-1996-ii-1455_kindergeld-marokko-inkrafttreten_document-1.txt",
+      "operative_body_sha256": "d74044e2a41ebd165b63ce83ac6f3ef806a1d6ebe60a896489584c6f033a388f",
+      "operative_corpus_citation_path": "de/regulation/bgbl-1996-ii-1455/kindergeld-marokko-inkrafttreten/document-1",
+      "operative_text_scope": "complete_operative_commencement_notice",
+      "discovery_note": "The notice establishes treaty commencement; it is distinct from the approval law and remains pending applicability/encoding review."
     },
     {
       "id": "de-kg-discovery-c711d29acbcee070",
@@ -2405,8 +2502,12 @@
       "source_path": "bmf-positive-list-2025.txt",
       "source_sha256": "6d749220154520e881b7cdad399b82e8103adfd425ea3b77383f402a231da78c",
       "status": "pending",
-      "text_capture_state": "citation_only",
-      "discovery_note": "Official 2025 positive-register entry; applicability and operative text remain to be established. The register alone does not close this dependency."
+      "text_capture_state": "corpus_receipted",
+      "discovery_note": "Full source capture is available; applicability and executable rules remain pending.",
+      "operative_source_path": "bmf-2014-01-17-civil-partners.txt",
+      "operative_body_sha256": "07a22694bbadb838ec6d89e4180495056c476ba665c4ff7c2a1860c4bb23305c",
+      "operative_corpus_citation_path": "de/guidance/esth-2024/bmf-2014-01-17-civil-partners/inhalt",
+      "operative_text_scope": "complete_official_handbook_letter"
     },
     {
       "id": "de-kg-discovery-dc687b40f4c59ca6",
@@ -2495,11 +2596,16 @@
       "source_sha256": "c792e3820830b948ba1b4b0b56aa58d4036839a35f76d70b875258427e6f50e5",
       "source_url": "https://www.bmas.de/SharedDocs/Downloads/DE/zweiseitige-abkommen.pdf?__blob=publicationFile&v=9",
       "status": "pending",
-      "text_capture_state": "citation_only",
+      "text_capture_state": "corpus_receipted",
       "inventory_page": 8,
       "country_contexts": [
         "Marokko"
-      ]
+      ],
+      "operative_source_path": "agreement-bodies/de_statute_bgbl-1995-ii-634_kindergeld-marokko_document-1.txt",
+      "operative_body_sha256": "0d3a03d7a1e6d2e92c92a7b620a8638edb8e231de7956f383651919733b8cf46",
+      "operative_corpus_citation_path": "de/statute/bgbl-1995-ii-634/kindergeld-marokko/document-1",
+      "operative_text_scope": "complete_approval_publication",
+      "discovery_note": "Full source capture is available; applicability and executable rules remain pending. The Morocco1991supplement changes Article7(4) from18to16; both the base treaty and supplement are retained in the same publication."
     },
     {
       "id": "de-kg-discovery-e14615f8317fca14",
@@ -2791,13 +2897,13 @@
     "Verify BStBl II publication/class membership of BVerfG, Beschluss vom 2025-06-03, 1 BvR 2017/21 (upstream parentage; BStBl II publication unverified); encode its parentage applicability before closing its bearing frontier row.",
     "The 14 March 2025 BMF positive register supplies four additional §32/country-group candidate entries on page 56; broader indirect dependencies and subsequent 2025 publications still require examination. No exhaustive class claim.",
     "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.",
-    "Recover complete Kindergeld-specific Morocco1981/1991 and Tunisia1991 treaty texts plus newly enumerated amendment/continuity instruments from the BMAS inventory. The22DVKA captures are publisher extracts; they do not supply this missing treaty text. Inventory legal/commencement references still need complete corpus-link reconciliation."
+    "The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim."
   ],
   "counts": {
     "de-kg-suppl-007": 16,
     "de-kg-suppl-008": 2,
     "de-kg-suppl-009": 168,
-    "de-kg-suppl-010": 36
+    "de-kg-suppl-010": 38
   },
-  "receipt_sha256": "ef994dae0ea533d9ed497f150596994f2456740f02f4364606bd44cfba8d3863"
+  "receipt_sha256": "42c58f79896991ec9d794e7e716c6d309d50b48bd22b69dd97a79901b1e88579"
 }

@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5",
-  "corpus_release": "de-rulespec-2026-09-09-kindergeld-bmf-context",
-  "corpus_release_content_sha256": "a5518aeeae74d85fb8627dd7006edeb55c3fcb9741a928f1b46c156c737d255e",
+  "corpus_commit": "27510ad32be7e2111c20f3a7dd41a2ae40310c17",
+  "corpus_release": "de-rulespec-2026-09-09-kindergeld-treaty-texts",
+  "corpus_release_content_sha256": "415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -168,7 +168,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "4b3dd2ce5a7d9797de3e572573d3a78714269f71bf6df43b36f1d849aacb0443",
+      "subgraph_sha256": "258cbbe061c46298bea23a6b72f132dad654fd4350ad5268ab4d285aeae19f87",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -252,7 +252,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "ca958ad03a177957c43bcffa24f646fdd898ecd5c0704337c2dfa530d2b5ba77",
+      "subgraph_sha256": "d138488a2ff7b77ec98a5789671ef51871b2f2f1b0db350b0f7818232507d1ce",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -335,7 +335,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "9f2b1eb108ed30d8d628c86846b109c9efcab627622976c9f5c21650bdaa8419",
+      "subgraph_sha256": "db6325d9955eda81b25e695a27e26af977f29dac390d1f6e5de2e9cc3a3a71a9",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -358,7 +358,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "9a58723a018b00c019cfe63f26d9a3557e3b14272c2486ba90f031a04a2c3997"
+    "sha256": "508e3157e45806781bf980b0916c9e03e882983be369b2d660d07d85b27f5742"
   },
   "spine_closed": false
 }
