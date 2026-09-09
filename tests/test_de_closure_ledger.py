@@ -1567,3 +1567,21 @@ def test_calendar_calls_keep_arguments_and_bare_identifiers_in_frontier(function
     assert {row["name"] for row in module._module_inputs(document, "de:test")} == {
         function, "unknown_function", "record_date"
     }
+
+
+@pytest.mark.parametrize("literal", [
+    '"Dezember"', "'Dezember'", '"quoted \\"month\\""',
+    "'quoted \\'month\\''", '"line\\nbreak"', '"back\\\\slash"',
+    '"date_add_days(fake_date, fake_duration)"', '""', "''",
+])
+def test_string_values_do_not_create_dependency_leaves(literal: str) -> None:
+    module = _load_script()
+    document = {"rules": [{"name": "matches", "versions": [{
+        "formula": f"recorded_month == {literal} and unresolved_legal_condition"
+    }]}]}
+    assert module._module_inputs(document, "de:test") == [
+        {"slot": "de:test#input.recorded_month", "name": "recorded_month",
+         "module": "de:test", "read_by": ["matches"]},
+        {"slot": "de:test#input.unresolved_legal_condition", "name": "unresolved_legal_condition",
+         "module": "de:test", "read_by": ["matches"]},
+    ]

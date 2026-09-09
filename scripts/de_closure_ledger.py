@@ -106,6 +106,7 @@ SUPPLEMENTAL_RELATIONS = ("bears_on", "issued_under", "coordination", "guidance"
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
+_STRING_LITERAL = re.compile(r"\"(?:[^\"\\]|\\[\s\S])*\"|'(?:[^'\\]|\\[\s\S])*'")
 _CALENDAR_FUNCTIONS = frozenset({"date_add_days", "date_add_months", "date_add_years"})
 _RESERVED = frozenset(
     {
@@ -464,6 +465,9 @@ def _module_inputs(document: Mapping[str, Any], module_id: str) -> list[dict[str
             formula = version.get("formula")
             if not isinstance(formula, str):
                 continue
+            # RuleSpec strings are values, not references. Preserve offsets and
+            # separators so masking cannot join identifiers or invent calls.
+            formula = _STRING_LITERAL.sub(lambda match: " " * len(match.group()), formula)
             for match in _IDENTIFIER.finditer(formula):
                 token = match.group()
                 if token in _CALENDAR_FUNCTIONS and formula[match.end():].lstrip().startswith("("):
