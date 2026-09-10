@@ -12997,6 +12997,12 @@ committed_decisions:
     reason: Read paragraphs 1–17. Paragraphs 1–14 allocate the EStG32(6) sentences6–11 tax allowances between parents, stepparents and grandparents (including the75percent maintenance test and objections); paragraphs15–16 allocate a child’s section33b lump sum to parents; paragraph17 starts assessment-year2012 application. These allocation rules do not change the section32(6) sentence1 statutory allowance amounts used by EStG66(3), the section32(1)–(5) qualifying-child tests, or section64 Kindergeld recipient priority. Paragraph15 makes existing Kindergeld entitlement a condition of downstream lump-sum transfer, not vice versa. The allocated parental lump sum does not define the child’s own disability needs. No computable rule upstream of this monthly Kindergeld surface is added; this does not exclude other BMF letters or section33b need amounts. Official corpus body de/guidance/esth-2024/bmf-2013-06-28-child-allowance-transfer/inhalt, SHA-256 7147c50128a48e45bab702c29afc3e4cda2500431081ae00be20deeb68b3870e,
       release de-rulespec-2026-09-09-kindergeld-bmf-context at 6caa12dbaeb916f3f1c66c8e2f821c45b63c9ce5.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-20d4058656e75e8c
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R 19/16 decision of 14 September 2017, paragraphs1–17, read. Paragraphs10–15 distinguish the ordinary exam-result endpoint from a training term fixed by legislation. In the latter regime, early result notification does not end training before the legally prescribed term expires. The specific2015 Baden-Wuerttemberg training scheme was outside BBiG by BBiG3(1), so BBiG21(2) could not be applied indiscriminately. DA-KG2025 A15.10(7) expressly retains this holding. It bears on qualifying_child_count and the qualifying monthly interval. The statutory term must be derived from the applicable, version-bound training law, not supplied as a legal endpoint input; the historical three-year examples do not establish one duration for every2025 training scheme. Direct BStBlII2018page131 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-19-16-2017-09-14/document-1, body SHA-256
+      a1799b7d88f39dae11e29c3ab0bdbf6e52a981d03b2eaafa09d66c92353160dc.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-258c3463a611bbff
     status: excluded-with-reason
     classification: payout_routing
@@ -13071,6 +13077,12 @@ committed_decisions:
     reason: 'Full three-page BFH III R71/10 decision (4 August 2011), paragraphs1–16: paragraphs9–14 define the temporal binding effect of a final rejection notice after an unsuccessful, temporally unrestricted objection. Its effect extends to the end of the month in which the objection decision is notified, so a later application can result in a new fixing only from the following month. Paragraph13 restates EStG66(2) monthly entitlement while distinguishing already arisen claims from the reach of an administrative decision. The disability qualification at paragraph3 is the lower court finding, not a new disability test decided here. Paragraphs7–8 and15–16 concern admissibility and costs. The additional rule is the finality/reassessment surface already excluded by the section70 spine; it does not redefine statutory claimant qualification, disability inability, recipient priority or the fixed section66 monthly amount. The section66 monthly-condition dependency remains open and is not dispositioned
       by this procedural exclusion. Text-bound source: de/guidance/bfh-iii-r-71-10-2011-08-04/document-1, body SHA-256 01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-d8507d27fb02cb6a
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full four-page BFH III R 40/19 decision of7July2021, paragraphs1–31, read. Paragraphs16–21 distinguish actual training from application or pro-forma enrolment; ordinary university completion requires all prescribed assessments successfully completed and result notification, using the earlier of receipt of written confirmation and objective ability to generate it online. A verbal announcement alone normally does not suffice; later certificate collection or exmatriculation is not a universal endpoint. Paragraph21 preserves earlier completion on starting full-time work in the intended profession and actual further study for grade improvement. Paragraphs27–30 require actual training/service endpoints for the transition ground, reject substituting an application date, and exclude the entire transition when it exceeds four full calendar months. The application/waiting route must be tested separately. DA-KG2025 A15.10(9) and A16 retain these operative distinctions; they affect qualifying_child_count
+      and monthly boundaries and remain unencoded. This2016/2017 case supplies no current child-benefit amount or obsolete income ceiling. Direct BStBlII2021page864 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-40-19-2021-07-07/document-1, body SHA-256 5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-da811c7c21203da5
     status: classified-with-reason
     classification: civil_partner_spousal_equivalence
@@ -13231,6 +13243,12 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
     bears_on_computed_surface: false
+  - id: de-kg-instr-75c3f434723fb3e9
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full four-page BFH III R 40/19 decision of7July2021, paragraphs1–31, read. Paragraphs16–21 distinguish actual training from application or pro-forma enrolment; ordinary university completion requires all prescribed assessments successfully completed and result notification, using the earlier of receipt of written confirmation and objective ability to generate it online. A verbal announcement alone normally does not suffice; later certificate collection or exmatriculation is not a universal endpoint. Paragraph21 preserves earlier completion on starting full-time work in the intended profession and actual further study for grade improvement. Paragraphs27–30 require actual training/service endpoints for the transition ground, reject substituting an application date, and exclude the entire transition when it exceeds four full calendar months. The application/waiting route must be tested separately. DA-KG2025 A15.10(9) and A16 retain these operative distinctions; they affect qualifying_child_count
+      and monthly boundaries and remain unencoded. This2016/2017 case supplies no current child-benefit amount or obsolete income ceiling. Direct BStBlII2021page864 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-40-19-2021-07-07/document-1, body SHA-256 5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-78841044a219e9b8
     status: classified-with-reason
     body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
@@ -14284,9 +14302,9 @@ computed:
     counts:
       total: 774
       encoded: 2
-      classified-with-reason: 146
+      classified-with-reason: 149
       excluded-with-reason: 348
-      pending: 278
+      pending: 275
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14311,7 +14329,6 @@ computed:
     - de-kg-discovery-1ba7598d59138424
     - de-kg-discovery-1de49ebec0a559f7
     - de-kg-discovery-1def91f5a9f89211
-    - de-kg-discovery-20d4058656e75e8c
     - de-kg-discovery-220823c8e347c5c0
     - de-kg-discovery-237000cd7ae7e260
     - de-kg-discovery-278a4e45324352a8
@@ -14461,7 +14478,6 @@ computed:
     - de-kg-discovery-d730067060742965
     - de-kg-discovery-d743efa2606d5620
     - de-kg-discovery-d830798a28c4e42c
-    - de-kg-discovery-d8507d27fb02cb6a
     - de-kg-discovery-d8ad76f29086b7d4
     - de-kg-discovery-d8f8732223baa754
     - de-kg-discovery-d9d5d0f4ff95db48
@@ -14526,7 +14542,6 @@ computed:
     - de-kg-instr-6abee6f46fd03a40
     - de-kg-instr-6cf659dd66fd5e85
     - de-kg-instr-73d798cce838ed41
-    - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-77dbf6a1855cb84d
     - de-kg-instr-7e37eabb86048805
     - de-kg-instr-8570a332681be6e4
@@ -21960,7 +21975,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.12.2018, III R 26/18, BStBl II 2019 S. 765
     - id: de-kg-discovery-20d4058656e75e8c
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 14.09.2017, III R 19/16, BStBl II 2018 S. 131
       discovery_refs:
@@ -21968,6 +21983,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 14.09.2017, III R 19/16, BStBl II 2018 S. 131
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R 19/16 decision of 14 September 2017, paragraphs1–17, read. Paragraphs10–15 distinguish the ordinary exam-result endpoint from a training term fixed by legislation. In the latter regime, early result notification does not end training before the legally prescribed term expires. The specific2015 Baden-Wuerttemberg training scheme was outside BBiG by BBiG3(1), so BBiG21(2) could not be applied indiscriminately. DA-KG2025 A15.10(7) expressly retains this holding. It bears on qualifying_child_count and the qualifying monthly interval. The statutory term must be derived from the applicable, version-bound training law, not supplied as a legal endpoint input; the historical three-year examples do not establish one duration for every2025 training scheme. Direct BStBlII2018page131 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-19-16-2017-09-14/document-1, body SHA-256
+        a1799b7d88f39dae11e29c3ab0bdbf6e52a981d03b2eaafa09d66c92353160dc.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-220823c8e347c5c0
       status: pending
       identity_kind: class_member
@@ -23475,7 +23494,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 03.09.2015, VI R 9/15, BStBl II 2016 S. 166
     - id: de-kg-discovery-d8507d27fb02cb6a
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 07.07.2021, III R 40/19, BStBl II S. 864
       discovery_refs:
@@ -23483,6 +23502,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 07.07.2021, III R 40/19, BStBl II S. 864
+      classification: entitlement_condition
+      reason: 'Full four-page BFH III R 40/19 decision of7July2021, paragraphs1–31, read. Paragraphs16–21 distinguish actual training from application or pro-forma enrolment; ordinary university completion requires all prescribed assessments successfully completed and result notification, using the earlier of receipt of written confirmation and objective ability to generate it online. A verbal announcement alone normally does not suffice; later certificate collection or exmatriculation is not a universal endpoint. Paragraph21 preserves earlier completion on starting full-time work in the intended profession and actual further study for grade improvement. Paragraphs27–30 require actual training/service endpoints for the transition ground, reject substituting an application date, and exclude the entire transition when it exceeds four full calendar months. The application/waiting route must be tested separately. DA-KG2025 A15.10(9) and A16 retain these operative distinctions; they affect qualifying_child_count
+        and monthly boundaries and remain unencoded. This2016/2017 case supplies no current child-benefit amount or obsolete income ceiling. Direct BStBlII2021page864 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-40-19-2021-07-07/document-1, body SHA-256 5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-d8ad76f29086b7d4
       status: pending
       identity_kind: class_member
@@ -24564,7 +24587,7 @@ computed:
       document_citation_path: de/guidance/bfh-iii-r-41-19-2021-08-31
       title: 'BFH, III R 41/19, 2021-08-31: Kindergeld; Berücksichtigung eines Kindes nach krankheitsbedingtem Ausbildungsabbruch'
     - id: de-kg-instr-75c3f434723fb3e9
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-1f5ac01ef702228a1dea
       - de-corpus-5a2117ef6b7a7ee6d833
@@ -24577,6 +24600,10 @@ computed:
       citation_label: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
       document_citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
       title: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
+      classification: entitlement_condition
+      reason: 'Full four-page BFH III R 40/19 decision of7July2021, paragraphs1–31, read. Paragraphs16–21 distinguish actual training from application or pro-forma enrolment; ordinary university completion requires all prescribed assessments successfully completed and result notification, using the earlier of receipt of written confirmation and objective ability to generate it online. A verbal announcement alone normally does not suffice; later certificate collection or exmatriculation is not a universal endpoint. Paragraph21 preserves earlier completion on starting full-time work in the intended profession and actual further study for grade improvement. Paragraphs27–30 require actual training/service endpoints for the transition ground, reject substituting an application date, and exclude the entire transition when it exceeds four full calendar months. The application/waiting route must be tested separately. DA-KG2025 A15.10(9) and A16 retain these operative distinctions; they affect qualifying_child_count
+        and monthly boundaries and remain unencoded. This2016/2017 case supplies no current child-benefit amount or obsolete income ceiling. Direct BStBlII2021page864 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-40-19-2021-07-07/document-1, body SHA-256 5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-77dbf6a1855cb84d
       status: pending
       discovery_refs:
@@ -25679,11 +25706,13 @@ computed:
     - de-kg-dakg-A9
     - de-kg-dakg-V14.3
     - de-kg-dakg-V23.1
+    - de-kg-discovery-20d4058656e75e8c
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
     - de-kg-discovery-756b8977705fa113
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
+    - de-kg-discovery-d8507d27fb02cb6a
     - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-dc687b40f4c59ca6
     - de-kg-discovery-e41c039197f881bd
@@ -25696,6 +25725,7 @@ computed:
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
     - de-kg-instr-703d3b12aaab39f8
+    - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
@@ -25717,8 +25747,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 132
-    open_dependency_count: 140
+    instruments_bearing_on_computed_count: 135
+    open_dependency_count: 143
     closed: false
   measured_denominators:
     spine_rows: 18

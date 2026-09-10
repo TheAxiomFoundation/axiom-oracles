@@ -9,9 +9,10 @@ Repeating that restriction cannot produce a complete module.
 
 The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
-It contains the complete pinned § 32(4) text, twelve fully read, hash-verified
-DA-KG sections (including the structural A 20.2 heading) and the complete BFH
-III R 37/21 and III R 10/22 decisions. The remaining guidance families listed below still need their
+It contains the complete pinned § 32(4) text, 27 fully read, hash-verified
+DA-KG sections (including the structural A 15, A 17 and A 20.2 headings) and four
+complete BFH decisions: III R 37/21, III R 10/22, III R 19/16 and III R 40/19.
+The review now covers all A 15 and A 17 text. The remaining guidance families listed below still need their
 own implementation review; listing them does not declare them reviewed or encoded.
 
 ## Source-unit coverage
@@ -117,6 +118,58 @@ assert that those records suffice for every legal case.
   substantive and predominant-employment qualifications. Section 9(6)'s separate
   first-training criteria must not be imported into this test.
 
+* **Training is not one enrolment flag or one hours cutoff.** A 15.1–15.9
+  distinguish a concrete vocational goal, structured instruction, genuine
+  apprenticeship, ordinary employment and actual study. Formal enrolment alone
+  does not resolve seriousness or a leave of absence. The ten-hour indicators
+  are not universal minimums: the guidance states exceptions and additional
+  evidence criteria. General free self-tuition must be distinguished from the
+  expressly recognized, strictly evidenced preparation for external school-leaving
+  examinations. Internships that are neither prescribed nor recommended have a
+  stated maximum of twelve months; vocational orientation has a separate
+  three-month limit. These limits do not apply indiscriminately to prescribed
+  placements. Military training, disability-specific training, foreign schooling,
+  distance education and language courses each need their stated conditions.
+* **The endpoint is selected by the applicable training regime.** A 15.10(1)–(7)
+  and BFH III R 19/16 distinguish official school-year boundaries, ordinary final
+  result notification and legally fixed training terms. Do not hard-code 31 July
+  for all schools or treat an ordinary contract end date as the statutory term.
+  Applicable school calendars and training legislation remain source dependencies.
+  Failed examinations, continued preparation without a contract, insolvency and
+  imprisonment/acquittal each have separate continuation rules. A legal duration
+  must be computed from the defining instrument, not imported as a factual date.
+* **Online result availability can precede certificate collection.** A 15.10(9)
+  and BFH III R 40/19 require completion of the prescribed assessments and the
+  earlier of written result receipt and objective ability to generate written
+  confirmation of completion and grades online. Oral announcement, certificate
+  collection and exmatriculation are not universal substitutes. The decision
+  retains earlier completion on full-time work in the intended profession and
+  actual continued study for grade improvement. An application is not itself
+  training or a transition endpoint. A gap exceeding four full months excludes
+  the whole transition ground; it does not grant its first four months.
+* **Waiting requires the source-defined absence of an available place.** A 17.1
+  includes an offered place whose start is delayed by school, university or
+  employer organization, but excludes inability to meet admission conditions or
+  other obstacles unrelated to availability. Where applications are not yet
+  open, a written intention to apply promptly can supply evidence. Deliberately
+  deferring the desired start differs from an unavailable start. After a prior
+  consideration ground ends, late commencement of serious efforts beyond the
+  following month starts consideration only in the first application/registration
+  month. Continued efforts after rejection and the separate waiting ground must
+  not be replaced by a four-month transition timer.
+* **Illness and maternity have different continuation rules.** A 15.11 requires
+  continuing legal ties to the training provider for the temporary-illness route.
+  A 17.2 also covers temporary inability to seek or start training, subject to the
+  stated evidence of future intention and resumption requirements. The six-month
+  criterion concerns expected functional impairment and the medical evidence;
+  an unknown or longer duration requires examination of the disability route,
+  not automatic qualification for an initial six months. The actual duration and
+  subsequent resumption also matter. Student semester rules can extend the
+  relevant interval beyond recovery. MuSchG prohibitions and prohibited activities
+  require their defining rules and recorded evidence; childcare/parental leave
+  is treated differently. The maternity waiting rule expressly does not depend
+  on resuming the search after the prohibition ends, unlike the illness rule.
+
 ## Required behavioral witnesses
 
 These are planned acceptance cases, not claims of executed tests:
@@ -157,6 +210,27 @@ These are planned acceptance cases, not claims of executed tests:
 15. Passing an examination, receiving its result, and starting full-time work in
     the intended profession on different dates; include an intermediate exam and
     an unfinished degree change.
+16. Results and grades available for written retrieval online in October versus
+    paper certificate collection in November; do not extend training to collection.
+17. An ordinary early final examination versus a training term fixed by the
+    applicable legislation, with remaining training after result notification.
+18. Five full months between actual training stages versus four; a month-four
+    application cannot shorten the former transition, though a separate waiting
+    ground may apply.
+19. School-year dates that depart from 31 July; official semester start versus
+    an application with no actual training activity.
+20. Training-place offers with an organizationally delayed start versus an
+    unavailable place caused by the child's separate employment commitment.
+21. Applications not yet open, prompt evidenced intention, and later application
+    versus an orientation period followed by the first serious application.
+22. Temporary illness with a continuing training relationship versus terminated
+    training, unknown prognosis or expected impairment beyond six months; check
+    the separate waiting/disability routes without assuming their results.
+23. Recovery during a semester, the next semester's resumption, and failure to
+    resume training efforts; contrast the expressly different maternity rule.
+24. Prescribed placement, unprescribed vocational placement and orientation work
+    across their distinct twelve-/three-month limits; retain genuine-training
+    requirements instead of classifying any low-paid job as an internship.
 
 Every omitted external prerequisite must identify the actual source reference
 and missing absolute output. Local computations cannot be deferred as runtime
