@@ -178,6 +178,7 @@ class ClosureSummary:
     pending_instruments: int
     pending_inputs: int
     open_dependencies: int
+    non_encoded_reasons_complete: bool = True
 
 
 def _sha256(data: bytes) -> str:
@@ -667,10 +668,26 @@ def _measurement_basis(
         for row in modules
         if row.get("state") == "captured" and isinstance(row.get("module_id"), str)
     )
+    # Bind the certificate PREMISES this inventory reads (conformant and
+    # executable), not the whole file: the certificate embeds this ledger's
+    # own SHA-256 as closure evidence once certify consumes it through the
+    # central producer gate, so whole-file binding would be a hash cycle
+    # with no fixpoint. The closed verdict is exactly the part derived from
+    # this ledger and is excluded from the binding by construction.
+    premises = {
+        "conformant": verdicts.get("conformant"),
+        "executable": verdicts.get("executable"),
+    }
+    premises_sha256 = _sha256(
+        json.dumps(premises, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode(
+            "utf-8"
+        )
+    )
     return {
         "work_inventory": {
             "certificate_path": certificate_path.relative_to(REPO_ROOT).as_posix(),
-            "certificate_sha256": _sha256(raw),
+            "certificate_premises_sha256": premises_sha256,
+            "certificate_premises": ["conformant", "executable"],
             "oracle_target": 2,
             "captured_oracle_legs": [captured_oracle[key] for key in sorted(captured_oracle)],
             "executable_target": 1,
@@ -1568,6 +1585,7 @@ def validate_artifact(document: Any) -> ClosureSummary:
         pending_instruments=len(candidates),
         pending_inputs=len(leaves),
         open_dependencies=len(leaves),
+        non_encoded_reasons_complete=computed.get("non_encoded_reasons_complete") is True,
     )
 
 

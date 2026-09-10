@@ -4,7 +4,9 @@
     "no comparison record has been declared",
     "de/regulation/bsv-2018/1: encoding and 2025 temporal evidence pending",
     "de/statute/sgb-6/168: signature pending",
-    "executable reproduction receipt pending"
+    "executable reproduction receipt pending",
+    "closed: instrument frontier incomplete \u2014 11 of 11 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: dependency closure open \u2014 1 open dependencies (0 law-derived inputs, 1 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
@@ -65,7 +67,14 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "f291a6fe3fd11e26c04a2e5e8015642cd5c3e9b8e59ce7b31d5c56ee6e494e1f"
+      "sha256": "eea77bac75e1df7b69672dcef37abfb3d29bcd683df72f1148466cba30d738a2"
+    },
+    {
+      "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
+      "claim": "closed:de/rv-employee-contribution",
+      "mode": "computed",
+      "sha256": "a2975be1172ad8882bd7c8512a4fe7e8d6d6867b9457238925eb5300d267b532",
+      "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
@@ -79,11 +88,36 @@
   "schema": "axiom_oracles.program_certificate.v1",
   "verdicts": {
     "closed": {
+      "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "blockers": [
-        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+        "closed: instrument frontier incomplete \u2014 11 of 11 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open \u2014 1 open dependencies (0 law-derived inputs, 1 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
+      "boundary_frontier": {
+        "complete": false,
+        "input_count": 1,
+        "inputs": [
+          {
+            "id": "de-rv-leaf-3df430088fbe0431",
+            "input": "total_pension_insurance_contribution",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "employee_pension_insurance_contribution_share"
+            ],
+            "slots": [
+              "de:statutes/sgb-6/168#input.total_pension_insurance_contribution"
+            ],
+            "status": "pending"
+          }
+        ],
+        "law_derived_count": 0,
+        "pending": [
+          "total_pension_insurance_contribution"
+        ],
+        "pending_count": 1,
+        "unclassified_count": 1
+      },
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 2,
@@ -135,18 +169,51 @@
       ],
       "dependency_closure": {
         "closed": false,
-        "missing": true,
-        "requirement": "closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block"
+        "instruments_bearing_on_computed": [],
+        "law_derived_inputs": [],
+        "open_dependency_count": 1,
+        "unclassified_inputs": [
+          "total_pension_insurance_contribution"
+        ]
       },
       "evidence_roots": [],
       "instrument_frontier": {
         "complete": false,
-        "missing": true,
-        "requirement": "closure must disposition the act's subordinate instruments (oracles#491); this closure declares none"
+        "counts": {
+          "classified-with-reason": 0,
+          "encoded": 0,
+          "excluded-with-reason": 0,
+          "pending": 11,
+          "total": 11
+        },
+        "instrument_count": 11,
+        "pending": [
+          "de-rv-instr-22c390264093bed6",
+          "de-rv-instr-39594b16de842cc6",
+          "de-rv-instr-3bf6a9afce351d7a",
+          "de-rv-instr-45a23bb6aa1843b8",
+          "de-rv-instr-b66d3dc850465244",
+          "de-rv-instr-bvv",
+          "de-rv-instr-contribution-rate-2025",
+          "de-rv-instr-f60d1fbcb6b28d3a",
+          "de-rv-instr-faktor-f-2025",
+          "de-rv-instr-geringfuegigkeitsgrenze",
+          "de-rv-instr-zusatzbeitrag-2025"
+        ],
+        "supplemental_count": null
       },
       "mode": "computed",
+      "non_encoded_reasons_complete": true,
       "pending_citations": 1,
       "pending_money_atoms": null,
+      "provision_counts": {
+        "classified-with-reason": 0,
+        "encoded": 0,
+        "excluded-with-reason": 0,
+        "partially-encoded": 0,
+        "pending": 3,
+        "total": 3
+      },
       "resolution_mode": "computed",
       "root_node_count": 2,
       "root_nodes": [

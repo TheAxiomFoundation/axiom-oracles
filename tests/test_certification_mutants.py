@@ -43,6 +43,18 @@ def _load(name: str):
     return module
 
 
+#: The central gate's blocker lines for the committed all-pending kindergeld
+#: discovery ledger (18 spine rows / 28 candidate instruments / 4 law-derived
+#: + 4 unclassified leaves). Certificates and the DE census must both carry
+#: exactly these — they are derived, never typed, in the producers.
+DE_KINDERGELD_CLOSURE_BLOCKERS = [
+    "closed: instrument frontier incomplete — 28 of 28 subordinate/bearing "
+    "instruments pending disposition (oracles#491)",
+    "closed: dependency closure open — 8 open dependencies (4 law-derived "
+    "inputs, 4 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)",
+]
+
+
 def _load_from(path: Path):
     spec = importlib.util.spec_from_file_location(f"_tmp_{path.stem}", path)
     module = importlib.util.module_from_spec(spec)
@@ -3744,7 +3756,7 @@ def test_de_census_recomputes_ready_state_when_exact_inputs_land(monkeypatch):
     # Even with a forged all-clear executable status, the census must keep
     # the certificate pending on the open v3 closure requirements.
     assert kindergeld["certificate_status"] == "pending"
-    assert kindergeld["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert kindergeld["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     amount_root = next(
         row
         for row in kindergeld["declared_roots"]
@@ -3887,8 +3899,14 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert exercise["fields"]["yearly_earned_income_total"]["distinct"] == 10
     closed = certificate["verdicts"]["closed"]
     assert closed["value"] is False
-    assert closed["instrument_frontier"]["missing"] is True
-    assert closed["dependency_closure"]["missing"] is True
+    # The v3 discovery ledger is consumed through the central gate: the
+    # frontier and dependency blocks are DECLARED and open, not missing.
+    assert closed["instrument_frontier"]["complete"] is False
+    assert closed["instrument_frontier"]["instrument_count"] == 28
+    assert closed["dependency_closure"]["closed"] is False
+    assert closed["dependency_closure"]["open_dependency_count"] == 8
+    assert len(closed["dependency_closure"]["unclassified_inputs"]) == 4
+    assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0
 
@@ -3940,7 +3958,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
     # certify while the closure's instrument frontier is undeclared.
-    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 
@@ -3953,8 +3971,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert mutant["certified"]["value"] is False
     assert mutant["certified"]["state"] == "no"
     assert mutant["blockers"] == [
-        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block',
+        *DE_KINDERGELD_CLOSURE_BLOCKERS,
         "release replay mismatch",
     ]
 
@@ -5661,3 +5678,183 @@ def test_de_raw_replay_binds_the_engine_pin_it_is_given(tmp_path, monkeypatch):
         )
     with pytest.raises(executable.DEExecutableError, match="ships no asset"):
         executable._host_engine_pin("riscv64-unknown-linux-gnu")
+
+
+# ---------------------------------------------------------------------------
+# DE closure through the central producer gate (issue #502 step 1): the
+# discovery ledgers are consumed by scripts/closure_gate.py like every other
+# closure artifact; nothing DE-specific decides the closed premise.
+# ---------------------------------------------------------------------------
+
+
+def test_closure_gate_counts_unclassified_inputs_as_open():
+    """A discovery ledger that has not typed every leaf must count those
+    leaves as open dependencies; they can never be hidden or netted away."""
+
+    import closure_gate
+
+    computed = {
+        "instrument_frontier": {
+            "instrument_count": 2,
+            "counts": {"total": 2, "pending": 0},
+            "pending": [],
+            "complete": True,
+        },
+        "dependency_closure": {
+            "open_dependency_count": 1,
+            "law_derived_inputs": [],
+            "unclassified_inputs": ["x"],
+            "instruments_bearing_on_computed": [],
+            "closed": False,
+        },
+    }
+    frontier, dependency, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is True
+    assert dependency["unclassified_inputs"] == ["x"]
+    assert passes is False
+    assert blockers == [
+        "closed: dependency closure open — 1 open dependencies (0 law-derived "
+        "inputs, 1 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+    ]
+
+    # MUTANT: an unclassified list the count does not include is malformed.
+    forged = copy.deepcopy(computed)
+    forged["dependency_closure"]["open_dependency_count"] = 0
+    forged["dependency_closure"]["closed"] = True
+    _f, dependency, passes, blockers = closure_gate.gate(forged)
+    assert passes is False
+    assert dependency["malformed"] is True
+    assert blockers == ["closed: " + closure_gate.DEPENDENCY_MALFORMED_REQUIREMENT]
+
+    # MUTANT: unclassified_inputs that is not a list is malformed too.
+    forged = copy.deepcopy(computed)
+    forged["dependency_closure"]["unclassified_inputs"] = 1
+    assert closure_gate.gate(forged)[1]["malformed"] is True
+
+    # Fully closed, well-formed: no blockers at all.
+    closed = copy.deepcopy(computed)
+    closed["dependency_closure"].update(
+        {"unclassified_inputs": [], "open_dependency_count": 0, "closed": True}
+    )
+    assert closure_gate.gate(closed)[2:] == (True, [])
+
+    # Missing blocks keep their requirement sentences.
+    _f, _d, passes, blockers = closure_gate.gate({})
+    assert passes is False
+    assert blockers == [
+        "closed: " + closure_gate.FRONTIER_MISSING_REQUIREMENT,
+        "closed: " + closure_gate.DEPENDENCY_MISSING_REQUIREMENT,
+    ]
+
+
+def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
+    certify = _load("certify")
+    evidence = []
+    closed = certify._closed_verdict(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"], evidence
+    )
+    assert closed["mode"] == "computed"
+    assert closed["value"] is False
+    assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
+    assert closed["instrument_frontier"]["instrument_count"] == 28
+    assert closed["instrument_frontier"]["complete"] is False
+    assert closed["dependency_closure"]["open_dependency_count"] == 8
+    assert closed["dependency_closure"]["unclassified_inputs"]
+    assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
+    assert closed["provision_counts"]["pending"] == 18
+    # The exact-path summary still contributes its scope fields only.
+    assert closed["rulespec_commit"] == "d83ba3db30e2f63376aacf822d116687589b8564"
+    assert closed["by_signature_state"] is not None
+    claims = {row["claim"] for row in evidence}
+    assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims
+    # The producer's validate_artifact is a hermetic rederivation: it must
+    # have been invoked (no DE-specific path bypasses it).
+    assert any(
+        row.get("verification") == "producer_artifact_validation"
+        for row in evidence
+    )
+
+
+def test_de_forged_ledger_cannot_flip_the_central_gate(tmp_path, monkeypatch):
+    """MUTANT: computed.closed=true (or a complete frontier / closed
+    dependency block) hand-written into the ledger fails the producer's
+    exact rederivation, so it never reaches the gate."""
+
+    certify = _load("certify")
+    source = REPO / "conformance/closure/de-kindergeld.yaml"
+    for mutate in (
+        lambda d: d["computed"].__setitem__("closed", True),
+        lambda d: d["computed"]["instrument_frontier"].update(
+            {"pending": [], "complete": True}
+        ),
+        lambda d: d["computed"]["dependency_closure"].update(
+            {
+                "law_derived_inputs": [],
+                "unclassified_inputs": [],
+                "open_dependency_count": 0,
+                "closed": True,
+            }
+        ),
+    ):
+        document = yaml.safe_load(source.read_text())
+        mutate(document)
+        forged = tmp_path / "de-kindergeld.yaml"
+        forged.write_text(yaml.safe_dump(document, sort_keys=False, allow_unicode=True))
+        real_path = _load("certify")._repo_artifact_path
+        monkeypatch.setattr(
+            certify,
+            "_repo_artifact_path",
+            lambda relative, label, _p=forged: (
+                _p if str(relative).endswith("de-kindergeld.yaml") else real_path(relative, label=label)
+            ),
+        )
+        spec = {
+            "computed": {
+                "closed": {
+                    "artifact": "conformance/closure/de-kindergeld.yaml",
+                    "producer": "scripts/de_closure_ledger.py",
+                }
+            }
+        }
+        with pytest.raises(ValueError, match="failed closure validation"):
+            certify._producer_closed_verdict("de/kindergeld", spec, [])
+
+
+def test_exact_path_summary_alone_fails_the_central_gate_for_any_program():
+    """No program-name conditional: a spec that names only an exact-path
+    summary (no producer ledger) fails closed on the same central gate."""
+
+    certify = _load("certify")
+    evidence = []
+    closed = certify._closed_verdict(
+        "de/kindergeld", {"computed_closed": "closure/de/summary.json"}, evidence
+    )
+    assert closed["value"] is False
+    assert closed["instrument_frontier"]["missing"] is True
+    assert closed["dependency_closure"]["missing"] is True
+    assert closed["blockers"] == [
+        "closed: closure must disposition the act's subordinate instruments "
+        "(oracles#491); this artifact declares none",
+        "closed: closure must type every leaf and encode every law-derived "
+        "dependency (CERTIFIED.md v3); this artifact declares no "
+        "dependency-closure block",
+    ]
+
+
+def test_de_census_and_certificate_carry_the_same_closure_blockers():
+    census = _load("de_certificate_census")
+    certify = _load("certify")
+    rows = census.build()["programs"]
+    for program in (
+        "de/kindergeld",
+        "de/rv-employee-contribution",
+        "de/unterhaltsvorschuss",
+    ):
+        certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        closure_lines = [b for b in certificate["blockers"] if b.startswith("closed: ")]
+        assert closure_lines == certificate["verdicts"]["closed"]["blockers"]
+        assert [b for b in rows[program]["blockers"] if b.startswith("closed: ")] == (
+            closure_lines
+        )
+        assert rows[program]["certificate_status"] == "pending"
+        assert certificate["certified"]["value"] is False

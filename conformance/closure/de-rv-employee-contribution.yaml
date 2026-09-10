@@ -232,7 +232,10 @@ generated_facts:
   measurement_basis:
     work_inventory:
       certificate_path: certificates/de-rv-employee-contribution.json
-      certificate_sha256: 2e0b629f80b76f62de8639cb0611f2eb3b5629feb73b5792a997b86c8e2f7760
+      certificate_premises_sha256: 348bba4f47a8744326972d2da82827f810f47ceec128e1923d66a00f4d491e4b
+      certificate_premises:
+      - conformant
+      - executable
       oracle_target: 2
       captured_oracle_legs: []
       executable_target: 1

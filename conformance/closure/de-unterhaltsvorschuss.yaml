@@ -525,7 +525,10 @@ generated_facts:
   measurement_basis:
     work_inventory:
       certificate_path: certificates/de-unterhaltsvorschuss.json
-      certificate_sha256: 587a639ba5d6aa7392be26a5df07ea3a7d0df257f64b81190ad968a8be22fc59
+      certificate_premises_sha256: 348bba4f47a8744326972d2da82827f810f47ceec128e1923d66a00f4d491e4b
+      certificate_premises:
+      - conformant
+      - executable
       oracle_target: 2
       captured_oracle_legs: []
       executable_target: 1
