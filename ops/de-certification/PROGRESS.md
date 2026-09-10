@@ -14,6 +14,156 @@
   dk/d3 lane owns. The certificate stays at `certified: no`; these decisions
   change scope, not evidence.
 
+## Stabilization sprint (2026-09-04, Pavel owning)
+
+- oracles#498 fixed: certificates recompute on macOS (per-target engine
+  pins; the receipt still binds the producing x86_64-linux archive).
+- DE routed through the central producer gate: `PROGRAMS["de/*"]` declare
+  the v3 ledgers as `computed.closed` producers; `scripts/closure_gate.py`
+  is the one v3 gate (frontier complete, dependency closure well-formed and
+  closed, `unclassified_inputs` counted as open) for DK/NZ/tariff/DE alike;
+  the unconditional DE fail-closed block in `certify.py` is retired and the
+  DE census derives its closure blockers from the same gate. Verdicts
+  unchanged (all three DE programs `certified: no`), blockers now measured.
+- Hash cycle broken: the ledgers' `work_inventory` now binds
+  `certificate_premises_sha256` over the conformant and executable verdicts
+  it reads, not the whole certificate file — the certificate embeds the
+  ledger's own SHA-256 as closure evidence, so whole-file binding had no
+  fixpoint. Regenerating either side now converges in one pass.
+- Ledger consumes committed decisions: `committed_decisions.provisions`
+  (bound by citation_path + spine body_sha256), `instrument_dispositions`
+  (bound by candidate id + body_sha256 for corpus rows, with the v3
+  bears_on_computed_surface rule), and `leaf_classifications` (bound by
+  frontier input; source-typed law_derived leaves cannot be demoted) overlay
+  the generated facts in `computed`; `closed` computes true only when every
+  row is dispositioned and the dependency closure is empty. Committed
+  ledgers unchanged (empty decisions reproduce the all-pending join).
+  Kindergeld discovery reads can now be recorded row by row
+  (docs/de-kindergeld-certification.md, "Recording dispositions").
+- Document layer measured: DA-KG 2025 (the retrieved `de-subject-003`
+  bytes, sha-verified against the snapshot receipt) parsed with
+  `pdftotext -layout` into 420 numbered headings, all 420 section bodies
+  located and hashed (`scripts/parse_de_subject_documents.py`,
+  `conformance/closure/de-subject-document-headings.json`). The ledger
+  consumes the committed JSON hermetically; kindergeld's instrument frontier
+  is now 448 candidates (28 + 420), all pending. The four unretrieved
+  subject queries are 404s on preregistered URLs, not connectivity; fixing
+  them is a query-set revision plus a corpus recapture, left open.
+- Kindergeld reads, DA-KG 2025 Kapitel O (27 headings, 2026-09-07): all
+  dispositioned in `committed_decisions.instrument_dispositions` with the
+  section body hash — 26 excluded (structural headings, five
+  "(weggefallen)", competence, forms, tax secrecy/data protection,
+  records, IdNr control, periodic review, statistics, supervision,
+  inter-agency cooperation) and O 2.4 classified as an instrument index.
+  O 2.4 Abs. 2 names instruments not yet in the frontier (EStR/EStH, LStR,
+  AEAO, AStBV (St), BMF letters, BZSt directives, published court
+  decisions, bilateral social-security agreements, Regulations (EC)
+  883/2004, 987/2009, 859/2003, Regulation (EU) 1231/2010, the EU/UK
+  Withdrawal Agreement); they are recorded in the reason and need a
+  `supplemental_instruments` section (as in the DK ledger) to enter as
+  pending candidates — next contract change. Frontier: 421 of 448
+  pending. Hermetic rederivation now takes decisions from the document
+  under check (working-tree edits are checkable before commit).
+- `supplemental_instruments` section landed in the ledger contract (mirrors
+  DK): the 15 instruments O 2.4 Abs. 2 names are enrolled as pending rows
+  bound to O 2.4's section hash (`de-kg-suppl-001`–`015`). Four are classes
+  (BMF letters, BZSt directives, published court decisions, bilateral
+  agreements) whose members a discovery channel must enumerate; the
+  frontier cannot complete around them. Kindergeld: 463 candidates, 436
+  pending.
+- Kindergeld reads, DA-KG 2025 Kapitel V (148 headings, 2026-09-07): 144
+  excluded as procedure / payment mechanics / recovery / payout routing;
+  four classified as open bearing restatements of spine rules (V 14.3
+  month principle § 66 Abs. 2; V 23.1 unrounded payout vs the module's
+  whole-euro rounding rule; V 23.4 six-month payout limit § 70 Abs. 1;
+  V 24.2 per-child share § 76). Those four stay open dependencies until the
+  spine provisions are encoded and the rules bound to them — the first
+  concrete encoder work the reads have produced. Frontier 288 of 463
+  pending; 12 open dependencies. Next: Kapitel R (69) and S (64), then A
+  (108, where most bearing instruments are expected).
+- Kindergeld reads, DA-KG 2025 Kapitel R (69) and S (64), 2026-09-07: all
+  133 excluded as appeals / court / penal procedure and penalty scales; no
+  bearing rows. KiZDAV (issued under § 68 Abs. 5 EStG) and RiStBV enrolled
+  as pending supplementals. Frontier 157 of 465 pending: Kapitel A (108
+  headings, entitlement conditions — where bearing instruments and the
+  encoder work are expected), the 28 discovered candidates (BKGG, EStG
+  § 31, corpus citations, unresolved references), and 17 supplementals.
+- Kindergeld reads, DA-KG 2025 Kapitel A (112 headings, 2026-09-07): 20
+  excluded (structural headings, A 21 repealed, A 19.2 proof of disability);
+  92 classified as open bearing rows — 28 spine restatements (§§ 62–66, 78)
+  and 64 entitlement conditions from outside the spine (AO residence, § 1
+  EStG, AufenthG/FreizügG, BGB kinship, foster children, the § 32 Abs. 4
+  grounds for adult children including the quantified disability
+  self-support test, the second-training 20-hour exclusion). Each names the
+  law-derived input it decides (claimant_entitlement, qualifying_child_count,
+  recipient_priority, substitute_child_benefit_exclusion). The DA-KG reads
+  are complete: 465 candidates, 45 pending (28 discovered candidates, 17
+  supplementals); 104 open dependencies (4 law-derived inputs, 4
+  unclassified inputs, 96 bearing instruments). The open count is now the
+  honest size of the encoder work: the entitlement layer (§§ 62–65, § 32
+  EStG) is unencoded and every DA-KG rule on it stays open until it is.
+- Spine and leaf dispositions (2026-09-08): 13 of 18 spine rows recorded —
+  § 66 partially-encoded by the captured module; §§ 67–69, 71–77 excluded
+  (procedure, data, payout routing, set-off, attachment, appeal costs,
+  repealed); § 70 excluded as fixing/payout/correction machinery on the
+  strength of Abs. 1 Satz 3. §§ 62–65 and § 78 stay pending by decision:
+  they define the four law-derived inputs and can only leave the spine as
+  encoded. The four unclassified § 66 inputs are typed law-derived (month
+  window from §§ 62–65/§ 32; § 31/§ 32 Abs. 6 increase; increased amount).
+  V 23.4 and V 24.2 re-dispositioned non-bearing to match the § 70 / § 76
+  spine rows. Spine 5 pending; frontier 45 of 465; 102 open dependencies
+  (8 law-derived, 0 unclassified, 94 bearing). Provision texts were
+  fetched from axiom-corpus at the pinned commit and hash-verified — no
+  local corpus checkout needed for spine reads.
+- Discovered candidates (2026-09-08): 27 of 28 dispositioned — SteFeG
+  encoded (its § 66 amounts are the module's two versions); 14 open bearing
+  (EStG §§ 1, 2, 19, 31, 32, BKGG, SGB III, SGB VI, BEEG, AufenthG,
+  FreizügG/EU, AO §§ 139a/139b, SGB VII § 217 Abs. 3 old, EEA Agreement),
+  of which five are not in the pinned corpus release and need capture; 11
+  excluded (data, procedure, recovery references; inbound WoGG/UhVorschG;
+  EStG § 19a mis-resolved from SGB I); the DA-KG seed recorded as a
+  container. One left pending: the 26.5.2026 EStG amending act (not in the
+  corpus). Frontier 18 of 465 pending (17 supplementals + that act); 116
+  open dependencies (8 law-derived, 0 unclassified, 108 bearing).
+- Supplementals (2026-09-08): 13 of 17 decided on captured text — 10 open
+  bearing (EStR/EStH, LStR/LStH, AEAO §§ 8/9, Regulations 883/2004,
+  987/2009, 1231/2010, 859/2003, Withdrawal Agreement), 3 excluded (AStBV,
+  KiZDAV, RiStBV). The four classes (BMF letters, BZSt directives, court
+  decisions, bilateral agreements) stay pending until a discovery channel
+  enumerates members. EUR-Lex and BMF handbook texts were captured through
+  the in-app browser (bot challenges block curl) and hashed in-page; a
+  corpus channel for guidance documents should replace these page
+  captures. Frontier 5 of 465; 126 open dependencies (8 law-derived, 0
+  unclassified, 118 bearing).
+- Corpus repin (2026-09-08): closure source and instrument graph moved to
+  the encoder's signed release de-rulespec-2026-09-08-kindergeld-civil (17
+  scopes, 7,637 rows; July scopes byte-identical, so no binding broke).
+  Capture script fixed for multi-scope releases. AO resolved to its act
+  row; four handbook/CJEU inbound rows and the 2026 amending act
+  dispositioned; 13 supplementals rebound to corpus rows; the bilateral
+  agreements and ARB 3/80 enrolled as 23 pending members of the class.
+  Toolchain now runs end to end on this host (corpus and rulespec-de
+  blobless clones, release objects from the public mirror). Frontier 27 of
+  492; 130 open dependencies (8 law-derived, 0 unclassified, 122 bearing).
+  Next: read the 23 agreement texts; rebind AufenthG/FreizügG/EEA/SGB
+  VI–VII rows once the resolver matches inflected act names.
+- Agreement members (2026-09-08): the 23 enrolled rows decided on their
+  corpus texts — 7 SVA + 7 Schlussprotokolle + ARB 3/80 open bearing, 7
+  Durchführungsvereinbarungen + Tunisia ZP excluded. Capture gap flagged:
+  the DVKA extracts omit the Kindergeld chapters; full BGBl II texts are
+  needed to encode. Frontier 4 of 492 (classes only); 145 open dependencies
+  (8 law-derived, 0 unclassified, 137 bearing).
+- Resolver fix (2026-09-08): raw-reference hint table added to the capture
+  script; AufenthG, FreizügG/EU and the EEA Agreement now bind to their
+  corpus rows (UHV: AufenthG, BGB). Counts unchanged (4 of 492; 145 open).
+  Remaining in-repo frontier work: none until the encoder or corpus lane
+  delivers (full agreement texts, class channels).
+- Remaining sprint items: single claim-surface digest bound across all four
+  premises; import / root-reachable dependency-edge traversal; successful
+  subject-query result capture and pagination; corpus citation scan (#611);
+  program-scoped dependency attribution (the NZ #493 adjudication question,
+  which kindergeld also needs to certify alone).
+
 ## Current lane (2026-08-21)
 
 - Worktree: `oracles-de-discovery`, branch `feat/de-discovery-ledgers`, starting

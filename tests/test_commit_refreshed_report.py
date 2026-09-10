@@ -396,7 +396,10 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     # The evidence legs are complete and computed, but the closure's
     # subordinate-instrument frontier is undeclared: a refresh must rebind
     # every artifact while keeping the honest certified=no.
-    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["blockers"] == [
+        'closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)',
+        'closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)',
+    ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 

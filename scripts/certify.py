@@ -67,6 +67,7 @@ CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 OUT_DIR = REPO_ROOT / "certificates"
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
+import closure_gate  # noqa: E402
 from nz_programs import SINGLE_PERSON_PROGRAMS  # noqa: E402
 
 SCHEMA = "axiom_oracles.program_certificate.v1"
@@ -288,6 +289,16 @@ PROGRAMS["de/kindergeld"] = {
         }
     ],
     "computed_de_exercise": ["child_count", "yearly_earned_income_total"],
+    # The v3 discovery ledger (#503) is the closure verdict, judged by the
+    # same central gate as DK/NZ/tariff; the exact-citation-path summary
+    # below only contributes its source-universe and signature fields.
+    "computed": {
+        "closed": {
+            "artifact": "conformance/closure/de-kindergeld.yaml",
+            "producer": "scripts/de_closure_ledger.py",
+            "external_verification": "hermetic_program_scoped",
+        },
+    },
     "computed_closed": "closure/de/summary.json",
     "computed_de_executable": "conformance/executable/de-kindergeld-status.json",
     "de_census_program": True,
@@ -300,6 +311,16 @@ for _de_pending_program in (
         "period": "2025",
         "suites": [],
         "pending_de_candidate": True,
+        "computed": {
+            "closed": {
+                "artifact": (
+                    "conformance/closure/"
+                    f"{_de_pending_program.replace('/', '-')}.yaml"
+                ),
+                "producer": "scripts/de_closure_ledger.py",
+                "external_verification": "hermetic_program_scoped",
+            },
+        },
         "computed_closed": "closure/de/summary.json",
         "de_census_program": True,
     }
@@ -1225,101 +1246,18 @@ def _producer_closed_verdict(
         value = getattr(summary, "closed", None)
     if not isinstance(value, bool):
         raise ValueError(f"{artifact_ref} validator returned no closed boolean")
-    # Central completeness requirement (oracles#491): a closure claim must
-    # disposition the act's subordinate instruments (regulations, guidance,
-    # rate publications), not just the act's own provisions. A closure
-    # artifact whose computed block carries no complete instrument frontier
-    # cannot compute closed=true, whatever its producer says — in the US,
-    # certifying statute-only closure would be very wrong.
-    _computed_block = document.get("computed")
-    _instrument_frontier = (
-        _computed_block.get("instrument_frontier")
-        if isinstance(_computed_block, dict)
-        else None
-    )
-    _instrument_frontier_summary = (
-        {
-            key: _instrument_frontier.get(key)
-            for key in (
-                "instrument_count",
-                "supplemental_count",
-                "counts",
-                "pending",
-                "complete",
-            )
-        }
-        if isinstance(_instrument_frontier, dict)
-        else {
-            "complete": False,
-            "missing": True,
-            "requirement": (
-                "closure must disposition the act's subordinate instruments "
-                "(oracles#491); this artifact declares none"
-            ),
-        }
-    )
-    if _instrument_frontier_summary.get("complete") is not True:
-        value = False
-    _dependency_block = (
-        _computed_block.get("dependency_closure")
-        if isinstance(_computed_block, dict)
-        else None
-    )
-    # A dependency-closure block only satisfies the gate when it is
-    # COMPLETE and internally consistent: all four fields present and
-    # well-typed, closed=true, and the enumerations actually empty. A bare
-    # {"closed": true} — or any block whose count and lists disagree — is
-    # treated as malformed and fails closed (launch-audit delta finding).
-    _dependency_well_formed = (
-        isinstance(_dependency_block, dict)
-        and isinstance(_dependency_block.get("open_dependency_count"), int)
-        # bool is an int subclass: open_dependency_count=false must read
-        # malformed, not as a zero count (launch-audit delta r2 finding).
-        and not isinstance(_dependency_block.get("open_dependency_count"), bool)
-        and isinstance(_dependency_block.get("law_derived_inputs"), list)
-        and isinstance(
-            _dependency_block.get("instruments_bearing_on_computed"), list
-        )
-        and isinstance(_dependency_block.get("closed"), bool)
-        and _dependency_block["open_dependency_count"]
-        == len(_dependency_block["law_derived_inputs"])
-        + len(_dependency_block["instruments_bearing_on_computed"])
-        and _dependency_block["closed"]
-        == (_dependency_block["open_dependency_count"] == 0)
-    )
-    if _dependency_well_formed:
-        _dependency_summary = {
-            key: _dependency_block[key]
-            for key in (
-                "open_dependency_count",
-                "law_derived_inputs",
-                "instruments_bearing_on_computed",
-                "closed",
-            )
-        }
-    elif isinstance(_dependency_block, dict):
-        _dependency_summary = {
-            "closed": False,
-            "malformed": True,
-            "requirement": (
-                "the dependency-closure block must carry a well-typed "
-                "open_dependency_count, law_derived_inputs, and "
-                "instruments_bearing_on_computed that agree with its closed "
-                "flag (CERTIFIED.md v3); this artifact's block is incomplete "
-                "or inconsistent"
-            ),
-        }
-    else:
-        _dependency_summary = {
-            "closed": False,
-            "missing": True,
-            "requirement": (
-                "closure must type every leaf and encode every law-derived "
-                "dependency (CERTIFIED.md v3); this artifact declares no "
-                "dependency-closure block"
-            ),
-        }
-    if not _dependency_well_formed or _dependency_summary.get("closed") is not True:
+    # Central completeness requirement (oracles#491) and v3 leaf discipline,
+    # judged from the artifact's computed block by scripts/closure_gate.py —
+    # the one gate every closure artifact passes through, with no
+    # program-name conditionals. A producer that says closed=true cannot
+    # outvote an incomplete frontier or an open/malformed dependency block.
+    (
+        _instrument_frontier_summary,
+        _dependency_summary,
+        _gate_passes,
+        _closure_blockers,
+    ) = closure_gate.gate(document.get("computed"))
+    if not _gate_passes:
         value = False
     evidence.append(
         {
@@ -1338,6 +1276,7 @@ def _producer_closed_verdict(
             "value": value,
             "instrument_frontier": _instrument_frontier_summary,
             "dependency_closure": _dependency_summary,
+            "blockers": [] if value else _closure_blockers,
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),
@@ -1368,12 +1307,15 @@ def _producer_closed_verdict(
         "boundary_frontier": computed.get("boundary_frontier"),
         "instrument_frontier": _instrument_frontier_summary,
         "dependency_closure": _dependency_summary,
+        "blockers": [] if value else _closure_blockers,
         **(
             {"burndown": computed.get("burndown")}
             if config.get("include_burndown")
             else {}
         ),
-        "non_encoded_reasons_complete": summary.non_encoded_reasons_complete,
+        "non_encoded_reasons_complete": getattr(
+            summary, "non_encoded_reasons_complete", None
+        ),
     }
 
 
@@ -1548,11 +1490,48 @@ def _closed_verdict(
     produced = _producer_closed_verdict(
         program, spec, evidence, verify_producer=verify_producer
     )
-    if produced is not None:
-        return produced
     path_string = spec.get("computed_closed")
+    if produced is not None:
+        if not path_string:
+            return produced
+        # The producer ledger IS the closure verdict. A rederived
+        # exact-citation-path summary contributes only its source-universe
+        # and signature fields; it can never supply the value or the gates.
+        scoped, closure = _rederived_closure_scope(program, path_string, evidence)
+        fields = _exact_path_fields(scoped, closure)
+        merged = {**fields, **produced}
+        if merged.get("rulespec_commit") is None:
+            merged["rulespec_commit"] = fields.get("rulespec_commit")
+        return merged
     if not path_string:
         return _attested_verdict(spec, "closed")
+    scoped, closure = _rederived_closure_scope(program, path_string, evidence)
+    # The same central v3 gate that judges producer artifacts: an exact-path
+    # summary that declares no instrument frontier or dependency-closure block
+    # cannot compute closed=true, whatever its resolution says (oracles#491,
+    # CERTIFIED.md v3). Nothing read from the summary can satisfy the gate,
+    # so a forged {"closed": true} cannot flip this verdict.
+    frontier_summary, dependency_summary, gate_passes, frontier_blockers = (
+        closure_gate.gate(scoped.get("computed"))
+    )
+    value = scoped.get("closed") is True and gate_passes
+    return {
+        "mode": "computed",
+        "status": "computed_pass" if value else "computed_open",
+        "value": value,
+        "instrument_frontier": frontier_summary,
+        "dependency_closure": dependency_summary,
+        "blockers": [] if value else frontier_blockers,
+        **_exact_path_fields(scoped, closure),
+    }
+
+
+def _rederived_closure_scope(
+    program: str, path_string: str, evidence: list[dict]
+) -> tuple[dict, dict]:
+    """Load an exact-citation-path closure summary, prove it rederives from
+    its versioned input, and return this program's scope plus the document."""
+
     path = REPO_ROOT / path_string
     closure = _load(path)
     if path_string in {"closure/nz/summary.json", "closure/de/summary.json"}:
@@ -1581,49 +1560,6 @@ def _closed_verdict(
             raise ValueError(f"DE closure has no scope for {program}")
     else:
         scoped = closure
-    value = scoped.get("closed") is True
-    # Central completeness requirement (oracles#491) — same bar the producer
-    # path enforces: a closure claim must disposition the act's subordinate
-    # instruments (regulations, administrative directives such as the DA-KG,
-    # guidance, rate publications), not just the statutory spine. A rederived
-    # closure summary that declares no complete instrument frontier cannot
-    # compute closed=true, whatever its exact-path resolution says. Scoped to
-    # the DE path here: extending it to the remaining evidence classes is the
-    # certified-definition rollout's change, not this lane's.
-    frontier_summary = None
-    if path_string == "closure/de/summary.json":
-        # The DE closure has no central-validated instrument frontier or
-        # typed-leaf dependency ledger. Both requirements therefore fail
-        # closed UNCONDITIONALLY: nothing read from the rederived summary can
-        # satisfy them, so a forged block in the summary (a bare
-        # {"closed": true}, a hand-written "complete" frontier) cannot flip
-        # this verdict. When the real DE ledger lands it must be consumed
-        # through the central producer gate, not through this path.
-        value = False
-        frontier_summary = {
-            "complete": False,
-            "missing": True,
-            "requirement": (
-                "closure must disposition the act's subordinate "
-                "instruments (oracles#491); this closure declares none"
-            ),
-        }
-        dependency_summary = {
-            "closed": False,
-            "missing": True,
-            "requirement": (
-                "closure must type every leaf and encode every "
-                "law-derived dependency (CERTIFIED.md v3); this "
-                "closure declares no dependency-closure block"
-            ),
-        }
-        frontier_blockers = [
-            "closed: " + frontier_summary["requirement"],
-            "closed: " + dependency_summary["requirement"],
-        ]
-    else:
-        frontier_blockers = []
-        dependency_summary = None
     evidence.append(
         {
             "claim": f"closure census:{program}",
@@ -1632,19 +1568,11 @@ def _closed_verdict(
             "sha256": sha256_of(path),
         }
     )
+    return scoped, closure
+
+
+def _exact_path_fields(scoped: dict, closure: dict) -> dict:
     return {
-        "mode": "computed",
-        "status": "computed_pass" if value else "computed_open",
-        "value": value,
-        **(
-            {
-                "instrument_frontier": frontier_summary,
-                "dependency_closure": dependency_summary,
-                "blockers": frontier_blockers,
-            }
-            if frontier_summary is not None
-            else {}
-        ),
         "corpus_release": closure.get("corpus_release"),
         "rulespec_commit": closure.get("rulespec_commit"),
         "pending_citations": len(scoped.get("pending_citations") or []),
@@ -2299,7 +2227,9 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
     evidence: list[dict] = []
     row = _de_census_row(program, evidence)
     closed = _closed_verdict(program, spec, evidence)
-    blockers = list(row.get("blockers") or [])
+    blockers = list(
+        dict.fromkeys([*(row.get("blockers") or []), *(closed.get("blockers") or [])])
+    )
     return {
         "schema": SCHEMA,
         "program": program,

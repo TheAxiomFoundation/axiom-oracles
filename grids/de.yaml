@@ -9,6 +9,220 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  de-kindergeld-eligibility:
+    locale: DE
+    outputs:
+    - de:policies/worker_dual_oracle_baseline#kindergeld_monthly
+    cases:
+    - id: child-17
+      period: '2025'
+      scenario: minor-child
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2008
+          age: 17
+          in_training: false
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 17
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-18-training
+      period: '2025'
+      scenario: adult-child-in-training
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2007
+          age: 18
+          in_training: true
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 18
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-18-no-training
+      period: '2025'
+      scenario: adult-child-not-in-training
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2007
+          age: 18
+          in_training: false
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 18
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-24-training
+      period: '2025'
+      scenario: adult-child-in-training-last-year
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2001
+          age: 24
+          in_training: true
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 24
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-25-training
+      period: '2025'
+      scenario: adult-child-in-training-over-limit
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2000
+          age: 25
+          in_training: true
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 25
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-22-training-20h
+      period: '2025'
+      scenario: adult-child-in-training-working-20h
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2003
+          age: 22
+          in_training: true
+          weekly_hours: 20.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 22
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: child-22-training-25h
+      period: '2025'
+      scenario: adult-child-in-training-working-25h
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2003
+          age: 22
+          in_training: true
+          weekly_hours: 25.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 22
+        relation: Child
+        yearly_earned_income: 0.0
+    - id: children-17-and-25
+      period: '2025'
+      scenario: one-eligible-one-ineligible-child
+      parameters:
+        yearly_earned_income: 48000.0
+        nominal_monthly_earnings:
+        - 4000.0
+        region: west
+        joint_assessment: false
+        children:
+        - birth_year: 2008
+          age: 17
+          in_training: false
+          weekly_hours: 0.0
+        - birth_year: 2000
+          age: 25
+          in_training: true
+          weekly_hours: 0.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        yearly_earned_income: 48000.0
+      - id: child1
+        kind: person
+        age: 17
+        relation: Child
+        yearly_earned_income: 0.0
+      - id: child2
+        kind: person
+        age: 25
+        relation: Child
+        yearly_earned_income: 0.0
   de-worker-dual-oracle:
     locale: DE
     outputs:

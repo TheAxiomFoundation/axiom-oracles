@@ -11,32 +11,182 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
-    "release": "de-rulespec-2026-07-21",
-    "release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
-    "release_selector_sha256": "106612aa6075a23fae4aae7fc80c39920cb6e0ff95e38694baa6191f8f3905f5",
+    "commit": "15402878eed59a0ab56e7428fe6caa052b5c098a",
+    "release": "de-rulespec-2026-09-08-kindergeld-civil",
+    "release_content_sha256": "3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35",
+    "release_selector_sha256": "76600c66ac8b9b6c5740ca8fb300a975b717879f6751a4f6d2e061ce84258940",
     "inventories": [
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
+        "sha256": "74e8dfa9aded09d34cad08c04249da5016ac478b0bace29562d11343e74ef21e",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json",
+        "sha256": "21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json",
+        "sha256": "ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json",
+        "sha256": "4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json",
+        "sha256": "9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0",
+        "row_count": 2
+      },
       {
         "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
         "row_count": 172
       },
       {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json",
+        "sha256": "b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-bilateral.json",
+        "sha256": "038860404e92952a4064d42413160b7a152f3d99aee28cacd7f49aed112da45f",
+        "row_count": 44
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-dependencies.json",
+        "sha256": "16d6428a20439fd1ab7885572a06f2bed83cf529c54e33703b2341ab1eb791e1",
+        "row_count": 9
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eea.json",
+        "sha256": "c3bd7372757fdbe1f25e7caf47b14e233688e94b5e9096a915c731f2937c2558",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eu.json",
+        "sha256": "3b977d73c0702ed2e46684fb6695983d5f50d5b10474a2a36f686f2dbf3c8b58",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json",
+        "sha256": "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
+        "row_count": 2
+      },
+      {
         "path": "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974",
         "row_count": 3376
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json",
+        "sha256": "deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json",
+        "sha256": "dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34",
+        "row_count": 3136
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json",
+        "sha256": "9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e",
+        "row_count": 854
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json",
+        "sha256": "8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76",
+        "row_count": 4
       }
     ],
     "provision_sources": [
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl",
+        "sha256": "80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl",
+        "sha256": "8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+        "sha256": "3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
+        "sha256": "b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl",
+        "sha256": "436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac",
+        "row_count": 2
+      },
       {
         "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
         "row_count": 172
       },
       {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl",
+        "sha256": "29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+        "sha256": "f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e",
+        "row_count": 44
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+        "sha256": "d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97",
+        "row_count": 9
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl",
+        "sha256": "5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+        "sha256": "5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
+        "sha256": "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
+        "row_count": 2
+      },
+      {
         "path": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
         "row_count": 3376
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl",
+        "sha256": "80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_count": 3136
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl",
+        "sha256": "a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac",
+        "row_count": 854
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl",
+        "sha256": "6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a",
+        "row_count": 4
       }
     ],
     "rows": [

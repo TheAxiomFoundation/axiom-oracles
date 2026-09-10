@@ -228,10 +228,14 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     provisions = corpus.get("provision_sources")
     if not isinstance(inventories, list) or not isinstance(provisions, list):
         raise CaptureError("source.json must pin inventory and provision files")
-    inventory_by_class: dict[str, dict[str, Any]] = {}
+    # One inventory per pinned scope (document class + release version), so a
+    # release with several scopes of one class pairs each provisions file with
+    # its own inventory rather than the last one seen.
+    inventory_by_scope: dict[tuple[str, str], dict[str, Any]] = {}
     for pin in inventories:
         path = str(pin.get("path", ""))
         document_class = path.split("/")[4] if len(path.split("/")) > 4 else ""
+        scope_version = path.rsplit("/", 1)[-1].rsplit(".", 1)[0]
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"inventory hash mismatch at pinned commit: {path}")
@@ -244,7 +248,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         artifact = release_artifacts.get(path)
         if not artifact or artifact.get("sha256") != pin.get("sha256"):
             raise CaptureError(f"inventory is not bound by the release object: {path}")
-        inventory_by_class[document_class] = {
+        inventory_by_scope[(document_class, scope_version)] = {
             "path": path,
             "sha256": pin["sha256"],
             "row_count": len(items),
@@ -257,6 +261,10 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         path = str(pin.get("path", ""))
         parts = path.split("/")
         document_class = parts[4] if len(parts) > 4 else ""
+        scope_version = path.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+        inventory = inventory_by_scope.get((document_class, scope_version))
+        if inventory is None:
+            raise CaptureError(f"provision file has no pinned inventory for its scope: {path}")
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"provision hash mismatch at pinned commit: {path}")
@@ -292,7 +300,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         scans.append(
             {
                 "document_class": document_class,
-                "inventory": inventory_by_class[document_class],
+                "inventory": inventory,
                 "provisions": {
                     "path": path,
                     "sha256": pin["sha256"],
@@ -392,6 +400,25 @@ _RAW_REFERENCE_RULES: tuple[tuple[str, str], ...] = (
     ("sgb-9", r"\b(?:SGB\s+IX|Neunten Buch(?:es)?(?: Sozialgesetzbuch)?)\b"),
     ("sgb-10", r"\b(?:SGB\s+X|Zehnten Buch(?:es)? Sozialgesetzbuch)\b"),
 )
+#: Corpus document paths for the raw-reference rules. A rule resolves to its
+#: hint only when that document is a pinned corpus row; otherwise the match
+#: stays an unresolved reference. The inflected act names in the EStG text
+#: ("Aufenthaltsgesetzes", "Freizügigkeitsgesetzes/EU", "Abkommen über den
+#: Europäischen Wirtschaftsraum") never appear in the captured rows' title
+#: metadata, so alias matching cannot reach them; the hint table can.
+_RAW_REFERENCE_CORPUS_HINTS: dict[str, str] = {
+    "abgabenordnung": "de/statute/ao-1977",
+    "ewr-abkommen": "de/regulation/eea-agreement",
+    "freizuegigkeitsgesetz-eu": "de/statute/freiz-gg-eu-2004",
+    "aufenthaltsgesetz": "de/statute/aufenthg-2004",
+    "bgb": "de/statute/bgb",
+    "sgb-1": "de/statute/sgb-1",
+    "sgb-4": "de/statute/sgb-4",
+    "sgb-7": "de/statute/sgb-7",
+    "sgb-8": "de/statute/sgb-8",
+    "sgb-9": "de/statute/sgb-9",
+    "sgb-10": "de/statute/sgb-10",
+}
 _EU_REGULATION = re.compile(r"\bVerordnung \((?:EG|EU)\) (?:Nr\.\s*)?\d{3,4}/\d+\b")
 _HISTORICAL_ACT = re.compile(
     r"\bGesetzes vom \d{1,2}\. [A-ZÄÖÜa-zäöüß]+ \d{4} "
@@ -540,20 +567,17 @@ def _global_row_findings(
                     }
                 )
 
-    corpus_hints = {
-        "sgb-1": "de/statute/sgb-1",
-        "sgb-4": "de/statute/sgb-4",
-        "sgb-7": "de/statute/sgb-7",
-        "sgb-8": "de/statute/sgb-8",
-        "sgb-9": "de/statute/sgb-9",
-        "sgb-10": "de/statute/sgb-10",
-    }
+    corpus_hints = _RAW_REFERENCE_CORPUS_HINTS
     for key, pattern in _RAW_REFERENCE_RULES:
         for match in re.finditer(pattern, body, flags=re.IGNORECASE):
             if any(start <= match.start() and match.end() <= end for start, end in named_spans):
                 continue
             named_spans.append(match.span())
             target = corpus_hints.get(key)
+            if target is not None and target == source_document:
+                # An act naming itself is not a cross-reference (the alias
+                # loop above skips same-document matches the same way).
+                continue
             fact = {
                 "mechanism": "explicit_cross_reference_body",
                 "source_citation_path": row.path,
@@ -1080,14 +1104,7 @@ def _discover_corpus_program(
                 if any(start <= match.start() and match.end() <= end for start, end in named_spans):
                     continue
                 named_spans.append(match.span())
-                corpus_hint = {
-                    "sgb-1": "de/statute/sgb-1",
-                    "sgb-4": "de/statute/sgb-4",
-                    "sgb-7": "de/statute/sgb-7",
-                    "sgb-8": "de/statute/sgb-8",
-                    "sgb-9": "de/statute/sgb-9",
-                    "sgb-10": "de/statute/sgb-10",
-                }.get(key)
+                corpus_hint = _RAW_REFERENCE_CORPUS_HINTS.get(key)
                 if corpus_hint and corpus_hint in corpus.documents:
                     add_path(
                         corpus_hint,
@@ -1498,7 +1515,10 @@ def build_snapshot(
             "commit": source["corpus"]["commit"],
             "release_content_sha256": source["corpus"]["release_content_sha256"],
             "release_object": corpus.release_object,
-            "scans": sorted(corpus.scans, key=lambda row: row["document_class"]),
+            "scans": sorted(
+                corpus.scans,
+                key=lambda row: (row["document_class"], row["provisions"]["path"]),
+            ),
             "scanned_row_count": len(corpus.rows),
             "global_extraction_index": global_extraction_index,
             "extraction_protocol": {
