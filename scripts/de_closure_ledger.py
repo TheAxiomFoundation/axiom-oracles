@@ -1752,9 +1752,13 @@ def _hermetic_rederivation(
         generated["rulespec_modules"],
         generated["leaf_frontier"],
     )
+    # Decisions come from the document under check, not from HEAD: they are
+    # the human layer and must be checkable before they are committed. Only
+    # the generated facts are bound to the committed bytes (the corpus and
+    # RuleSpec objects they derive from are not available hermetically).
     decision_errors: list[str] = []
     decisions = _canonical_decisions(
-        committed.get("committed_decisions"),
+        document.get("committed_decisions"),
         spine=generated["provision_spine"],
         leaves=generated["leaf_frontier"],
         candidates=generated["instrument_graph"]["candidates"],

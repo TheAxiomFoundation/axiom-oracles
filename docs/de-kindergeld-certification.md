@@ -168,6 +168,14 @@ instruments. The central gate (`scripts/closure_gate.py`) re-derives that
 verdict from the committed block; a hand-edited `closed: true` fails the
 producer's exact rederivation before it reaches certify.
 
+## Reads log
+
+- 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26
+  excluded with text-grounded reasons, O 2.4 classified as an instrument
+  index whose cited instruments await enrolment as supplemental candidates.
+  Rows: `committed_decisions.instrument_dispositions` in
+  `conformance/closure/de-kindergeld.yaml`, ids `de-kg-dakg-O*`.
+
 ## Closing worklist (seed enumeration — discovery incomplete)
 
 Stable IDs; each row is a node of the open frontier, not an engineering

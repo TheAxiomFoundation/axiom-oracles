@@ -35,6 +35,21 @@
   is now 448 candidates (28 + 420), all pending. The four unretrieved
   subject queries are 404s on preregistered URLs, not connectivity; fixing
   them is a query-set revision plus a corpus recapture, left open.
+- Kindergeld reads, DA-KG 2025 Kapitel O (27 headings, 2026-09-07): all
+  dispositioned in `committed_decisions.instrument_dispositions` with the
+  section body hash — 26 excluded (structural headings, five
+  "(weggefallen)", competence, forms, tax secrecy/data protection,
+  records, IdNr control, periodic review, statistics, supervision,
+  inter-agency cooperation) and O 2.4 classified as an instrument index.
+  O 2.4 Abs. 2 names instruments not yet in the frontier (EStR/EStH, LStR,
+  AEAO, AStBV (St), BMF letters, BZSt directives, published court
+  decisions, bilateral social-security agreements, Regulations (EC)
+  883/2004, 987/2009, 859/2003, Regulation (EU) 1231/2010, the EU/UK
+  Withdrawal Agreement); they are recorded in the reason and need a
+  `supplemental_instruments` section (as in the DK ledger) to enter as
+  pending candidates — next contract change. Frontier: 421 of 448
+  pending. Hermetic rederivation now takes decisions from the document
+  under check (working-tree edits are checkable before commit).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);
