@@ -9,8 +9,9 @@ Repeating that restriction cannot produce a complete module.
 
 The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
-It contains the complete pinned § 32(4) text, six fully read, hash-verified
-DA-KG sections and the complete BFH III R 37/21 decision. The remaining guidance families listed below still need their
+It contains the complete pinned § 32(4) text, twelve fully read, hash-verified
+DA-KG sections (including the structural A 20.2 heading) and the complete BFH
+III R 37/21 and III R 10/22 decisions. The remaining guidance families listed below still need their
 own implementation review; listing them does not declare them reviewed or encoded.
 
 ## Source-unit coverage
@@ -78,6 +79,44 @@ assert that those records suffice for every legal case.
   monthly training/work flag can produce false positives when their intervals
   do not intersect.
 
+* **The two training definitions differ.** A 20.2.1 defines the completed
+  qualification that triggers sentence 2 more narrowly than the training ground
+  in sentence 1 number 2(a). A school certificate, voluntary internship or
+  traineeship is not automatically a first completed vocational qualification.
+  Regulated qualifications, equivalent expertise examinations and foreign
+  qualifications require their stated source conditions. A 20.2.2 treats later
+  formal training after work without a qualification as first training;
+  recognition adjustment measures belong to the preceding foreign qualification.
+  A 20.2.3 requires the stated higher-education recognition and equivalence;
+  changing or interrupting an unfinished degree does not complete it.
+* **A voluntary-service interval does not restart the multi-stage training
+  clock.** A 20.2.4(2) and BFH III R 10/22 paragraphs 19–32 require the connection
+  between the actual training stages and the earliest available next start.
+  Choosing an intervening FSJ despite an available start does not preserve that
+  connection merely because the next degree starts promptly after service.
+  The service and four-calendar-month transition consideration grounds do not
+  replace this separate sentence-2 assessment. The decision leaves room for a
+  specifically established vocational-training exception; do not turn its
+  ordinary FSJ treatment into an exceptionless service exclusion.
+* **Multi-stage training requires more than dates or a Boolean.** A 20.2.4
+  requires objective evidence of the further goal arising before the next stage;
+  late disclosure to the Familienkasse is harmless. Subject and timing connection,
+  objectively unavailable places and the role of intervening work matter. Work
+  required only for admission to the final examination differs from work required
+  before the next stage can begin. The four indicators in paragraph 3, including
+  a commitment exceeding 26 weeks, inform an overall assessment of all the
+  circumstances. They are not an automatic OR rule or a numeric score. The
+  implementation of that assessment remains unresolved; neither an invented
+  score nor a caller-supplied `first_training_completed` judgment is acceptable.
+* **Completion dates and degree sequences have exceptions.** A 20.2.4(5)–(11)
+  distinguishes passing a vocational examination from the ordinary university
+  result-notification date, with intervening full-time work in the intended
+  profession relevant. Intermediate examinations do not complete a degree.
+  Consecutive masters, parallel courses, postgraduate courses, legal/teaching
+  preparatory service and doctoral preparation retain the stated temporal,
+  substantive and predominant-employment qualifications. Section 9(6)'s separate
+  first-training criteria must not be imported into this test.
+
 ## Required behavioral witnesses
 
 These are planned acceptance cases, not claims of executed tests:
@@ -104,6 +143,20 @@ These are planned acceptance cases, not claims of executed tests:
 10. First qualification completed versus not completed, with otherwise identical
     number-1 and disability cases demonstrating that sentence 2 does not apply
     to those routes.
+11. A vocationally relevant internship followed by work exceeding 20 hours versus
+    an actually completed first vocational qualification; apply the distinct
+    sentence-1 and sentence-2 definitions before testing harmful work.
+12. Bachelor-to-master continuation at the first available start versus a
+    personal choice of intervening FSJ despite an available start; do not measure
+    the multi-stage connection from the service end date.
+13. Objective evidence created before the next training stage but disclosed late
+    versus evidence created only afterwards. Include an objectively unavailable
+    place and work required solely for the final examination.
+14. Employment indicators straddling 26 weeks with different overall
+    circumstances; no single indicator supplies an automatic decision.
+15. Passing an examination, receiving its result, and starting full-time work in
+    the intended profession on different dates; include an intermediate exam and
+    an unfinished degree change.
 
 Every omitted external prerequisite must identify the actual source reference
 and missing absolute output. Local computations cannot be deferred as runtime

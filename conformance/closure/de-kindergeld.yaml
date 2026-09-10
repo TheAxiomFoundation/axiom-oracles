@@ -13087,6 +13087,12 @@ committed_decisions:
     classification: compound_discovery_container
     reason: 'The SHA-bound DA-KG seed cites two distinct decisions of 13 June 2013: III R 10/11 and III R 63/11. It is a combined citation, not a third decision. Its complete member set is retained as de-kg-discovery-c2042f69f19b6bdc (III R 10/11, corpus body de/guidance/bfh-iii-r-10-11-2013-06-13/document-1, SHA-256 3c955d5bc78494d693f931691eecfade5316942fe4ce20bd4e586696eb009393) and de-kg-discovery-433dc05c4b6592e2 (III R 63/11, corpus body de/guidance/bfh-iii-r-63-11-2013-06-13/document-1, SHA-256 972eeee693cd85419d8b50a673d31cc3af2ba2ab99d73e25f061bb7cd35c6bb4). Both official headers confirm the individual case numbers and date; both bodies are receipted at corpus commit 4a225368e171b193d02590e7dd1866792174c705. Both individual members remain pending, including their foreign-benefit interpretation and BStBl II issue/page verification. This disposition removes only double counting of their citation container; no substantive rule is declared non-bearing.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-e41c039197f881bd
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: Full four-page BFH III R 10/22 decision of 12 October 2023, paragraphs 1–33, read against pinned corpus body SHA-256 537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027 at de/guidance/bfh-iii-r-10-22-2023-10-12/document-1 (corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509). Paragraphs 19–26 require the close temporal connection to run between the actual training stages, with the next stage taken at the earliest available opportunity. A previously declared plan to continue does not suffice when the next stage could have begun and personal choice of an intervening FSJ delayed it. Paragraphs 27–30 distinguish the independent voluntary-service consideration ground from vocational training; the decision does not exclude a specifically established vocational-training exception. Paragraph 32 rejects substituting a hypothetical transition-period calculation for the first-training assessment. DA-KG 2025 A 20.2.4(2), body SHA-256 e618983cc4323ffa87f53988b2b3967fc9261822b97c787fd424d66a84bb6037,
+      expressly retains the earliest-available-start holding. This is an unencoded entitlement condition affecting qualifying_child_count under EStG32(4) sentences2–3, not merely procedural history. The case concerns 2019; the current guidance supplies the 2025 relevance. BStBl II2024 page267 is the guidance citation; direct gazette verification and exhaustive discovery remain open.
+    bears_on_computed_surface: true
   - id: de-kg-discovery-e90973e7e66e0913
     status: classified-with-reason
     classification: country_group_income_thresholds
@@ -13267,6 +13273,12 @@ committed_decisions:
     reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
       section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-9dfa8fc6d1681fbb
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: Full four-page BFH III R 10/22 decision of 12 October 2023, paragraphs 1–33, read against pinned corpus body SHA-256 537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027 at de/guidance/bfh-iii-r-10-22-2023-10-12/document-1 (corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509). Paragraphs 19–26 require the close temporal connection to run between the actual training stages, with the next stage taken at the earliest available opportunity. A previously declared plan to continue does not suffice when the next stage could have begun and personal choice of an intervening FSJ delayed it. Paragraphs 27–30 distinguish the independent voluntary-service consideration ground from vocational training; the decision does not exclude a specifically established vocational-training exception. Paragraph 32 rejects substituting a hypothetical transition-period calculation for the first-training assessment. DA-KG 2025 A 20.2.4(2), body SHA-256 e618983cc4323ffa87f53988b2b3967fc9261822b97c787fd424d66a84bb6037,
+      expressly retains the earliest-available-start holding. This is an unencoded entitlement condition affecting qualifying_child_count under EStG32(4) sentences2–3, not merely procedural history. The case concerns 2019; the current guidance supplies the 2025 relevance. BStBl II2024 page267 is the guidance citation; direct gazette verification and exhaustive discovery remain open.
+    bears_on_computed_surface: true
   - id: de-kg-instr-a365b83505706342
     status: excluded-with-reason
     body_sha256: c99788b126259e0f376231245bf47d0354ef30252d33cb4fc534800c11401118
@@ -14272,9 +14284,9 @@ computed:
     counts:
       total: 774
       encoded: 2
-      classified-with-reason: 144
+      classified-with-reason: 146
       excluded-with-reason: 348
-      pending: 280
+      pending: 278
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14462,7 +14474,6 @@ computed:
     - de-kg-discovery-e14615f8317fca14
     - de-kg-discovery-e1d5e5794321bcbd
     - de-kg-discovery-e403daefa2e34575
-    - de-kg-discovery-e41c039197f881bd
     - de-kg-discovery-e66d9bc7e06202a7
     - de-kg-discovery-e75ffe1f3768b706
     - de-kg-discovery-e83d1870feca6593
@@ -14522,7 +14533,6 @@ computed:
     - de-kg-instr-8a5bf72ed2cf253f
     - de-kg-instr-9728a65b720a8ab3
     - de-kg-instr-9886b8cf5a4c26e8
-    - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-9ea3370bf9f2ad0d
     - de-kg-instr-a2bd2172735c10fa
     - de-kg-instr-ac571daf105e0ae9
@@ -23619,7 +23629,7 @@ computed:
       discovery_source_sha256: 22f601eec3b463b0e77c0b0cfbefe9e989f874c25a8b6f2b9765057693dfb1d0
       discovery_excerpt: media/dokumente/rechtsquellen/svabkommen/tuerkei_sva.pdf
     - id: de-kg-discovery-e41c039197f881bd
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 12.10.2023, III R 10/22, BStBl II 2024 S. 267
       discovery_refs:
@@ -23627,6 +23637,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 12.10.2023, III R 10/22, BStBl II 2024 S. 267
+      classification: entitlement_condition
+      reason: Full four-page BFH III R 10/22 decision of 12 October 2023, paragraphs 1–33, read against pinned corpus body SHA-256 537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027 at de/guidance/bfh-iii-r-10-22-2023-10-12/document-1 (corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509). Paragraphs 19–26 require the close temporal connection to run between the actual training stages, with the next stage taken at the earliest available opportunity. A previously declared plan to continue does not suffice when the next stage could have begun and personal choice of an intervening FSJ delayed it. Paragraphs 27–30 distinguish the independent voluntary-service consideration ground from vocational training; the decision does not exclude a specifically established vocational-training exception. Paragraph 32 rejects substituting a hypothetical transition-period calculation for the first-training assessment. DA-KG 2025 A 20.2.4(2), body SHA-256 e618983cc4323ffa87f53988b2b3967fc9261822b97c787fd424d66a84bb6037,
+        expressly retains the earliest-available-start holding. This is an unencoded entitlement condition affecting qualifying_child_count under EStG32(4) sentences2–3, not merely procedural history. The case concerns 2019; the current guidance supplies the 2025 relevance. BStBl II2024 page267 is the guidance citation; direct gazette verification and exhaustive discovery remain open.
+      bears_on_computed_surface: true
     - id: de-kg-discovery-e66d9bc7e06202a7
       status: pending
       identity_kind: class_member
@@ -24757,7 +24771,7 @@ computed:
         section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
       bears_on_computed_surface: false
     - id: de-kg-instr-9dfa8fc6d1681fbb
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-351c5921e511fb22722d
       identity_kind: corpus_citation
@@ -24767,6 +24781,10 @@ computed:
       citation_label: 'BFH, III R 10/22, 2023-10-12: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei Freiwilligendienst zwischen mehreren Ausbildungsabschnitten'
       document_citation_path: de/guidance/bfh-iii-r-10-22-2023-10-12
       title: 'BFH, III R 10/22, 2023-10-12: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei Freiwilligendienst zwischen mehreren Ausbildungsabschnitten'
+      classification: entitlement_condition
+      reason: Full four-page BFH III R 10/22 decision of 12 October 2023, paragraphs 1–33, read against pinned corpus body SHA-256 537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027 at de/guidance/bfh-iii-r-10-22-2023-10-12/document-1 (corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509). Paragraphs 19–26 require the close temporal connection to run between the actual training stages, with the next stage taken at the earliest available opportunity. A previously declared plan to continue does not suffice when the next stage could have begun and personal choice of an intervening FSJ delayed it. Paragraphs 27–30 distinguish the independent voluntary-service consideration ground from vocational training; the decision does not exclude a specifically established vocational-training exception. Paragraph 32 rejects substituting a hypothetical transition-period calculation for the first-training assessment. DA-KG 2025 A 20.2.4(2), body SHA-256 e618983cc4323ffa87f53988b2b3967fc9261822b97c787fd424d66a84bb6037,
+        expressly retains the earliest-available-start holding. This is an unencoded entitlement condition affecting qualifying_child_count under EStG32(4) sentences2–3, not merely procedural history. The case concerns 2019; the current guidance supplies the 2025 relevance. BStBl II2024 page267 is the guidance citation; direct gazette verification and exhaustive discovery remain open.
+      bears_on_computed_surface: true
     - id: de-kg-instr-9ea3370bf9f2ad0d
       status: pending
       discovery_refs:
@@ -25668,6 +25686,7 @@ computed:
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-dc687b40f4c59ca6
+    - de-kg-discovery-e41c039197f881bd
     - de-kg-discovery-e90973e7e66e0913
     - de-kg-instr-002
     - de-kg-instr-003
@@ -25680,6 +25699,7 @@ computed:
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
+    - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-a5848a433a63d2cb
     - de-kg-instr-ad3045c5a5d2f5bd
     - de-kg-instr-b96e03076e143e8e
@@ -25697,8 +25717,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 130
-    open_dependency_count: 138
+    instruments_bearing_on_computed_count: 132
+    open_dependency_count: 140
     closed: false
   measured_denominators:
     spine_rows: 18

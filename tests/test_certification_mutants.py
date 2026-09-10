@@ -47,10 +47,10 @@ def _load(name: str):
 #: incomplete; the signed maternity prerequisite does not close the eight
 #: law-derived inputs or the remaining bearing instruments.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 280 of 774 subordinate/bearing "
+    "closed: instrument frontier incomplete — 278 of 774 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
-    "closed: dependency closure open — 138 open dependencies (8 law-derived "
-    "inputs, 0 unclassified inputs, 130 bearing instruments) (CERTIFIED.md v3)",
+    "closed: dependency closure open — 140 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 132 bearing instruments) (CERTIFIED.md v3)",
 ]
 
 
