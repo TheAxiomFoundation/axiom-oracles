@@ -98,7 +98,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 784, 8, 1, 0, 0),
+    "de/kindergeld": (18, 788, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 40, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1560,12 +1560,13 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 21
+    assert len(supplemental) == 25
     # The four classes remain pending because enumeration is incomplete;
-    # citation seeds have their own frontier rows. The 17 named documents are decided on
-    # captured text.
+    # citation seeds have their own frontier rows. Seventeen named documents are
+    # decided on captured text; four earlier programme instruments await capture.
     pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
-    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
+    pending_earlier_instruments = {"de-kg-suppl-022", "de-kg-suppl-023", "de-kg-suppl-024", "de-kg-suppl-025"}
+    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes | pending_earlier_instruments
     assert all(row["text_sha256"] and row["text_source"] for row in supplemental if row["status"] != "pending")
     from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
     assert len(from_o24) == 15
@@ -1575,8 +1576,8 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2", "de-kg-dakg-A25.1", "de-kg-dakg-A18.4"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 534 + 21 + 229
-    assert all(sid in frontier["pending"] for sid in pending_classes)
+    assert frontier["instrument_count"] == 534 + 25 + 229
+    assert all(sid in frontier["pending"] for sid in pending_classes | pending_earlier_instruments)
 
 
 def test_duplicate_supplemental_ids_are_rejected() -> None:

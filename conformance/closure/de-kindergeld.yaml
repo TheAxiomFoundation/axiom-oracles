@@ -13919,6 +13919,38 @@ committed_decisions:
     text_source: Receipted original German Official Journal text, de/regulation/eu-2021-817/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
     text_sha256: 017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e
     bears_on_computed_surface: true
+  - id: de-kg-suppl-022
+    identity: Regulation (EU) No 375/2014, EU Aid Volunteers predecessor
+    title_short: Regulation (EU) No 375/2014
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    status: pending
+  - id: de-kg-suppl-023
+    identity: Decision No 1719/2006/EC, Youth in Action predecessor
+    title_short: Decision No 1719/2006/EC
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    status: pending
+  - id: de-kg-suppl-024
+    identity: Decision No 1720/2006/EC, lifelong learning predecessor
+    title_short: Decision No 1720/2006/EC
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    status: pending
+  - id: de-kg-suppl-025
+    identity: Decision No 1298/2008/EC, Erasmus Mundus predecessor
+    title_short: Decision No 1298/2008/EC
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    status: pending
 computed:
   ledger:
   - ordinal: 1
@@ -14531,13 +14563,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 784
+    instrument_count: 788
     counts:
-      total: 784
+      total: 788
       encoded: 2
       classified-with-reason: 165
       excluded-with-reason: 349
-      pending: 268
+      pending: 272
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14807,6 +14839,10 @@ computed:
     - de-kg-suppl-008
     - de-kg-suppl-009
     - de-kg-suppl-010
+    - de-kg-suppl-022
+    - de-kg-suppl-023
+    - de-kg-suppl-024
+    - de-kg-suppl-025
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -26018,6 +26054,46 @@ computed:
       bears_on_computed_surface: true
       text_source: Receipted original German Official Journal text, de/regulation/eu-2021-817/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
       text_sha256: 017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e
+    - id: de-kg-suppl-022
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Regulation (EU) No 375/2014, EU Aid Volunteers predecessor
+      title_short: Regulation (EU) No 375/2014
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    - id: de-kg-suppl-023
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Decision No 1719/2006/EC, Youth in Action predecessor
+      title_short: Decision No 1719/2006/EC
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    - id: de-kg-suppl-024
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Decision No 1720/2006/EC, lifelong learning predecessor
+      title_short: Decision No 1720/2006/EC
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    - id: de-kg-suppl-025
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Decision No 1298/2008/EC, Erasmus Mundus predecessor
+      title_short: Decision No 1298/2008/EC
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -26188,7 +26264,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 784
+    bearing_candidate_instruments: 788
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

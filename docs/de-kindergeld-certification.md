@@ -6,7 +6,7 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 268 of 784 instruments
+other closure artifact. The current frontier has 272 of 788 instruments
 pending, and dependency closure has 159 open dependencies: eight law-derived
 inputs and 151 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
@@ -347,7 +347,7 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 268 of 784 instruments pending, 159 open
+rows pending. Current result: 272 of 788 instruments pending, 159 open
 dependencies (eight law-derived inputs, 151 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -668,7 +668,7 @@ section mentions remain `unresolved_cross_reference_proximity` candidates with a
 `candidate_target_citation_path`, never a `resolved_citation_path`. This preserves
 recall for unfamiliar citation forms without asserting their identity. The SGB V
 candidate remains pending for a text-bound disposition; this correction does not
-classify the whole act as non-bearing. Current totals are 268 pending of 784
+classify the whole act as non-bearing. Current totals are 272 pending of 788
 instruments and 159 open dependencies (eight law-derived, 151 bearing), with
 five pending and one partially encoded spine provision. Closure remains false.
 
@@ -703,7 +703,7 @@ III R58/12 preserves the maternity exception without requiring later resumed
 search. III R41/19 distinguishes training termination, temporary-illness prognosis
 and contemporaneous evidence of training intention. Their relevant class/corpus
 identities are bearing and remain unencoded. A18.7 preserves training averaging
-at least 60 hours per year. Current totals are 268 pending of 784 instruments
+at least 60 hours per year. Current totals are 272 pending of 788 instruments
 and 159 open dependencies (eight law-derived, 151 bearing).
 
 The recall review records 188 matching BFH citation occurrences in the retained
@@ -745,7 +745,7 @@ full hash-bound A25.1(7) read and bound to its exact corpus body. Before the gen
 scan retained the same 111 Kindergeld identities and did not project FamFG into
 that set. The separate reading-discovery mechanism prevents its omission from
 hiding the dependency. This enrollment does not claim the entire FamFG has
-been reviewed or encoded. The current ledger has 268 pending instruments out of 784
+been reviewed or encoded. The current ledger has 272 pending instruments out of 788
 and 159 open dependencies: eight law-derived inputs and 151 bearing instruments.
 
 The genitive-title recall repair adds three corpus candidates: FamFG, KiZDAV
@@ -756,8 +756,8 @@ receipt and support the same data-retrieval-only exclusion. The graph now has
 body references; the prior 6,741 count is retained in the recall audit. No
 Kindergeld identity was removed. In the Unterhaltsvorschuss graph, the genitive
 EStG title now matches the existing in-scope act alias instead of emitting a
-separate unresolved identity. Current totals are 268 pending instruments out of
-784 and 159 open dependencies (eight law-derived inputs and 151 bearing
+separate unresolved identity. Current totals are 272 pending instruments out of
+788 and 159 open dependencies (eight law-derived inputs and 151 bearing
 instruments). The [recall review](../conformance/closure/de-discovery-2026-09-08/genitive-citation-recall-review.json)
 retains the graph comparison, exact evidence and full KiZDAV texts. This fixes
 a demonstrated recall gap; the four discovery classes remain open.
@@ -779,7 +779,15 @@ It records the original Article13 service route, its later replacement, repeal
 and continuation of initiated actions, and separate entry and application dates.
 Financial transition exceptions do not automatically set Kindergeld award dates.
 This is a limited article review, not a legal review of all 77 captured pages.
-All three instruments remain unencoded. The generated ledger reports 268 pending
-of 784 instruments and 159 open dependencies: eight law-derived inputs and 151
+All three instruments remain unencoded. The generated ledger reports 272 pending
+of 788 instruments and 159 open dependencies: eight law-derived inputs and 151
 bearing instruments. Five spine provisions remain pending and one partially
 encoded; dependency closure remains false.
+
+The same review also enrolls four uncaptured earlier instruments as pending
+supplemental022–025: Regulation375/2014, named in 2021/888 Articles32–33, and
+Decisions1719/2006,1720/2006 and1298/2008, named in 1288/2013 Article37.
+These are indirect reading discoveries. Their programme scope and bearing on
+2025 Kindergeld require source capture and review; old dates alone do not
+support exclusion. This adds four pending rows, without asserting that they
+are applicable or encoded.
