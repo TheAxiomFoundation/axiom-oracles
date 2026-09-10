@@ -6,16 +6,17 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 276 of 770 instruments
+other closure artifact. The current frontier has 280 of 774 instruments
 pending, and dependency closure has 138 open dependencies: eight law-derived
 inputs and 130 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
-historical minimum-wage parameter, MiLoV5 §1 future rates, and historical SGB IV §8(1a) earnings threshold are declared at RuleSpec merge
-`af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41`; the live amount-only oracle and
+historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
+earnings threshold and BFDG §5 recognition-preservation norms are declared at
+RuleSpec merge `212bba29ea06d0166037e4cc24ba4d03b4dd6c02`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
-and same-child credit remain deferred to §64, and the §78 spine stays pending.
+and same-child credit remain deferred to §64, and the §78 spine stays partially encoded.
 The exact-citation-path summary (`closure/de/summary.json`) contributes only
 its source-universe and signature fields; nothing DE-specific decides the
 premise, and a forged ledger fails the producer's exact rederivation before
@@ -341,12 +342,12 @@ and retain their original release identities. Eight article-level EU coordinatio
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
 uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 108 citation-only seeds and
-102 receipted instruments. The 2023 country-group letter remains citation-only
+101 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 276 of 770 instruments pending, 138 open
+rows pending. Current result: 280 of 774 instruments pending, 138 open
 dependencies (eight law-derived inputs, 130 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
@@ -636,3 +637,33 @@ are insufficient. The judgment’s historical SGB III wording must be distinguis
 from the current guidance when encoding. Current totals are 276 pending
 instruments and 138 open dependencies (eight law-derived, 130 bearing); this
 classification exposes the rules still needed rather than closing them.
+
+## Signed overseas-service recognition preservation (2026-09-10)
+
+[RuleSpec PR87](https://github.com/TheAxiomFoundation/rulespec-de/pull/87) merged
+at `212bba29ea06d0166037e4cc24ba4d03b4dd6c02` after all exact-head checks passed.
+BFDG §5 supplies six normative preservation outputs: existing recognitions and
+new-recognition powers under ZDG §14b(3), each for providers, projects and
+service deployment plans. The module has zero inputs and no deferrals; every
+proof atom quotes the full corpus sentence, body SHA-256
+`eef6e0dc2ef478dd2b29b8869e4d8e12eb6d1f601b3b1f054eef111cd387bf5b`.
+Three native companion cases exercise all six outputs in supported 2025/2026
+observation periods. These norms do not decide individual recognition validity,
+service qualification or child eligibility. DA-KG A18.5 remains bearing.
+
+The protected signing run used encoder
+`5d4562d822e6d4a53420f0f9cb0a5891a7edf6fe`. DE repository CI now uses that exact
+identity; the initial mismatch was repaired by aligning the pin, with the policy
+gate retained. Generated module, companion and manifest bytes were not edited.
+The DE workstream's owned display follow-up in PR536 includes `bfdg` and `zdg`
+in both canonical acronym registries, alongside `milov4` and `milov5`.
+
+The consumer now declares ten signed modules against the same corpus release.
+Native graph refresh adds four pending candidates: the BFDG amendment reference
+of 23 May 2024, SGB V, ZDG and the 2021 IJFD guideline. Their identity and bearing
+must be reviewed from the bound source edges; discovery alone does not establish
+applicability. In particular, the new SGB V §226 inbound excerpt combines a
+§5 reference with a later BFDG mention and requires identity review before it can
+be treated as a BFDG §5 dependency. Current totals are 280 pending of 774
+instruments and 138 open dependencies (eight law-derived, 130 bearing), with
+five pending and one partially encoded spine provision. Closure remains false.

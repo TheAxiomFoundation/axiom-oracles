@@ -27,7 +27,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: de0958a4be373ff440931bc06f4fea4b0c3dab70857dca078d630d033be0c640
+    sha256: d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 9bc4f5f0afad97e8edc9834609a53a56435d0509
@@ -275,8 +275,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/minuhv/1
     state: captured
-    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
-    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
     path: de/regulations/minuhv/1.yaml
     sha256: c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc
     module_id: de:regulations/minuhv/1
@@ -284,8 +284,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
-    commit: af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41
+    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -425,14 +425,14 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 827726a0275cf41978a1ce2fc330b904d78249215776c04d89adc73d6aa4259f
+    snapshot_sha256: 27b4cccee9454f4cf267b611d23230bf61978f518d1c12ba62785e27416740db
     channel_receipts:
-      corpus_release: 1dc0bafe76599b79b4503ad854b58441ae8d5ce995d86bdaaa0ae776e17d46cc
-      subject_matter_search: 332afd709deaed329b8b7eb01207eb2f2cffdcc741d239f0cdd0793ad49d9bc1
+      corpus_release: c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c
+      subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
-      unretrieved: 4
+      unretrieved: 6
     candidate_count: 41
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
@@ -1668,6 +1668,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 6 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

@@ -70,10 +70,10 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 9
+        "signed": 10
       },
       "by_status": {
-        "encoded": 9,
+        "encoded": 10,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -83,6 +83,7 @@
         "de/regulation/eu-987-2009/article-59/document-1",
         "de/regulation/milov4/1",
         "de/regulation/milov5/1",
+        "de/statute/bfdg/5",
         "de/statute/bgb/1591",
         "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -98,7 +99,7 @@
         "de/statute/estg/78",
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt"
       ],
-      "citation_root_count": 15,
+      "citation_root_count": 16,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -187,6 +188,15 @@
           "role": "marginal_employment_threshold_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bfdg/5",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.",
+          "role": "overseas_service_recognition_preservation_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
         }
       ],
       "evidence_roots": [
@@ -228,7 +238,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "a14da1e832f0f80a6ebe71c5e7f2b384750cce6bc3178ef9f94b5f7a9419a8c9",
+      "subgraph_sha256": "aad0c0188a2c7eb18dffdad4ff7ed5d26230cc4d76624fd025d7277c06194cda",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -409,7 +419,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41",
+  "rulespec_commit": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -418,7 +428,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "de0958a4be373ff440931bc06f4fea4b0c3dab70857dca078d630d033be0c640"
+    "sha256": "d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3"
   },
   "spine_closed": false
 }

@@ -38,12 +38,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "af3e4f1c15550f8b871a1c14d0a6d1bd7c6a2a41"
+RULESPEC_MAIN_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/bfdg/5",
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
         "de/regulation/milov5/1",
         "de/regulation/milov4/1",
@@ -73,6 +74,7 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/statute/bfdg/5": ("overseas_service_recognition_preservation_prerequisite", "encoded", {"signed"}),
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": (
             "marginal_employment_threshold_prerequisite", "encoded", {"signed"}
         ),
@@ -131,6 +133,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    'de/statute/bfdg/5': {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": '.axiom/encoding-manifests/de/statutes/bfdg/5.json',
+        "sha256": 'f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452',
+    },
     "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -233,6 +241,15 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                'de/statute/bfdg/5',
+                role="overseas_service_recognition_preservation_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path='.axiom/encoding-manifests/de/statutes/bfdg/5.json',
+                source_sha256='f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452',
+                reason='Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.',
+            ),
             _root(
                 "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
                 role="marginal_employment_threshold_prerequisite",
