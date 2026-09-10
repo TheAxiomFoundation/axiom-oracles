@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 278 of 770 instruments
-pending, and dependency closure has 136 open dependencies: eight law-derived
-inputs and 128 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 276 of 770 instruments
+pending, and dependency closure has 138 open dependencies: eight law-derived
+inputs and 130 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, and historical SGB IV §8(1a) earnings threshold are declared at RuleSpec merge
@@ -346,8 +346,8 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 278 of 770 instruments pending, 136 open
-dependencies (eight law-derived inputs, 128 bearing instruments, no unclassified
+rows pending. Current result: 276 of 770 instruments pending, 138 open
+dependencies (eight law-derived inputs, 130 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 The latest release also retains complete EStG §32 paragraph captures and the
@@ -626,3 +626,13 @@ limit the award. This corrects the earlier whole-section evidence exclusion.
 Pending instruments remain 278 of 770; the correction makes 136 dependencies
 explicit (eight law-derived inputs and 128 bearing instruments). No new signed
 module or certified claim results from this review.
+
+Full-text review of BFH III R 37/21 (22 September 2022), paragraphs 1–22,
+adds bearing dispositions for its discovery and corpus frontier rows. It also
+corrects A 14.1’s former “only breach” termination summary: the child’s own
+termination request and an effectively notified termination decision are
+separate routes. Register deletion and ending a careers-advice appointment alone
+are insufficient. The judgment’s historical SGB III wording must be distinguished
+from the current guidance when encoding. Current totals are 276 pending
+instruments and 138 open dependencies (eight law-derived, 130 bearing); this
+classification exposes the rules still needed rather than closing them.

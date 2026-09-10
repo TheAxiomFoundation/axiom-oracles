@@ -9,8 +9,8 @@ Repeating that restriction cannot produce a complete module.
 
 The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
-It contains the complete pinned § 32(4) text and six fully read, hash-verified
-DA-KG sections. The remaining guidance families listed below still need their
+It contains the complete pinned § 32(4) text, six fully read, hash-verified
+DA-KG sections and the complete BFH III R 37/21 decision. The remaining guidance families listed below still need their
 own implementation review; listing them does not declare them reviewed or encoded.
 
 ## Source-unit coverage
@@ -46,7 +46,12 @@ assert that those records suffice for every legal case.
 
 * **Registration is not a simple open/close interval.** A 14.1 expressly says
   deletion of registration alone does not terminate the job-seeker condition.
-  Disputed termination requires the SGB III § 38(4) analysis. It also permits
+  BFH III R 37/21 paragraphs 17–21 also distinguish an effectively notified
+  termination decision and the child’s own termination request from mere register
+  deletion or ending a careers-advice appointment. Without those acts, a
+  source-defined breach authorizing termination matters; breach is not the only
+  termination route. Disputed termination requires version-bound SGB III § 38
+  analysis. The existing A 14.1 disposition is corrected accordingly. It also permits
   specified marginal work, self-employment below 15 hours and EU/EEA/Swiss
   employment-agency registration. A domestic-registration Boolean and a blanket
   no-work Boolean would miss these routes.
@@ -81,7 +86,9 @@ These are planned acceptance cases, not claims of executed tests:
    the supported two-argument date function and signed correction expression.
 2. Conditions occurring in disjoint parts of one month versus one common day;
    the former must not qualify merely because each overlaps the month.
-3. Registration deletion alone versus the source-defined effective termination.
+3. Registration deletion or ending a careers-advice appointment alone versus an
+   effectively notified termination decision, the child’s own termination request,
+   and the source-defined breach route; bind the applicable SGB III version.
 4. Qualifying July/December training endpoints versus a January next endpoint;
    include a prior endpoint before the eighteenth birthday.
 5. Disability evidence ending mid-month versus card expiry alone, and evidence

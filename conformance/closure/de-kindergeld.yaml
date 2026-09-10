@@ -10465,7 +10465,7 @@ committed_decisions:
     status: classified-with-reason
     body_sha256: 49f5119533290f174c96252707609c39a0e777d138caa1df00799f3425a040d3
     classification: entitlement_condition
-    reason: A child aged 18 to under 21 is considered under § 32 Abs. 4 Satz 1 Nr. 1 EStG if not in employment and registered as job-seeking with a domestic Agentur für Arbeit or Jobcenter; the registration lapses only where placement was rightly ended for breach of duties (BFH III R 37/21); marginal employment, self-employment under 15 hours a week (BFH III R 9/14), § 16d SGB II work opportunities and registration with an EU/EEA/Swiss placement service do not preclude; A 23 applies; proof by KG 11a or unemployment/benefit certificate; half-yearly review. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.
+    reason: A child aged 18 to under 21 is considered under § 32 Abs. 4 Satz 1 Nr. 1 EStG if not in employment and registered as job-seeking with a domestic Agentur für Arbeit or Jobcenter; registration deletion alone does not end the condition; BFH III R 37/21 distinguishes a source-defined breach authorizing termination, the child’s own request to end job-seeking, and an effectively notified termination decision, while ending a careers-advice appointment alone is insufficient; marginal employment, self-employment under 15 hours a week (BFH III R 9/14), § 16d SGB II work opportunities and registration with an EU/EEA/Swiss placement service do not preclude; A 23 applies; proof by KG 11a or unemployment/benefit certificate; half-yearly review. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.
     bears_on_computed_surface: true
   - id: de-kg-dakg-A14.2
     status: classified-with-reason
@@ -12984,6 +12984,12 @@ committed_decisions:
     reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
       section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-756b8977705fa113
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R 37/21 decision of 22 September 2022, paragraphs 1–22, read against the pinned corpus body. Paragraphs 13 and 17–21 distinguish the actual job-seeker notification from the agency register and its deletion. Where neither an effectively notified termination decision nor the child’s own request to end job-seeking is present, termination depends on a source-defined breach authorizing the agency to end placement. Deletion of registration and consensual ending of a careers-advice appointment alone do not end the condition. The child-request and effectively notified administrative-act routes must not be omitted by describing breach as the only termination route. DA-KG 2025 A 14.1 expressly applies this holding to EStG § 32 Abs. 4 Satz 1 Nr. 1; it bears on qualifying_child_count and remains unencoded. The decision applies the historical SGB III § 38 wording to 2018; the corresponding provision and current guidance must be version-bound before implementation,
+      without copying the old paragraph number as current law. Source: de/guidance/bfh-iii-r-37-21-2022-09-22/document-1, body SHA-256 49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef, corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBl II issue/page verification and exhaustive discovery remain open.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-78f494ec90cd368b
     status: excluded-with-reason
     classification: appeal_costs
@@ -13219,6 +13225,12 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Zehnten Buches Sozialgesetzbuch' matched in § 74 Abs. 2 EStG (§§ 102–109 and 111–113 SGB X applied to refund claims of social-benefit providers) and § 68 Abs. 7 EStG (§ 79 Abs. 2–4 SGB X for automated retrieval). Both citations sit in excluded payout-routing and data provisions; no entitlement or amount rule.
     bears_on_computed_surface: false
+  - id: de-kg-instr-ad3045c5a5d2f5bd
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R 37/21 decision of 22 September 2022, paragraphs 1–22, read against the pinned corpus body. Paragraphs 13 and 17–21 distinguish the actual job-seeker notification from the agency register and its deletion. Where neither an effectively notified termination decision nor the child’s own request to end job-seeking is present, termination depends on a source-defined breach authorizing the agency to end placement. Deletion of registration and consensual ending of a careers-advice appointment alone do not end the condition. The child-request and effectively notified administrative-act routes must not be omitted by describing breach as the only termination route. DA-KG 2025 A 14.1 expressly applies this holding to EStG § 32 Abs. 4 Satz 1 Nr. 1; it bears on qualifying_child_count and remains unencoded. The decision applies the historical SGB III § 38 wording to 2018; the corresponding provision and current guidance must be version-bound before implementation,
+      without copying the old paragraph number as current law. Source: de/guidance/bfh-iii-r-37-21-2022-09-22/document-1, body SHA-256 49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef, corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBl II issue/page verification and exhaustive discovery remain open.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-b96e03076e143e8e
     status: classified-with-reason
     body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
@@ -14202,9 +14214,9 @@ computed:
     counts:
       total: 770
       encoded: 2
-      classified-with-reason: 142
+      classified-with-reason: 144
       excluded-with-reason: 348
-      pending: 278
+      pending: 276
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14294,7 +14306,6 @@ computed:
     - de-kg-discovery-72d51e3daaea5eea
     - de-kg-discovery-73e9e033ebfde669
     - de-kg-discovery-740e76246747a2be
-    - de-kg-discovery-756b8977705fa113
     - de-kg-discovery-76c82b8ffe35fc59
     - de-kg-discovery-77e24ec30aa0b588
     - de-kg-discovery-78fe440c4b3bff9e
@@ -14455,7 +14466,6 @@ computed:
     - de-kg-instr-9ea3370bf9f2ad0d
     - de-kg-instr-a2bd2172735c10fa
     - de-kg-instr-ac571daf105e0ae9
-    - de-kg-instr-ad3045c5a5d2f5bd
     - de-kg-instr-b25507686192c311
     - de-kg-instr-b794d203afd4361a
     - de-kg-instr-b8899970af340fb3
@@ -14705,7 +14715,7 @@ computed:
       section_located: true
       body_sha256: 49f5119533290f174c96252707609c39a0e777d138caa1df00799f3425a040d3
       classification: entitlement_condition
-      reason: A child aged 18 to under 21 is considered under § 32 Abs. 4 Satz 1 Nr. 1 EStG if not in employment and registered as job-seeking with a domestic Agentur für Arbeit or Jobcenter; the registration lapses only where placement was rightly ended for breach of duties (BFH III R 37/21); marginal employment, self-employment under 15 hours a week (BFH III R 9/14), § 16d SGB II work opportunities and registration with an EU/EEA/Swiss placement service do not preclude; A 23 applies; proof by KG 11a or unemployment/benefit certificate; half-yearly review. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.
+      reason: A child aged 18 to under 21 is considered under § 32 Abs. 4 Satz 1 Nr. 1 EStG if not in employment and registered as job-seeking with a domestic Agentur für Arbeit or Jobcenter; registration deletion alone does not end the condition; BFH III R 37/21 distinguishes a source-defined breach authorizing termination, the child’s own request to end job-seeking, and an effectively notified termination decision, while ending a careers-advice appointment alone is insufficient; marginal employment, self-employment under 15 hours a week (BFH III R 9/14), § 16d SGB II work opportunities and registration with an EU/EEA/Swiss placement service do not preclude; A 23 applies; proof by KG 11a or unemployment/benefit certificate; half-yearly review. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.
       bears_on_computed_surface: true
     - id: de-kg-dakg-A14.2
       status: classified-with-reason
@@ -22564,7 +22574,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 02.06.2022, III R 9/21, BStBl II S. 840
     - id: de-kg-discovery-756b8977705fa113
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 22.09.2022, III R 37/21, BStBl II S. 649
       discovery_refs:
@@ -22572,6 +22582,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 22.09.2022, III R 37/21, BStBl II S. 649
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R 37/21 decision of 22 September 2022, paragraphs 1–22, read against the pinned corpus body. Paragraphs 13 and 17–21 distinguish the actual job-seeker notification from the agency register and its deletion. Where neither an effectively notified termination decision nor the child’s own request to end job-seeking is present, termination depends on a source-defined breach authorizing the agency to end placement. Deletion of registration and consensual ending of a careers-advice appointment alone do not end the condition. The child-request and effectively notified administrative-act routes must not be omitted by describing breach as the only termination route. DA-KG 2025 A 14.1 expressly applies this holding to EStG § 32 Abs. 4 Satz 1 Nr. 1; it bears on qualifying_child_count and remains unencoded. The decision applies the historical SGB III § 38 wording to 2018; the corresponding provision and current guidance must be version-bound before implementation,
+        without copying the old paragraph number as current law. Source: de/guidance/bfh-iii-r-37-21-2022-09-22/document-1, body SHA-256 49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef, corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBl II issue/page verification and exhaustive discovery remain open.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-76c82b8ffe35fc59
       status: pending
       identity_kind: class_member
@@ -24751,7 +24765,7 @@ computed:
       document_citation_path: de/guidance/bfh-xi-r-24-13-2014-04-30
       title: 'BFH, XI R 24/13, 2014-04-30: Kein Kindergeld für behindertes Kind in Haft'
     - id: de-kg-instr-ad3045c5a5d2f5bd
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-35cf58fe9bac00087a26
       identity_kind: corpus_citation
@@ -24761,6 +24775,10 @@ computed:
       citation_label: 'BFH, III R 37/21, 2022-09-22: Kindergeldanspruch; Wegfall der Arbeitsuchendmeldung i.S. des § 32 Abs. 4 Satz 1 Nr. 1 EStG'
       document_citation_path: de/guidance/bfh-iii-r-37-21-2022-09-22
       title: 'BFH, III R 37/21, 2022-09-22: Kindergeldanspruch; Wegfall der Arbeitsuchendmeldung i.S. des § 32 Abs. 4 Satz 1 Nr. 1 EStG'
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R 37/21 decision of 22 September 2022, paragraphs 1–22, read against the pinned corpus body. Paragraphs 13 and 17–21 distinguish the actual job-seeker notification from the agency register and its deletion. Where neither an effectively notified termination decision nor the child’s own request to end job-seeking is present, termination depends on a source-defined breach authorizing the agency to end placement. Deletion of registration and consensual ending of a careers-advice appointment alone do not end the condition. The child-request and effectively notified administrative-act routes must not be omitted by describing breach as the only termination route. DA-KG 2025 A 14.1 expressly applies this holding to EStG § 32 Abs. 4 Satz 1 Nr. 1; it bears on qualifying_child_count and remains unencoded. The decision applies the historical SGB III § 38 wording to 2018; the corresponding provision and current guidance must be version-bound before implementation,
+        without copying the old paragraph number as current law. Source: de/guidance/bfh-iii-r-37-21-2022-09-22/document-1, body SHA-256 49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef, corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBl II issue/page verification and exhaustive discovery remain open.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-b25507686192c311
       status: pending
       discovery_refs:
@@ -25537,6 +25555,7 @@ computed:
     - de-kg-dakg-V23.1
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
+    - de-kg-discovery-756b8977705fa113
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-da811c7c21203da5
@@ -25554,6 +25573,7 @@ computed:
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-a5848a433a63d2cb
+    - de-kg-instr-ad3045c5a5d2f5bd
     - de-kg-instr-b96e03076e143e8e
     - de-kg-instr-c3642f7b68a0f9a8
     - de-kg-instr-ce168756ed1a28cb
@@ -25569,8 +25589,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 128
-    open_dependency_count: 136
+    instruments_bearing_on_computed_count: 130
+    open_dependency_count: 138
     closed: false
   measured_denominators:
     spine_rows: 18
