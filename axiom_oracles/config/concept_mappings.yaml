@@ -133,6 +133,23 @@ concepts:
         name: kindergeld.betrag_m
         scope: *de_country_scope
 
+  de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count:
+    description: >-
+      Germany: number of children in the household for whom Kindergeld is due
+      (§ 63 Abs. 1 with § 32 Abs. 3–5 EStG). GETTSIM exposes it as the recipient's
+      claim count; EUROMOD has no per-child eligibility output, so its leg is the
+      household amount under kindergeld_monthly.
+    category: benefits
+    comparison: amount
+    tolerance: 0
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      gettsim:
+        name: kindergeld.anzahl_ansprüche
+        scope: *de_country_scope
+
   be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax

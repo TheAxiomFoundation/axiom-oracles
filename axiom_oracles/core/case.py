@@ -361,6 +361,12 @@ class Concepts:
         "#income_tax_including_solidarity_surcharge_annual"
     )
     DE_KINDERGELD_MONTHLY = "de:policies/worker_dual_oracle_baseline#kindergeld_monthly"
+    # Number of children for whom Kindergeld is due in the household (§ 63 with
+    # § 32 EStG). Named for the ledger's law-derived input qualifying_child_count
+    # so the rulespec-de encoding of §§ 63/32 can attach without renaming.
+    DE_KINDERGELD_QUALIFYING_CHILD_COUNT = (
+        "de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count"
+    )
     BE_PERSONAL_INCOME_TAX = (
         "be:statutes/income_tax/individual/tax_liability_pipeline"
         "#belgium_pit_final_income_tax_payable"

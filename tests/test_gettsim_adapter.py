@@ -50,6 +50,10 @@ from axiom_oracles.adapters.gettsim.case import (
     DEFAULT_RENTENEINTRITT_JAHR,
     NO_LINK,
 )
+from axiom_oracles.suites.de_kindergeld import (
+    DE_KINDERGELD_GETTSIM_TARGETS,
+    de_kindergeld_eligibility_cases,
+)
 from axiom_oracles.suites.de_worker import (
     DE_GETTSIM_TARGETS,
     de_worker_dual_oracle_cases,
@@ -903,3 +907,53 @@ class TestGettsimTypedFailures:
                 GettsimCase.single_person({"alter": 40, "alter_monate": 0}),
                 {"einkommensteuer": {"betrag_y_sn": "income_tax_y_sn"}},
             )
+
+
+@gettsim_required
+class TestGettsimKindergeldEligibilityGridLive:
+    """Live anchors for the § 32 EStG child-eligibility grid.
+
+    Statutory anchors: § 32 Abs. 3 EStG (unconditional until the completed
+    18th year), Abs. 4 Satz 1 Nr. 2 Buchst. a (under 25 and in training),
+    Abs. 4 Satz 2–3 (20 weekly hours), § 66 Abs. 1 (EUR 255 per child in 2025).
+    GETTSIM 1.2.1 applies the 20-hour rule to every child in training, where
+    the statute applies it only after a first training or degree is completed
+    (DA-KG A 20.1); the 25-hour case pins the engine's behaviour, labelled as
+    such, not the statute.
+    """
+
+    #: (household Kindergeld, claim count, per-person eligibility judgement)
+    ANCHORS = {
+        "child-17": (255.0, 1, [False, True]),
+        "child-18-training": (255.0, 1, [False, True]),
+        "child-18-no-training": (0.0, 0, [False, False]),
+        "child-24-training": (255.0, 1, [False, True]),
+        "child-25-training": (0.0, 0, [False, False]),
+        "child-22-training-20h": (255.0, 1, [False, True]),
+        # engine-pinned: statute would still pay before a first training is
+        # completed; GETTSIM has no input for that.
+        "child-22-training-25h": (0.0, 0, [False, False]),
+        "children-17-and-25": (255.0, 1, [False, True, False]),
+    }
+
+    @pytest.fixture(scope="class")
+    def runner(self) -> GettsimRunner:
+        return GettsimRunner(policy_date_str="2025-06-30")
+
+    def test_grid_covers_every_anchor(self) -> None:
+        assert [case.case_id for case in de_kindergeld_eligibility_cases()] == list(
+            self.ANCHORS
+        )
+
+    @pytest.mark.parametrize("case_id", list(ANCHORS))
+    def test_eligibility_anchor(self, runner, case_id) -> None:
+        cases = {case.case_id: case for case in de_kindergeld_eligibility_cases()}
+        projected = GettsimCase.from_mapping(cases[case_id].metadata["gettsim_case"])
+        result = runner.run_case(projected, DE_KINDERGELD_GETTSIM_TARGETS)
+        reduced = reduce_gettsim_household_values(result.values)
+        amount, count, per_person = self.ANCHORS[case_id]
+
+        assert result.gettsim_version == GETTSIM_VERSION
+        assert reduced["kindergeld.betrag_m"] == pytest.approx(amount, abs=FLOAT_NOISE)
+        assert reduced["kindergeld.anzahl_ansprüche"] == count
+        assert list(result.values["kindergeld.ist_leistungsbegründendes_kind"]) == per_person

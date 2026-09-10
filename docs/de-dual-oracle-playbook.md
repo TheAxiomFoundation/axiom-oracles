@@ -82,6 +82,42 @@ The fixed grid is defined in `axiom_oracles/suites/de_worker.py`:
 Do not duplicate this grid in a runner or live test. Both engine anchor tests
 select cases from the canonical builder.
 
+## Child-eligibility grid (`de-kindergeld-eligibility`)
+
+The canonical grid fixes its children at ages 7 and 10, so the § 32 EStG
+conditions behind `qualifying_child_count` are never exercised. The second DE
+case set, defined in `axiom_oracles/suites/de_kindergeld.py`, varies one
+threshold per case on a single-parent West household at EUR 4,000: age 17;
+age 18 in and not in training; age 24 and 25 in training; age 22 in training
+working 20 and 25 hours a week; and one eligible plus one ineligible child. It
+compares `kindergeld_monthly` and the new concept
+`de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count`
+(GETTSIM `kindergeld.anzahl_ansprüche`; EUROMOD has no per-child eligibility
+output, so its leg is the household amount).
+
+GETTSIM 1.2.1 inputs are `kindergeld__in_ausbildung` and `arbeitsstunden_w` on
+the child; its rule is `alter < 18 or (alter < 25 and in_ausbildung and
+arbeitsstunden_w <= 20)`. EUROMOD receives `les = 6` / `dec = 1` for a child in
+training, `les = 1` / `dec = 0` otherwise, and `lhw`/`liwwh` for the working
+child. Live GETTSIM anchors are pinned in
+`tests/test_gettsim_adapter.py::TestGettsimKindergeldEligibilityGridLive`.
+
+Known oracle limits, recorded so they are not mistaken for findings:
+
+- GETTSIM applies the 20-hour rule to every child in training; § 32 Abs. 4
+  Satz 2–3 applies it only after a first training or degree is completed
+  (DA-KG A 20.1). The 25-hour case pins the engine, not the statute.
+- Neither oracle models the job-seeking ground for 18–20-year-olds (§ 32
+  Abs. 4 Satz 1 Nr. 1), the disability ground (Nr. 3), foster children, the
+  § 62 residence-title conditions, § 64 priority or § 65 exclusions. Those
+  parts of the rulespec-de encoding will rest on statute-bound proof atoms.
+
+The EUROMOD leg of this grid has not been run yet (no EUROMOD host in the
+session that added it); run it with the same command as the canonical grid
+and commit the report before adding a comparison config. The Axiom leg
+attaches when rulespec-de encodes §§ 63/32; the concept id is named for the
+ledger's law-derived input `qualifying_child_count` for that reason.
+
 ## Filed model findings
 
 The 12 non-matching rows are not widened away. They retain the one-cent
