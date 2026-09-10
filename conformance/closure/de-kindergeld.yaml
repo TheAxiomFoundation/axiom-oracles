@@ -41,12 +41,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39
+    sha256: 9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 5a77472300eb240e303a6f52c1d45040d671e7a4
-    release: de-rulespec-2026-09-10-kindergeld-maternity
-    release_content_sha256: 57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042
+    commit: eb2c46117b2cf2a396a48a41be409fe1e5ecc696
+    release: de-rulespec-2026-09-10-kindergeld-recipient-priority
+    release_content_sha256: 4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -189,6 +189,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl
       sha256: 2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5
       row_count: 46
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl
+      sha256: 65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1
+      row_count: 598
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 62
@@ -979,10 +982,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 4b493fbae92d383d9eba6eb639cf05401941a32a0a84ef6ae1a192bedd1c22f1
+    snapshot_sha256: 4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343
     channel_receipts:
-      corpus_release: c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a
-      subject_matter_search: c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390
+      corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
+      subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10291,7 +10294,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: cc824086800ba8eec8490a9228bf418c888b05c57c52621292c3261b2146221d
+      sha256: 591437fc0236c93ed18f85f3a0067dfddd0c04ba1201a822047943b3bce5082f
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10340,8 +10343,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a
-        subject_matter_search: c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390
+        corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
+        subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13793,6 +13796,20 @@ committed_decisions:
     text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
     text_sha256: 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263
     bears_on_computed_surface: false
+  - id: de-kg-suppl-018
+    identity: FamFG §40 (Wirksamwerden), upstream of EStG §64 family-court recipient selection
+    title_short: FamFG40
+    relation: bears_on
+    discovered_by: de-kg-dakg-A25.1
+    discovered_in_body_sha256: 0c265ad0e4371c67d949ffa2f37b4acf3f4ba481747e9d91b088811e3a8f2760
+    provenance: 'Full DA-KG2025 A25.1(7), sentence4: Der Beschluss des Familiengerichts wird nach § 40 Abs. 1 FamFG mit Bekanntgabe an alle Beteiligten wirksam.'
+    status: classified-with-reason
+    classification: recipient_priority_effectiveness
+    reason: Full current FamFG40 body read and checked against official XML. Paragraph1 defines effectiveness on notification to the participant for whom the decision is intended according to its essential content. Paragraph2 and paragraph3 define the stated finality and immediate-effect branches for other decision classes. This is upstream of when a family-court recipient-priority selection takes effect; an issued-order Boolean or an ungrounded finality_date input does not encode those consequences. The specific DA-KG recipient-selection formulation refers to all participants; its application of the general rule and historical applicability remain for source-bound reconciliation. Current capture does not establish blanket2025 applicability. The finding concerns section40, not a claim that all598 FamFG rows were legally reviewed. The graph scan did not project this instrument into the Kindergeld candidates, so this reading-discovered dependency is explicitly enrolled here. It remains bearing
+      and unencoded.
+    text_source: Native official FamFG XML; de/statute/famfg/40 in data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl; release de-rulespec-2026-09-10-kindergeld-recipient-priority, commit eb2c46117b2cf2a396a48a41be409fe1e5ecc696, content SHA-2564955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4. Exact body retained in conformance/closure/de-discovery-2026-09-08/recipient-priority-source-review.json reviewed_statutes.
+    text_sha256: 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3
+    bears_on_computed_surface: true
 computed:
   ledger:
   - ordinal: 1
@@ -14405,11 +14422,11 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 777
+    instrument_count: 778
     counts:
-      total: 777
+      total: 778
       encoded: 2
-      classified-with-reason: 159
+      classified-with-reason: 160
       excluded-with-reason: 348
       pending: 268
     pending:
@@ -25772,6 +25789,22 @@ computed:
       bears_on_computed_surface: false
       text_source: 'Receipted axiom-corpus release de-rulespec-2026-09-09-kindergeld-treaty-texts at 27510ad32be7e2111c20f3a7dd41a2ae40310c17, content SHA-256 415ed064787982bd65ba6b5c882efd53ae6d1ba2f98f0e1fc66232a27977d69f; conformance/closure/de-discovery-2026-09-08/supplemental-corpus-bindings.json#de-kg-suppl-017; SHA-256 of UTF-8 corpus body. Citation paths: de/guidance/ristbv-2023/inhalt. Replaces the earlier browser/PDF page capture; disposition and bearing remain unchanged.'
       text_sha256: 113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263
+    - id: de-kg-suppl-018
+      status: classified-with-reason
+      discovery_refs:
+      - de-kg-dakg-A25.1
+      identity_kind: supplemental
+      identity: FamFG §40 (Wirksamwerden), upstream of EStG §64 family-court recipient selection
+      title_short: FamFG40
+      relation: bears_on
+      discovered_in_body_sha256: 0c265ad0e4371c67d949ffa2f37b4acf3f4ba481747e9d91b088811e3a8f2760
+      provenance: 'Full DA-KG2025 A25.1(7), sentence4: Der Beschluss des Familiengerichts wird nach § 40 Abs. 1 FamFG mit Bekanntgabe an alle Beteiligten wirksam.'
+      classification: recipient_priority_effectiveness
+      reason: Full current FamFG40 body read and checked against official XML. Paragraph1 defines effectiveness on notification to the participant for whom the decision is intended according to its essential content. Paragraph2 and paragraph3 define the stated finality and immediate-effect branches for other decision classes. This is upstream of when a family-court recipient-priority selection takes effect; an issued-order Boolean or an ungrounded finality_date input does not encode those consequences. The specific DA-KG recipient-selection formulation refers to all participants; its application of the general rule and historical applicability remain for source-bound reconciliation. Current capture does not establish blanket2025 applicability. The finding concerns section40, not a claim that all598 FamFG rows were legally reviewed. The graph scan did not project this instrument into the Kindergeld candidates, so this reading-discovered dependency is explicitly enrolled here. It remains bearing
+        and unencoded.
+      bears_on_computed_surface: true
+      text_source: Native official FamFG XML; de/statute/famfg/40 in data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl; release de-rulespec-2026-09-10-kindergeld-recipient-priority, commit eb2c46117b2cf2a396a48a41be409fe1e5ecc696, content SHA-2564955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4. Exact body retained in conformance/closure/de-discovery-2026-09-08/recipient-priority-source-review.json reviewed_statutes.
+      text_sha256: 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -25931,12 +25964,13 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 145
-    open_dependency_count: 153
+    - de-kg-suppl-018
+    instruments_bearing_on_computed_count: 146
+    open_dependency_count: 154
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 777
+    bearing_candidate_instruments: 778
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

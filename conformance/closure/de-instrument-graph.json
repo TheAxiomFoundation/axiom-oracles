@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-10T14:51:17Z",
+  "generated_at": "2026-09-10T15:42:10Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39"
+    "sha256": "9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-10-kindergeld-maternity",
-      "commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
-      "release_content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
+      "release": "de-rulespec-2026-09-10-kindergeld-recipient-priority",
+      "commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+      "release_content_sha256": "4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-10-kindergeld-maternity/57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042.json",
-        "raw_sha256": "0a2157c2925092aca525dded6a9116d99771af280c291ef515b181cf0f91dbf0",
-        "content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042"
+        "path": "releases/de-rulespec-2026-09-10-kindergeld-recipient-priority/4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4.json",
+        "raw_sha256": "b808f0b3f014664446039f48e3c56bdabcc32f5999c8aacc241cafccde45014e",
+        "content_sha256": "4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4"
       },
       "scans": [
         {
@@ -606,25 +606,38 @@
             "sha256": "2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5",
             "row_count": 46
           }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json",
+            "sha256": "a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6",
+            "row_count": 598
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
+            "sha256": "65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1",
+            "row_count": 598
+          }
         }
       ],
-      "scanned_row_count": 9264,
+      "scanned_row_count": 9862,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9264,
-        "body_row_count": 9083,
-        "mapped_row_count": 9264,
+        "row_count": 9862,
+        "body_row_count": 9681,
+        "mapped_row_count": 9862,
         "unmapped_row_count": 0,
-        "act_count": 220,
+        "act_count": 221,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6443,
-          "law_metadata_changed_by": 33,
-          "law_metadata_fundstelle": 41
+          "explicit_cross_reference_body": 6741,
+          "law_metadata_changed_by": 34,
+          "law_metadata_fundstelle": 42
         },
-        "row_scan_sha256": "09155f01efcb02065a005fa457b531403f064a5a23786b8f055fb47a20bbc031",
-        "canonical_index_sha256": "80796d844fffdadcf3a602ee0290d6a09704665ff111f1483fe225eaab97cd8d",
-        "per_act_sha256": "e19fed80d1ed26f7166f345d9c19b5f40625584971fa93238a9cc9321e2d5532",
+        "row_scan_sha256": "031ab2aeafa21e019de6267bcfa6f2a3173bdef50f04cef921ff79dc01c76ee7",
+        "canonical_index_sha256": "24df5da550c01836158f5561f1d63c97d0c5aea1b09865dacf347145a28388ce",
+        "per_act_sha256": "32a4bf64b3e48e5eb692ffaa82e19867dfc0e0be28cccd91018952c59e14f1d4",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -2599,11 +2612,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 7,
+              "explicit_cross_reference_body": 9,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "0976a9eee7da6f5ce780258006193d5feb05b559b71159711af4b79f8f9ab926",
+            "findings_sha256": "e0709d79bbad05bb2c8325a8ca3522e9f028db9dc3ea7df96ec8e1b4ea144ee6",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -2653,8 +2666,26 @@
                 "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
                 "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
                 "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
+                "matched_text": "FamFG",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
+                "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
+                "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
                 "matched_text": "Finanzverwaltungsgesetzes",
                 "unresolved_identity": "named-instrument:finanzverwaltungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
+                "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
+                "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6037,11 +6068,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 4,
+              "explicit_cross_reference_body": 5,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "1dfa237e053ccf93d756030afd43ce03d7daf254ed5e8bed6083e33c6155eefc",
+            "findings_sha256": "c92a1113574cbb86d90e8402bc0ebc3ef5c41d30fca58186936e159fa4cd67bf",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6059,6 +6090,15 @@
                 "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
                 "matched_text": "Bürgerlichen Gesetzbuchs",
                 "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bverfg-1-bvr-2017-21-2024-04-09/inhalt",
+                "source_body_sha256": "9f7469d1575b0eb4797d839d6e9c3e71f8a137bd48354184062791e2d882220e",
+                "source_row_sha256": "36a28fe5a3f02cd0a37b7e60837c51684b670132a28332a78f18a4019fd1f8ed",
+                "matched_text": "FamFG",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6123,11 +6163,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 83,
+              "explicit_cross_reference_body": 85,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "682756c2a91229d6dd131c82182daf3f189bf7e36fb38288b923a251d5fc6790",
+            "findings_sha256": "13ad2d3ef2632f4ddea25a1563d2af173ec2b31f5bb1bfcd9311e7bd1f717ab9",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6371,6 +6411,15 @@
                 "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
                 "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
                 "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "FamFG",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
                 "matched_text": "Finanzverwaltungsgesetz",
                 "unresolved_identity": "named-instrument:finanzverwaltungsgesetz"
               },
@@ -6407,6 +6456,15 @@
                 "matched_text": "Gesetz zum Elterngeld und zur Elternzeit",
                 "target_citation_path": "de/statute/beeg",
                 "target_row_sha256": "743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7753,11 +7811,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 26,
+              "explicit_cross_reference_body": 27,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "0affd90d8431819570e99381ee9dbc304cf9a6ae66afd3c4b0b9892cae70d522",
+            "findings_sha256": "87ab6272a42839ed4a1fb2edf8a0dde9a8520d745bdfe0a1a872a33a88ca0f21",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7828,6 +7886,15 @@
                 "matched_text": "EhfG",
                 "target_citation_path": "de/statute/ehfg",
                 "target_row_sha256": "eaa68d6eb40e8640f910dde8f0d992292e6d7305d181a50927b315b295602b66"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/esth-2024-32/inhalt",
+                "source_body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785",
+                "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
+                "matched_text": "FamFG",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8576,11 +8643,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 98,
+              "explicit_cross_reference_body": 99,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "797467052f550b89186ae1049fe1f48f60ff938af7e3f4bda88088feed5b9ccf",
+            "findings_sha256": "8058622502b5945f35dd01473f21127ff7433599cc9fbf70a9a931c4f418a22e",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8847,6 +8914,15 @@
                 "source_row_sha256": "da151cc8581fb28e6a8c3e895be85a8f212a4344f12422086b9db3f575ccb3be",
                 "matched_text": "Einführungsverordnungen",
                 "unresolved_identity": "named-instrument:einführungsverordnungen"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/ristbv-2023/inhalt",
+                "source_body_sha256": "113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263",
+                "source_row_sha256": "da151cc8581fb28e6a8c3e895be85a8f212a4344f12422086b9db3f575ccb3be",
+                "matched_text": "FamFG",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19614,11 +19690,11 @@
             "row_count": 2841,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 107,
+              "explicit_cross_reference_body": 108,
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "a0fb1db60edd1a532b0c3666e495ac6c555d378e1d81268ff529dc77fafe4ca9",
+            "findings_sha256": "bebea7928676a6d2b483937171f945a5f0c5593a5e684f3a378937c10baacc48",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19870,6 +19946,15 @@
                 "source_row_sha256": "06b6bb435f769b2c245e767bcb825dd9d5dcdf73939efe1f31f74fb6925bb215",
                 "matched_text": "Gebäudemodernisierungsgesetzes",
                 "unresolved_identity": "named-instrument:gebäudemodernisierungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgb/79a",
+                "source_body_sha256": "e10208aa05d61665fa64bee226ffbca937aeaf87c85a6862d4fcebfee8f47bba",
+                "source_row_sha256": "bec764cf1e1cf63fe66f52f87182ee2196dc35feca8ea3b4dbc486d0ef46e9c5",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -20734,11 +20819,11 @@
             "row_count": 519,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 414,
+              "explicit_cross_reference_body": 416,
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "5e79a0423210fd4548dc3a5c29bf2f8b9f7455dfedb51dacf61974ca7891f6c5",
+            "findings_sha256": "1eacfddf8764527c94f4de54519eb7ae30c4d7c563f663fe243fbda6a1c1423a",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -22989,6 +23074,24 @@
                 "source_row_sha256": "b3ac896efca8b1da1f7987fc35e87c3847ac27a3838b3e6b9d80182161649d95",
                 "matched_text": "Gerichtsverfassungsgesetzes",
                 "unresolved_identity": "named-instrument:gerichtsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbeg/64",
+                "source_body_sha256": "1549878f62ad84a170e9892d4682bf52c0b36da07a33797f98a2701fefb1b874",
+                "source_row_sha256": "de61c2261fb7beb9a4fd52a2278761b3f82c86d963f962fe2c959b274d7816aa",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbeg/36",
+                "source_body_sha256": "81398c43188e7c9a7f8c3b8b657b84ebcb4d6175aaf25b16b1a4c0202c7444d6",
+                "source_row_sha256": "920eb59d3156aca5759a8cd00d015d24b74a3b0e875fca52f65dcabfeb84c16e",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -25640,11 +25743,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 10,
+              "explicit_cross_reference_body": 11,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "1a5b8329bd23f27aa4ab3a076de09e32f3e6518c3f795ab464d8a27974db2659",
+            "findings_sha256": "dd354e8d0ebe72f2b8fb2ec56f4d2a8874039ea8dc827e5d241b40ee82124cc0",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -25686,6 +25789,15 @@
                 "source_row_sha256": "b60bad196ca3f47c0bf3558067b353df2ec4d2407636d125f0e636c7495bef52",
                 "matched_text": "Gerichtsverfassungsgesetzes",
                 "unresolved_identity": "named-instrument:gerichtsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung/document-1",
+                "source_body_sha256": "c7b55043fece34e270985f3142cc8aaa7cb49ce806d331afdc2592a30d7e5410",
+                "source_row_sha256": "b60bad196ca3f47c0bf3558067b353df2ec4d2407636d125f0e636c7495bef52",
+                "matched_text": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+                "target_citation_path": "de/statute/famfg",
+                "target_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -36588,6 +36700,2357 @@
                 "matched_text": "Unterhaltsvorschussgesetz",
                 "target_citation_path": "de/statute/uhvorschg",
                 "target_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/famfg",
+            "document_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee",
+            "row_count": 598,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 287,
+              "law_metadata_changed_by": 1,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "1c4a4a77bf45934d88b3ac4cf936a8254b6e626fe5f745a11645c062df205671",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/10",
+                "source_body_sha256": "08edc68ee1663aedcce14f68aa2a7f3fe5a77c0ad95158703b9900c9254bb65d",
+                "source_row_sha256": "78661280f6a1e4ee53d275aec25b05caf75317bd271f93ed236828b16659b11d",
+                "matched_text": "Abgabenordnung",
+                "target_citation_path": "de/statute/ao-1977",
+                "target_row_sha256": "19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Achten Buch Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/155a",
+                "source_body_sha256": "97160bf3e64fc312cad7fdcfc36dd7aac2315a57bc9c2f80fd47782b5a482732",
+                "source_row_sha256": "93c2e06052fa10162dc48afa118159cb5090b3e3aa9a18da5c13c00ef37eda9c",
+                "matched_text": "Achten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/196a",
+                "source_body_sha256": "2f1a4445f09117b244b4c6f45e51c438d4a8daf8dfe4b3c844d3b083efac6468",
+                "source_row_sha256": "32d39361370a9408fcf11b5a8d6c29360d869d7d93454cef7f4b72c528422e96",
+                "matched_text": "Adoptionsvermittlungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionsvermittlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/189",
+                "source_body_sha256": "36f69f368ccb52f9aeb406b8d4d9d3d399740deb0572672e1b78b95a61e2b9a3",
+                "source_row_sha256": "00bfec19166463303b6520d4ec9e1c900212427d68e06e37f3ad3d1d7df43a34",
+                "matched_text": "Adoptionsvermittlungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionsvermittlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/195",
+                "source_body_sha256": "37006c6f94ac2c8f47e44447585d356c48f6c479d4e8293717e1d8c87079b849",
+                "source_row_sha256": "fd61898269620265f4e3c93c7aea297b612afc7b2f995d2b4a192ae0b9179a72",
+                "matched_text": "Adoptionsvermittlungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionsvermittlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/199",
+                "source_body_sha256": "08c237fca046014637705fa98f08a06720da99d85f17e92ca8f13a0f05505416",
+                "source_row_sha256": "98b187006863811569fe14d38f6d297c58b5678f32913cba25ef4982af04e19f",
+                "matched_text": "Adoptionswirkungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionswirkungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/108",
+                "source_body_sha256": "1cef261f8c6e2991432130bdb60d28ff4db825df0b1fc50d061e2d66f64ee5d9",
+                "source_row_sha256": "a0a9c322e85b9dd20e79bc1ee5087800f471c745ba3ba8e1a09273221421230b",
+                "matched_text": "Adoptionswirkungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionswirkungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/187",
+                "source_body_sha256": "7df93f2e3d4c0dfcc38492bfd8b1fc4a937908db36846d0f3db5cb0463113ecc",
+                "source_row_sha256": "47ad8b72b09ae5ceb379d42412113349a7f2f1c45206b640a6680fda6e34014d",
+                "matched_text": "Adoptionswirkungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionswirkungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/inhaltsuebersicht",
+                "source_body_sha256": "8a79bc4f4cfe8cb01c7bd5b26035cb5872ace17e365d3b73315a2163efb793fc",
+                "source_row_sha256": "f40823464c9f90793ce7a6fa6b7f8ea279d8486fdd57b5b0786b249d79f2773f",
+                "matched_text": "Adoptionswirkungsgesetzes",
+                "unresolved_identity": "named-instrument:adoptionswirkungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/10",
+                "source_body_sha256": "08edc68ee1663aedcce14f68aa2a7f3fe5a77c0ad95158703b9900c9254bb65d",
+                "source_row_sha256": "78661280f6a1e4ee53d275aec25b05caf75317bd271f93ed236828b16659b11d",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/402",
+                "source_body_sha256": "2f8ee431f89664a66c19b56534c780d859e3127c411021058a2639071748c962",
+                "source_row_sha256": "ecf8bc726bf7149ae9e0b3d9002ec3d47f829fab8298f2771e6884492e4ac9a9",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/399",
+                "source_body_sha256": "563603ba93d7ff0bd35b95486e94882053c2d8bbc0f20e6329a03c2c05406e57",
+                "source_row_sha256": "d10c5d41c619ee272daadd5fcfced097876071fe2e2be568937de9b6d40e994d",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/397",
+                "source_body_sha256": "e20f9d0873e8944f3abc05b5d6fa03af42f8fa3228e8f0c1699a76c8129513b5",
+                "source_row_sha256": "071a296a1e9c71354e83d508c3a889fc7a05999bc8c6783a92d65ef1588dc0e4",
+                "matched_text": "Aktiengesetzes",
+                "unresolved_identity": "named-instrument:aktiengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/14a",
+                "source_body_sha256": "a9f9f41aafcc7d3f1d9c35220e2a715576c937a4aff69a0b91b0a002182e1470",
+                "source_row_sha256": "f061ba8bfd71c63646d25f6082a492c38da8346d629274379bbe8476d54994c1",
+                "matched_text": "Aufenthaltsgesetzes",
+                "unresolved_identity": "law:aufenthaltsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Außenwirtschaftsgesetzes",
+                "unresolved_identity": "named-instrument:aussenwirtschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292",
+                "source_body_sha256": "60cc2846dd01785da62c7a3a1965cb8707d329816d02c089c24a6e62d42ccf48",
+                "source_row_sha256": "1cd4bfa3aec5a485a3a255358e74b8ebd3d7941169cec27bbe5cd64328333bdd",
+                "matched_text": "Betreuervergütungsgesetz",
+                "unresolved_identity": "named-instrument:betreuervergütungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/277",
+                "source_body_sha256": "4f2cdace4f110f74399aa60873bfaf1657b72261ef4639e9966d01d869245d2d",
+                "source_row_sha256": "4d9fa7a45a9553e1cfb70d20fb071301e3d6086659cd87e3592c82a53f64415f",
+                "matched_text": "Betreuervergütungsgesetzes",
+                "unresolved_identity": "named-instrument:betreuervergütungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292",
+                "source_body_sha256": "60cc2846dd01785da62c7a3a1965cb8707d329816d02c089c24a6e62d42ccf48",
+                "source_row_sha256": "1cd4bfa3aec5a485a3a255358e74b8ebd3d7941169cec27bbe5cd64328333bdd",
+                "matched_text": "Betreuervergütungsgesetzes",
+                "unresolved_identity": "named-instrument:betreuervergütungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/486",
+                "source_body_sha256": "72329f2af795a240ea2b86bf8461a43e923b9ceda78d2746df4f038787069a3c",
+                "source_row_sha256": "c078a01492b7703be80dfd4f2ec4e40a81a2c4289619019b625e83bb0f18e844",
+                "matched_text": "Beurkundungsgesetzes",
+                "unresolved_identity": "named-instrument:beurkundungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/377",
+                "source_body_sha256": "fd38c118f33bcdd277562e9c03e1ad183419c013486742b494dc4958b384c303",
+                "source_row_sha256": "f45fc958dc202edf9d04de982a569208e45ab305c23c3589d2402469767e5f06",
+                "matched_text": "Binnenschifffahrtsgesetz",
+                "unresolved_identity": "named-instrument:binnenschifffahrtsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/484",
+                "source_body_sha256": "2c3df9e1e2211b730754487fa6b2873fccec6460857cbda67afa23c565f22de8",
+                "source_row_sha256": "7a196be9634115df905e767918d2b52d2ec1db91da44c6b4af1fc41ad6877e3b",
+                "matched_text": "Binnenschifffahrtsgesetzes",
+                "unresolved_identity": "named-instrument:binnenschifffahrtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/402",
+                "source_body_sha256": "2f8ee431f89664a66c19b56534c780d859e3127c411021058a2639071748c962",
+                "source_row_sha256": "ecf8bc726bf7149ae9e0b3d9002ec3d47f829fab8298f2771e6884492e4ac9a9",
+                "matched_text": "Binnenschifffahrtsgesetzes",
+                "unresolved_identity": "named-instrument:binnenschifffahrtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Binnenschifffahrtsgesetzes",
+                "unresolved_identity": "named-instrument:binnenschifffahrtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/465",
+                "source_body_sha256": "b00e9a25526a2e965afc6ba17dece4461d1403964f33b57a13adffb191ed9d12",
+                "source_row_sha256": "72cb3b6dfdf872d83ec9774a2e39ca287c386224d6822d068127ad5d99a562aa",
+                "matched_text": "Binnenschifffahrtsgesetzes",
+                "unresolved_identity": "named-instrument:binnenschifffahrtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/231",
+                "source_body_sha256": "0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20",
+                "source_row_sha256": "08df145090abcbdab08330829fadd453c1fa3d39ee4f14f953ca92dc760e235b",
+                "matched_text": "Bundeskindergeldgesetzes",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/168",
+                "source_body_sha256": "1f497cc93061a216e49233c3dd43adaf355d6e5c585ff92ae6e58bacefc37b02",
+                "source_row_sha256": "d300b7fb11706f0c71bcae7143ebf1e181f7c7530ecd48627503d2bc1405f38c",
+                "matched_text": "Bundeszentralregistergesetzes",
+                "unresolved_identity": "named-instrument:bundeszentralregistergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/158a",
+                "source_body_sha256": "619cc7282b2433d6b65142051245db2c366f97d2a01d7fc9e3c65315f52648e7",
+                "source_row_sha256": "4f72295d83b7d7f318465eba3f058483a91479d772c4ccdfcde2f6b03e093a10",
+                "matched_text": "Bundeszentralregistergesetzes",
+                "unresolved_identity": "named-instrument:bundeszentralregistergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Börsengesetzes",
+                "unresolved_identity": "named-instrument:börsengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/237",
+                "source_body_sha256": "015c3c39d66d6b520b34680009326fdb8150989b0a6efa504a6465a4d92bc222",
+                "source_row_sha256": "8ee0a50a1f0170854a108ba31f27c28351bc44d49eba5fcf26459ce328ed7ccc",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/231",
+                "source_body_sha256": "0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20",
+                "source_row_sha256": "08df145090abcbdab08330829fadd453c1fa3d39ee4f14f953ca92dc760e235b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/344",
+                "source_body_sha256": "02386c2fb65dd9f65a4e7a7bb0c90126bfa23a56002a41e5b10a2a9379202f6b",
+                "source_row_sha256": "a717ec127a1be077a6555a72277fa5f302f06adc2c5d66a4318ee4878068229b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292a",
+                "source_body_sha256": "043967c6b1ba9caf4a662d8194f20f60df7a8527f9419c6521c1c4886e34c0b2",
+                "source_row_sha256": "0a25f940b123ed4e7acaf14c89171e5aa1034ff5bff2ec4400b62da26e30f168",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/261",
+                "source_body_sha256": "07cf9aa23d174795ea0f79ebba48a02814b05eb30f0df86f0b3a7c98b76923f9",
+                "source_row_sha256": "9e624493e01de157b0d9f8d07c5da41773ecec2ea128b2ffbf3e2cdd8a3eb119",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/176",
+                "source_body_sha256": "0e6f8fbdbaa578854edb78b0b045db9c37691fe70262ed2e049f2de5c328b3b8",
+                "source_row_sha256": "258a3596d185183bb87ce3fe78d6731c0c102796525ebf4df406b018d1fcb0d5",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/354",
+                "source_body_sha256": "0fbda3c1ed66fc1f9438dc3c43060416b0014770b90a5033d76289f34b129e8b",
+                "source_row_sha256": "a6e0acbe51c8dc853bf46adef556831ec0fc49ed94d3b8270262b93f82de9fd6",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/345",
+                "source_body_sha256": "1024010e63870f8cea687e3c7f3ef5f0f3a47f5e4372a76f6a607fcdb5e7ef64",
+                "source_row_sha256": "58202432ce0d1a0f55e5493f9eefa2667ccb1818a15ad1d4ed149783d79799ea",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/198",
+                "source_body_sha256": "11030cd76a5e050c32e24e3fdf4e6a3eff1b07f9b480eda1884cb6cd06b2625b",
+                "source_row_sha256": "3c2f9ecd970054f3d1975abd976f0f7db877a220678e48252038bd34f447411f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/450",
+                "source_body_sha256": "151967915a03d2de89278d919e27ada640a54538154a652c2cb2da00b094289e",
+                "source_row_sha256": "0018758ab7e94a68b2843dbfcd68d34b2dd84a5d73c9c40ee3e78127076481ea",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/247",
+                "source_body_sha256": "1532bf88fdb7fee1992ab58b825428d3a163975757184a8691d030bebcebf851",
+                "source_row_sha256": "84906343494bef1074186bb410b29f24b9df98199f4e50d41ab41508a8821946",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/168b",
+                "source_body_sha256": "192d0938dfcb7280e60c021856dc7a8083f1d48a0ce01079d504de028ec65108",
+                "source_row_sha256": "07623d7200e9feb2d08a34b09cb879149847f46d89e041b5c99433824dfbc142",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/453",
+                "source_body_sha256": "1bd37d17b184b356ec1ef448a3f48a79e942a550be68f001aada5a4b617331ca",
+                "source_row_sha256": "3a71b2bb5b7f6cb3444e3d95fd43a4b03b557fd6aeda042e6b861207a6c75d31",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/299",
+                "source_body_sha256": "1f3d890960d21bbd4614614af3b3331add8751d952362d454c9103289ce2ef7d",
+                "source_row_sha256": "8bf95800e529effec7e9432f427452c0125943ecd49ed591eb4972585c45db43",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/290",
+                "source_body_sha256": "22e4e07d5ca11b5ec835515c24c5c312ab21bab93da9e10032f628b863cad6f2",
+                "source_row_sha256": "b4d82c5eedf922410d42c31134733e2f839c18acaac97c0a267d4fe0bc961f8f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/232",
+                "source_body_sha256": "2470665268fe5dcdb847baa6e7cb8d7b00fcd8a1e2b6afac52c2f9cd24f399fb",
+                "source_row_sha256": "7268319442cd56a950678d6d388e9a565b5fc2c472fb695309864ebff7d63faf",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/264",
+                "source_body_sha256": "2a746f841952f4d9898ae55b49544cb4181601d944e74b42b515aca304224e44",
+                "source_row_sha256": "b0db11a30d24777216a967874c3e76a8a12549c9f375ec8c12214eb2ea692f07",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/159",
+                "source_body_sha256": "2b64d9d8c486db67833a28f1e3926bc8438ebc7f8ce983f4cd85e797ed2850f3",
+                "source_row_sha256": "6b510835c83cfa8ebbf0f902b0a9297fcb766d55bacfe2c1cbceec106042a758",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/484",
+                "source_body_sha256": "2c3df9e1e2211b730754487fa6b2873fccec6460857cbda67afa23c565f22de8",
+                "source_row_sha256": "7a196be9634115df905e767918d2b52d2ec1db91da44c6b4af1fc41ad6877e3b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/362",
+                "source_body_sha256": "2e4a9e3d732316384e329651266bf196a2f113773bbcfd5379e1dfadd57df7d0",
+                "source_row_sha256": "d99410473a262e10fdd53991cf5e66920acf7154913b41a285d3c7feece35d49",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/168g",
+                "source_body_sha256": "2f0e53328d6125ef0c96934ef4ce7bce1b7a22d287d4702552d7354ba044ff17",
+                "source_row_sha256": "4713f20d0484dabfb7fb55bcb751be7ff7816175c558b76c59974c139b9f30ac",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/185a",
+                "source_body_sha256": "2ff3546572e252e6dc13da35d790120d33d97f45093d970f9a113191db342ad0",
+                "source_row_sha256": "bed5688ca2ae7a6b1a2a71fe909f1f874b05b9a48004e270495f1a6070603bb9",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/266",
+                "source_body_sha256": "339e743817e7314127a9ac1d91ee0f6f760c9863873985650184729f9c711079",
+                "source_row_sha256": "cd40ba5c9dbe56be6ec987f7fe1f019712dd5e74cd7639cb804b348dcc50b243",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/245",
+                "source_body_sha256": "350ebd64c050977f8c08d20dccd28a34462eb28cf76dc71988fdba57ea54ca00",
+                "source_row_sha256": "39c3d3b772439c5b4b94d73a34ca3a283a9d82c6b0c8ece99706221a4048d399",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/307",
+                "source_body_sha256": "36e8200e810a2ac99c209de146a6730c7717860bd0107d87b3d209db2f7136dc",
+                "source_row_sha256": "649bb13c71295d0e593c7c374e418445a234cd53ec9a9d8c3ac054514a96a1f4",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/160",
+                "source_body_sha256": "3ba3af001442d9d4a5f04aa3f8d63eb831dbc6eb093b1a27ba8ea5d84afd3563",
+                "source_row_sha256": "70474b7063a750ea927a7fe623f18bd537dae5c9343c1b69975eacc2fad36375",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/315",
+                "source_body_sha256": "3d165a9f61f46aa982cbc94a2f65529fad466214e8796b2f1792b53b269d5fc8",
+                "source_row_sha256": "aa7435b7be081ba5a418232f9a0ec411c8ea399ad4a030d3104eb940a122687d",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/452",
+                "source_body_sha256": "3e76fd77b294ae5abffb30af706d7aaed2c7da275ff33ec84f57bdd6875fdfa5",
+                "source_row_sha256": "84e0d382405fa8de3373cd649832706de38f488ebcb23ba348985be22ebfc3e9",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/271",
+                "source_body_sha256": "3eee37cef90463b3bb201fc94c21331c208a3de561b09c9782191ca0c44c1633",
+                "source_row_sha256": "c6830879f1eb8b938eeefcf08a5e517d78e881e90a93e81a55e4d09940d07b56",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/463",
+                "source_body_sha256": "415d2f07a0ef52c2d12662b04c4abbb7a3f6cd914b740767ed2c41e28af1b79b",
+                "source_row_sha256": "22a874f3de32de705b7341fab2c11840e1ea45472d4dc66523474326183c765d",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/204",
+                "source_body_sha256": "45a85462940d82481578e4d8db6bbcd5afa1b2dd409c0073768ca73071bfe6b3",
+                "source_row_sha256": "cb7d212bb14105d45bb67cfc30529deb541743b2a56d047c60b972d170521d3f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/324",
+                "source_body_sha256": "475fa746a1d5efc0f08ec66027f94ed8916f8b2be4f646aad9e50bdd7fb85592",
+                "source_row_sha256": "e3809e818626495b24177e0883c6779413f5756d3ce40fd70ed7ed61cd43c695",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/182",
+                "source_body_sha256": "4aa631c6f0216fe6a409fe831f2d88d1e8abaad07ec270352f376a67270e8a56",
+                "source_row_sha256": "c1996e1ae19705ece4aa931a188fb25e3d5ab6705c135440a9cd167358ab3efe",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/285",
+                "source_body_sha256": "4ae459e5b319eaa7ec790dd90bc7836e1bac785d4d41a863ae9262d438ecabb4",
+                "source_row_sha256": "525f321ff07a625c124bfe23db4ebcf7fdce26ede45febede4c4e3d691745474",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/410",
+                "source_body_sha256": "4dfe1dbd4c9db0e4b4b8e96d1910916b871c5392e6ceac9a0e5569519bffcfd9",
+                "source_row_sha256": "907fb8a00e506df07ba08b6901991dc51a26128d4a6fac83f3489155d3f25339",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/277",
+                "source_body_sha256": "4f2cdace4f110f74399aa60873bfaf1657b72261ef4639e9966d01d869245d2d",
+                "source_row_sha256": "4d9fa7a45a9553e1cfb70d20fb071301e3d6086659cd87e3592c82a53f64415f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/251",
+                "source_body_sha256": "51547c72b2978823b1a8f9d407ae7bab1b4da57128411c8d5249ba96e166943a",
+                "source_row_sha256": "61849e110cbcf555d15b3168311ffe0a7c17d8fa124a029e9c97f4035c3e2d3f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/158",
+                "source_body_sha256": "517514f67522d3233985fa6b87f969909edf2015ba4c1e8c283344a37489e343",
+                "source_row_sha256": "b6fab08b3d7876c6d8f2cef4828213da90423bcb7591b4435a4659c9b7294e45",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/464",
+                "source_body_sha256": "53e85eb5a398cadeec58f66768afc4676e8eca705d312197a086b2bd27560551",
+                "source_row_sha256": "3c5e67d47dc7fcdf6983f7b88f6627e00e59f04ee162d34038df7df66d6b672a",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/491",
+                "source_body_sha256": "5b4c112c82336a20a14cf889ea1c350f2958209a13ab3a8338bc7f9c79ad8689",
+                "source_row_sha256": "5a72fb9b009684549b9389cecb5ed025312c6c7806e864051225475f682c1b3b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/157",
+                "source_body_sha256": "5f796bc3d7e26b9a6190e12a2cfe92953380fdfc039a72cebbf7abd1a9345a5e",
+                "source_row_sha256": "2bd5ca3e76d6622c6582135715e3aebbadf98ec1f78b1c576f807aa3049fc2d5",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/40",
+                "source_body_sha256": "5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3",
+                "source_row_sha256": "add8fd4b3c4aa9fc7a8f1a0b7616b593c274dd4ca1be7a216ae140091d416ec7",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292",
+                "source_body_sha256": "60cc2846dd01785da62c7a3a1965cb8707d329816d02c089c24a6e62d42ccf48",
+                "source_row_sha256": "1cd4bfa3aec5a485a3a255358e74b8ebd3d7941169cec27bbe5cd64328333bdd",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/401",
+                "source_body_sha256": "674ad7e3ce7d0f3a897b9f363437cb4040eafc707b4c1c52e818bf8a92207020",
+                "source_row_sha256": "a2cef3f25c186a71ef430ea79bbc41fd861ac44cff8cdfe0d969211862cd19b2",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/454",
+                "source_body_sha256": "6a631a4348c666a5a0e2ed51b8e29daeb65f3496bcf05424db31e0c60ffb0c28",
+                "source_row_sha256": "8c051b392a3ec873bceab7e1d34aa5a05016b7a9492df1f0f01261caa05c74a3",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/412",
+                "source_body_sha256": "6e27ae87f427429c74e8a136e6e7a4697c76a0c8c26555dd6256f82d902f9a85",
+                "source_row_sha256": "9285342493552e41bd27f378165e3c9cf14d40465bbedefe75cad8e3ed2d4b74",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/293",
+                "source_body_sha256": "77ce925ff2a16798b8fe2dcb04357c5ef3994a5c359c46f26ce8f9d9b3e3d512",
+                "source_row_sha256": "ebaf523c02d16fa52380ff22a8954897d600aacd7bca458b3cec7abf382b2266",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/483",
+                "source_body_sha256": "78df83d34987a8d279ab613ac6af646b394fd518e4c9e8042af73f6e0794df00",
+                "source_row_sha256": "980f7303affe3e83f270941fc53ca01224debba453f0bcbdc8d1d6b9281bf263",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/96a",
+                "source_body_sha256": "7c8d99277984da42a431aa9a903fa036184e34fe56db21ca01d30f4f96a15d1d",
+                "source_row_sha256": "37f9a01388f1c71ec8ab8592b89adb20d1f991ac1bd9534593d3771c5f0aeede",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/167b",
+                "source_body_sha256": "845245909b35741d6cdf5c00d2b063308848e63d9c964e018eade4e2838455fa",
+                "source_row_sha256": "c1ca26c45d2f9b04632568e21c15b323cb78149617215f07226e0d2d2b14cd80",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/167a",
+                "source_body_sha256": "8906581208b7ed430caf1298f5ad39d28a65bf051538b4aa336a162b067752c3",
+                "source_row_sha256": "c65f992c1c5095f274a3615ac1332180f6b7f422946c06365c79fb8ad725e76e",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/356",
+                "source_body_sha256": "8a06858c1badb852f1f755d0adbfb033b790157da6e96a24211d91d6b91a7bde",
+                "source_row_sha256": "e057ae843a1f3568fb437e4e68a4556baad0f6f941e1332e8a375b358afc956e",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/inhaltsuebersicht",
+                "source_body_sha256": "8a79bc4f4cfe8cb01c7bd5b26035cb5872ace17e365d3b73315a2163efb793fc",
+                "source_row_sha256": "f40823464c9f90793ce7a6fa6b7f8ea279d8486fdd57b5b0786b249d79f2773f",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/140",
+                "source_body_sha256": "8aebbaf694efcd2d5ae5fcdeb0b492f085a88db4e4b0496e50ae4e0998a79486",
+                "source_row_sha256": "c66662e785b90e2a223fa807b9e702cbab00044316e46a3694c1c49c5f414782",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/129",
+                "source_body_sha256": "924704b05572010356b69ef430c3a7922597ff9fd8f78281166b40fa6b6033be",
+                "source_row_sha256": "e30bb954bc6894f90af7144d5ad50114efa9e46696a313beb0a3815d138df37a",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/447",
+                "source_body_sha256": "924db2daa0540ffb5b4538b0f574516738e7cca2c58774ae05b473be06a44714",
+                "source_row_sha256": "4b77e06336ee42f4e98fa9ea6c1b4559b5230849cff3a4da437260c51be58e82",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/155a",
+                "source_body_sha256": "97160bf3e64fc312cad7fdcfc36dd7aac2315a57bc9c2f80fd47782b5a482732",
+                "source_row_sha256": "93c2e06052fa10162dc48afa118159cb5090b3e3aa9a18da5c13c00ef37eda9c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/162",
+                "source_body_sha256": "98c2216e9a58620c483a4c4ced499389cc38c5a5566c40d346012b066e42fec6",
+                "source_row_sha256": "20e9d1357a3bc6664820677603deb5a6b2f3238d808193c7d38f35bb9fcae6fd",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/358",
+                "source_body_sha256": "9bcbb1b1f2ecc523b74628ab996d60068ea183a8dd6a2715d504c4a882fc1273",
+                "source_row_sha256": "8ff2417bcff8f84f3d74bb72a7f63e5312592a0eb3234235e279af8211ef2fb5",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/197",
+                "source_body_sha256": "a73999a705a5d9dcb75bfe8a70557b86e8af7bb49f011074773dbdbc907144ba",
+                "source_row_sha256": "51ce288657ca2c5672b7fba724baa28b989756a0a617ea82434caf576acefa1b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/443",
+                "source_body_sha256": "a74bda1f3998cda449a71e69324227515df0ab682b6c32397a0eb497fe7b13e6",
+                "source_row_sha256": "b651871123d857789b86ff37d082c14f1cff34eefdb141ec486bb80c1d7f928c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/166",
+                "source_body_sha256": "a906375dec1c8764456acb472b9c273418bd95ea8c441fc964c8a6af81ed5868",
+                "source_row_sha256": "372412c72a30b917865add16d7560825c8df1cb2eb16769d4673cee62eae1e8c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/460",
+                "source_body_sha256": "aa7f7de85850d8321147f27372dab0fb866851b85d6f7c1fd2ed0eded01d758d",
+                "source_row_sha256": "5f90d8ee4f33b7a1a1d67ea98963b8b727d970d82aafcd44be1da41f4dfe3e8d",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/265",
+                "source_body_sha256": "b2f855bf9af8591e9c8b16363399a50372318ed5e82b7b9d1c549857d2db9637",
+                "source_row_sha256": "262bf09fe8195649bc9648b4af78e2b428c28a12f6e8bfefdd16f439b539c22c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/168a",
+                "source_body_sha256": "b49fa445674047e5ac054c4c89753d0c144ac396c0333772df30e60441245986",
+                "source_row_sha256": "378561ed242a14435fa4618f1792534ef3310955658e5fada137879f0487e472",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/68",
+                "source_body_sha256": "b64207ce73b462c38e20c6c2ed796025d2805ca608cd3cd160203d6b2fab26e3",
+                "source_row_sha256": "f83a2512deef33a16d065a5f036e5ad25397cd9642101890da5128d477f0bdee",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/361",
+                "source_body_sha256": "ba7c3b69be6512c4c977057b88fef24071664b23ac6513d72082739e69bab503",
+                "source_row_sha256": "b87fa48b6f948dfccaba8c85fed22b3abfc6cc8badb62efd79410495d1c685fa",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/151",
+                "source_body_sha256": "bff89496c1c0e8ccff1b93191122df83778238085e14246342c3cc6022020f1f",
+                "source_row_sha256": "b18061f4e5499359236585f1f37266bdee532c2031d253521429c8f1c87fe0a4",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/132",
+                "source_body_sha256": "cab631c0e45185edf3bb26a13c10d016b5e2a6d8ffe76df9108a24d6f065b50e",
+                "source_row_sha256": "37d8ec88d040f2316377149988051a6c2808fcaf00a101e7e496ac89722e0cec",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/279",
+                "source_body_sha256": "cb0b717c59d2764cc82c2194ca0f0772b2d9cbce4878907f7f2547afd468a7c8",
+                "source_row_sha256": "7a96814a832bd48b0eee6445b51f0ba179a3c3385a5435d00b344f61355b0231",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/274",
+                "source_body_sha256": "cb8d43ae2bdf7724c74bb1d5bc6ebc16b7289af20ef5a1a04cb10d393ac14762",
+                "source_row_sha256": "9b098e45b7ef5e23554895cc0fde7b8d49f0629ad70e3d7c0cf167f052868d41",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/296",
+                "source_body_sha256": "ce179b60a78697bcc17454aa0524c5500f98e733ffa557a792e98cf24d4e061c",
+                "source_row_sha256": "f0742359895dffdba352035a201319252e9326ef7b219833019625d6b2573949",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/127",
+                "source_body_sha256": "ce30696a17c7c3ce4c7d5cd1ae4ff70d8521868a56c13c54b561dd6ace16def5",
+                "source_row_sha256": "49804c7fd4a4090db1238427c73877bd486d7c4534b58addb36c13d8151d4cd8",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/355",
+                "source_body_sha256": "d039d61f4f5cd9fa4e60b41858819d43af33f77f01ef659d150a865fbf9a073c",
+                "source_row_sha256": "7b6f187941eaff2ad4b7338495cd2f6acf4b40c022b5784b9b024b3f92430e05",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/249",
+                "source_body_sha256": "d1e3e422e56934d59dbfc9e4a0f83b2725ff2593713a3d9d9d45e600fbb15fd7",
+                "source_row_sha256": "987d3bae0debb3088a95743812320937d44e0dcd5d489865710b76d84aababc6",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/188",
+                "source_body_sha256": "d34aca41bcced4e37edc5a3a3f89ceaf1b5e1af2d84bf6f7fec4adfee653c91b",
+                "source_row_sha256": "d65ad021c4b4cfd1d40b2a2338c1a841aaca13ce3bde722563735b7b0129a2d5",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/312",
+                "source_body_sha256": "d39cce8770b577f2d767b53ee8a13052b8d460d0abd97508dc89fbf78abf4889",
+                "source_row_sha256": "a43d408bceabbce7cb9080e7a7e26b9f1ddd06faabca48ea5dd585b4237c4424",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/301",
+                "source_body_sha256": "d9794aeed8c21b0ce27bddc3e0e8664765756a3759d57067590baac2166d7892",
+                "source_row_sha256": "ce987a53f65dd893b965b33529c71fac660f8e8238271be2fecdb20d36ce4a96",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/451",
+                "source_body_sha256": "db54fcc5705938cb42d5eba6523ca9d940f0aa9f5a9d936eab06dce8d7d631c2",
+                "source_row_sha256": "5c12830fc17af4921f3f00d680ba5bfed156fbfc6df16eb579aba75e75e74e10",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/248",
+                "source_body_sha256": "dd049a5f6055b8108298a04f97d5c87e8402aa099f874463388f12e451c2c724",
+                "source_row_sha256": "8760b82ad1fa898367d9030f0fda1c6ba56fc463077a5f1203d4501e380b3a55",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/13",
+                "source_body_sha256": "e0e7514f88d0b39fda1c409463ecd2fee620f6ad35b0cad578b314d5dde9f489",
+                "source_row_sha256": "1f58ff6c3538b101b1dd2dc43000981046a34c69ab7eb7b83b66d8861f76cd27",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/241",
+                "source_body_sha256": "e2f4748aac68cb93ba38470865312a430d4813c44ae5057d31ab5dbc56c8f141",
+                "source_row_sha256": "2d585640ad67ac457d7e4d695a80b0a195b01caee84305b8d66381d77efd6d1d",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/326",
+                "source_body_sha256": "e35aecaec74d502e695ca76a88d2b2e9b575f3f5506e634c03a1941cf8b8d16c",
+                "source_row_sha256": "686700198e29f342617c70f9dc43114f85443368304bf232eddd644dc8297b88",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/269",
+                "source_body_sha256": "e909d23a68739b63b52a7c09f15f8924ec12ccea0f96f9fa47998041ec439077",
+                "source_row_sha256": "37591c18ebd79892d28960dd9e7edadec2aa0cfc536f02168b58bfdcd23ee90c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/298",
+                "source_body_sha256": "ec0dc16c5dab78fb4bbc997244e6189ec090e3eb53858472873ed9de3808e87c",
+                "source_row_sha256": "4d47eac321ad6256f0dae92e77537b63b5bd0b6d85e697af314beb1bbb3c12f8",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/297",
+                "source_body_sha256": "ee596bb54e2daae6b2801bb725c484fd49be62cd9489e16ac8f59c6355754565",
+                "source_row_sha256": "d09231b1444c07482d47700893dd1db8bf3ab30c1a3bf07e404fa92bb745d5ee",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/161",
+                "source_body_sha256": "f182c811da569bee277e6bd19f40d6aadbf36735d76190de4865c48523137a49",
+                "source_row_sha256": "14381be289eec83e9f0e89e6e7da96bbfc209286a9da1979169edecf69ef6815",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/448",
+                "source_body_sha256": "f1b5577237a23e8e6d4ed66647ffb2e0050c1a6cce67125120ee06adb318c39a",
+                "source_row_sha256": "5d98de711ec65b5c99c583e1ab62a5897309575a361ab3233d8693f215707033",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/109",
+                "source_body_sha256": "f579c3b571b85fd68948fcbe3da613dc46d4ab332992a6cc739df32fa483705e",
+                "source_row_sha256": "d2db1e3f512f27499cc054e4899f9f069a48a4faf7644d9a01faa18958ea74da",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/442",
+                "source_body_sha256": "f82c75f426b3a428dd37131ec400cc29764ab1d198e34bdd2022017c8d296154",
+                "source_row_sha256": "a140fbb9f3709503d4b3eeea5d1170f4f24ae8902c52b770514b9821e96cc7e4",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/287",
+                "source_body_sha256": "f963989514b015b0243ca36b7c14a2ce550a1e862791a59a15578cb4033cad20",
+                "source_row_sha256": "7052b2efc457aefea96d553ace35fd55f274e1cc51b9a63be6d0861d2710fa1b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/244",
+                "source_body_sha256": "fcb4786846f531767c401ff6f801f87c1af14c716ae69097b73b1b47712480ad",
+                "source_row_sha256": "b8c6ef899ccce7f5ea0f1e68b918e43c8815d5d13ccf6ef3bb8c945100e112cc",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/334",
+                "source_body_sha256": "fd64f763b6789ce39ba23292c1699dc679faff324e2db9712b98dc6f0fcfb507",
+                "source_row_sha256": "50b7a1ac3a9c568fa30d03aac2b087416b3a4b5a43adcbd940fe13b7a33e482d",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/304",
+                "source_body_sha256": "fdb410b1bd3b92e4cf10335f28a62c23eef2fedc137419e5de9d12c9e6204f6d",
+                "source_row_sha256": "3b5bc95ccd7af05e4fc718e44e65bf9fff07c39b607f536d5afeed7f8c66aec3",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/200",
+                "source_body_sha256": "ff8b397dcc6b3682233f12a0be0e6bf42c9cc1290c18d99afffd247fae1dbb96",
+                "source_row_sha256": "eb10204ecd0f344c48c931a96b337ed3feb18a50641fd272aff199126aabc41c",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "EWIV-Ausführungsgesetzes",
+                "unresolved_identity": "named-instrument:ewiv-ausführungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/486",
+                "source_body_sha256": "72329f2af795a240ea2b86bf8461a43e923b9ceda78d2746df4f038787069a3c",
+                "source_row_sha256": "c078a01492b7703be80dfd4f2ec4e40a81a2c4289619019b625e83bb0f18e844",
+                "matched_text": "Einführungsgesetz zum Bürgerlichen Gesetzbuche",
+                "target_citation_path": "de/statute/bgbeg",
+                "target_row_sha256": "c16ea9e328c488d91278cf09a837717c6a4458f6bfbcb94768486e62b07be62f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/231",
+                "source_body_sha256": "0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20",
+                "source_row_sha256": "08df145090abcbdab08330829fadd453c1fa3d39ee4f14f953ca92dc760e235b",
+                "matched_text": "Einkommensteuergesetzes",
+                "unresolved_identity": "named-instrument:einkommensteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/282",
+                "source_body_sha256": "0be53e781573637f4686467c69b6621cf1b2df128b89144f719145ff8336328d",
+                "source_row_sha256": "f926ca0ad25568e0a60b5d391205c6e69c3499ea6aed02cd3a37d60385cea02d",
+                "matched_text": "Elften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/282",
+                "source_body_sha256": "0be53e781573637f4686467c69b6621cf1b2df128b89144f719145ff8336328d",
+                "source_row_sha256": "f926ca0ad25568e0a60b5d391205c6e69c3499ea6aed02cd3a37d60385cea02d",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Finanzkonglomerate-Aufsichtsgesetzes",
+                "unresolved_identity": "named-instrument:finanzkonglomerate-aufsichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/180",
+                "source_body_sha256": "433d1429b262ec0983cbdb87a869032e1031fe13b3a6665c93b476d32e046361",
+                "source_row_sha256": "2797327eab5e674bbf2ba136113037a99a1e6471c23eb367cabf645da69d571f",
+                "matched_text": "Gendiagnostikgesetzes",
+                "unresolved_identity": "named-instrument:gendiagnostikgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "Genossenschaftsgesetzes",
+                "unresolved_identity": "named-instrument:genossenschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Genossenschaftsgesetzes",
+                "unresolved_identity": "named-instrument:genossenschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/397",
+                "source_body_sha256": "e20f9d0873e8944f3abc05b5d6fa03af42f8fa3228e8f0c1699a76c8129513b5",
+                "source_row_sha256": "071a296a1e9c71354e83d508c3a889fc7a05999bc8c6783a92d65ef1588dc0e4",
+                "matched_text": "Genossenschaftsgesetzes",
+                "unresolved_identity": "named-instrument:genossenschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/311",
+                "source_body_sha256": "4cd809e3ba1cbf69cf1bd0b87ae0078cff5235773aa72be9d69d6d0638bcc357",
+                "source_row_sha256": "7edaa6b4b3ac4992f17535938fd393d37e681bcdac4ac27c3bcee8e06a79cfc8",
+                "matched_text": "Gerichtsverfassungsgesetz",
+                "unresolved_identity": "named-instrument:gerichtsverfassungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/488",
+                "source_body_sha256": "49d37e92b9ece57780e0a04003c7b747b0f105f42a758e3c9a64801f0dfa663c",
+                "source_row_sha256": "f6c5421ac130d96eaaffcf8133ebfddca0907859466d439c0d7a5729d783ec89",
+                "matched_text": "Gerichtsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:gerichtsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/155b",
+                "source_body_sha256": "df27af6891f9b49c3181b2b0558a064aeead2a8ed30434ebd7d84aaef5fe8288",
+                "source_row_sha256": "e5c7eb348322a3d048bd901b166a797df9665ed405527f8c658b24cad80f8088",
+                "matched_text": "Gerichtsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:gerichtsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/inhaltsuebersicht",
+                "source_body_sha256": "8a79bc4f4cfe8cb01c7bd5b26035cb5872ace17e365d3b73315a2163efb793fc",
+                "source_row_sha256": "f40823464c9f90793ce7a6fa6b7f8ea279d8486fdd57b5b0786b249d79f2773f",
+                "matched_text": "Gewaltschutzgesetz",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/214a",
+                "source_body_sha256": "04206076a147eb6fb933eae356f6e0d3485ed0e63a69c4431476fed54a68b04b",
+                "source_row_sha256": "45185f5678f51e330936e1932d88c4adb5fea8c409b4f200c4b62fb89826a248",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/96",
+                "source_body_sha256": "1619d2fca55829a6fdf5d3c46bec508e3344b702503ca4cd3e5efc6f71e662e4",
+                "source_row_sha256": "e51a79d7463ff4f26e6c684761f13b2475743cb97ba956fed24b2c98f1e6d028",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/213",
+                "source_body_sha256": "1e31bade03ca04564033948406ea1497440fa2d14d60dd23afe0ce363da524fb",
+                "source_row_sha256": "c967a4fd3714221fd62422a7fb233673b4a80177e76824e58d7386db99e14b35",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/216a",
+                "source_body_sha256": "6a381d0d51221faea6b37db064843907f386d18f56f552174e93790d87745b18",
+                "source_row_sha256": "788e877e1518299beb701d93f4fcf7a1a1a396a2718decf1ca2142b0b39b82e9",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/57",
+                "source_body_sha256": "82877ffb3085732742c0e30d7276496d12527326de21c2a26829d11aff573a35",
+                "source_row_sha256": "86c92fbe94bef0a24ae6749a216722b49751c3a7bf6d49b19e97ac12af84465e",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/214",
+                "source_body_sha256": "96ef49929571fd1aad57ab34aef4526ea8af530261e554ce5518ce8a0b4ccfb2",
+                "source_row_sha256": "a6dcc36aa631f4e953868d7077f9c12ea0e9a22f41924ac0f5d562fb7de692f2",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/210",
+                "source_body_sha256": "ad30092490cae198da6bc466018573ed21224d382cebee24257e08d20fe1597e",
+                "source_row_sha256": "d7a4275ae4f810557245df06c3ba5f2fd9a0d9d3b2425e828c650adc31a8b51d",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/215",
+                "source_body_sha256": "b4bf5f10d6a1fd1ebb0ecc9d8013ff1e54c1058f241578112ce994912e37ee69",
+                "source_row_sha256": "b5504a91c6b1afeb567a9759b0389ee37ee5b558bd60842674ebe4b7fc20cf04",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/212",
+                "source_body_sha256": "e8c6f666a68b97f168414edf363f414b556140ab45f4bfb8223c0972d60238c1",
+                "source_row_sha256": "eb33205c2bab5a8cf34a41d96db3342e9146877b813fea97b60598fd96cb37a6",
+                "matched_text": "Gewaltschutzgesetzes",
+                "target_citation_path": "de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung",
+                "target_row_sha256": "7dfac5e340511998e9faee15a30e414600cb12a8bb662588c621c30878ae60cf"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/278",
+                "source_body_sha256": "21a9d9a44081583ecf84d65326fe1f547c0f11f28636c15134fd424ba5fdd626",
+                "source_row_sha256": "032b546c4936e50ddd6e9f61020c7810eca33ada22880b00ab097ee0afcfb271",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/283",
+                "source_body_sha256": "2b18657ab5fbfe0fe9f1fa9512cab095e7e52e110ddee8b3ab8287c9d67d1a25",
+                "source_row_sha256": "8a01accd11e2d625e94c776dc5fa2afb29f0a56b05ef0dd2a9e2d87c4e28834a",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/326",
+                "source_body_sha256": "e35aecaec74d502e695ca76a88d2b2e9b575f3f5506e634c03a1941cf8b8d16c",
+                "source_row_sha256": "686700198e29f342617c70f9dc43114f85443368304bf232eddd644dc8297b88",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/319",
+                "source_body_sha256": "fddd7caacda36ba6ffa625b240e39c0ea188834a2752d6f4e42168eae602a94c",
+                "source_row_sha256": "ff56fe0ec179e232db856cc3b2cd98a08ffe4716f7f5142970e978b26623f8fa",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/420",
+                "source_body_sha256": "2133b2e12346340fc16cbf8e8ec2cbdc53ab3fb9e82863b5b2120bad51810b0a",
+                "source_row_sha256": "a7d6aaf100f51fe3e04be99a6172abf521c2d6f8da2bc53a34dd999209d72888",
+                "matched_text": "Infektionsschutzgesetzes",
+                "unresolved_identity": "named-instrument:infektionsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Investmentgesetzes",
+                "unresolved_identity": "named-instrument:investmentgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/311",
+                "source_body_sha256": "4cd809e3ba1cbf69cf1bd0b87ae0078cff5235773aa72be9d69d6d0638bcc357",
+                "source_row_sha256": "7edaa6b4b3ac4992f17535938fd393d37e681bcdac4ac27c3bcee8e06a79cfc8",
+                "matched_text": "Jugendgerichtsgesetzes",
+                "unresolved_identity": "named-instrument:jugendgerichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Kreditwesengesetzes",
+                "unresolved_identity": "named-instrument:kreditwesengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Kryptomärkteaufsichtsgesetzes",
+                "unresolved_identity": "named-instrument:kryptomärkteaufsichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/10",
+                "source_body_sha256": "08edc68ee1663aedcce14f68aa2a7f3fe5a77c0ad95158703b9900c9254bb65d",
+                "source_row_sha256": "78661280f6a1e4ee53d275aec25b05caf75317bd271f93ed236828b16659b11d",
+                "matched_text": "Lebenspartnerschaftsgesetzes",
+                "unresolved_identity": "named-instrument:lebenspartnerschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/40",
+                "source_body_sha256": "5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3",
+                "source_row_sha256": "add8fd4b3c4aa9fc7a8f1a0b7616b593c274dd4ca1be7a216ae140091d416ec7",
+                "matched_text": "Lebenspartnerschaftsgesetzes",
+                "unresolved_identity": "named-instrument:lebenspartnerschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/103",
+                "source_body_sha256": "d5318f9ac83f065631d5c830b72ac0a65a26d99c641f7fc70de66a6ef092b2ad",
+                "source_row_sha256": "27e80c09eb728d1b4dbc5b0de55bd4de2686d7bf6be782695895603376d09d9e",
+                "matched_text": "Lebenspartnerschaftsgesetzes",
+                "unresolved_identity": "named-instrument:lebenspartnerschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/269",
+                "source_body_sha256": "e909d23a68739b63b52a7c09f15f8924ec12ccea0f96f9fa47998041ec439077",
+                "source_row_sha256": "37591c18ebd79892d28960dd9e7edadec2aa0cfc536f02168b58bfdcd23ee90c",
+                "matched_text": "Lebenspartnerschaftsgesetzes",
+                "unresolved_identity": "named-instrument:lebenspartnerschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/109",
+                "source_body_sha256": "f579c3b571b85fd68948fcbe3da613dc46d4ab332992a6cc739df32fa483705e",
+                "source_row_sha256": "d2db1e3f512f27499cc054e4899f9f069a48a4faf7644d9a01faa18958ea74da",
+                "matched_text": "Lebenspartnerschaftsgesetzes",
+                "unresolved_identity": "named-instrument:lebenspartnerschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/84a",
+                "source_body_sha256": "712695e3b9b3f301a9c52342707e48906650597e29494b105e126af2862c45f9",
+                "source_row_sha256": "8a6a0a5941116b6a91866b921698d24cd7c7f017755bcc4a60bef559508e5399",
+                "matched_text": "Notarkostengesetzes",
+                "unresolved_identity": "named-instrument:notarkostengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "Partnerschaftsgesellschaftsgesetzes",
+                "unresolved_identity": "named-instrument:partnerschaftsgesellschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Partnerschaftsgesellschaftsgesetzes",
+                "unresolved_identity": "named-instrument:partnerschaftsgesellschaftsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/14a",
+                "source_body_sha256": "a9f9f41aafcc7d3f1d9c35220e2a715576c937a4aff69a0b91b0a002182e1470",
+                "source_row_sha256": "f061ba8bfd71c63646d25f6082a492c38da8346d629274379bbe8476d54994c1",
+                "matched_text": "Personalausweisgesetzes",
+                "unresolved_identity": "named-instrument:personalausweisgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/402",
+                "source_body_sha256": "2f8ee431f89664a66c19b56534c780d859e3127c411021058a2639071748c962",
+                "source_row_sha256": "ecf8bc726bf7149ae9e0b3d9002ec3d47f829fab8298f2771e6884492e4ac9a9",
+                "matched_text": "Publizitätsgesetzes",
+                "unresolved_identity": "named-instrument:publizitätsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Publizitätsgesetzes",
+                "unresolved_identity": "named-instrument:publizitätsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "SE-Ausführungsgesetzes",
+                "unresolved_identity": "named-instrument:se-ausführungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Schuldverschreibungsgesetzes",
+                "unresolved_identity": "named-instrument:schuldverschreibungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/168g",
+                "source_body_sha256": "2f0e53328d6125ef0c96934ef4ce7bce1b7a22d287d4702552d7354ba044ff17",
+                "source_row_sha256": "4713f20d0484dabfb7fb55bcb751be7ff7816175c558b76c59974c139b9f30ac",
+                "matched_text": "Schwangerschaftskonfliktgesetzes",
+                "unresolved_identity": "named-instrument:schwangerschaftskonfliktgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/388",
+                "source_body_sha256": "34744ee3d268e91d61d3672e1cb943bfed8df294b28239713c54c002353def09",
+                "source_row_sha256": "660afc22f3ceb702a3570921eaf2f032ba7ee116c2784aeb52dde9d9e435b278",
+                "matched_text": "Umwandlungsgesetzes",
+                "unresolved_identity": "named-instrument:umwandlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Umwandlungsgesetzes",
+                "unresolved_identity": "named-instrument:umwandlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Unterhaltsvorschussgesetz",
+                "target_citation_path": "de/statute/uhvorschg",
+                "target_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Unterhaltsvorschussgesetzes",
+                "target_citation_path": "de/statute/uhvorschg",
+                "target_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/400",
+                "source_body_sha256": "d6467a1d4f6d852e3901cb8f4d3e6773f3739c7922f9923da16dd967f8b4527e",
+                "source_row_sha256": "66d5dabacb37c194f1faee0d4a71fe62a783663ad8fa6e64b148133b679db749",
+                "matched_text": "Vereinsgesetzes",
+                "unresolved_identity": "named-instrument:vereinsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Verordnung (EG) Nr. 1435/2003",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1435/2003"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Verordnung (EG) Nr. 2157/2001",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 2157/2001"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Versicherungsaufsichtsgesetzes",
+                "unresolved_identity": "named-instrument:versicherungsaufsichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/226",
+                "source_body_sha256": "047cc4578ea2f5c04c33ba4e5e549e98d2645a02a997f3d9619729a6b0184b55",
+                "source_row_sha256": "db370b7f6cdfe375de2a9da43afcbfd10071a3c291fe67eaaa44e7441006fea8",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/224",
+                "source_body_sha256": "22491d06c45e470f775617c601fc98187826e5e07b9325d474da5b598ee444b0",
+                "source_row_sha256": "800f06e2bb832d815f7d673a5f7a872aa6725b7a5a6d9263a0606a81f298af4e",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/114",
+                "source_body_sha256": "4383c57fa5eaaa429bfaa1fddf7ac8e3c1517a1855f61187a79c91fce9fb431d",
+                "source_row_sha256": "e2cca375573f16e4492827aa8b06cc50fe4c7b486a34a73138c72f4aa86ff090",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/220",
+                "source_body_sha256": "8c168abde0f50f38e5c26aa06b83f56842267d5c29a00f3d464f21459ac42051",
+                "source_row_sha256": "1dfe77bd539a339e1f334a08fdc3cfa74a16c7002951b00c88943fecb52b43af",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/222",
+                "source_body_sha256": "ab189f6339b60e1ae256379fbd1e8ce17b83c9153cf42a79bbd5b005622e9c62",
+                "source_row_sha256": "767de6bd29db712ccec5630e8a8d3059190753ea3ca6e2b94291f4cdb77ccf48",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/225",
+                "source_body_sha256": "b45967afff74e5a5b093b2eb4950e1294985af93e7de67de6edaa91c785304fa",
+                "source_row_sha256": "28a26b88ac76fa270cc5d27e9ea2774ad875137d933ceb570f2a15f156643447",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/223",
+                "source_body_sha256": "cbe060df4cd72e8a8995537a97a73b1ab59c3d6b752f33118a555a4a79eb8f94",
+                "source_row_sha256": "f165358e417c98e2996b30eb21b69807a5ccebdf13894770a17d04036554d935",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/227",
+                "source_body_sha256": "da646276424ea401962c3fb9cb6b013eabebd2aef903c70ea61d18ae45a1b0fb",
+                "source_row_sha256": "2a78200e3e4027a14baa2889da5ad9e71feb2fdd671ea709e4cc94191892e887",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/137",
+                "source_body_sha256": "eb25c0c719ac14252b055eab0ef9efd4155f5367f83a20ba4732a2ce0f977334",
+                "source_row_sha256": "b7a3eb8f42d075e36c57f4a9a6e5923434de3c2fbe9d7a538786819fa7fc610c",
+                "matched_text": "Versorgungsausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:versorgungsausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/225",
+                "source_body_sha256": "b45967afff74e5a5b093b2eb4950e1294985af93e7de67de6edaa91c785304fa",
+                "source_row_sha256": "28a26b88ac76fa270cc5d27e9ea2774ad875137d933ceb570f2a15f156643447",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/225",
+                "source_body_sha256": "b45967afff74e5a5b093b2eb4950e1294985af93e7de67de6edaa91c785304fa",
+                "source_row_sha256": "28a26b88ac76fa270cc5d27e9ea2774ad875137d933ceb570f2a15f156643447",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Wertpapierinstitutsgesetzes",
+                "unresolved_identity": "named-instrument:wertpapierinstitutsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/375",
+                "source_body_sha256": "63ff98f24a8ce6ac36139716e94e8d0a73ba0531c4e9fd0d7e4968fd054496e3",
+                "source_row_sha256": "5aa569c4114e55c6fae6d29635b11c2683fd628fe45ba89ca24c9dc88577f834",
+                "matched_text": "Zahlungsdiensteaufsichtsgesetzes",
+                "unresolved_identity": "named-instrument:zahlungsdiensteaufsichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/138",
+                "source_body_sha256": "00c36b0a9456b991a28a1efc04244470977f8926f77da000474a2a3626513e89",
+                "source_row_sha256": "e24987ceec6835dc0c1bf2807613b925f5dc2402595683e34b05f78ba6c6af76",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/74",
+                "source_body_sha256": "0437489cd0cf4dd4b851a7575c5443e981a6cadb51dec0a4375c908e05c22857",
+                "source_row_sha256": "2060518c30fddee1947eeba2d3a3a6d51732277e32e12840bbc3cbe38994628a",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292a",
+                "source_body_sha256": "043967c6b1ba9caf4a662d8194f20f60df7a8527f9419c6521c1c4886e34c0b2",
+                "source_row_sha256": "0a25f940b123ed4e7acaf14c89171e5aa1034ff5bff2ec4400b62da26e30f168",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/371",
+                "source_body_sha256": "06841b24a68c0c622c4a1ab7bd9d9dbd42a51833722175a38d804f43faf11bd6",
+                "source_row_sha256": "471715de2faf4e5d4b33e03544350f31e51ca92c6813b0c489b8bbe754584f4f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/9",
+                "source_body_sha256": "068db25fbe55e1660f8e3936106e5ef72e22ada3ba55683d4e6a7e770dea0cc2",
+                "source_row_sha256": "b2ef5f07c2ddd35ddc7c4ad9fa52f3a749d2524dfecc6e2f57c2ec91b830414a",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/10",
+                "source_body_sha256": "08edc68ee1663aedcce14f68aa2a7f3fe5a77c0ad95158703b9900c9254bb65d",
+                "source_row_sha256": "78661280f6a1e4ee53d275aec25b05caf75317bd271f93ed236828b16659b11d",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/11",
+                "source_body_sha256": "095de84b3c2053aa4a349ea11f482ef5b2fbeaf1bf5bc21ce8e70bf1e745222c",
+                "source_row_sha256": "28a3b627b28683c0f50c550442899f991ac189832b42abae489a4f48ba69d87d",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/110",
+                "source_body_sha256": "0b690da9caae0f8d54ac9077e17f587279e57fd39fa65b893952d222d820716c",
+                "source_row_sha256": "610e18be457cc20324776b8fca218a2998ee64ac725eaafe4e5db10bb53a62e2",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/263",
+                "source_body_sha256": "0f60ae066a27559e8bc589aad7b4e2303878fae9a950fd2eb5b8c9112d164ed6",
+                "source_row_sha256": "a7b43321abcab42c0e88764dc942ed21c06b3ccca50188a19fb2fae25754fe7e",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/441",
+                "source_body_sha256": "11abb4066b332103109c88fe09f61795a568e19671b571f060c6099b9b0566b5",
+                "source_row_sha256": "98e789444f7a3d14fb201af84f1f87eba53c3ef07c10630fbb5b6ecafd2dd73b",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/128",
+                "source_body_sha256": "12ad875338882b8c59c6906d96245ce01a408b84e910dc297cb93c8984c76dca",
+                "source_row_sha256": "e22e24fd1f53da8decc878cfa90dd86ab3b3a3da90ad7addff22096be64efb88",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/96",
+                "source_body_sha256": "1619d2fca55829a6fdf5d3c46bec508e3344b702503ca4cd3e5efc6f71e662e4",
+                "source_row_sha256": "e51a79d7463ff4f26e6c684761f13b2475743cb97ba956fed24b2c98f1e6d028",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/48",
+                "source_body_sha256": "1a185530fef524b31e2c5d476d1dce35cdaa9c7922fe3ff12e868dd165dd2b1d",
+                "source_row_sha256": "7bd254431794a16c4280cafec719d7d54ffb6f6ef578e23ef21e1f15f173a2e1",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/36",
+                "source_body_sha256": "1e135200ac3ec80e1fc6ba0773e9f8dbc05cbd98ec8740cc4356339b412c9c31",
+                "source_row_sha256": "c2769b4000dccd404ea687f7d8c9f4bf8b581c766ac47c7e8ed03dbaa5e6beed",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/85",
+                "source_body_sha256": "20f35fa6cfef6e490c93f06471d9bad3e44383bbbe895c8200319391a9ce61e6",
+                "source_row_sha256": "80c2cd7d5f1588817df54f4380862b41dde8d4ce6862bb3a6236fc2a26b61bf4",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/232",
+                "source_body_sha256": "2470665268fe5dcdb847baa6e7cb8d7b00fcd8a1e2b6afac52c2f9cd24f399fb",
+                "source_row_sha256": "7268319442cd56a950678d6d388e9a565b5fc2c472fb695309864ebff7d63faf",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/35",
+                "source_body_sha256": "258e6369111da5e03d42985e49e1b4be7064e2dacfe9176f60690a9850dd813c",
+                "source_row_sha256": "4494a4f5f238f229da220e240120038b1a7173bccfe63a2928455d04b1b956de",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/117",
+                "source_body_sha256": "28be3c26613c379e5de481224b9b7d3fb0bc562e18428c511dfaa5fe40f4c69f",
+                "source_row_sha256": "edaf0c07f928a76d4f71b567e2104ed9963f5850cca0f55c54b009a935f18983",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/6",
+                "source_body_sha256": "2abded0ef65d1daeb71cc002c3e8abe9bfc1bd30babb821b92e4d50d3788de1d",
+                "source_row_sha256": "708df47a7ef8de5f01f2ce25373bef5a0bcb2b2dbb07748a19450e1059b7c41a",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/262",
+                "source_body_sha256": "2e33477fc074a707b0227c56d8d0a8da656e4cc042f9cbaf5c964fd9fa456de6",
+                "source_row_sha256": "8333e97568ed7a16ba91fe333fa21508ef4194443da20835e90c94e38803d32d",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/267",
+                "source_body_sha256": "2e33477fc074a707b0227c56d8d0a8da656e4cc042f9cbaf5c964fd9fa456de6",
+                "source_row_sha256": "53c7f3a2b6961fec295a1149368bee878e3578e83aa16470141f49c02252dcbb",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/266",
+                "source_body_sha256": "339e743817e7314127a9ac1d91ee0f6f760c9863873985650184729f9c711079",
+                "source_row_sha256": "cd40ba5c9dbe56be6ec987f7fe1f019712dd5e74cd7639cb804b348dcc50b243",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/29",
+                "source_body_sha256": "38b3270dab18c7d940bc6c3a9d66287a3e641089e6276f5a7bc4186cf104c69c",
+                "source_row_sha256": "df28865a308982b14060b5ac538d039e79968ebbb691e63adf278d2af4013843",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/482",
+                "source_body_sha256": "3d08871c4a740577f831929d9e81c034ddafd49930ed75bdcd7a468a51417a1c",
+                "source_row_sha256": "00c5c2c3b4d78613ba15498afaf8ff9bd5d1cb1026986c9bcd0c2347a1ee392e",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/7",
+                "source_body_sha256": "3dd3cd5f32f0a3ad97ba7354b8a41a93985c2657a9f020658cb74c76fed97e4b",
+                "source_row_sha256": "a966f745cb38dadaac5e91d1dd21f8e3993516bcf30b8755b33edd62e0607d9e",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/114",
+                "source_body_sha256": "4383c57fa5eaaa429bfaa1fddf7ac8e3c1517a1855f61187a79c91fce9fb431d",
+                "source_row_sha256": "e2cca375573f16e4492827aa8b06cc50fe4c7b486a34a73138c72f4aa86ff090",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/372",
+                "source_body_sha256": "44962980d81806662f33a52b164f62b63e6c1eedb829c9cdddc264bc172760ac",
+                "source_row_sha256": "dcfe40fae50670a37592525c6a51acc90dbba130f0655ae82247fd1fcec87012",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/258",
+                "source_body_sha256": "4bcaae191269d044cbacd632ec0c64be0a4ceba7d68f91dd3b3bac87ac0b163e",
+                "source_row_sha256": "db1168a853141ce46fa78f18605935ed5b55b0d6363346f080df81a03b8307d7",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/32",
+                "source_body_sha256": "4bcde231883bc62e76cc52c731062be854c3550f659b6f7a2f8acb8e9ac6d735",
+                "source_row_sha256": "f84c3b127858f4d340d541cd2c51cd5b9cb7265c2d4f82fe67104fcd8e3a8dce",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/93",
+                "source_body_sha256": "4ca4477dd47852401338b176817f57dbd419cdd266767e56c4d06be56f95e9b2",
+                "source_row_sha256": "cc47cddb7c8ffdb5561863819753f6f425ff32b5743f4326f178ce3c290ea124",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/284",
+                "source_body_sha256": "4e7bd708bc94d72d35f5f4c1fc75c248c35738edd6be0731d04233be78ea1cbb",
+                "source_row_sha256": "5bdd68e99e3e33e5a4e41c97c6d7a2de9c7479462140e853ecbddc43ff07fe72",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/242",
+                "source_body_sha256": "4f24ebe6c3d6e0d856799c4fbe896ba8f1a5c35f7c31007d05258de48a5424b1",
+                "source_row_sha256": "01937b5b5a10d130cf1ff83b3ced2ee243593adb9c9505f6565beb7503e94c9c",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/15",
+                "source_body_sha256": "4fabd8e172c8573c20bdb33524ed762c169c1d7df9d981e86728622f4bc39896",
+                "source_row_sha256": "6797186a76b84f08cd3646d07fb8bf316aba66b84661ebc4c322657748ea41d3",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/251",
+                "source_body_sha256": "51547c72b2978823b1a8f9d407ae7bab1b4da57128411c8d5249ba96e166943a",
+                "source_row_sha256": "61849e110cbcf555d15b3168311ffe0a7c17d8fa124a029e9c97f4035c3e2d3f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/292",
+                "source_body_sha256": "60cc2846dd01785da62c7a3a1965cb8707d329816d02c089c24a6e62d42ccf48",
+                "source_row_sha256": "1cd4bfa3aec5a485a3a255358e74b8ebd3d7941169cec27bbe5cd64328333bdd",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/123",
+                "source_body_sha256": "61c4377162fe57f392b005a45ce560452b6dde9142aef84f6ead7bdf487e99e2",
+                "source_row_sha256": "59cefff8f7c3aa2ea35b2a276f356a51d4b68687bc0d1a939abff65a52231eaf",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/407",
+                "source_body_sha256": "6214b859ff24ac77e9d62e5c214357b0c567b4fa9b2c4caa6be4631623483a2b",
+                "source_row_sha256": "44f5212da9099403d90a4e959ac4d876b6d2d5a4a3dced0ca0e8e56328d50e06",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/243",
+                "source_body_sha256": "62f1c3d289a514a509ae7a80948955e5a93b7827d048fb8417378693cf0b4f1b",
+                "source_row_sha256": "6a7d92fa2abceae3a2c23ff81d4337060d020fa9039d325779893b8595152eee",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/80",
+                "source_body_sha256": "6939ae85f68a3647f77d5cb1ada6fe4b9b668c46b7c79d2dffba28f21d30bdd8",
+                "source_row_sha256": "f4598e3efab120fa1e863a4d6e92596804f18433f52d42fc8c3453328d5bdb21",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/120",
+                "source_body_sha256": "7386ac10e8c150ea378a322a82941bddf664ab5def2ca7069bbf3ab61b932333",
+                "source_row_sha256": "d217b7c3624e2e34de74d1cfa47a215846e25a6225f0bb80558e4242ee31d713",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/202",
+                "source_body_sha256": "7761739bc9dc63f0a68ee93f81eef1749411f6f33c484dafcb14fd1a748d146f",
+                "source_row_sha256": "10ea3b8e690e55b1f82f8e098e5b503aaba6a04b2f6024fa3800d8b75898ca03",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/233",
+                "source_body_sha256": "7e52009599b84a1719047438d811aff449a5d30203e23937ce1260df7d8fe715",
+                "source_row_sha256": "dff7ad839267ce13ca937e83139d97360765f6bbb75aedfa4a91b4a8dfa55b32",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/72",
+                "source_body_sha256": "856cb3d23cf95ecec64a52494b00b116a435e9551fdb2ee4f0d639f4925c9767",
+                "source_row_sha256": "16a4897a3b0bee344364859f6a4e9d2b35f9ad79c847f0e2e2522deaee8403f7",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/86",
+                "source_body_sha256": "86354e07f45922db9a089b385c91e249f9e1c064472f1c30dec2378169d5f73a",
+                "source_row_sha256": "cdac08d7a062e42fa8da051ff28052c3d5ee5d37fe7e83863066ff5a11ac1b8d",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/236",
+                "source_body_sha256": "8a0fec94884f55277e5450bd44266dccd9e206dd796c40fb56e1f072963f1cc1",
+                "source_row_sha256": "51ecc798d2a64dda1bb694a246395ca0b28a502661a4dbeb7100f82047f1d976",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/inhaltsuebersicht",
+                "source_body_sha256": "8a79bc4f4cfe8cb01c7bd5b26035cb5872ace17e365d3b73315a2163efb793fc",
+                "source_row_sha256": "f40823464c9f90793ce7a6fa6b7f8ea279d8486fdd57b5b0786b249d79f2773f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/76",
+                "source_body_sha256": "8ab92cddadfb342e3e4d51671eb78f992e5b8cf32cfebfb747e8a053019f3ce8",
+                "source_row_sha256": "03f569f55fe3badc00836b5f15bb69300c92ebbb62c942f01b4f70f5e8b6b155",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/87",
+                "source_body_sha256": "8b2d87074f2b10ca7d0c9b3498323c71a81e8770b2dc4c55ac7f35c3b637a9b0",
+                "source_row_sha256": "6b8ad647a232a11d91acb1b03ea647f4c3a7e004f30a15158050410d824ea7da",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/124",
+                "source_body_sha256": "8caf89480a3a32c20a20500cd31b2bf52e895ba16940c1316d4da6764b91a41d",
+                "source_row_sha256": "4a7fe0d2ac299a5ffd51090a6b33f2991f5c58aaaf728bb2044383ca5bf052c4",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/119",
+                "source_body_sha256": "903c4d4d5c75aa41cdee1316c9a5edca89d7c37ff3426ebfa4fe71ad2eae4b4a",
+                "source_row_sha256": "2a6f14336f07b0e0315dbf0d722c223698e37c92f941060dd35953595b700d9f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/480",
+                "source_body_sha256": "932ac76686c394c0d78c5bf206da34bcaff49ffa904b325a2fb93aa09325d062",
+                "source_row_sha256": "2801201a40b424b29eee8a83e311eb8001902bd28dba9bda410c0597a3b9e4bf",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/42",
+                "source_body_sha256": "93d6cce071456ba8c8a782a30b45e1466dc47ca561bfc07957e53a7bb264c22c",
+                "source_row_sha256": "5ec19ebff9a0c09bfc521d509db5fc125e22ae93b792d4f9afeb681520cd1283",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/91",
+                "source_body_sha256": "951d2fbdef358286dbe426f295f31083727f87f1f7dfe12db240132e10a878ff",
+                "source_row_sha256": "ae61a195bd892b15ca2db9080b61f81459073efc458f64d2f09f3d528412bd46",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/214",
+                "source_body_sha256": "96ef49929571fd1aad57ab34aef4526ea8af530261e554ce5518ce8a0b4ccfb2",
+                "source_row_sha256": "a6dcc36aa631f4e953868d7077f9c12ea0e9a22f41924ac0f5d562fb7de692f2",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/155a",
+                "source_body_sha256": "97160bf3e64fc312cad7fdcfc36dd7aac2315a57bc9c2f80fd47782b5a482732",
+                "source_row_sha256": "93c2e06052fa10162dc48afa118159cb5090b3e3aa9a18da5c13c00ef37eda9c",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/71",
+                "source_body_sha256": "980087d1003d4f05778fbc6827b4177d755627e73457339414a3d93cadae894c",
+                "source_row_sha256": "a0d2fa35400f4d76673b10179811634fc82689b473f281ec464b68c990c96d4a",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/33",
+                "source_body_sha256": "a20a67a63127c5f25898b149138bd85757935c8ebdec28f76377c8f99f93d55a",
+                "source_row_sha256": "f4cc5603fe728aba28819214e339cb90859693cd833df3397102db7a098b80cc",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/185",
+                "source_body_sha256": "a468bd3a1708bbb317e577810a470f5bad9eb61242cfc0c279ea8c3ad5ce76b5",
+                "source_row_sha256": "4e338d8949c7c0d592e54a544552dd61b4b371b15d207f793df0b4b90246734f",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/239",
+                "source_body_sha256": "a53941ecd632502b30ca6f67fba6e026cc84be911e028c68e09aa14644ff637e",
+                "source_row_sha256": "b49c8fd6361c1bfc3a18cd1e4b47913c47778b2bc7b242fcff3afc0d21ddffd6",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/14a",
+                "source_body_sha256": "a9f9f41aafcc7d3f1d9c35220e2a715576c937a4aff69a0b91b0a002182e1470",
+                "source_row_sha256": "f061ba8bfd71c63646d25f6082a492c38da8346d629274379bbe8476d54994c1",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/gl-010080030",
+                "source_body_sha256": "aeffc470b910c189763cf2faef87841facc0f53384c6428c36b101b9f6f049f0",
+                "source_row_sha256": "d492d37c8f96e98bd66be6c709d916100a655631320dbc95dc01b4fcef7e84f1",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/68",
+                "source_body_sha256": "b64207ce73b462c38e20c6c2ed796025d2805ca608cd3cd160203d6b2fab26e3",
+                "source_row_sha256": "f83a2512deef33a16d065a5f036e5ad25397cd9642101890da5128d477f0bdee",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/46",
+                "source_body_sha256": "b6abc46b281ab9c39ba7611485c4c64e05f102381b13fadd8196ef146f9a7b0b",
+                "source_row_sha256": "a381fab261f5fc3592af7710b75133aa9465f74e1ba12c9ae723f1470155cfff",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/118",
+                "source_body_sha256": "b8ebc4a29567488ba1c8fb9ecf6973facca9693bbe430afd5aedec8323ff6692",
+                "source_row_sha256": "2080b7e94503250b1a749fd0ee86001fba33dd407b230a6dd2c779b7c9380e09",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/361",
+                "source_body_sha256": "ba7c3b69be6512c4c977057b88fef24071664b23ac6513d72082739e69bab503",
+                "source_row_sha256": "b87fa48b6f948dfccaba8c85fed22b3abfc6cc8badb62efd79410495d1c685fa",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/153",
+                "source_body_sha256": "c3f5bb1ba006109ae0a77dbe58f2e31d28f4d6e1b9a1533afccce9f32ea5f46b",
+                "source_row_sha256": "b3be2c06da36df7353bc2e28e53ead04ef47b286794cabceb3854a0889b226c3",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/21",
+                "source_body_sha256": "c493d185313770f02c0442ad1401ff0bc5f9fc12513a3f0dca74eb3bc9bac457",
+                "source_row_sha256": "d14393c375c31e0cf11491cd339469be5cd3db9b3f7ff5c294b37a5394b9e9da",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/89",
+                "source_body_sha256": "c592f3e6bdf9a8dcc28529905ec760aeda1d5702cdd0c8a4283878330559ee14",
+                "source_row_sha256": "dd43f040e2104527339122151759d7b6b595c23c6bfe98a5316ebe42a9c3c30a",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/16",
+                "source_body_sha256": "cc861247505e0125df862f3c0e22af58f1edc1d15ff2df36615096aa47b56efa",
+                "source_row_sha256": "0d17129fec83c815aaf022d286e1c64fcf88acd42332c6190f90d2b5dc404e41",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/355",
+                "source_body_sha256": "d039d61f4f5cd9fa4e60b41858819d43af33f77f01ef659d150a865fbf9a073c",
+                "source_row_sha256": "7b6f187941eaff2ad4b7338495cd2f6acf4b40c022b5784b9b024b3f92430e05",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/94",
+                "source_body_sha256": "dd1ed03883b7545cc8bc87ebc37e1278719bd5e84b571bc416816b3ffa472cd8",
+                "source_row_sha256": "e596985616e805f4a48bff39de750030e97e360d7ccccf8763e105ff97b04ec0",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/75",
+                "source_body_sha256": "ded1213d911c0e8b1ecd88be484e33e5170adc2b292e271d2008ecd6dc8fee87",
+                "source_row_sha256": "70666aed117dd8e4df1cc78526969cff2be3ec5508541921c6942d5b01bf5922",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/13",
+                "source_body_sha256": "e0e7514f88d0b39fda1c409463ecd2fee620f6ad35b0cad578b314d5dde9f489",
+                "source_row_sha256": "1f58ff6c3538b101b1dd2dc43000981046a34c69ab7eb7b83b66d8861f76cd27",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/30",
+                "source_body_sha256": "e41aac002e314d1ad5f8bcb7741ebc56a8f7aab798aacd347a4b8ab7c1def0a4",
+                "source_row_sha256": "48d8d769db5f88b8f738b8998be8173003111069a6466e2b121df8128058cc90",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/413",
+                "source_body_sha256": "e4d563417efb3860f924770915d395aede6c5852d9039d1ea90e6a2f1bf8e01d",
+                "source_row_sha256": "2506f385f3049251f2aae90ac148a6fd273def77c7c11525ced87a283ad0c2c9",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/113",
+                "source_body_sha256": "e8324889d4401fa4e4cfa62cd718ff90e55069434b9e3c981133f8c93fcee0e0",
+                "source_row_sha256": "65ba4cb563f030768f9177867c5d2b602f1d17a90200d47d16ac932dbdf3b6e5",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/269",
+                "source_body_sha256": "e909d23a68739b63b52a7c09f15f8924ec12ccea0f96f9fa47998041ec439077",
+                "source_row_sha256": "37591c18ebd79892d28960dd9e7edadec2aa0cfc536f02168b58bfdcd23ee90c",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/178",
+                "source_body_sha256": "ed6aef219d120ef013d283910c1d5fede92aee704d270f24edfd5d46312fd922",
+                "source_row_sha256": "174ffff98e0f6ca5a855314fbca5a816d47cce8ee1daed3c0580e01dd7153460",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/95",
+                "source_body_sha256": "f5e8cd9e9159507fe2714182011767bc62d44f22830092c5d31a192c29a6e00a",
+                "source_row_sha256": "acd052fbac97677b3ed69332536df3a386cb25f438bbfa1cd65417308820d02d",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/268",
+                "source_body_sha256": "f76853f4c991337fab53b0f7c6946d4c8a7dac6c97ada821b9a2fb9ce1cd4547",
+                "source_row_sha256": "8ed246d9cd436177cd5509fc3967b16c33e90faab423f51a3fb159187df225e3",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/14",
+                "source_body_sha256": "fb65554459fce09435d43465cd07a5642fc8cabf966c94a90b747033d66f3f1c",
+                "source_row_sha256": "c5fd06bf5c9c35eb3c13b4935b16a97f6752d46ab8072fab2ee7b66b07d29ec3",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/244",
+                "source_body_sha256": "fcb4786846f531767c401ff6f801f87c1af14c716ae69097b73b1b47712480ad",
+                "source_row_sha256": "b8c6ef899ccce7f5ea0f1e68b918e43c8815d5d13ccf6ef3bb8c945100e112cc",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/252",
+                "source_body_sha256": "1fe8f98bce507019fdc85fd111b22e555ba5a9ff4fb362ef36a9a292a5e298d5",
+                "source_row_sha256": "e3dd12edae8ea76ae0a319919aee89d4f693d2d5a2cef842b0ce73dd159fac07",
+                "matched_text": "Zweiten Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/252",
+                "source_body_sha256": "1fe8f98bce507019fdc85fd111b22e555ba5a9ff4fb362ef36a9a292a5e298d5",
+                "source_row_sha256": "e3dd12edae8ea76ae0a319919aee89d4f693d2d5a2cef842b0ce73dd159fac07",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zweiten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zweiten Buches",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/252",
+                "source_body_sha256": "1fe8f98bce507019fdc85fd111b22e555ba5a9ff4fb362ef36a9a292a5e298d5",
+                "source_row_sha256": "e3dd12edae8ea76ae0a319919aee89d4f693d2d5a2cef842b0ce73dd159fac07",
+                "matched_text": "Zwölften Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zwölften Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/252",
+                "source_body_sha256": "1fe8f98bce507019fdc85fd111b22e555ba5a9ff4fb362ef36a9a292a5e298d5",
+                "source_row_sha256": "e3dd12edae8ea76ae0a319919aee89d4f693d2d5a2cef842b0ce73dd159fac07",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zwölften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/famfg/250",
+                "source_body_sha256": "8806fae9d058f44134941f0a98b8027bc00c1ea4791b4f4957af0bced924d097",
+                "source_row_sha256": "d48ca4a629aa4366b0943ed3b3d7d45ecb48b97c2ad933eae3dfd34d1f684a87",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": "de/statute/famfg",
+                "source_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee",
+                "raw_reference": "Zuletzt geändert durch Art. 5 G v. 23.4.2026 I Nr. 111"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/statute/famfg",
+                "source_row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee",
+                "raw_reference": "BGBl I 2008, 2586, 2587"
               }
             ]
           },
@@ -57991,7 +60454,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "272315e0c5aca789d67458bb709f937a1c7b59cc355bbf79fd899e0b2576b432"
+        "receipt_sha256": "6e86441d379fb34f64c195bb8a7be17984b0a7e1e23a8f42e853af23d2e400d6"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -61169,7 +63632,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a"
+      "receipt_sha256": "34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -61185,10 +63648,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "214e6868eb75f1c8abcd9f6dc11c45078ab76d6bf6cec0deb41396712a3720d1"
+          "receipt_sha256": "ff2332ba08983a32599e7cf992cecf065315f157136219fe66a6ca82a486e801"
         },
         {
           "id": "de-subject-002",
@@ -61198,14 +63661,14 @@
           "source_id": "bzst",
           "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "8f6b4f034c97e32ea0acaca063ce15fcc91c0b4929a4abf03b1d8938a1481a5f"
+          "receipt_sha256": "ab1db1aca1b7da3990fc094fc11f53bc82d899eb097309a5e1bd51501da1e850"
         },
         {
           "id": "de-subject-003",
@@ -61215,14 +63678,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "210ccb872508a4fc7968b77827e2593e8426ee5522d3f660a87b1d03e8ff70f5"
+          "receipt_sha256": "a2bae2138802286be18bc5c63237f75847bfe196305b5f912cde9a4a3e2da403"
         },
         {
           "id": "de-subject-004",
@@ -61232,14 +63695,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
-          "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
+          "final_url": "https://validate.perfdrive.com/?ssa=f4f2bc3f-83cb-444c-8cac-eb954e7efe3b&ssb=41829208547&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=d6ccd3ca-ca3f-47da-810b-d51a06cf4af3&ssk=botmanager_support@radware.com&ssm=24996206864881583103832073950021&ssn=3e2526997636d1bfbee6c9a21448f4b094fe15a81e24-a48a-4790-afe411&sso=007d9441-3e1ec6b8065fdfbfc394c12f4a7edf6497c573f86579e00a&ssp=02417251131789025512178901336026278&ssq=74361175515583110986555155261294725507183&ssr=MjEyLjIyMS4zLjY2&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJ1em14IjoiN2ZjMDAwNGEyMGE0Y2EtNjM1Zi00NmQyLThmNDktZmQzZjQxZmUzYWE2MS0xNzg5MDU1MTU1NDczMC0wMDRmYzVmYjY2OTlhNDkzZmIxMTAiLCJfX3V6bWYiOiI3ZjkwMDAxNWE4MWUyNC1hNDhhLTQ3OTAtYTQ0MS0zZTFlYzZiODA2NWYxLTE3ODkwNTUxNTU0NzMwLTAwNDU5Y2I4ODhiYWM3ZDIwOTQxMCIsInJkIjoiYnVuZGVzZmluYW56bWluaXN0ZXJpdW0uZGUifQ==",
           "http_status": 200,
-          "content_type": "text/html;charset=utf-8",
-          "byte_count": 215724,
-          "content_sha256": "2036debd79bacdd8f1d3ffcfb7199068ea9fb75b5420077115b17f3eb18ab984",
-          "receipt_sha256": "0173029a8bcdafb39b86e778464e735e165084944e9e30cb3df6f9a96c78d501"
+          "content_type": "text/html; charset=UTF-8",
+          "byte_count": 15113,
+          "content_sha256": "37e01d46f3df577e2a2d68adb4b8b58a623b5a33bf4e795f575340b18d7353bf",
+          "receipt_sha256": "72cb20fe0977e3ba5e626f2176e86baeeb4455dac8c0a3a8383baecb8a2cb40d"
         },
         {
           "id": "de-subject-005",
@@ -61250,14 +63713,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "ccc443244e134e080c39a6389288d202d0460dc4dec98d1a7dceef79dc069fb9"
+          "receipt_sha256": "90b486800387707b1dd77fb255c363365ad041fec6339f52055add1ec8929435"
         },
         {
           "id": "de-subject-006",
@@ -61267,14 +63730,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "0cccaae8490e27fb073e0cce79563c556703c57d45eb73bc777fd196e035d52a"
+          "receipt_sha256": "452f01f7ba6bd9babc14b544a14edeb5d0d30779d5622059c0142028fa9eb9b3"
         },
         {
           "id": "de-subject-007",
@@ -61284,14 +63747,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "3c105ef480a29f11e2edbf29854aef9fd7539b89f6b5947857687367552b05c3"
+          "receipt_sha256": "2d7640cc4c4f60c816eacfa64a9bebd6ad988781218d16d4e583f99231f38f88"
         },
         {
           "id": "de-subject-008",
@@ -61301,10 +63764,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "2e9fc5a7b0aa641e82a999f1faf0c3549d8a91c4606642175fe539d0cface3a8"
+          "receipt_sha256": "bffab6029bb0f848b8434919d335f386bfb2ab6aae0fe176d926dfabaa26f14e"
         },
         {
           "id": "de-subject-009",
@@ -61314,14 +63777,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "3eb0aa1ed316c2eca9e52e11cd1362b8bf2d71ac1239c7450b9d3dac65a0e9e6"
+          "receipt_sha256": "7669793f36c84cef4cdde7201ab4b198633d6c7136cd1e8e0cc6bd73f0141385"
         },
         {
           "id": "de-subject-010",
@@ -61331,14 +63794,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "4dc8889845e16118b49d561735374673eb732a09fd131b9d5c7f63a1d3dd46b0",
-          "receipt_sha256": "c0923c81058155ca68fedb54bfb9f8197dea352d8e1e43f11b6618468579cd98"
+          "receipt_sha256": "a7b61606c5c8fca8cdec510ffc24609264f8ee4d293d40ac802813ff7eee9bfa"
         },
         {
           "id": "de-subject-011",
@@ -61348,14 +63811,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "1e533769501975598b36c8a48dc24e9f3222dc5f488730d04d233fa6896824fb",
-          "receipt_sha256": "67750f34cbace3264fb0ba302c04271633adeaf916e990f3e2aef86f78409b50"
+          "receipt_sha256": "e299ddb0721d012a3187fb43b38b48efb92635999708b21f14d7d1e119cb654d"
         },
         {
           "id": "de-subject-012",
@@ -61365,10 +63828,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "997b1226c8bf995b32c869ba1d444f327a9d5c3812403a9d0ca68df2643f4f25"
+          "receipt_sha256": "d247ce57024f4ab0002d0bd2b6526c0e65891b96f0be9e61849ff86b8f6c466c"
         },
         {
           "id": "de-subject-013",
@@ -61378,14 +63841,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "f617b384e9b41ff898f71d793552539189f02792be120dbe040cdab911c83698"
+          "receipt_sha256": "0080f848ec2d8d0abfc28db139526064e366805037e9a2d7af1b9c8fdae6b638"
         },
         {
           "id": "de-subject-014",
@@ -61395,14 +63858,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "dac1daae728d203a8f6a16847a9f129e9a6240ec527330754eb7c52bdc417517",
-          "receipt_sha256": "ecf09efe9e7dc113097f10013bb49eb615fd7af7bcadf3522456683cdb892b15"
+          "receipt_sha256": "1daec76e2b1208ec82b659568aa10dbc5d3550d234f9fb3ce52306b74dde4aac"
         },
         {
           "id": "de-subject-015",
@@ -61412,10 +63875,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "a0037f5240eeb32de9f17f037b337158dfaff0d964e92f17097a31c13640d00e"
+          "receipt_sha256": "ecaa7d0c247f1c0aaf3b814051bfa28a646ac6a0f94791b9f071d1400140c57b"
         },
         {
           "id": "de-subject-016",
@@ -61425,14 +63888,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "4477185d627adf52613557507a19df85b008be2bb0c25438033195cc900d260d"
+          "receipt_sha256": "33905087c22bd58117b85bc69b38f1291c1c5a1c5caaf4d1417fc21e98443e3e"
         },
         {
           "id": "de-subject-017",
@@ -61442,17 +63905,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T14:51:17Z",
+          "captured_at": "2026-09-10T15:42:10Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf",
+          "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "c64422c4a7ed5473e62445fc8a913d7230461da856fa0da18543d9f437004a46"
+          "receipt_sha256": "1fede8ffcb6b57961efed0b1bb69de448334aaf66225aba245dd7a9adefea8bd"
         }
       ],
-      "receipt_sha256": "c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390"
+      "receipt_sha256": "3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -63201,8 +65664,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a",
-            "subject_matter_search": "c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390",
+            "corpus_release": "34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb",
+            "subject_matter_search": "3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -63935,5 +66398,5 @@
       ]
     }
   ],
-  "receipt_sha256": "3db66943c0f8163aa57a8ce0cd41ff93986fcb2a32e8782e9fb607ab09de0f2f"
+  "receipt_sha256": "9f12e027d1b1025f47a485422262f3c786314c809775537fc8b248a368ab2150"
 }

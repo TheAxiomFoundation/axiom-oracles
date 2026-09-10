@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
-    "release": "de-rulespec-2026-09-10-kindergeld-maternity",
-    "release_content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
-    "release_selector_sha256": "46b58c751d3defeffdaef986ddb39443e5de45d292881e76ad4c7b38c89ab0c2",
+    "commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+    "release": "de-rulespec-2026-09-10-kindergeld-recipient-priority",
+    "release_content_sha256": "4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4",
+    "release_selector_sha256": "334b1e1edb7826341da11a4069f801e4dedab795734aae1607aa38e338dbbe9b",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -240,6 +240,11 @@
         "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json",
         "sha256": "956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865",
         "row_count": 46
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json",
+        "sha256": "a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6",
+        "row_count": 598
       }
     ],
     "provision_sources": [
@@ -467,6 +472,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl",
         "sha256": "2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5",
         "row_count": 46
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
+        "sha256": "65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1",
+        "row_count": 598
       }
     ],
     "rows": [

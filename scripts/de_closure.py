@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = 'f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39'
+SOURCE_SHA256 = '9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-10-kindergeld-maternity'
-RELEASE_CONTENT_SHA256 = '57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042'
-RELEASE_SELECTOR_SHA256 = '46b58c751d3defeffdaef986ddb39443e5de45d292881e76ad4c7b38c89ab0c2'
-CORPUS_COMMIT = '5a77472300eb240e303a6f52c1d45040d671e7a4'
+RELEASE = 'de-rulespec-2026-09-10-kindergeld-recipient-priority'
+RELEASE_CONTENT_SHA256 = '4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4'
+RELEASE_SELECTOR_SHA256 = '334b1e1edb7826341da11a4069f801e4dedab795734aae1607aa38e338dbbe9b'
+CORPUS_COMMIT = 'eb2c46117b2cf2a396a48a41be409fe1e5ecc696'
 RULESPEC_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -140,6 +140,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json': ('907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7', 4),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json': ('a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830', 4),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json': ('956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865', 46),
+    'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json': ('a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6', 598),
 }
 EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl': ('80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29', 2),
@@ -187,6 +188,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl': ('41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f', 4),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl': ('87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668', 4),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl': ('2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5', 46),
+    'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl': ('65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1', 598),
 }
 
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")

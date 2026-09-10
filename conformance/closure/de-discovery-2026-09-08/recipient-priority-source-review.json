@@ -14,6 +14,14 @@
       "body_sha256": "7105366cec1d12d8fb02bc1a87c7fd268517a0701b159e2134db5e0e7dc999a8",
       "body": "(1) bis (4) (weggefallen)\n(5) 1Abweichend von § 64 Absatz 2 und 3 steht Berechtigten, die für Dezember 1990 für ihre Kinder Kindergeld in dem in Artikel 3 des Einigungsvertrages genannten Gebiet bezogen haben, das Kindergeld für diese Kinder auch für die folgende Zeit zu, solange sie ihren Wohnsitz oder gewöhnlichen Aufenthalt in diesem Gebiet beibehalten und die Kinder die Voraussetzungen ihrer Berücksichtigung weiterhin erfüllen. 2§ 64 Absatz 2 und 3 ist insoweit erst für die Zeit vom Beginn des Monats an anzuwenden, in dem ein hierauf gerichteter Antrag bei der zuständigen Stelle eingegangen ist; der hiernach Berechtigte muss die nach Satz 1 geleisteten Zahlungen gegen sich gelten lassen.",
       "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl"
+    },
+    {
+      "citation_path": "de/statute/famfg/40",
+      "body_sha256": "5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3",
+      "body": "(1) Der Beschluss wird wirksam mit Bekanntgabe an den Beteiligten, für den er seinem wesentlichen Inhalt nach bestimmt ist.\n(2) Ein Beschluss, der die Genehmigung eines Rechtsgeschäfts zum Gegenstand hat, wird erst mit Rechtskraft wirksam. Dies ist mit der Entscheidung auszusprechen.\n(3) Ein Beschluss, durch den auf Antrag die Ermächtigung oder die Zustimmung eines anderen zu einem Rechtsgeschäft ersetzt oder die Beschränkung oder Ausschließung der Berechtigung des Ehegatten oder Lebenspartners, Geschäfte mit Wirkung für den anderen Ehegatten oder Lebenspartner zu besorgen (§ 1357 Abs. 2 Satz 1 des Bürgerlichen Gesetzbuchs, auch in Verbindung mit § 8 Abs. 2 des Lebenspartnerschaftsgesetzes), aufgehoben wird, wird erst mit Rechtskraft wirksam. Bei Gefahr im Verzug kann das Gericht die sofortige Wirksamkeit des Beschlusses anordnen. Der Beschluss wird mit Bekanntgabe an den Antragsteller wirksam.",
+      "provision_file": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
+      "corpus_commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+      "applicability": "Current official expression captured10September2026; no blanket2025 applicability finding."
     }
   ],
   "reviewed_guidance": [
@@ -55,11 +63,12 @@
   ],
   "prerequisite_gaps": [
     "Claimant entitlement and child qualification remain unencoded; a supplied eligible_claimants list would hide legal predicates.",
-    "FamFG40 decision-effectiveness text is absent from the pinned corpus and must be captured before defining that date.",
     "Referenced older BFH III R91/03, III R66/04 and VI R224/98 are absent from the pinned complete-decision rows; source recovery remains required.",
     "Household admission requires shared care and material support; registration alone and an arbitrary overnight threshold are insufficient.",
     "Section78 continuity needs composed residence and child qualification with the one-full-calendar-month interruption condition; existing record helpers do not decide priority.",
-    "BFH III R57/13 leaves regularly recurring payments delayed by weeks or months undecided; a universal late-transfer exclusion is not supported by that decision."
+    "BFH III R57/13 leaves regularly recurring payments delayed by weeks or months undecided; a universal late-transfer exclusion is not supported by that decision.",
+    "FamFG40 is now in the verified release; historical applicability and the particular recipient-selection notification rule still require reconciliation.",
+    "FamFG40 paragraphs2/3 include finality and immediate-effect branches; any complete module must derive legal finality from the defining provisions rather than accept an ungrounded finality_date input."
   ],
   "native_attempt": "No native generation dispatched.",
   "reviewed_decisions": [

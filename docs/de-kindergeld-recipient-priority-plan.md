@@ -31,8 +31,13 @@ sentence2. Preserve the guidance quotation verbatim and ground the operative
 maintenance comparison in the actual statutory owner.
 
 A25.1(7) cites FamFG §40(1) for effectiveness after notification to all
-participants. FamFG40 is absent from this release and requires official corpus
-capture. The older BFH III R91/03, III R66/04 and VI R224/98 decisions are also
+participants. FamFG40 was absent from the preceding release. It is now retained in the
+published `de-rulespec-2026-09-10-kindergeld-recipient-priority` release, commit
+`eb2c46117b2cf2a396a48a41be409fe1e5ecc696`, content SHA-256
+`4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4`.
+The full section body is added to the review receipt. Its general notification
+rule and finality/immediate-effect branches are not interchangeable. Historical
+applicability and its application to this particular decision class remain open. The older BFH III R91/03, III R66/04 and VI R224/98 decisions are also
 absent from its complete-decision rows. III R3/13 and III R57/13 are captured and their full four-page and three-page
 decisions are now read and retained in the review receipt. Both their class
 and corpus identities are bearing and remain unencoded. These source gaps and the unencoded entitlement/household
