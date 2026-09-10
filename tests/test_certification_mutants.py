@@ -3928,7 +3928,7 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["instrument_frontier"]["complete"] is False
     assert closed["instrument_frontier"]["instrument_count"] == 774
     assert closed["dependency_closure"]["closed"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 138
+    assert closed["dependency_closure"]["open_dependency_count"] == 140
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     # Resolving all declared roots does not close the governing-act spine.
     assert closed["declared_sources_closed"] is True
@@ -5787,7 +5787,7 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
     assert closed["instrument_frontier"]["instrument_count"] == 774
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 138
+    assert closed["dependency_closure"]["open_dependency_count"] == 140
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5
