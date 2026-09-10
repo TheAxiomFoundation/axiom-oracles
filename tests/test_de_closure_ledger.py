@@ -1368,9 +1368,9 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     # captured text.
     pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
     # The 23 social-security-agreement and ARB 3/80 members enrolled from the
-    # corpus scopes (de-kg-suppl-018..040) are pending until read.
-    pending_members = {f"de-kg-suppl-{n:03d}" for n in range(18, 41)}
-    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes | pending_members
+    # corpus scopes (de-kg-suppl-018..040) are decided; only the classes wait
+    # for a discovery channel.
+    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
     assert all(row["text_sha256"] and row["text_source"] for row in supplemental if row["status"] != "pending")
     from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
     assert len(from_o24) == 15
