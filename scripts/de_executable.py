@@ -47,6 +47,7 @@ import importlib.util
 import json
 import math
 import os
+import platform
 import re
 import stat
 import subprocess
@@ -102,6 +103,159 @@ AXIOM_TUPLE_PIN = {
     "asset_sha256": ENGINE_PIN["archive_sha256"],
     "metadata_claim_mode": "attested",
 }
+
+# Per-target assets of the SAME pinned release (oracles#498). ENGINE_PIN above
+# is the producing pin: the manifest, the receipt, and the status bind that
+# x86_64-linux archive and never change with the verifying host. A verifier on
+# another target replays the receipt's exact request with this table's
+# sha-bound sibling asset, and every fresh equality except the binary's own
+# SHA-256 (platform-specific by construction) still has to hold: version line,
+# compiled artifact bytes, engine stdout bytes, and all result rows.
+ENGINE_PLATFORM_PINS = {
+    "x86_64-unknown-linux-gnu": {
+        "asset": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
+        "archive_sha256": (
+            "76565685230d64edf33e4205f01f77c57ef341ba2d3cf75dc967fc12c883f1f4"
+        ),
+        "binary_in_archive": (
+            "axiom-rules-engine-x86_64-unknown-linux-gnu/axiom-rules-engine"
+        ),
+    },
+    "aarch64-unknown-linux-gnu": {
+        "asset": "axiom-rules-engine-aarch64-unknown-linux-gnu.tar.xz",
+        "archive_sha256": (
+            "a50e76829d0889e8ee6542962d523e596f7ab8b2a723962ce2ac78415206ee1f"
+        ),
+        "binary_in_archive": (
+            "axiom-rules-engine-aarch64-unknown-linux-gnu/axiom-rules-engine"
+        ),
+    },
+    "x86_64-apple-darwin": {
+        "asset": "axiom-rules-engine-x86_64-apple-darwin.tar.xz",
+        "archive_sha256": (
+            "1b54d474099c161dd9f5f7c16598c9fc666de62503483b8c3944cd3bdafb9f17"
+        ),
+        "binary_in_archive": "axiom-rules-engine-x86_64-apple-darwin/axiom-rules-engine",
+    },
+    "aarch64-apple-darwin": {
+        "asset": "axiom-rules-engine-aarch64-apple-darwin.tar.xz",
+        "archive_sha256": (
+            "42cd7441d15fd07420065ce4e005b71fbbae290d570448b7f761bc263c63a7d8"
+        ),
+        "binary_in_archive": (
+            "axiom-rules-engine-aarch64-apple-darwin/axiom-rules-engine"
+        ),
+    },
+}
+HOST_ARCHIVE_ENV = "AXIOM_RULES_ENGINE_HOST_ARCHIVE"
+HOST_ARCHIVE_CACHE = Path.home() / ".cache" / "axiom-oracles" / "axiom-rules-engine"
+
+
+def host_engine_target(
+    system: str | None = None, machine: str | None = None
+) -> str | None:
+    """Map the running host to a release target triple, or None if unknown."""
+
+    system = (system or sys.platform).lower()
+    machine = (machine or platform.machine()).lower()
+    if machine in {"x86_64", "amd64"}:
+        arch = "x86_64"
+    elif machine in {"arm64", "aarch64"}:
+        arch = "aarch64"
+    else:
+        return None
+    if system.startswith("linux"):
+        return f"{arch}-unknown-linux-gnu"
+    if system == "darwin":
+        return f"{arch}-apple-darwin"
+    return None
+
+
+def _host_engine_pin(target: str) -> dict[str, Any]:
+    platform_pin = ENGINE_PLATFORM_PINS.get(target)
+    if platform_pin is None:
+        raise DEExecutableError(
+            f"release {ENGINE_PIN['release']} ships no asset for host target {target}"
+        )
+    return {
+        "repository": ENGINE_PIN["repository"],
+        "release": ENGINE_PIN["release"],
+        "commit": ENGINE_PIN["commit"],
+        "target": target,
+        **platform_pin,
+    }
+
+
+def _host_archive_candidates(pin: dict[str, Any]) -> list[Path]:
+    candidates: list[Path] = []
+    override = os.environ.get(HOST_ARCHIVE_ENV)
+    if override:
+        candidates.append(Path(override).expanduser())
+    candidates.append(HOST_ARCHIVE_CACHE / pin["release"] / pin["asset"])
+    return candidates
+
+
+def _host_engine_archive(embedded_bytes: bytes) -> tuple[bytes, dict[str, Any]]:
+    """Choose the archive a fresh replay runs: the embedded producing archive
+    on its own target, otherwise the sha-pinned sibling asset for this host."""
+
+    target = host_engine_target()
+    if target == ENGINE_PIN["target"]:
+        return embedded_bytes, dict(ENGINE_PIN)
+    if target is None:
+        raise DEExecutableError(
+            "cannot execute pinned release command: unsupported host "
+            f"{sys.platform}/{platform.machine()} for target {ENGINE_PIN['target']}"
+        )
+    pin = _host_engine_pin(target)
+    for candidate in _host_archive_candidates(pin):
+        if not candidate.is_file():
+            continue
+        archive_bytes = candidate.read_bytes()
+        _require_equal(
+            _sha256_bytes(archive_bytes),
+            pin["archive_sha256"],
+            f"host engine archive SHA-256 ({candidate})",
+        )
+        return archive_bytes, pin
+    raise DEExecutableError(
+        f"host target {target} cannot execute the pinned {ENGINE_PIN['target']} "
+        f"archive; provide {pin['asset']} (sha256 {pin['archive_sha256']}) via "
+        f"${HOST_ARCHIVE_ENV} or run `python scripts/de_executable.py "
+        "--fetch-host-engine`"
+    )
+
+
+def fetch_host_engine(target: str | None = None) -> Path:
+    """Download this host's sha-pinned release asset into the local cache."""
+
+    import urllib.request
+
+    target = target or host_engine_target()
+    if target is None:
+        raise DEExecutableError("unsupported host; cannot pick a release asset")
+    pin = _host_engine_pin(target)
+    destination = HOST_ARCHIVE_CACHE / pin["release"] / pin["asset"]
+    if destination.is_file() and _sha256(destination) == pin["archive_sha256"]:
+        return destination
+    url = (
+        f"https://github.com/{pin['repository']}/releases/download/"
+        f"{pin['release']}/{pin['asset']}"
+    )
+    try:
+        with urllib.request.urlopen(url, timeout=120) as response:  # noqa: S310
+            archive_bytes = response.read()
+    except OSError as exc:
+        raise DEExecutableError(f"cannot download {url}: {exc}") from exc
+    _require_equal(
+        _sha256_bytes(archive_bytes),
+        pin["archive_sha256"],
+        f"downloaded {pin['asset']} SHA-256",
+    )
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(archive_bytes)
+    return destination
+
 
 REPORT_PIN = {
     "path": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -1432,11 +1586,22 @@ def _validate_replay_receipt(
     fresh = (replay_executor or _execute_release_archive)(
         archive_bytes, descriptor, fixture
     )
-    _require_equal(
-        recorded_binary_sha,
-        fresh["binary_sha256"],
-        "fresh release binary SHA-256",
-    )
+    fresh_target = fresh.get("engine_target", ENGINE_PIN["target"])
+    if fresh_target == ENGINE_PIN["target"]:
+        _require_equal(
+            recorded_binary_sha,
+            fresh["binary_sha256"],
+            "fresh release binary SHA-256",
+        )
+    else:
+        # A sibling-target binary differs by construction; its archive was
+        # bound to ENGINE_PLATFORM_PINS before it ran. Everything the binary
+        # emitted must still match the receipt exactly (checked below).
+        if fresh_target not in ENGINE_PLATFORM_PINS:
+            raise DEExecutableError(
+                f"fresh replay ran on unpinned target {fresh_target!r}"
+            )
+        _require_sha(fresh.get("binary_sha256"), "fresh release binary SHA-256")
     _require_equal(
         engine.get("version_stdout"),
         fresh["version_stdout"],
@@ -1481,7 +1646,10 @@ def _validate_replay_receipt(
         "path": RECEIPT_PATH,
         "sha256": _sha256(path),
         "verification_mode": manifest["replay"]["verification_mode"],
-        "fresh_binary_sha256": fresh["binary_sha256"],
+        # Host-invariant: the producing-target binary SHA-256. On that target
+        # it was just proven equal to the fresh run; on a sibling target the
+        # fresh binary differs by construction and must not enter the status.
+        "fresh_binary_sha256": recorded_binary_sha,
         "fresh_observed_results_sha256": fresh["observed_results_sha256"],
     }
 
@@ -1889,7 +2057,11 @@ def _build_signed_descriptor(
     return descriptor
 
 
-def _extract_release(archive: Path, destination: Path) -> Path:
+def _extract_release(
+    archive: Path,
+    destination: Path,
+    binary_in_archive: str = ENGINE_PIN["binary_in_archive"],
+) -> Path:
     try:
         with tarfile.open(archive, mode="r:xz") as bundle:
             for member in bundle.getmembers():
@@ -1904,7 +2076,7 @@ def _extract_release(archive: Path, destination: Path) -> Path:
             bundle.extractall(destination, filter="data")
     except (OSError, tarfile.TarError) as exc:
         raise DEExecutableError(f"cannot extract release archive: {exc}") from exc
-    binary = destination / ENGINE_PIN["binary_in_archive"]
+    binary = destination / binary_in_archive
     if not binary.is_file():
         raise DEExecutableError("release archive lacks the pinned engine binary")
     binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
@@ -1950,19 +2122,30 @@ def _execute_release_archive_raw(
     archive_bytes: bytes,
     descriptor: dict[str, Any],
     request: dict[str, Any],
+    *,
+    engine: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Compile and run an exact request from pinned release bytes."""
+    """Compile and run an exact request from pinned release bytes.
 
+    ``engine`` defaults to the producing pin; a verifier on another target
+    passes the sha-bound sibling pin from ``ENGINE_PLATFORM_PINS``.
+    """
+
+    engine = dict(engine or ENGINE_PIN)
     _require_equal(
         _sha256_bytes(archive_bytes),
-        ENGINE_PIN["archive_sha256"],
+        engine["archive_sha256"],
         "engine archive SHA-256",
     )
     with tempfile.TemporaryDirectory(prefix="de-kindergeld-replay-") as raw_tmp:
-        temp = Path(raw_tmp)
-        archive = temp / ENGINE_PIN["asset"]
+        # Canonical path: macOS temp dirs live under the /var -> /private/var
+        # alias and the engine rejects aliased RuleSpec roots.
+        temp = Path(raw_tmp).resolve()
+        archive = temp / engine["asset"]
         archive.write_bytes(archive_bytes)
-        binary = _extract_release(archive, temp / "engine")
+        binary = _extract_release(
+            archive, temp / "engine", binary_in_archive=engine["binary_in_archive"]
+        )
         version = _run_process([str(binary), "--version"])
         try:
             version_stdout = version.stdout.decode("utf-8", errors="strict").strip()
@@ -2006,6 +2189,7 @@ def _execute_release_archive_raw(
             raise DEExecutableError("release replay response lacks a results array")
         observed_results = response["results"]
         return {
+            "engine_target": engine["target"],
             "binary_sha256": _sha256(binary),
             "version_stdout": version_stdout,
             "compiled_artifact_sha256": _sha256(artifact),
@@ -2024,10 +2208,12 @@ def _execute_release_archive(
 ) -> dict[str, Any]:
     """Freshly replay exact committed rows; never trust the stored transcript."""
 
+    host_bytes, host_engine = _host_engine_archive(archive_bytes)
     result = _execute_release_archive_raw(
-        archive_bytes,
+        host_bytes,
         descriptor,
         fixture["request"],
+        engine=host_engine,
     )
     _require_equal(
         result["observed_results"],
@@ -2595,6 +2781,12 @@ def main() -> int:
     modes.add_argument("--check", action="store_true")
     modes.add_argument("--print-status", action="store_true")
     modes.add_argument("--run", action="store_true")
+    modes.add_argument(
+        "--fetch-host-engine",
+        action="store_true",
+        help="download this host's sha-pinned release asset into "
+        f"{HOST_ARCHIVE_CACHE} so --check can replay on a non-{ENGINE_PIN['target']} host",
+    )
     parser.add_argument("--engine-archive", type=Path)
     parser.add_argument("--rulespec-root", type=Path)
     parser.add_argument("--signing-public-key", type=Path)
@@ -2603,6 +2795,10 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
+        if args.fetch_host_engine:
+            destination = fetch_host_engine()
+            print(f"host engine archive ready: {destination}")
+            return 0
         if args.run:
             missing_args = [
                 name
