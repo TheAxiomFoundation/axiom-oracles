@@ -40,10 +40,11 @@ from .de_worker import (
     _euromod_person,
 )
 
-DE_KINDERGELD_ELIGIBILITY_OUTPUTS = (
-    Concepts.DE_KINDERGELD_MONTHLY,
-    Concepts.DE_KINDERGELD_QUALIFYING_CHILD_COUNT,
-)
+#: The dual-oracle comparison compares the household amount only: EUROMOD has
+#: no per-child eligibility output. The qualifying-child concept is read from
+#: GETTSIM through DE_KINDERGELD_GETTSIM_TARGETS (live anchors) and attaches to
+#: the Axiom leg once rulespec-de encodes §§ 63/32.
+DE_KINDERGELD_ELIGIBILITY_OUTPUTS = (Concepts.DE_KINDERGELD_MONTHLY,)
 
 #: GETTSIM targets for this grid: the household amount, the recipient's claim
 #: count, and the per-child eligibility judgement (read per person; the

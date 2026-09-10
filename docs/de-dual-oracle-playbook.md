@@ -112,11 +112,26 @@ Known oracle limits, recorded so they are not mistaken for findings:
   § 62 residence-title conditions, § 64 priority or § 65 exclusions. Those
   parts of the rulespec-de encoding will rest on statute-bound proof atoms.
 
-The EUROMOD leg of this grid has not been run yet (no EUROMOD host in the
-session that added it); run it with the same command as the canonical grid
-and commit the report before adding a comparison config. The Axiom leg
-attaches when rulespec-de encodes §§ 63/32; the concept id is named for the
-ledger's law-derived input `qualifying_child_count` for that reason.
+The comparison config is `comparisons/de-kindergeld-eligibility.yaml`
+(runner `gettsim-synthetic-compare`, same engine contract as the canonical
+grid); its committed report is
+`dashboard/public/data/euromod-gettsim-de-kindergeld-eligibility.json`.
+First run (2026-09-08, EUROMOD J2.0+ DE_2025 and GETTSIM 1.2.1): 8 of 8
+household amounts match to the cent — both engines pay EUR 255 for the
+17-year-old, the 18- and 24-year-olds in training and the 20-hour worker, and
+nothing for the 18-year-old not in training, the 25-year-old and the 25-hour
+worker. The dual-oracle grid compares the household amount only, because
+EUROMOD has no per-child eligibility output; GETTSIM's claim count is pinned
+by the live anchors and attaches to the Axiom leg as
+`kindergeld_qualifying_child_count` when rulespec-de encodes §§ 63/32 (the
+concept id is named for the ledger's law-derived input for that reason).
+
+Apple Silicon note for the EUROMOD leg: `/usr/local/bin/python3-intel64`
+builds a venv whose `bin/python` is a universal binary that still launches
+as arm64, so `EUROMOD_PYTHON` must point at a wrapper that runs
+`exec arch -x86_64 <venv>/bin/python "$@"`, and the venv's wheels must be
+installed through that wrapper. The JRC download rejects plain `curl`; send
+browser-like `User-Agent`, `Accept` and `Referer` headers.
 
 ## Filed model findings
 

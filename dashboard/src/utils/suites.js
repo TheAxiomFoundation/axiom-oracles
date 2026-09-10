@@ -74,6 +74,7 @@ export const FAMILY_LABELS = {
   be_study_allowance: "Belgium study allowance",
   be_disposable_income: "Belgium disposable income",
   de_worker_tax_contributions: "Germany worker tax and social insurance",
+  de_kindergeld: "Germany Kindergeld",
   canada_personal_income_tax: "Canada personal income tax",
   canada_family_benefits: "Canada family and disability benefits",
 };
@@ -830,6 +831,14 @@ const SUITE_OVERRIDES = {
     region: "de",
     kind: "household",
     order: 600,
+  },
+  "de-kindergeld-eligibility": {
+    family: "de_kindergeld",
+    jurisdiction: "DEU",
+    label: "Germany Kindergeld child eligibility",
+    region: "de",
+    kind: "household",
+    order: 601,
   },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",

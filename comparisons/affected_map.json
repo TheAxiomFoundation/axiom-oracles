@@ -394,6 +394,13 @@
       "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
+      "suite": "de-kindergeld-eligibility",
+      "name": "de-kindergeld-eligibility",
+      "report": "euromod-gettsim-de-kindergeld-eligibility.json",
+      "repos": [],
+      "source": "comparisons/de-kindergeld-eligibility.yaml"
+    },
+    {
       "suite": "de-tanf-ecps",
       "name": null,
       "report": "axiom-policyengine-de-tanf-ecps.json",

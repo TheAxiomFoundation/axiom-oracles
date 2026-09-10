@@ -13,7 +13,6 @@ case_sets:
     locale: DE
     outputs:
     - de:policies/worker_dual_oracle_baseline#kindergeld_monthly
-    - de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count
     cases:
     - id: child-17
       period: '2025'
