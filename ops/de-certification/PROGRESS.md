@@ -74,6 +74,20 @@
   headings, entitlement conditions — where bearing instruments and the
   encoder work are expected), the 28 discovered candidates (BKGG, EStG
   § 31, corpus citations, unresolved references), and 17 supplementals.
+- Kindergeld reads, DA-KG 2025 Kapitel A (112 headings, 2026-09-07): 20
+  excluded (structural headings, A 21 repealed, A 19.2 proof of disability);
+  92 classified as open bearing rows — 28 spine restatements (§§ 62–66, 78)
+  and 64 entitlement conditions from outside the spine (AO residence, § 1
+  EStG, AufenthG/FreizügG, BGB kinship, foster children, the § 32 Abs. 4
+  grounds for adult children including the quantified disability
+  self-support test, the second-training 20-hour exclusion). Each names the
+  law-derived input it decides (claimant_entitlement, qualifying_child_count,
+  recipient_priority, substitute_child_benefit_exclusion). The DA-KG reads
+  are complete: 465 candidates, 45 pending (28 discovered candidates, 17
+  supplementals); 104 open dependencies (4 law-derived inputs, 4
+  unclassified inputs, 96 bearing instruments). The open count is now the
+  honest size of the encoder work: the entitlement layer (§§ 62–65, § 32
+  EStG) is unencoded and every DA-KG rule on it stays open until it is.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

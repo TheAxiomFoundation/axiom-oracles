@@ -230,6 +230,32 @@ producer's exact rederivation before it reaches certify.
   issued under § 68 Abs. 5 EStG, from O 4.5) and RiStBV (`de-kg-suppl-017`,
   from S 1.2). Frontier 465 candidates, 157 pending (all in Kapitel A plus
   the 28 discovered candidates and 17 supplementals); 12 open dependencies.
+- 2026-09-07 — DA-KG 2025 Kapitel A (Anspruchsvoraussetzungen), 112
+  headings: 20 excluded (18 structural headings, A 21 "(weggefallen)", and
+  A 19.2, which prescribes how a disability is proven and that
+  consideration tracks the proven period) and 92 classified as OPEN bearing
+  rows. The captured § 66 module takes four law-derived inputs —
+  `claimant_entitlement`, `qualifying_child_count`, `recipient_priority`,
+  `substitute_child_benefit_exclusion` — and every Kapitel A heading that
+  states a condition of law deciding one of them bears on the computed
+  output through that input: 28 `spine_restatement` rows (§ 62 Abs. 1, 1a,
+  2 claimant conditions and IdNr; § 63 Abs. 1 child categories,
+  identification and territorial condition; § 64 priority; § 65 exclusions
+  and the EU differential; § 66 Abs. 1 amount table and ordinal rule in
+  A 30; § 66 Abs. 2 month principle in A 20.4 and A 31; § 78 Abs. 5) and 64
+  `entitlement_condition` rows (§§ 8, 9 AO residence and the treaty
+  fictions; § 1 Abs. 2, 3 EStG; AufenthG, FreizügG/EU and treaty-state
+  workers; §§ 1591, 1592, 1755, 1772 BGB kinship; foster-child conditions;
+  the § 32 Abs. 4 grounds for adult children — job-seeking, training in all
+  its forms with begin/end/interruption rules, transition period, lack of a
+  place, the seven voluntary services, disability with the quantified
+  self-support test of A 19.4–19.6 (Grundfreibetrag, additional need,
+  disposable net income, third-party benefits) — and the § 32 Abs. 4 Satz 2
+  and 3 second-training exclusion with the 20-hour rule). Each row names
+  the input it bears on and stays open until §§ 62–65 / § 32 EStG are
+  encoded and the rule bound. Frontier 465 candidates, 45 pending (the 28
+  discovered candidates and 17 supplementals); 104 open dependencies
+  (4 law-derived inputs, 4 unclassified inputs, 96 bearing instruments).
 
 ## Closing worklist (seed enumeration — discovery incomplete)
 
