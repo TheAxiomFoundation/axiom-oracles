@@ -101,6 +101,16 @@
   (8 law-derived, 0 unclassified, 94 bearing). Provision texts were
   fetched from axiom-corpus at the pinned commit and hash-verified — no
   local corpus checkout needed for spine reads.
+- Discovered candidates (2026-09-08): 27 of 28 dispositioned — SteFeG
+  encoded (its § 66 amounts are the module's two versions); 14 open bearing
+  (EStG §§ 1, 2, 19, 31, 32, BKGG, SGB III, SGB VI, BEEG, AufenthG,
+  FreizügG/EU, AO §§ 139a/139b, SGB VII § 217 Abs. 3 old, EEA Agreement),
+  of which five are not in the pinned corpus release and need capture; 11
+  excluded (data, procedure, recovery references; inbound WoGG/UhVorschG;
+  EStG § 19a mis-resolved from SGB I); the DA-KG seed recorded as a
+  container. One left pending: the 26.5.2026 EStG amending act (not in the
+  corpus). Frontier 18 of 465 pending (17 supplementals + that act); 116
+  open dependencies (8 law-derived, 0 unclassified, 108 bearing).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

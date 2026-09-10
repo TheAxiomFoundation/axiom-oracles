@@ -9200,6 +9200,158 @@ committed_decisions:
     classification: administration_only
     reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
     bears_on_computed_surface: false
+  - id: de-kg-instr-001
+    status: classified-with-reason
+    classification: document_container
+    reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. de-subject-002 retrieved the 2024 Randstrichfassung (1 304 209 bytes), the edition the 2025 text replaces; it was not read separately.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-002
+    status: classified-with-reason
+    body_sha256: cf33f6972a5fb2182e0c0e8d37160ae15fbf61c41fdae663886004dd3e36565b
+    classification: entitlement_condition
+    reason: 'The Bundeskindergeldgesetz (act-level corpus row: BGBl I 1995, 1250; last amended 16.4.2026), cited by § 63 Abs. 1 Satz 7 EStG: ''Kinder im Sinne von § 2 Absatz 4 Satz 2 des Bundeskindergeldgesetzes werden nicht berücksichtigt.'' That reference makes a BKGG rule a condition of which children count under § 63, and the DA-KG (A 1 Abs. 2, A 7 Abs. 2) adds the EStG-over-BKGG priority. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the cited rule is bound to them.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-003
+    status: classified-with-reason
+    body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
+    classification: amount_trigger_source
+    reason: 'EStG § 31 (Familienleistungsausgleich), cited by § 66 Abs. 3 Satz 1: the Kindergeld is raised ''entsprechend'' when ''die Freibeträge für Kinder nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben'' are raised. § 31 Satz 1 places the tax exemption of a child''s subsistence minimum in either the § 32 Abs. 6 allowances or Kindergeld, Satz 3 pays Kindergeld monthly as a tax refund, Satz 4–7 govern the assessment-stage add-back. The captured module takes the increase trigger and the increased amount as inputs (leaves child_allowances_under_sections_31_and_32_6_1_are_increased, correspondingly_increased_kindergeld_amount, both law-derived and open). Bears on the computed amount through those leaves; open until the § 31 / § 32 Abs. 6 allowance history is encoded.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-1808736a82828a59
+    status: encoded
+    classification: amendment_act
+    reason: 'The Steuerfortentwicklungsgesetz (BGBl. 2024 I Nr. 449, 23.12.2024) entered the frontier as the amendment act targeting § 66: Art. 1 replaces ''250 Euro'' by ''255 Euro'' in § 66 Abs. 1 from 1 January 2025 and Art. 2 sets 259 Euro from 1 January 2026. Both amounts and both effective dates are encoded as the two versions of monthly_kindergeld_per_child in the captured module de:statutes/estg/66, whose proof atoms cite this act''s document-1 row by corpus citation path and excerpt. The act''s other articles (income-tax tariff) do not target the spine.'
+    encoded_by: de:statutes/estg/66
+  - id: de-kg-instr-1c8fd922bf6e3662
+    status: excluded-with-reason
+    classification: data_and_procedure_reference
+    reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-32a81be6d35e33be
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-3841260753e31d86
+    status: classified-with-reason
+    body_sha256: c11d89ee6b4d2dfd607f4fccb1ed272c72035aae7b7b7d5e58b7d50324dc7a03
+    classification: exclusion_comparator
+    reason: SGB VI (act-level corpus row), cited by § 65 Satz 1 Nr. 1 EStG as the comparator 'dem Kinderzuschuss aus der gesetzlichen Rentenversicherung nach § 270 des Sechsten Buches Sozialgesetzbuch in der bis zum 16. November 2016 geltenden Fassung'. Whether a foreign child benefit excludes Kindergeld is tested by comparability with that (repealed) SGB VI child supplement, so the comparator's definition is part of the exclusion rule (A 28.2). Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-3875634198c25414
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-43b69c0fdc7079aa
+    status: classified-with-reason
+    body_sha256: fb916ad7151c1e2440e28f2b117f74ebd73b325f48b6d54e98108fffd697012d
+    classification: entitlement_condition
+    reason: 'EStG § 2 (Umfang der Besteuerung, Begriffsbestimmungen), cited by § 62 Abs. 1a Satz 2 EStG: the three-month exclusion of EU/EEA nationals does not apply where the claimant shows ''inländische Einkünfte im Sinne des § 2 Absatz 1 Satz 1 Nummer 1 bis 4'' (agriculture and forestry, business, self-employment, employment). § 2 Abs. 1 Satz 1 Nr. 1–4 therefore delimits an entitlement condition (A 4.2 Abs. 4 Satz 2), notwithstanding EuGH C-411/20''s non-application of § 62 Abs. 1a Satz 1–2 noted in the DA-KG. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-4692150bbe1f7849
+    status: excluded-with-reason
+    classification: data_and_procedure_reference
+    reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-4e1f544ea66cccdf
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Unresolved reference ''Abgabenordnung'' matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The AO is not in the pinned corpus release as a statute row; §§ 139a, 139b AO must be captured to encode the identification condition. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG
+      is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-57142250c1d7c52f
+    status: classified-with-reason
+    classification: exclusion_comparator
+    reason: Unresolved reference 'Siebten Buches Sozialgesetzbuch' matched in § 65 Satz 1 Nr. 1 EStG as the comparator 'der Kinderzulage aus der gesetzlichen Unfallversicherung nach § 217 Absatz 3 des Siebten Buches Sozialgesetzbuch in der bis zum 30. Juni 2020 geltenden Fassung'. As with the SGB VI child supplement, comparability with that (repealed) SGB VII child allowance is part of the exclusion test (A 28.2). SGB VII is not in the pinned corpus release; § 217 Abs. 3 in its pre-1.7.2020 version must be captured to encode the comparator. Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-5fbc4ffc01cca130
+    status: excluded-with-reason
+    body_sha256: 91cefe81ddf95a56756f6e05c89a32ef60a4d268f8f97b583912eea3d96785a6
+    classification: recovery_reference
+    reason: 'SGB XII (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off of refund claims against Kindergeld is barred where the claimant proves he would become ''hilfebedürftig im Sinne der Vorschriften des Zwölften Buches Sozialgesetzbuch über die Hilfe zum Lebensunterhalt''. The need test qualifies the excluded set-off machinery of § 75; it does not enter the entitlement or the monthly amount.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-6b0cd760b62eaed2
+    status: excluded-with-reason
+    classification: data_and_procedure_reference
+    reason: 'Unresolved reference ''Steuerberatungsgesetzes'' matched in § 77 Abs. 2 EStG: fees of a representative authorised under the Steuerberatungsgesetz are reimbursable in a successful objection. Part of the excluded appeal-costs provision; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-6e0720e53a02234e
+    status: excluded-with-reason
+    body_sha256: 8bc9d521ed936f4be196ec6bb5f1234a4f1a270be8cb67b6441ba4d23764660c
+    classification: cross_program_inbound
+    reason: 'Wohngeldgesetz (act-level corpus row), which entered the frontier only through an INBOUND reference: WoGG § 17 cites ''§ 65'' EStG when it lists Kindergeld and § 65 benefits for the housing-benefit computation. No spine provision cites the WoGG; the reference governs how Wohngeld treats Kindergeld, which is that programme''s encoding (parallel to the DK ledger''s cross_program_treatment exclusion of § 10). It changes nothing in §§ 62–78 EStG.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-703d3b12aaab39f8
+    status: classified-with-reason
+    body_sha256: a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416
+    classification: entitlement_condition
+    reason: EStG § 32 (Kinder, Freibeträge für Kinder), cited by § 63 Abs. 1 Satz 1 Nr. 1 ('Kinder im Sinne des § 32 Absatz 1') and Satz 2 ('§ 32 Absatz 3 bis 5 gilt entsprechend'), by § 66 Abs. 3 (Abs. 6 Satz 1 allowances) and by § 69 (Abs. 6 data). Abs. 1 defines children (first-degree relatives, foster children), Abs. 2 the priority between adoptive and foster status, Abs. 3 the month of live birth to the completed 18th year, Abs. 4 the grounds for adult children (job-seeking under 21; under 25 in training, transition period, lacking a place, the enumerated voluntary services; disability arising before 25) with the Satz 2–3 second-training exclusion (20 weekly hours, training service relationship, marginal employment under §§ 8, 8a SGB IV), Abs. 5 the military-service extension, Abs. 6 the allowance amounts (3 414 EUR and 1 464 EUR) whose increase triggers § 66 Abs. 3. The DA-KG Kapitel A rows A 7–A 20.4 apply these paragraphs. Bears on the law-derived input qualifying_child_count (open
+      dependency); open until §§ 63, 32 EStG are encoded and the cited rule is bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-70e222e42c3fbd52
+    status: excluded-with-reason
+    body_sha256: ab6442cd2f52fc33c4f72ca19a8d879e20f48e7cff58e44c095808a3d922db22
+    classification: data_and_procedure_reference
+    reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-7b88fe63abf1deb1
+    status: classified-with-reason
+    body_sha256: 626f7bb866fc0a1c6e7a2ccc96dac66ba7131eb8ee87ca981d2578d7a3f97366
+    classification: entitlement_condition
+    reason: 'EStG § 19 (employment income), cited by § 62 Abs. 1a Satz 2 EStG: the domestic income that lifts the three-month exclusion excludes ''Einkünfte nach § 19 Absatz 1 Satz 1 Nummer 2'' (pensions and survivor benefits from a former employment). The second match, ''§ 19 Absatz 2'' in § 68 Abs. 5, is a citation of SGB I § 19 Abs. 2 (Arbeitsförderung) inside an excluded data provision and is not a reference to EStG § 19. The § 62 Abs. 1a citation delimits an entitlement condition (A 4.2 Abs. 4 Satz 2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-87d3e50373adabc2
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-995400ec8f736a51
+    status: excluded-with-reason
+    body_sha256: 96106a6ca5a4a81da21e1522e43c2e633af31f8b1f88470b6715675750de2cca
+    classification: misresolved_citation
+    reason: 'The citation scan resolved ''§ 19a'' in § 68 Abs. 5 EStG to EStG § 19a (Sondervorschrift für Einkünfte aus nichtselbständiger Arbeit bei Vermögensbeteiligungen). The cited text reads ''für Leistungen der Grundsicherung für Arbeitsuchende nach § 19a Absatz 2 … des Ersten Buches Sozialgesetzbuch'': the reference is to SGB I § 19a Abs. 2, not to the EStG. EStG § 19a (employee share schemes) is not cited by any spine provision and has no bearing on Kindergeld; the SGB I reference sits in the excluded data provision and is dispositioned under the ''Ersten Buches Sozialgesetzbuch'' candidate.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-a365b83505706342
+    status: excluded-with-reason
+    body_sha256: c99788b126259e0f376231245bf47d0354ef30252d33cb4fc534800c11401118
+    classification: cross_program_inbound
+    reason: Unterhaltsvorschussgesetz (act-level corpus row). It entered the frontier through an INBOUND reference — UhVorschG § 2 cites '§ 65' EStG when it deducts Kindergeld and § 65 benefits from the maintenance advance — and through § 68 Abs. 5 EStG, which authorises data transmission to 'den nach § 9 Absatz 1 Satz 2 des Unterhaltsvorschussgesetzes zuständigen Stellen'. The first governs the Unterhaltsvorschuss computation (that programme's ledger, conformance/closure/de-unterhaltsvorschuss.yaml); the second is part of an excluded data provision. Neither changes §§ 62–78 EStG.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-a66a4cb13aaf0599
+    status: excluded-with-reason
+    classification: data_and_procedure_reference
+    reason: Unresolved reference 'Zehnten Buches Sozialgesetzbuch' matched in § 74 Abs. 2 EStG (§§ 102–109 and 111–113 SGB X applied to refund claims of social-benefit providers) and § 68 Abs. 7 EStG (§ 79 Abs. 2–4 SGB X for automated retrieval). Both citations sit in excluded payout-routing and data provisions; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-b96e03076e143e8e
+    status: classified-with-reason
+    body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
+    classification: entitlement_condition
+    reason: SGB III (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG — a study, recognition or job-search title or a humanitarian title qualifies only while the holder is employed, on parental leave or takes 'laufende Geldleistungen nach dem Dritten Buch Sozialgesetzbuch' — and by § 65 Satz 3 EStG, whose exception to the EU-official exclusion requires a 'Versicherungspflichtverhältnis zur Bundesagentur für Arbeit nach § 24 des Dritten Buches Sozialgesetzbuch' or insurance freedom 'nach § 28 Absatz 1 Nummer 1'. § 68 Abs. 7 adds a data-retrieval citation. The SGB III benefit and insurance concepts are therefore conditions of claimant_entitlement (A 4.3.4) and of substitute_child_benefit_exclusion (A 28.3 Abs. 4). Bears on both law-derived inputs (open dependencies); open until §§ 62, 65 EStG are encoded with those SGB III terms bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-c795a7af57079afc
+    status: excluded-with-reason
+    body_sha256: b9f3061e4404328c68116fbf1c9fa5ae69a66715e748466312ab9ee22c37711e
+    classification: recovery_reference
+    reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-instr-ce168756ed1a28cb
+    status: classified-with-reason
+    body_sha256: 039de9931d61ee11b13fe82082115c085a24f84017c78fd2779dbad4118fde6b
+    classification: entitlement_condition
+    reason: 'EStG § 1 (Steuerpflicht), cited by § 62 Abs. 1 Satz 1 Nr. 2 EStG: a person without domestic residence is entitled if ''nach § 1 Absatz 2 unbeschränkt einkommensteuerpflichtig'' (German nationals in public service abroad paid from a domestic public purse and their household members, subject to Abs. 2 Satz 2) or ''nach § 1 Absatz 3 als unbeschränkt einkommensteuerpflichtig behandelt wird'' (on application, with 90 percent of income subject to German tax or foreign income at most the Grundfreibetrag). § 1 Abs. 2 and 3 are therefore entitlement conditions in their own terms (A 2.2.1). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-db7693cd9f018ff4
+    status: classified-with-reason
+    body_sha256: a8adb00ead8b612cd2acf62607433f9b6f77423a9e56ce7eccbd9deef8bf18af
+    classification: entitlement_condition
+    reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-f480bf90ee72ae1d
+    status: excluded-with-reason
+    classification: data_and_procedure_reference
+    reason: Unresolved reference 'Ersten Buches Sozialgesetzbuch' matched in § 68 Abs. 5 EStG, which names the benefit providers under §§ 19 Abs. 2, 19a Abs. 2, 25 Abs. 3 and 28 Abs. 2 SGB I to whom the Familienkassen may transmit case data. Part of the excluded data provision; no entitlement or amount rule.
+    bears_on_computed_surface: false
   leaf_classifications:
   - input: child_allowances_under_sections_31_and_32_6_1_are_increased
     leaf_kind: law_derived
@@ -9674,39 +9826,12 @@ computed:
     instrument_count: 465
     counts:
       total: 465
-      encoded: 0
-      classified-with-reason: 97
-      excluded-with-reason: 323
-      pending: 45
+      encoded: 1
+      classified-with-reason: 112
+      excluded-with-reason: 334
+      pending: 18
     pending:
-    - de-kg-instr-001
-    - de-kg-instr-002
-    - de-kg-instr-003
-    - de-kg-instr-1808736a82828a59
-    - de-kg-instr-1c8fd922bf6e3662
-    - de-kg-instr-32a81be6d35e33be
-    - de-kg-instr-3841260753e31d86
-    - de-kg-instr-3875634198c25414
-    - de-kg-instr-43b69c0fdc7079aa
-    - de-kg-instr-4692150bbe1f7849
-    - de-kg-instr-4e1f544ea66cccdf
-    - de-kg-instr-57142250c1d7c52f
-    - de-kg-instr-5fbc4ffc01cca130
-    - de-kg-instr-6b0cd760b62eaed2
-    - de-kg-instr-6e0720e53a02234e
-    - de-kg-instr-703d3b12aaab39f8
-    - de-kg-instr-70e222e42c3fbd52
-    - de-kg-instr-7b88fe63abf1deb1
-    - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-8939b62ab3b44a39
-    - de-kg-instr-995400ec8f736a51
-    - de-kg-instr-a365b83505706342
-    - de-kg-instr-a66a4cb13aaf0599
-    - de-kg-instr-b96e03076e143e8e
-    - de-kg-instr-c795a7af57079afc
-    - de-kg-instr-ce168756ed1a28cb
-    - de-kg-instr-db7693cd9f018ff4
-    - de-kg-instr-f480bf90ee72ae1d
     - de-kg-suppl-001
     - de-kg-suppl-002
     - de-kg-suppl-003
@@ -16883,7 +17008,7 @@ computed:
       reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
       bears_on_computed_surface: false
     - id: de-kg-instr-001
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-subject-001
       - de-subject-002
@@ -16894,8 +17019,11 @@ computed:
       - https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790
       - https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2
       - https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf
+      classification: document_container
+      reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. de-subject-002 retrieved the 2024 Randstrichfassung (1 304 209 bytes), the edition the 2025 text replaces; it was not read separately.
+      bears_on_computed_surface: false
     - id: de-kg-instr-002
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-b554431cd2c4259bcd01
       - de-subject-005
@@ -16908,8 +17036,11 @@ computed:
       document_citation_path: de/statute/bkgg-1996
       legal_authority_url: https://www.gesetze-im-internet.de/bkgg_1996/
       fundstelle: BGBl I 1995, 1250, 1378 (1996 I 714)
+      classification: entitlement_condition
+      reason: 'The Bundeskindergeldgesetz (act-level corpus row: BGBl I 1995, 1250; last amended 16.4.2026), cited by § 63 Abs. 1 Satz 7 EStG: ''Kinder im Sinne von § 2 Absatz 4 Satz 2 des Bundeskindergeldgesetzes werden nicht berücksichtigt.'' That reference makes a BKGG rule a condition of which children count under § 63, and the DA-KG (A 1 Abs. 2, A 7 Abs. 2) adds the EStG-over-BKGG priority. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the cited rule is bound to them.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-003
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-b55b0cb5e19d73524db2
       identity_kind: corpus_citation
@@ -16920,8 +17051,11 @@ computed:
       body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: amount_trigger_source
+      reason: 'EStG § 31 (Familienleistungsausgleich), cited by § 66 Abs. 3 Satz 1: the Kindergeld is raised ''entsprechend'' when ''die Freibeträge für Kinder nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben'' are raised. § 31 Satz 1 places the tax exemption of a child''s subsistence minimum in either the § 32 Abs. 6 allowances or Kindergeld, Satz 3 pays Kindergeld monthly as a tax refund, Satz 4–7 govern the assessment-stage add-back. The captured module takes the increase trigger and the increased amount as inputs (leaves child_allowances_under_sections_31_and_32_6_1_are_increased, correspondingly_increased_kindergeld_amount, both law-derived and open). Bears on the computed amount through those leaves; open until the § 31 / § 32 Abs. 6 allowance history is encoded.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-1808736a82828a59
-      status: pending
+      status: encoded
       discovery_refs:
       - de-corpus-42cb174d59c13ca15840
       - de-corpus-6d4c3e36d18b468a9b05
@@ -16936,22 +17070,31 @@ computed:
       title_short: SteFeG (BGBl. 2024 I Nr. 449)
       date_document: '2024-12-23'
       document_type: Änderungsgesetz (amendment act)
+      classification: amendment_act
+      reason: 'The Steuerfortentwicklungsgesetz (BGBl. 2024 I Nr. 449, 23.12.2024) entered the frontier as the amendment act targeting § 66: Art. 1 replaces ''250 Euro'' by ''255 Euro'' in § 66 Abs. 1 from 1 January 2025 and Art. 2 sets 259 Euro from 1 January 2026. Both amounts and both effective dates are encoded as the two versions of monthly_kindergeld_per_child in the captured module de:statutes/estg/66, whose proof atoms cite this act''s document-1 row by corpus citation path and excerpt. The act''s other articles (income-tax tariff) do not target the spine.'
+      encoded_by: de:statutes/estg/66
     - id: de-kg-instr-1c8fd922bf6e3662
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-ea9a43c8df78b3a1c389
       identity_kind: unresolved_reference
       raw_references:
       - Verordnung (EG) Nr. 883/2004
+      classification: data_and_procedure_reference
+      reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
+      bears_on_computed_surface: false
     - id: de-kg-instr-32a81be6d35e33be
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-4b0837db61b89b31ba27
       identity_kind: unresolved_reference
       raw_references:
       - Freizügigkeitsgesetzes/EU
+      classification: entitlement_condition
+      reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-3841260753e31d86
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-5016e64524a26332b65e
       - de-corpus-65740a9c68e8a6636d75
@@ -16964,15 +17107,21 @@ computed:
       document_citation_path: de/statute/sgb-6
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_6/
       fundstelle: BGBl I 1989, 2261 (1990 I 1337)
+      classification: exclusion_comparator
+      reason: SGB VI (act-level corpus row), cited by § 65 Satz 1 Nr. 1 EStG as the comparator 'dem Kinderzuschuss aus der gesetzlichen Rentenversicherung nach § 270 des Sechsten Buches Sozialgesetzbuch in der bis zum 16. November 2016 geltenden Fassung'. Whether a foreign child benefit excludes Kindergeld is tested by comparability with that (repealed) SGB VI child supplement, so the comparator's definition is part of the exclusion rule (A 28.2). Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
+      bears_on_computed_surface: true
     - id: de-kg-instr-3875634198c25414
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-d4040ccf15ddd057ae22
       identity_kind: unresolved_reference
       raw_references:
       - Aufenthaltsgesetzes
+      classification: entitlement_condition
+      reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
+      bears_on_computed_surface: true
     - id: de-kg-instr-43b69c0fdc7079aa
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-76f0ac1f8c887e222870
       identity_kind: corpus_citation
@@ -16983,15 +17132,21 @@ computed:
       body_sha256: fb916ad7151c1e2440e28f2b117f74ebd73b325f48b6d54e98108fffd697012d
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: entitlement_condition
+      reason: 'EStG § 2 (Umfang der Besteuerung, Begriffsbestimmungen), cited by § 62 Abs. 1a Satz 2 EStG: the three-month exclusion of EU/EEA nationals does not apply where the claimant shows ''inländische Einkünfte im Sinne des § 2 Absatz 1 Satz 1 Nummer 1 bis 4'' (agriculture and forestry, business, self-employment, employment). § 2 Abs. 1 Satz 1 Nr. 1–4 therefore delimits an entitlement condition (A 4.2 Abs. 4 Satz 2), notwithstanding EuGH C-411/20''s non-application of § 62 Abs. 1a Satz 1–2 noted in the DA-KG. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-4692150bbe1f7849
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-995170ff8fc2b96f7c5b
       identity_kind: unresolved_reference
       raw_references:
       - Verordnung (EU) 2017/492
+      classification: data_and_procedure_reference
+      reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-instr-4e1f544ea66cccdf
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-043880c8a12aa41c518e
       - de-corpus-05a43bd8718a27d94769
@@ -17003,15 +17158,22 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Abgabenordnung
+      classification: entitlement_condition
+      reason: 'Unresolved reference ''Abgabenordnung'' matched in §§ 62, 63, 67, 68, 69, 70 and 77 EStG. Two of those citations are entitlement conditions: § 62 Abs. 1 Satz 2 (''Voraussetzung für den Anspruch nach Satz 1 ist, dass der Berechtigte durch die an ihn vergebene Identifikationsnummer (§ 139b der Abgabenordnung) identifiziert wird'') and § 63 Abs. 1 Satz 3–4 (identification of the child by its § 139b AO IdNr or, for a child not taxable under § 139a Abs. 2 AO, in another suitable way), with the retroactivity rules of § 62 Abs. 1 Satz 3 and § 63 Abs. 1 Satz 5 (A 3, A 22). The remaining citations (§ 67 IdNr disclosure, § 68 § 31a Abs. 2 and § 101 AO, § 69 § 139b Abs. 3 data, § 70 § 176 AO, § 77 § 126 AO) sit in excluded procedure, data and correction provisions. The AO is not in the pinned corpus release as a statute row; §§ 139a, 139b AO must be captured to encode the identification condition. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62
+        EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-57142250c1d7c52f
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-b0eeca04259f7ddeb7ff
       identity_kind: unresolved_reference
       raw_references:
       - Siebten Buches Sozialgesetzbuch
+      classification: exclusion_comparator
+      reason: Unresolved reference 'Siebten Buches Sozialgesetzbuch' matched in § 65 Satz 1 Nr. 1 EStG as the comparator 'der Kinderzulage aus der gesetzlichen Unfallversicherung nach § 217 Absatz 3 des Siebten Buches Sozialgesetzbuch in der bis zum 30. Juni 2020 geltenden Fassung'. As with the SGB VI child supplement, comparability with that (repealed) SGB VII child allowance is part of the exclusion test (A 28.2). SGB VII is not in the pinned corpus release; § 217 Abs. 3 in its pre-1.7.2020 version must be captured to encode the comparator. Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
+      bears_on_computed_surface: true
     - id: de-kg-instr-5fbc4ffc01cca130
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-7dd34add44b01ccd165a
       - de-corpus-db8f3aca1ba2a76048cb
@@ -17024,15 +17186,21 @@ computed:
       document_citation_path: de/statute/sgb-12
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_12/
       fundstelle: BGBl I 2003, 3022, 3023
+      classification: recovery_reference
+      reason: 'SGB XII (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off of refund claims against Kindergeld is barred where the claimant proves he would become ''hilfebedürftig im Sinne der Vorschriften des Zwölften Buches Sozialgesetzbuch über die Hilfe zum Lebensunterhalt''. The need test qualifies the excluded set-off machinery of § 75; it does not enter the entitlement or the monthly amount.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-6b0cd760b62eaed2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-27b3386012358a3cd94f
       identity_kind: unresolved_reference
       raw_references:
       - Steuerberatungsgesetzes
+      classification: data_and_procedure_reference
+      reason: 'Unresolved reference ''Steuerberatungsgesetzes'' matched in § 77 Abs. 2 EStG: fees of a representative authorised under the Steuerberatungsgesetz are reimbursable in a successful objection. Part of the excluded appeal-costs provision; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-6e0720e53a02234e
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-62426bac3f50a2b0ae6f
       identity_kind: corpus_citation
@@ -17044,8 +17212,11 @@ computed:
       document_citation_path: de/statute/wogg
       legal_authority_url: https://www.gesetze-im-internet.de/wogg/
       fundstelle: BGBl I 2008, 1856
+      classification: cross_program_inbound
+      reason: 'Wohngeldgesetz (act-level corpus row), which entered the frontier only through an INBOUND reference: WoGG § 17 cites ''§ 65'' EStG when it lists Kindergeld and § 65 benefits for the housing-benefit computation. No spine provision cites the WoGG; the reference governs how Wohngeld treats Kindergeld, which is that programme''s encoding (parallel to the DK ledger''s cross_program_treatment exclusion of § 10). It changes nothing in §§ 62–78 EStG.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-703d3b12aaab39f8
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-4557bdb1577aa4d1661e
       - de-corpus-a908aed35b7d1ceeda30
@@ -17058,8 +17229,12 @@ computed:
       body_sha256: a7e3fd429ffb17be763388449fcd5968938238242e2eac77faaf1e7bf22b0416
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: entitlement_condition
+      reason: EStG § 32 (Kinder, Freibeträge für Kinder), cited by § 63 Abs. 1 Satz 1 Nr. 1 ('Kinder im Sinne des § 32 Absatz 1') and Satz 2 ('§ 32 Absatz 3 bis 5 gilt entsprechend'), by § 66 Abs. 3 (Abs. 6 Satz 1 allowances) and by § 69 (Abs. 6 data). Abs. 1 defines children (first-degree relatives, foster children), Abs. 2 the priority between adoptive and foster status, Abs. 3 the month of live birth to the completed 18th year, Abs. 4 the grounds for adult children (job-seeking under 21; under 25 in training, transition period, lacking a place, the enumerated voluntary services; disability arising before 25) with the Satz 2–3 second-training exclusion (20 weekly hours, training service relationship, marginal employment under §§ 8, 8a SGB IV), Abs. 5 the military-service extension, Abs. 6 the allowance amounts (3 414 EUR and 1 464 EUR) whose increase triggers § 66 Abs. 3. The DA-KG Kapitel A rows A 7–A 20.4 apply these paragraphs. Bears on the law-derived input qualifying_child_count (open
+        dependency); open until §§ 63, 32 EStG are encoded and the cited rule is bound to them.
+      bears_on_computed_surface: true
     - id: de-kg-instr-70e222e42c3fbd52
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-c30ae063c5bb2bbca5c6
       identity_kind: corpus_citation
@@ -17070,8 +17245,11 @@ computed:
       body_sha256: ab6442cd2f52fc33c4f72ca19a8d879e20f48e7cff58e44c095808a3d922db22
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: data_and_procedure_reference
+      reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-instr-7b88fe63abf1deb1
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-71149390efb48e142347
       - de-corpus-96ed78a0f8293d733120
@@ -17083,14 +17261,20 @@ computed:
       body_sha256: 626f7bb866fc0a1c6e7a2ccc96dac66ba7131eb8ee87ca981d2578d7a3f97366
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: entitlement_condition
+      reason: 'EStG § 19 (employment income), cited by § 62 Abs. 1a Satz 2 EStG: the domestic income that lifts the three-month exclusion excludes ''Einkünfte nach § 19 Absatz 1 Satz 1 Nummer 2'' (pensions and survivor benefits from a former employment). The second match, ''§ 19 Absatz 2'' in § 68 Abs. 5, is a citation of SGB I § 19 Abs. 2 (Arbeitsförderung) inside an excluded data provision and is not a reference to EStG § 19. The § 62 Abs. 1a citation delimits an entitlement condition (A 4.2 Abs. 4 Satz 2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-87d3e50373adabc2
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-334b97469237730f3b68
       - de-corpus-3829f704c28eb570310c
       identity_kind: unresolved_reference
       raw_references:
       - Abkommen über den Europäischen Wirtschaftsraum
+      classification: entitlement_condition
+      reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
+      bears_on_computed_surface: true
     - id: de-kg-instr-8939b62ab3b44a39
       status: pending
       discovery_refs:
@@ -17099,7 +17283,7 @@ computed:
       raw_references:
       - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
     - id: de-kg-instr-995400ec8f736a51
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-b7ca49921d36915d52ed
       identity_kind: corpus_citation
@@ -17110,8 +17294,11 @@ computed:
       body_sha256: 96106a6ca5a4a81da21e1522e43c2e633af31f8b1f88470b6715675750de2cca
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: misresolved_citation
+      reason: 'The citation scan resolved ''§ 19a'' in § 68 Abs. 5 EStG to EStG § 19a (Sondervorschrift für Einkünfte aus nichtselbständiger Arbeit bei Vermögensbeteiligungen). The cited text reads ''für Leistungen der Grundsicherung für Arbeitsuchende nach § 19a Absatz 2 … des Ersten Buches Sozialgesetzbuch'': the reference is to SGB I § 19a Abs. 2, not to the EStG. EStG § 19a (employee share schemes) is not cited by any spine provision and has no bearing on Kindergeld; the SGB I reference sits in the excluded data provision and is dispositioned under the ''Ersten Buches Sozialgesetzbuch'' candidate.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-a365b83505706342
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-ba21485fd75ad89b02e1
       - de-corpus-f61bee0c29ccd5d670fb
@@ -17124,16 +17311,22 @@ computed:
       document_citation_path: de/statute/uhvorschg
       legal_authority_url: https://www.gesetze-im-internet.de/uhvorschg/
       fundstelle: BGBl I 1979, 1184
+      classification: cross_program_inbound
+      reason: Unterhaltsvorschussgesetz (act-level corpus row). It entered the frontier through an INBOUND reference — UhVorschG § 2 cites '§ 65' EStG when it deducts Kindergeld and § 65 benefits from the maintenance advance — and through § 68 Abs. 5 EStG, which authorises data transmission to 'den nach § 9 Absatz 1 Satz 2 des Unterhaltsvorschussgesetzes zuständigen Stellen'. The first governs the Unterhaltsvorschuss computation (that programme's ledger, conformance/closure/de-unterhaltsvorschuss.yaml); the second is part of an excluded data provision. Neither changes §§ 62–78 EStG.
+      bears_on_computed_surface: false
     - id: de-kg-instr-a66a4cb13aaf0599
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-62e92e01e49ba1d80a17
       - de-corpus-a12d2b6db22397cc343b
       identity_kind: unresolved_reference
       raw_references:
       - Zehnten Buches Sozialgesetzbuch
+      classification: data_and_procedure_reference
+      reason: Unresolved reference 'Zehnten Buches Sozialgesetzbuch' matched in § 74 Abs. 2 EStG (§§ 102–109 and 111–113 SGB X applied to refund claims of social-benefit providers) and § 68 Abs. 7 EStG (§ 79 Abs. 2–4 SGB X for automated retrieval). Both citations sit in excluded payout-routing and data provisions; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-instr-b96e03076e143e8e
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-1b65ac76074a9e4d0fd1
       - de-corpus-443ad0c2567894367d0f
@@ -17151,8 +17344,11 @@ computed:
       document_citation_path: de/statute/sgb-3
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_3/
       fundstelle: BGBl I 1997, 594, 595
+      classification: entitlement_condition
+      reason: SGB III (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG — a study, recognition or job-search title or a humanitarian title qualifies only while the holder is employed, on parental leave or takes 'laufende Geldleistungen nach dem Dritten Buch Sozialgesetzbuch' — and by § 65 Satz 3 EStG, whose exception to the EU-official exclusion requires a 'Versicherungspflichtverhältnis zur Bundesagentur für Arbeit nach § 24 des Dritten Buches Sozialgesetzbuch' or insurance freedom 'nach § 28 Absatz 1 Nummer 1'. § 68 Abs. 7 adds a data-retrieval citation. The SGB III benefit and insurance concepts are therefore conditions of claimant_entitlement (A 4.3.4) and of substitute_child_benefit_exclusion (A 28.3 Abs. 4). Bears on both law-derived inputs (open dependencies); open until §§ 62, 65 EStG are encoded with those SGB III terms bound to them.
+      bears_on_computed_surface: true
     - id: de-kg-instr-c795a7af57079afc
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-bb0bea162872670bb36e
       - de-corpus-bff0604ab434028f691b
@@ -17165,8 +17361,11 @@ computed:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+      classification: recovery_reference
+      reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-instr-ce168756ed1a28cb
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-9140eb4c223a509ac378
       identity_kind: corpus_citation
@@ -17177,8 +17376,11 @@ computed:
       body_sha256: 039de9931d61ee11b13fe82082115c085a24f84017c78fd2779dbad4118fde6b
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+      classification: entitlement_condition
+      reason: 'EStG § 1 (Steuerpflicht), cited by § 62 Abs. 1 Satz 1 Nr. 2 EStG: a person without domestic residence is entitled if ''nach § 1 Absatz 2 unbeschränkt einkommensteuerpflichtig'' (German nationals in public service abroad paid from a domestic public purse and their household members, subject to Abs. 2 Satz 2) or ''nach § 1 Absatz 3 als unbeschränkt einkommensteuerpflichtig behandelt wird'' (on application, with 90 percent of income subject to German tax or foreign income at most the Grundfreibetrag). § 1 Abs. 2 and 3 are therefore entitlement conditions in their own terms (A 2.2.1). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-db7693cd9f018ff4
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-f470901abf1d00d286e1
       - de-subject-006
@@ -17191,13 +17393,19 @@ computed:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+      classification: entitlement_condition
+      reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-f480bf90ee72ae1d
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-corpus-8fbae7ccbaf5d47aaa5d
       identity_kind: unresolved_reference
       raw_references:
       - Ersten Buches Sozialgesetzbuch
+      classification: data_and_procedure_reference
+      reason: Unresolved reference 'Ersten Buches Sozialgesetzbuch' matched in § 68 Abs. 5 EStG, which names the benefit providers under §§ 19 Abs. 2, 19a Abs. 2, 25 Abs. 3 and 28 Abs. 2 SGB I to whom the Familienkassen may transmit case data. Part of the excluded data provision; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-suppl-001
       status: pending
       discovery_refs:
@@ -17476,8 +17684,22 @@ computed:
     - de-kg-dakg-A9
     - de-kg-dakg-V14.3
     - de-kg-dakg-V23.1
-    instruments_bearing_on_computed_count: 94
-    open_dependency_count: 102
+    - de-kg-instr-002
+    - de-kg-instr-003
+    - de-kg-instr-32a81be6d35e33be
+    - de-kg-instr-3841260753e31d86
+    - de-kg-instr-3875634198c25414
+    - de-kg-instr-43b69c0fdc7079aa
+    - de-kg-instr-4e1f544ea66cccdf
+    - de-kg-instr-57142250c1d7c52f
+    - de-kg-instr-703d3b12aaab39f8
+    - de-kg-instr-7b88fe63abf1deb1
+    - de-kg-instr-87d3e50373adabc2
+    - de-kg-instr-b96e03076e143e8e
+    - de-kg-instr-ce168756ed1a28cb
+    - de-kg-instr-db7693cd9f018ff4
+    instruments_bearing_on_computed_count: 108
+    open_dependency_count: 116
     closed: false
   measured_denominators:
     spine_rows: 18

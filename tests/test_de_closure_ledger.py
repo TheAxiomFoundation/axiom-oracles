@@ -454,7 +454,9 @@ def test_counts_lists_and_decisions_agree(program: str) -> None:
     for row in instrument_ledger:
         if row["status"] != "pending":
             assert row["reason"] == decided[row["id"]]["reason"]
-            assert row["body_sha256"] == decided[row["id"]]["body_sha256"]
+            # Unresolved references and act-level rows without a captured body
+            # carry no body_sha256 on either side.
+            assert row.get("body_sha256") == decided[row["id"]].get("body_sha256")
     assert frontier["complete"] is (bool(instrument_ledger) and not frontier["pending"])
     assert computed["closed"] is False
 
