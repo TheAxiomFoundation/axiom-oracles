@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 275 of 774 instruments
-pending, and dependency closure has 143 open dependencies: eight law-derived
-inputs and 135 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 272 of 775 instruments
+pending, and dependency closure has 147 open dependencies: eight law-derived
+inputs and 139 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
@@ -308,8 +308,8 @@ multi-body instruments use the SHA-256 of body hashes joined by newline in
 citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
-The SHA-bound class snapshot contains 228 entries. With the committed dispositions,
-210 members remain pending, seven captured members are bearing, and eleven entries
+The SHA-bound class snapshot contains 229 entries. With the committed dispositions,
+205 members remain pending, thirteen captured members are bearing, and eleven entries
 are non-bearing or structural: the transfer letter, BFH file-access decision,
 misdated BFH duplicate, combined BFH citation, superseded country-group letter, BFH remission decision
 BFH objection-notice decision, BFH appeal-cost decision, and BFH inter-agency
@@ -341,14 +341,14 @@ The SGB VII discovery reference now resolves to the complete act; its historic
 and retain their original release identities. Eight article-level EU coordination
 captures supplement the complete regulation bodies without creating eight new
 instrument identities. DA-KG A30 is now bound to the signed §66 module for its
-uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 108 citation-only seeds and
-98 receipted instruments. The 2023 country-group letter remains citation-only
+uniform 2025 amount; its historical ordinal advantage expressly ended in 2023. The remaining pending members are 109 citation-only seeds and
+96 receipted instruments. The 2023 country-group letter remains citation-only
 as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 275 of 774 instruments pending, 143 open
-dependencies (eight law-derived inputs, 135 bearing instruments, no unclassified
+rows pending. Current result: 272 of 775 instruments pending, 147 open
+dependencies (eight law-derived inputs, 139 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 The latest release also retains complete EStG §32 paragraph captures and the
@@ -668,8 +668,8 @@ section mentions remain `unresolved_cross_reference_proximity` candidates with a
 `candidate_target_citation_path`, never a `resolved_citation_path`. This preserves
 recall for unfamiliar citation forms without asserting their identity. The SGB V
 candidate remains pending for a text-bound disposition; this correction does not
-classify the whole act as non-bearing. Current totals are 275 pending of 774
-instruments and 143 open dependencies (eight law-derived, 135 bearing), with
+classify the whole act as non-bearing. Current totals are 272 pending of 775
+instruments and 147 open dependencies (eight law-derived, 139 bearing), with
 five pending and one partially encoded spine provision. Closure remains false.
 
 For a corpus-evidence-only refresh, `refresh_de_instrument_graph.py
@@ -695,15 +695,23 @@ class member and its corpus identity are dispositioned as bearing.
 The implementation remains open. A 20.2.4’s 26-week employment indicator is part
 of an overall assessment, not an automatic threshold.
 
-The training review now binds 27 DA-KG sections (including three structural
-headings), covering all A15 and A17 text, and four complete BFH decisions.
-III R19/16 supplies the statutory-training-term exception to the ordinary
-exam-result endpoint. III R40/19 distinguishes objective online result availability
-from later certificate collection and excludes an entire transition longer than
-four full calendar months. The two class members and the existing III R40/19
-corpus frontier identity are now bearing: 275 instruments remain pending, with
-143 open dependencies (eight law-derived, 135 bearing). The source review also
-records waiting-place, illness, maternity and training-definition exceptions;
-these are implementation requirements, not signed coverage. The pinned corpus
-currently lacks MuSchG rows, so the maternity-prohibition prerequisites require
-source capture before encoding.
+The adult-child review now binds all 50 DA-KG sections from A14 through A20
+(including seven structural headings) and six complete BFH decisions. III R19/16
+supplies the statutory-training-term exception; III R40/19 distinguishes objective
+online result availability and the whole-transition four-calendar-month limit.
+III R58/12 preserves the maternity exception without requiring later resumed
+search. III R41/19 distinguishes training termination, temporary-illness prognosis
+and contemporaneous evidence of training intention. Their relevant class/corpus
+identities are bearing and remain unencoded. A18.7 preserves training averaging
+at least 60 hours per year. Current totals are 272 pending of 775 instruments
+and 147 open dependencies (eight law-derived, 139 bearing).
+
+The recall review records 188 matching BFH citation occurrences in the retained
+DA-KG text and one missing case label: III R42/22, printed with “S.16”. Its exact
+citation is now a pending discovery member; all 228 prior member payloads are
+unchanged. This is a recall repair, not exhaustive court enumeration or proof of
+BStBl II membership. Corpus PR668 contains the complete recovered decision and
+the maternity sources, with signatures, but the consumer awaits the published
+release identity before binding those new receipts. The pinned corpus therefore
+still lacks those new scopes. These are source/implementation requirements,
+not signed encoding coverage or certification.

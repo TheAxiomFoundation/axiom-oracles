@@ -1,0 +1,17 @@
+{
+  "source_path": "conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt",
+  "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+  "matched_occurrences": 188,
+  "missing_exact_case_labels": [
+    "BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16"
+  ],
+  "limitation": "Recall probe only; matching an existing case label does not verify its date or BStBl membership.",
+  "previous_snapshot_sha256": "1ad8b2a104a349ed089fc5296d76d676f6df0fa5485a96b2a59cf623389436ae",
+  "result_snapshot_sha256": "877e5878f37cc05198f9431e7f4e9b8c1e29e094e218607a60026d6131f10ab8",
+  "new_member_id": "de-kg-discovery-c4a75118763d3018",
+  "retained_existing_members": 228,
+  "existing_member_payloads_unchanged": true,
+  "source_payloads_unchanged": true,
+  "probe_regex": "BFH vom\\s+(\\d{1,2}\\.\\d{1,2}\\.\\d{4}),\\s*([IVX]+\\s+[A-Z]+\\s+\\d+/\\d+),\\s*BStBl\\s+II(?:\\s+\\d{4})?\\s+S\\.\\s*\\d+",
+  "comparison": "Whitespace-normalized retained source; identify missing exact case labels among existing court-member identity strings. This does not validate existing dates, resolve compound citations, or cover every citation syntax."
+}

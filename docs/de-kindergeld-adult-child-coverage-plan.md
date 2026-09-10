@@ -11,7 +11,8 @@ The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
 It contains the complete pinned § 32(4) text, all 50 fully read, hash-verified
 DA-KG sections from A 14 through A 20 (including seven structural headings) and
-four complete BFH decisions: III R 37/21, III R 10/22, III R 19/16 and III R 40/19.
+six complete BFH decisions: III R 37/21, III R 10/22, III R 19/16, III R 40/19,
+III R 58/12 and III R 41/19.
 This completes the reading of these guidance families. Their referenced statutes,
 other decisions and implementation boundaries still require source-bound work;
 a full-text review does not declare any route encoded.
@@ -328,3 +329,28 @@ minimum retained basic allowance. Preserve the source's internal cross-reference
 wording and reconcile the calculation with the already reviewed spousal decision;
 do not convert a citation typo into an arithmetic rule. None of these legal
 resource, need or causation quantities may terminate in a bare legal-status input.
+
+
+BFH III R 58/12 was read in full (three pages, paragraphs 1–22). It applies the
+maternity exception as a typified rule without requiring proof that an individual
+written-only application was impossible. It does not condition the protected
+months on later resumed search. Its historical MuSchG § 6(1) reference is the
+pre-2018 post-birth protection provision; current § 3 supplies the later numbering.
+The decision expressly leaves illness-duration limits open, and its recovery and
+equitable-remission discussion does not automatically cancel a debt after delay.
+
+BFH III R 41/19 was read in full (five pages, paragraphs 1–33). Ending the training
+relationship removes the training route but leaves waiting/disability routes for
+separate assessment. The six-month prognosis concerns expected functional
+impairment, not elapsed time since diagnosis. Evidence of training intention is
+not restricted to a prescribed form; contemporaneous institutional contacts can
+matter, while a retrospective blanket assertion ordinarily does not suffice.
+Pending applications need not be renewed monthly, but its three-month parallel-
+application rule must be preserved. A later decision to work or volunteer requires
+its own timeline; independent statutory transition/service grounds remain distinct.
+The remand is not a final award for every disputed month.
+
+The court-citation recall audit enrolls the previously omitted exact A 19.3
+citation to III R 42/22 as a pending member. Its complete primary decision is in
+corpus PR668, awaiting publication/binding. No mere citation search or abbreviated
+headnote is counted as a published corpus receipt or a completed causal assessment.

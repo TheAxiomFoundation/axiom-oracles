@@ -975,7 +975,7 @@ generated_facts:
     subject_search_state:
       total: 17
       unretrieved: 6
-    candidate_count: 757
+    candidate_count: 758
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -8378,6 +8378,15 @@ generated_facts:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/bverfg-parentage-2025-06-03.txt
       discovery_source_sha256: 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567
       discovery_excerpt: 1 BvR 2017/21
+    - id: de-kg-discovery-c4a75118763d3018
+      status: pending
+      identity_kind: class_member
+      identity: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
+      discovery_refs:
+      - de-kg-suppl-009
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
+      discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
+      discovery_excerpt: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
     - id: de-kg-discovery-c5da6ee5d3d1267d
       status: pending
       identity_kind: class_member
@@ -10254,13 +10263,13 @@ generated_facts:
         sections_located: 420
     class_discovery:
       path: conformance/closure/de-discovery-2026-09-08/snapshot.json
-      sha256: 1ad8b2a104a349ed089fc5296d76d676f6df0fa5485a96b2a59cf623389436ae
-      receipt_sha256: 216ec5b4bf063cdfefccffb748b5544d9e1f410b93a8341f1451e0a9e2e2ec7f
+      sha256: 877e5878f37cc05198f9431e7f4e9b8c1e29e094e218607a60026d6131f10ab8
+      receipt_sha256: afcf5908a3b060f32257e5c05795c04b4ec25a343afe2614b71b03727623430f
       complete: false
       counts:
         de-kg-suppl-007: 16
         de-kg-suppl-008: 2
-        de-kg-suppl-009: 170
+        de-kg-suppl-009: 171
         de-kg-suppl-010: 40
       remaining:
       - Complete official BMF/BZSt registers beyond DA-KG citations
@@ -10272,6 +10281,7 @@ generated_facts:
       - The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.
       - The Swiss free-movement agreement and2012AnnexII replacement are receipted. Encode the Swiss coordination bridge and investigate all bearing amendments and administrative decisions referenced by AnnexII; the requested Swiss override cannot be inferred from the EEA Agreement.
       - 81 complete official BFH decisions recovered from post2009 queries. Reconcile duplicate III R21/12 date and compound III R10/11 plus III R63/11 seed explicitly; older cases and exhaustive register discovery remain. Official V classification does not by itself verify exact BStBl issue/page.
+      - A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. The exact S.16 citation is now enrolled. This probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels; bind its recovered official text after corpus PR668 publication.
     seed_bindings:
     - id: de-kg-instr-001
       binding_kind: instrument_candidate
@@ -13048,6 +13058,12 @@ committed_decisions:
     reason: 'Full three-page BFH III R21/13 decision (26 June 2014), paragraphs1–18: paragraphs9–18 address suspension of assessment limitation under AO171(7)/169 in a negligent tax-shortening case caused by failing to report the loss of eligibility. Paragraphs13–17 start prosecution limitation from the last payment causally resulting from the same omission, rather than treating each monthly payment as a separate completed offence; a genuinely new application is distinguished. Paragraph10 takes the lower court findings of loss of residence/habitual abode and negligent non-reporting as established; it does not supply a new AO8/9 residence test. Paragraphs16–17 restate the section66 monthly principle to distinguish it from offence completion. This is reporting, correction and enforcement procedure on surfaces already excluded by the sections68/70 spine, not an additional eligibility or benefit-amount formula. The four/five-year limitation periods are procedural quantities; the substantive
       section62/66 dependencies remain open. Text-bound source: de/guidance/bfh-iii-r-21-13-2014-06-26/document-1, body SHA-256 6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-69469ab37f301181
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R 58/12 decision of 13 June 2013, paragraphs 1–22, read. Paragraphs 9–18 preserve training-place-search consideration during maternity protection even after agency deregistration and without requiring prompt resumption afterwards. The protection is typified; paragraph 15 does not require an individualized finding that an exclusively written application was impossible. Paragraph 19 distinguishes parental-leave interruption. Paragraph 16 expressly leaves illness-duration limits undecided. DA-KG 2025 A 14.2 and A 17.2 retain the maternity holding, so it bears on qualifying_child_count and monthly entitlement intervals. Historical MuSchG § 3(2)/§ 6(1) references address the pre-2018 regime, not current § 6; the current and historical 2025 § 3 texts must supply applicable protection periods. Paragraphs 20–22 separately address recovery and possible equitable remission, not automatic erasure of the debt after payment or delay. No historical age limit, payment
+      amount or global parental-leave exclusion is imported into all current grounds. Direct BStBl II 2014 page 834 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-58-12-2013-06-13/document-1, body SHA-256 263907d1053ae5414546123f919188361ede3a8ee1afd5d73291732135331d60.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-756b8977705fa113
     status: classified-with-reason
     classification: entitlement_condition
@@ -13060,6 +13076,12 @@ committed_decisions:
     reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
       9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-90238268a8dee863
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full five-page BFH III R 41/19 decision of 31 August 2021, paragraphs 1–33, read. Paragraphs 15–18 distinguish actual training and a continuing training relationship from mere formal enrolment and illness-related termination; termination removes the training ground but does not automatically exclude the separate waiting or disability grounds. Paragraphs 20–24 require ability to take up the intended training except for the stated maternity/temporary-illness routes. Temporary illness depends on the expected duration of functional impairment, generally no more than six months, rather than elapsed time since diagnosis or a guaranteed first six months. Paragraphs 25–30 require evidence of training intention during the claimed months, permit contemporaneous contact/application records beyond a prescribed form, reject merely retrospective blanket assertions, and distinguish a later decision to work or volunteer. Paragraph 27 does not require a fresh application every month while an
+      earlier one is pending, but requires a parallel application after three months without rejection in its stated case. The judgment remands for findings and does not finally award all disputed months. DA-KG 2025 A 14.2, A 15.11 and A 17.2 retain these distinctions; they bear on qualifying_child_count and monthly intervals and remain unencoded. Direct BStBl II 2022 page 465 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-41-19-2021-08-31/document-1, body SHA-256 13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-b8b7b0fae40a3f3a
     status: classified-with-reason
     classification: entitlement_condition
@@ -13219,6 +13241,12 @@ committed_decisions:
     classification: recovery_reference
     reason: 'SGB XII (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off of refund claims against Kindergeld is barred where the claimant proves he would become ''hilfebedürftig im Sinne der Vorschriften des Zwölften Buches Sozialgesetzbuch über die Hilfe zum Lebensunterhalt''. The need test qualifies the excluded set-off machinery of § 75; it does not enter the entitlement or the monthly amount.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-6abee6f46fd03a40
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full three-page BFH III R 58/12 decision of 13 June 2013, paragraphs 1–22, read. Paragraphs 9–18 preserve training-place-search consideration during maternity protection even after agency deregistration and without requiring prompt resumption afterwards. The protection is typified; paragraph 15 does not require an individualized finding that an exclusively written application was impossible. Paragraph 19 distinguishes parental-leave interruption. Paragraph 16 expressly leaves illness-duration limits undecided. DA-KG 2025 A 14.2 and A 17.2 retain the maternity holding, so it bears on qualifying_child_count and monthly entitlement intervals. Historical MuSchG § 3(2)/§ 6(1) references address the pre-2018 regime, not current § 6; the current and historical 2025 § 3 texts must supply applicable protection periods. Paragraphs 20–22 separately address recovery and possible equitable remission, not automatic erasure of the debt after payment or delay. No historical age limit, payment
+      amount or global parental-leave exclusion is imported into all current grounds. Direct BStBl II 2014 page 834 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-58-12-2013-06-13/document-1, body SHA-256 263907d1053ae5414546123f919188361ede3a8ee1afd5d73291732135331d60.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-6b0cd760b62eaed2
     status: excluded-with-reason
     classification: data_and_procedure_reference
@@ -13243,6 +13271,12 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
     bears_on_computed_surface: false
+  - id: de-kg-instr-73d798cce838ed41
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full five-page BFH III R 41/19 decision of 31 August 2021, paragraphs 1–33, read. Paragraphs 15–18 distinguish actual training and a continuing training relationship from mere formal enrolment and illness-related termination; termination removes the training ground but does not automatically exclude the separate waiting or disability grounds. Paragraphs 20–24 require ability to take up the intended training except for the stated maternity/temporary-illness routes. Temporary illness depends on the expected duration of functional impairment, generally no more than six months, rather than elapsed time since diagnosis or a guaranteed first six months. Paragraphs 25–30 require evidence of training intention during the claimed months, permit contemporaneous contact/application records beyond a prescribed form, reject merely retrospective blanket assertions, and distinguish a later decision to work or volunteer. Paragraph 27 does not require a fresh application every month while an
+      earlier one is pending, but requires a parallel application after three months without rejection in its stated case. The judgment remands for findings and does not finally award all disputed months. DA-KG 2025 A 14.2, A 15.11 and A 17.2 retain these distinctions; they bear on qualifying_child_count and monthly intervals and remain unencoded. Direct BStBl II 2022 page 465 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-41-19-2021-08-31/document-1, body SHA-256 13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-75c3f434723fb3e9
     status: classified-with-reason
     classification: entitlement_condition
@@ -14298,13 +14332,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 774
+    instrument_count: 775
     counts:
-      total: 774
+      total: 775
       encoded: 2
-      classified-with-reason: 149
+      classified-with-reason: 153
       excluded-with-reason: 348
-      pending: 275
+      pending: 272
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14385,7 +14419,6 @@ computed:
     - de-kg-discovery-66a9b87630c2063b
     - de-kg-discovery-68d02c914f7d3807
     - de-kg-discovery-68e996762a6ab631
-    - de-kg-discovery-69469ab37f301181
     - de-kg-discovery-6de6a5a8165850e6
     - de-kg-discovery-700c57ff6f10473b
     - de-kg-discovery-7027129fca0edcad
@@ -14414,7 +14447,6 @@ computed:
     - de-kg-discovery-8c04d87c0388495b
     - de-kg-discovery-8c6a71dafb7dfcd3
     - de-kg-discovery-8e2d552de7522aa4
-    - de-kg-discovery-90238268a8dee863
     - de-kg-discovery-906d91a4ef4c0871
     - de-kg-discovery-916b53202a012a36
     - de-kg-discovery-918ab3081a058973
@@ -14460,6 +14492,7 @@ computed:
     - de-kg-discovery-c2042f69f19b6bdc
     - de-kg-discovery-c306fddfde187836
     - de-kg-discovery-c37028de6c676351
+    - de-kg-discovery-c4a75118763d3018
     - de-kg-discovery-c5da6ee5d3d1267d
     - de-kg-discovery-c5dc988364156b5a
     - de-kg-discovery-c711d29acbcee070
@@ -14539,9 +14572,7 @@ computed:
     - de-kg-instr-63ae4bcff4818d3a
     - de-kg-instr-6568b0e3e8e4b33c
     - de-kg-instr-6571f5d198cf30bd
-    - de-kg-instr-6abee6f46fd03a40
     - de-kg-instr-6cf659dd66fd5e85
-    - de-kg-instr-73d798cce838ed41
     - de-kg-instr-77dbf6a1855cb84d
     - de-kg-instr-7e37eabb86048805
     - de-kg-instr-8570a332681be6e4
@@ -22593,7 +22624,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 15.07.2003, VIII R 19/02, BStBl II 2007 S. 247
     - id: de-kg-discovery-69469ab37f301181
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 13.06.2013, III R 58/12, BStBl II 2014 S. 834
       discovery_refs:
@@ -22601,6 +22632,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 13.06.2013, III R 58/12, BStBl II 2014 S. 834
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R 58/12 decision of 13 June 2013, paragraphs 1–22, read. Paragraphs 9–18 preserve training-place-search consideration during maternity protection even after agency deregistration and without requiring prompt resumption afterwards. The protection is typified; paragraph 15 does not require an individualized finding that an exclusively written application was impossible. Paragraph 19 distinguishes parental-leave interruption. Paragraph 16 expressly leaves illness-duration limits undecided. DA-KG 2025 A 14.2 and A 17.2 retain the maternity holding, so it bears on qualifying_child_count and monthly entitlement intervals. Historical MuSchG § 3(2)/§ 6(1) references address the pre-2018 regime, not current § 6; the current and historical 2025 § 3 texts must supply applicable protection periods. Paragraphs 20–22 separately address recovery and possible equitable remission, not automatic erasure of the debt after payment or delay. No historical age limit, payment
+        amount or global parental-leave exclusion is imported into all current grounds. Direct BStBl II 2014 page 834 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-58-12-2013-06-13/document-1, body SHA-256 263907d1053ae5414546123f919188361ede3a8ee1afd5d73291732135331d60.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-6de6a5a8165850e6
       status: pending
       identity_kind: class_member
@@ -22880,7 +22915,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.04.2013, III R 35/11, BStBl II S. 1037
     - id: de-kg-discovery-90238268a8dee863
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465
       discovery_refs:
@@ -22888,6 +22923,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465
+      classification: entitlement_condition
+      reason: 'Full five-page BFH III R 41/19 decision of 31 August 2021, paragraphs 1–33, read. Paragraphs 15–18 distinguish actual training and a continuing training relationship from mere formal enrolment and illness-related termination; termination removes the training ground but does not automatically exclude the separate waiting or disability grounds. Paragraphs 20–24 require ability to take up the intended training except for the stated maternity/temporary-illness routes. Temporary illness depends on the expected duration of functional impairment, generally no more than six months, rather than elapsed time since diagnosis or a guaranteed first six months. Paragraphs 25–30 require evidence of training intention during the claimed months, permit contemporaneous contact/application records beyond a prescribed form, reject merely retrospective blanket assertions, and distinguish a later decision to work or volunteer. Paragraph 27 does not require a fresh application every month while
+        an earlier one is pending, but requires a parallel application after three months without rejection in its stated case. The judgment remands for findings and does not finally award all disputed months. DA-KG 2025 A 14.2, A 15.11 and A 17.2 retain these distinctions; they bear on qualifying_child_count and monthly intervals and remain unencoded. Direct BStBl II 2022 page 465 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-41-19-2021-08-31/document-1, body SHA-256 13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-906d91a4ef4c0871
       status: pending
       identity_kind: class_member
@@ -23318,6 +23357,15 @@ computed:
       classification: constitutional_parentage_applicability
       reason: The operative order extends continued application of BGB §1600(2) and (3) sentence 1 beyond 30 June 2025 until replacement legislation enters force, at most 31 March 2026, and retains suspension on the specified applicants' request. It changes the outer deadline of the 9 April 2024 judgment. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt, SHA-256 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
       bears_on_computed_surface: true
+    - id: de-kg-discovery-c4a75118763d3018
+      status: pending
+      identity_kind: class_member
+      identity: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
+      discovery_refs:
+      - de-kg-suppl-009
+      discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
+      discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
+      discovery_excerpt: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
     - id: de-kg-discovery-c5da6ee5d3d1267d
       status: pending
       identity_kind: class_member
@@ -24493,7 +24541,7 @@ computed:
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_5/
       fundstelle: BGBl I 1988, 2477, 2482
     - id: de-kg-instr-6abee6f46fd03a40
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-7856b18458aa3760bf10
       identity_kind: corpus_citation
@@ -24503,6 +24551,10 @@ computed:
       citation_label: 'BFH, III R 58/12, 2013-06-13: Kindergeld während der Mutterschutzfrist und der Elternzeit'
       document_citation_path: de/guidance/bfh-iii-r-58-12-2013-06-13
       title: 'BFH, III R 58/12, 2013-06-13: Kindergeld während der Mutterschutzfrist und der Elternzeit'
+      classification: entitlement_condition
+      reason: 'Full three-page BFH III R 58/12 decision of 13 June 2013, paragraphs 1–22, read. Paragraphs 9–18 preserve training-place-search consideration during maternity protection even after agency deregistration and without requiring prompt resumption afterwards. The protection is typified; paragraph 15 does not require an individualized finding that an exclusively written application was impossible. Paragraph 19 distinguishes parental-leave interruption. Paragraph 16 expressly leaves illness-duration limits undecided. DA-KG 2025 A 14.2 and A 17.2 retain the maternity holding, so it bears on qualifying_child_count and monthly entitlement intervals. Historical MuSchG § 3(2)/§ 6(1) references address the pre-2018 regime, not current § 6; the current and historical 2025 § 3 texts must supply applicable protection periods. Paragraphs 20–22 separately address recovery and possible equitable remission, not automatic erasure of the debt after payment or delay. No historical age limit, payment
+        amount or global parental-leave exclusion is imported into all current grounds. Direct BStBl II 2014 page 834 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-58-12-2013-06-13/document-1, body SHA-256 263907d1053ae5414546123f919188361ede3a8ee1afd5d73291732135331d60.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-6b0cd760b62eaed2
       status: excluded-with-reason
       discovery_refs:
@@ -24574,7 +24626,7 @@ computed:
       reason: EStG § 39e (electronic wage-tax deduction features), cited by § 69 Satz 3 Nr. 2 EStG only to identify 'die Personen, bei denen für dieses Kind nach § 39e Absatz 1 ein Kinderfreibetrag berücksichtigt wird' whose register data the BZSt transmits to the Familienkasse. Part of the excluded data-transmission provision; no entitlement or amount rule.
       bears_on_computed_surface: false
     - id: de-kg-instr-73d798cce838ed41
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-3b2c7b9b5abe912013b1
       - de-corpus-7d0435cc3335ee23ce8f
@@ -24586,6 +24638,10 @@ computed:
       citation_label: 'BFH, III R 41/19, 2021-08-31: Kindergeld; Berücksichtigung eines Kindes nach krankheitsbedingtem Ausbildungsabbruch'
       document_citation_path: de/guidance/bfh-iii-r-41-19-2021-08-31
       title: 'BFH, III R 41/19, 2021-08-31: Kindergeld; Berücksichtigung eines Kindes nach krankheitsbedingtem Ausbildungsabbruch'
+      classification: entitlement_condition
+      reason: 'Full five-page BFH III R 41/19 decision of 31 August 2021, paragraphs 1–33, read. Paragraphs 15–18 distinguish actual training and a continuing training relationship from mere formal enrolment and illness-related termination; termination removes the training ground but does not automatically exclude the separate waiting or disability grounds. Paragraphs 20–24 require ability to take up the intended training except for the stated maternity/temporary-illness routes. Temporary illness depends on the expected duration of functional impairment, generally no more than six months, rather than elapsed time since diagnosis or a guaranteed first six months. Paragraphs 25–30 require evidence of training intention during the claimed months, permit contemporaneous contact/application records beyond a prescribed form, reject merely retrospective blanket assertions, and distinguish a later decision to work or volunteer. Paragraph 27 does not require a fresh application every month while
+        an earlier one is pending, but requires a parallel application after three months without rejection in its stated case. The judgment remands for findings and does not finally award all disputed months. DA-KG 2025 A 14.2, A 15.11 and A 17.2 retain these distinctions; they bear on qualifying_child_count and monthly intervals and remain unencoded. Direct BStBl II 2022 page 465 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-41-19-2021-08-31/document-1, body SHA-256 13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-75c3f434723fb3e9
       status: classified-with-reason
       discovery_refs:
@@ -25709,7 +25765,9 @@ computed:
     - de-kg-discovery-20d4058656e75e8c
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
+    - de-kg-discovery-69469ab37f301181
     - de-kg-discovery-756b8977705fa113
+    - de-kg-discovery-90238268a8dee863
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-d8507d27fb02cb6a
@@ -25724,7 +25782,9 @@ computed:
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
+    - de-kg-instr-6abee6f46fd03a40
     - de-kg-instr-703d3b12aaab39f8
+    - de-kg-instr-73d798cce838ed41
     - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
@@ -25747,12 +25807,12 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 135
-    open_dependency_count: 143
+    instruments_bearing_on_computed_count: 139
+    open_dependency_count: 147
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 774
+    bearing_candidate_instruments: 775
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

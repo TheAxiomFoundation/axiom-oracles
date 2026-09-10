@@ -3755,6 +3755,18 @@
       "class_membership_state": "bstbl_ii_publication_unverified"
     },
     {
+      "id": "de-kg-discovery-c4a75118763d3018",
+      "class_id": "de-kg-suppl-009",
+      "identity": "BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16",
+      "discovery_excerpt": "BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16",
+      "source_path": "da-kg-2025.txt",
+      "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
+      "status": "pending",
+      "text_capture_state": "citation_only",
+      "class_membership_state": "bstbl_ii_issue_page_unverified",
+      "discovery_note": "Exact A19.3 citation recovered by a recall probe accepting the printed S.16 form. Official decision recovered into corpus PR668; it is not yet bound as a published corpus receipt."
+    },
+    {
       "id": "de-kg-discovery-c5da6ee5d3d1267d",
       "class_id": "de-kg-suppl-009",
       "identity": "BFH vom 11.07.1978, VIII R 120/75, BStBl II 1979 S. 57",
@@ -4605,13 +4617,14 @@
     "Verify BStBl II publication/class membership of C-328/20; the full official corrected judgment is captured and its family-benefit coordination effect remains to encode.",
     "The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.",
     "The Swiss free-movement agreement and2012AnnexII replacement are receipted. Encode the Swiss coordination bridge and investigate all bearing amendments and administrative decisions referenced by AnnexII; the requested Swiss override cannot be inferred from the EEA Agreement.",
-    "81 complete official BFH decisions recovered from post2009 queries. Reconcile duplicate III R21/12 date and compound III R10/11 plus III R63/11 seed explicitly; older cases and exhaustive register discovery remain. Official V classification does not by itself verify exact BStBl issue/page."
+    "81 complete official BFH decisions recovered from post2009 queries. Reconcile duplicate III R21/12 date and compound III R10/11 plus III R63/11 seed explicitly; older cases and exhaustive register discovery remain. Official V classification does not by itself verify exact BStBl issue/page.",
+    "A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. The exact S.16 citation is now enrolled. This probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels; bind its recovered official text after corpus PR668 publication."
   ],
   "counts": {
     "de-kg-suppl-007": 16,
     "de-kg-suppl-008": 2,
-    "de-kg-suppl-009": 170,
+    "de-kg-suppl-009": 171,
     "de-kg-suppl-010": 40
   },
-  "receipt_sha256": "216ec5b4bf063cdfefccffb748b5544d9e1f410b93a8341f1451e0a9e2e2ec7f"
+  "receipt_sha256": "afcf5908a3b060f32257e5c05795c04b4ec25a343afe2614b71b03727623430f"
 }
