@@ -92,7 +92,14 @@ INSTRUMENT_DECISION_STATUSES = (
     "excluded-with-reason",
 )
 LEAF_DECISION_KINDS = ("world_fact", "law_derived")
-_DECISION_SECTIONS = ("provisions", "instrument_dispositions", "leaf_classifications")
+_DECISION_SECTIONS = (
+    "provisions",
+    "instrument_dispositions",
+    "leaf_classifications",
+    "supplemental_instruments",
+)
+_SUPPLEMENTAL_ID = re.compile(r"^de-(kg|rv|uhv)-suppl-\d{3}$")
+SUPPLEMENTAL_RELATIONS = ("bears_on", "issued_under", "coordination", "guidance")
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
@@ -1089,6 +1096,109 @@ def _canonical_decisions(
         dispositions.append(row)
     dispositions.sort(key=lambda row: candidate_order[row["id"]])
 
+    # Supplemental instruments: found by reading (not by a captured discovery
+    # channel), enrolled as pending frontier rows. Each row binds the
+    # discovering candidate AND that candidate's section text, so the
+    # enrolment is as text-grounded as the read that produced it. A
+    # non-pending supplemental row must declare the captured text it was
+    # decided on (text_source + text_sha256).
+    disposition_by_id = {row["id"]: row for row in dispositions}
+    supplemental: list[dict[str, Any]] = []
+    seen = set()
+    raw_rows = raw.get("supplemental_instruments", [])
+    if not isinstance(raw_rows, list):
+        errors.append("committed_decisions.supplemental_instruments must be a list")
+        raw_rows = []
+    for index, decision in enumerate(raw_rows):
+        label = f"committed_decisions.supplemental_instruments[{index}]"
+        if not isinstance(decision, Mapping):
+            errors.append(f"{label} must be a mapping")
+            continue
+        sid = decision.get("id")
+        if not isinstance(sid, str) or not _SUPPLEMENTAL_ID.fullmatch(sid):
+            errors.append(f"{label}.id must match de-<program>-suppl-NNN")
+            continue
+        if sid in seen or sid in candidate_by_id:
+            errors.append(f"duplicate or colliding supplemental instrument id: {sid}")
+            continue
+        seen.add(sid)
+        identity = _text(decision.get("identity"))
+        title_short = _text(decision.get("title_short"))
+        if identity is None:
+            errors.append(f"{label}.identity must name the instrument (official citation)")
+        if title_short is None:
+            errors.append(f"{label}.title_short must be non-empty")
+        relation = decision.get("relation")
+        if relation not in SUPPLEMENTAL_RELATIONS:
+            errors.append(f"{label}.relation must be one of {SUPPLEMENTAL_RELATIONS}")
+        discovered_by = decision.get("discovered_by")
+        discovering = candidate_by_id.get(discovered_by) if isinstance(discovered_by, str) else None
+        if discovering is None:
+            errors.append(f"{label}.discovered_by must name a generated instrument candidate")
+        else:
+            if discovered_by not in disposition_by_id:
+                errors.append(
+                    f"{label}.discovered_by {discovered_by} has no committed disposition; "
+                    "a read that enrols instruments must itself be recorded"
+                )
+            bound = discovering.get("body_sha256")
+            if isinstance(bound, str) and decision.get("discovered_in_body_sha256") != bound:
+                errors.append(
+                    f"{label}.discovered_in_body_sha256 does not bind the discovering "
+                    "candidate's section text"
+                )
+        status = decision.get("status")
+        if status != "pending" and status not in INSTRUMENT_DECISION_STATUSES:
+            errors.append(f"{label}.status must be pending or one of {INSTRUMENT_DECISION_STATUSES}")
+        row: dict[str, Any] = {
+            "id": sid,
+            "identity": identity,
+            "title_short": title_short,
+            "relation": relation,
+            "discovered_by": discovered_by,
+            "discovered_in_body_sha256": decision.get("discovered_in_body_sha256"),
+            "provenance": _text(decision.get("provenance")),
+            "status": status,
+        }
+        if row["provenance"] is None:
+            errors.append(f"{label}.provenance must record where in the read the instrument was named")
+        if status == "pending":
+            for key in ("classification", "reason", "bears_on_computed_surface", "text_sha256", "text_source"):
+                if decision.get(key) is not None:
+                    errors.append(f"{label}: pending rows carry no {key}")
+        else:
+            classification = _text(decision.get("classification"))
+            reason = _text(decision.get("reason"))
+            if classification is None:
+                errors.append(f"{label}.classification must be non-empty")
+            if reason is None:
+                errors.append(f"{label}.reason must be non-empty")
+            row["classification"] = classification
+            row["reason"] = reason
+            text_sha = decision.get("text_sha256")
+            text_source = _text(decision.get("text_source"))
+            if not isinstance(text_sha, str) or not _HEX_SHA256.fullmatch(text_sha) or text_source is None:
+                errors.append(
+                    f"{label}: a decided supplemental instrument must bind the captured "
+                    "text it was read from (text_source + text_sha256)"
+                )
+            row["text_source"] = text_source
+            row["text_sha256"] = text_sha
+            bears = decision.get("bears_on_computed_surface")
+            if status in ("classified-with-reason", "excluded-with-reason"):
+                if not isinstance(bears, bool):
+                    errors.append(f"{label}.bears_on_computed_surface must be true or false")
+                row["bears_on_computed_surface"] = bears
+            elif bears is not None:
+                errors.append(f"{label}.bears_on_computed_surface is only valid for classified or excluded instruments")
+            if status == "encoded":
+                encoded_by = _text(decision.get("encoded_by"))
+                if encoded_by is None or encoded_by not in all_module_ids:
+                    errors.append(f"{label}.encoded_by must name a captured RuleSpec module")
+                row["encoded_by"] = encoded_by
+        supplemental.append(row)
+    supplemental.sort(key=lambda row: row["id"])
+
     leaf_by_input = {row["input"]: row for row in leaves if isinstance(row, Mapping)}
     classifications: list[dict[str, Any]] = []
     seen = set()
@@ -1140,6 +1250,7 @@ def _canonical_decisions(
         "provisions": provisions,
         "instrument_dispositions": dispositions,
         "leaf_classifications": classifications,
+        "supplemental_instruments": supplemental,
     }
 
 
@@ -1213,6 +1324,29 @@ def _computed(
             for key in ("classification", "reason", "encoded_by", "bears_on_computed_surface"):
                 if decision.get(key) is not None:
                     entry[key] = decision[key]
+        candidates.append(entry)
+    for row in decisions.get("supplemental_instruments", []):
+        entry = {
+            "id": row["id"],
+            "status": row["status"],
+            "discovery_refs": [row["discovered_by"]],
+            "identity_kind": "supplemental",
+            "identity": row["identity"],
+            "title_short": row["title_short"],
+            "relation": row["relation"],
+            "discovered_in_body_sha256": row.get("discovered_in_body_sha256"),
+            "provenance": row["provenance"],
+        }
+        for key in (
+            "classification",
+            "reason",
+            "encoded_by",
+            "bears_on_computed_surface",
+            "text_source",
+            "text_sha256",
+        ):
+            if row.get(key) is not None:
+                entry[key] = row[key]
         candidates.append(entry)
     instrument_counts = {
         "total": len(candidates),
@@ -1294,7 +1428,7 @@ def _computed(
         },
         "measurement_method": {
             "spine_rows": "count of rows selected by the preregistered exact-citation/range scope from the pinned corpus release",
-            "bearing_candidate_instruments": "unique all-pending candidates discovered by any captured channel; potential bearing, not a legal disposition",
+            "bearing_candidate_instruments": "unique candidates discovered by any captured channel or enrolled from a recorded read (supplemental); potential bearing, not a legal disposition",
             "law_derived_leaf_nodes": "unique typed frontier inputs that closure/de/source.json already commits as law_derived",
             "max_depth_estimate": "maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned",
             "remaining_oracle_work": "oracle_target minus complete oracle rows in the sha-bound current certificate work inventory",
@@ -1692,7 +1826,7 @@ def _hermetic_rederivation(
     if program_id not in PROGRAM_IDS:
         raise _SourceError("cannot rederive ledger with an unknown program")
     committed = _load_committed_document(program_id)
-    validate_artifact(committed)
+    _validate_generated(committed)
     if committed.get("program", {}).get("id") != program_id:
         raise _SourceError(f"committed artifact program mismatch: {program_id}")
 
@@ -1807,7 +1941,12 @@ def _is_int(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 
 
-def validate_artifact(document: Any) -> ClosureSummary:
+def _validate_generated(document: Any) -> dict[str, Any]:
+    """Validate the ledger's shape and generated facts (no decisions, no
+    computed join). Shared by validate_artifact and the hermetic rederivation,
+    which needs HEAD's generated facts to be trustworthy without requiring
+    HEAD's decisions and join to satisfy the current contract."""
+
     errors: list[str] = []
     if not isinstance(document, Mapping):
         raise ClosureLedgerError(("ledger must be a mapping",))
@@ -1951,6 +2090,29 @@ def validate_artifact(document: Any) -> ClosureSummary:
         errors.append("measurement basis is malformed")
     if errors:
         raise ClosureLedgerError(errors)
+    return {
+        "generated": generated,
+        "decisions": decisions,
+        "computed": computed,
+        "spine": spine,
+        "leaves": leaves,
+        "graph": graph,
+        "candidates": candidates,
+        "measurement_basis": measurement_basis,
+    }
+
+
+def validate_artifact(document: Any) -> ClosureSummary:
+    parts = _validate_generated(document)
+    generated = parts["generated"]
+    decisions = parts["decisions"]
+    computed = parts["computed"]
+    spine = parts["spine"]
+    leaves = parts["leaves"]
+    graph = parts["graph"]
+    candidates = parts["candidates"]
+    measurement_basis = parts["measurement_basis"]
+    errors: list[str] = []
 
     canonical = _canonical_decisions(
         decisions,
