@@ -982,15 +982,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343
+    snapshot_sha256: 81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc
     channel_receipts:
-      corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
-      subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
+      corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
+      subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 760
+    candidate_count: 763
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -8946,7 +8946,13 @@ generated_facts:
     - id: de-kg-instr-002
       status: pending
       discovery_refs:
+      - de-corpus-2255106cce7adc9d0fee
+      - de-corpus-42ad35ba8f618cfa5964
+      - de-corpus-488caa60151badf00b2c
+      - de-corpus-54770bf802e0df15588c
+      - de-corpus-55af163867a66816acd6
       - de-corpus-b554431cd2c4259bcd01
+      - de-corpus-f67fecb8680c30b370a6
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
@@ -8983,7 +8989,7 @@ generated_facts:
     - id: de-kg-instr-075453ee3119e51d
       status: pending
       discovery_refs:
-      - de-corpus-c4939583b6323155513e
+      - de-corpus-186e9228f0debdada404
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-57-13-2015-11-05
       row_sha256: 26ac98c7b4fec1a38c834bc7916850c7962d0511126a78a89e82c0a4efa7cab6
@@ -9011,8 +9017,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-42cb174d59c13ca15840
-      - de-corpus-64dd3a55ec99e673f94b
       - de-corpus-6d4c3e36d18b468a9b05
+      - de-corpus-d287c2c231ce79c78266
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -9058,8 +9064,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2f133166ae69264b2ba4
+      - de-corpus-999ab27339a2d07ab8bf
       - de-corpus-a44ac4d98cca45e24532
-      - de-corpus-b22116b1e8963b259125
       - de-corpus-bf8dd8d0692c69c903ea
       - de-corpus-d03f7f5a1298c9db19cf
       - de-corpus-dfcf666a5b18275ee7f2
@@ -9070,6 +9076,19 @@ generated_facts:
       citation_label: 'BFH, III R 3/13, 2013-08-08: Keine Bindungswirkung einer familiengerichtlichen Bestimmung des Kindes zum Kindergeldberechtigten'
       document_citation_path: de/guidance/bfh-iii-r-3-13-2013-08-08
       title: 'BFH, III R 3/13, 2013-08-08: Keine Bindungswirkung einer familiengerichtlichen Bestimmung des Kindes zum Kindergeldberechtigten'
+    - id: de-kg-instr-2264ad62fc60eb93
+      status: pending
+      discovery_refs:
+      - de-corpus-88b4cf4edf941263ce32
+      identity_kind: corpus_citation
+      citation_path: de/statute/famfg
+      row_sha256: 050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee
+      document_class: statute
+      citation_label: Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit
+      body_sha256: eb4e0257b47a4e95186060f314e29cde25026c80baa539cd15905adbd181ba62
+      document_citation_path: de/statute/famfg
+      legal_authority_url: https://www.gesetze-im-internet.de/famfg/
+      fundstelle: BGBl I 2008, 2586, 2587
     - id: de-kg-instr-25b1ea0557c352eb
       status: pending
       discovery_refs:
@@ -9110,7 +9129,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2ec721f6243aa7a9c822
-      - de-corpus-e229d5164de6bea3ea75
+      - de-corpus-a0265f7ca30ec38d108c
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-73-09-2012-02-09
       row_sha256: d90042f7820188bae7105a60a6886d375fec0e5e60050aec5c53173bd8602b58
@@ -9128,7 +9147,7 @@ generated_facts:
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
-      - de-corpus-5603013ef29636fa1cef
+      - de-corpus-0d44ca971d400c789b24
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-14-17-2018-02-21
       row_sha256: bf7b0a4cdd7d06e9586f3d27ae68dd22a2dd8e234800ea928e24fcd53ffe8311
@@ -9139,8 +9158,8 @@ generated_facts:
     - id: de-kg-instr-2c28748809bc5f0a
       status: pending
       discovery_refs:
+      - de-corpus-5a26a1be8c2bb09e971e
       - de-corpus-b0a8a31f2ba2a50e5cfa
-      - de-corpus-c3db2fce1115f8cdcd14
       - de-corpus-dd60ada54b4cc59bba0b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-15-12-2014-12-17
@@ -9153,7 +9172,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2106da243fb5e024a263
-      - de-corpus-916b11da697e717aa71c
+      - de-corpus-65b3584061565b16c9d0
       - de-corpus-b0bd9d4a4d8965a06c4b
       - de-corpus-c12c4db12729a1514f1b
       identity_kind: corpus_citation
@@ -9179,9 +9198,9 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-33cbcddd67cd6e674ac2
+      - de-corpus-700f8f69091e4db81ad9
       - de-corpus-8ec012ea0ce9871a3de5
       - de-corpus-ba74bd9b74797c226c19
-      - de-corpus-e46d616e9a6a4ba07292
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-18-21-2021-09-01
       row_sha256: 863d1f341f8e7ccb31aba9678d5a1efe123406f29edcc384fb30073338493163
@@ -9231,7 +9250,7 @@ generated_facts:
     - id: de-kg-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-6f3eda00e6dfb62c26ed
+      - de-corpus-0f0ec3eb21acbcbd115b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -9243,7 +9262,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-682153d250410ec8f830
-      - de-corpus-8f1bf892530fb3c7e621
+      - de-corpus-72dd464614ff88b07622
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
@@ -9254,7 +9273,7 @@ generated_facts:
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
-      - de-corpus-1fe7ebc3106c241b84c6
+      - de-corpus-0138041ff7d4a35b7464
       - de-corpus-3a6526f67d54b8372d7f
       - de-corpus-461448dd2f8399f809a7
       - de-corpus-ae7798bcf059f03c5a6d
@@ -9317,8 +9336,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-164bea938c6a3063f131
-      - de-corpus-272c08aa29f52270c78f
       - de-corpus-6ca53ad3e1fd2762a3be
+      - de-corpus-d05d60b0d1c823fe736f
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-32-15-2017-03-15
       row_sha256: 83e56135a34905a6bf1644c2630162d41a5d953ac7c47031377fab1be97f8128
@@ -9370,8 +9389,8 @@ generated_facts:
       discovery_refs:
       - de-corpus-170306142fc9632c0004
       - de-corpus-4da85ff7b2913f67bdbe
-      - de-corpus-580c329817851b74d98e
       - de-corpus-81d6a86fe9a55499b410
+      - de-corpus-9672c95dab6b6ae002e8
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
       row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
@@ -9394,8 +9413,8 @@ generated_facts:
     - id: de-kg-instr-466db8bab9da1048
       status: pending
       discovery_refs:
+      - de-corpus-12b5b6e63d58a19d4913
       - de-corpus-6c1b70664f2e80798d7f
-      - de-corpus-fc09dfbbf412855028eb
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-48-11-2013-04-18
       row_sha256: c2facdb93e1393569a3a8921b0f7741d159e8af512682db31ffbb6c1799ed7ba
@@ -9428,7 +9447,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-371c309783518901f2d5
-      - de-corpus-5253b0a0ad725b94c828
+      - de-corpus-432a1b5dea593a43b9d9
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       row_sha256: 11986fea527775345d675f14309099c47ac086cfcc0461ef8dbd728914f331cd
@@ -9450,6 +9469,22 @@ generated_facts:
       citation_label: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
       document_citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
       title: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
+    - id: de-kg-instr-5f245a7caa2b79e4
+      status: pending
+      discovery_refs:
+      - de-corpus-0e79544366eb745d84c0
+      - de-corpus-4221634101ec67808d9a
+      - de-corpus-a275cf6abdc465163a6f
+      - de-corpus-eb02b2767d60eb65f481
+      identity_kind: corpus_citation
+      citation_path: de/regulation/kizdav
+      row_sha256: 55ba9e46328e3010a47dedde6546a452d3d5830b4f4e7d7889a204fb0d6f042d
+      document_class: regulation
+      citation_label: Verordnung zur Datenübermittlung zwischen den für das Kindergeld nach dem Einkommensteuergesetz und den für den Kinderzuschlag zuständigen Stellen
+      body_sha256: 84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b
+      document_citation_path: de/regulation/kizdav
+      legal_authority_url: https://www.gesetze-im-internet.de/kizdav/
+      fundstelle: BGBl I 2023, Nr. 376
     - id: de-kg-instr-5fbc4ffc01cca130
       status: pending
       discovery_refs:
@@ -9532,7 +9567,7 @@ generated_facts:
     - id: de-kg-instr-6cf659dd66fd5e85
       status: pending
       discovery_refs:
-      - de-corpus-a2529365876ae617a375
+      - de-corpus-6b31b46427b574df1f94
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-43-20-2021-12-15
       row_sha256: 96d3e126313bd7350745cdcb5adf4b772255adee74137a5a3ec0298f926827b0
@@ -9543,7 +9578,7 @@ generated_facts:
     - id: de-kg-instr-6e0720e53a02234e
       status: pending
       discovery_refs:
-      - de-corpus-18f6a44b5b4c894fbc1a
+      - de-corpus-57e6e40f6e48f87df680
       identity_kind: corpus_citation
       citation_path: de/statute/wogg
       row_sha256: 0c75816689d2cf1d91917c024d3bb2760ba821c2af162fd347863d5d5b4b5386
@@ -9596,7 +9631,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-1f5ac01ef702228a1dea
-      - de-corpus-5a2117ef6b7a7ee6d833
+      - de-corpus-516b29b5d37859f891c0
       - de-corpus-b29b277d4040a30899e3
       - de-corpus-d89cf799cb8ebc53bd98
       identity_kind: corpus_citation
@@ -9623,6 +9658,7 @@ generated_facts:
       discovery_refs:
       - de-corpus-6f0371332ecc12225a78
       - de-corpus-7339241372ee322f0ac8
+      - de-corpus-9ad1847e4442dd534b54
       - de-corpus-9f86038cb34463bd1471
       - de-corpus-debda12e7904d090ed0c
       - de-corpus-e637adf550bf2a846e17
@@ -9655,6 +9691,7 @@ generated_facts:
       discovery_refs:
       - de-corpus-3945410495307f7f8a69
       - de-corpus-72c90697807b0be4d86b
+      - de-corpus-d13b418c6ee98fc0d97f
       identity_kind: corpus_citation
       citation_path: de/guidance/esth-2024-32
       row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
@@ -9666,7 +9703,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-6d51618dea25df463cf4
-      - de-corpus-a047bd909d331c4e44d2
+      - de-corpus-8649076d89ba303eef81
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-14-2014-09-25
       row_sha256: c0a33ff49e3a46a817e766e5eef78efb484b4b55028fd32f3b596d201e5d4808
@@ -9679,7 +9716,7 @@ generated_facts:
       discovery_refs:
       - de-corpus-48b002d52962878d6020
       - de-corpus-4f93bf3e9a042ed50fbd
-      - de-corpus-51156c894227c4bf49bc
+      - de-corpus-fa128eee8b539bda82a3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-19-17-2018-09-13
       row_sha256: 49758e06d3a304b2659e41a975f3ef12b7adb3ecaa7466a7e498cc1446e3bbae
@@ -9691,7 +9728,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2397f2ff0c5303b88c52
-      - de-corpus-6888a83ab19a44712a4a
+      - de-corpus-6fc3d11d63d7c2ad4926
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       row_sha256: 6121522ba80e3e85463abc2a128f527e144fc0a71820ad1caa08e2f23c854edc
@@ -9722,8 +9759,8 @@ generated_facts:
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
+      - de-corpus-16aebe9685b95e8a3d0e
       - de-corpus-276261a84cf3a57d8882
-      - de-corpus-31e61e88272db75b21bf
       - de-corpus-3de2dc62ca7b5d5103e8
       - de-corpus-566cbc94dcc63a98d95d
       - de-corpus-5891e59f49035c505f7f
@@ -9766,7 +9803,7 @@ generated_facts:
       - de-corpus-045f86ac66a8bb0e5366
       - de-corpus-09437434940495b70a02
       - de-corpus-28db1c6c0a5a3d0244ed
-      - de-corpus-88e7b29e3eb9a6782c3e
+      - de-corpus-f3740f155f38fd83842a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
@@ -9777,7 +9814,7 @@ generated_facts:
     - id: de-kg-instr-9dfa8fc6d1681fbb
       status: pending
       discovery_refs:
-      - de-corpus-351c5921e511fb22722d
+      - de-corpus-e2eede02b89631068943
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-22-2023-10-12
       row_sha256: b379b748838e3b1f183d246659fc0dcfef0aaab0ba3c10fd09d3307dfda39690
@@ -9788,7 +9825,7 @@ generated_facts:
     - id: de-kg-instr-9ea3370bf9f2ad0d
       status: pending
       discovery_refs:
-      - de-corpus-471ca3eaad0d0db47a44
+      - de-corpus-33214cc45470fb36c26a
       - de-corpus-585ed85fef5ed5a7db20
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
@@ -9812,7 +9849,8 @@ generated_facts:
     - id: de-kg-instr-a365b83505706342
       status: pending
       discovery_refs:
-      - de-corpus-9d3970d1a7a27b46ba4f
+      - de-corpus-3a40902fa122bcbfe288
+      - de-corpus-992c016781439b8ebb6a
       - de-corpus-f61bee0c29ccd5d670fb
       identity_kind: corpus_citation
       citation_path: de/statute/uhvorschg
@@ -9869,7 +9907,7 @@ generated_facts:
     - id: de-kg-instr-b25507686192c311
       status: pending
       discovery_refs:
-      - de-corpus-8bbb904a7845c7cd0110
+      - de-corpus-a23a4613a84a8feb5048
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-23-21-2022-09-22
       row_sha256: ec79e7b225a622b7a34caaa3d28b6d903b62ec2fff19419c75b00190b3ce9c31
@@ -9890,6 +9928,17 @@ generated_facts:
       document_citation_path: de/statute/ersdig
       legal_authority_url: https://www.gesetze-im-internet.de/ersdig/
       fundstelle: BGBl I 1960, 10 (2005, 2301)
+    - id: de-kg-instr-b7704b22cefd934c
+      status: pending
+      discovery_refs:
+      - de-corpus-2e22980e6eccd990d59b
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/32/absatz-4
+      row_sha256: 31c99ccf67ecfa8f82fffe7b26102474e86e11639ee75a64cf9f51c6f33aa1d0
+      document_class: statute
+      citation_label: Einkommensteuergesetz § 32 Absatz 4
+      document_citation_path: de/statute/estg/32/absatz-4
+      title: Einkommensteuergesetz § 32 Absatz 4
     - id: de-kg-instr-b794d203afd4361a
       status: pending
       discovery_refs:
@@ -9922,6 +9971,7 @@ generated_facts:
       - de-corpus-6f9020d3778b517e3e2a
       - de-corpus-86534602aca6487afa11
       - de-corpus-8bba30603b49eb761e1d
+      - de-corpus-96240af8f8849da1f5e9
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
       row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
@@ -9972,7 +10022,7 @@ generated_facts:
       discovery_refs:
       - de-corpus-2bf0470f154a78fd2a70
       - de-corpus-6ecae1b1cb1d2867a6e9
-      - de-corpus-74152776761c48e810eb
+      - de-corpus-8cb7cb2942187ed6a8d3
       - de-corpus-8cf5cadf0d4c98644544
       - de-corpus-8f230fbe6c5ed690124c
       - de-corpus-d0478f88a64d7cf4bc7c
@@ -10075,7 +10125,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2346b5d653dd91ad16ef
-      - de-corpus-67a85788481346c5eb32
+      - de-corpus-41e2a24c48733a4659b8
       identity_kind: corpus_citation
       citation_path: de/guidance/cjeu-c-411-20
       row_sha256: f4600965e8faeb7a2a3ead975193b78acd7f6a10272a8b89bcab96217c4e5762
@@ -10159,7 +10209,7 @@ generated_facts:
     - id: de-kg-instr-e832fabf332bce62
       status: pending
       discovery_refs:
-      - de-corpus-0fc08e64477e9859b7a9
+      - de-corpus-6bd58c000de866287b86
       - de-corpus-dc178935f4d4ae6081e7
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-12-2014-05-08
@@ -10171,7 +10221,7 @@ generated_facts:
     - id: de-kg-instr-e92627717e6aac58
       status: pending
       discovery_refs:
-      - de-corpus-d67857af8cf31cb144d5
+      - de-corpus-34c33714d140c423d6ed
       - de-corpus-d8126b4c20a7244a1f57
       - de-corpus-f88c13ced838e0fe748a
       identity_kind: corpus_citation
@@ -10204,7 +10254,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-8b5289f0247ef6ad90f2
-      - de-corpus-d6aab01062574b46488b
+      - de-corpus-97dfdb8399ecf7ff2593
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-38-14-2015-06-23
       row_sha256: 62dee8eb4963e72aab68e1db4ce0ed588b038a79db9a78ef8205d98614072e7f
@@ -10227,7 +10277,7 @@ generated_facts:
     - id: de-kg-instr-f87f215f5ca7e7eb
       status: pending
       discovery_refs:
-      - de-corpus-3f68bca82ed9109af0b2
+      - de-corpus-61223ffe0907fa488d19
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-13-2014-05-08
       row_sha256: 5afb226db1b4e7c44b0071cd26b3cc1a461b3545e2e445dd68969207645163f0
@@ -10250,8 +10300,8 @@ generated_facts:
     - id: de-kg-instr-fa626aa971b4e396
       status: pending
       discovery_refs:
-      - de-corpus-154c7b4436e7570445ce
       - de-corpus-add9b4ac0708e9b85f62
+      - de-corpus-b54ec0b159268ea9240f
       - de-corpus-f36e48b35aaf9a5e2131
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-10-14-2015-06-18
@@ -10294,7 +10344,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 591437fc0236c93ed18f85f3a0067dfddd0c04ba1201a822047943b3bce5082f
+      sha256: 664ae594e98d2f5a9f8b62f103c1a1b8ecff16fc8970abbd0a1f4c1aefede525
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10343,8 +10393,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
-        subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
+        corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
+        subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13229,6 +13279,12 @@ committed_decisions:
     reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
       derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-2264ad62fc60eb93
+    status: classified-with-reason
+    body_sha256: eb4e0257b47a4e95186060f314e29cde25026c80baa539cd15905adbd181ba62
+    classification: recipient_priority_condition
+    reason: The graph now resolves the connected EStG64(2) sentence3 citation in the fully reviewed FamFG231(2), body SHA-256 0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20. The full FamFG40 effectiveness rule is independently identified by DA-KG A25.1(7), retained as supplemental018 with body SHA-256 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3. These rules bear on recipient-priority procedure and when a selection takes effect. They remain unencoded; FamFG231 does not create claimant entitlement. The complete sections40 and231, not every FamFG provision, were reviewed. Their full texts and exact corpus commit are retained in recipient-priority-source-review.json. Historical applicability remains open.
+    bears_on_computed_surface: true
   - id: de-kg-instr-26ba3514c162c52d
     status: classified-with-reason
     classification: document_container
@@ -13310,6 +13366,12 @@ committed_decisions:
     status: excluded-with-reason
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Verordnung (EU) 2017/492' matched in § 68 Abs. 6 EStG, where it appears only as the last-amendment citation of Regulation (EC) 883/2004 inside the data-sharing authorisation. Part of an excluded data provision; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-5f245a7caa2b79e4
+    status: excluded-with-reason
+    body_sha256: 84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b
+    classification: data_retrieval_regulation
+    reason: All nine pinned KiZDAV rows, including the complete sections1–6, entrance and closing formulas and act header, read and hash-checked. Their ordered body-hash aggregate 0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a equals the existing supplemental016 receipt. Sections1–3 authorize and limit retrieval of existing Kindergeld records for Kinderzuschlag, sections4–5 govern notifications, privacy and audit duties, and section6 supplies commencement on1January2024. The EStG64/65/74 references specify retrieved data, not new entitlement, recipient-selection or amount rules. The existing exclusion of EStG68(5) and supplemental016 therefore applies to this newly discovered corpus identity as well. Full row texts and hash verification are retained in genitive-citation-recall-review.json.
     bears_on_computed_surface: false
   - id: de-kg-instr-5fbc4ffc01cca130
     status: excluded-with-reason
@@ -13428,6 +13490,11 @@ committed_decisions:
     classification: entitlement_condition
     reason: 'Full three-page BFH III R 37/21 decision of 22 September 2022, paragraphs 1–22, read against the pinned corpus body. Paragraphs 13 and 17–21 distinguish the actual job-seeker notification from the agency register and its deletion. Where neither an effectively notified termination decision nor the child’s own request to end job-seeking is present, termination depends on a source-defined breach authorizing the agency to end placement. Deletion of registration and consensual ending of a careers-advice appointment alone do not end the condition. The child-request and effectively notified administrative-act routes must not be omitted by describing breach as the only termination route. DA-KG 2025 A 14.1 expressly applies this holding to EStG § 32 Abs. 4 Satz 1 Nr. 1; it bears on qualifying_child_count and remains unencoded. The decision applies the historical SGB III § 38 wording to 2018; the corresponding provision and current guidance must be version-bound before implementation,
       without copying the old paragraph number as current law. Source: de/guidance/bfh-iii-r-37-21-2022-09-22/document-1, body SHA-256 49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef, corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBl II issue/page verification and exhaustive discovery remain open.'
+    bears_on_computed_surface: true
+  - id: de-kg-instr-b7704b22cefd934c
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: This separately captured complete EStG32(4) document is now discovered through its connected BFDG5 reference. Its full body SHA-256 509eeb2d18357ff8e9f127cb216cb2e2f0ce4b362e5a08052c553870ce0211e2 matches adult-child-repair-review.json and remains unchanged in the current pinned release. It defines adult-child qualification, training and service routes, disability and second-training employment limits. Those routes bear on qualifying_child_count and remain unencoded. The signed age module and BFDG5 general preservation norms do not implement this full provision; discovering this document does not reopen an encoding attempt or claim complete coverage.
     bears_on_computed_surface: true
   - id: de-kg-instr-b96e03076e143e8e
     status: classified-with-reason
@@ -14422,12 +14489,12 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 778
+    instrument_count: 781
     counts:
-      total: 778
+      total: 781
       encoded: 2
-      classified-with-reason: 160
-      excluded-with-reason: 348
+      classified-with-reason: 162
+      excluded-with-reason: 349
       pending: 268
     pending:
     - de-kg-discovery-00aab547379e68f7
@@ -24036,7 +24103,13 @@ computed:
     - id: de-kg-instr-002
       status: classified-with-reason
       discovery_refs:
+      - de-corpus-2255106cce7adc9d0fee
+      - de-corpus-42ad35ba8f618cfa5964
+      - de-corpus-488caa60151badf00b2c
+      - de-corpus-54770bf802e0df15588c
+      - de-corpus-55af163867a66816acd6
       - de-corpus-b554431cd2c4259bcd01
+      - de-corpus-f67fecb8680c30b370a6
       - de-subject-005
       identity_kind: corpus_citation
       citation_path: de/statute/bkgg-1996
@@ -24079,7 +24152,7 @@ computed:
     - id: de-kg-instr-075453ee3119e51d
       status: classified-with-reason
       discovery_refs:
-      - de-corpus-c4939583b6323155513e
+      - de-corpus-186e9228f0debdada404
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-57-13-2015-11-05
       row_sha256: 26ac98c7b4fec1a38c834bc7916850c7962d0511126a78a89e82c0a4efa7cab6
@@ -24111,8 +24184,8 @@ computed:
       status: encoded
       discovery_refs:
       - de-corpus-42cb174d59c13ca15840
-      - de-corpus-64dd3a55ec99e673f94b
       - de-corpus-6d4c3e36d18b468a9b05
+      - de-corpus-d287c2c231ce79c78266
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -24164,8 +24237,8 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-2f133166ae69264b2ba4
+      - de-corpus-999ab27339a2d07ab8bf
       - de-corpus-a44ac4d98cca45e24532
-      - de-corpus-b22116b1e8963b259125
       - de-corpus-bf8dd8d0692c69c903ea
       - de-corpus-d03f7f5a1298c9db19cf
       - de-corpus-dfcf666a5b18275ee7f2
@@ -24179,6 +24252,22 @@ computed:
       classification: recipient_priority_condition
       reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
         derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
+    - id: de-kg-instr-2264ad62fc60eb93
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-88b4cf4edf941263ce32
+      identity_kind: corpus_citation
+      citation_path: de/statute/famfg
+      row_sha256: 050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee
+      document_class: statute
+      citation_label: Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit
+      body_sha256: eb4e0257b47a4e95186060f314e29cde25026c80baa539cd15905adbd181ba62
+      document_citation_path: de/statute/famfg
+      legal_authority_url: https://www.gesetze-im-internet.de/famfg/
+      fundstelle: BGBl I 2008, 2586, 2587
+      classification: recipient_priority_condition
+      reason: The graph now resolves the connected EStG64(2) sentence3 citation in the fully reviewed FamFG231(2), body SHA-256 0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20. The full FamFG40 effectiveness rule is independently identified by DA-KG A25.1(7), retained as supplemental018 with body SHA-256 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3. These rules bear on recipient-priority procedure and when a selection takes effect. They remain unencoded; FamFG231 does not create claimant entitlement. The complete sections40 and231, not every FamFG provision, were reviewed. Their full texts and exact corpus commit are retained in recipient-priority-source-review.json. Historical applicability remains open.
       bears_on_computed_surface: true
     - id: de-kg-instr-25b1ea0557c352eb
       status: pending
@@ -24226,7 +24315,7 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-2ec721f6243aa7a9c822
-      - de-corpus-e229d5164de6bea3ea75
+      - de-corpus-a0265f7ca30ec38d108c
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-73-09-2012-02-09
       row_sha256: d90042f7820188bae7105a60a6886d375fec0e5e60050aec5c53173bd8602b58
@@ -24248,7 +24337,7 @@ computed:
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
-      - de-corpus-5603013ef29636fa1cef
+      - de-corpus-0d44ca971d400c789b24
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-14-17-2018-02-21
       row_sha256: bf7b0a4cdd7d06e9586f3d27ae68dd22a2dd8e234800ea928e24fcd53ffe8311
@@ -24259,8 +24348,8 @@ computed:
     - id: de-kg-instr-2c28748809bc5f0a
       status: pending
       discovery_refs:
+      - de-corpus-5a26a1be8c2bb09e971e
       - de-corpus-b0a8a31f2ba2a50e5cfa
-      - de-corpus-c3db2fce1115f8cdcd14
       - de-corpus-dd60ada54b4cc59bba0b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-15-12-2014-12-17
@@ -24273,7 +24362,7 @@ computed:
       status: excluded-with-reason
       discovery_refs:
       - de-corpus-2106da243fb5e024a263
-      - de-corpus-916b11da697e717aa71c
+      - de-corpus-65b3584061565b16c9d0
       - de-corpus-b0bd9d4a4d8965a06c4b
       - de-corpus-c12c4db12729a1514f1b
       identity_kind: corpus_citation
@@ -24307,9 +24396,9 @@ computed:
       status: excluded-with-reason
       discovery_refs:
       - de-corpus-33cbcddd67cd6e674ac2
+      - de-corpus-700f8f69091e4db81ad9
       - de-corpus-8ec012ea0ce9871a3de5
       - de-corpus-ba74bd9b74797c226c19
-      - de-corpus-e46d616e9a6a4ba07292
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-18-21-2021-09-01
       row_sha256: 863d1f341f8e7ccb31aba9678d5a1efe123406f29edcc384fb30073338493163
@@ -24371,7 +24460,7 @@ computed:
     - id: de-kg-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-6f3eda00e6dfb62c26ed
+      - de-corpus-0f0ec3eb21acbcbd115b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -24383,7 +24472,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-682153d250410ec8f830
-      - de-corpus-8f1bf892530fb3c7e621
+      - de-corpus-72dd464614ff88b07622
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
@@ -24394,7 +24483,7 @@ computed:
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
-      - de-corpus-1fe7ebc3106c241b84c6
+      - de-corpus-0138041ff7d4a35b7464
       - de-corpus-3a6526f67d54b8372d7f
       - de-corpus-461448dd2f8399f809a7
       - de-corpus-ae7798bcf059f03c5a6d
@@ -24468,8 +24557,8 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-164bea938c6a3063f131
-      - de-corpus-272c08aa29f52270c78f
       - de-corpus-6ca53ad3e1fd2762a3be
+      - de-corpus-d05d60b0d1c823fe736f
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-32-15-2017-03-15
       row_sha256: 83e56135a34905a6bf1644c2630162d41a5d953ac7c47031377fab1be97f8128
@@ -24525,8 +24614,8 @@ computed:
       discovery_refs:
       - de-corpus-170306142fc9632c0004
       - de-corpus-4da85ff7b2913f67bdbe
-      - de-corpus-580c329817851b74d98e
       - de-corpus-81d6a86fe9a55499b410
+      - de-corpus-9672c95dab6b6ae002e8
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
       row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
@@ -24552,8 +24641,8 @@ computed:
     - id: de-kg-instr-466db8bab9da1048
       status: pending
       discovery_refs:
+      - de-corpus-12b5b6e63d58a19d4913
       - de-corpus-6c1b70664f2e80798d7f
-      - de-corpus-fc09dfbbf412855028eb
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-48-11-2013-04-18
       row_sha256: c2facdb93e1393569a3a8921b0f7741d159e8af512682db31ffbb6c1799ed7ba
@@ -24589,7 +24678,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-371c309783518901f2d5
-      - de-corpus-5253b0a0ad725b94c828
+      - de-corpus-432a1b5dea593a43b9d9
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       row_sha256: 11986fea527775345d675f14309099c47ac086cfcc0461ef8dbd728914f331cd
@@ -24611,6 +24700,25 @@ computed:
       citation_label: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
       document_citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
       title: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
+    - id: de-kg-instr-5f245a7caa2b79e4
+      status: excluded-with-reason
+      discovery_refs:
+      - de-corpus-0e79544366eb745d84c0
+      - de-corpus-4221634101ec67808d9a
+      - de-corpus-a275cf6abdc465163a6f
+      - de-corpus-eb02b2767d60eb65f481
+      identity_kind: corpus_citation
+      citation_path: de/regulation/kizdav
+      row_sha256: 55ba9e46328e3010a47dedde6546a452d3d5830b4f4e7d7889a204fb0d6f042d
+      document_class: regulation
+      citation_label: Verordnung zur Datenübermittlung zwischen den für das Kindergeld nach dem Einkommensteuergesetz und den für den Kinderzuschlag zuständigen Stellen
+      body_sha256: 84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b
+      document_citation_path: de/regulation/kizdav
+      legal_authority_url: https://www.gesetze-im-internet.de/kizdav/
+      fundstelle: BGBl I 2023, Nr. 376
+      classification: data_retrieval_regulation
+      reason: All nine pinned KiZDAV rows, including the complete sections1–6, entrance and closing formulas and act header, read and hash-checked. Their ordered body-hash aggregate 0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a equals the existing supplemental016 receipt. Sections1–3 authorize and limit retrieval of existing Kindergeld records for Kinderzuschlag, sections4–5 govern notifications, privacy and audit duties, and section6 supplies commencement on1January2024. The EStG64/65/74 references specify retrieved data, not new entitlement, recipient-selection or amount rules. The existing exclusion of EStG68(5) and supplemental016 therefore applies to this newly discovered corpus identity as well. Full row texts and hash verification are retained in genitive-citation-recall-review.json.
+      bears_on_computed_surface: false
     - id: de-kg-instr-5fbc4ffc01cca130
       status: excluded-with-reason
       discovery_refs:
@@ -24703,7 +24811,7 @@ computed:
     - id: de-kg-instr-6cf659dd66fd5e85
       status: pending
       discovery_refs:
-      - de-corpus-a2529365876ae617a375
+      - de-corpus-6b31b46427b574df1f94
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-43-20-2021-12-15
       row_sha256: 96d3e126313bd7350745cdcb5adf4b772255adee74137a5a3ec0298f926827b0
@@ -24714,7 +24822,7 @@ computed:
     - id: de-kg-instr-6e0720e53a02234e
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-18f6a44b5b4c894fbc1a
+      - de-corpus-57e6e40f6e48f87df680
       identity_kind: corpus_citation
       citation_path: de/statute/wogg
       row_sha256: 0c75816689d2cf1d91917c024d3bb2760ba821c2af162fd347863d5d5b4b5386
@@ -24781,7 +24889,7 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-1f5ac01ef702228a1dea
-      - de-corpus-5a2117ef6b7a7ee6d833
+      - de-corpus-516b29b5d37859f891c0
       - de-corpus-b29b277d4040a30899e3
       - de-corpus-d89cf799cb8ebc53bd98
       identity_kind: corpus_citation
@@ -24812,6 +24920,7 @@ computed:
       discovery_refs:
       - de-corpus-6f0371332ecc12225a78
       - de-corpus-7339241372ee322f0ac8
+      - de-corpus-9ad1847e4442dd534b54
       - de-corpus-9f86038cb34463bd1471
       - de-corpus-debda12e7904d090ed0c
       - de-corpus-e637adf550bf2a846e17
@@ -24851,6 +24960,7 @@ computed:
       discovery_refs:
       - de-corpus-3945410495307f7f8a69
       - de-corpus-72c90697807b0be4d86b
+      - de-corpus-d13b418c6ee98fc0d97f
       identity_kind: corpus_citation
       citation_path: de/guidance/esth-2024-32
       row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
@@ -24865,7 +24975,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-6d51618dea25df463cf4
-      - de-corpus-a047bd909d331c4e44d2
+      - de-corpus-8649076d89ba303eef81
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-14-2014-09-25
       row_sha256: c0a33ff49e3a46a817e766e5eef78efb484b4b55028fd32f3b596d201e5d4808
@@ -24878,7 +24988,7 @@ computed:
       discovery_refs:
       - de-corpus-48b002d52962878d6020
       - de-corpus-4f93bf3e9a042ed50fbd
-      - de-corpus-51156c894227c4bf49bc
+      - de-corpus-fa128eee8b539bda82a3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-19-17-2018-09-13
       row_sha256: 49758e06d3a304b2659e41a975f3ef12b7adb3ecaa7466a7e498cc1446e3bbae
@@ -24894,7 +25004,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-2397f2ff0c5303b88c52
-      - de-corpus-6888a83ab19a44712a4a
+      - de-corpus-6fc3d11d63d7c2ad4926
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       row_sha256: 6121522ba80e3e85463abc2a128f527e144fc0a71820ad1caa08e2f23c854edc
@@ -24929,8 +25039,8 @@ computed:
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
+      - de-corpus-16aebe9685b95e8a3d0e
       - de-corpus-276261a84cf3a57d8882
-      - de-corpus-31e61e88272db75b21bf
       - de-corpus-3de2dc62ca7b5d5103e8
       - de-corpus-566cbc94dcc63a98d95d
       - de-corpus-5891e59f49035c505f7f
@@ -24976,7 +25086,7 @@ computed:
       - de-corpus-045f86ac66a8bb0e5366
       - de-corpus-09437434940495b70a02
       - de-corpus-28db1c6c0a5a3d0244ed
-      - de-corpus-88e7b29e3eb9a6782c3e
+      - de-corpus-f3740f155f38fd83842a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
@@ -24991,7 +25101,7 @@ computed:
     - id: de-kg-instr-9dfa8fc6d1681fbb
       status: classified-with-reason
       discovery_refs:
-      - de-corpus-351c5921e511fb22722d
+      - de-corpus-e2eede02b89631068943
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-22-2023-10-12
       row_sha256: b379b748838e3b1f183d246659fc0dcfef0aaab0ba3c10fd09d3307dfda39690
@@ -25006,7 +25116,7 @@ computed:
     - id: de-kg-instr-9ea3370bf9f2ad0d
       status: pending
       discovery_refs:
-      - de-corpus-471ca3eaad0d0db47a44
+      - de-corpus-33214cc45470fb36c26a
       - de-corpus-585ed85fef5ed5a7db20
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
@@ -25030,7 +25140,8 @@ computed:
     - id: de-kg-instr-a365b83505706342
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-9d3970d1a7a27b46ba4f
+      - de-corpus-3a40902fa122bcbfe288
+      - de-corpus-992c016781439b8ebb6a
       - de-corpus-f61bee0c29ccd5d670fb
       identity_kind: corpus_citation
       citation_path: de/statute/uhvorschg
@@ -25100,7 +25211,7 @@ computed:
     - id: de-kg-instr-b25507686192c311
       status: pending
       discovery_refs:
-      - de-corpus-8bbb904a7845c7cd0110
+      - de-corpus-a23a4613a84a8feb5048
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-23-21-2022-09-22
       row_sha256: ec79e7b225a622b7a34caaa3d28b6d903b62ec2fff19419c75b00190b3ce9c31
@@ -25121,6 +25232,20 @@ computed:
       document_citation_path: de/statute/ersdig
       legal_authority_url: https://www.gesetze-im-internet.de/ersdig/
       fundstelle: BGBl I 1960, 10 (2005, 2301)
+    - id: de-kg-instr-b7704b22cefd934c
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-2e22980e6eccd990d59b
+      identity_kind: corpus_citation
+      citation_path: de/statute/estg/32/absatz-4
+      row_sha256: 31c99ccf67ecfa8f82fffe7b26102474e86e11639ee75a64cf9f51c6f33aa1d0
+      document_class: statute
+      citation_label: Einkommensteuergesetz § 32 Absatz 4
+      document_citation_path: de/statute/estg/32/absatz-4
+      title: Einkommensteuergesetz § 32 Absatz 4
+      classification: entitlement_condition
+      reason: This separately captured complete EStG32(4) document is now discovered through its connected BFDG5 reference. Its full body SHA-256 509eeb2d18357ff8e9f127cb216cb2e2f0ce4b362e5a08052c553870ce0211e2 matches adult-child-repair-review.json and remains unchanged in the current pinned release. It defines adult-child qualification, training and service routes, disability and second-training employment limits. Those routes bear on qualifying_child_count and remain unencoded. The signed age module and BFDG5 general preservation norms do not implement this full provision; discovering this document does not reopen an encoding attempt or claim complete coverage.
+      bears_on_computed_surface: true
     - id: de-kg-instr-b794d203afd4361a
       status: pending
       discovery_refs:
@@ -25153,6 +25278,7 @@ computed:
       - de-corpus-6f9020d3778b517e3e2a
       - de-corpus-86534602aca6487afa11
       - de-corpus-8bba30603b49eb761e1d
+      - de-corpus-96240af8f8849da1f5e9
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
       row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
@@ -25206,7 +25332,7 @@ computed:
       discovery_refs:
       - de-corpus-2bf0470f154a78fd2a70
       - de-corpus-6ecae1b1cb1d2867a6e9
-      - de-corpus-74152776761c48e810eb
+      - de-corpus-8cb7cb2942187ed6a8d3
       - de-corpus-8cf5cadf0d4c98644544
       - de-corpus-8f230fbe6c5ed690124c
       - de-corpus-d0478f88a64d7cf4bc7c
@@ -25318,7 +25444,7 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-2346b5d653dd91ad16ef
-      - de-corpus-67a85788481346c5eb32
+      - de-corpus-41e2a24c48733a4659b8
       identity_kind: corpus_citation
       citation_path: de/guidance/cjeu-c-411-20
       row_sha256: f4600965e8faeb7a2a3ead975193b78acd7f6a10272a8b89bcab96217c4e5762
@@ -25411,7 +25537,7 @@ computed:
     - id: de-kg-instr-e832fabf332bce62
       status: pending
       discovery_refs:
-      - de-corpus-0fc08e64477e9859b7a9
+      - de-corpus-6bd58c000de866287b86
       - de-corpus-dc178935f4d4ae6081e7
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-12-2014-05-08
@@ -25423,7 +25549,7 @@ computed:
     - id: de-kg-instr-e92627717e6aac58
       status: pending
       discovery_refs:
-      - de-corpus-d67857af8cf31cb144d5
+      - de-corpus-34c33714d140c423d6ed
       - de-corpus-d8126b4c20a7244a1f57
       - de-corpus-f88c13ced838e0fe748a
       identity_kind: corpus_citation
@@ -25459,7 +25585,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-8b5289f0247ef6ad90f2
-      - de-corpus-d6aab01062574b46488b
+      - de-corpus-97dfdb8399ecf7ff2593
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-38-14-2015-06-23
       row_sha256: 62dee8eb4963e72aab68e1db4ce0ed588b038a79db9a78ef8205d98614072e7f
@@ -25482,7 +25608,7 @@ computed:
     - id: de-kg-instr-f87f215f5ca7e7eb
       status: pending
       discovery_refs:
-      - de-corpus-3f68bca82ed9109af0b2
+      - de-corpus-61223ffe0907fa488d19
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-13-2014-05-08
       row_sha256: 5afb226db1b4e7c44b0071cd26b3cc1a461b3545e2e445dd68969207645163f0
@@ -25505,8 +25631,8 @@ computed:
     - id: de-kg-instr-fa626aa971b4e396
       status: pending
       discovery_refs:
-      - de-corpus-154c7b4436e7570445ce
       - de-corpus-add9b4ac0708e9b85f62
+      - de-corpus-b54ec0b159268ea9240f
       - de-corpus-f36e48b35aaf9a5e2131
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-10-14-2015-06-18
@@ -25933,6 +26059,7 @@ computed:
     - de-kg-instr-003
     - de-kg-instr-075453ee3119e51d
     - de-kg-instr-1cf23bf8090c91b9
+    - de-kg-instr-2264ad62fc60eb93
     - de-kg-instr-295706eb9fcb6809
     - de-kg-instr-2e123c165d3631db
     - de-kg-instr-32a81be6d35e33be
@@ -25949,6 +26076,7 @@ computed:
     - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-a5848a433a63d2cb
     - de-kg-instr-ad3045c5a5d2f5bd
+    - de-kg-instr-b7704b22cefd934c
     - de-kg-instr-b96e03076e143e8e
     - de-kg-instr-c3642f7b68a0f9a8
     - de-kg-instr-ce168756ed1a28cb
@@ -25965,12 +26093,12 @@ computed:
     - de-kg-suppl-014
     - de-kg-suppl-015
     - de-kg-suppl-018
-    instruments_bearing_on_computed_count: 146
-    open_dependency_count: 154
+    instruments_bearing_on_computed_count: 148
+    open_dependency_count: 156
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 778
+    bearing_candidate_instruments: 781
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

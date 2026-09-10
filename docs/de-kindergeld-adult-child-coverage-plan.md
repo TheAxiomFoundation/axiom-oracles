@@ -283,7 +283,8 @@ job-seeker ground requires registration. A 14.2(2) sentence 6 literally prints
 “6 MuSchG”, while its opening sentence and the parallel A 17.2 rule refer to
 § 16. Preserve the source wording and resolve this cross-reference against the
 underlying source/decision; do not silently amend the proof excerpt. The versioned
-MuSchG captures are in corpus PR668, pending publication and consumer repinning.
+MuSchG captures from merged corpus PR668 are published and retained in the
+current pinned release.
 
 A 19.3 separates disability from causation. A high disability degree alone does
 not establish causation. Issued benefits, care classifications, placement records
@@ -351,8 +352,8 @@ its own timeline; independent statutory transition/service grounds remain distin
 The remand is not a final award for every disputed month.
 
 The court-citation recall audit enrolls the previously omitted exact A 19.3
-citation to III R 42/22 as a pending member. Its complete primary decision is in
-corpus PR668, awaiting publication/binding. No mere citation search or abbreviated
+citation to III R 42/22. Its complete primary decision from merged corpus
+PR668 is now published, bound and classified as bearing. No mere citation search or abbreviated
 headnote is counted as a published corpus receipt or a completed causal assessment.
 
 ## Published maternity and psychiatric-placement prerequisites

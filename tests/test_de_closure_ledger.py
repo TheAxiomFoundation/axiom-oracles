@@ -98,8 +98,8 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 778, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 41, 0, 2, 2, 1),
+    "de/kindergeld": (18, 781, 8, 1, 0, 0),
+    "de/unterhaltsvorschuss": (12, 40, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -197,6 +197,55 @@ def test_inbound_proximity_retains_candidate_without_false_section_binding(
         assert finding["mechanism"] == "unresolved_cross_reference_proximity"
         assert finding["candidate_target_citation_path"] == target
         assert "resolved_citation_path" not in finding
+
+
+@pytest.mark.parametrize("body,expected", [
+    ("§ 64 Abs. 2 Satz 3 des Einkommensteuergesetzes", "explicit_cross_reference_inbound"),
+    ("§ 64 Absatz 2 Satz 3 des Einkommensteuergesetzes", "explicit_cross_reference_inbound"),
+    ("§ 64 gilt hier; daneben gelten Regeln des Einkommensteuergesetzes.",
+     "unresolved_cross_reference_proximity"),
+    ("§ 640 des Einkommensteuergesetzes", None),
+    ("§ 64 des Einkommensteuergesetzesentwurfs", None),
+    ("§ 64 des anderen Einkommensteuergesetzes", "unresolved_cross_reference_proximity"),
+    ("§ 64 des EStGes", None),
+])
+def test_inbound_genitive_act_title_keeps_section_binding_strict(body, expected) -> None:
+    refresh = _load_refresh_script()
+    target = "de/statute/estg/64"
+    source = "de/statute/famfg/231"
+    values = [
+        {"citation_path": "de/statute/estg", "citation_label": "EStG",
+         "metadata": {"law_title": "Einkommensteuergesetz"}},
+        {"citation_path": target, "body": "One recipient per child."},
+        {"citation_path": "de/statute/famfg", "citation_label": "FamFG"},
+        {"citation_path": source, "body": body},
+    ]
+    rows = [refresh.CorpusRow(value, i + 1, "a" * 64, "b" * 64)
+            for i, value in enumerate(values)]
+    by_path = {row.path: row for row in rows}
+    documents = {path: by_path[path] for path in ("de/statute/estg", "de/statute/famfg")}
+    corpus = refresh.Corpus(rows, by_path, documents, {
+        "de/statute/estg": "de/statute/estg", target: "de/statute/estg",
+        "de/statute/famfg": "de/statute/famfg", source: "de/statute/famfg",
+    }, [], {})
+    evidence = {}
+    candidates = refresh._discover_corpus_program(
+        "de/kindergeld", {"declared_sources": [{"citation_path": target}]},
+        corpus, evidence,
+    )
+    if expected is None:
+        assert "corpus:de/statute/famfg" not in candidates
+        assert not evidence
+    else:
+        assert "corpus:de/statute/famfg" in candidates
+        finding, = evidence.values()
+        assert finding["mechanism"] == expected
+        if expected == "explicit_cross_reference_inbound":
+            assert finding["resolved_citation_path"] == target
+            assert finding["matched_text"] == body
+        else:
+            assert finding["candidate_target_citation_path"] == target
+            assert "resolved_citation_path" not in finding
 
 
 def _artifact_items(module) -> list[tuple[str, Path]]:
@@ -331,7 +380,7 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     assert index["act_count"] == len(index["acts"]) == 221
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 6741,
+        "explicit_cross_reference_body": 6745,
         "law_metadata_changed_by": 34,
         "law_metadata_fundstelle": 42,
     }
@@ -1526,7 +1575,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2", "de-kg-dakg-A25.1"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 531 + 18 + 229
+    assert frontier["instrument_count"] == 534 + 18 + 229
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 

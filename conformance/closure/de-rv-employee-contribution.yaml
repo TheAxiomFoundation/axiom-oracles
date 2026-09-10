@@ -250,10 +250,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343
+    snapshot_sha256: 81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc
     channel_receipts:
-      corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
-      subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
+      corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
+      subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

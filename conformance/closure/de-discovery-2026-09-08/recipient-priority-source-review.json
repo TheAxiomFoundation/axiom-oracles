@@ -22,6 +22,15 @@
       "provision_file": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
       "corpus_commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
       "applicability": "Current official expression captured10September2026; no blanket2025 applicability finding."
+    },
+    {
+      "citation_path": "de/statute/famfg/231",
+      "body_sha256": "0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20",
+      "body": "(1) Unterhaltssachen sind Verfahren, die\n1. die durch Verwandtschaft begründete gesetzliche Unterhaltspflicht,\n2. die durch Ehe begründete gesetzliche Unterhaltspflicht oder\n3. die Ansprüche nach\na) § 1305 Absatz 1 des Bürgerlichen Gesetzbuchs oder\nb) § 1615l oder § 1615m des Bürgerlichen Gesetzbuchsbetreffen.\n(2) Unterhaltssachen sind auch Verfahren nach § 3 Abs. 2 Satz 3 des Bundeskindergeldgesetzes und § 64 Abs. 2 Satz 3 des Einkommensteuergesetzes. Die §§ 235 bis 245 sind nicht anzuwenden.",
+      "provision_file": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
+      "corpus_commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+      "applicability": "Current official expression captured 10 September 2026; no blanket 2025 applicability finding.",
+      "review": "Complete two-paragraph body checked against official XML. Paragraph 1 defines the listed maintenance proceedings; paragraph 2 includes BKGG 3(2) sentence 3 and EStG 64(2) sentence 3 proceedings and expressly excludes application of sections 235 through 245. This is a procedural classification, not an award of claimant entitlement. The connected genitive EStG citation reproduces the scanner recall gap. Review of this section does not establish full-act coverage."
     }
   ],
   "reviewed_guidance": [

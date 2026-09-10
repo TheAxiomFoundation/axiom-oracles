@@ -4,7 +4,7 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: instrument frontier incomplete \u2014 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
     "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
@@ -70,13 +70,13 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "56d660af4c3cac61c6095f7cada759f90a4084b96feb4a0f46050193e08815e2"
+      "sha256": "1adccbd8483536b11e46aafad6183096a386993878a99e06792f763cbcc3d38e"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "63ec2d3559491d6433fa5b5361e470826b06551cfbe1bcf72ff51d3e82b48cc7",
+      "sha256": "58a8b4b7349aff52a7944d86afa6fb3710ae8f903af5f322bf81ae2c1ff7f08b",
       "verification": "producer_artifact_validation"
     },
     {
@@ -93,7 +93,7 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete \u2014 39 of 40 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
@@ -302,10 +302,10 @@
           "classified-with-reason": 1,
           "encoded": 0,
           "excluded-with-reason": 0,
-          "pending": 40,
-          "total": 41
+          "pending": 39,
+          "total": 40
         },
-        "instrument_count": 41,
+        "instrument_count": 40,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
           "de-uhv-instr-13c9a46f75b99498",
@@ -342,7 +342,6 @@
           "de-uhv-instr-a9efdae38748dd9f",
           "de-uhv-instr-b96e03076e143e8e",
           "de-uhv-instr-bf9c57bd5c2a3d58",
-          "de-uhv-instr-c29a0cb26e4cbc1d",
           "de-uhv-instr-c795a7af57079afc",
           "de-uhv-instr-db7693cd9f018ff4",
           "de-uhv-instr-fbb51fe84fb002e1",

@@ -440,19 +440,20 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343
+    snapshot_sha256: 81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc
     channel_receipts:
-      corpus_release: 34865524698dae165f74ba3465859d3197a7bdbf73a49ea70f54c0c020a61dfb
-      subject_matter_search: 3a9776e3799879be8e5db000940b642bc83e3a64fa0661d603d9ec4c46c0e3f5
+      corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
+      subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 41
+    candidate_count: 40
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
+      - de-corpus-2ed7071551358508dae7
       - de-corpus-3969d462857249ee5505
       - de-corpus-4ee998583657193d78b4
       - de-subject-005
@@ -480,8 +481,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
+      - de-corpus-73c93179892edaf4ec5f
       - de-corpus-80ca528e0ed2cceb764a
-      - de-corpus-9e5b0fce008e5455ee6d
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -557,7 +558,7 @@ generated_facts:
     - id: de-uhv-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-9213eaeb43e56344e114
+      - de-corpus-41a5dc26b1a671ee3409
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -829,13 +830,6 @@ generated_facts:
       citation_label: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
       document_citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
       title: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
-    - id: de-uhv-instr-c29a0cb26e4cbc1d
-      status: pending
-      discovery_refs:
-      - de-corpus-ec66057b34bdb760ed6c
-      identity_kind: unresolved_reference
-      raw_references:
-      - Einkommensteuergesetzes
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -1161,13 +1155,13 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 41
+    instrument_count: 40
     counts:
-      total: 41
+      total: 40
       encoded: 0
       classified-with-reason: 1
       excluded-with-reason: 0
-      pending: 40
+      pending: 39
     pending:
     - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-13c9a46f75b99498
@@ -1204,7 +1198,6 @@ computed:
     - de-uhv-instr-a9efdae38748dd9f
     - de-uhv-instr-b96e03076e143e8e
     - de-uhv-instr-bf9c57bd5c2a3d58
-    - de-uhv-instr-c29a0cb26e4cbc1d
     - de-uhv-instr-c795a7af57079afc
     - de-uhv-instr-db7693cd9f018ff4
     - de-uhv-instr-fbb51fe84fb002e1
@@ -1214,6 +1207,7 @@ computed:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
+      - de-corpus-2ed7071551358508dae7
       - de-corpus-3969d462857249ee5505
       - de-corpus-4ee998583657193d78b4
       - de-subject-005
@@ -1241,8 +1235,8 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
+      - de-corpus-73c93179892edaf4ec5f
       - de-corpus-80ca528e0ed2cceb764a
-      - de-corpus-9e5b0fce008e5455ee6d
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -1318,7 +1312,7 @@ computed:
     - id: de-uhv-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-9213eaeb43e56344e114
+      - de-corpus-41a5dc26b1a671ee3409
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -1593,13 +1587,6 @@ computed:
       citation_label: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
       document_citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
       title: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
-    - id: de-uhv-instr-c29a0cb26e4cbc1d
-      status: pending
-      discovery_refs:
-      - de-corpus-ec66057b34bdb760ed6c
-      identity_kind: unresolved_reference
-      raw_references:
-      - Einkommensteuergesetzes
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -1671,7 +1658,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 41
+    bearing_candidate_instruments: 40
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2

@@ -351,6 +351,15 @@ def _document_aliases(document: CorpusRow) -> list[str]:
     ):
         if isinstance(value, str) and len(value.strip()) >= 3:
             aliases.add(value.strip())
+    # German compound act titles take -es in connected genitive citations,
+    # e.g. FamFG § 231(2)'s "des Einkommensteuergesetzes". Restrict this
+    # expansion to a complete single-word title grounded in this document;
+    # abbreviations and titles containing other words need separate handling.
+    aliases.update(
+        alias + "es"
+        for alias in tuple(aliases)
+        if re.fullmatch(r"[A-ZÄÖÜ][a-zäöüß]*gesetz", alias)
+    )
     match = re.fullmatch(r"de/statute/sgb-(\d+)", document.path)
     if match:
         number = int(match.group(1))

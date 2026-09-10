@@ -57,3 +57,12 @@ late-transfer exclusion nor an invented number-of-days threshold follows from
 that decision. Paragraph14 also distinguishes assessment from actual payout
 where a public body seeks reimbursement. These holdings do not import the case's
 200EUR transfers or30-hour employment fact as normative parameters.
+
+The complete FamFG §231 body is also retained in the review receipt. Its second
+paragraph explicitly includes the §64(2) sentence 3 procedure and excludes
+FamFG §§235–245. This procedural classification does not award entitlement.
+The citation uses “des Einkommensteuergesetzes”, which the former scanner
+missed when it knew only the base title “Einkommensteuergesetz”. The repaired
+alias derivation admits the genitive of a grounded single-word compound act
+title ending in “gesetz”. Exact section binding still requires connected
+citation syntax. Broader title morphology and exhaustive discovery remain open.
