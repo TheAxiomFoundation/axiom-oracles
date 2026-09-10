@@ -13113,11 +13113,23 @@ committed_decisions:
     reason: 'Full four-page decision BFH III R18/21 (1 September 2021), paragraphs 1–21: the dispute concerns reimbursement of costs after a successful objection to evasion-interest assessment, not the underlying Kindergeld entitlement. Paragraphs 10–17 hold EStG section77 neither directly nor analogously applicable to that interest objection; paragraphs18–19 distinguish other cost-reimbursement cases, including diversion/accounting proceedings. Paragraphs20–21 dismiss the cost claim and allocate litigation costs. The EUR2163 interest and EUR16800 recovery are case facts, not benefit parameters. This is solely the appeal-cost surface already excluded by the section77 spine disposition; references to section31(3), section74 and AO235 do not add a child qualification, recipient-priority, exclusion or section66 amount formula. Text-bound source: de/guidance/bfh-iii-r-18-21-2021-09-01/document-1, body SHA-256 6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f, pinned corpus commit
       9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-discovery-7a2ec2123c2f5ae8
+    status: classified-with-reason
+    classification: recipient_priority_condition
+    reason: 'Full three-page BFH III R57/13 decision of5November2015, paragraphs1–15, read. Paragraph12 defines the relevant maintenance as ongoing cash support, oriented to BGB1612(1)/(3), generally paid both for and in the Kindergeld period. Paragraph13 excludes payments begun years after the original due date and expressly leaves continuous payments delayed by only weeks or months undecided. Do not convert this into an automatic exclusion of every late transfer or an invented lateness threshold. The case amounts and30-hour employment finding are facts, not normative payment parameters or a new employment limit. Paragraphs11–13 retain claimant selection where neither parent pays qualifying ongoing support. Paragraph14 distinguishes benefit assessment from actual payment when another public body claims reimbursement. DA-KG2025 A26 retains the maintenance holding, which bears on recipient_priority and remains unencoded. Exact BStBl II2016page403 membership and exhaustive discovery remain
+      open. Source: de/guidance/bfh-iii-r-57-13-2015-11-05/document-1, body SHA-256 33edbc7a3783a0e15a6e756377a4aa11f2bf0981a9caecac57caca32552e1597, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-90238268a8dee863
     status: classified-with-reason
     classification: entitlement_condition
     reason: 'Full five-page BFH III R 41/19 decision of 31 August 2021, paragraphs 1–33, read. Paragraphs 15–18 distinguish actual training and a continuing training relationship from mere formal enrolment and illness-related termination; termination removes the training ground but does not automatically exclude the separate waiting or disability grounds. Paragraphs 20–24 require ability to take up the intended training except for the stated maternity/temporary-illness routes. Temporary illness depends on the expected duration of functional impairment, generally no more than six months, rather than elapsed time since diagnosis or a guaranteed first six months. Paragraphs 25–30 require evidence of training intention during the claimed months, permit contemporaneous contact/application records beyond a prescribed form, reject merely retrospective blanket assertions, and distinguish a later decision to work or volunteer. Paragraph 27 does not require a fresh application every month while an
       earlier one is pending, but requires a parallel application after three months without rejection in its stated case. The judgment remands for findings and does not finally award all disputed months. DA-KG 2025 A 14.2, A 15.11 and A 17.2 retain these distinctions; they bear on qualifying_child_count and monthly intervals and remain unencoded. Direct BStBl II 2022 page 465 verification and exhaustive discovery remain open. Pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. Source: de/guidance/bfh-iii-r-41-19-2021-08-31/document-1, body SHA-256 13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84.'
+    bears_on_computed_surface: true
+  - id: de-kg-discovery-949482e500000d24
+    status: classified-with-reason
+    classification: recipient_priority_condition
+    reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
+      derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
     bears_on_computed_surface: true
   - id: de-kg-discovery-b8b7b0fae40a3f3a
     status: classified-with-reason
@@ -13192,6 +13204,12 @@ committed_decisions:
     classification: amount_trigger_source
     reason: 'EStG § 31 (Familienleistungsausgleich), cited by § 66 Abs. 3 Satz 1: the Kindergeld is raised ''entsprechend'' when ''die Freibeträge für Kinder nach § 31 Satz 1 in Verbindung mit § 32 Absatz 6 Satz 1 angehoben'' are raised. § 31 Satz 1 places the tax exemption of a child''s subsistence minimum in either the § 32 Abs. 6 allowances or Kindergeld, Satz 3 pays Kindergeld monthly as a tax refund, Satz 4–7 govern the assessment-stage add-back. The captured module takes the increase trigger and the increased amount as inputs (leaves child_allowances_under_sections_31_and_32_6_1_are_increased, correspondingly_increased_kindergeld_amount, both law-derived and open). Bears on the computed amount through those leaves; open until the § 31 / § 32 Abs. 6 allowance history is encoded.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-075453ee3119e51d
+    status: classified-with-reason
+    classification: recipient_priority_condition
+    reason: 'Full three-page BFH III R57/13 decision of5November2015, paragraphs1–15, read. Paragraph12 defines the relevant maintenance as ongoing cash support, oriented to BGB1612(1)/(3), generally paid both for and in the Kindergeld period. Paragraph13 excludes payments begun years after the original due date and expressly leaves continuous payments delayed by only weeks or months undecided. Do not convert this into an automatic exclusion of every late transfer or an invented lateness threshold. The case amounts and30-hour employment finding are facts, not normative payment parameters or a new employment limit. Paragraphs11–13 retain claimant selection where neither parent pays qualifying ongoing support. Paragraph14 distinguishes benefit assessment from actual payment when another public body claims reimbursement. DA-KG2025 A26 retains the maintenance holding, which bears on recipient_priority and remains unencoded. Exact BStBl II2016page403 membership and exhaustive discovery remain
+      open. Source: de/guidance/bfh-iii-r-57-13-2015-11-05/document-1, body SHA-256 33edbc7a3783a0e15a6e756377a4aa11f2bf0981a9caecac57caca32552e1597, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-1808736a82828a59
     status: encoded
     classification: amendment_act
@@ -13202,6 +13220,12 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
     bears_on_computed_surface: false
+  - id: de-kg-instr-1cf23bf8090c91b9
+    status: classified-with-reason
+    classification: recipient_priority_condition
+    reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
+      derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-26ba3514c162c52d
     status: classified-with-reason
     classification: document_container
@@ -14385,9 +14409,9 @@ computed:
     counts:
       total: 777
       encoded: 2
-      classified-with-reason: 155
+      classified-with-reason: 159
       excluded-with-reason: 348
-      pending: 272
+      pending: 268
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14478,7 +14502,6 @@ computed:
     - de-kg-discovery-76c82b8ffe35fc59
     - de-kg-discovery-77e24ec30aa0b588
     - de-kg-discovery-78fe440c4b3bff9e
-    - de-kg-discovery-7a2ec2123c2f5ae8
     - de-kg-discovery-7ab667641308947c
     - de-kg-discovery-7d4411713295f2d1
     - de-kg-discovery-7fbda1344edd8822
@@ -14501,7 +14524,6 @@ computed:
     - de-kg-discovery-918ab3081a058973
     - de-kg-discovery-92a8b69b3c59a0b2
     - de-kg-discovery-9375617094688485
-    - de-kg-discovery-949482e500000d24
     - de-kg-discovery-94b8bf3c969f58f9
     - de-kg-discovery-957b1d766d1aa0c0
     - de-kg-discovery-97107fad2d0c468e
@@ -14594,11 +14616,9 @@ computed:
     - de-kg-discovery-ff3af97754355946
     - de-kg-discovery-ff9019c2c2453a4d
     - de-kg-instr-028b46da9b934bf7
-    - de-kg-instr-075453ee3119e51d
     - de-kg-instr-13c9a46f75b99498
     - de-kg-instr-1945c20cac056911
     - de-kg-instr-1c560d43302dedf2
-    - de-kg-instr-1cf23bf8090c91b9
     - de-kg-instr-25b1ea0557c352eb
     - de-kg-instr-29707b769759e246
     - de-kg-instr-2b121051486857aa
@@ -22802,7 +22822,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 18.06.2015, VI R 10/14, BStBl II S. 940
     - id: de-kg-discovery-7a2ec2123c2f5ae8
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 05.11.2015, III R 57/13, BStBl II 2016 S. 403
       discovery_refs:
@@ -22810,6 +22830,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 05.11.2015, III R 57/13, BStBl II 2016 S. 403
+      classification: recipient_priority_condition
+      reason: 'Full three-page BFH III R57/13 decision of5November2015, paragraphs1–15, read. Paragraph12 defines the relevant maintenance as ongoing cash support, oriented to BGB1612(1)/(3), generally paid both for and in the Kindergeld period. Paragraph13 excludes payments begun years after the original due date and expressly leaves continuous payments delayed by only weeks or months undecided. Do not convert this into an automatic exclusion of every late transfer or an invented lateness threshold. The case amounts and30-hour employment finding are facts, not normative payment parameters or a new employment limit. Paragraphs11–13 retain claimant selection where neither parent pays qualifying ongoing support. Paragraph14 distinguishes benefit assessment from actual payment when another public body claims reimbursement. DA-KG2025 A26 retains the maintenance holding, which bears on recipient_priority and remains unencoded. Exact BStBl II2016page403 membership and exhaustive discovery remain
+        open. Source: de/guidance/bfh-iii-r-57-13-2015-11-05/document-1, body SHA-256 33edbc7a3783a0e15a6e756377a4aa11f2bf0981a9caecac57caca32552e1597, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-7ab667641308947c
       status: pending
       identity_kind: class_member
@@ -23022,7 +23046,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 05.08.1977, VI R 187/74, BStBl II S. 832
     - id: de-kg-discovery-949482e500000d24
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 08.08.2013, III R 3/13, BStBl II 2014 S. 576
       discovery_refs:
@@ -23030,6 +23054,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 08.08.2013, III R 3/13, BStBl II 2014 S. 576
+      classification: recipient_priority_condition
+      reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
+        derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-94b8bf3c969f58f9
       status: pending
       identity_kind: class_member
@@ -24032,7 +24060,7 @@ computed:
       document_citation_path: de/guidance/bfh-iii-r-59-19-2020-11-03
       title: 'BFH, III R 59/19, 2020-11-03: Einsicht in Kindergeldakten'
     - id: de-kg-instr-075453ee3119e51d
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-c4939583b6323155513e
       identity_kind: corpus_citation
@@ -24042,6 +24070,10 @@ computed:
       citation_label: 'BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen'
       document_citation_path: de/guidance/bfh-iii-r-57-13-2015-11-05
       title: 'BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen'
+      classification: recipient_priority_condition
+      reason: 'Full three-page BFH III R57/13 decision of5November2015, paragraphs1–15, read. Paragraph12 defines the relevant maintenance as ongoing cash support, oriented to BGB1612(1)/(3), generally paid both for and in the Kindergeld period. Paragraph13 excludes payments begun years after the original due date and expressly leaves continuous payments delayed by only weeks or months undecided. Do not convert this into an automatic exclusion of every late transfer or an invented lateness threshold. The case amounts and30-hour employment finding are facts, not normative payment parameters or a new employment limit. Paragraphs11–13 retain claimant selection where neither parent pays qualifying ongoing support. Paragraph14 distinguishes benefit assessment from actual payment when another public body claims reimbursement. DA-KG2025 A26 retains the maintenance holding, which bears on recipient_priority and remains unencoded. Exact BStBl II2016page403 membership and exhaustive discovery remain
+        open. Source: de/guidance/bfh-iii-r-57-13-2015-11-05/document-1, body SHA-256 33edbc7a3783a0e15a6e756377a4aa11f2bf0981a9caecac57caca32552e1597, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-13c9a46f75b99498
       status: pending
       discovery_refs:
@@ -24112,7 +24144,7 @@ computed:
       reason: Unresolved reference 'Verordnung (EG) Nr. 883/2004' matched in § 68 Abs. 6 EStG, which authorises the Familienkassen to provide case data to EU member-state authorities for checking the family benefits defined in Art. 3 Abs. 1 Buchst. j with Art. 1 Buchst. z of that Regulation. In this citation the Regulation is named only to delimit a data-sharing purpose within an excluded data provision. Its coordination rules (differential amounts, priority between states) bear on the computed surface and are tracked by the pending supplemental row enrolled from O 2.4 (Regulation (EC) 883/2004, relation coordination), not by this citation.
       bears_on_computed_surface: false
     - id: de-kg-instr-1cf23bf8090c91b9
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-2f133166ae69264b2ba4
       - de-corpus-a44ac4d98cca45e24532
@@ -24127,6 +24159,10 @@ computed:
       citation_label: 'BFH, III R 3/13, 2013-08-08: Keine Bindungswirkung einer familiengerichtlichen Bestimmung des Kindes zum Kindergeldberechtigten'
       document_citation_path: de/guidance/bfh-iii-r-3-13-2013-08-08
       title: 'BFH, III R 3/13, 2013-08-08: Keine Bindungswirkung einer familiengerichtlichen Bestimmung des Kindes zum Kindergeldberechtigten'
+      classification: recipient_priority_condition
+      reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
+        derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-25b1ea0557c352eb
       status: pending
       discovery_refs:
@@ -25849,7 +25885,9 @@ computed:
     - de-kg-discovery-4a16231e30b5e62b
     - de-kg-discovery-69469ab37f301181
     - de-kg-discovery-756b8977705fa113
+    - de-kg-discovery-7a2ec2123c2f5ae8
     - de-kg-discovery-90238268a8dee863
+    - de-kg-discovery-949482e500000d24
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-c4a75118763d3018
@@ -25860,6 +25898,8 @@ computed:
     - de-kg-discovery-e90973e7e66e0913
     - de-kg-instr-002
     - de-kg-instr-003
+    - de-kg-instr-075453ee3119e51d
+    - de-kg-instr-1cf23bf8090c91b9
     - de-kg-instr-295706eb9fcb6809
     - de-kg-instr-2e123c165d3631db
     - de-kg-instr-32a81be6d35e33be
@@ -25891,8 +25931,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 141
-    open_dependency_count: 149
+    instruments_bearing_on_computed_count: 145
+    open_dependency_count: 153
     closed: false
   measured_denominators:
     spine_rows: 18

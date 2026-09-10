@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 272 of 777 instruments
-pending, and dependency closure has 149 open dependencies: eight law-derived
-inputs and 141 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 268 of 777 instruments
+pending, and dependency closure has 153 open dependencies: eight law-derived
+inputs and 145 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
@@ -309,7 +309,7 @@ citation-path order, without a trailing newline. Source receipt changes alone
 do not change bearing or close a legal dependency.
 
 The SHA-bound class snapshot contains 229 entries. With the committed dispositions,
-204 members remain pending, fourteen captured members are bearing, and eleven entries
+202 members remain pending, sixteen captured members are bearing, and eleven entries
 are non-bearing or structural: the transfer letter, BFH file-access decision,
 misdated BFH duplicate, combined BFH citation, superseded country-group letter, BFH remission decision
 BFH objection-notice decision, BFH appeal-cost decision, and BFH inter-agency
@@ -347,8 +347,8 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 272 of 777 instruments pending, 149 open
-dependencies (eight law-derived inputs, 141 bearing instruments, no unclassified
+rows pending. Current result: 268 of 777 instruments pending, 153 open
+dependencies (eight law-derived inputs, 145 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 The latest release also retains complete EStG §32 paragraph captures and the
@@ -668,8 +668,8 @@ section mentions remain `unresolved_cross_reference_proximity` candidates with a
 `candidate_target_citation_path`, never a `resolved_citation_path`. This preserves
 recall for unfamiliar citation forms without asserting their identity. The SGB V
 candidate remains pending for a text-bound disposition; this correction does not
-classify the whole act as non-bearing. Current totals are 272 pending of 777
-instruments and 149 open dependencies (eight law-derived, 141 bearing), with
+classify the whole act as non-bearing. Current totals are 268 pending of 777
+instruments and 153 open dependencies (eight law-derived, 145 bearing), with
 five pending and one partially encoded spine provision. Closure remains false.
 
 For a corpus-evidence-only refresh, `refresh_de_instrument_graph.py
@@ -703,8 +703,8 @@ III R58/12 preserves the maternity exception without requiring later resumed
 search. III R41/19 distinguishes training termination, temporary-illness prognosis
 and contemporaneous evidence of training intention. Their relevant class/corpus
 identities are bearing and remain unencoded. A18.7 preserves training averaging
-at least 60 hours per year. Current totals are 272 pending of 777 instruments
-and 149 open dependencies (eight law-derived, 141 bearing).
+at least 60 hours per year. Current totals are 268 pending of 777 instruments
+and 153 open dependencies (eight law-derived, 145 bearing).
 
 The recall review records 188 matching BFH citation occurrences in the retained
 DA-KG text and one missing case label: III R42/22, printed with “S.16”. Its exact
@@ -727,3 +727,12 @@ III R42/22 refines substantial co-causation during psychiatric placement and
 requires an individual overall assessment. It does not permit a blanket
 placement exclusion or an automatic entitlement flag. These sources support
 remaining implementation work, not signed encoding coverage or certification.
+
+The recipient-priority review adds full §64/§78 and seven DA-KG sections plus
+complete BFH III R3/13 and III R57/13 decisions. Their four class/corpus identities
+are bearing. Court selection does not create entitlement outside §§62–63. The
+maintenance decision excludes payments begun years late but leaves continuously
+recurring payments delayed by weeks or months undecided. The worklist preserves
+that boundary instead of inventing a universal lateness threshold. FamFG is
+captured and signed in corpus PR669; the consumer remains on the published
+maternity release until the next release has completed review and publication.

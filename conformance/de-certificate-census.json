@@ -16,8 +16,8 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 272 of 777 subordinate/bearing instruments pending disposition (oracles#491)",
-        "closed: dependency closure open — 149 open dependencies (8 law-derived inputs, 0 unclassified inputs, 141 bearing instruments) (CERTIFIED.md v3)"
+        "closed: instrument frontier incomplete — 268 of 777 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 153 open dependencies (8 law-derived inputs, 0 unclassified inputs, 145 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
       "certificate_status": "pending",

@@ -33,7 +33,22 @@ maintenance comparison in the actual statutory owner.
 A25.1(7) cites FamFG §40(1) for effectiveness after notification to all
 participants. FamFG40 is absent from this release and requires official corpus
 capture. The older BFH III R91/03, III R66/04 and VI R224/98 decisions are also
-absent from its complete-decision rows. III R3/13 and III R57/13 are captured,
-but their complete texts still need review before their holdings are bound in
-this workstream. These source gaps and the unencoded entitlement/household
+absent from its complete-decision rows. III R3/13 and III R57/13 are captured and their full four-page and three-page
+decisions are now read and retained in the review receipt. Both their class
+and corpus identities are bearing and remain unencoded. These source gaps and the unencoded entitlement/household
 rules remain open dependencies; this worklist does not turn them into inputs.
+
+III R3/13 paragraphs19–27 limit family-court selection to the entitled persons
+whose priority is at issue; neither an agreement nor an order selecting a third,
+ineligible person creates entitlement. The case separately distinguishes
+assessment from diversion/payment procedure. An issued court order is observable,
+but its priority consequence must be composed with the statutory eligibility
+and decision-scope rules.
+
+III R57/13 paragraphs12–13 require the ongoing-maintenance analysis and exclude
+payments begun years after their due date. The court expressly leaves regularly
+recurring payments delayed only weeks or months undecided. Neither a universal
+late-transfer exclusion nor an invented number-of-days threshold follows from
+that decision. Paragraph14 also distinguishes assessment from actual payout
+where a public body seeks reimbursement. These holdings do not import the case's
+200EUR transfers or30-hour employment fact as normative parameters.
