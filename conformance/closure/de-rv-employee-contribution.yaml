@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4
+    sha256: 389facd9856cca42b49131a1e9a8e04037e668696952b8be8560de426a12d8b7
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: eb2c46117b2cf2a396a48a41be409fe1e5ecc696
-    release: de-rulespec-2026-09-10-kindergeld-recipient-priority
-    release_content_sha256: 4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4
+    commit: 8f7d60aaced28ee4252b9237f9d6e02360dc34bc
+    release: de-rulespec-2026-09-10-kindergeld-eu-service-predecessors
+    release_content_sha256: c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -117,6 +117,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
       row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
+      sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
@@ -250,10 +253,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc
+    snapshot_sha256: c9ec4bf63d5d41d425f82aa2fc6e7e07e5398c23d9681267b7f3b59c7992e35e
     channel_receipts:
-      corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
-      subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
+      corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
+      subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

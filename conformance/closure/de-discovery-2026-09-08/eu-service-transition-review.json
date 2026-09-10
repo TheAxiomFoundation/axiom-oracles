@@ -1,0 +1,233 @@
+{
+  "schema": "de-kindergeld.eu-service-transition-review.v1",
+  "status": "source-bound review; bearing instruments remain unencoded",
+  "reviewed_full_articles": [
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-888/document-1",
+      "article_label": 32,
+      "corpus_body_sha256": "35c7e0a169bdfb184933ff525381f10ed60564ab782590caabb77e4d84e8d628",
+      "full_article_with_closing_text_where_applicable": "Artikel 32 Aufhebung Die Verordnungen (EU) 2018/1475 und (EU) Nr. 375/2014 werden mit Wirkung vom 1. Januar 2021 aufgehoben.",
+      "excerpt_sha256": "6383aec5d155821efec4b6964124a12ed0ee87bc04e40601704560b85da6dab6",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-888/document-1",
+      "article_label": 33,
+      "corpus_body_sha256": "35c7e0a169bdfb184933ff525381f10ed60564ab782590caabb77e4d84e8d628",
+      "full_article_with_closing_text_where_applicable": "Artikel 33 Übergangsbestimmungen (1) Die vorliegende Verordnung lässt die Weiterführung oder Änderung der Maßnahmen, die gemäß der Verordnung (EU) 2018/1475 bzw. (EU) Nr. 375/2014 durchgeführt werden, bis zu deren Abschluss unberührt; die beiden letzt­ genannten Verordnungen sind auf diese Maßnahmen bis zu deren Abschluss anwendbar. (2) Die Finanzausstattung des Programms kann auch zur Deckung der Ausgaben für technische und administrative Hilfe verwendet werden, die für den Übergang zwischen dem Programm und den Maßnahmen erforderlich sind, die gemäß der Verordnung (EU) 2018/1475 oder (EU) Nr. 375/2014 eingeführt wurden. DE L 202/52 Amtsblatt der Europäischen Union 8.6.2021\n\n(3) Gemäß Artikel 193 Absatz 2 Unterabsatz 2 Buchstabe a der Haushaltsordnung und abweichend von Artikel 193 Absatz 4 jener Verordnung können im Rahmen der vorliegenden Verordnung geförderte Tätigkeiten und die zugrunde liegenden, 2021 anfallenden Kosten in hinreichend begründeten, im Finanzierungsbeschluss genannten Fällen ab dem 1. Januar 2021 als förderfähig betrachtet werden, auch wenn sie bereits vor dem Zeitpunkt der Finanzhilfeantragstellung durchgeführt wurden bzw. entstanden sind. (4) Falls erforderlich können über das Jahr 2027 hinaus Mittel zur Deckung von in Artikel 11 Absatz 3 vorgesehenen Ausgaben in den Unionshaushalt eingesetzt werden, um die Verwaltung von Maßnahmen und Tätigkeiten zu ermögli­ chen, die bis zum 31. Dezember 2027 noch nicht abgeschlossen sind. (5) Die Mitgliedstaaten sorgen auf nationaler Ebene für einen reibungslosen Übergang zwischen im Rahmen des Programms für das Europäische Solidaritätskorps 2018-2020 durchzuführenden Maßnahmen und den im Rahmen des vorliegenden Programms durchzuführenden Maßnahmen.",
+      "excerpt_sha256": "5747d650ad73dd368820cb4e0bb2ec0564f94066ebcc03996b1aa6cda125ac5a",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-888/document-1",
+      "article_label": 34,
+      "corpus_body_sha256": "35c7e0a169bdfb184933ff525381f10ed60564ab782590caabb77e4d84e8d628",
+      "full_article_with_closing_text_where_applicable": "Artikel 34 Inkrafttreten Diese Verordnung tritt am Tag ihrer Veröffentlichung im Amtsblatt der Europäischen Union in Kraft. Sie gilt ab dem 1. Januar 2021. Diese Verordnung ist in allen ihren Teilen verbindlich und gilt unmittelbar in jedem Mitglied­ staat. Geschehen zu Brüssel am 20. Mai 2021. Im Namen des Europäischen Parlaments Der Präsident D.M. SASSOLI Im Namen des Rates Die Präsidentin A.P. ZACARIAS DE 8.6.2021 Amtsblatt der Europäischen Union L 202/53",
+      "excerpt_sha256": "a264d7d6d5fbfd68fc1a1b56481e683afec4579a5af8dc7bac761a8099e50dba",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2018-1475/document-1",
+      "article_label": 26,
+      "corpus_body_sha256": "0b132ef52aa7981ddcbc7280c11ae829d3ee7d13214dc2296ff05405881159ba",
+      "full_article_with_closing_text_where_applicable": "Artikel 26 Änderung der Verordnung (EU) Nr. 1288/2013 Die Verordnung (EU) Nr. 1288/2013 wird wie folgt geändert: 1. Artikel 13 erhält folgende Fassung: „Artikel 13 Lernmobilität von Einzelpersonen (1) Mit der Lernmobilität von Einzelpersonen wird Folgendes unterstützt: a) Mobilität von jungen Menschen zwischen den Programmländern im Bereich des nicht formalen und informellen Lernens; bei dieser Mobilität kann es sich um den Jugendaustausch sowie um innovative Maßnahmen handeln, in deren Rahmen die bisherigen Mobilitätsmaßnahmen nutzbar gemacht werden; b) Mobilität von in der Jugendarbeit oder in Jugendorganisationen tätigen Personen und von Jugendleitern; bei einer solchen Mobilität kann es sich um Schulungsmaßnahmen und um Kontakt- und Beziehungspflege handeln. (2) Mit dieser Maßnahme wird ferner die in Partnerländer, insbesondere Nachbarschaftsländer, gerichtete und von Partnerländern, insbesondere Nachbarschaftsländern, ausgehende Mobilität von jungen Menschen, von in der Jugendarbeit oder in Jugendorganisationen tätigen Personen und von Jugendleitern unterstützt.“ 2. Artikel 18 Absätze 1, 2 und 3 erhalten folgende Fassung: „(1) Die Finanzausstattung für die Durchführung des Programms ab dem 1. Januar 2014 wird auf 14 542 724 000 EUR zu jeweiligen Preisen festgesetzt. 4.10.2018 L 250/17 Amtsblatt der Europäischen Union DE\n\n(2) Der Betrag gemäß Absatz 1 wird in folgender Weise für die einzelnen Maßnahmen des Programms vorgesehen, wobei die Flexibilität für jeden der vorgesehenen Beträge 5 % jeweils nicht übersteigt: a) mindestens 80,8 % für allgemeine und berufliche Bildung, von denen folgende Mindestbeträge zugewiesen sind: i) 44,3 % für Hochschulbildung, was 35,7 % aller Mittel entspricht; ii) 21,4 % für berufliche Bildung, was 17,3 % aller Mittel entspricht; iii) 14,6 % für Schulbildung, was 11,8 % aller Mittel entspricht; iv) 4,9 % für Erwachsenenbildung, was 3,9 % aller Mittel entspricht; b) 8,6 % für die Jugend; c) höchstens 1,5 % für die Bürgschaftsfazilität für Studiendarlehen; d) 1,9 % für die Jean-Monnet-Aktivitäten; e) 1,8 % für Sport, von denen höchstens 10 % für die Aktivität gemäß Artikel 17 Absatz 1 Buchstabe b vorgesehen sind; f) 3,4 % als Betriebskostenzuschüsse für nationale Agenturen; g) 1,8 % für Verwaltungsausgaben. (3) Von den Mittelzuweisungen gemäß Absatz 2 Buchstaben a und b sind mindestens 63 % für Lernmobilität von Einzelpersonen, mindestens 27 % für Zusammenarbeit zur Förderung von Innovation und den Austausch von bewährten Verfahren und 4,2 % zur Förderung politischer Reformen vorgesehen.“",
+      "excerpt_sha256": "e37810577b499e53b4db6bc36839261f72685bbc4ede2ec1c57849c2298ccd57",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2018-1475/document-1",
+      "article_label": 29,
+      "corpus_body_sha256": "0b132ef52aa7981ddcbc7280c11ae829d3ee7d13214dc2296ff05405881159ba",
+      "full_article_with_closing_text_where_applicable": "Artikel 29 Inkrafttreten Diese Verordnung tritt am Tag nach ihrer Veröffentlichung im Amtsblatt der Europäischen Union in Kraft. Diese Verordnung ist in allen ihren Teilen verbindlich und gilt unmittelbar in jedem Mitgliedstaat. Geschehen zu Straßburg am 2. Oktober 2018. Im Namen des Europäischen Parlaments Der Präsident A. TAJANI Im Namen des Rates Der Präsidentin J. BOGNER-STRAUSS 4.10.2018 L 250/19 Amtsblatt der Europäischen Union DE",
+      "excerpt_sha256": "12d39fd20becd217d84d7220bb8a364c63d071c0df0a8dfb6144578fcf7b323d",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-1288-2013/document-1",
+      "article_label": 13,
+      "corpus_body_sha256": "04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29",
+      "full_article_with_closing_text_where_applicable": "Artikel 13 Lernmobilität von Einzelpersonen (1) Mit der Lernmobilität von Einzelpersonen wird Folgendes unterstützt: a) Mobilität von jungen Menschen zwischen den Programmlän­ dern im Bereich des nicht formalen und informellen Lernens; bei dieser Mobilität kann es sich um den Jugendaustausch und um Freiwilligentätigkeiten im Rahmen des Europäischen Freiwilligendienstes und um innovative Maßnahmen handeln, in deren Rahmen die bisherigen Mobilitätsmaßnahmen nutz­ bar gemacht werden; b) Mobilität von in der Jugendarbeit oder in Jugendorganisatio­ nen tätigen Personen und von Jugendleitern; bei einer sol­ chen Mobilität kann es sich um Schulungsmaßnahmen und um Kontakt- und Beziehungspflege handeln. (2) Mit dieser Maßnahme wird auch die in Partnerländer, insbesondere Nachbarschaftsländer, gerichtete und von Partner­ ländern, insbesondere Nachbarschaftsländern, ausgehende Mobi­ lität von jungen Menschen, von in der Jugendarbeit oder in Jugendorganisationen tätigen Personen und von Jugendleitern unterstützt.",
+      "excerpt_sha256": "08b487ff39e1afcd78de8cd31987b53f058f0e768d8181d6ede6dda79c206de3",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-1288-2013/document-1",
+      "article_label": 37,
+      "corpus_body_sha256": "04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29",
+      "full_article_with_closing_text_where_applicable": "Artikel 37 Aufhebung und Übergangsbestimmungen (1) Die Beschlüsse Nr. 1719/2006/EG, Nr. 1720/2006/EG, und Nr. 1298/2008/EG werden zum 1. Januar 2014 aufgeho­ ben. (2) Maßnahmen, die bis einschließlich 31. Dezember 2013 auf Grundlage der Beschlüsse Nr. 1719/2006/EG, Nr. 1720/ 2006/EG, oder Nr. 1298/2008/EG angelaufen sind, werden ge­ gebenenfalls entsprechend den Bestimmungen der vorliegenden Verordnung verwaltet. (3) Die Mitgliedstaaten sorgen auf nationaler Ebene für einen reibungslosen Übergang zwischen den im Rahmen der Vorläu­ ferprogramme in den Bereichen lebenslanges Lernen, Jugend und internationale Zusammenarbeit im Hochschulwesen durch­ geführten Maßnahmen und den im Rahmen des Programms vorgesehenen Maßnahmen.",
+      "excerpt_sha256": "df6150f0372e50390a10b5d785ac63c5649743285f94b47aee7951f9d7526b15",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-1288-2013/document-1",
+      "article_label": 38,
+      "corpus_body_sha256": "04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29",
+      "full_article_with_closing_text_where_applicable": "Artikel 38 Inkrafttreten Diese Verordnung tritt am Tag nach ihrer Veröffentlichung im Amtsblatt der Europäischen Union in Kraft. Sie gilt ab dem 1. Januar 2014. Diese Verordnung ist in allen ihren Teilen verbindlich und gilt unmittelbar in jedem Mitglied­ staat. Geschehen zu Straßburg am 11. Dezember 2013 Im Namen des Europäischen Parlaments Der Präsident M. SCHULZ Im Namen des Rates Der Präsident V. LEŠKEVIČIUS DE 20.12.2013 Amtsblatt der Europäischen Union L 347/69",
+      "excerpt_sha256": "c25aeff9448d7a910fca1b708182aa95c02c65207fc5fa57d823ac1d0556f629",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-817/document-1",
+      "article_label": 35,
+      "corpus_body_sha256": "017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e",
+      "full_article_with_closing_text_where_applicable": "Artikel 35 Aufhebung Die Verordnung (EU) Nr. 1288/2013 wird mit Wirkung vom 1. Januar 2021 aufgehoben.",
+      "excerpt_sha256": "cea67c3e7a830a0a7509db7e8e29d7e93b54ec70f6330c3eb8c2fd5ba0572f7b",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-817/document-1",
+      "article_label": 36,
+      "corpus_body_sha256": "017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e",
+      "full_article_with_closing_text_where_applicable": "Artikel 36 Übergangsbestimmungen (1) Die vorliegende Verordnung lässt die Weiterführung oder Änderung der Maßnahmen, die im Rahmen der Verordnung (EU) Nr. 1288/2013 eingeleitet wurden, unberührt; die genannte Verordnung gilt für diese Maßnahmen bis zu deren Abschluss. (2) Die Finanzausstattung des Programms kann auch zur Deckung der Ausgaben für technische und administrative Hilfe verwendet werden, die für den Übergang zwischen dem Programm und den gemäß der Verordnung (EU) Nr. 1288/2013 angenommenen Maßnahmen erforderlich sind. (3) Gemäß Artikel 193 Absatz 2 Unterabsatz 2 Buchstabe a der Haushaltsordnung und abweichend von Artikel 193 Absatz 4 der Haushaltsordnung können im Rahmen der vorliegenden Verordnung geförderte Aktivitäten und die zugrunde liegenden im Jahr 2021 anfallenden Kosten in hinreichend begründeten, im Finanzierungsbeschluss genannten Fällen ab dem 1. Januar 2021 als förderfähig betrachtet werden, auch wenn diese Aktivitäten bereits vor dem Zeitpunkt der Finanzhilfeantragstellung durchgeführt wurden bzw. diese Kosten davor entstanden sind. Die Finanzhilfeverein­ barungen für die Beiträge zu den Betriebskosten für das Haushaltsjahr 2021 können ausnahmsweise innerhalb von sechs Monaten nach Beginn des Rechnungsjahres des Begünstigten unterzeichnet werden. (4) Um die Verwaltung von Maßnahmen und Aktivitäten, die bis zum 31. Dezember 2027 noch nicht abgeschlossen sind, zu ermöglichen, können erforderlichenfalls über das Jahr 2027 hinaus Mittel zur Deckung der in Artikel 17 Absatz 7 genannten Ausgaben in den Unionshaushalt eingesetzt werden. (5) Die Mitgliedstaaten sorgen auf nationaler Ebene für einen reibungslosen Übergang zwischen den im Rahmen des Programms 2014-2020 durchgeführten und den im Rahmen des Programms durchzuführenden Maßnahmen.",
+      "excerpt_sha256": "ff0e2feabdc8c96ae310923472e368f05eddcf3494f5f6b25feaf084e3f8907e",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    },
+    {
+      "corpus_citation_path": "de/regulation/eu-2021-817/document-1",
+      "article_label": 37,
+      "corpus_body_sha256": "017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e",
+      "full_article_with_closing_text_where_applicable": "Artikel 37 Inkrafttreten Diese Verordnung tritt am Tag ihrer Veröffentlichung im Amtsblatt der Europäischen Union in Kraft. Sie gilt ab dem 1. Januar 2021. Diese Verordnung ist in allen ihren Teilen verbindlich und gilt unmittelbar in jedem Mitgliedstaat. Geschehen zu Brüssel am 20. Mai 2021. Im Namen des Europäischen Parlaments Der Präsident D. M. SASSOLI Im Namen des Rates Die Präsidentin A. P. ZACARIAS DE Amtsblatt der Europäischen Union L 189/30 28.5.2021",
+      "excerpt_sha256": "ce5680c2806b82b2b48945e05a5ffce1053d35b535b24a518b53a88c4b611abc",
+      "binding_status": "verified published corpus release, pinned in closure/de/source.json"
+    }
+  ],
+  "reviewed_full_guidance": {
+    "id": "de-kg-dakg-A18.4",
+    "body_sha256": "999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6",
+    "reviewed_full_section": "A 18.4       Europäisches Solidaritätskorps\n(1) 1Freiwilligentätigkeiten im Rahmen des Europäischen Solidaritätskorps werden gemäß der\nVerordnung (EU) Nr. 2021/888 (ABl. EU Nr. L 202 S. 32) des Europäischen Parlaments und des Rates\nvom 20.05.2021 ausgeführt. 2Das Europäische Solidaritätskorps 2021-2027 umfasst auch ausstehende\nFreiwilligentätigkeiten im Rahmen der Vorläuferprogramme Europäisches Solidaritätskorps 2018-2020\ngem. Verordnung (EU) Nr. 2018/1475 vom 02.10.2018 (ABl. EU Nr. L 250 S. 1) sowie dem\nEuropäischen Freiwilligendienst aus dem Programm Erasmus+ 2014-2020 gem. Verordnung (EU)\nNr. 1288/2013 vom 11.12.2013 (ABl. EU Nr. L 347 S 50). 3Ein Kind, das eine Freiwilligentätigkeit nach\nden bisherigen Programmen vereinbart hatte, erfüllt über den 01.01.2021 hinaus die\nAnspruchsvoraussetzungen nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. d EStG.\n(2) 1Die Europäische Freiwilligentätigkeit wird auf der Grundlage eines privatrechtlichen Fördervertrags\ngeleistet, der zwischen der projektleitenden Organisation (das kann entweder die\nAufnahmeorganisation oder die unterstützende Organisation sein) und der die Förderung bewilligenden\nStelle abgeschlossen wird. 2Die die Förderung bewilligende Stelle kann für in Deutschland ansässige\nFreiwillige die Nationale Agentur JUGEND für Europa (Godesberger Allee 142 - 148, 53175 Bonn) oder\neine mit der Abwicklung betraute Nationale Agentur in einem der anderen 30 Programmländer (das sind\ndie anderen 26 EU-Mitgliedstaaten sowie die vier mit dem Programm assoziierten Drittländer Island,\nLiechtenstein, Türkei und Nordmazedonien) sein und in Ausnahmefällen auch unmittelbar die\nEuropäische Kommission in Brüssel. 3Der Vertrag kommt erst mit abschließender Unterzeichnung durch\ndie bewilligende Stelle zustande; er ist zwingende Voraussetzung für die Berücksichtigung. 4Der\nTätigkeitsort liegt regelmäßig, aber nicht notwendig, im Gebiet der Programmländer. 5Die Dauer ist auf\nmaximal zwölf Monate beschränkt; bis zu der Höchstdauer können auch mehrere Dienste bzw. die\nArbeit in verschiedenen Projekten berücksichtigt werden.\n(3) 1Der Nachweis ist durch eine Bescheinigung, die die deutsche Nationale Agentur oder die\nunterstützende Organisation unter Bezugnahme auf das Programm und Angabe der Beteiligten (des\nFreiwilligen, der unterstützenden Organisation und der Aufnahmeorganisation), der Dauer sowie der\nProjektnummer vor Beginn oder nach Abschluss der Tätigkeit dem Freiwilligen ausstellt, zu erbringen.\n\n\n                                                   51\n\f2Bei Vorlage einer entsprechenden Bescheinigung ist von einem rechtswirksamen Fördervertrag\nauszugehen. 3Zur abschließenden Prüfung siehe A 18.1 Abs. 3."
+  },
+  "findings": [
+    "The original1288/2013 Article13 explicitly includes European Voluntary Service. Article26 of2018/1475 replaces that Article13 with wording that omits that route, and Article29 supplies entry on the day following publication. Do not treat the original2013 expression as an unchanged current rule.",
+    "2021/888 Article32 repeals2018/1475 and375/2014 from1January2021, while Article33(1) preserves continuation/modification of their actions under the old regulations until completion. Article34 separates publication-day entry from application beginning1January2021.",
+    "2021/817 Article35 repeals1288/2013 from1January2021; Article36(1) preserves actions initiated under it, including continuation or modification, until completion. This supplies the Erasmus transition rule not expressly named in2021/888 Article33(1).",
+    "The financial and administrative branches in2021/817 Article36(2)–(5), including the specific2021 pre-application-cost exception and operating-grant signing period, are not general Kindergeld eligibility dates or amounts. Do not transfer the budget exception into an automatic child-benefit award.",
+    "DA-KG A18.4 includes outstanding predecessor activities, requires a concluded funding contract signed finally by the granting authority, allows the stated project certificate as evidence and caps aggregate consideration at12months. A certificate can be issued after the activity. Do not invent a requirement that the evidentiary certificate precede the service or automatically equate signature date with the first eligible service day. Contract scope and any retrospective application need their own source-bound analysis."
+  ],
+  "limitations": [
+    "No whole77page legal review or current consolidation claim.",
+    "No native generation dispatched. These article labels describe reviewed spans of existing document-body citation paths; they are not fabricated corpus article rows.",
+    "Bilateral/third-country programme participation, individual grant/action scope and substantive service eligibility remain unencoded."
+  ],
+  "corpus_pr": 679,
+  "reviewed_capture_head": "ce17437e7b0490dc5bf745307a09da8867477762",
+  "corpus_commit": "8f7d60aaced28ee4252b9237f9d6e02360dc34bc",
+  "release": "de-rulespec-2026-09-10-kindergeld-eu-service-predecessors",
+  "release_content_sha256": "c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947",
+  "publication_verification": {
+    "release": "de-rulespec-2026-09-10-kindergeld-eu-service-predecessors",
+    "commit": "8f7d60aaced28ee4252b9237f9d6e02360dc34bc",
+    "content_sha256": "c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947",
+    "selector_sha256": "2bba8f8afc9b6a179bac132a9721268515b696bba7a093befde58ad030142689",
+    "artifact_count": 366,
+    "all_artifact_hashes_match": true,
+    "release_object_sha256": "7cd8ec2752538b0cc2132ca2070b24cd355da79ed7c181183b4c90b0754c29f1"
+  },
+  "public_mirror_verification": {
+    "url": "https://pub-a8952f8657fc49fda358146ac001366c.r2.dev/releases/de-rulespec-2026-09-10-kindergeld-eu-service-predecessors/c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947.json",
+    "mirror_run": 34521605732,
+    "byte_identical": true,
+    "sha256": "7cd8ec2752538b0cc2132ca2070b24cd355da79ed7c181183b4c90b0754c29f1",
+    "bytes": 249255
+  },
+  "publication_run_id": 34521018738,
+  "mirror_run_id": 34521605732,
+  "graph_drift": {
+    "programs": [
+      {
+        "program": "de/kindergeld",
+        "before": 114,
+        "after": 114,
+        "added": [],
+        "removed": []
+      },
+      {
+        "program": "de/rv-employee-contribution",
+        "before": 11,
+        "after": 11,
+        "added": [],
+        "removed": []
+      },
+      {
+        "program": "de/unterhaltsvorschuss",
+        "before": 40,
+        "after": 40,
+        "added": [],
+        "removed": []
+      }
+    ],
+    "before_sha256": "81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc",
+    "after_sha256": "c9ec4bf63d5d41d425f82aa2fc6e7e07e5398c23d9681267b7f3b59c7992e35e",
+    "index_after": {
+      "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
+      "row_count": 9868,
+      "body_row_count": 9684,
+      "mapped_row_count": 9868,
+      "unmapped_row_count": 0,
+      "act_count": 224,
+      "mechanism_counts": {
+        "amendment_targets": 46,
+        "explicit_cross_reference_body": 6764,
+        "law_metadata_changed_by": 34,
+        "law_metadata_fundstelle": 42
+      },
+      "row_scan_sha256": "4aedbffed7e0bb0b1a945473e479695b5c0d902389feffee693e49d96d28d562",
+      "canonical_index_sha256": "0b1d1d9e43f1bc6ddfcd3f39a597885348b92aeec770a58201315563b110b1ea",
+      "per_act_sha256": "dfa98045fbe0c2825aae0222c8e238ba9039cac19d9b3f3b60829aca3d95310d",
+      "method": {
+        "row_participation": "one canonical row receipt for every pinned statute and regulation row, including rows with zero findings",
+        "law_metadata": "Fundstelle and stand values read from law_metadata on every row; values remain verbatim corpus facts",
+        "body_references": "every string body scanned; counts are canonical unique source-row/matched-text/target facts from corpus-grounded cross-act aliases, versioned known-reference patterns, and an unmatched specific compound-law/regulation fallback retained verbatim; the committed nonspecific-term stoplist does not assert generic classes as instruments",
+        "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
+        "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
+      },
+      "receipt_sha256": "5d1d620d85073664aaa8ffbf9e7c81d0286d4ad704abd630512d7df4e48d71d5"
+    }
+  },
+  "enrolled_supplemental_instruments": [
+    {
+      "id": "de-kg-suppl-019",
+      "identity": "Regulation (EU) 2018/1475, European Solidarity Corps predecessor programme",
+      "title_short": "eu-2018-1475",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A18.4",
+      "discovered_in_body_sha256": "999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6",
+      "provenance": "DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888.",
+      "status": "classified-with-reason",
+      "classification": "adult_child_service_transition",
+      "reason": "DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.",
+      "text_source": "Receipted original German Official Journal text, de/regulation/eu-2018-1475/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.",
+      "text_sha256": "0b132ef52aa7981ddcbc7280c11ae829d3ee7d13214dc2296ff05405881159ba",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "de-kg-suppl-020",
+      "identity": "Regulation (EU) No 1288/2013, Erasmus+ predecessor programme",
+      "title_short": "eu-1288-2013",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A18.4",
+      "discovered_in_body_sha256": "999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6",
+      "provenance": "DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route.",
+      "status": "classified-with-reason",
+      "classification": "adult_child_service_transition",
+      "reason": "DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.",
+      "text_source": "Receipted original German Official Journal text, de/regulation/eu-1288-2013/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.",
+      "text_sha256": "04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "de-kg-suppl-021",
+      "identity": "Regulation (EU) 2021/817, Erasmus+ repeal and continuation rules",
+      "title_short": "eu-2021-817",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A18.4",
+      "discovered_in_body_sha256": "999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6",
+      "provenance": "Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts.",
+      "status": "classified-with-reason",
+      "classification": "adult_child_service_transition",
+      "reason": "Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.",
+      "text_source": "Receipted original German Official Journal text, de/regulation/eu-2021-817/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.",
+      "text_sha256": "017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e",
+      "bears_on_computed_surface": true
+    }
+  ]
+}

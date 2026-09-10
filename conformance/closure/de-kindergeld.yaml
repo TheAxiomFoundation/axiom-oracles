@@ -41,12 +41,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4
+    sha256: 389facd9856cca42b49131a1e9a8e04037e668696952b8be8560de426a12d8b7
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: eb2c46117b2cf2a396a48a41be409fe1e5ecc696
-    release: de-rulespec-2026-09-10-kindergeld-recipient-priority
-    release_content_sha256: 4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4
+    commit: 8f7d60aaced28ee4252b9237f9d6e02360dc34bc
+    release: de-rulespec-2026-09-10-kindergeld-eu-service-predecessors
+    release_content_sha256: c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -129,6 +129,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
       row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
+      sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
@@ -982,10 +985,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc
+    snapshot_sha256: c9ec4bf63d5d41d425f82aa2fc6e7e07e5398c23d9681267b7f3b59c7992e35e
     channel_receipts:
-      corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
-      subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
+      corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
+      subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10344,7 +10347,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 664ae594e98d2f5a9f8b62f103c1a1b8ecff16fc8970abbd0a1f4c1aefede525
+      sha256: 67e060c891d8534926019130304195972cc8f64c6f9ffc44c2af2860e4366443
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10393,8 +10396,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: f9fff09c1b1d02ce108b8c239ba79b9247f1a32ce31bc3e87620be67464c2dd1
-        subject_matter_search: eb632225ee9ce8ab916b75c1ccf3673b063ded8616c22892198b5df5270b7fbe
+        corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
+        subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13877,6 +13880,45 @@ committed_decisions:
     text_source: Native official FamFG XML; de/statute/famfg/40 in data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl; release de-rulespec-2026-09-10-kindergeld-recipient-priority, commit eb2c46117b2cf2a396a48a41be409fe1e5ecc696, content SHA-2564955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4. Exact body retained in conformance/closure/de-discovery-2026-09-08/recipient-priority-source-review.json reviewed_statutes.
     text_sha256: 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3
     bears_on_computed_surface: true
+  - id: de-kg-suppl-019
+    identity: Regulation (EU) 2018/1475, European Solidarity Corps predecessor programme
+    title_short: eu-2018-1475
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888.
+    status: classified-with-reason
+    classification: adult_child_service_transition
+    reason: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.
+    text_source: Receipted original German Official Journal text, de/regulation/eu-2018-1475/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+    text_sha256: 0b132ef52aa7981ddcbc7280c11ae829d3ee7d13214dc2296ff05405881159ba
+    bears_on_computed_surface: true
+  - id: de-kg-suppl-020
+    identity: Regulation (EU) No 1288/2013, Erasmus+ predecessor programme
+    title_short: eu-1288-2013
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route.
+    status: classified-with-reason
+    classification: adult_child_service_transition
+    reason: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.
+    text_source: Receipted original German Official Journal text, de/regulation/eu-1288-2013/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+    text_sha256: 04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29
+    bears_on_computed_surface: true
+  - id: de-kg-suppl-021
+    identity: Regulation (EU) 2021/817, Erasmus+ repeal and continuation rules
+    title_short: eu-2021-817
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.4
+    discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+    provenance: 'Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts.'
+    status: classified-with-reason
+    classification: adult_child_service_transition
+    reason: 'Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.'
+    text_source: Receipted original German Official Journal text, de/regulation/eu-2021-817/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+    text_sha256: 017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e
+    bears_on_computed_surface: true
 computed:
   ledger:
   - ordinal: 1
@@ -14489,11 +14531,11 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 781
+    instrument_count: 784
     counts:
-      total: 781
+      total: 784
       encoded: 2
-      classified-with-reason: 162
+      classified-with-reason: 165
       excluded-with-reason: 349
       pending: 268
     pending:
@@ -25931,6 +25973,51 @@ computed:
       bears_on_computed_surface: true
       text_source: Native official FamFG XML; de/statute/famfg/40 in data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl; release de-rulespec-2026-09-10-kindergeld-recipient-priority, commit eb2c46117b2cf2a396a48a41be409fe1e5ecc696, content SHA-2564955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4. Exact body retained in conformance/closure/de-discovery-2026-09-08/recipient-priority-source-review.json reviewed_statutes.
       text_sha256: 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3
+    - id: de-kg-suppl-019
+      status: classified-with-reason
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Regulation (EU) 2018/1475, European Solidarity Corps predecessor programme
+      title_short: eu-2018-1475
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888.
+      classification: adult_child_service_transition
+      reason: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) 2018/1475; the complete reviewed Article26 replaces Article13 of 1288/2013 and Article29 supplies entry into force. These source-defined service routes and their dates bear on child qualification. Their continuation is addressed by reviewed Articles32–34 of 2021/888. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.
+      bears_on_computed_surface: true
+      text_source: Receipted original German Official Journal text, de/regulation/eu-2018-1475/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+      text_sha256: 0b132ef52aa7981ddcbc7280c11ae829d3ee7d13214dc2296ff05405881159ba
+    - id: de-kg-suppl-020
+      status: classified-with-reason
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Regulation (EU) No 1288/2013, Erasmus+ predecessor programme
+      title_short: eu-1288-2013
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route.
+      classification: adult_child_service_transition
+      reason: DA-KG A18.4(1) sentence2 expressly names Regulation (EU) No1288/2013. Its complete original Article13 includes European Voluntary Service; Articles37–38 supply transition and application rules. The Article13 amendment in 2018/1475 and repeal/continuation in 2021/817 must be composed before applying this historical service route. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.
+      bears_on_computed_surface: true
+      text_source: Receipted original German Official Journal text, de/regulation/eu-1288-2013/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+      text_sha256: 04fae9469ebf8abff1ea7f9dbfe301a21ce53af6e2e151f03c780905eb575a29
+    - id: de-kg-suppl-021
+      status: classified-with-reason
+      discovery_refs:
+      - de-kg-dakg-A18.4
+      identity_kind: supplemental
+      identity: Regulation (EU) 2021/817, Erasmus+ repeal and continuation rules
+      title_short: eu-2021-817
+      relation: bears_on
+      discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
+      provenance: 'Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts.'
+      classification: adult_child_service_transition
+      reason: 'Reading the 1288/2013 predecessor named in DA-KG A18.4(1) led to its repeal and continuation instrument 2021/817. This instrument is not expressly named in A18.4. Complete Articles35–37 were reviewed: Article36(1) retains the prior rules for initiated actions until completion despite repeal from1January2021. The financial and administrative exceptions do not automatically set Kindergeld entitlement dates or amounts. The identified rules bear on qualifying_child_count and remain unencoded. This review covers the specified complete articles, not every provision of the act or all 77 captured pages. The recorded graph scan did not project this instrument into the Kindergeld frontier. Individual service and grant scope, historical applicability and the remaining qualification rules still require source-bound implementation.'
+      bears_on_computed_surface: true
+      text_source: Receipted original German Official Journal text, de/regulation/eu-2021-817/document-1; release de-rulespec-2026-09-10-kindergeld-eu-service-predecessors, commit 8f7d60aaced28ee4252b9237f9d6e02360dc34bc, content SHA-256 c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947. Reviewed complete article spans and their excerpt hashes are retained in conformance/closure/de-discovery-2026-09-08/eu-service-transition-review.json; text_sha256 binds the full corpus document body.
+      text_sha256: 017f6c2e1a9ad306502218ae1bd5c623b50ed0238feb088d389d655f918bc02e
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -26093,12 +26180,15 @@ computed:
     - de-kg-suppl-014
     - de-kg-suppl-015
     - de-kg-suppl-018
-    instruments_bearing_on_computed_count: 148
-    open_dependency_count: 156
+    - de-kg-suppl-019
+    - de-kg-suppl-020
+    - de-kg-suppl-021
+    instruments_bearing_on_computed_count: 151
+    open_dependency_count: 159
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 781
+    bearing_candidate_instruments: 784
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

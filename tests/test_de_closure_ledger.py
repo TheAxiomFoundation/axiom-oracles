@@ -98,7 +98,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 781, 8, 1, 0, 0),
+    "de/kindergeld": (18, 784, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 40, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -321,7 +321,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9862
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9868
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -373,14 +373,14 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=9862)
-    assert index["row_count"] == index["mapped_row_count"] == 9862
-    assert index["body_row_count"] == 9681
+    refresh._validate_global_extraction_index(index, scanned_row_count=9868)
+    assert index["row_count"] == index["mapped_row_count"] == 9868
+    assert index["body_row_count"] == 9684
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 221
+    assert index["act_count"] == len(index["acts"]) == 224
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 6745,
+        "explicit_cross_reference_body": 6764,
         "law_metadata_changed_by": 34,
         "law_metadata_fundstelle": 42,
     }
@@ -1560,9 +1560,9 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 18
+    assert len(supplemental) == 21
     # The four classes remain pending because enumeration is incomplete;
-    # citation seeds have their own frontier rows. The 14 named documents are decided on
+    # citation seeds have their own frontier rows. The 17 named documents are decided on
     # captured text.
     pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
     assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
@@ -1573,9 +1573,9 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     for row in supplemental:
         # every enrolment binds the discovering read's section text
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
-    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2", "de-kg-dakg-A25.1"}
+    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2", "de-kg-dakg-A25.1", "de-kg-dakg-A18.4"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 534 + 18 + 229
+    assert frontier["instrument_count"] == 534 + 21 + 229
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 
