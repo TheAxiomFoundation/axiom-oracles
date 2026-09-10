@@ -62,6 +62,9 @@ NZ_INDEX = "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json"
 NZ_CHUNK = "dashboard/public/data/cases/nz-treasury-incomeexplorer/chunk-0.json"
 NZ_EXECUTABLE_RECEIPT = "conformance/executable/nz-treasury-incomeexplorer.json"
 NZ_CLOSURE_SUMMARY = "closure/nz/summary.json"
+NZ_INSTRUMENT_GRAPH = "conformance/closure/nz-instrument-graph.json"
+NZ_INSTRUMENT_DISPOSITIONS = "closure/nz/instrument-dispositions.json"
+NZ_DEPENDENCY_DISPOSITIONS = "closure/nz/dependency-dispositions.json"
 DE_REPORT = "dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json"
 DE_REBOUND_ARTIFACTS = (
     "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -276,6 +279,7 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
         "generate_dashboard_overview.py",
         "exercise_census.py",
         "certify.py",
+        "nz_v3_audit_report.py",
     ):
         result = _staleness_gate(verify, script)
         assert result.returncode == 0, (
@@ -344,6 +348,13 @@ def test_de_refresh_chain_is_ordered_checked_and_staged():
         assert path in derived_paths, f"{path} must be staged by the refresh bot"
     assert "conformance/" in derived_paths
     assert "certificates/" in derived_paths
+    assert "V3-AUDIT-OUT.md" in derived_paths
+    assert regenerate.index('"$PYTHON" scripts/certify.py\n') < regenerate.index(
+        '"$PYTHON" scripts/nz_v3_audit_report.py\n'
+    )
+    assert verify.index('"$PYTHON" scripts/certify.py --check') < verify.index(
+        '"$PYTHON" scripts/nz_v3_audit_report.py --check'
+    )
 
     ci = (REPO_ROOT / ".github/workflows/ci.yml").read_text()
     ci_positions = [ci.index(f"{script} --check") for script in DE_DERIVED_CHAIN]
@@ -545,13 +556,18 @@ def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
 
 
 def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tmp_path):
-    """The bot must repair stale producer outputs, not validate them first."""
+    """Repair producer outputs while preserving frontier source bytes."""
 
     broken = _clone(origin, tmp_path / "broken-nz-producers")
     receipt_path = broken / NZ_EXECUTABLE_RECEIPT
     closure_path = broken / NZ_CLOSURE_SUMMARY
     canonical_receipt = receipt_path.read_bytes()
     canonical_closure = closure_path.read_bytes()
+    canonical_graph = (broken / NZ_INSTRUMENT_GRAPH).read_bytes()
+    canonical_dispositions = (broken / NZ_INSTRUMENT_DISPOSITIONS).read_bytes()
+    canonical_dependency_dispositions = (
+        broken / NZ_DEPENDENCY_DISPOSITIONS
+    ).read_bytes()
 
     receipt = json.loads(receipt_path.read_text())
     receipt["transcript"]["sha256"] = "0" * 64
@@ -577,6 +593,13 @@ def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tm
     verify = _assert_origin_tip_green(origin, tmp_path)
     assert (verify / NZ_EXECUTABLE_RECEIPT).read_bytes() == canonical_receipt
     assert (verify / NZ_CLOSURE_SUMMARY).read_bytes() == canonical_closure
+    assert (verify / NZ_INSTRUMENT_GRAPH).read_bytes() == canonical_graph
+    assert (
+        verify / NZ_INSTRUMENT_DISPOSITIONS
+    ).read_bytes() == canonical_dispositions
+    assert (
+        verify / NZ_DEPENDENCY_DISPOSITIONS
+    ).read_bytes() == canonical_dependency_dispositions
 
 
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):

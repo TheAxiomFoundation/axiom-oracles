@@ -1,0 +1,28 @@
+{
+  "capture": {
+    "download_manifest_sha256": "8c9f2b048405c5d293f56962e9d478abc2e7b05bd4d32f1f4b2a3219e7541b76",
+    "snapshot": "2026-06-16-pco-latest",
+    "source": "New Zealand Legislation API",
+    "source_xml_bytes": 621849,
+    "source_xml_sha256": "030e959b5d829224f27cc5ecaf2b2f64115fa460a8c3af8df95bb0bd2a190857",
+    "xml_url": "https://www.legislation.govt.nz/act/public/2025/9/en/latest.xml"
+  },
+  "excerpt": {
+    "body_sha256": "e3a50ef1cd6039ca52501363a33dfe858ae629aa254cc4d1f114eea739a8b1db",
+    "body_utf8_bytes": 182,
+    "body_renderer": "axiom-corpus@2d077803ee17f921c30014b9e98ae9ee3b612512 src/axiom_corpus/converters/nz_pco.py render_nz_pco_legal_text over prov.body",
+    "citation_path": "nz/statute/act/public/2025/0009/section/105",
+    "element_id": "LMS1000039",
+    "path": "closure/nz/sources/taxation-2025-s105.xml",
+    "sha256": "5b36778d3438b72b7ee6ee6f9bebbf1c380dc6f70676b28829e508a1507647dc"
+  },
+  "instrument": {
+    "legislation_status": "in_force",
+    "publisher": "Parliamentary Counsel Office",
+    "stable_source_url": "https://www.legislation.govt.nz/act/public/2025/0009/latest/LMS1000039.html",
+    "title": "Taxation (Annual Rates for 2024–25, Emergency Response, and Remedial Measures) Act 2025",
+    "version_id": "act_public_2025_9_en_2026-03-31B",
+    "work_id": "act_public_2025_9"
+  },
+  "schema": "axiom_oracles.nz_official_xml_receipt.v1"
+}
