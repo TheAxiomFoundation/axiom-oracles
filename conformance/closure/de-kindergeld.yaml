@@ -32,6 +32,8 @@ program:
     role: marginal_employment_threshold_prerequisite
   - citation_path: de/statute/bfdg/5
     role: overseas_service_recognition_preservation_prerequisite
+  - citation_path: de/statute/bgb/126/absatz-1/inhalt
+    role: written_agreement_signature_prerequisite
   spine_scope:
     kind: ordinal_range
     corpus_root: de/statute/estg
@@ -41,7 +43,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6
+    sha256: fae4f5a5df3c500f9e3e5b6b5eeacfbb771e96489cc0183a4f7a5932ae5c5e75
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 279e27503c00ce1fab35809d069c076d3abad362
@@ -370,8 +372,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/eu-987-2009/article-59/document-1
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/regulations/eu-987-2009/article-59/document-1.yaml
     sha256: 500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640
     module_id: de:regulations/eu-987-2009/article-59/document-1
@@ -379,8 +381,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/regulation/milov4/1
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/regulations/milov4/1.yaml
     sha256: 5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec
     module_id: de:regulations/milov4/1
@@ -388,8 +390,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/regulation/milov5/1
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/regulations/milov5/1.yaml
     sha256: 6f2e281426c8471958b41a99b5ebc91212d8641041ed016257bd1f2d58b8b74e
     module_id: de:regulations/milov5/1
@@ -397,17 +399,26 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/bfdg/5
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/bfdg/5.yaml
     sha256: 8ba253fa78e604313092461338d0c369e3494734ca04c23f3b789d4c6550be99
     module_id: de:statutes/bfdg/5
     rule_count: 6
     declared_imports: []
+  - citation_path: de/statute/bgb/126/absatz-1/inhalt
+    state: captured
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
+    path: de/statutes/bgb/126/absatz-1/inhalt.yaml
+    sha256: eddd00d7ac369c39641b3c82061a1e04369174184dc3ab08bab3b1e6044296e8
+    module_id: de:statutes/bgb/126/absatz-1/inhalt
+    rule_count: 1
+    declared_imports: []
   - citation_path: de/statute/bgb/1591
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/bgb/1591.yaml
     sha256: bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b
     module_id: de:statutes/bgb/1591
@@ -415,8 +426,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/bgb/187
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/bgb/187.yaml
     sha256: e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70
     module_id: de:statutes/bgb/187
@@ -424,8 +435,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/32/absatz-3/document-1
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/estg/32/absatz-3/document-1.yaml
     sha256: 37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d
     module_id: de:statutes/estg/32/absatz-3/document-1
@@ -433,8 +444,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -442,8 +453,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/78
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/estg/78.yaml
     sha256: b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5
     module_id: de:statutes/estg/78
@@ -451,8 +462,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
     state: captured
-    ref: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
-    commit: 212bba29ea06d0166037e4cc24ba4d03b4dd6c02
+    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
+    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
     path: de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.yaml
     sha256: 5306768441081fa65ea33cc75e23cb1f5eac281e26e592e697f986f341042c86
     module_id: de:statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt
@@ -556,6 +567,76 @@ generated_facts:
     read_by:
     - transition_is_in_previous_month
     - transition_is_in_query_month
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier
+    name: document_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier
+    name: document_version_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present
+    name: issued_notarial_authentication_is_present
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier
+    name: issuer_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier
+    name: notarial_authentication_document_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier
+    name: notarial_authentication_document_version_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier
+    name: notarial_authentication_handmark_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier
+    name: notarial_authentication_issuer_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier
+    name: signature_document_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier
+    name: signature_document_version_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier
+    name: signature_handmark_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present
+    name: signature_is_present
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier
+    name: signature_issuer_identifier
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+  - slot: de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method
+    name: signature_observed_physical_method
+    module: de:statutes/bgb/126/absatz-1/inhalt
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
   - slot: de:statutes/bgb/1591#input.birth_record_child_identifier
     name: birth_record_child_identifier
     module: de:statutes/bgb/1591
@@ -842,12 +923,44 @@ generated_facts:
     - documented_transition_records_match
     leaf_kind: unclassified
     status: pending
+  - id: de-kg-leaf-5ccf66b063a729f3
+    input: document_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-6ef200a9fa298b91
+    input: document_version_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-564f888212a5ff1b
     input: event_or_intraday_timepoint_date
     slots:
     - de:statutes/bgb/187#input.event_or_intraday_timepoint_date
     read_by:
     - first_included_day_after_event_or_intraday_timepoint
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-a3cffd05e389980a
+    input: issued_notarial_authentication_is_present
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-3b2332e905bd6624
+    input: issuer_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
     leaf_kind: unclassified
     status: pending
   - id: de-kg-leaf-3333a0bd9110472c
@@ -896,6 +1009,38 @@ generated_facts:
     - de:statutes/estg/66#input.month_is_on_or_before_last_qualifying_month
     read_by:
     - kindergeld_payable_for_month
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-84fd94a429640160
+    input: notarial_authentication_document_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-322a52b950ad202e
+    input: notarial_authentication_document_version_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-332ebbc2b3c68cae
+    input: notarial_authentication_handmark_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-9cad351fcb097612
+    input: notarial_authentication_issuer_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
     leaf_kind: unclassified
     status: pending
   - id: de-kg-leaf-5d5e20614f0865bd
@@ -978,6 +1123,54 @@ generated_facts:
     - eighteenth_birthday_attainment_date
     leaf_kind: unclassified
     status: pending
+  - id: de-kg-leaf-5a7c2d762e534e12
+    input: signature_document_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-4ec95c090d340d87
+    input: signature_document_version_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-7f2b20e643ab79dd
+    input: signature_handmark_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-fac7c7de3d152eec
+    input: signature_is_present
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-ef8aa1e4861896ba
+    input: signature_issuer_identifier
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
+  - id: de-kg-leaf-7e341dd9fb750459
+    input: signature_observed_physical_method
+    slots:
+    - de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method
+    read_by:
+    - issuer_signature_mechanism_documentarily_conforms
+    leaf_kind: unclassified
+    status: pending
   - id: de-kg-leaf-004
     input: substitute_child_benefit_exclusion
     slots: []
@@ -994,10 +1187,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: cb8efb80cbb4e328391436bec71c048a56437ff1374f72d1609360a2522f9e89
+    snapshot_sha256: 823c1ff2e0b27581b835479735ba50c79c02b5658dd4982bb3a80ac48682be4a
     channel_receipts:
       corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-      subject_matter_search: 70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525
+      subject_matter_search: 2f1da1662df40b0966c61333abb2c74e6f15f93c14296437a4b4d0a53f84bbba
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10402,7 +10595,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 7c23eb1d6f5cc2ed7c4cf9aa9b3c1582ae662bfa1db3135d88e40f4df4df94ea
+      sha256: f96fca2d696088ca402c926de37bd96b9275ec1db3130b01442689de883ddf05
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10452,7 +10645,7 @@ generated_facts:
       status: pending
       receipts:
         corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-        subject_matter_search: 70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525
+        subject_matter_search: 2f1da1662df40b0966c61333abb2c74e6f15f93c14296437a4b4d0a53f84bbba
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -10488,6 +10681,7 @@ generated_facts:
       - de:regulations/milov4/1
       - de:regulations/milov5/1
       - de:statutes/bfdg/5
+      - de:statutes/bgb/126/absatz-1/inhalt
       - de:statutes/bgb/1591
       - de:statutes/bgb/187
       - de:statutes/estg/32/absatz-3/document-1
@@ -10518,13 +10712,21 @@ generated_facts:
       - de-kg-leaf-d354a0092ff1e25c
       - de-kg-leaf-c6f8ad8b702a8841
       - de-kg-leaf-ca9ba0b00d94aea7
+      - de-kg-leaf-5ccf66b063a729f3
+      - de-kg-leaf-6ef200a9fa298b91
       - de-kg-leaf-564f888212a5ff1b
+      - de-kg-leaf-a3cffd05e389980a
+      - de-kg-leaf-3b2332e905bd6624
       - de-kg-leaf-3333a0bd9110472c
       - de-kg-leaf-e92794b4b1d575a5
       - de-kg-leaf-800ab2bf7c273fd5
       - de-kg-leaf-11170598d00895bf
       - de-kg-leaf-28c8b07ec06f361f
       - de-kg-leaf-9dcc1cbc40e7ed0b
+      - de-kg-leaf-84fd94a429640160
+      - de-kg-leaf-322a52b950ad202e
+      - de-kg-leaf-332ebbc2b3c68cae
+      - de-kg-leaf-9cad351fcb097612
       - de-kg-leaf-5d5e20614f0865bd
       - de-kg-leaf-3f5d3c6ef41b7aa4
       - de-kg-leaf-44fefef5a95182bb
@@ -10534,6 +10736,12 @@ generated_facts:
       - de-kg-leaf-78b369cb7f817283
       - de-kg-leaf-c9126da262ebdd49
       - de-kg-leaf-27b66afeff04e642
+      - de-kg-leaf-5a7c2d762e534e12
+      - de-kg-leaf-4ec95c090d340d87
+      - de-kg-leaf-7f2b20e643ab79dd
+      - de-kg-leaf-fac7c7de3d152eec
+      - de-kg-leaf-ef8aa1e4861896ba
+      - de-kg-leaf-7e341dd9fb750459
       - de-kg-leaf-004
       uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
@@ -13704,9 +13912,21 @@ committed_decisions:
   - input: decision_receiving_member_state_id
     leaf_kind: world_fact
     reason: Recorded decision receiving member state id. This is an identifier in the retained case/decision/payment/institution record, with institution identifiers fully qualified to their issuing register. The signed Article59 rules compare the identifiers and require a cross-member-state transition; identity strings do not supply an entitlement, priority, family-benefit amount or legal calendar endpoint. Original-payer identifiers always refer to the beginning of the change month, not a new successor payment record.
+  - input: document_identifier
+    leaf_kind: world_fact
+    reason: Identity of the retained document being assessed. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: document_version_identifier
+    leaf_kind: world_fact
+    reason: Identity of the particular retained version of that document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
   - input: event_or_intraday_timepoint_date
     leaf_kind: world_fact
     reason: Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
+  - input: issued_notarial_authentication_is_present
+    leaf_kind: world_fact
+    reason: Existence of the retained issued notarial authentication record. Its named signer, document, version and handmark are separately observed and compared by the rule; mere record presence does not prove an unrelated authentication. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: issuer_identifier
+    leaf_kind: world_fact
+    reason: Identity of the document issuer stated in the retained document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
   - input: kindergeld_payment_record_exists
     leaf_kind: world_fact
     reason: Existence of a retained Kindergeld payment record for this person. This is an observable record, not a conclusion that the payment was lawful, that the person was entitled, or that continuing priority exists. The signed helper tests the recorded reference period only.
@@ -13727,6 +13947,18 @@ committed_decisions:
     leaf_kind: law_derived
     reason: Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (§ 66 Abs. 2 EStG) is decided by the same entitlement conditions of §§ 62–65 EStG with § 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.
     defining_citation_path: de/statute/estg/62
+  - input: notarial_authentication_document_identifier
+    leaf_kind: world_fact
+    reason: Identity of the document identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: notarial_authentication_document_version_identifier
+    leaf_kind: world_fact
+    reason: Identity of the document version identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: notarial_authentication_handmark_identifier
+    leaf_kind: world_fact
+    reason: Identity of the particular handmark identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: notarial_authentication_issuer_identifier
+    leaf_kind: world_fact
+    reason: Identity of the signer named in the issued notarial authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
   - input: original_payer_at_start_of_change_month_institution_id
     leaf_kind: world_fact
     reason: Recorded original payer at start of change month institution id. This is an identifier in the retained case/decision/payment/institution record, with institution identifiers fully qualified to their issuing register. The signed Article59 rules compare the identifiers and require a cross-member-state transition; identity strings do not supply an entitlement, priority, family-benefit amount or legal calendar endpoint. Original-payer identifiers always refer to the beginning of the change month, not a new successor payment record.
@@ -13748,6 +13980,24 @@ committed_decisions:
   - input: recorded_live_birth_date
     leaf_kind: world_fact
     reason: Actual date in the live-birth entry. The signed EStG32(3) rule supplies18 and computes calendar age attainment under BGB187/188; neither age nor legal month boundary is supplied.
+  - input: signature_document_identifier
+    leaf_kind: world_fact
+    reason: Identity of the physical document carrying the observed signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: signature_document_version_identifier
+    leaf_kind: world_fact
+    reason: Identity of the retained document version carrying that signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: signature_handmark_identifier
+    leaf_kind: world_fact
+    reason: Identity of the particular observed handmark, where that physical method was used. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: signature_is_present
+    leaf_kind: world_fact
+    reason: Observed presence of a signature on the retained document version. This does not supply a judgment of legal form or signature validity. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: signature_issuer_identifier
+    leaf_kind: world_fact
+    reason: Identity of the person observed to have made the signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+  - input: signature_observed_physical_method
+    leaf_kind: world_fact
+    reason: Observed physical act/method of signature, including a handwritten name, handmark or other method. The module compares the method and the actual signer/document associations; this fact supplies no statutory-applicability or whole-form verdict. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
   supplemental_instruments:
   - id: de-kg-suppl-001
     identity: Einkommensteuer-Richtlinien (EStR)
@@ -14445,7 +14695,7 @@ computed:
   - de/statute/estg/65
   - de/statute/estg/78
   boundary_frontier:
-    input_count: 40
+    input_count: 54
     pending_count: 4
     law_derived_count: 8
     unclassified_count: 0
@@ -14669,6 +14919,24 @@ computed:
       leaf_kind: world_fact
       status: classified
       reason: Recorded decision receiving member state id. This is an identifier in the retained case/decision/payment/institution record, with institution identifiers fully qualified to their issuing register. The signed Article59 rules compare the identifiers and require a cross-member-state transition; identity strings do not supply an entitlement, priority, family-benefit amount or legal calendar endpoint. Original-payer identifiers always refer to the beginning of the change month, not a new successor payment record.
+    - id: de-kg-leaf-5ccf66b063a729f3
+      input: document_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the retained document being assessed. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-6ef200a9fa298b91
+      input: document_version_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the particular retained version of that document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
     - id: de-kg-leaf-564f888212a5ff1b
       input: event_or_intraday_timepoint_date
       slots:
@@ -14678,6 +14946,24 @@ computed:
       leaf_kind: world_fact
       status: classified
       reason: Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.
+    - id: de-kg-leaf-a3cffd05e389980a
+      input: issued_notarial_authentication_is_present
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Existence of the retained issued notarial authentication record. Its named signer, document, version and handmark are separately observed and compared by the rule; mere record presence does not prove an unrelated authentication. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-3b2332e905bd6624
+      input: issuer_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the document issuer stated in the retained document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
     - id: de-kg-leaf-3333a0bd9110472c
       input: kindergeld_payment_record_exists
       slots:
@@ -14734,6 +15020,42 @@ computed:
       status: classified
       reason: Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (§ 66 Abs. 2 EStG) is decided by the same entitlement conditions of §§ 62–65 EStG with § 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.
       defining_citation_path: de/statute/estg/62
+    - id: de-kg-leaf-84fd94a429640160
+      input: notarial_authentication_document_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the document identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-322a52b950ad202e
+      input: notarial_authentication_document_version_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the document version identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-332ebbc2b3c68cae
+      input: notarial_authentication_handmark_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the particular handmark identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-9cad351fcb097612
+      input: notarial_authentication_issuer_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the signer named in the issued notarial authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
     - id: de-kg-leaf-5d5e20614f0865bd
       input: original_payer_at_start_of_change_month_institution_id
       slots:
@@ -14821,6 +15143,60 @@ computed:
       leaf_kind: world_fact
       status: classified
       reason: Actual date in the live-birth entry. The signed EStG32(3) rule supplies18 and computes calendar age attainment under BGB187/188; neither age nor legal month boundary is supplied.
+    - id: de-kg-leaf-5a7c2d762e534e12
+      input: signature_document_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the physical document carrying the observed signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-4ec95c090d340d87
+      input: signature_document_version_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the retained document version carrying that signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-7f2b20e643ab79dd
+      input: signature_handmark_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the particular observed handmark, where that physical method was used. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-fac7c7de3d152eec
+      input: signature_is_present
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Observed presence of a signature on the retained document version. This does not supply a judgment of legal form or signature validity. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-ef8aa1e4861896ba
+      input: signature_issuer_identifier
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Identity of the person observed to have made the signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
+    - id: de-kg-leaf-7e341dd9fb750459
+      input: signature_observed_physical_method
+      slots:
+      - de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method
+      read_by:
+      - issuer_signature_mechanism_documentarily_conforms
+      leaf_kind: world_fact
+      status: classified
+      reason: Observed physical act/method of signature, including a handwritten name, handmark or other method. The module compares the method and the actual signer/document associations; this fact supplies no statutory-applicability or whole-form verdict. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.
     - id: de-kg-leaf-004
       input: substitute_child_benefit_exclusion
       slots: []

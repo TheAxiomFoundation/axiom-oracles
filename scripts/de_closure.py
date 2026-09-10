@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = '3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6'
+SOURCE_SHA256 = "fae4f5a5df3c500f9e3e5b6b5eeacfbb771e96489cc0183a4f7a5932ae5c5e75"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -36,7 +36,7 @@ RELEASE = 'de-rulespec-2026-09-11-kindergeld-illness-precedents'
 RELEASE_CONTENT_SHA256 = '1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c'
 RELEASE_SELECTOR_SHA256 = 'a8f4521f60195362fa2aec2034a44aa4777775572a4a13bc906332090d4ba945'
 CORPUS_COMMIT = '279e27503c00ce1fab35809d069c076d3abad362'
-RULESPEC_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
+RULESPEC_COMMIT = "019619f0422766eab2e30b73d465c5309f0b5b47"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,
@@ -76,6 +76,7 @@ PROGRAM_SOURCE_PATHS = {
         "de/regulation/milov5/1",
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
         "de/statute/bfdg/5",
+        "de/statute/bgb/126/absatz-1/inhalt",
     ),
     "de/rv-employee-contribution": (
         "de/regulation/bsv-2018/1",

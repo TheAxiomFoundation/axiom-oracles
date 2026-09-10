@@ -12,8 +12,9 @@ inputs and 157 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
-earnings threshold and BFDG §5 recognition-preservation norms are declared at
-RuleSpec merge `212bba29ea06d0166037e4cc24ba4d03b4dd6c02`; the live amount-only oracle and
+earnings threshold, BFDG §5 recognition-preservation norms and the BGB §126(1)
+documentary signature mechanism are declared at
+RuleSpec merge `019619f0422766eab2e30b73d465c5309f0b5b47`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine remains pending.
@@ -838,3 +839,11 @@ Native ledger generation records four additional bearing identities and 21 newly
 The six recovered illness/training originals are now bound to published corpus release `de-rulespec-2026-09-11-kindergeld-illness-precedents`, merged in corpus PR684. Native publication 34538761714 and mirror 34539151964 succeeded. The release signature and all 388 artifact bytes match the merge commit; the public mirror matches the signed object exactly. These receipts replace indirect-source-only provenance for supplemental rows 026, 028, 030, 031, 033 and 034, while their original-source legal reviews remain pending.
 
 Fresh graph capture against the 50-scope release adds four pending Kindergeld corpus identities and one UHV identity, with no removals. These are separately discovered rows for recovered named cases; the supplemental reading discoveries remain explicit. The global index contains 9,894 rows, 9,697 body rows, 237 document roots and 6,827 explicit body references. The exact before/after hashes and added identities are retained in the illness-prognosis review artifact.
+
+## Signed BGB §126(1) documentary signature mechanism
+
+RuleSpec PR93 merged as `019619f0422766eab2e30b73d465c5309f0b5b47` after exact-head CI34539559771 passed. Dedicated encoder-pin PR94 resolved the initial provenance mismatch before that final validation. The three generated files remain byte-identical to native run34536457917; the rejected PR91 andPR92 candidates are closed and never counted as coverage.
+
+The declared paragraph module derives only documentary conformance with the issuer-signature mechanism: a handwritten name signature, or an issued notarial authentication associated with the observed handmark, issuer, document and version. It does not decide statutory applicability, whole-contract validity, other writing substitutes or service eligibility. Its fourteen used inputs describe retained observations. Positive surrogate identifiers preserve observed identity, while zero represents absent/unidentified associations; this convention is technical, not a statutory numerical threshold. All14 complete companion cases and six additional pinned-engine counterexamples passed, including absent identities, mismatches, unrelated authentication and an unknown physical method. Full-paragraph proof binds body SHA-256 `28ff8e921b9384a922dbc2ed654e199ae40fc5b5226306ecb2581a8cef3dffb0`.
+
+The source and manifest are declared in `closure/de/source.json`; `bgb1261-signature-mechanism-review.json` records the replay and observable-input bindings. SGBVII §2(1a), BGB §126(2), DA-KGA18.7 and BFHIII R68/11 remain open. This prerequisite does not close a Kindergeld spine provision or remove the eight law-derived inputs.

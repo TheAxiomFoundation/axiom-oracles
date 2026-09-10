@@ -38,12 +38,13 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
+RULESPEC_MAIN_COMMIT = "019619f0422766eab2e30b73d465c5309f0b5b47"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/bgb/126/absatz-1/inhalt",
         "de/statute/bfdg/5",
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
         "de/regulation/milov5/1",
@@ -74,6 +75,7 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/statute/bgb/126/absatz-1/inhalt": ("written_agreement_signature_prerequisite", "encoded", {"signed"}),
         "de/statute/bfdg/5": ("overseas_service_recognition_preservation_prerequisite", "encoded", {"signed"}),
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": (
             "marginal_employment_threshold_prerequisite", "encoded", {"signed"}
@@ -133,6 +135,12 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    'de/statute/bgb/126/absatz-1/inhalt': {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": '.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
+        "sha256": 'b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893',
+    },
     'de/statute/bfdg/5': {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -241,6 +249,15 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                'de/statute/bgb/126/absatz-1/inhalt',
+                role="written_agreement_signature_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path='.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
+                source_sha256='b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893',
+                reason='Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.',
+            ),
             _root(
                 'de/statute/bfdg/5',
                 role="overseas_service_recognition_preservation_prerequisite",

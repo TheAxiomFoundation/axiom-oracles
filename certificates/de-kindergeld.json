@@ -13,8 +13,22 @@
     "citation_roots": [
       {
         "attestation": {
+          "path": ".axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893"
+        },
+        "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2\u20135, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.",
+        "role": "written_agreement_signature_prerequisite",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bfdg/5.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452"
         },
@@ -28,7 +42,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c"
         },
@@ -42,7 +56,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462"
         },
@@ -56,7 +70,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04"
         },
@@ -70,7 +84,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910"
         },
@@ -84,7 +98,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
         },
@@ -98,7 +112,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
         },
@@ -112,7 +126,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
         },
@@ -126,7 +140,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
         },
@@ -139,7 +153,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -169,7 +183,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/62",
@@ -181,7 +195,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/63",
@@ -193,7 +207,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/64",
@@ -205,7 +219,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/estg/65",
@@ -217,7 +231,7 @@
       },
       {
         "attestation": {
-          "ref": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -238,7 +252,7 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/kindergeld",
       "mode": "computed",
-      "sha256": "b650d617a4a47c6d0589107162a657ed00b4f952d93a7c4a70c7526b271825f7"
+      "sha256": "f50fbc79de68e29d2fa9a9cef83a35f8c792a3cc02f6ae8a866a70d29a083533"
     },
     {
       "artifact": "comparisons/de-worker-dual-oracle/unified-record.json",
@@ -262,14 +276,14 @@
       "artifact": "conformance/closure/de-kindergeld.yaml",
       "claim": "closed:de/kindergeld",
       "mode": "computed",
-      "sha256": "a87ee76d65c5cbfd9c6e07f386b1042f218165f4a08df23ba7374cfe2926ed09",
+      "sha256": "b8f52e64a258c9cab9a7e439c2255b9cc13a0593fa5d052f4728edb752f12751",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/kindergeld",
       "mode": "computed",
-      "sha256": "767f78a533558d0a2dbf32542efa1d8cdd0dba32cd40b98c542d2e798d5e3b62"
+      "sha256": "412fa050e58b5472f28d20a4de8fb1c8814659e19e6e6e150d4cd960ae4cbaaf"
     },
     {
       "artifact": "conformance/executable/de-kindergeld-manifest.json",
@@ -338,7 +352,7 @@
       ],
       "boundary_frontier": {
         "complete": true,
-        "input_count": 40,
+        "input_count": 54,
         "inputs": [
           {
             "id": "de-kg-leaf-72885c711d8b5233",
@@ -645,6 +659,32 @@
             "status": "classified"
           },
           {
+            "id": "de-kg-leaf-5ccf66b063a729f3",
+            "input": "document_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the retained document being assessed. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-6ef200a9fa298b91",
+            "input": "document_version_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the particular retained version of that document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier"
+            ],
+            "status": "classified"
+          },
+          {
             "id": "de-kg-leaf-564f888212a5ff1b",
             "input": "event_or_intraday_timepoint_date",
             "leaf_kind": "world_fact",
@@ -654,6 +694,32 @@
             "reason": "Calendar date recorded for the event or intraday timepoint. Observable Date evidence for signed de:statutes/bgb/187; the module derives the first included date. This is not an elapsed legal age, residence result or selection of the legally applicable deadline regime. Calling provisions still must derive that regime and deadline end.",
             "slots": [
               "de:statutes/bgb/187#input.event_or_intraday_timepoint_date"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-a3cffd05e389980a",
+            "input": "issued_notarial_authentication_is_present",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Existence of the retained issued notarial authentication record. Its named signer, document, version and handmark are separately observed and compared by the rule; mere record presence does not prove an unrelated authentication. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-3b2332e905bd6624",
+            "input": "issuer_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the document issuer stated in the retained document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier"
             ],
             "status": "classified"
           },
@@ -734,6 +800,58 @@
             "reason": "Whether a month is at or before the month in which 'die Anspruchsvoraussetzungen wegfallen' (\u00a7 66 Abs. 2 EStG) is decided by the same entitlement conditions of \u00a7\u00a7 62\u201365 EStG with \u00a7 32 EStG. Law-derived; open until those provisions are encoded and the last qualifying month derived from them.",
             "slots": [
               "de:statutes/estg/66#input.month_is_on_or_before_last_qualifying_month"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-84fd94a429640160",
+            "input": "notarial_authentication_document_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the document identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-322a52b950ad202e",
+            "input": "notarial_authentication_document_version_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the document version identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-332ebbc2b3c68cae",
+            "input": "notarial_authentication_handmark_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the particular handmark identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-9cad351fcb097612",
+            "input": "notarial_authentication_issuer_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the signer named in the issued notarial authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier"
             ],
             "status": "classified"
           },
@@ -859,6 +977,84 @@
             "status": "classified"
           },
           {
+            "id": "de-kg-leaf-5a7c2d762e534e12",
+            "input": "signature_document_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the physical document carrying the observed signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-4ec95c090d340d87",
+            "input": "signature_document_version_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the retained document version carrying that signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-7f2b20e643ab79dd",
+            "input": "signature_handmark_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the particular observed handmark, where that physical method was used. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-fac7c7de3d152eec",
+            "input": "signature_is_present",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Observed presence of a signature on the retained document version. This does not supply a judgment of legal form or signature validity. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-ef8aa1e4861896ba",
+            "input": "signature_issuer_identifier",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Identity of the person observed to have made the signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier"
+            ],
+            "status": "classified"
+          },
+          {
+            "id": "de-kg-leaf-7e341dd9fb750459",
+            "input": "signature_observed_physical_method",
+            "leaf_kind": "world_fact",
+            "read_by": [
+              "issuer_signature_mechanism_documentarily_conforms"
+            ],
+            "reason": "Observed physical act/method of signature, including a handwritten name, handmark or other method. The module compares the method and the actual signer/document associations; this fact supplies no statutory-applicability or whole-form verdict. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations.",
+            "slots": [
+              "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method"
+            ],
+            "status": "classified"
+          },
+          {
             "citation_path": "de/statute/estg/65",
             "id": "de-kg-leaf-004",
             "input": "substitute_child_benefit_exclusion",
@@ -888,7 +1084,7 @@
         "signed": 1
       },
       "by_status": {
-        "encoded": 10,
+        "encoded": 11,
         "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
@@ -899,6 +1095,7 @@
         "de/regulation/milov4/1",
         "de/regulation/milov5/1",
         "de/statute/bfdg/5",
+        "de/statute/bgb/126/absatz-1/inhalt",
         "de/statute/bgb/1591",
         "de/statute/bgb/187",
         "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
@@ -914,7 +1111,7 @@
         "de/statute/estg/78",
         "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt"
       ],
-      "citation_root_count": 16,
+      "citation_root_count": 17,
       "closed_claim_mode": "computed",
       "corpus_release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
       "declared_sources": [
@@ -1023,6 +1220,15 @@
           "classification": "encoded",
           "reason": "Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.",
           "role": "overseas_service_recognition_preservation_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2\u20135, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.",
+          "role": "written_agreement_signature_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
         }
@@ -1562,9 +1768,9 @@
       "source_universe": {
         "role": "citation-path closure snapshot",
         "role_claim_mode": "attested",
-        "rulespec_commit": "212bba29ea06d0166037e4cc24ba4d03b4dd6c02",
+        "rulespec_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
         "rulespec_commit_claim_mode": "attested",
-        "subgraph_sha256": "3053402a792cb5bc142ba69861f31edf7f8a77532bba80374cef921e2d13a541",
+        "subgraph_sha256": "91fd959d24ba392d408bf18ceb66c7d85c35469f791a25cad5712d9e7c5d5189",
         "subgraph_sha256_claim_mode": "computed"
       },
       "spine_closed": false,

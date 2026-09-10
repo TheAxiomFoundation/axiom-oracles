@@ -43,6 +43,20 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "document_identifier",
+        "document_version_identifier",
+        "issued_notarial_authentication_is_present",
+        "issuer_identifier",
+        "notarial_authentication_document_identifier",
+        "notarial_authentication_document_version_identifier",
+        "notarial_authentication_handmark_identifier",
+        "notarial_authentication_issuer_identifier",
+        "signature_document_identifier",
+        "signature_document_version_identifier",
+        "signature_handmark_identifier",
+        "signature_is_present",
+        "signature_issuer_identifier",
+        "signature_observed_physical_method",
         "live_birth_register_entry_exists",
         "recorded_live_birth_date",
         "coordination_decision_record_exists",
