@@ -111,6 +111,16 @@
   container. One left pending: the 26.5.2026 EStG amending act (not in the
   corpus). Frontier 18 of 465 pending (17 supplementals + that act); 116
   open dependencies (8 law-derived, 0 unclassified, 108 bearing).
+- Supplementals (2026-09-08): 13 of 17 decided on captured text — 10 open
+  bearing (EStR/EStH, LStR/LStH, AEAO §§ 8/9, Regulations 883/2004,
+  987/2009, 1231/2010, 859/2003, Withdrawal Agreement), 3 excluded (AStBV,
+  KiZDAV, RiStBV). The four classes (BMF letters, BZSt directives, court
+  decisions, bilateral agreements) stay pending until a discovery channel
+  enumerates members. EUR-Lex and BMF handbook texts were captured through
+  the in-app browser (bot challenges block curl) and hashed in-page; a
+  corpus channel for guidance documents should replace these page
+  captures. Frontier 5 of 465; 126 open dependencies (8 law-derived, 0
+  unclassified, 118 bearing).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);
