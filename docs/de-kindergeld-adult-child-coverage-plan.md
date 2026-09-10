@@ -9,11 +9,12 @@ Repeating that restriction cannot produce a complete module.
 
 The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
-It contains the complete pinned § 32(4) text, 27 fully read, hash-verified
-DA-KG sections (including the structural A 15, A 17 and A 20.2 headings) and four
-complete BFH decisions: III R 37/21, III R 10/22, III R 19/16 and III R 40/19.
-The review now covers all A 15 and A 17 text. The remaining guidance families listed below still need their
-own implementation review; listing them does not declare them reviewed or encoded.
+It contains the complete pinned § 32(4) text, all 50 fully read, hash-verified
+DA-KG sections from A 14 through A 20 (including seven structural headings) and
+four complete BFH decisions: III R 37/21, III R 10/22, III R 19/16 and III R 40/19.
+This completes the reading of these guidance families. Their referenced statutes,
+other decisions and implementation boundaries still require source-bound work;
+a full-text review does not declare any route encoded.
 
 ## Source-unit coverage
 
@@ -236,3 +237,94 @@ Every omitted external prerequisite must identify the actual source reference
 and missing absolute output. Local computations cannot be deferred as runtime
 gaps when the runtime supports their operations. No generated module, manifest,
 test expectation or signing gate is edited as part of this review.
+
+## Service, employment and disability requirements
+
+The complete A 18 family preserves separate definitions for each enumerated
+service. A generic volunteering record is insufficient; unlisted services cannot
+qualify by analogy, although the separate training/practical-placement route may
+apply. FSJ/FÖJ and federal voluntary service allow part-time performance and
+separate qualifying phases, but gaps between phases do not become training
+transitions. Overseas FSJ/FÖJ may include preparation and need not occur in
+Europe. Provider recognition, the particular parties to the written agreement,
+service dates and the completion certificate are distinct observable acts.
+
+For the European Solidarity Corps, A 18.4 requires the funding contract's final
+signature and preserves outstanding activities under the predecessor programmes.
+Its maximum twelve months applies across the stated services/projects; activity
+outside a programme country is not automatically excluded. Capture and review of
+Regulations 2018/1475 and 1288/2013 remains necessary where the stock-case route
+relies on them. The signed BFDG § 5 preservation module does not establish the
+individual overseas-service agreement, recognition or duration conditions in
+A 18.5. The all-generations service has a minimum commitment of six months and
+eight hours per week, no statutory maximum duration, and agreement provisions
+for insurance, support and training averaging at least 60 hours per year. That
+average must not become an inflexible minimum in each individual calendar year.
+The 2016 weltwärts and 2021 IJFD source editions remain the referenced regimes;
+current programme labels cannot replace them.
+
+A 20.3 includes self-employment and other work using personal labour to earn
+income, while excluding own-asset management and au-pair arrangements from this
+employment test. Work in an enumerated voluntary service is harmless. A 20.3.2
+requires the training itself to be the subject of the employment relationship;
+an employer's scholarship or reduced hours does not establish that condition.
+Dual study requires the stated substantive connection beyond a shared subject
+or organizational coordination. A 20.3.3 covers both low-paid and short-term
+marginal employment. It generally uses the employer's classification as evidence;
+the legal definition and aggregation rules must still be encoded rather than
+replaced by an unqualified caller-supplied eligibility flag.
+
+A 14.2 adds illness and maternity routes even without an active job-seeker
+registration. The temporary-illness prognosis, prior consideration, documented
+intention and prompt re-registration rules differ from maternity, which does not
+require later re-registration in the stated cases. During parental leave the
+job-seeker ground requires registration. A 14.2(2) sentence 6 literally prints
+“6 MuSchG”, while its opening sentence and the parallel A 17.2 rule refer to
+§ 16. Preserve the source wording and resolve this cross-reference against the
+underlying source/decision; do not silently amend the proof excerpt. The versioned
+MuSchG captures are in corpus PR668, pending publication and consumer repinning.
+
+A 19.3 separates disability from causation. A high disability degree alone does
+not establish causation. Issued benefits, care classifications, placement records
+and the specified medical work-capacity evidence support separate statutory
+routes. Capacity for fifteen hours of work does not exclude substantial
+co-causation; working children may still qualify. Ordinary detention is not an
+absolute exclusion either: the psychiatric-placement case requires the specific
+§§ 20 and 63 StGB decision facts and the underlying BFH III R 42/22 review.
+
+A 19.4 requires resources no greater than necessary need, including equality.
+The simplified comparison excludes earmarked disability support; exceeding its
+threshold triggers the detailed comparison, not automatic exclusion. Uneven
+receipts and pension arrears require the full-month and following-month rules.
+Assets themselves are excluded; tax/net-income classification, third-party
+receipts and exchange conversion remain legal computations. General need uses
+the applicable § 32a allowance history, not a free input or a universal 2025 value.
+
+Disability need includes separate evidence/default routes, full-residential and
+part-residential rules, and safeguards against double counting. Additional care
+uses the stated €10 hourly rate only beyond the already counted care allowance.
+Transport defaults (€900/€4,500), the evidenced-distance alternative and the
+€767 accompanying-person travel limit require their distinct source conditions.
+Reimbursement and parental/child contributions reduce the third-party benefit
+rather than the underlying need. Full residential cost evidence excludes adding
+the § 33b lump sum again; part-residential care can require that lump sum for the
+care outside the placement. These amounts and the SvEV food values must be rules.
+
+A 19.5–19.5.3 distinguish taxable income, tax-free receipts, investment income,
+refunds and actually paid tax/insurance. Loss-offset restrictions apply, but
+§ 10d does not. The €180 annual expense allowance is capped by tax-free receipts
+and yields to higher evidenced related expenses; unused employee allowances have
+their separate replacement-income rule. Pension tax shares and service-pension
+allowances are not caller inputs. Returns of pre-existing capital in a private
+annuity are distinguished from earnings. The annual simplification is limited to
+its stated full-year case; self-employed net income uses the three-year period.
+
+A 19.6 values noncash receipts at receipt-time market value, using SvEV estimates
+where individual evidence is unavailable. It excludes the stated parental support,
+pain compensation, child benefit and victim-compensation payments. The optional
+co-resident spouse/partner calculation is distinct from actual transfers: apply
+its qualifying-child maintenance adjustments, positive half-difference and
+minimum retained basic allowance. Preserve the source's internal cross-reference
+wording and reconcile the calculation with the already reviewed spousal decision;
+do not convert a citation typo into an arithmetic rule. None of these legal
+resource, need or causation quantities may terminate in a bare legal-status input.

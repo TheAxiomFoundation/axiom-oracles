@@ -10676,7 +10676,7 @@ committed_decisions:
     status: classified-with-reason
     body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
     classification: entitlement_condition
-    reason: 'Freiwilligendienst aller Generationen under § 2 Abs. 1a SGB VII: unpaid service under a written agreement with a suitable provider (domestic public-law bodies or tax-exempt charitable institutions) specifying provider and placement, tasks, a commitment of at least six months and at least eight hours a week, liability cover, continuous support and at least 60 hours of training a year (BFH III R 68/11); at least six months, no statutory maximum; proof by agreement and certificate. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.'
+    reason: 'Freiwilligendienst aller Generationen under § 2 Abs. 1a SGB VII: unpaid service under a written agreement with a suitable provider (domestic public-law bodies or tax-exempt charitable institutions) specifying provider and placement, tasks, a commitment of at least six months and at least eight hours a week, liability cover, continuous support and training averaging at least 60 hours per year (BFH III R 68/11); at least six months, no statutory maximum; proof by agreement and certificate. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.'
     bears_on_computed_surface: true
   - id: de-kg-dakg-A18.8
     status: classified-with-reason
@@ -15230,7 +15230,7 @@ computed:
       section_located: true
       body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
       classification: entitlement_condition
-      reason: 'Freiwilligendienst aller Generationen under § 2 Abs. 1a SGB VII: unpaid service under a written agreement with a suitable provider (domestic public-law bodies or tax-exempt charitable institutions) specifying provider and placement, tasks, a commitment of at least six months and at least eight hours a week, liability cover, continuous support and at least 60 hours of training a year (BFH III R 68/11); at least six months, no statutory maximum; proof by agreement and certificate. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.'
+      reason: 'Freiwilligendienst aller Generationen under § 2 Abs. 1a SGB VII: unpaid service under a written agreement with a suitable provider (domestic public-law bodies or tax-exempt charitable institutions) specifying provider and placement, tasks, a commitment of at least six months and at least eight hours a week, liability cover, continuous support and training averaging at least 60 hours per year (BFH III R 68/11); at least six months, no statutory maximum; proof by agreement and certificate. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.'
       bears_on_computed_surface: true
     - id: de-kg-dakg-A18.8
       status: classified-with-reason
