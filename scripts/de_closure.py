@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = '389facd9856cca42b49131a1e9a8e04037e668696952b8be8560de426a12d8b7'
+SOURCE_SHA256 = '73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-10-kindergeld-eu-service-predecessors'
-RELEASE_CONTENT_SHA256 = 'c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947'
-RELEASE_SELECTOR_SHA256 = '2bba8f8afc9b6a179bac132a9721268515b696bba7a093befde58ad030142689'
-CORPUS_COMMIT = '8f7d60aaced28ee4252b9237f9d6e02360dc34bc'
+RELEASE = 'de-rulespec-2026-09-10-kindergeld-generations-service'
+RELEASE_CONTENT_SHA256 = '4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982'
+RELEASE_SELECTOR_SHA256 = '5d048faacf21ec2df0934a56b9af629787810fd44cda37044258fb37d9d84f71'
+CORPUS_COMMIT = '4779d3deb7db854bdb6e702abc523dee8d95fb31'
 RULESPEC_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -120,6 +120,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json': ('829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39', 4),
     'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json': ('37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28', 4),
     'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json': ('917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02', 4),
+    'data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.json': ('ba05d92d427205d675f45883b122eec18f665174150d9f17e24bc8e3ffc6074b', 8),
     'data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.json': ('f6a01566e2b0599a7d621f43e42e1485ad7c2f33062a639ae5ee603c6d58ac11', 6),
     'data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974', 3376),
     'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json': ('deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604', 2),
@@ -138,6 +139,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json': ('64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676', 32),
     'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json': ('2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54', 2),
     'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json': ('690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f', 4),
+    'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-generations-service.json': ('4c1a103349b74d5ef4211274a54be1caec625318677f10ec212ae4873e3f17f2', 6),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json': ('907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7', 4),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json': ('a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830', 4),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json': ('956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865', 46),
@@ -169,6 +171,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl': ('793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187', 4),
     'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl': ('6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e', 4),
     'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl': ('f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045', 4),
+    'data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl': ('4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063', 8),
     'data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl': ('559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6', 6),
     'data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31', 3376),
     'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl': ('80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de', 2),
@@ -187,6 +190,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl': ('5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2', 32),
     'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl': ('40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c', 2),
     'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl': ('c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717', 4),
+    'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl': ('e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0', 6),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl': ('41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f', 4),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl': ('87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668', 4),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl': ('2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5', 46),

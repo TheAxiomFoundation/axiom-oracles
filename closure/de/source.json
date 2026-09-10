@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "8f7d60aaced28ee4252b9237f9d6e02360dc34bc",
-    "release": "de-rulespec-2026-09-10-kindergeld-eu-service-predecessors",
-    "release_content_sha256": "c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947",
-    "release_selector_sha256": "2bba8f8afc9b6a179bac132a9721268515b696bba7a093befde58ad030142689",
+    "commit": "4779d3deb7db854bdb6e702abc523dee8d95fb31",
+    "release": "de-rulespec-2026-09-10-kindergeld-generations-service",
+    "release_content_sha256": "4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982",
+    "release_selector_sha256": "5d048faacf21ec2df0934a56b9af629787810fd44cda37044258fb37d9d84f71",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -142,6 +142,11 @@
         "row_count": 4
       },
       {
+        "path": "data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.json",
+        "sha256": "ba05d92d427205d675f45883b122eec18f665174150d9f17e24bc8e3ffc6074b",
+        "row_count": 8
+      },
+      {
         "path": "data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.json",
         "sha256": "f6a01566e2b0599a7d621f43e42e1485ad7c2f33062a639ae5ee603c6d58ac11",
         "row_count": 6
@@ -230,6 +235,11 @@
         "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
         "sha256": "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-generations-service.json",
+        "sha256": "4c1a103349b74d5ef4211274a54be1caec625318677f10ec212ae4873e3f17f2",
+        "row_count": 6
       },
       {
         "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json",
@@ -379,6 +389,11 @@
         "row_count": 4
       },
       {
+        "path": "data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl",
+        "sha256": "4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063",
+        "row_count": 8
+      },
+      {
         "path": "data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl",
         "sha256": "559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6",
         "row_count": 6
@@ -467,6 +482,11 @@
         "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
         "sha256": "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl",
+        "sha256": "e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0",
+        "row_count": 6
       },
       {
         "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl",

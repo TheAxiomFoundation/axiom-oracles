@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 389facd9856cca42b49131a1e9a8e04037e668696952b8be8560de426a12d8b7
+    sha256: 73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 8f7d60aaced28ee4252b9237f9d6e02360dc34bc
-    release: de-rulespec-2026-09-10-kindergeld-eu-service-predecessors
-    release_content_sha256: c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947
+    commit: 4779d3deb7db854bdb6e702abc523dee8d95fb31
+    release: de-rulespec-2026-09-10-kindergeld-generations-service
+    release_content_sha256: 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -115,6 +115,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
       row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl
+      sha256: 4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063
+      row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
       sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
       row_count: 6
@@ -169,6 +172,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl
+      sha256: e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
       sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
       row_count: 4
@@ -443,10 +449,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c9ec4bf63d5d41d425f82aa2fc6e7e07e5398c23d9681267b7f3b59c7992e35e
+    snapshot_sha256: 9077324716dcc3627b13c34a6d8c7fbc970fef64f6106d9e18df802295663ed0
     channel_receipts:
-      corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
-      subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
+      corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
+      subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

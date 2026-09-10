@@ -41,12 +41,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 389facd9856cca42b49131a1e9a8e04037e668696952b8be8560de426a12d8b7
+    sha256: 73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 8f7d60aaced28ee4252b9237f9d6e02360dc34bc
-    release: de-rulespec-2026-09-10-kindergeld-eu-service-predecessors
-    release_content_sha256: c269707caaf69261494c23c7226464b79ac1b1113528c631d140fc7d543a1947
+    commit: 4779d3deb7db854bdb6e702abc523dee8d95fb31
+    release: de-rulespec-2026-09-10-kindergeld-generations-service
+    release_content_sha256: 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -129,6 +129,9 @@ generated_facts:
     - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
       row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl
+      sha256: 4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063
+      row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
       sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
       row_count: 6
@@ -183,6 +186,9 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl
+      sha256: e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
       sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
       row_count: 4
@@ -985,10 +991,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c9ec4bf63d5d41d425f82aa2fc6e7e07e5398c23d9681267b7f3b59c7992e35e
+    snapshot_sha256: 9077324716dcc3627b13c34a6d8c7fbc970fef64f6106d9e18df802295663ed0
     channel_receipts:
-      corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
-      subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
+      corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
+      subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
@@ -10347,7 +10353,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 67e060c891d8534926019130304195972cc8f64c6f9ffc44c2af2860e4366443
+      sha256: 618dcfebaba579ea57509b56cd472bc7d6c230821e0958d7d4314540c59b4b81
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10396,8 +10402,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: bc8578f51dcaa933f802db99bf984456985cabf906e921071054273b717608c4
-        subject_matter_search: c2acc6b27d87c40d28e896ca035bdde730cc0bb27ff01605d6d575e2ee8ce2c8
+        corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
+        subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13187,6 +13193,12 @@ committed_decisions:
     reason: 'Full four-page BFH III R3/13 decision of8August2013, paragraphs1–31, read. Paragraphs19–27 distinguish selecting priority among otherwise entitled persons from determining entitlement under EStG62/63. Neither claimant agreement nor a family-court order can make an ineligible person entitled; an order selecting the child itself outside that statutory framework has no binding priority effect for the assessment. A final order outside that subject matter does not decide the still-open priority between the entitled parents. The decision does not permit disregarding every family-court selection: its limit is the statutory decision framework. Paragraphs10–18 separately distinguish assessment from diversion/payment procedure. Paragraphs28–30 do not create entitlement through good faith; paragraph31 preserves the applicable age/extension prerequisites rather than deriving eligibility from the order. DA-KG2025 A25.1(7) retains the holding. Priority selection must compose independently
       derived eligibility; a court-selected-ID input alone cannot decide recipient_priority. Exact BStBl II2014page576 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-3-13-2013-08-08/document-1, body SHA-256 d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
     bears_on_computed_surface: true
+  - id: de-kg-discovery-a6c69e0f5cc29a7f
+    status: classified-with-reason
+    classification: voluntary_service_agreement_condition
+    reason: The complete four-page BFH III R68/11 decision (paragraphs1–24) was read from its pinned official PDF corpus body, SHA-256 9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93. Paragraphs9–20 require the statutory SGBVII2(1a) service conditions; paragraphs21–24 require a written agreement satisfying BGB126(1)–(2) and containing provider/placement, tasks, duration, weekly hours, liability and accident cover, continuous support and the annual training commitment. A unilateral appointment letter did not establish the required agreement in the decided case. The later new factual assertion was not considered in revision; that procedural outcome does not create a universal rejection rule for a properly evidenced agreement. The decision expressly requires accident-insurance content in addition to liability cover, whereas the retained A18.7 wording mentions liability cover; preserve both source texts and reconcile their application. These conditions bear on qualifying_child_count
+      and remain unencoded. Full text and source-bound limitations are retained in generations-service-source-review.json; BStBlII issue/page membership is not independently proved by this body capture.
+    bears_on_computed_surface: true
   - id: de-kg-discovery-b8b7b0fae40a3f3a
     status: classified-with-reason
     classification: entitlement_condition
@@ -13382,6 +13394,12 @@ committed_decisions:
     classification: recovery_reference
     reason: 'SGB XII (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off of refund claims against Kindergeld is barred where the claimant proves he would become ''hilfebedürftig im Sinne der Vorschriften des Zwölften Buches Sozialgesetzbuch über die Hilfe zum Lebensunterhalt''. The need test qualifies the excluded set-off machinery of § 75; it does not enter the entitlement or the monthly amount.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-63ae4bcff4818d3a
+    status: classified-with-reason
+    classification: voluntary_service_agreement_condition
+    reason: The complete four-page BFH III R68/11 decision (paragraphs1–24) was read from its pinned official PDF corpus body, SHA-256 9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93. Paragraphs9–20 require the statutory SGBVII2(1a) service conditions; paragraphs21–24 require a written agreement satisfying BGB126(1)–(2) and containing provider/placement, tasks, duration, weekly hours, liability and accident cover, continuous support and the annual training commitment. A unilateral appointment letter did not establish the required agreement in the decided case. The later new factual assertion was not considered in revision; that procedural outcome does not create a universal rejection rule for a properly evidenced agreement. The decision expressly requires accident-insurance content in addition to liability cover, whereas the retained A18.7 wording mentions liability cover; preserve both source texts and reconcile their application. These conditions bear on qualifying_child_count
+      and remain unencoded. Full text and source-bound limitations are retained in generations-service-source-review.json; BStBlII issue/page membership is not independently proved by this body capture.
+    bears_on_computed_surface: true
   - id: de-kg-instr-6abee6f46fd03a40
     status: classified-with-reason
     classification: entitlement_condition
@@ -13925,7 +13943,8 @@ committed_decisions:
     relation: bears_on
     discovered_by: de-kg-dakg-A18.4
     discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-375-2014/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+      Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 fa9550fb44886b3d11b40adc3833dfd1b081796cbe10820702c84fcd599673b4.'
     status: pending
   - id: de-kg-suppl-023
     identity: Decision No 1719/2006/EC, Youth in Action predecessor
@@ -13933,7 +13952,8 @@ committed_decisions:
     relation: bears_on
     discovered_by: de-kg-dakg-A18.4
     discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1719-2006/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+      Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 f9f90980af8443d6c5abae55ce072045213ce2533a26cdd3932b7915926a0bac.'
     status: pending
   - id: de-kg-suppl-024
     identity: Decision No 1720/2006/EC, lifelong learning predecessor
@@ -13941,7 +13961,8 @@ committed_decisions:
     relation: bears_on
     discovered_by: de-kg-dakg-A18.4
     discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1720-2006/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+      Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 56134ccb9ca03b694e2d02d5d3331a20478c6fbfd99f67704a354511f691bbb4.'
     status: pending
   - id: de-kg-suppl-025
     identity: Decision No 1298/2008/EC, Erasmus Mundus predecessor
@@ -13949,7 +13970,8 @@ committed_decisions:
     relation: bears_on
     discovered_by: de-kg-dakg-A18.4
     discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-    provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+    provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1298-2008/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+      Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 4c2ea767684d0b5d4acbbc9fb90cf7c47f95a36029cca8e3288feb8f2fe855b0.'
     status: pending
 computed:
   ledger:
@@ -14567,9 +14589,9 @@ computed:
     counts:
       total: 788
       encoded: 2
-      classified-with-reason: 165
+      classified-with-reason: 167
       excluded-with-reason: 349
-      pending: 272
+      pending: 270
     pending:
     - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
@@ -14697,7 +14719,6 @@ computed:
     - de-kg-discovery-a1eac264f26a3761
     - de-kg-discovery-a2d03a0a29d3cfc7
     - de-kg-discovery-a49901260a7486e4
-    - de-kg-discovery-a6c69e0f5cc29a7f
     - de-kg-discovery-a6d0f0f9ae0e99c4
     - de-kg-discovery-a6ffe067295c997c
     - de-kg-discovery-a9aa071bb8822494
@@ -14796,7 +14817,6 @@ computed:
     - de-kg-instr-55b78f1e0b14946b
     - de-kg-instr-5c0851a954940f82
     - de-kg-instr-6090dfaa9d45d6a1
-    - de-kg-instr-63ae4bcff4818d3a
     - de-kg-instr-6568b0e3e8e4b33c
     - de-kg-instr-6571f5d198cf30bd
     - de-kg-instr-6cf659dd66fd5e85
@@ -23356,7 +23376,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BMF vom 14.11.2014 – BStBl I S. 1450
     - id: de-kg-discovery-a6c69e0f5cc29a7f
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 24.05.2012, III R 68/11, BStBl II 2013 S. 864
       discovery_refs:
@@ -23364,6 +23384,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 24.05.2012, III R 68/11, BStBl II 2013 S. 864
+      classification: voluntary_service_agreement_condition
+      reason: The complete four-page BFH III R68/11 decision (paragraphs1–24) was read from its pinned official PDF corpus body, SHA-256 9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93. Paragraphs9–20 require the statutory SGBVII2(1a) service conditions; paragraphs21–24 require a written agreement satisfying BGB126(1)–(2) and containing provider/placement, tasks, duration, weekly hours, liability and accident cover, continuous support and the annual training commitment. A unilateral appointment letter did not establish the required agreement in the decided case. The later new factual assertion was not considered in revision; that procedural outcome does not create a universal rejection rule for a properly evidenced agreement. The decision expressly requires accident-insurance content in addition to liability cover, whereas the retained A18.7 wording mentions liability cover; preserve both source texts and reconcile their application. These conditions bear on qualifying_child_count
+        and remain unencoded. Full text and source-bound limitations are retained in generations-service-source-review.json; BStBlII issue/page membership is not independently proved by this body capture.
+      bears_on_computed_surface: true
     - id: de-kg-discovery-a6d0f0f9ae0e99c4
       status: pending
       identity_kind: class_member
@@ -24827,7 +24851,7 @@ computed:
       document_citation_path: de/guidance/bfh-iii-r-22-12-2013-08-08
       title: 'BFH, III R 22/12, 2013-08-08: Kindergeld für Ausländer, die dem NATO-Truppenstatut unterliegen'
     - id: de-kg-instr-63ae4bcff4818d3a
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-226460336311f7713278
       identity_kind: corpus_citation
@@ -24837,6 +24861,10 @@ computed:
       citation_label: 'BFH, III R 68/11, 2012-05-24: Voraussetzungen für einen Kindergeldanspruch aufgrund eines Freiwilligendienstes aller Generationen'
       document_citation_path: de/guidance/bfh-iii-r-68-11-2012-05-24
       title: 'BFH, III R 68/11, 2012-05-24: Voraussetzungen für einen Kindergeldanspruch aufgrund eines Freiwilligendienstes aller Generationen'
+      classification: voluntary_service_agreement_condition
+      reason: The complete four-page BFH III R68/11 decision (paragraphs1–24) was read from its pinned official PDF corpus body, SHA-256 9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93. Paragraphs9–20 require the statutory SGBVII2(1a) service conditions; paragraphs21–24 require a written agreement satisfying BGB126(1)–(2) and containing provider/placement, tasks, duration, weekly hours, liability and accident cover, continuous support and the annual training commitment. A unilateral appointment letter did not establish the required agreement in the decided case. The later new factual assertion was not considered in revision; that procedural outcome does not create a universal rejection rule for a properly evidenced agreement. The decision expressly requires accident-insurance content in addition to liability cover, whereas the retained A18.7 wording mentions liability cover; preserve both source texts and reconcile their application. These conditions bear on qualifying_child_count
+        and remain unencoded. Full text and source-bound limitations are retained in generations-service-source-review.json; BStBlII issue/page membership is not independently proved by this body capture.
+      bears_on_computed_surface: true
     - id: de-kg-instr-6568b0e3e8e4b33c
       status: pending
       discovery_refs:
@@ -26063,7 +26091,8 @@ computed:
       title_short: Regulation (EU) No 375/2014
       relation: bears_on
       discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+      provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation2021/888 Articles32 and33(1) expressly repeal375/2014 and preserve continuation/modification of its actions until completion. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-375-2014/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+        Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 fa9550fb44886b3d11b40adc3833dfd1b081796cbe10820702c84fcd599673b4.'
     - id: de-kg-suppl-023
       status: pending
       discovery_refs:
@@ -26073,7 +26102,8 @@ computed:
       title_short: Decision No 1719/2006/EC
       relation: bears_on
       discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+      provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1719/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1719-2006/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+        Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 f9f90980af8443d6c5abae55ce072045213ce2533a26cdd3932b7915926a0bac.'
     - id: de-kg-suppl-024
       status: pending
       discovery_refs:
@@ -26083,7 +26113,8 @@ computed:
       title_short: Decision No 1720/2006/EC
       relation: bears_on
       discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+      provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1720/2006/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1720-2006/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+        Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 56134ccb9ca03b694e2d02d5d3331a20478c6fbfd99f67704a354511f691bbb4.'
     - id: de-kg-suppl-025
       status: pending
       discovery_refs:
@@ -26093,7 +26124,8 @@ computed:
       title_short: Decision No 1298/2008/EC
       relation: bears_on
       discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
-      provenance: Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. No corpus row for the named earlier instrument exists in the pinned release. Capture and source-bound determination of its bearing on the2025 Kindergeld surface remain pending; no applicability or exclusion is inferred from the old date alone.
+      provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1298-2008/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
+        Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 4c2ea767684d0b5d4acbbc9fb90cf7c47f95a36029cca8e3288feb8f2fe855b0.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -26210,6 +26242,7 @@ computed:
     - de-kg-discovery-7a2ec2123c2f5ae8
     - de-kg-discovery-90238268a8dee863
     - de-kg-discovery-949482e500000d24
+    - de-kg-discovery-a6c69e0f5cc29a7f
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
     - de-kg-discovery-c4a75118763d3018
@@ -26229,6 +26262,7 @@ computed:
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
+    - de-kg-instr-63ae4bcff4818d3a
     - de-kg-instr-6abee6f46fd03a40
     - de-kg-instr-703d3b12aaab39f8
     - de-kg-instr-73d798cce838ed41
@@ -26259,8 +26293,8 @@ computed:
     - de-kg-suppl-019
     - de-kg-suppl-020
     - de-kg-suppl-021
-    instruments_bearing_on_computed_count: 151
-    open_dependency_count: 159
+    instruments_bearing_on_computed_count: 153
+    open_dependency_count: 161
     closed: false
   measured_denominators:
     spine_rows: 18
