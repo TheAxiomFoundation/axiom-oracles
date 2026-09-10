@@ -10640,11 +10640,11 @@ committed_decisions:
       open until §§ 63, 32 EStG are encoded and this rule is bound to them.
     bears_on_computed_surface: true
   - id: de-kg-dakg-A19.2
-    status: excluded-with-reason
+    status: classified-with-reason
     body_sha256: f06939e892b151c54422ecae1bab9210da1a607190545373927a5fcd104978b8
-    classification: evidence_and_review
-    reason: 'Means of proving the disability: SGB IX card or § 152 Abs. 1 SGB IX decision for a GdB of at least 50, an authority certificate or pension decision for a GdB of 20 to under 50, the care-grade 4/5 decision, or a medical certificate or expert report (BFH VIII R 62/99) showing the disability, its onset where the child is over 25, and its effect on earning capacity; where proof covers only a limited period the child is considered only for that period, a time-limited card not itself limiting the fixing; review per A 19.1 Abs. 7 and 8. Prescribes how the disability is proven and that consideration tracks the proven period; the condition itself is in A 19.1 and § 32 Abs. 4 Satz 1 Nr. 3 EStG.'
-    bears_on_computed_surface: false
+    classification: entitlement_condition
+    reason: Full DA-KG 2025 A 19.2 reviewed against the bound section text. Paragraph 1 specifies the issued decisions, cards, authority certificates and medical reports that establish the disability evidence, including the recorded onset where the child is over 25. Paragraph 2 sentence 1 limits consideration under EStG § 32 Abs. 4 Satz 1 Nr. 3 to the period for which disability is proven; this temporal rule affects qualifying_child_count and remains unencoded. Paragraph 2 sentence 2 expressly prevents treating expiry of a time-limited SGB IX card as an automatic end of the Kindergeld award. The evidence-period rule must therefore be derived from the actual evidence records, separately from card expiry, and combined with A 19.1 and A 19.3–19.6. Review scheduling and document-collection procedure alone are not computed here, but do not justify excluding the whole section. This corrects the previous evidence_and_review exclusion; no signed module currently closes the rule.
+    bears_on_computed_surface: true
   - id: de-kg-dakg-A19.3
     status: classified-with-reason
     body_sha256: 4d4d3b85f3de330cd9ec788d6a6e76b481387a58a2775b67218dfcaf01f74b70
@@ -14202,8 +14202,8 @@ computed:
     counts:
       total: 770
       encoded: 2
-      classified-with-reason: 141
-      excluded-with-reason: 349
+      classified-with-reason: 142
+      excluded-with-reason: 348
       pending: 278
     pending:
     - de-kg-discovery-00aab547379e68f7
@@ -15188,7 +15188,7 @@ computed:
         dependency); open until §§ 63, 32 EStG are encoded and this rule is bound to them.
       bears_on_computed_surface: true
     - id: de-kg-dakg-A19.2
-      status: excluded-with-reason
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -15201,9 +15201,9 @@ computed:
       heading_sha256: ce0b4acfdb12fc784b3913f903001b32ed53ce949e6603c4d7ff76e715bfc28e
       section_located: true
       body_sha256: f06939e892b151c54422ecae1bab9210da1a607190545373927a5fcd104978b8
-      classification: evidence_and_review
-      reason: 'Means of proving the disability: SGB IX card or § 152 Abs. 1 SGB IX decision for a GdB of at least 50, an authority certificate or pension decision for a GdB of 20 to under 50, the care-grade 4/5 decision, or a medical certificate or expert report (BFH VIII R 62/99) showing the disability, its onset where the child is over 25, and its effect on earning capacity; where proof covers only a limited period the child is considered only for that period, a time-limited card not itself limiting the fixing; review per A 19.1 Abs. 7 and 8. Prescribes how the disability is proven and that consideration tracks the proven period; the condition itself is in A 19.1 and § 32 Abs. 4 Satz 1 Nr. 3 EStG.'
-      bears_on_computed_surface: false
+      classification: entitlement_condition
+      reason: Full DA-KG 2025 A 19.2 reviewed against the bound section text. Paragraph 1 specifies the issued decisions, cards, authority certificates and medical reports that establish the disability evidence, including the recorded onset where the child is over 25. Paragraph 2 sentence 1 limits consideration under EStG § 32 Abs. 4 Satz 1 Nr. 3 to the period for which disability is proven; this temporal rule affects qualifying_child_count and remains unencoded. Paragraph 2 sentence 2 expressly prevents treating expiry of a time-limited SGB IX card as an automatic end of the Kindergeld award. The evidence-period rule must therefore be derived from the actual evidence records, separately from card expiry, and combined with A 19.1 and A 19.3–19.6. Review scheduling and document-collection procedure alone are not computed here, but do not justify excluding the whole section. This corrects the previous evidence_and_review exclusion; no signed module currently closes the rule.
+      bears_on_computed_surface: true
     - id: de-kg-dakg-A19.3
       status: classified-with-reason
       discovery_refs:
@@ -25475,6 +25475,7 @@ computed:
     - de-kg-dakg-A18.7
     - de-kg-dakg-A18.8
     - de-kg-dakg-A19.1
+    - de-kg-dakg-A19.2
     - de-kg-dakg-A19.3
     - de-kg-dakg-A19.4
     - de-kg-dakg-A19.5
@@ -25568,8 +25569,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 127
-    open_dependency_count: 135
+    instruments_bearing_on_computed_count: 128
+    open_dependency_count: 136
     closed: false
   measured_denominators:
     spine_rows: 18

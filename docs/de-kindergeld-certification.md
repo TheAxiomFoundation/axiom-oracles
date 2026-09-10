@@ -7,8 +7,8 @@ replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
 other closure artifact. The current frontier has 278 of 770 instruments
-pending, and dependency closure has 135 open dependencies: eight law-derived
-inputs and 127 bearing instruments, with no unclassified inputs. The signed
+pending, and dependency closure has 136 open dependencies: eight law-derived
+inputs and 128 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, and historical SGB IV §8(1a) earnings threshold are declared at RuleSpec merge
@@ -346,8 +346,8 @@ as a capture matter, but the receipted 2 December 2025 replacement expressly
 replaces it from assessment year 2025; that operative clause supports the
 period-specific exclusion without misattributing a captured body to the old letter. The 22 DVKA documents are publisher extracts.
 Enumeration and identity deduplication remain incomplete, with all four class
-rows pending. Current result: 278 of 770 instruments pending, 135 open
-dependencies (eight law-derived inputs, 127 bearing instruments, no unclassified
+rows pending. Current result: 278 of 770 instruments pending, 136 open
+dependencies (eight law-derived inputs, 128 bearing instruments, no unclassified
 inputs). Dependency closure remains false.
 
 The latest release also retains complete EStG §32 paragraph captures and the
@@ -610,5 +610,19 @@ caller inputs, retaining two birth-record fields, but still failed date
 arithmetic, proof, precise-deferral and behavior checks. The retained candidate
 uses an unsupported third `date_add_years` argument; the later candidate omits
 the leap-day correction and returns 28 February instead of 1 March. Neither
-candidate is declared as coverage. An additional scoped-attempt decision is
-pending; §32(6) and §66 retain their separately paused attempt decisions.
+candidate is declared as coverage. The subsequent instruction to continue allows
+preparing the requested additional scoped attempt, but the source-coverage plan
+below is not yet ready for dispatch. No budget override has been set; §32(6)
+and §66 retain their separately paused attempt decisions.
+
+## Adult-child repair review (2026-09-10)
+
+The [source-bound § 32(4) worklist](de-kindergeld-adult-child-coverage-plan.md)
+records why birth-date helpers alone cannot repair the complete source unit.
+Six DA-KG sections were read in full and verified against their section hashes.
+A 19.2 is now an open bearing instrument: paragraph 2 limits consideration to
+the period for which disability is proven, while card expiry alone does not
+limit the award. This corrects the earlier whole-section evidence exclusion.
+Pending instruments remain 278 of 770; the correction makes 136 dependencies
+explicit (eight law-derived inputs and 128 bearing instruments). No new signed
+module or certified claim results from this review.
