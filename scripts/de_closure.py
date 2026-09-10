@@ -28,18 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3"
+SOURCE_SHA256 = 'f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = "de-rulespec-2026-09-09-kindergeld-threshold"
-RELEASE_CONTENT_SHA256 = (
-    "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162"
-)
-RELEASE_SELECTOR_SHA256 = (
-    "751e5c7e7aa9cb97dbe1f38b4dca183f3482fd6f24cdf3fcf97587aa6c341212"
-)
-CORPUS_COMMIT = "9bc4f5f0afad97e8edc9834609a53a56435d0509"
+RELEASE = 'de-rulespec-2026-09-10-kindergeld-maternity'
+RELEASE_CONTENT_SHA256 = '57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042'
+RELEASE_SELECTOR_SHA256 = '46b58c751d3defeffdaef986ddb39443e5de45d292881e76ad4c7b38c89ab0c2'
+CORPUS_COMMIT = '5a77472300eb240e303a6f52c1d45040d671e7a4'
 RULESPEC_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -99,336 +95,98 @@ PROGRAM_EVIDENCE_ROOTS = {
 }
 
 EXPECTED_INVENTORIES = {
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json": (
-        "74e8dfa9aded09d34cad08c04249da5016ac478b0bace29562d11343e74ef21e",
-        2,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json": (
-        "21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc",
-        2,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json": (
-        "ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb",
-        16,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json": (
-        "4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178",
-        4,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json": (
-        "f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28",
-        4,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json": (
-        "9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0",
-        2,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-adult-services.json": (
-        "d92f3f4c52b434dfe24a7acd8add10db4c757053dc6157a40d7d45356cf4b5b1",
-        4,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.json": (
-        "0ff6f48069381b5e5c02392eceddd7495e450d4f0bb60f6f667fbf89d407504a",
-        2,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.json": (
-        "024afaaf0b2f6d0865b29bc8c2606f228412d65eccb8801c693e3535a095e066",
-        162,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.json": (
-        "741158c6661fcc152978385ded67a9d927c9afaad99e460ec03ac98a0b9d7257",
-        6,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json": (
-        "f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d",
-        2,
-    ),
-    "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json": (
-        "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
-        2,
-    ),
-    "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json": (
-        "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
-        172,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json": (
-        "b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2",
-        2,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-bilateral.json": (
-        "038860404e92952a4064d42413160b7a152f3d99aee28cacd7f49aed112da45f",
-        44,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-dependencies.json": (
-        "16d6428a20439fd1ab7885572a06f2bed83cf529c54e33703b2341ab1eb791e1",
-        9,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eea.json": (
-        "c3bd7372757fdbe1f25e7caf47b14e233688e94b5e9096a915c731f2937c2558",
-        2,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eu.json": (
-        "3b977d73c0702ed2e46684fb6695983d5f50d5b10474a2a36f686f2dbf3c8b58",
-        8,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json": (
-        "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
-        2,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-adult-services.json": (
-        "6be92204b0dc064addeb7ef3e53be6e80e65fa78dd2a3c2bdc78be92db47d765",
-        2,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-eu-articles.json": (
-        "9729eadd40744a601ab59b5301ac78969f50dca89254f9fba106ad2ed98a7691",
-        16,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json": (
-        "829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39",
-        4,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json": (
-        "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
-        4,
-    ),
-    "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json": (
-        "917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02",
-        4,
-    ),
-    "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json": (
-        "0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974",
-        3376,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json": (
-        "deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json": (
-        "dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34",
-        3136,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json": (
-        "9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e",
-        854,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json": (
-        "8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76",
-        4,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json": (
-        "80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95",
-        18,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json": (
-        "f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json": (
-        "ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json": (
-        "6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64",
-        535,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-service-history.json": (
-        "fd02fe2e8a1ab9eec16f108ff2a87f7c66605c9bfa37077b5b4ce426800ff4f7",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-services.json": (
-        "7817354353f3b27ab0de07101445431dafb6ef8488ac1e19f4df69c971110094",
-        746,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-bgb-amendment.json": (
-        "7bee851dff8c8141f9554960f3148b1229a412acb4565b0ee720554923bd0eb9",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.json": (
-        "6b4a7dc1c3467ba664ce03e0833dc6337b44caa2e42a91eb00cfdf069442651a",
-        12,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.json": (
-        "8b82e6de16963b2d1767d8d0d267a0c7d9c74a3e3758732e11e6690fc5fbac0c",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json": (
-        "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
-        32,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json": (
-        "2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54",
-        2,
-    ),
-    "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json": (
-        "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
-        4,
-    ),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json': ('74e8dfa9aded09d34cad08c04249da5016ac478b0bace29562d11343e74ef21e', 2),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json': ('21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc', 2),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json': ('ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb', 16),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json': ('4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178', 4),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json': ('f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28', 4),
+    'data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json': ('9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0', 2),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-adult-services.json': ('d92f3f4c52b434dfe24a7acd8add10db4c757053dc6157a40d7d45356cf4b5b1', 4),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.json': ('0ff6f48069381b5e5c02392eceddd7495e450d4f0bb60f6f667fbf89d407504a', 2),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.json': ('024afaaf0b2f6d0865b29bc8c2606f228412d65eccb8801c693e3535a095e066', 162),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.json': ('741158c6661fcc152978385ded67a9d927c9afaad99e460ec03ac98a0b9d7257', 6),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json': ('f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d', 2),
+    'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json': ('981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47', 2),
+    'data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json': ('f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d', 2),
+    'data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70', 172),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json': ('b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2', 2),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-bilateral.json': ('038860404e92952a4064d42413160b7a152f3d99aee28cacd7f49aed112da45f', 44),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-dependencies.json': ('16d6428a20439fd1ab7885572a06f2bed83cf529c54e33703b2341ab1eb791e1', 9),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eea.json': ('c3bd7372757fdbe1f25e7caf47b14e233688e94b5e9096a915c731f2937c2558', 2),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eu.json': ('3b977d73c0702ed2e46684fb6695983d5f50d5b10474a2a36f686f2dbf3c8b58', 8),
+    'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json': ('540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240', 2),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-adult-services.json': ('6be92204b0dc064addeb7ef3e53be6e80e65fa78dd2a3c2bdc78be92db47d765', 2),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-eu-articles.json': ('9729eadd40744a601ab59b5301ac78969f50dca89254f9fba106ad2ed98a7691', 16),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json': ('829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39', 4),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json': ('37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28', 4),
+    'data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json': ('917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02', 4),
+    'data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974', 3376),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json': ('deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604', 2),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json': ('dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34', 3136),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json': ('9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e', 854),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json': ('8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76', 4),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json': ('80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95', 18),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json': ('f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6', 2),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json': ('ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c', 2),
+    'data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json': ('6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64', 535),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-service-history.json': ('fd02fe2e8a1ab9eec16f108ff2a87f7c66605c9bfa37077b5b4ce426800ff4f7', 2),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-services.json': ('7817354353f3b27ab0de07101445431dafb6ef8488ac1e19f4df69c971110094', 746),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-bgb-amendment.json': ('7bee851dff8c8141f9554960f3148b1229a412acb4565b0ee720554923bd0eb9', 2),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.json': ('6b4a7dc1c3467ba664ce03e0833dc6337b44caa2e42a91eb00cfdf069442651a', 12),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.json': ('8b82e6de16963b2d1767d8d0d267a0c7d9c74a3e3758732e11e6690fc5fbac0c', 2),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json': ('64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676', 32),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json': ('2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54', 2),
+    'data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json': ('690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f', 4),
+    'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json': ('907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7', 4),
+    'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json': ('a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830', 4),
+    'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json': ('956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865', 46),
 }
 EXPECTED_PROVISION_SOURCES = {
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl": (
-        "80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29",
-        2,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl": (
-        "8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff",
-        2,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl": (
-        "3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14",
-        16,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl": (
-        "b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85",
-        4,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl": (
-        "1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39",
-        4,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl": (
-        "436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac",
-        2,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl": (
-        "1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2",
-        4,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl": (
-        "9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97",
-        2,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl": (
-        "b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc",
-        162,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl": (
-        "7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b",
-        6,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl": (
-        "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
-        2,
-    ),
-    "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl": (
-        "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
-        2,
-    ),
-    "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl": (
-        "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
-        172,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl": (
-        "29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df",
-        2,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl": (
-        "f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e",
-        44,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl": (
-        "d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97",
-        9,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl": (
-        "5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b",
-        2,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl": (
-        "5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1",
-        8,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl": (
-        "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
-        2,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl": (
-        "58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914",
-        2,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl": (
-        "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
-        16,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl": (
-        "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
-        4,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl": (
-        "6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e",
-        4,
-    ),
-    "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl": (
-        "f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045",
-        4,
-    ),
-    "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl": (
-        "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
-        3376,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl": (
-        "80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl": (
-        "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
-        3136,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl": (
-        "a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac",
-        854,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl": (
-        "6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a",
-        4,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl": (
-        "656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510",
-        18,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl": (
-        "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl": (
-        "9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl": (
-        "c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059",
-        535,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl": (
-        "1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl": (
-        "854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163",
-        746,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl": (
-        "738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl": (
-        "e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40",
-        12,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl": (
-        "1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl": (
-        "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
-        32,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl": (
-        "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
-        2,
-    ),
-    "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl": (
-        "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
-        4,
-    ),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl': ('80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29', 2),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl': ('8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff', 2),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl': ('3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14', 16),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl': ('b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85', 4),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl': ('1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39', 4),
+    'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl': ('436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac', 2),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl': ('1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2', 4),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl': ('9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97', 2),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl': ('b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc', 162),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl': ('7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b', 6),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl': ('847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050', 2),
+    'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl': ('4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b', 2),
+    'data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl': ('a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408', 2),
+    'data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528', 172),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl': ('29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df', 2),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl': ('f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e', 44),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl': ('d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97', 9),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl': ('5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b', 2),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl': ('5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1', 8),
+    'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl': ('22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6', 2),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl': ('58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914', 2),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl': ('3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c', 16),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl': ('793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187', 4),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl': ('6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e', 4),
+    'data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl': ('f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045', 4),
+    'data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31', 3376),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl': ('80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de', 2),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl': ('3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68', 3136),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl': ('a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac', 854),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl': ('6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a', 4),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl': ('656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510', 18),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl': ('906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f', 2),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl': ('9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf', 2),
+    'data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl': ('c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059', 535),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl': ('1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235', 2),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl': ('854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163', 746),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl': ('738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6', 2),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl': ('e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40', 12),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl': ('1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a', 2),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl': ('5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2', 32),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl': ('40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c', 2),
+    'data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl': ('c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717', 4),
+    'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl': ('41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f', 4),
+    'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl': ('87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668', 4),
+    'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl': ('2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5', 46),
 }
 
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")

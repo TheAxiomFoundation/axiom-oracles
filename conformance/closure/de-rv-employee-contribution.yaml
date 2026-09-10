@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3
+    sha256: f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 9bc4f5f0afad97e8edc9834609a53a56435d0509
-    release: de-rulespec-2026-09-09-kindergeld-threshold
-    release_content_sha256: 7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162
+    commit: 5a77472300eb240e303a6f52c1d45040d671e7a4
+    release: de-rulespec-2026-09-10-kindergeld-maternity
+    release_content_sha256: 57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -77,6 +77,9 @@ generated_facts:
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl
       sha256: 4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
+      sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
       row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
@@ -165,6 +168,15 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
+      sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl
+      sha256: 87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl
+      sha256: 2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5
+      row_count: 46
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -235,14 +247,14 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 45b0cf11084453b41995896aece50c9dd289359eb0c0a9a544f299b44d06fdf8
+    snapshot_sha256: 4b493fbae92d383d9eba6eb639cf05401941a32a0a84ef6ae1a192bedd1c22f1
     channel_receipts:
-      corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
-      subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
+      corpus_release: c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a
+      subject_matter_search: c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
-      unretrieved: 6
+      unretrieved: 4
     candidate_count: 11
     candidates:
     - id: de-rv-instr-22c390264093bed6
@@ -587,6 +599,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 6 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

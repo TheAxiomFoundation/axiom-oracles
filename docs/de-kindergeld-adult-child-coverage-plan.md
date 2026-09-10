@@ -11,8 +11,8 @@ The review evidence is committed in
 [`adult-child-repair-review.json`](../conformance/closure/de-discovery-2026-09-08/adult-child-repair-review.json).
 It contains the complete pinned § 32(4) text, all 50 fully read, hash-verified
 DA-KG sections from A 14 through A 20 (including seven structural headings) and
-six complete BFH decisions: III R 37/21, III R 10/22, III R 19/16, III R 40/19,
-III R 58/12 and III R 41/19.
+seven complete BFH decisions: III R 37/21, III R 10/22, III R 19/16, III R 40/19,
+III R 58/12, III R 41/19 and III R 42/22.
 This completes the reading of these guidance families. Their referenced statutes,
 other decisions and implementation boundaries still require source-bound work;
 a full-text review does not declare any route encoded.
@@ -354,3 +354,28 @@ The court-citation recall audit enrolls the previously omitted exact A 19.3
 citation to III R 42/22 as a pending member. Its complete primary decision is in
 corpus PR668, awaiting publication/binding. No mere citation search or abbreviated
 headnote is counted as a published corpus receipt or a completed causal assessment.
+
+## Published maternity and psychiatric-placement prerequisites
+
+Release `de-rulespec-2026-09-10-kindergeld-maternity`, commit
+`5a77472300eb240e303a6f52c1d45040d671e7a4`, preserves the prior 41 scopes and
+adds the complete current MuSchG, two official historical § 3 versions, the
+complete 2025 amendment acts I 59 and I 371, and BFH III R 42/22. Its content
+SHA-256 is `57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042`.
+The native release verifier checked the signature and all 355 artifact bytes.
+The current MuSchG capture is not blanket evidence of applicability throughout
+2025. The historical § 3 rows distinguish the period through 31 May 2025 from
+the miscarriage-protection amendment commencing 1 June 2025. Act I 371 was
+captured in full; only its MuSchG article 13 and commencement article 14 have
+received the legal review recorded in this workstream.
+
+BFH III R 42/22 paragraphs 22–27 refine the causation assessment for psychiatric
+placement, including provisional placement under StPO § 126a. Placement itself
+neither proves entitlement nor universally excludes the disability route.
+The same pre-25 disability causing an act without guilt under StGB § 20 is a
+weighty indicator; placement alongside conviction has a different causal
+analysis. Paragraphs 29–31 uphold the particular overall assessment under
+FGO § 118(2), rather than defining a universal conclusive flag. The complete
+five-page decision is retained in the review; source-defined causation and its
+statutory prerequisites remain unencoded. Exact BStBl II issue/page verification
+and exhaustive discovery remain open.

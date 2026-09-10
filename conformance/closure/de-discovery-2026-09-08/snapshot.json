@@ -909,6 +909,17 @@
       "extraction": "Exact UTF-8 native corpus body of complete official BFH PDF, case header and complete PDF extraction checked. BStBl issue/page and legal bearing remain to be dispositioned."
     },
     {
+      "path": "decision-bodies/bfh-iii-r-42-22-2024-01-30.txt",
+      "sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+      "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202410069?type=1646225765",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+      "corpus_commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
+      "corpus_release": "de-rulespec-2026-09-10-kindergeld-maternity",
+      "corpus_release_content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
+      "receipt_origin": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
+      "extraction": "Exact UTF-8 native corpus body of the complete five-page official BFH PDF; all pages checked. BStBl II issue/page membership remains unverified."
+    },
+    {
       "path": "decision-bodies/bfh-iii-r-43-20-2021-12-15.txt",
       "sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
       "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202210068?type=1646225765",
@@ -3762,9 +3773,15 @@
       "source_path": "da-kg-2025.txt",
       "source_sha256": "916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd",
       "status": "pending",
-      "text_capture_state": "citation_only",
+      "text_capture_state": "corpus_receipted",
       "class_membership_state": "bstbl_ii_issue_page_unverified",
-      "discovery_note": "Exact A19.3 citation recovered by a recall probe accepting the printed S.16 form. Official decision recovered into corpus PR668; it is not yet bound as a published corpus receipt."
+      "discovery_note": "Exact A19.3 citation recovered by a recall probe accepting the printed S.16 form. Official decision recovered into corpus PR668; it is not yet bound as a published corpus receipt.",
+      "operative_source_path": "decision-bodies/bfh-iii-r-42-22-2024-01-30.txt",
+      "operative_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+      "operative_corpus_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+      "operative_text_scope": "complete_official_court_decision",
+      "official_case_number": "III R 42/22",
+      "official_decision_date": "2024-01-30"
     },
     {
       "id": "de-kg-discovery-c5da6ee5d3d1267d",
@@ -4618,7 +4635,7 @@
     "The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.",
     "The Swiss free-movement agreement and2012AnnexII replacement are receipted. Encode the Swiss coordination bridge and investigate all bearing amendments and administrative decisions referenced by AnnexII; the requested Swiss override cannot be inferred from the EEA Agreement.",
     "81 complete official BFH decisions recovered from post2009 queries. Reconcile duplicate III R21/12 date and compound III R10/11 plus III R63/11 seed explicitly; older cases and exhaustive register discovery remain. Official V classification does not by itself verify exact BStBl issue/page.",
-    "A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. The exact S.16 citation is now enrolled. This probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels; bind its recovered official text after corpus PR668 publication."
+    "A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. Its exact S.16 citation is enrolled and its complete official decision is now bound to the published maternity release. The probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels. BStBl II issue/page verification remains open."
   ],
   "counts": {
     "de-kg-suppl-007": 16,
@@ -4626,5 +4643,5 @@
     "de-kg-suppl-009": 171,
     "de-kg-suppl-010": 40
   },
-  "receipt_sha256": "afcf5908a3b060f32257e5c05795c04b4ec25a343afe2614b71b03727623430f"
+  "receipt_sha256": "200b1798251f48414abd34793dbf77c4983d24606ff6c89f18c4ea7983593427"
 }

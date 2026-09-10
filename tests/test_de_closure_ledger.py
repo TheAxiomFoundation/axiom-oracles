@@ -98,7 +98,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 775, 8, 1, 0, 0),
+    "de/kindergeld": (18, 777, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 41, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -272,7 +272,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9208
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9264
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -324,16 +324,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=9208)
-    assert index["row_count"] == index["mapped_row_count"] == 9208
-    assert index["body_row_count"] == 9032
+    refresh._validate_global_extraction_index(index, scanned_row_count=9264)
+    assert index["row_count"] == index["mapped_row_count"] == 9264
+    assert index["body_row_count"] == 9083
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 214
+    assert index["act_count"] == len(index["acts"]) == 220
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 6344,
-        "law_metadata_changed_by": 32,
-        "law_metadata_fundstelle": 40,
+        "explicit_cross_reference_body": 6443,
+        "law_metadata_changed_by": 33,
+        "law_metadata_fundstelle": 41,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]
@@ -1526,7 +1526,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
     assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 529 + 17 + 229
+    assert frontier["instrument_count"] == 531 + 17 + 229
     assert all(sid in frontier["pending"] for sid in pending_classes)
 
 

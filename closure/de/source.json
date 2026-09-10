@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "9bc4f5f0afad97e8edc9834609a53a56435d0509",
-    "release": "de-rulespec-2026-09-09-kindergeld-threshold",
-    "release_content_sha256": "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162",
-    "release_selector_sha256": "751e5c7e7aa9cb97dbe1f38b4dca183f3482fd6f24cdf3fcf97587aa6c341212",
+    "commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
+    "release": "de-rulespec-2026-09-10-kindergeld-maternity",
+    "release_content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
+    "release_selector_sha256": "46b58c751d3defeffdaef986ddb39443e5de45d292881e76ad4c7b38c89ab0c2",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -74,6 +74,11 @@
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json",
         "sha256": "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json",
+        "sha256": "f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d",
         "row_count": 2
       },
       {
@@ -220,6 +225,21 @@
         "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
         "sha256": "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json",
+        "sha256": "907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json",
+        "sha256": "a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json",
+        "sha256": "956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865",
+        "row_count": 46
       }
     ],
     "provision_sources": [
@@ -281,6 +301,11 @@
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl",
         "sha256": "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
+        "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
         "row_count": 2
       },
       {
@@ -427,6 +452,21 @@
         "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
         "sha256": "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
         "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl",
+        "sha256": "41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl",
+        "sha256": "87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl",
+        "sha256": "2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5",
+        "row_count": 46
       }
     ],
     "rows": [

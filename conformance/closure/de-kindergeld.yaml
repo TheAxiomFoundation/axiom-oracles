@@ -41,12 +41,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3
+    sha256: f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 9bc4f5f0afad97e8edc9834609a53a56435d0509
-    release: de-rulespec-2026-09-09-kindergeld-threshold
-    release_content_sha256: 7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162
+    commit: 5a77472300eb240e303a6f52c1d45040d671e7a4
+    release: de-rulespec-2026-09-10-kindergeld-maternity
+    release_content_sha256: 57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -89,6 +89,9 @@ generated_facts:
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl
       sha256: 4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
+      sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
       row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
@@ -177,6 +180,15 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
       sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
       row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
+      sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl
+      sha256: 87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl
+      sha256: 2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5
+      row_count: 46
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 62
@@ -967,15 +979,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 45b0cf11084453b41995896aece50c9dd289359eb0c0a9a544f299b44d06fdf8
+    snapshot_sha256: 4b493fbae92d383d9eba6eb639cf05401941a32a0a84ef6ae1a192bedd1c22f1
     channel_receipts:
-      corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
-      subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
+      corpus_release: c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a
+      subject_matter_search: c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
-      unretrieved: 6
-    candidate_count: 758
+      unretrieved: 4
+    candidate_count: 760
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -9148,6 +9160,18 @@ generated_facts:
       citation_label: 'BFH, III R 36/21, 2023-01-19: Allgemeine Leistungsklage des Jobcenters gegen die Familienkasse wegen Erstattung'
       document_citation_path: de/guidance/bfh-iii-r-36-21-2023-01-19
       title: 'BFH, III R 36/21, 2023-01-19: Allgemeine Leistungsklage des Jobcenters gegen die Familienkasse wegen Erstattung'
+    - id: de-kg-instr-2e123c165d3631db
+      status: pending
+      discovery_refs:
+      - de-corpus-a06e8371458c53b96b3f
+      - de-corpus-a63bd12081bbcd155e0e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-42-22-2024-01-30
+      row_sha256: f955eba8a8a0f885beb4cecf507d3a04eee29aee41540847879a614a27cc8235
+      document_class: guidance
+      citation_label: 'BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind'
+      document_citation_path: de/guidance/bfh-iii-r-42-22-2024-01-30
+      title: 'BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind'
     - id: de-kg-instr-2e3e1e94e8491798
       status: pending
       discovery_refs:
@@ -9174,6 +9198,19 @@ generated_facts:
       citation_label: 'BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE'
       document_citation_path: de/guidance/bfh-vi-r-72-11-2012-05-10
       title: 'BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE'
+    - id: de-kg-instr-30c321b1f99eca45
+      status: pending
+      discovery_refs:
+      - de-corpus-1d0c6a5405f62dac77e0
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung
+      row_sha256: 69ccc78f4fed6b64530183787d9fb8a85817c17ef24bfeb4206ffcf393d47740
+      document_class: statute
+      citation_label: Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371
+      document_citation_path: de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung
+      title: Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371
+      date_document: '2025-12-22'
+      document_type: Änderungsgesetz
     - id: de-kg-instr-32a81be6d35e33be
       status: pending
       discovery_refs:
@@ -10254,7 +10291,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 01c5f94578fa6046fd2bfce6ecafdcbcb22c04373ff842a096992eabb66c9028
+      sha256: cc824086800ba8eec8490a9228bf418c888b05c57c52621292c3261b2146221d
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10263,8 +10300,8 @@ generated_facts:
         sections_located: 420
     class_discovery:
       path: conformance/closure/de-discovery-2026-09-08/snapshot.json
-      sha256: 877e5878f37cc05198f9431e7f4e9b8c1e29e094e218607a60026d6131f10ab8
-      receipt_sha256: afcf5908a3b060f32257e5c05795c04b4ec25a343afe2614b71b03727623430f
+      sha256: 9a83228ea4c8f5d8454f4454e7d7dd8589a34c0ac0eb7ae544ca974ddb8ac65b
+      receipt_sha256: 200b1798251f48414abd34793dbf77c4983d24606ff6c89f18c4ea7983593427
       complete: false
       counts:
         de-kg-suppl-007: 16
@@ -10281,7 +10318,7 @@ generated_facts:
       - The complete Morocco1981/1991 and Tunisia1991 Kindergeld publications, their1996commencement notices and the2014civil-partner letter are now receipted. Treaty entitlement, rate, currency and coordination rules remain unencoded. Recover the remaining BMAS amendment/continuity instruments; the22DVKA captures remain publisher extracts. No exhaustive discovery claim.
       - The Swiss free-movement agreement and2012AnnexII replacement are receipted. Encode the Swiss coordination bridge and investigate all bearing amendments and administrative decisions referenced by AnnexII; the requested Swiss override cannot be inferred from the EEA Agreement.
       - 81 complete official BFH decisions recovered from post2009 queries. Reconcile duplicate III R21/12 date and compound III R10/11 plus III R63/11 seed explicitly; older cases and exhaustive register discovery remain. Official V classification does not by itself verify exact BStBl issue/page.
-      - A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. The exact S.16 citation is now enrolled. This probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels; bind its recovered official text after corpus PR668 publication.
+      - A recall probe found 188 BFH citation occurrences and one absent case label, III R42/22, in the retained DA-KG2025 text. Its exact S.16 citation is enrolled and its complete official decision is now bound to the published maternity release. The probe does not prove exhaustive court discovery or correct dates/publication membership for all existing labels. BStBl II issue/page verification remains open.
     seed_bindings:
     - id: de-kg-instr-001
       binding_kind: instrument_candidate
@@ -10303,8 +10340,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
-        subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
+        corpus_release: c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a
+        subject_matter_search: c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13093,6 +13130,12 @@ committed_decisions:
     classification: constitutional_parentage_applicability
     reason: The operative order extends continued application of BGB §1600(2) and (3) sentence 1 beyond 30 June 2025 until replacement legislation enters force, at most 31 March 2026, and retains suspension on the specified applicants' request. It changes the outer deadline of the 9 April 2024 judgment. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt, SHA-256 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
     bears_on_computed_surface: true
+  - id: de-kg-discovery-c4a75118763d3018
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full five-page BFH III R 42/22 decision of 30 January 2024, paragraphs 1–32, read. Paragraphs 22–27 refine the earlier XI R24/13 approach: substantial co-causation by disability can continue during psychiatric placement under StGB63 and provisional placement under StPO126a. The overall circumstances require individual assessment; placement alone neither proves entitlement nor universally excludes it. Paragraph26 treats the same pre25 mental disability causing an act without guilt under StGB20 as a weighty indicator, distinct from paragraph27 placement alongside conviction, including diminished responsibility. Paragraphs29–31 uphold the particular lower-court assessment under FGO118(2), not a universal conclusive flag. The absence of resources and severity findings in this case do not supply a new universal numeric need or disability threshold. DA-KG2025 A19.3 retains this holding. It bears on qualifying_child_count and contemporaneous monthly entitlement, and remains unencoded.
+      Neither an invented score nor a caller-supplied legal causation Boolean resolves the required assessment. Exact BStBl II2025 page16 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-42-22-2024-01-30/document-1, body SHA-256 a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10, published corpus commit 5a77472300eb240e303a6f52c1d45040d671e7a4.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-ca1314db19ffa550
     status: excluded-with-reason
     classification: fixing_payout_and_correction
@@ -13181,6 +13224,12 @@ committed_decisions:
     reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion at
       paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-2e123c165d3631db
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: 'Full five-page BFH III R 42/22 decision of 30 January 2024, paragraphs 1–32, read. Paragraphs 22–27 refine the earlier XI R24/13 approach: substantial co-causation by disability can continue during psychiatric placement under StGB63 and provisional placement under StPO126a. The overall circumstances require individual assessment; placement alone neither proves entitlement nor universally excludes it. Paragraph26 treats the same pre25 mental disability causing an act without guilt under StGB20 as a weighty indicator, distinct from paragraph27 placement alongside conviction, including diminished responsibility. Paragraphs29–31 uphold the particular lower-court assessment under FGO118(2), not a universal conclusive flag. The absence of resources and severity findings in this case do not supply a new universal numeric need or disability threshold. DA-KG2025 A19.3 retains this holding. It bears on qualifying_child_count and contemporaneous monthly entitlement, and remains unencoded.
+      Neither an invented score nor a caller-supplied legal causation Boolean resolves the required assessment. Exact BStBl II2025 page16 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-42-22-2024-01-30/document-1, body SHA-256 a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10, published corpus commit 5a77472300eb240e303a6f52c1d45040d671e7a4.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-2e3e1e94e8491798
     status: excluded-with-reason
     classification: appeal_costs
@@ -14332,11 +14381,11 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 775
+    instrument_count: 777
     counts:
-      total: 775
+      total: 777
       encoded: 2
-      classified-with-reason: 153
+      classified-with-reason: 155
       excluded-with-reason: 348
       pending: 272
     pending:
@@ -14492,7 +14541,6 @@ computed:
     - de-kg-discovery-c2042f69f19b6bdc
     - de-kg-discovery-c306fddfde187836
     - de-kg-discovery-c37028de6c676351
-    - de-kg-discovery-c4a75118763d3018
     - de-kg-discovery-c5da6ee5d3d1267d
     - de-kg-discovery-c5dc988364156b5a
     - de-kg-discovery-c711d29acbcee070
@@ -14556,6 +14604,7 @@ computed:
     - de-kg-instr-2b121051486857aa
     - de-kg-instr-2c28748809bc5f0a
     - de-kg-instr-2f1ac975f16fdbf6
+    - de-kg-instr-30c321b1f99eca45
     - de-kg-instr-337d81a4694fca6a
     - de-kg-instr-33c1190039335beb
     - de-kg-instr-360df2059e09e33e
@@ -23358,7 +23407,7 @@ computed:
       reason: The operative order extends continued application of BGB §1600(2) and (3) sentence 1 beyond 30 June 2025 until replacement legislation enters force, at most 31 March 2026, and retains suspension on the specified applicants' request. It changes the outer deadline of the 9 April 2024 judgment. These govern the paternity-challenge rules upstream of first-degree child relationships (§32(1) EStG) and qualifying_child_count. Open until encoded and composed; no automatic loss of parentage is inferred from incompatibility alone. Official full German corpus body de/guidance/bverfg-1-bvr-2017-21-2025-06-03/inhalt, SHA-256 2e0bd20afa3ddc4100bfeaa2a73ee5c39de209d739d6dcd6151d710a7c2ea567, release de-rulespec-2026-09-08-kindergeld-2025-history at ceab7b8fc768dbd78089df5a85bfc67deb6a75f9. This is a bearing upstream decision regardless of still-unverified BStBl II publication; its discovery class is provisional, not an assertion of publication.
       bears_on_computed_surface: true
     - id: de-kg-discovery-c4a75118763d3018
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
       discovery_refs:
@@ -23366,6 +23415,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16
+      classification: entitlement_condition
+      reason: 'Full five-page BFH III R 42/22 decision of 30 January 2024, paragraphs 1–32, read. Paragraphs 22–27 refine the earlier XI R24/13 approach: substantial co-causation by disability can continue during psychiatric placement under StGB63 and provisional placement under StPO126a. The overall circumstances require individual assessment; placement alone neither proves entitlement nor universally excludes it. Paragraph26 treats the same pre25 mental disability causing an act without guilt under StGB20 as a weighty indicator, distinct from paragraph27 placement alongside conviction, including diminished responsibility. Paragraphs29–31 uphold the particular lower-court assessment under FGO118(2), not a universal conclusive flag. The absence of resources and severity findings in this case do not supply a new universal numeric need or disability threshold. DA-KG2025 A19.3 retains this holding. It bears on qualifying_child_count and contemporaneous monthly entitlement, and remains unencoded.
+        Neither an invented score nor a caller-supplied legal causation Boolean resolves the required assessment. Exact BStBl II2025 page16 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-42-22-2024-01-30/document-1, body SHA-256 a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10, published corpus commit 5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-c5da6ee5d3d1267d
       status: pending
       identity_kind: class_member
@@ -24181,6 +24234,22 @@ computed:
       reason: 'Full five-page decision BFH III R36/21 (19 January 2023), paragraphs1–37: the Jobcenter claims an inter-agency refund of benefits against the Familienkasse under EStG section74(2)/SGB X104. Paragraph20 requires a general performance action; paragraphs21–30 define timely-payment and prior-knowledge limits on the refund, including receipt at the dedicated functional address and agency rather than individual caseworker knowledge; paragraphs31–36 apply those rules. Paragraph27 takes an existing Kindergeld award and its amount as given, bounding the inter-agency refund months and amount; EUR486, EUR192 and the EUR30 deduction concern this historical refund case, not the section66 statutory parameter. These are the refund/payment-routing surfaces already excluded by the section74 spine and DA-KG V34.1 dispositions. The decision does not determine the underlying child qualification, section64 recipient priority, entitlement or fixed monthly amount. Its identity-linkage discussion
         at paragraph35 concerns agency notice, not a new section63 identification condition. Text-bound source: de/guidance/bfh-iii-r-36-21-2023-01-19/document-1, body SHA-256 75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31, pinned corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509. The discovery member and corpus parent refer to this same complete decision. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
       bears_on_computed_surface: false
+    - id: de-kg-instr-2e123c165d3631db
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-a06e8371458c53b96b3f
+      - de-corpus-a63bd12081bbcd155e0e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-42-22-2024-01-30
+      row_sha256: f955eba8a8a0f885beb4cecf507d3a04eee29aee41540847879a614a27cc8235
+      document_class: guidance
+      citation_label: 'BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind'
+      document_citation_path: de/guidance/bfh-iii-r-42-22-2024-01-30
+      title: 'BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind'
+      classification: entitlement_condition
+      reason: 'Full five-page BFH III R 42/22 decision of 30 January 2024, paragraphs 1–32, read. Paragraphs 22–27 refine the earlier XI R24/13 approach: substantial co-causation by disability can continue during psychiatric placement under StGB63 and provisional placement under StPO126a. The overall circumstances require individual assessment; placement alone neither proves entitlement nor universally excludes it. Paragraph26 treats the same pre25 mental disability causing an act without guilt under StGB20 as a weighty indicator, distinct from paragraph27 placement alongside conviction, including diminished responsibility. Paragraphs29–31 uphold the particular lower-court assessment under FGO118(2), not a universal conclusive flag. The absence of resources and severity findings in this case do not supply a new universal numeric need or disability threshold. DA-KG2025 A19.3 retains this holding. It bears on qualifying_child_count and contemporaneous monthly entitlement, and remains unencoded.
+        Neither an invented score nor a caller-supplied legal causation Boolean resolves the required assessment. Exact BStBl II2025 page16 membership and exhaustive discovery remain open. Source: de/guidance/bfh-iii-r-42-22-2024-01-30/document-1, body SHA-256 a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10, published corpus commit 5a77472300eb240e303a6f52c1d45040d671e7a4.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-2e3e1e94e8491798
       status: excluded-with-reason
       discovery_refs:
@@ -24211,6 +24280,19 @@ computed:
       citation_label: 'BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE'
       document_citation_path: de/guidance/bfh-vi-r-72-11-2012-05-10
       title: 'BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE'
+    - id: de-kg-instr-30c321b1f99eca45
+      status: pending
+      discovery_refs:
+      - de-corpus-1d0c6a5405f62dac77e0
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung
+      row_sha256: 69ccc78f4fed6b64530183787d9fb8a85817c17ef24bfeb4206ffcf393d47740
+      document_class: statute
+      citation_label: Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371
+      document_citation_path: de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung
+      title: Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371
+      date_document: '2025-12-22'
+      document_type: Änderungsgesetz
     - id: de-kg-instr-32a81be6d35e33be
       status: classified-with-reason
       discovery_refs:
@@ -25770,6 +25852,7 @@ computed:
     - de-kg-discovery-90238268a8dee863
     - de-kg-discovery-b8b7b0fae40a3f3a
     - de-kg-discovery-c49f3225984aa26f
+    - de-kg-discovery-c4a75118763d3018
     - de-kg-discovery-d8507d27fb02cb6a
     - de-kg-discovery-da811c7c21203da5
     - de-kg-discovery-dc687b40f4c59ca6
@@ -25778,6 +25861,7 @@ computed:
     - de-kg-instr-002
     - de-kg-instr-003
     - de-kg-instr-295706eb9fcb6809
+    - de-kg-instr-2e123c165d3631db
     - de-kg-instr-32a81be6d35e33be
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
@@ -25807,12 +25891,12 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
-    instruments_bearing_on_computed_count: 139
-    open_dependency_count: 147
+    instruments_bearing_on_computed_count: 141
+    open_dependency_count: 149
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 775
+    bearing_candidate_instruments: 777
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
@@ -25824,6 +25908,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 6 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

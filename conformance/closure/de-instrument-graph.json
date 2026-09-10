@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-10T12:03:53Z",
+  "generated_at": "2026-09-10T14:51:17Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3"
+    "sha256": "f9e4db286303ea35853377d1fad70d701246fa05b91ce228f38223bfd913ea39"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-09-kindergeld-threshold",
-      "commit": "9bc4f5f0afad97e8edc9834609a53a56435d0509",
-      "release_content_sha256": "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162",
+      "release": "de-rulespec-2026-09-10-kindergeld-maternity",
+      "commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
+      "release_content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-09-kindergeld-threshold/7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162.json",
-        "raw_sha256": "8ff525822f10f635b18dd0d8ec9ff0a55711aaede1969220ad8fbe5d958ae1da",
-        "content_sha256": "7f3743883a536d7aca5e22e2cf58cfbc660c4cb6ce8645928104363d9f1fc162"
+        "path": "releases/de-rulespec-2026-09-10-kindergeld-maternity/57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042.json",
+        "raw_sha256": "0a2157c2925092aca525dded6a9116d99771af280c291ef515b181cf0f91dbf0",
+        "content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042"
       },
       "scans": [
         {
@@ -175,6 +175,19 @@
           "provisions": {
             "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl",
             "sha256": "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json",
+            "sha256": "f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
+            "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
             "row_count": 2
           }
         },
@@ -554,25 +567,64 @@
             "sha256": "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
             "row_count": 4
           }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json",
+            "sha256": "907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl",
+            "sha256": "41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f",
+            "row_count": 4
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json",
+            "sha256": "a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl",
+            "sha256": "87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668",
+            "row_count": 4
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json",
+            "sha256": "956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865",
+            "row_count": 46
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl",
+            "sha256": "2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5",
+            "row_count": 46
+          }
         }
       ],
-      "scanned_row_count": 9208,
+      "scanned_row_count": 9264,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9208,
-        "body_row_count": 9032,
-        "mapped_row_count": 9208,
+        "row_count": 9264,
+        "body_row_count": 9083,
+        "mapped_row_count": 9264,
         "unmapped_row_count": 0,
-        "act_count": 214,
+        "act_count": 220,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6344,
-          "law_metadata_changed_by": 32,
-          "law_metadata_fundstelle": 40
+          "explicit_cross_reference_body": 6443,
+          "law_metadata_changed_by": 33,
+          "law_metadata_fundstelle": 41
         },
-        "row_scan_sha256": "11b2c34991d218419ad1f03643907c8533ea9179b3b6338ba747c767a8f8136a",
-        "canonical_index_sha256": "6fd2d207171673a8e0119fc5d8ecbe4ee5bfae6f9dde1f9cd5399a92096180d9",
-        "per_act_sha256": "2161a70cb438558c724ff1a65c770feb16a636ab354179ff68f98e984028cd8d",
+        "row_scan_sha256": "09155f01efcb02065a005fa457b531403f064a5a23786b8f055fb47a20bbc031",
+        "canonical_index_sha256": "80796d844fffdadcf3a602ee0290d6a09704665ff111f1483fe225eaab97cd8d",
+        "per_act_sha256": "e19fed80d1ed26f7166f345d9c19b5f40625584971fa93238a9cc9321e2d5532",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -3302,11 +3354,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 6,
+              "explicit_cross_reference_body": 7,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "bbc252e5d8dbf6b9b549fe9f436619dfb7c1b1c8134824ab09c0108f9aad58bd",
+            "findings_sha256": "200e9ba721969e1d4bee5387397739055dcdc8af740e8d5eecc1312c398899c4",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3348,8 +3400,18 @@
                 "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
                 "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
                 "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
+                "matched_text": "MuSchG",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
+                "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
+                "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3433,6 +3495,45 @@
                 "matched_text": "Vierten Buches",
                 "target_citation_path": "de/statute/sgb-4",
                 "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30",
+            "document_row_sha256": "f955eba8a8a0f885beb4cecf507d3a04eee29aee41540847879a614a27cc8235",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 3,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "6c6f9d0874f9b698c72179b2635bb954dd1ecce79788403b4c0957fd049c86a1",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+                "source_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+                "source_row_sha256": "0b1f3a2e137cf166b06d6d065aa118a1ce996c9f475a5f08558602978b292917",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+                "source_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+                "source_row_sha256": "0b1f3a2e137cf166b06d6d065aa118a1ce996c9f475a5f08558602978b292917",
+                "matched_text": "Einkommensteuergesetzes",
+                "unresolved_identity": "named-instrument:einkommensteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+                "source_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+                "source_row_sha256": "0b1f3a2e137cf166b06d6d065aa118a1ce996c9f475a5f08558602978b292917",
+                "matched_text": "Jugendgerichtsgesetzes",
+                "unresolved_identity": "named-instrument:jugendgerichtsgesetzes"
               }
             ]
           },
@@ -3650,11 +3751,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 6,
+              "explicit_cross_reference_body": 7,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "aa10a26d72a28d337cebb21c513bc743246454f57fe9bba96f190b3ba001a095",
+            "findings_sha256": "d4626d4bb5cef0a94a5d3032a8d43ba4df09346ef45337448d832b9f5dcec36c",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3695,8 +3796,18 @@
                 "source_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
                 "source_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
                 "source_row_sha256": "d09c3163004ec054cf5afe4c0c6fba508861744b3d50b6299fb9d3559d71db5d",
+                "matched_text": "MuSchG",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+                "source_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+                "source_row_sha256": "d09c3163004ec054cf5afe4c0c6fba508861744b3d50b6299fb9d3559d71db5d",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4055,11 +4166,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 5,
+              "explicit_cross_reference_body": 6,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "b151586f7fa9e9d1e85ae91e651035e50e82336238b4707eb0d02959f00b819a",
+            "findings_sha256": "17959719822b0b5ce585004c5d2dee5bdef9bcb25f7ea3cea47f080713e0a85d",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4094,6 +4205,15 @@
                 "source_row_sha256": "d3b79102b3711e7f9b0779432eac38ab7a06e4be198feb594a6a431c37181d50",
                 "matched_text": "Finanzverwaltungsgesetzes",
                 "unresolved_identity": "named-instrument:finanzverwaltungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-58-12-2013-06-13/document-1",
+                "source_body_sha256": "263907d1053ae5414546123f919188361ede3a8ee1afd5d73291732135331d60",
+                "source_row_sha256": "d3b79102b3711e7f9b0779432eac38ab7a06e4be198feb594a6a431c37181d50",
+                "matched_text": "MuSchG",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6003,11 +6123,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 82,
+              "explicit_cross_reference_body": 83,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "58255e7929342d6c9fdd902272b807a6dacc2f3725e3672f39c884ccb6835076",
+            "findings_sha256": "682756c2a91229d6dd131c82182daf3f189bf7e36fb38288b923a251d5fc6790",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6393,8 +6513,18 @@
                 "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
                 "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
                 "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
+                "matched_text": "MuSchG",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2026/document-1",
+                "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
+                "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6895,7 +7025,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "c811e4ce85fe63c24d8500db9d0441b3659eb846a5a3df60340e307057d82cf1",
+            "findings_sha256": "4c47d5c2695961fba33e7a65857710bc768117e504eabfb23fb54454cc6f3e40",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7316,7 +7446,8 @@
                 "source_body_sha256": "62b8f81e5cfd966bc91c7069c017f5aa9280b6856f8844fbb1d12e9fb90c0cbe",
                 "source_row_sha256": "08a85fd1be035820e053609ef05566631008c9845922788fff1f1ae74b21c466",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7622,11 +7753,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 25,
+              "explicit_cross_reference_body": 26,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "197e3f84730608a122fba6813d6784ea9984b3b33e718cd8b513b9c7143c54e6",
+            "findings_sha256": "0affd90d8431819570e99381ee9dbc304cf9a6ae66afd3c4b0b9892cae70d522",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7712,8 +7843,18 @@
                 "source_citation_path": "de/guidance/esth-2024-32/inhalt",
                 "source_body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785",
                 "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
+                "matched_text": "MuSchG",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/esth-2024-32/inhalt",
+                "source_body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785",
+                "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7859,7 +8000,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "547575de35a0928225cc0a1a0a1ca8b01c042f16214cfee8cb9d8c0ac1d40c85",
+            "findings_sha256": "ebe87a4f925aee732bdc6bfc2d3fd2c45a8a78b565d649c9c5ead9fef1f06ca6",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7962,7 +8103,8 @@
                 "source_body_sha256": "6cdd0886175c7aabe3fb9fb182ddbbe593d198eb3f662274e0d130e5bca5590b",
                 "source_row_sha256": "b8ce379ce1771dd8c0bbfeaa8f5c8d55bbc23a10ee015ed9844afc6d4155a40d",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8244,7 +8386,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "65b290f3db4c5f0a658f6bbe0784d6a43d2de9143f89f88c54328d2923e3b169",
+            "findings_sha256": "f8bd474cb731bbf6292e48fe4f788ddcbc26da6f2b415d8e9cbcb11d7d78c618",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8269,7 +8411,8 @@
                 "source_body_sha256": "3efad3b4166b5c686af9957363a11be90795829a4a4ba46a785fd2b10cd956ca",
                 "source_row_sha256": "df5c83fa1426f5d6d925d556de89923ff98d31438b149608bc6f9819f78e3862",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               }
             ]
           },
@@ -8437,7 +8580,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "e8e1096b37a559336c979afcedf64d916aa73c39d459d3305124ddc4c8f87f1b",
+            "findings_sha256": "797467052f550b89186ae1049fe1f48f60ff938af7e3f4bda88088feed5b9ccf",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8927,7 +9070,8 @@
                 "source_body_sha256": "113638bdbea4946489e6625b48072c0b1ae84a11eb868717a3623e6010e94263",
                 "source_row_sha256": "da151cc8581fb28e6a8c3e895be85a8f212a4344f12422086b9db3f575ccb3be",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -18725,7 +18869,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "fc0b0333dd571e71a383241776fc25dc38d6d80a6519e762e2bac1b8e59f7e2a",
+            "findings_sha256": "9f36a859efa29cc0f4e5fddaaed4793f8c25265bab68c7a57829290ffd5185f1",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19118,7 +19262,8 @@
                 "source_body_sha256": "2d1ad4e789baa9092eee1b72298f9eea56c05b9767fffc94d3a9a3156f1b412f",
                 "source_row_sha256": "1e7353ba544d1e49d1c074b8d74286b34f81212611e2b2d611f01ae7cfa1af05",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19126,7 +19271,8 @@
                 "source_body_sha256": "17af47b617c4f90b555b6d8474c3c83343f3b170ef54454fd01cb0d70b799416",
                 "source_row_sha256": "42f0be524a040b6d9cbf3a42b9713512af158ca418635fe314bc392e580001ee",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19134,7 +19280,8 @@
                 "source_body_sha256": "3ac0971eb6151f98d238cf41c58f2bd25734ad2a2a1cf6069bc4a104da036dd1",
                 "source_row_sha256": "34293d73d311c3b162ad7c18b354733faa058514b012a3710bac7635ff48192a",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19142,7 +19289,8 @@
                 "source_body_sha256": "b57acd6fc695c528659e7383054a9c31038d533f96e86739f5355e849cd4d68f",
                 "source_row_sha256": "a8f9f8f506f5272dfa7bf22a3fa4e5235137dc8c969d75204f10fe72b8961626",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19150,7 +19298,8 @@
                 "source_body_sha256": "b614ebb6dfe82dd4e92aa21640a52898d2879cbb0ffbe7e724d488df979bc8e7",
                 "source_row_sha256": "c8dded9e7bdca53d1de29ee9ec8543210d603fc6ba3b29ece7c9561ce7e58137",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -19158,7 +19307,8 @@
                 "source_body_sha256": "dbc7b55f0bf098b7482a7b5ce0b5feac609c493e6276ab79dc9458120bda0270",
                 "source_row_sha256": "d49512dda6b3a3c1be42f39b452979182a801accd1a681c056b86a77b4277416",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -24683,6 +24833,472 @@
             ]
           },
           {
+            "document_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung",
+            "document_row_sha256": "69ccc78f4fed6b64530183787d9fb8a85817c17ef24bfeb4206ffcf393d47740",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 45,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "29ebb60da0ec10681d188725b5052b8591cb32b12b8e83e9317951d2b92f21ca",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Apothekengesetzes",
+                "unresolved_identity": "named-instrument:apothekengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Aufenthaltsgesetzes",
+                "unresolved_identity": "law:aufenthaltsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Bundesfreiwilligendienstgesetz",
+                "target_citation_path": "de/statute/bfdg",
+                "target_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Bundespflegesatzverordnung",
+                "unresolved_identity": "named-instrument:bundespflegesatzverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Bundesversorgungsgesetz",
+                "unresolved_identity": "named-instrument:bundesversorgungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Einkommensteuergesetzes",
+                "unresolved_identity": "named-instrument:einkommensteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Elften Buch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Elften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Fünften Buch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Fünften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Grundstoffüberwachungsgesetz",
+                "unresolved_identity": "named-instrument:grundstoffüberwachungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Grundstoffüberwachungsgesetzes",
+                "unresolved_identity": "named-instrument:grundstoffüberwachungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Jugendfreiwilligendienstegesetz",
+                "target_citation_path": "de/statute/jfdg",
+                "target_row_sha256": "6f593c489eea4d2933c9a08f3759a1a34146fc40a173eeb85b3dedd363dba684"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Krankenhausentgeltgesetz",
+                "unresolved_identity": "named-instrument:krankenhausentgeltgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Krankenhausentgeltgesetzes",
+                "unresolved_identity": "named-instrument:krankenhausentgeltgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Krankenhausfinanzierungsgesetz",
+                "unresolved_identity": "named-instrument:krankenhausfinanzierungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Krankenhausfinanzierungsgesetzes",
+                "unresolved_identity": "named-instrument:krankenhausfinanzierungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Mutterschutzgesetz",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Mutterschutzgesetzes",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Passgesetzes",
+                "unresolved_identity": "named-instrument:passgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Personalausweisgesetzes",
+                "unresolved_identity": "named-instrument:personalausweisgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegeberufegesetz",
+                "unresolved_identity": "named-instrument:pflegeberufegesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegeberufegesetzes",
+                "unresolved_identity": "named-instrument:pflegeberufegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegefachassistenzgesetz",
+                "unresolved_identity": "named-instrument:pflegefachassistenzgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegefachassistenzgesetzes",
+                "unresolved_identity": "named-instrument:pflegefachassistenzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegezeitgesetz",
+                "unresolved_identity": "named-instrument:pflegezeitgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Pflegezeitgesetzes",
+                "unresolved_identity": "named-instrument:pflegezeitgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Prüfungsverordnung",
+                "unresolved_identity": "named-instrument:prüfungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Risikostruktur-Ausgleichsverordnung",
+                "unresolved_identity": "named-instrument:risikostruktur-ausgleichsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Siebten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Soldatenversorgungsgesetz",
+                "unresolved_identity": "named-instrument:soldatenversorgungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Verordnung (EG) Nr. 111/2005",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 111/2005"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Verordnung (EG) Nr. 273/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 273/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Verordnung (EU) 2025/1475",
+                "unresolved_identity": "eu-regulation:verordnung (eu) 2025/1475"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Versicherungsvertragsgesetzes",
+                "unresolved_identity": "named-instrument:versicherungsvertragsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Zwölften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+                "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+                "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz",
+            "document_row_sha256": "4cde02f8e2d052c2d5d00a8b7c4717ff083730df50e400deca9a3e21d1b05de7",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 7,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "18a95a791507f6c4f73afbadb5c4b682079336827f7e7f19558edeca26f61739",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Elternzeitverordnung",
+                "unresolved_identity": "named-instrument:elternzeitverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Fünften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Mutterschutzgesetz",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Mutterschutzgesetzes",
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Mutterschutzverordnung",
+                "unresolved_identity": "named-instrument:mutterschutzverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bgbl-2025-i-59/mutterschutzanpassungsgesetz/document-1",
+                "source_body_sha256": "7b0609c5d063a0c96f6572f1fc6ec8098ddcc180f11c438650cfc5e6b478db35",
+                "source_row_sha256": "69d5eda1bbaab47f05d3b0c42970f2fbefd2fc4a02c9c0dd03e63a87faa1257e",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz",
             "document_row_sha256": "c672b8e37a1fab6889be4a3ae549309e263ccfdf84954f8411a313a5818ad9a0",
             "row_count": 2,
@@ -25875,7 +26491,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "e0eb7a2082beaf55b2d0f79fb36a9e940660e0e5e4151e7721af665f3e4124ce",
+            "findings_sha256": "cbe90b90437b943ab7df6211e83bd155992c587ae0e24f11772816af03ac9769",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26011,7 +26627,8 @@
                 "source_body_sha256": "95d5dafa3845399e1bce3f316853c9fd287663ca585ac225b6a6449756446b51",
                 "source_row_sha256": "9218ea6a33b69d8faeaae6aa0c534ee2959b16e984db57422e69f683cc9d781f",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26019,7 +26636,8 @@
                 "source_body_sha256": "e3b82ff8d4ac99af7312b4bac32c39b7b930e2f5c855cbf192580ac95da40dfb",
                 "source_row_sha256": "6ec55112e6354c6591215243133d6caf5f2f5e0de33c7254871715a0169a36d9",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -26081,7 +26699,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "95f4d175423b9f59f25e83b3f9ef69333bede6db7e8dc6eab14aa2fb0c2c1ff7",
+            "findings_sha256": "89a07c0f456f0aeb9405c95deb053c141cb3b6fafa87c7eb9ec9b0b65ab9d848",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -29475,7 +30093,8 @@
                 "source_body_sha256": "d35933cf901f9908fd8eaa7a75a164359763fd47bb9429e7e4845717fd86b8e5",
                 "source_row_sha256": "caab5a272658eceeee7bf2036e3d143b2179d05a76058ab963b4d2538431886c",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -31282,7 +31901,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "7cc443cb8c45e889cb5e37abae4ded44f3ed83e39c76f13ee8b924e234d316b5",
+            "findings_sha256": "925e46304b93a83320b19fe2db0c5e7228852fdb4fa7d2fbbd1702e575895aea",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -34291,7 +34910,8 @@
                 "source_body_sha256": "19624263b163262c4d46c1bdbaf9dfcd3c9605bf0b1c6c4256e176a2b8fc751f",
                 "source_row_sha256": "8d5632df59e2cf278202c38a384d758b849dca180096d806a10dfa7d85ff47a4",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -34299,7 +34919,8 @@
                 "source_body_sha256": "508b09897a4911190d7caf6cb1d5a824bd2c2faa3ae36cd933fce73e908a14ad",
                 "source_row_sha256": "f27fcee14267554276ccf5cf1ec39f056f2e930ec489e185be3e15f9344c7efb",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -34307,7 +34928,8 @@
                 "source_body_sha256": "6fe524b1b90bdca7e1e5ef207742147c9d5b54c51fad4145a8a9fde0e317f305",
                 "source_row_sha256": "255bb56685326c7f465519cccbb4345085d4a93ebcf4efc99a6e43986a4a1436",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -34315,7 +34937,8 @@
                 "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
                 "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -34323,7 +34946,8 @@
                 "source_body_sha256": "d9c1a2412d26fee39815bd65d28607c636ac8157771de5e84f03caecf9d0658b",
                 "source_row_sha256": "f82ae1a2fcd6bf9cade184761fef9a55cc37f7227f455fc451e083913e4f8319",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -36514,6 +37138,387 @@
             ]
           },
           {
+            "document_citation_path": "de/statute/muschg-2018",
+            "document_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3",
+            "row_count": 46,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 37,
+              "law_metadata_changed_by": 1,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "bb1ec93b241cce8ea8885b6ae9dd7adb364dde0cc9d3e49d2dcb8fb0c925c1a8",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/29",
+                "source_body_sha256": "303fda3a06f4ce497e9bd186b485a39c57a74227786f186b2bbc7189c125f557",
+                "source_row_sha256": "7bc17435186a97369f8597d793e3ab22484b6c032a362093f74844258d94f588",
+                "matched_text": "Arbeitsschutzgesetzes",
+                "unresolved_identity": "named-instrument:arbeitsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/14",
+                "source_body_sha256": "33eca4272b488571f8bbb9432deb12dfef595083aaf37e181e9e27bf78987e4f",
+                "source_row_sha256": "5421b98514b8e4a98daf236823971bec4013e6b141e9f2d5053c847c44fa54ae",
+                "matched_text": "Arbeitsschutzgesetzes",
+                "unresolved_identity": "named-instrument:arbeitsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/30",
+                "source_body_sha256": "8c278cca11913263be99681d8467811b6b1e4eed727288f91b38626b2eafd72c",
+                "source_row_sha256": "d6ab18c2f4da538763b1092bcaa0c996b880a75c9a00c9150ea6255e0bf9e474",
+                "matched_text": "Arbeitsschutzgesetzes",
+                "unresolved_identity": "named-instrument:arbeitsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/10",
+                "source_body_sha256": "f27965a416afba15a0798e410f9bf9532e3855ad4ff6a43de16123cafa7858a0",
+                "source_row_sha256": "70aaa022f65fcbfc02ac0439436c99ae2390bab210c5261c64842642dda38918",
+                "matched_text": "Arbeitsschutzgesetzes",
+                "unresolved_identity": "named-instrument:arbeitsschutzgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/23",
+                "source_body_sha256": "1eafe4ee820674661e59122cce527b91eb4e8cea59ac073244e9fc19db374bda",
+                "source_row_sha256": "342d8583c67d5ac2951036c8cbbf376c5dadb6a3a0b8a711b31cb0b1f4fea6fd",
+                "matched_text": "Arbeitszeitgesetz",
+                "unresolved_identity": "named-instrument:arbeitszeitgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/6",
+                "source_body_sha256": "42b42c56deae8257ad56c3dd06821d13eae9eb1eb24a2eaa423841225ee12bca",
+                "source_row_sha256": "3b2ee523e05a15241380ce6dc14884c1d9f931ee9339109d44fc8a90d4545e7e",
+                "matched_text": "Arbeitszeitgesetzes",
+                "unresolved_identity": "named-instrument:arbeitszeitgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Berufsbildungsgesetzes",
+                "unresolved_identity": "named-instrument:berufsbildungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/12",
+                "source_body_sha256": "f1aad3ec969f9a8c295de13b40973494504a80972cdcfe29dc8ec0828498ee84",
+                "source_row_sha256": "1e7a6ecbdc062026548801da50b7ce5a53aab0e4a5e7505cc336bf7de87538b7",
+                "matched_text": "Biostoffverordnung",
+                "unresolved_identity": "named-instrument:biostoffverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/11",
+                "source_body_sha256": "f3d0d957d01c58147ebcd01b063b90c29500fbe26fc3dd10e05a0dd56186d418",
+                "source_row_sha256": "14277237aac4075fd19e47334035c1168f2954dd95ac2e1a508e5bf590ce8034",
+                "matched_text": "Biostoffverordnung",
+                "unresolved_identity": "named-instrument:biostoffverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/2",
+                "source_body_sha256": "4efb7792311d07495e9b4d163804e8b86218a357b027892292244baa9cef1075",
+                "source_row_sha256": "496dff228f25fba06cfb2512cd3fa3b9f5d53f9fdef55d9898150e0a5d78c5f9",
+                "matched_text": "Bundesfreiwilligendienstgesetz",
+                "target_citation_path": "de/statute/bfdg",
+                "target_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Bundesfreiwilligendienstgesetzes",
+                "target_citation_path": "de/statute/bfdg",
+                "target_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/20",
+                "source_body_sha256": "db6c415d96857e645cb7db14e408802043e9ced79974eb189774628e9039e26d",
+                "source_row_sha256": "732658e6fc4b40b20367a504d1377297df2d16ae27d5f5cd2224af870f7dd000",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/20",
+                "source_body_sha256": "db6c415d96857e645cb7db14e408802043e9ced79974eb189774628e9039e26d",
+                "source_row_sha256": "732658e6fc4b40b20367a504d1377297df2d16ae27d5f5cd2224af870f7dd000",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/12",
+                "source_body_sha256": "f1aad3ec969f9a8c295de13b40973494504a80972cdcfe29dc8ec0828498ee84",
+                "source_row_sha256": "1e7a6ecbdc062026548801da50b7ce5a53aab0e4a5e7505cc336bf7de87538b7",
+                "matched_text": "Druckluftverordnung",
+                "unresolved_identity": "named-instrument:druckluftverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/11",
+                "source_body_sha256": "f3d0d957d01c58147ebcd01b063b90c29500fbe26fc3dd10e05a0dd56186d418",
+                "source_row_sha256": "14277237aac4075fd19e47334035c1168f2954dd95ac2e1a508e5bf590ce8034",
+                "matched_text": "Druckluftverordnung",
+                "unresolved_identity": "named-instrument:druckluftverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/21",
+                "source_body_sha256": "e495f41c37d0ee21ee8eff68682eb130744afae011f751e0d8bb279f2b40d07a",
+                "source_row_sha256": "37e443d783b9351f517246e837d1b822fab50ac8a187dbdf6464623436e449a2",
+                "matched_text": "Elternzeitgesetz",
+                "target_citation_path": "de/statute/beeg",
+                "target_row_sha256": "743c392466d8bd77db3fc48f24ed2a073a75713d199bdbbfdab1bb1e5a1fa8d4"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/19",
+                "source_body_sha256": "24af24f5d57c8613effe9fdbc1b1f0fd38cf4f6e4bc21fda8449f2d40a05d301",
+                "source_row_sha256": "f2b27d84ab42f67fc8acab232ccc60b0d8e52d6a1607992ed5af442a1ad9c1fe",
+                "matched_text": "Fünften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/19",
+                "source_body_sha256": "24af24f5d57c8613effe9fdbc1b1f0fd38cf4f6e4bc21fda8449f2d40a05d301",
+                "source_row_sha256": "f2b27d84ab42f67fc8acab232ccc60b0d8e52d6a1607992ed5af442a1ad9c1fe",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/29",
+                "source_body_sha256": "303fda3a06f4ce497e9bd186b485a39c57a74227786f186b2bbc7189c125f557",
+                "source_row_sha256": "7bc17435186a97369f8597d793e3ab22484b6c032a362093f74844258d94f588",
+                "matched_text": "Grundgesetzes",
+                "unresolved_identity": "named-instrument:grundgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/23",
+                "source_body_sha256": "1eafe4ee820674661e59122cce527b91eb4e8cea59ac073244e9fc19db374bda",
+                "source_row_sha256": "342d8583c67d5ac2951036c8cbbf376c5dadb6a3a0b8a711b31cb0b1f4fea6fd",
+                "matched_text": "Heimarbeitsgesetzes",
+                "unresolved_identity": "named-instrument:heimarbeitsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/17",
+                "source_body_sha256": "909592382165b8e1eca819891aac01658540a42084c3587ae166c9283aa31814",
+                "source_row_sha256": "64ae8be4e5752b1a6cbda8b8dc3652f71320ff0531839d6d83e1d876cfc74da5",
+                "matched_text": "Heimarbeitsgesetzes",
+                "unresolved_identity": "named-instrument:heimarbeitsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Heimarbeitsgesetzes",
+                "unresolved_identity": "named-instrument:heimarbeitsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/2",
+                "source_body_sha256": "4efb7792311d07495e9b4d163804e8b86218a357b027892292244baa9cef1075",
+                "source_row_sha256": "496dff228f25fba06cfb2512cd3fa3b9f5d53f9fdef55d9898150e0a5d78c5f9",
+                "matched_text": "Jugendfreiwilligendienstegesetz",
+                "target_citation_path": "de/statute/jfdg",
+                "target_row_sha256": "6f593c489eea4d2933c9a08f3759a1a34146fc40a173eeb85b3dedd363dba684"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Jugendfreiwilligendienstegesetzes",
+                "target_citation_path": "de/statute/jfdg",
+                "target_row_sha256": "6f593c489eea4d2933c9a08f3759a1a34146fc40a173eeb85b3dedd363dba684"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/3",
+                "source_body_sha256": "d9a05525c2feee75e1908fd8cff01a1d087d58e4f577d9f24fcab31cd63d56ca",
+                "source_row_sha256": "a1e136e0016bd81e909c498cf8b13b8bb610df1c960bbf59cb284c1de73ce547",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/27",
+                "source_body_sha256": "086f229e5f0e05e9ce107dd1ba8609727b9466740e07111829d7ea0202716d8e",
+                "source_row_sha256": "f670ea960c8d4962a0f29839ada8a389835406b6b31dc4b7fa757ee8332dcc0a",
+                "matched_text": "Umweltinformationsgesetz",
+                "unresolved_identity": "named-instrument:umweltinformationsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/27",
+                "source_body_sha256": "086f229e5f0e05e9ce107dd1ba8609727b9466740e07111829d7ea0202716d8e",
+                "source_row_sha256": "f670ea960c8d4962a0f29839ada8a389835406b6b31dc4b7fa757ee8332dcc0a",
+                "matched_text": "Umweltinformationsgesetzes",
+                "unresolved_identity": "named-instrument:umweltinformationsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/12",
+                "source_body_sha256": "f1aad3ec969f9a8c295de13b40973494504a80972cdcfe29dc8ec0828498ee84",
+                "source_row_sha256": "1e7a6ecbdc062026548801da50b7ce5a53aab0e4a5e7505cc336bf7de87538b7",
+                "matched_text": "Verordnung (EG) Nr. 1272/2008",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1272/2008"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/11",
+                "source_body_sha256": "f3d0d957d01c58147ebcd01b063b90c29500fbe26fc3dd10e05a0dd56186d418",
+                "source_row_sha256": "14277237aac4075fd19e47334035c1168f2954dd95ac2e1a508e5bf590ce8034",
+                "matched_text": "Verordnung (EG) Nr. 1272/2008",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1272/2008"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/11",
+                "source_body_sha256": "f3d0d957d01c58147ebcd01b063b90c29500fbe26fc3dd10e05a0dd56186d418",
+                "source_row_sha256": "14277237aac4075fd19e47334035c1168f2954dd95ac2e1a508e5bf590ce8034",
+                "matched_text": "Verordnung (EG) Nr. 1907/2006",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1907/2006"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/28",
+                "source_body_sha256": "1cbf043d2db6c00bf57af2842f5cd8904e00f0b3d0e00cd1bf5bee89d833ccd2",
+                "source_row_sha256": "b3592aaadf27c8c780dcfae95c31ba3e2603193fb276f4fbda64846cd7903097",
+                "matched_text": "Verwaltungsverfahrensgesetzes",
+                "unresolved_identity": "named-instrument:verwaltungsverfahrensgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/2",
+                "source_body_sha256": "4efb7792311d07495e9b4d163804e8b86218a357b027892292244baa9cef1075",
+                "source_row_sha256": "496dff228f25fba06cfb2512cd3fa3b9f5d53f9fdef55d9898150e0a5d78c5f9",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/21",
+                "source_body_sha256": "e495f41c37d0ee21ee8eff68682eb130744afae011f751e0d8bb279f2b40d07a",
+                "source_row_sha256": "37e443d783b9351f517246e837d1b822fab50ac8a187dbdf6464623436e449a2",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Vierten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/2",
+                "source_body_sha256": "4efb7792311d07495e9b4d163804e8b86218a357b027892292244baa9cef1075",
+                "source_row_sha256": "496dff228f25fba06cfb2512cd3fa3b9f5d53f9fdef55d9898150e0a5d78c5f9",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/21",
+                "source_body_sha256": "e495f41c37d0ee21ee8eff68682eb130744afae011f751e0d8bb279f2b40d07a",
+                "source_row_sha256": "37e443d783b9351f517246e837d1b822fab50ac8a187dbdf6464623436e449a2",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/1",
+                "source_body_sha256": "e551ce173fb79083ec0374d416db00516632a84b10c3b38fd59e635f6cace4d1",
+                "source_row_sha256": "ad5e66b15b2ba91051a02e447abe77d4d765702e3c0ce6504a47ceef8dd1a3ee",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": "de/statute/muschg-2018",
+                "source_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3",
+                "raw_reference": "Zuletzt geändert durch Art. 13 G v. 22.12.2025 I Nr. 371"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/statute/muschg-2018",
+                "source_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3",
+                "raw_reference": "BGBl I 2017, 1228"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/muschg-2018/fassung-2018-01-01/3",
+            "document_row_sha256": "f69604af509b9fabd0700235e4e4d93917d8b5c4cd76a1466d2436158566f893",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "dfd58d9b17df75502dfc6ee4aeaf6e68f904c32e50e068ec9a31f05653e6c150",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/fassung-2018-01-01/3/inhalt",
+                "source_body_sha256": "1a4a2c313c47becb0d82437af3a7c4bfac3deb581a9ee2e69a5114116c38d649",
+                "source_row_sha256": "665332cb45b02e7ed8f55973f2ca85640e1843d7e462d95053337b9e17d59af8",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/muschg-2018/fassung-2025-06-01/3",
+            "document_row_sha256": "2670b431435cb94f0fe6a367c83edca2003170aa927e6f04ae125b0a0a8ad7e6",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9211a3924a45337a944aeebf2e7f010b309640a5ac984c60c4757c41fcb43012",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/muschg-2018/fassung-2025-06-01/3/inhalt",
+                "source_body_sha256": "e04c7a93d02bc40ba007418b7979cc36c1e0a0e72f4101972f06f60be75f37f0",
+                "source_row_sha256": "ce03900eb6d77e366c68eba3bb1829ff5be60a8e4b12a824c8b25073b03af962",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/statute/rbeg-2021",
             "document_row_sha256": "346642ea53ec13f4d3d3caf39c48e3f1924c457dcff708d6a6217011f9beae9a",
             "row_count": 10,
@@ -36791,7 +37796,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "97b9db27335d6d5aa5bb8212c3e03c6de444600f85499f03632d16fc0fda5391",
+            "findings_sha256": "5103206d6ae3ea17106a0c8a9f518ae0440f3850a9cff2900a79dd2466bfbb2a",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -37295,7 +38300,8 @@
                 "source_body_sha256": "557f43b2d4773845df01f1ab85ff49daceafe11e97cba5a96d443abb0afd5416",
                 "source_row_sha256": "9142244c1b53a901e0d3cb75d520345080cfee8a41942f564aca5ea776f7ce1e",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -39640,7 +40646,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "a7e9e8d8f3a636d0ae076dcd122ca6b751b543319af012a8bf3345e3c54fd4d5",
+            "findings_sha256": "fb17a0e6a5b957768b80e176a688dd31dd08e851ef65b1076c64bfa242a8a45b",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40226,7 +41232,8 @@
                 "source_body_sha256": "7388da1e92fac92dda0d6304704f96442b88bdc56ed8f3ba6f1a8b672c9cf930",
                 "source_row_sha256": "ef258ff6c4cf7d210b3b8c811444635c0703dab3f7b221f04f8e933c78377742",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -40840,7 +41847,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "57045802a6c3bfd07a7bfd01b9f595d5333b0aa85f4eaa2956ab23e71d370b5f",
+            "findings_sha256": "04958d25f79c0db66199e5d46e37f43d1e51d8dee2cf08dfe95480ada2677f03",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -41728,7 +42735,8 @@
                 "source_body_sha256": "b2795d5a483190fb49bd0516ce72af8f3b9a45e0f1654baaf72868bb107239e2",
                 "source_row_sha256": "e913bffb4f7256469f5d32ef29ddd4c4d5cf59cfc8b8424b28fd6b0676672d6e",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -42152,7 +43160,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "08c0664b2e924a21f1e403ab14abe46460d531461041cfcbcb09e869486c876b",
+            "findings_sha256": "33da4da5e0959bcfb74138e79a64a28333fe07a8a424dc77333f5cb3dcb06d1d",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -43223,7 +44231,8 @@
                 "source_body_sha256": "7d24a45f44da11a0ce7fd45270f722ad00ca820c935214391bb968da9bfdec03",
                 "source_row_sha256": "2e158aadbe15a0f8de7ff0d0329e531b2d8488154f2a7448ed042bf57d139197",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -43231,7 +44240,8 @@
                 "source_body_sha256": "a41ff2a52bd9758a7e627a0d4e5da40000488dd77552e939bdfa696f798090fb",
                 "source_row_sha256": "a21b2501fcf598b5794caa4aa61916fff6d067f86b39e2d09b4f95510a7ef6af",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -43239,7 +44249,8 @@
                 "source_body_sha256": "b4820ee4bdcfc2cb1c162ad2252cc77e0c02f39459fac63c099b8c9e53bbcd02",
                 "source_row_sha256": "31aeb727fbaace724dc576a2134d599b56b5b2ed5fda4dc94d81f3967f528458",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -43247,7 +44258,8 @@
                 "source_body_sha256": "41a73898276eb1960677e386f017e7e7d4156f39d760e244f31b58fb0d9a9dc1",
                 "source_row_sha256": "71561b71c06b6432debe74049a5bb8f907ffd2c1845ddb6f435f9c817b269160",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -45844,7 +46856,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "cc8cc0f206fda73251faab8fa70e2c919fe42e96e0f72d738349ef157a17038f",
+            "findings_sha256": "3bd8a187c9d3cf28cda1ae5a7cee8f3a80cc1ab2e7ee381fa225833bf80acdf8",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -48969,7 +49981,8 @@
                 "source_body_sha256": "9c6ad3c24b2fb0c8dbc53824736a31a2f12f66b8ca4f768b45951888a3a7e118",
                 "source_row_sha256": "4504cf7d8c63c7bcbe442e948fffb34364339bf5c5cbcf4c002e6f7ae6edf77d",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -48977,7 +49990,8 @@
                 "source_body_sha256": "e37862fb2bb45b1abebfc27b69f86722dd0ad4efdd5ed9363bf18ce921789f5f",
                 "source_row_sha256": "b095eb5dc20d2a0149279b2922ebc4a681f8991b16e485ff621f8c2d4ea8736f",
                 "matched_text": "Mutterschutzgesetzes",
-                "unresolved_identity": "named-instrument:mutterschutzgesetzes"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -51724,7 +52738,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "0c0dc8fdf772a1f98c7904a058a464ba2bfa4f5fdf59dd8a3cda0b7ba28d8e9e",
+            "findings_sha256": "441f8e9efe8f7b5c7dcdd40e4fc83992dee45d3f5592437dbcc5e95991d5cd60",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -52680,7 +53694,8 @@
                 "source_body_sha256": "8a4d2e5b8cf4982b06504f7e5baa79e73a081b52ecdb36b61cb3a9b2b8879165",
                 "source_row_sha256": "58982e014ebcb039002a92284fbfee2e4ba3e3d8c62755676d53afcde554a6bf",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -52688,7 +53703,8 @@
                 "source_body_sha256": "bff73c8d27c34307109776561342c52bbc61d5c8284bb4a60fcad311ab295c74",
                 "source_row_sha256": "ba0b3de0d32b3758b37767d31af18218d0001238a6bd91d7ca92dd9b303ec57a",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -52696,7 +53712,8 @@
                 "source_body_sha256": "e8de5a0af1a9239efeb4d9c85ba9317b62c2b7df6339c022232e602029388477",
                 "source_row_sha256": "9686664368be1ae249190958094448c00b8a08cc421d61bc142fa7fc2e44a265",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -54016,7 +55033,7 @@
               "law_metadata_changed_by": 1,
               "law_metadata_fundstelle": 1
             },
-            "findings_sha256": "8dc4aad347ddca318738bf8497c524eaa324c7f9cc5555af8f296f968a71ddc1",
+            "findings_sha256": "cb74b6266e325e83324c322f0f061fedf38b067f430c65f0da72616d6532f57b",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -54521,7 +55538,8 @@
                 "source_body_sha256": "df1ef2edf7f297598f1b2acd33457146fe966a6b137ad02f02b1c76d7934ad59",
                 "source_row_sha256": "1b20f07fdfb5604c5fbd2420dc6c1e6a86190dd097c095cabb0cc993ede6589e",
                 "matched_text": "Mutterschutzgesetz",
-                "unresolved_identity": "named-instrument:mutterschutzgesetz"
+                "target_citation_path": "de/statute/muschg-2018",
+                "target_row_sha256": "22b07a88de4932c08401c1f8541efcd1bec2afc9a0e9afe363bb9200ac7cc9e3"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -56973,7 +57991,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "059e9a2881af3e030f848d493eed91eae2209b8a1c1db58b6a23c689e524f433"
+        "receipt_sha256": "272315e0c5aca789d67458bb709f937a1c7b59cc355bbf79fd899e0b2576b432"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -57234,6 +58252,17 @@
           "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
           "matched_text": "§ 63 EStG",
           "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-1d0c6a5405f62dac77e0",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung/document-1",
+          "source_body_sha256": "d5a81cfd585d94b3e67c4c13f7c41080cd5526b67e794be3c5a24522c2133ee4",
+          "source_row_sha256": "7b037404d34cc1f3cfe2eda5fb9ab049107a523ef0039ae48223b593fe265f22",
+          "matched_text": "§ 5 Absatz 1 Nummer 11b versicherungspflichtig sind, durch Ableistung eines Freiwilligendienstes nach dem Bundesfreiwilligendienstgesetz",
+          "candidate_target_citation_path": "de/statute/bfdg/5",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-1d6c5f8222688638d7d7",
@@ -59138,6 +60167,16 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-a06e8371458c53b96b3f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+          "source_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+          "source_row_sha256": "0b1f3a2e137cf166b06d6d065aa118a1ce996c9f475a5f08558602978b292917",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-a089160c72877d8aa6c1",
           "program": "de/kindergeld",
           "mechanism": "law_metadata_changed_by",
@@ -59231,6 +60270,16 @@
           "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
           "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. b EStG",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-a63bd12081bbcd155e0e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30/document-1",
+          "source_body_sha256": "a334cbf1a73ac67366e8a325d9e20b2d6969aaaf4461af69f53da78575ff7b10",
+          "source_row_sha256": "0b1f3a2e137cf166b06d6d065aa118a1ce996c9f475a5f08558602978b292917",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-a908aed35b7d1ceeda30",
@@ -60120,7 +61169,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f"
+      "receipt_sha256": "c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -60136,10 +61185,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "85515dfef80a514b602ab9d8058f65125d84dcfa7b6e3dd372a62e1205dd7e97"
+          "receipt_sha256": "214e6868eb75f1c8abcd9f6dc11c45078ab76d6bf6cec0deb41396712a3720d1"
         },
         {
           "id": "de-subject-002",
@@ -60149,14 +61198,14 @@
           "source_id": "bzst",
           "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "0feadfedb3b5e655de44f90c0f2e04b14b3fe109ad7faec8f484d2f80ff0fad3"
+          "receipt_sha256": "8f6b4f034c97e32ea0acaca063ce15fcc91c0b4929a4abf03b1d8938a1481a5f"
         },
         {
           "id": "de-subject-003",
@@ -60166,14 +61215,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "d58e27cbb5de9fa96ea923ccee99faaae4a8a8ddd158628977c97fad25567d30"
+          "receipt_sha256": "210ccb872508a4fc7968b77827e2593e8426ee5522d3f660a87b1d03e8ff70f5"
         },
         {
           "id": "de-subject-004",
@@ -60183,14 +61232,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
-          "byte_count": 214571,
-          "content_sha256": "c7ba4971efd2c5d98ca089117ee6d409d2881d6c178b64261d6ffe0e55bb5a32",
-          "receipt_sha256": "e3611fe34062530364c02e52ed5b723802775b7d510070c1a356d32a82266aa1"
+          "byte_count": 215724,
+          "content_sha256": "2036debd79bacdd8f1d3ffcfb7199068ea9fb75b5420077115b17f3eb18ab984",
+          "receipt_sha256": "0173029a8bcdafb39b86e778464e735e165084944e9e30cb3df6f9a96c78d501"
         },
         {
           "id": "de-subject-005",
@@ -60201,14 +61250,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "7132ca46a39ec2cc0956e9e04fd5ec74dfadd3aeb9885408d76b05499d98a66e"
+          "receipt_sha256": "ccc443244e134e080c39a6389288d202d0460dc4dec98d1a7dceef79dc069fb9"
         },
         {
           "id": "de-subject-006",
@@ -60218,14 +61267,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "a9799220069fc72769de25572047da20c66fa9cb9f5d0ba251888d315330d0e8"
+          "receipt_sha256": "0cccaae8490e27fb073e0cce79563c556703c57d45eb73bc777fd196e035d52a"
         },
         {
           "id": "de-subject-007",
@@ -60235,10 +61284,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-10T10:29:32Z",
-          "state": "unretrieved",
-          "reason": "URLError: timed out",
-          "receipt_sha256": "01e78277a60819a43c1a05e1fe3b422b4f5b695c54be3e7890b54f0513d69b73"
+          "captured_at": "2026-09-10T14:51:17Z",
+          "state": "retrieved",
+          "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
+          "http_status": 200,
+          "content_type": "text/html",
+          "byte_count": 7086,
+          "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
+          "receipt_sha256": "3c105ef480a29f11e2edbf29854aef9fd7539b89f6b5947857687367552b05c3"
         },
         {
           "id": "de-subject-008",
@@ -60248,10 +61301,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "0360fd818515667c788565e8b4cf0cff11dde30217cf44a5c310782a2ab9c2d6"
+          "receipt_sha256": "2e9fc5a7b0aa641e82a999f1faf0c3549d8a91c4606642175fe539d0cface3a8"
         },
         {
           "id": "de-subject-009",
@@ -60261,14 +61314,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "7d1797a15fd44b9fe7128d623a401646319455574d433ec33873e7823f85d302"
+          "receipt_sha256": "3eb0aa1ed316c2eca9e52e11cd1362b8bf2d71ac1239c7450b9d3dac65a0e9e6"
         },
         {
           "id": "de-subject-010",
@@ -60278,14 +61331,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "4dc8889845e16118b49d561735374673eb732a09fd131b9d5c7f63a1d3dd46b0",
-          "receipt_sha256": "bf8632cf63b3b696c36ce0932a7f6737a0dbc985ff496bfa3f5032ff634b3514"
+          "receipt_sha256": "c0923c81058155ca68fedb54bfb9f8197dea352d8e1e43f11b6618468579cd98"
         },
         {
           "id": "de-subject-011",
@@ -60295,14 +61348,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "1e533769501975598b36c8a48dc24e9f3222dc5f488730d04d233fa6896824fb",
-          "receipt_sha256": "cede28693b62d4fc8f50713884e941fa4a884588b82e3152d971ddb3040d185a"
+          "receipt_sha256": "67750f34cbace3264fb0ba302c04271633adeaf916e990f3e2aef86f78409b50"
         },
         {
           "id": "de-subject-012",
@@ -60312,10 +61365,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "ffb0b3b0e6f77f55844755505fcf63018a3b1515b7fe62785639830e03c032b6"
+          "receipt_sha256": "997b1226c8bf995b32c869ba1d444f327a9d5c3812403a9d0ca68df2643f4f25"
         },
         {
           "id": "de-subject-013",
@@ -60325,14 +61378,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "a1a07b451fb267ca50c186fc6ac3713835ebaab96593e005001ed3461ace5968"
+          "receipt_sha256": "f617b384e9b41ff898f71d793552539189f02792be120dbe040cdab911c83698"
         },
         {
           "id": "de-subject-014",
@@ -60342,10 +61395,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-10T10:29:32Z",
-          "state": "unretrieved",
-          "reason": "TimeoutError: The read operation timed out",
-          "receipt_sha256": "0b0d1d7598714c816025ee5d2934d0194ddc0ee0a46a96ef644563ea95f060e4"
+          "captured_at": "2026-09-10T14:51:17Z",
+          "state": "retrieved",
+          "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
+          "http_status": 200,
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 532905,
+          "content_sha256": "dac1daae728d203a8f6a16847a9f129e9a6240ec527330754eb7c52bdc417517",
+          "receipt_sha256": "ecf09efe9e7dc113097f10013bb49eb615fd7af7bcadf3522456683cdb892b15"
         },
         {
           "id": "de-subject-015",
@@ -60355,10 +61412,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "77713b77911e39465a7d74eb94bc25f2bb121af7c2b9a2ca235a292aa9335f5b"
+          "receipt_sha256": "a0037f5240eeb32de9f17f037b337158dfaff0d964e92f17097a31c13640d00e"
         },
         {
           "id": "de-subject-016",
@@ -60368,14 +61425,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "c60bf163baa40d365ff55a792a313a644d058d97a170da679910052bb7cc5e39"
+          "receipt_sha256": "4477185d627adf52613557507a19df85b008be2bb0c25438033195cc900d260d"
         },
         {
           "id": "de-subject-017",
@@ -60385,17 +61442,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T10:29:32Z",
+          "captured_at": "2026-09-10T14:51:17Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "d3e806491e9d296d4d8d5a9022e7903c07329cff9e2f4b95be36dda9b55c248f"
+          "receipt_sha256": "c64422c4a7ed5473e62445fc8a913d7230461da856fa0da18543d9f437004a46"
         }
       ],
-      "receipt_sha256": "0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb"
+      "receipt_sha256": "c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -60699,6 +61756,21 @@
           "title": "BFH, III R 36/21, 2023-01-19: Allgemeine Leistungsklage des Jobcenters gegen die Familienkasse wegen Erstattung"
         },
         {
+          "id": "de-kg-instr-2e123c165d3631db",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-a06e8371458c53b96b3f",
+            "de-corpus-a63bd12081bbcd155e0e"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30",
+          "row_sha256": "f955eba8a8a0f885beb4cecf507d3a04eee29aee41540847879a614a27cc8235",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind",
+          "document_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30",
+          "title": "BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind"
+        },
+        {
           "id": "de-kg-instr-2e3e1e94e8491798",
           "status": "pending",
           "discovery_refs": [
@@ -60729,6 +61801,22 @@
           "citation_label": "BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE",
           "document_citation_path": "de/guidance/bfh-vi-r-72-11-2012-05-10",
           "title": "BFH, VI R 72/11, 2012-05-10: Ausbildung eines Soldaten auf Zeit zum Kraftfahrer der Fahrerlaubnisklasse CE"
+        },
+        {
+          "id": "de-kg-instr-30c321b1f99eca45",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1d0c6a5405f62dac77e0"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung",
+          "row_sha256": "69ccc78f4fed6b64530183787d9fb8a85817c17ef24bfeb4206ffcf393d47740",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371",
+          "document_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung",
+          "title": "Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371",
+          "date_document": "2025-12-22",
+          "document_type": "Änderungsgesetz"
         },
         {
           "id": "de-kg-instr-32a81be6d35e33be",
@@ -62113,8 +63201,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f",
-            "subject_matter_search": "0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb",
+            "corpus_release": "c4814222c48617cbbe519694be9d2e18c67ee396d135a395624f6db779a13e7a",
+            "subject_matter_search": "c45a8b108c4ca283a4689721a2ea9e403d7225259e3046523f62b18d8cb3a390",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -62847,5 +63935,5 @@
       ]
     }
   ],
-  "receipt_sha256": "61997827b45b3716f0bc2814f2c29bd76cbea20c4e32b59e6e689d53bbb87b56"
+  "receipt_sha256": "3db66943c0f8163aa57a8ce0cd41ff93986fcb2a32e8782e9fb607ab09de0f2f"
 }

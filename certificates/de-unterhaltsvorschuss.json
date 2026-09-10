@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "5571d4a4cd0e2ba23b1749279655e7be3e7e960898eb62b69e5ab7889bb05d89"
+      "sha256": "4979cb2f208c4d67eb2dcfc7a344b8bb826e378df316ca2feb1879699c2d9cc4"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "6a05541674ebe8c7b7ae9b04cb7ea2d6d5702aabf969c97fbaf360154f30e1fe",
+      "sha256": "92d1780f4291a06073a4040f2e8fbd2b7f5d2b8372f3bd1a321c61c7e8ce46a9",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "4a2b30a8f63d26be8736d2095e230b4a1d8ac6a09b5af9d9c4fc90bb06c1e1ec"
+      "sha256": "e38a699c7edf74c5de612c0b2ddc8d39585f0b0c4817aa18a868c0cca162ae7e"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-09-kindergeld-threshold",
+      "corpus_release": "de-rulespec-2026-09-10-kindergeld-maternity",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -378,7 +378,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "cb77e8032cff7c5ab3476ddb7c18d91dd5b7b46685e9334395ddf1aead36fa32",
+      "subgraph_sha256": "2e462d47511bc0793e60343ef51ae22e9227ff63fb5bcd31c2a8a83fc6be2189",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
