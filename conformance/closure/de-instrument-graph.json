@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-10T21:45:07Z",
+  "generated_at": "2026-09-10T22:48:04Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc"
+    "sha256": "3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-10-kindergeld-generations-service",
-      "commit": "4779d3deb7db854bdb6e702abc523dee8d95fb31",
-      "release_content_sha256": "4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-10-kindergeld-generations-service/4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.json",
-        "raw_sha256": "aa969bbf7a9aeaa434cebf568d87f7e6e04a8ee91aff117eccae08a3c07b1c09",
-        "content_sha256": "4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982"
+        "path": "releases/de-rulespec-2026-09-11-kindergeld-illness-precedents/1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c.json",
+        "raw_sha256": "2dc60ae5b5b7968b25298e48b69b63769878c4cc110aea397f63d971aa1336ce",
+        "content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c"
       },
       "scans": [
         {
@@ -189,6 +189,19 @@
             "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
             "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
             "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-illness-precedents.json",
+            "sha256": "cb645cdb33c96563e9868759bc146eb76fdbfc4ddb5e092690231204a24ac077",
+            "row_count": 12
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+            "sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+            "row_count": 12
           }
         },
         {
@@ -660,23 +673,23 @@
           }
         }
       ],
-      "scanned_row_count": 9882,
+      "scanned_row_count": 9894,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9882,
-        "body_row_count": 9691,
-        "mapped_row_count": 9882,
+        "row_count": 9894,
+        "body_row_count": 9697,
+        "mapped_row_count": 9894,
         "unmapped_row_count": 0,
-        "act_count": 231,
+        "act_count": 237,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6777,
+          "explicit_cross_reference_body": 6827,
           "law_metadata_changed_by": 34,
           "law_metadata_fundstelle": 42
         },
-        "row_scan_sha256": "c15dadc2bcd196ed2836417483fd720473c3ed42c80b13f0912f395e0a2230c1",
-        "canonical_index_sha256": "08ae2fa21fc8813b2636acd5b1909c254e7b776e1f9d6eb2ebc4b8873a30916f",
-        "per_act_sha256": "8aa521079e2f7fd6fad732e5454f51bbb139f118ca7e5609ca331f56fe6b0da0",
+        "row_scan_sha256": "0a84412af60d83517738d055d71e042611934fc289ac838d18deaa6a2ca2c6b2",
+        "canonical_index_sha256": "9c5bf6decb80db7a43e4dcd9d8ea10c81e5dafc422c77423417dc16e6689a86b",
+        "per_act_sha256": "8db803e9f38c5e174935f9a2b12e9cd7d0bcf8e430e335b7ec0b178fe66240ff",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -2184,6 +2197,115 @@
                 "source_row_sha256": "46da04caf779a9b435ddbdde9395f4910bd6000d303b6cf2bdaca0cd5dc04806",
                 "matched_text": "Steueränderungsgesetzes",
                 "unresolved_identity": "named-instrument:steueränderungsgesetzes"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07",
+            "document_row_sha256": "d26683155904c4b3209e6ea551e3ec474a36df00f74e2019c0737e07f53763d3",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 11,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "c76b35bb252dd71ce0b78cd74eb98d3b9efc974574702b5223d516d7e7360a23",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Abgabenordnung",
+                "target_citation_path": "de/statute/ao-1977",
+                "target_row_sha256": "19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Arbeitsgenehmigungsverordnung",
+                "unresolved_identity": "named-instrument:arbeitsgenehmigungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Ausländergesetz",
+                "unresolved_identity": "law:auslaendergesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Ausländergesetzes",
+                "unresolved_identity": "law:auslaendergesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "SGB 3",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "SGB III",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+                "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+                "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+                "matched_text": "Zuwanderungsgesetzes",
+                "unresolved_identity": "named-instrument:zuwanderungsgesetzes"
               }
             ]
           },
@@ -3823,6 +3945,180 @@
             ]
           },
           {
+            "document_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19",
+            "document_row_sha256": "cad623394464c29b03992c25062b559068165cf2ba1ec7fc666c54accc266a75",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 6,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "b0020d41395ed93311b35c0190d3a2e4c3d1ecf91de9bc86775835c793f869f5",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "SGB IX",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "Schwerbehindertengesetzes",
+                "unresolved_identity": "named-instrument:schwerbehindertengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "Zweiten Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+                "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+                "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27",
+            "document_row_sha256": "48b7fcdc77188c1fc088076af3d43bba8f59a35615a79324eb02c8fc9a3e052d",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 11,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "045500354f4a250aa3fd856beef7450e8b420c33653da286dff17f1ca9a03a6b",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Achten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "SGB 12",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "SGB IX",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "SGB XII",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Schwerbehindertengesetzes",
+                "unresolved_identity": "named-instrument:schwerbehindertengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Steueränderungsgesetzes",
+                "unresolved_identity": "named-instrument:steueränderungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Zwölften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+                "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+                "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15",
             "document_row_sha256": "f8f37b6d90e74afe818c88512014814610f4b9182417df6846d26bd39e5216e0",
             "row_count": 2,
@@ -4549,6 +4845,47 @@
             ]
           },
           {
+            "document_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+            "document_row_sha256": "f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 3,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "31d8a7505a3d94d2ab66b85ca9f44193ece606b7a1f4088684069e43b34c4373",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+                "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+                "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+                "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+                "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+                "matched_text": "Einkommensteuergesetz",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+                "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+                "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/guidance/bfh-iii-r-68-11-2012-05-24",
             "document_row_sha256": "05ad072e8622fbdb85a9a9efd01859374a3fb3f8e5fd20a039f7348a4e733548",
             "row_count": 2,
@@ -4747,6 +5084,55 @@
                 "matched_text": "Zwölften Buches",
                 "target_citation_path": "de/statute/sgb-12",
                 "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27",
+            "document_row_sha256": "5aa0da376993e79c2695c727d99a3734d62c6928c5807908ca0f733fecf2e683",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 4,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "06cc673b4cc36cb27f0bc5ffcb6927c810315d4f3a9b66d5f26b942fc60bfc3e",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+                "source_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+                "source_row_sha256": "2a5d6c932261522cee0c8acb55464c709d6b1cb62c00f46ad41d6711396edb1b",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+                "source_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+                "source_row_sha256": "2a5d6c932261522cee0c8acb55464c709d6b1cb62c00f46ad41d6711396edb1b",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+                "source_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+                "source_row_sha256": "2a5d6c932261522cee0c8acb55464c709d6b1cb62c00f46ad41d6711396edb1b",
+                "matched_text": "Grundgesetz",
+                "unresolved_identity": "named-instrument:grundgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+                "source_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+                "source_row_sha256": "2a5d6c932261522cee0c8acb55464c709d6b1cb62c00f46ad41d6711396edb1b",
+                "matched_text": "Zivildienstgesetzes",
+                "target_citation_path": "de/statute/ersdig",
+                "target_row_sha256": "14abfdae58f7d56d86bd049a71b18566e3c38c2b20cd4e28c4feb3722f3c078a"
               }
             ]
           },
@@ -5584,6 +5970,149 @@
                 "matched_text": "Einkommensteuergesetzes",
                 "target_citation_path": "de/statute/estg",
                 "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18",
+            "document_row_sha256": "69d00bf5ab8228281a6f500985e5758e64eeda3e22576e009b61eb5746a1cd40",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 15,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "a927f54d4af3533eac947009da7ebbed71437f576a05a3265421a8eec89173d9",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Achten Buch Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Einkommensteuer-Durchführungsverordnung (EStDV)",
+                "target_citation_path": "de/regulation/estdv-1955",
+                "target_row_sha256": "d16b26eacb7efd952cd835a62b66b18d39daa5e0c0581fdd7dcbd4c6793133ec"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Einkommensteuer-Durchführungsverordnung",
+                "target_citation_path": "de/regulation/estdv-1955",
+                "target_row_sha256": "d16b26eacb7efd952cd835a62b66b18d39daa5e0c0581fdd7dcbd4c6793133ec"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Einkommensteuergesetz",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Fünften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "SGB 5",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "SGB IX",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "SGB V",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "SGB VIII",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Schwerbehindertengesetzes",
+                "unresolved_identity": "named-instrument:schwerbehindertengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+                "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+                "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+                "matched_text": "Steuervereinfachungsgesetzes",
+                "unresolved_identity": "named-instrument:steuervereinfachungsgesetzes"
               }
             ]
           },
@@ -61094,7 +61623,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "3eab68aea4cdbbc6e42d3f01f68a25d9cbfb2f32f72ecede87f01d75ec09d636"
+        "receipt_sha256": "edd6532da7ded38a1389d7481ca6ff3543d47e14bfc5333653757cf0fd4374ef"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -61262,6 +61791,16 @@
           "source_row_sha256": "87bf4a4a169c92c8417c08f7a1c135c848155ac2b36f4d77a99efc753e144812",
           "matched_text": "§ 66 Abs. 3 des Einkommensteuergesetzes",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-0fcbcb7664fe9d27d1ab",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+          "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+          "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-111c2e5574197a8e8017",
@@ -61601,6 +62140,16 @@
           "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
           "matched_text": "§ 68 Abs. 1 Satz 1 EStG",
           "resolved_citation_path": "de/statute/estg/68"
+        },
+        {
+          "id": "de-corpus-2c23960b9c4604f17fb3",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+          "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+          "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-2d468d2aa05d885c6717",
@@ -62835,6 +63384,16 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
+          "id": "de-corpus-7b4314f7be6ab8bf0b8f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+          "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+          "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+          "matched_text": "§ 66 Abs. 2 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-7bd10338303e55be1c0b",
           "program": "de/rv-employee-contribution",
           "mechanism": "explicit_cross_reference_outbound",
@@ -63585,6 +64144,16 @@
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
+          "id": "de-corpus-afbef9e671489df19b64",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+          "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+          "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-afcb95a25eb1fc7228ae",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -63889,6 +64458,17 @@
           "source_row_sha256": "e45fccc0076b9a8af8e94ca87d9b948a1a78a0348a9d6d419146dc54356f4433",
           "matched_text": "§ 62 Abs. 2 des Einkommensteuergesetzes",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-d114ab925636568ac2f1",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+          "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+          "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
+          "matched_text": "§ 64 Abs 1 Nr 1, EStG",
+          "candidate_target_citation_path": "de/statute/estg/64",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-d13b418c6ee98fc0d97f",
@@ -64266,6 +64846,16 @@
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
+          "id": "de-corpus-f4513c4dc19bdbef458e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+          "source_body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+          "source_row_sha256": "2cf4faced22e1377280cae8da93b35d6685f65c8b9b7b85e5aed198e60159043",
+          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/70"
+        },
+        {
           "id": "de-corpus-f45fc2be2eafde486fd7",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "law_metadata_changed_by",
@@ -64404,6 +64994,16 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
+          "id": "de-corpus-ff8e1ba3ff32fb1fbbed",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+          "source_body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+          "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
+          "matched_text": "§ 66 Abs. 2 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-ffa95c0c9c03160d0c67",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -64423,7 +65023,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7"
+      "receipt_sha256": "f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -64439,10 +65039,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "590897e3479848fe4aeb76be8ac7ce4609032bc964acafff588898adcd5505f3"
+          "receipt_sha256": "66e1ba7e2f6ecb34a14c8df85e3e90673d35de5c993bf5d0145274870b89100e"
         },
         {
           "id": "de-subject-002",
@@ -64452,14 +65052,14 @@
           "source_id": "bzst",
           "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "9a8d80f8a831fe0a2b20d0c338e5234301a00bda30f0b7750bc0ac4c6e456f85"
+          "receipt_sha256": "07947db4f67c87913748685d6344ffca6008fbf12c4bcbde4e9e5355a8f9ee7e"
         },
         {
           "id": "de-subject-003",
@@ -64469,14 +65069,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "399c65cad3e786ed460655d1ad493c28d6458ff63547b488247f217a3e20cb2a"
+          "receipt_sha256": "3b79bb6d6a15cbeb0ba8f705510becdd8cae93fe6d2cc2ba8de98ba7924aec44"
         },
         {
           "id": "de-subject-004",
@@ -64486,14 +65086,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 214567,
-          "content_sha256": "c049add4d20e055ea44be8d7559d188a22a167109a0b1e1b6debf21b8c8dbd70",
-          "receipt_sha256": "b87d661e52142645aeaeb2dedf86e3dce65e886f2c76ad52d26238901ccecf73"
+          "content_sha256": "33e6d5dbaae986ede2d67d09085b05525c3fbd49891327ef38f808ca079decab",
+          "receipt_sha256": "c407eb213a6e25de166178aa4d47844d6901f657cd8edd01560d04615819a8e8"
         },
         {
           "id": "de-subject-005",
@@ -64504,14 +65104,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "9ed8e950ac30ca86c7b33cf30a8b78dbc0c9ba924eb7a1c679e8ab322cdcc4b7"
+          "receipt_sha256": "660d95ecd5dc2d5d1e877ad45bad5a080f42b460ccccdc2ebfc7453a7aac2791"
         },
         {
           "id": "de-subject-006",
@@ -64521,14 +65121,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "e0a96613e1023539b173f72eb76e3c31654280a9f0f33ff93433c0093db88eb4"
+          "receipt_sha256": "f18fab4f27d8799f64fc36b0c154ce107f7ac0304d7018f3f7da84d89256018e"
         },
         {
           "id": "de-subject-007",
@@ -64538,14 +65138,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "b67d3f7ac90b46d917eeeb68d6b922866e41265e996c30ef4b226e3f962c02cd"
+          "receipt_sha256": "e497c543016aca250127317ef308a7e42b733342a7c54d7069e716a41e28705a"
         },
         {
           "id": "de-subject-008",
@@ -64555,10 +65155,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "376f1e3bea18de9854c9309a33228973d65a2ec0e9fbcd2d10cb7b8efb0cd2b0"
+          "receipt_sha256": "033a456038f51496602969e90334ab77eca4b8cb39214358373107ac9e1a417c"
         },
         {
           "id": "de-subject-009",
@@ -64568,14 +65168,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "d0a8a7688249611166d6fbc5cad52ffc7a394e6348e958f226b8d6f2eec5029b"
+          "receipt_sha256": "60af087d079b682a0062927f264798633370c0185e212c78711b76c4d1cd0d68"
         },
         {
           "id": "de-subject-010",
@@ -64585,14 +65185,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "4dc8889845e16118b49d561735374673eb732a09fd131b9d5c7f63a1d3dd46b0",
-          "receipt_sha256": "8417471bef4aaed3a6e95b9b1574f85d7fff22b890114a42111ad0100da0770b"
+          "receipt_sha256": "8b574ee9cdd911d334078f79bd1c42b1cc87f1c00244e92057f64ce626536ca0"
         },
         {
           "id": "de-subject-011",
@@ -64602,14 +65202,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "1e533769501975598b36c8a48dc24e9f3222dc5f488730d04d233fa6896824fb",
-          "receipt_sha256": "438a0a9dd9d12ab1ece0a7da1e9bb1a60a9d78bf83ef2e6196e4828b8dc32b8e"
+          "receipt_sha256": "c4eff79e3a9c5d080118eb2dfe205045e979a6dd53e8bfbbe9784e6673425b21"
         },
         {
           "id": "de-subject-012",
@@ -64619,10 +65219,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "b669451750487538ae107b176527717d728dfc0a0efc540218432977226c741b"
+          "receipt_sha256": "116f14bf42daf79c3de8650fc1a7b1a9d2b8a02150d568fc649d85454b873836"
         },
         {
           "id": "de-subject-013",
@@ -64632,14 +65232,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "5ba2ae7b4a3ef16ff72ebb42d3e030d8a740b3f84d7c0013cc5dd203878895fd"
+          "receipt_sha256": "347f38b351cd672fb417198ae7b717c3d22e3e5047825dfe7f70b3b850821a40"
         },
         {
           "id": "de-subject-014",
@@ -64649,14 +65249,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "dac1daae728d203a8f6a16847a9f129e9a6240ec527330754eb7c52bdc417517",
-          "receipt_sha256": "99188ceca6d589e8182b12605aa84a9a0496188b469c3e36e3ed353ddfa9aa04"
+          "receipt_sha256": "ae72ccecd6e4f1b1eb4a202ec2ef758f6c2b76444ed876e4594a22c3fa3f1d9e"
         },
         {
           "id": "de-subject-015",
@@ -64666,10 +65266,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "894a26eb50d76f6f4f841bd12e08db35f30ee6e8bafbd6de4e2a4dd6ddbfd4a8"
+          "receipt_sha256": "6ffbe99f7e0ef04880cf18f88f99574ce221821ae6f203fab3db8921615db1ab"
         },
         {
           "id": "de-subject-016",
@@ -64679,14 +65279,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "152951f6fb3941586f44db280982181c7ec4350ff80947aa5495e2f0c97daadc"
+          "receipt_sha256": "ee4438e3dec6659d29671928508797a6fc950ca0b3e43e0a458db51017f9d84b"
         },
         {
           "id": "de-subject-017",
@@ -64696,17 +65296,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T21:45:07Z",
+          "captured_at": "2026-09-10T22:48:04Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
           "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "bbb4153d5dbe2c97f7401744e06893858a54270ab07cca069f17be876b890d47"
+          "receipt_sha256": "6275c8bbbd3348dca672cf7252aa284de66e161c2f13881b9b02b86c4a8f720a"
         }
       ],
-      "receipt_sha256": "6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4"
+      "receipt_sha256": "70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -64798,6 +65398,21 @@
           "citation_label": "BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen",
           "document_citation_path": "de/guidance/bfh-iii-r-57-13-2015-11-05",
           "title": "BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen"
+        },
+        {
+          "id": "de-kg-instr-11b2fee91a7250af",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-0fcbcb7664fe9d27d1ab",
+            "de-corpus-7b4314f7be6ab8bf0b8f"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+          "row_sha256": "f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung",
+          "document_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+          "title": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung"
         },
         {
           "id": "de-kg-instr-13c9a46f75b99498",
@@ -64983,6 +65598,20 @@
           "raw_references": [
             "Zuletzt geändert durch Art. 4 G v. 23.5.2024 I Nr. 170"
           ]
+        },
+        {
+          "id": "de-kg-instr-29a6a70e18440300",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-d114ab925636568ac2f1"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18",
+          "row_sha256": "69d00bf5ab8228281a6f500985e5758e64eeda3e22576e009b61eb5746a1cd40",
+          "document_class": "guidance",
+          "citation_label": "BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe",
+          "document_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18",
+          "title": "BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe"
         },
         {
           "id": "de-kg-instr-2b121051486857aa",
@@ -65753,6 +66382,21 @@
           "title": "BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung"
         },
         {
+          "id": "de-kg-instr-8d943b84c0c798b3",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-2c23960b9c4604f17fb3",
+            "de-corpus-afbef9e671489df19b64"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27",
+          "row_sha256": "48b7fcdc77188c1fc088076af3d43bba8f59a35615a79324eb02c8fc9a3e052d",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres",
+          "document_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27",
+          "title": "BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres"
+        },
+        {
           "id": "de-kg-instr-9728a65b720a8ab3",
           "status": "pending",
           "discovery_refs": [
@@ -66282,6 +66926,20 @@
           ]
         },
         {
+          "id": "de-kg-instr-df39c3eca6f41704",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-f4513c4dc19bdbef458e"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07",
+          "row_sha256": "d26683155904c4b3209e6ea551e3ec474a36df00f74e2019c0737e07f53763d3",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse",
+          "document_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07",
+          "title": "BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse"
+        },
+        {
           "id": "de-kg-instr-e0b7829aa64b55e5",
           "status": "pending",
           "discovery_refs": [
@@ -66514,8 +67172,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7",
-            "subject_matter_search": "6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4",
+            "corpus_release": "f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0",
+            "subject_matter_search": "70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -66691,6 +67349,20 @@
           "document_citation_path": "de/statute/bkgg-1996",
           "legal_authority_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "fundstelle": "BGBl I 1995, 1250, 1378 (1996 I 714)"
+        },
+        {
+          "id": "de-uhv-instr-11b2fee91a7250af",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-ff8e1ba3ff32fb1fbbed"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+          "row_sha256": "f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung",
+          "document_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+          "title": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung"
         },
         {
           "id": "de-uhv-instr-13c9a46f75b99498",
@@ -67238,5 +67910,5 @@
       ]
     }
   ],
-  "receipt_sha256": "df55f3bb8a449147ba75c316c9ba0bd84818800ae66ec9a7b316577080c719e8"
+  "receipt_sha256": "1e4ffb7dc4c496f3a4b624cad630d4383b852f43d305da4daa33607d973c56e5"
 }

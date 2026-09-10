@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = '73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc'
+SOURCE_SHA256 = '3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-10-kindergeld-generations-service'
-RELEASE_CONTENT_SHA256 = '4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982'
-RELEASE_SELECTOR_SHA256 = '5d048faacf21ec2df0934a56b9af629787810fd44cda37044258fb37d9d84f71'
-CORPUS_COMMIT = '4779d3deb7db854bdb6e702abc523dee8d95fb31'
+RELEASE = 'de-rulespec-2026-09-11-kindergeld-illness-precedents'
+RELEASE_CONTENT_SHA256 = '1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c'
+RELEASE_SELECTOR_SHA256 = 'a8f4521f60195362fa2aec2034a44aa4777775572a4a13bc906332090d4ba945'
+CORPUS_COMMIT = '279e27503c00ce1fab35809d069c076d3abad362'
 RULESPEC_COMMIT = "212bba29ea06d0166037e4cc24ba4d03b4dd6c02"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -108,6 +108,7 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json': ('f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d', 2),
     'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json': ('981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47', 2),
     'data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json': ('f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d', 2),
+    'data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-illness-precedents.json': ('cb645cdb33c96563e9868759bc146eb76fdbfc4ddb5e092690231204a24ac077', 12),
     'data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70', 172),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json': ('b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2', 2),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-bilateral.json': ('038860404e92952a4064d42413160b7a152f3d99aee28cacd7f49aed112da45f', 44),
@@ -159,6 +160,7 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl': ('847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050', 2),
     'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl': ('4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b', 2),
     'data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl': ('a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408', 2),
+    'data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl': ('1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee', 12),
     'data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528', 172),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl': ('29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df', 2),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl': ('f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e', 44),

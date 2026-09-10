@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc
+    sha256: 3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4779d3deb7db854bdb6e702abc523dee8d95fb31
-    release: de-rulespec-2026-09-10-kindergeld-generations-service
-    release_content_sha256: 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982
+    commit: 279e27503c00ce1fab35809d069c076d3abad362
+    release: de-rulespec-2026-09-11-kindergeld-illness-precedents
+    release_content_sha256: 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -81,6 +81,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
       sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
+      sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
+      row_count: 12
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -259,10 +262,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 9077324716dcc3627b13c34a6d8c7fbc970fef64f6106d9e18df802295663ed0
+    snapshot_sha256: cb8efb80cbb4e328391436bec71c048a56437ff1374f72d1609360a2522f9e89
     channel_receipts:
-      corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
-      subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
+      corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
+      subject_matter_search: 70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

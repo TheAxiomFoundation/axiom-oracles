@@ -380,3 +380,25 @@ FGO § 118(2), rather than defining a universal conclusive flag. The complete
 five-page decision is retained in the review; source-defined causation and its
 statutory prerequisites remain unencoded. Exact BStBl II issue/page verification
 and exhaustive discovery remain open.
+
+## Additional illness-prognosis precedent
+
+The complete BFH III R49/18 decision (12 November 2020, paragraphs 1–18)
+is retained in `illness-prognosis-source-review.json`, alongside the complete
+A17.2 section that cites it. An unforeseeable return to training is not
+established as the waiting-for-training ground merely by a general future
+intention. The remand requires the separate disability assessment; it does not
+award that ground automatically or close its causation/resource prerequisites.
+
+Paragraph 16 disregards a later medical certificate that says nothing about the
+earlier disputed period. A later-issued record with actual retrospective
+findings is a distinct case; issuance date alone must not become an exclusion.
+The decision expressly leaves the training-intention declaration's possible
+retroactivity open. Its discussion of illness duration and both SGB IX definitions
+must be read with the later III R41/19 prognosis formulation already reviewed,
+without inventing an automatic cutoff measured from diagnosis. Native repair
+cases must preserve these distinctions.
+
+The complete III R43/20 review also requires preserving an initially supported temporary illness prognosis for earlier months when a later prognosis changes (paragraph28). Nine indirect illness/training precedents are enrolled pending; six original PDFs are in corpus PR684, with publication and original-source legal review still separate.
+
+The complete III R23/22 review is retained in `conformance/closure/de-discovery-2026-09-08/annuity-capital-source-review.json`. It distinguishes annuity income from returned existing capital, uses statutory earnings shares, and preserves the month-specific assessment. Paragraph33 expressly leaves the savings-allowance question open. Twelve additional contextual/comparison authorities are enrolled pending original-source review; this is not an assertion of independent bearing or verified BStBl II membership.

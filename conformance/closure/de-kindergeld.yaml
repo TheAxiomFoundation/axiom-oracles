@@ -41,12 +41,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 73de6ff5cb58b0086ef970ba67e94e3fed6d5fd895c7b68e0ef6850d183c27dc
+    sha256: 3782835db7ee45636e03d9499e85b64664337eb2db733434b357a8d9428085c6
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4779d3deb7db854bdb6e702abc523dee8d95fb31
-    release: de-rulespec-2026-09-10-kindergeld-generations-service
-    release_content_sha256: 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982
+    commit: 279e27503c00ce1fab35809d069c076d3abad362
+    release: de-rulespec-2026-09-11-kindergeld-illness-precedents
+    release_content_sha256: 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -93,6 +93,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
       sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
+      sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
+      row_count: 12
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -991,15 +994,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 9077324716dcc3627b13c34a6d8c7fbc970fef64f6106d9e18df802295663ed0
+    snapshot_sha256: cb8efb80cbb4e328391436bec71c048a56437ff1374f72d1609360a2522f9e89
     channel_receipts:
-      corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
-      subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
+      corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
+      subject_matter_search: 70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 763
+    candidate_count: 767
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -9006,6 +9009,18 @@ generated_facts:
       citation_label: 'BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen'
       document_citation_path: de/guidance/bfh-iii-r-57-13-2015-11-05
       title: 'BFH, III R 57/13, 2015-11-05: Bestimmung des Kindergeldberechtigten bei nachträglichen Unterhaltszahlungen'
+    - id: de-kg-instr-11b2fee91a7250af
+      status: pending
+      discovery_refs:
+      - de-corpus-0fcbcb7664fe9d27d1ab
+      - de-corpus-7b4314f7be6ab8bf0b8f
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      row_sha256: f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606
+      document_class: guidance
+      citation_label: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+      document_citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      title: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
     - id: de-kg-instr-13c9a46f75b99498
       status: pending
       discovery_refs:
@@ -9153,6 +9168,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Zuletzt geändert durch Art. 4 G v. 23.5.2024 I Nr. 170
+    - id: de-kg-instr-29a6a70e18440300
+      status: pending
+      discovery_refs:
+      - de-corpus-d114ab925636568ac2f1
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-vi-r-31-14-2015-06-18
+      row_sha256: 69d00bf5ab8228281a6f500985e5758e64eeda3e22576e009b61eb5746a1cd40
+      document_class: guidance
+      citation_label: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
+      document_citation_path: de/guidance/bfh-vi-r-31-14-2015-06-18
+      title: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
@@ -9765,6 +9791,18 @@ generated_facts:
       citation_label: 'BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung'
       document_citation_path: de/guidance/bfh-v-r-27-14-2015-04-15
       title: 'BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung'
+    - id: de-kg-instr-8d943b84c0c798b3
+      status: pending
+      discovery_refs:
+      - de-corpus-2c23960b9c4604f17fb3
+      - de-corpus-afbef9e671489df19b64
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-44-17-2019-11-27
+      row_sha256: 48b7fcdc77188c1fc088076af3d43bba8f59a35615a79324eb02c8fc9a3e052d
+      document_class: guidance
+      citation_label: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
+      document_citation_path: de/guidance/bfh-iii-r-44-17-2019-11-27
+      title: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
@@ -10193,6 +10231,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Mindestlohngesetzes
+    - id: de-kg-instr-df39c3eca6f41704
+      status: pending
+      discovery_refs:
+      - de-corpus-f4513c4dc19bdbef458e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-24-08-2011-04-07
+      row_sha256: d26683155904c4b3209e6ea551e3ec474a36df00f74e2019c0737e07f53763d3
+      document_class: guidance
+      citation_label: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
+      document_citation_path: de/guidance/bfh-iii-r-24-08-2011-04-07
+      title: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
     - id: de-kg-instr-e0b7829aa64b55e5
       status: pending
       discovery_refs:
@@ -10353,7 +10402,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 618dcfebaba579ea57509b56cd472bc7d6c230821e0958d7d4314540c59b4b81
+      sha256: 7c23eb1d6f5cc2ed7c4cf9aa9b3c1582ae662bfa1db3135d88e40f4df4df94ea
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10402,8 +10451,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: c27304fbde75705c65eba8a7dc9242e531bdc4f6cd0a88ec805144f6ddd865d7
-        subject_matter_search: 6479a32b43766f0f72351a91511db3489ea6b76e4100cfe8937c6ac4616a66c4
+        corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
+        subject_matter_search: 70704ecf163610e8c41f436f6ed23d832895e363e2fcca2143149fcc920a3525
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13094,6 +13143,24 @@ committed_decisions:
     classification: administration_only
     reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
     bears_on_computed_surface: false
+  - id: de-kg-discovery-00aab547379e68f7
+    status: classified-with-reason
+    classification: adult_child_illness_prognosis
+    reason: 'The complete four-page BFH III R49/18 judgment (12 November 2020, paragraphs1–18), corpus body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, was read with the complete retained DA-KG2025 A17.2 section, which expressly cites it. Paragraphs11–16 require the waiting-for-training route to be assessed separately from an inability to train caused by an illness whose end is not foreseeable; general future training intention alone does not establish that route. The disability route remains a separate statutory assessment, and the remand is not an automatic disability award. Paragraph16 disregards the later medical certificate because it contains no statement about the earlier disputed period; do not turn this into a blanket ban on retrospective medical evidence. The possible retroactivity of the training-intention declaration is expressly left open. Paragraphs14–15 discuss both historical SGBIX definitions and leave the general illness-duration boundary unresolved
+      in that decision; use the separately reviewed III R41/19 and current A17.2 for the later prognosis formulation, not an invented elapsed-since-diagnosis cutoff. These source-defined conditions bear on qualifying_child_count and remain unencoded. Complete body and limitations: illness-prognosis-source-review.json. Exact BStBlII issue/page membership is not independently proved by this body receipt.'
+    bears_on_computed_surface: true
+  - id: de-kg-discovery-0a5820943b10e4f9
+    status: classified-with-reason
+    classification: adult_child_training_illness_prognosis
+    reason: 'The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain
+      unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.'
+    bears_on_computed_surface: true
+  - id: de-kg-discovery-175a2b2bae32af40
+    status: classified-with-reason
+    classification: adult_child_disability_annuity_capital
+    reason: 'The complete five-page BFH III R23/22 judgment (16 February 2023, paragraphs1–34), body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, was read with complete DA-KG2025 A19.5.3. Paragraphs16–23 distinguish needs, income/receipts and existing assets. Paragraphs24–31 distinguish ordinary pension receipts from private annuity capital returned after an asset conversion; the latter excess over the statutory income share is excluded from receipts. The statutory earnings-share rules, not an invented case-specific investment yield, govern the split (paragraph29). Earmarking of inherited money does not alone prevent it being existing assets (paragraphs30–31). Paragraph32 requires month-specific assessment; acceptance of equal monthly capital-income amounts in this case is not a universal annual averaging rule. Paragraph33 expressly leaves the savings-allowance receipt question open, so the lower court arithmetic is not a ruling resolving the DA-KG conflict.
+      The case-specific 2021 figures are not current legal thresholds. These rules bear on qualifying_child_count and remain unencoded. Full body, guidance and limitations: annuity-capital-source-review.json. The source capture does not independently verify exact BStBlII issue/page membership.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-17bc04f83ae1dc83
     status: classified-with-reason
     classification: recovery_remission_and_reporting_procedure
@@ -13411,6 +13478,12 @@ committed_decisions:
     classification: data_and_procedure_reference
     reason: 'Unresolved reference ''Steuerberatungsgesetzes'' matched in § 77 Abs. 2 EStG: fees of a representative authorised under the Steuerberatungsgesetz are reimbursable in a successful objection. Part of the excluded appeal-costs provision; no entitlement or amount rule.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-6cf659dd66fd5e85
+    status: classified-with-reason
+    classification: adult_child_training_illness_prognosis
+    reason: 'The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain
+      unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-6e0720e53a02234e
     status: excluded-with-reason
     body_sha256: 8bc9d521ed936f4be196ec6bb5f1234a4f1a270be8cb67b6441ba4d23764660c
@@ -13972,6 +14045,180 @@ committed_decisions:
     discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
     provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1298-2008/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
       Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 4c2ea767684d0b5d4acbbc9fb90cf7c47f95a36029cca8e3288feb8f2fe855b0.'
+    status: pending
+  - id: de-kg-suppl-026
+    identity: BFH III R 24/08, 2011-04-07, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 24/08 dated 2011-04-07 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-24-08-2011-04-07/document-1, body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, original PDF SHA-256 6439d45600fb8f471153ddd9b0e819ad42edde10a788e56a43af124a5415dad5. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-027
+    identity: BFH VIII R 71/99, 2003-07-15, indirectly cited in the illness/training precedent review
+    title_short: BFH VIII R 71/99
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VIII R 71/99 dated 2003-07-15 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    status: pending
+  - id: de-kg-suppl-028
+    identity: BFH III R 70/11, 2012-09-27, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 70/11
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-70-11-2012-09-27/document-1, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, original PDF SHA-256 1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-029
+    identity: BFH VI B 322/98, 1999-11-08, indirectly cited in the illness/training precedent review
+    title_short: BFH VI B 322/98
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VI B 322/98 dated 1999-11-08 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    status: pending
+  - id: de-kg-suppl-030
+    identity: BFH III R 44/14, 2017-01-19, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 44/14
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-14-2017-01-19/document-1, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, original PDF SHA-256 e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-031
+    identity: BFH III R 65/18, 2019-11-27, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 65/18
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 65/18 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-65-18-2019-11-27/document-1, body SHA-256 ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d, original PDF SHA-256 fbb28287ccbc9feb7f504e22f6bc7592b50084c1e9b5c7849794479a7ffb8060. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-032
+    identity: BFH III R 69/04, 2006-07-20, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 69/04
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 69/04 dated 2006-07-20 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    status: pending
+  - id: de-kg-suppl-033
+    identity: BFH III R 44/17, 2019-11-27, indirectly cited in the illness/training precedent review
+    title_short: BFH III R 44/17
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 44/17 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-17-2019-11-27/document-1, body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, original PDF SHA-256 ea39ab05e23d041900c8721a54469b1f27cb2e6c1146ff9f3f693536bccfd92f. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-034
+    identity: BFH VI R 31/14, 2015-06-18, indirectly cited in the illness/training precedent review
+    title_short: BFH VI R 31/14
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH VI R 31/14 dated 2015-06-18 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+      corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-vi-r-31-14-2015-06-18/document-1, body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, original PDF SHA-256 e5c347c4968b7a4903bfc7e27d9ed6bddeb3ab92d0a9f7edea0e6ca3a16c7649. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    status: pending
+  - id: de-kg-suppl-035
+    identity: BFH III R 19/19, 2021-10-27, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 19/19
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 19/19 dated 2021-10-27. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-036
+    identity: BFH III R 22/10, 2011-08-04, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 22/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 22/10 dated 2011-08-04. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-037
+    identity: BFH III R 31/13, 2015-02-05, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 31/13
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 31/13 dated 2015-02-05. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-038
+    identity: BFH III R 48/05, 2008-05-29, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 48/05
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 48/05 dated 2008-05-29. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-039
+    identity: BFH III R 74/07, 2009-12-17, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 74/07
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 74/07 dated 2009-12-17. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-040
+    identity: BFH III R 8/06, 2009-05-28, indirectly cited in the disability annuity/capital review
+    title_short: BFH III R 8/06
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 8/06 dated 2009-05-28. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-041
+    identity: BFH VI R 183/97, 1999-10-15, indirectly cited in the disability annuity/capital review
+    title_short: BFH VI R 183/97
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VI R 183/97 dated 1999-10-15. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-042
+    identity: BFH VIII R 53/12, 2014-07-01, indirectly cited in the disability annuity/capital review
+    title_short: BFH VIII R 53/12
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VIII R 53/12 dated 2014-07-01. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-043
+    identity: BFH VIII R 76/01, 2002-04-16, indirectly cited in the disability annuity/capital review
+    title_short: BFH VIII R 76/01
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VIII R 76/01 dated 2002-04-16. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-044
+    identity: BFH XI R 51/10, 2013-03-20, indirectly cited in the disability annuity/capital review
+    title_short: BFH XI R 51/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH XI R 51/10 dated 2013-03-20. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-045
+    identity: BVerwG 5 C 35/97, 1999-02-18, indirectly cited in the disability annuity/capital review
+    title_short: BVerwG 5 C 35/97
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BVerwG 5 C 35/97 dated 1999-02-18. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    status: pending
+  - id: de-kg-suppl-046
+    identity: BSG B 4 AS 57/07 R, 2008-09-30, indirectly cited in the disability annuity/capital review
+    title_short: BSG B 4 AS 57/07 R
+    relation: bears_on
+    discovered_by: de-kg-dakg-A19.5.3
+    discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+    provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BSG B 4 AS 57/07 R dated 2008-09-30. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
     status: pending
 computed:
   ledger:
@@ -14585,28 +14832,25 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 788
+    instrument_count: 813
     counts:
-      total: 788
+      total: 813
       encoded: 2
-      classified-with-reason: 167
+      classified-with-reason: 171
       excluded-with-reason: 349
-      pending: 270
+      pending: 291
     pending:
-    - de-kg-discovery-00aab547379e68f7
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
     - de-kg-discovery-05b9e1f2aa436208
     - de-kg-discovery-067415d0d456a49f
     - de-kg-discovery-073ce2d05cd37be4
     - de-kg-discovery-09f5f9534b6b1d86
-    - de-kg-discovery-0a5820943b10e4f9
     - de-kg-discovery-0a6eec2d664292e0
     - de-kg-discovery-0c43ba45962d536b
     - de-kg-discovery-0d38fbb82aecb654
     - de-kg-discovery-0d45d56b2bad4eb9
     - de-kg-discovery-1707afd8485770c7
-    - de-kg-discovery-175a2b2bae32af40
     - de-kg-discovery-179e5bbf757e6529
     - de-kg-discovery-18243162e57ce9f6
     - de-kg-discovery-18d7ddc0a8189df2
@@ -14795,11 +15039,13 @@ computed:
     - de-kg-discovery-ff3af97754355946
     - de-kg-discovery-ff9019c2c2453a4d
     - de-kg-instr-028b46da9b934bf7
+    - de-kg-instr-11b2fee91a7250af
     - de-kg-instr-13c9a46f75b99498
     - de-kg-instr-1945c20cac056911
     - de-kg-instr-1c560d43302dedf2
     - de-kg-instr-25b1ea0557c352eb
     - de-kg-instr-29707b769759e246
+    - de-kg-instr-29a6a70e18440300
     - de-kg-instr-2b121051486857aa
     - de-kg-instr-2c28748809bc5f0a
     - de-kg-instr-2f1ac975f16fdbf6
@@ -14819,11 +15065,11 @@ computed:
     - de-kg-instr-6090dfaa9d45d6a1
     - de-kg-instr-6568b0e3e8e4b33c
     - de-kg-instr-6571f5d198cf30bd
-    - de-kg-instr-6cf659dd66fd5e85
     - de-kg-instr-77dbf6a1855cb84d
     - de-kg-instr-7e37eabb86048805
     - de-kg-instr-8570a332681be6e4
     - de-kg-instr-8a5bf72ed2cf253f
+    - de-kg-instr-8d943b84c0c798b3
     - de-kg-instr-9728a65b720a8ab3
     - de-kg-instr-9886b8cf5a4c26e8
     - de-kg-instr-9ea3370bf9f2ad0d
@@ -14843,6 +15089,7 @@ computed:
     - de-kg-instr-ccf56f3091f029e7
     - de-kg-instr-dakg-2026
     - de-kg-instr-dde9fcbc9faae4c7
+    - de-kg-instr-df39c3eca6f41704
     - de-kg-instr-e0b7829aa64b55e5
     - de-kg-instr-e832fabf332bce62
     - de-kg-instr-e92627717e6aac58
@@ -14863,6 +15110,27 @@ computed:
     - de-kg-suppl-023
     - de-kg-suppl-024
     - de-kg-suppl-025
+    - de-kg-suppl-026
+    - de-kg-suppl-027
+    - de-kg-suppl-028
+    - de-kg-suppl-029
+    - de-kg-suppl-030
+    - de-kg-suppl-031
+    - de-kg-suppl-032
+    - de-kg-suppl-033
+    - de-kg-suppl-034
+    - de-kg-suppl-035
+    - de-kg-suppl-036
+    - de-kg-suppl-037
+    - de-kg-suppl-038
+    - de-kg-suppl-039
+    - de-kg-suppl-040
+    - de-kg-suppl-041
+    - de-kg-suppl-042
+    - de-kg-suppl-043
+    - de-kg-suppl-044
+    - de-kg-suppl-045
+    - de-kg-suppl-046
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -22024,7 +22292,7 @@ computed:
       reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
       bears_on_computed_surface: false
     - id: de-kg-discovery-00aab547379e68f7
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 12.11.2020, III R 49/18, BStBl II 2021 S. 390
       discovery_refs:
@@ -22032,6 +22300,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 12.11.2020, III R 49/18, BStBl II 2021 S. 390
+      classification: adult_child_illness_prognosis
+      reason: 'The complete four-page BFH III R49/18 judgment (12 November 2020, paragraphs1–18), corpus body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, was read with the complete retained DA-KG2025 A17.2 section, which expressly cites it. Paragraphs11–16 require the waiting-for-training route to be assessed separately from an inability to train caused by an illness whose end is not foreseeable; general future training intention alone does not establish that route. The disability route remains a separate statutory assessment, and the remand is not an automatic disability award. Paragraph16 disregards the later medical certificate because it contains no statement about the earlier disputed period; do not turn this into a blanket ban on retrospective medical evidence. The possible retroactivity of the training-intention declaration is expressly left open. Paragraphs14–15 discuss both historical SGBIX definitions and leave the general illness-duration boundary
+        unresolved in that decision; use the separately reviewed III R41/19 and current A17.2 for the later prognosis formulation, not an invented elapsed-since-diagnosis cutoff. These source-defined conditions bear on qualifying_child_count and remain unencoded. Complete body and limitations: illness-prognosis-source-review.json. Exact BStBlII issue/page membership is not independently proved by this body receipt.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-00f6a665fab961c6
       status: pending
       identity_kind: class_member
@@ -22087,7 +22359,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 09.02.2009, III R 37/07, BStBl II S. 928
     - id: de-kg-discovery-0a5820943b10e4f9
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 15.12.2021, III R 43/20, BStBl II 2022 S. 472
       discovery_refs:
@@ -22095,6 +22367,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 15.12.2021, III R 43/20, BStBl II 2022 S. 472
+      classification: adult_child_training_illness_prognosis
+      reason: 'The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain
+        unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-0a6eec2d664292e0
       status: pending
       identity_kind: class_member
@@ -22141,7 +22417,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 26.11.2009, III R 67/07, BStBl II 2010 S. 476
     - id: de-kg-discovery-175a2b2bae32af40
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 16.02.2023, III R 23/22, BStBl II S. 714
       discovery_refs:
@@ -22149,6 +22425,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 16.02.2023, III R 23/22, BStBl II S. 714
+      classification: adult_child_disability_annuity_capital
+      reason: 'The complete five-page BFH III R23/22 judgment (16 February 2023, paragraphs1–34), body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, was read with complete DA-KG2025 A19.5.3. Paragraphs16–23 distinguish needs, income/receipts and existing assets. Paragraphs24–31 distinguish ordinary pension receipts from private annuity capital returned after an asset conversion; the latter excess over the statutory income share is excluded from receipts. The statutory earnings-share rules, not an invented case-specific investment yield, govern the split (paragraph29). Earmarking of inherited money does not alone prevent it being existing assets (paragraphs30–31). Paragraph32 requires month-specific assessment; acceptance of equal monthly capital-income amounts in this case is not a universal annual averaging rule. Paragraph33 expressly leaves the savings-allowance receipt question open, so the lower court arithmetic is not a ruling resolving the DA-KG conflict.
+        The case-specific 2021 figures are not current legal thresholds. These rules bear on qualifying_child_count and remain unencoded. Full body, guidance and limitations: annuity-capital-source-review.json. The source capture does not independently verify exact BStBlII issue/page membership.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-179e5bbf757e6529
       status: pending
       identity_kind: class_member
@@ -24266,6 +24546,18 @@ computed:
       reason: 'Full three-page BFH III R57/13 decision of5November2015, paragraphs1–15, read. Paragraph12 defines the relevant maintenance as ongoing cash support, oriented to BGB1612(1)/(3), generally paid both for and in the Kindergeld period. Paragraph13 excludes payments begun years after the original due date and expressly leaves continuous payments delayed by only weeks or months undecided. Do not convert this into an automatic exclusion of every late transfer or an invented lateness threshold. The case amounts and30-hour employment finding are facts, not normative payment parameters or a new employment limit. Paragraphs11–13 retain claimant selection where neither parent pays qualifying ongoing support. Paragraph14 distinguishes benefit assessment from actual payment when another public body claims reimbursement. DA-KG2025 A26 retains the maintenance holding, which bears on recipient_priority and remains unencoded. Exact BStBl II2016page403 membership and exhaustive discovery remain
         open. Source: de/guidance/bfh-iii-r-57-13-2015-11-05/document-1, body SHA-256 33edbc7a3783a0e15a6e756377a4aa11f2bf0981a9caecac57caca32552e1597, pinned corpus commit5a77472300eb240e303a6f52c1d45040d671e7a4.'
       bears_on_computed_surface: true
+    - id: de-kg-instr-11b2fee91a7250af
+      status: pending
+      discovery_refs:
+      - de-corpus-0fcbcb7664fe9d27d1ab
+      - de-corpus-7b4314f7be6ab8bf0b8f
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      row_sha256: f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606
+      document_class: guidance
+      citation_label: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+      document_citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      title: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
     - id: de-kg-instr-13c9a46f75b99498
       status: pending
       discovery_refs:
@@ -24436,6 +24728,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Zuletzt geändert durch Art. 4 G v. 23.5.2024 I Nr. 170
+    - id: de-kg-instr-29a6a70e18440300
+      status: pending
+      discovery_refs:
+      - de-corpus-d114ab925636568ac2f1
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-vi-r-31-14-2015-06-18
+      row_sha256: 69d00bf5ab8228281a6f500985e5758e64eeda3e22576e009b61eb5746a1cd40
+      document_class: guidance
+      citation_label: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
+      document_citation_path: de/guidance/bfh-vi-r-31-14-2015-06-18
+      title: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
@@ -24915,7 +25218,7 @@ computed:
       reason: 'Unresolved reference ''Steuerberatungsgesetzes'' matched in § 77 Abs. 2 EStG: fees of a representative authorised under the Steuerberatungsgesetz are reimbursable in a successful objection. Part of the excluded appeal-costs provision; no entitlement or amount rule.'
       bears_on_computed_surface: false
     - id: de-kg-instr-6cf659dd66fd5e85
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-6b31b46427b574df1f94
       identity_kind: corpus_citation
@@ -24925,6 +25228,10 @@ computed:
       citation_label: 'BFH, III R 43/20, 2021-12-15: Kindergeld für ein langfristig erkranktes Kind bei fortbestehendem Ausbildungsverhältnis'
       document_citation_path: de/guidance/bfh-iii-r-43-20-2021-12-15
       title: 'BFH, III R 43/20, 2021-12-15: Kindergeld für ein langfristig erkranktes Kind bei fortbestehendem Ausbildungsverhältnis'
+      classification: adult_child_training_illness_prognosis
+      reason: 'The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain
+        unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-6e0720e53a02234e
       status: excluded-with-reason
       discovery_refs:
@@ -25142,6 +25449,18 @@ computed:
       citation_label: 'BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung'
       document_citation_path: de/guidance/bfh-v-r-27-14-2015-04-15
       title: 'BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung'
+    - id: de-kg-instr-8d943b84c0c798b3
+      status: pending
+      discovery_refs:
+      - de-corpus-2c23960b9c4604f17fb3
+      - de-corpus-afbef9e671489df19b64
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-44-17-2019-11-27
+      row_sha256: 48b7fcdc77188c1fc088076af3d43bba8f59a35615a79324eb02c8fc9a3e052d
+      document_class: guidance
+      citation_label: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
+      document_citation_path: de/guidance/bfh-iii-r-44-17-2019-11-27
+      title: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
@@ -25615,6 +25934,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Mindestlohngesetzes
+    - id: de-kg-instr-df39c3eca6f41704
+      status: pending
+      discovery_refs:
+      - de-corpus-f4513c4dc19bdbef458e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-24-08-2011-04-07
+      row_sha256: d26683155904c4b3209e6ea551e3ec474a36df00f74e2019c0737e07f53763d3
+      document_class: guidance
+      citation_label: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
+      document_citation_path: de/guidance/bfh-iii-r-24-08-2011-04-07
+      title: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
     - id: de-kg-instr-e0b7829aa64b55e5
       status: pending
       discovery_refs:
@@ -26126,6 +26456,222 @@ computed:
       discovered_in_body_sha256: 999d688507690b5d7a0854da9a984f9cfaf0eb03af88576f91dc3add99728bd6
       provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1298-2008/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
         Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 4c2ea767684d0b5d4acbbc9fb90cf7c47f95a36029cca8e3288feb8f2fe855b0.'
+    - id: de-kg-suppl-026
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 24/08, 2011-04-07, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 24/08 dated 2011-04-07 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-24-08-2011-04-07/document-1, body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, original PDF SHA-256 6439d45600fb8f471153ddd9b0e819ad42edde10a788e56a43af124a5415dad5. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-027
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VIII R 71/99, 2003-07-15, indirectly cited in the illness/training precedent review
+      title_short: BFH VIII R 71/99
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VIII R 71/99 dated 2003-07-15 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    - id: de-kg-suppl-028
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 70/11, 2012-09-27, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 70/11
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-70-11-2012-09-27/document-1, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, original PDF SHA-256 1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-029
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VI B 322/98, 1999-11-08, indirectly cited in the illness/training precedent review
+      title_short: BFH VI B 322/98
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VI B 322/98 dated 1999-11-08 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    - id: de-kg-suppl-030
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 44/14, 2017-01-19, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 44/14
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-14-2017-01-19/document-1, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, original PDF SHA-256 e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-031
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 65/18, 2019-11-27, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 65/18
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 65/18 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-65-18-2019-11-27/document-1, body SHA-256 ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d, original PDF SHA-256 fbb28287ccbc9feb7f504e22f6bc7592b50084c1e9b5c7849794479a7ffb8060. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-032
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 69/04, 2006-07-20, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 69/04
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 69/04 dated 2006-07-20 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
+    - id: de-kg-suppl-033
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 44/17, 2019-11-27, indirectly cited in the illness/training precedent review
+      title_short: BFH III R 44/17
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 44/17 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-17-2019-11-27/document-1, body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, original PDF SHA-256 ea39ab05e23d041900c8721a54469b1f27cb2e6c1146ff9f3f693536bccfd92f. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-034
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 31/14, 2015-06-18, indirectly cited in the illness/training precedent review
+      title_short: BFH VI R 31/14
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH VI R 31/14 dated 2015-06-18 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
+        corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-vi-r-31-14-2015-06-18/document-1, body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, original PDF SHA-256 e5c347c4968b7a4903bfc7e27d9ed6bddeb3ab92d0a9f7edea0e6ca3a16c7649. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+    - id: de-kg-suppl-035
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 19/19, 2021-10-27, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 19/19
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 19/19 dated 2021-10-27. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-036
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 22/10, 2011-08-04, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 22/10
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 22/10 dated 2011-08-04. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-037
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 31/13, 2015-02-05, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 31/13
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 31/13 dated 2015-02-05. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-038
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 48/05, 2008-05-29, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 48/05
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 48/05 dated 2008-05-29. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-039
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 74/07, 2009-12-17, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 74/07
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 74/07 dated 2009-12-17. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-040
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH III R 8/06, 2009-05-28, indirectly cited in the disability annuity/capital review
+      title_short: BFH III R 8/06
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH III R 8/06 dated 2009-05-28. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-041
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH VI R 183/97, 1999-10-15, indirectly cited in the disability annuity/capital review
+      title_short: BFH VI R 183/97
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VI R 183/97 dated 1999-10-15. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-042
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH VIII R 53/12, 2014-07-01, indirectly cited in the disability annuity/capital review
+      title_short: BFH VIII R 53/12
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VIII R 53/12 dated 2014-07-01. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-043
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH VIII R 76/01, 2002-04-16, indirectly cited in the disability annuity/capital review
+      title_short: BFH VIII R 76/01
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH VIII R 76/01 dated 2002-04-16. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-044
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BFH XI R 51/10, 2013-03-20, indirectly cited in the disability annuity/capital review
+      title_short: BFH XI R 51/10
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BFH XI R 51/10 dated 2013-03-20. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-045
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BVerwG 5 C 35/97, 1999-02-18, indirectly cited in the disability annuity/capital review
+      title_short: BVerwG 5 C 35/97
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BVerwG 5 C 35/97 dated 1999-02-18. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
+    - id: de-kg-suppl-046
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A19.5.3
+      identity_kind: supplemental
+      identity: BSG B 4 AS 57/07 R, 2008-09-30, indirectly cited in the disability annuity/capital review
+      title_short: BSG B 4 AS 57/07 R
+      relation: bears_on
+      discovered_in_body_sha256: d679a8db8b22a3c20a5b47a9a1aa8e662a705dde52a5b19d89a924fa1684b55c
+      provenance: 'Indirect reading discovery: complete DA-KG2025 A19.5.3 cites de/guidance/bfh-iii-r-23-22-2023-02-16/document-1, body SHA-256 1a5e5f809aaf3f7c5425c81e2e722fb15c6cc2138e633ac56619aeca0f9d60aa, whose complete judgment cites BSG B 4 AS 57/07 R dated 2008-09-30. This does not assert direct DA-KG naming, current applicability, a resolved legal holding, or independent BStBlII publication membership. The citation includes contextual and comparison authorities; bearing requires review of the original and its use. Exact referring text and excerpt SHA-256 are retained in annuity-capital-source-review.json. Original-source review and historical/bearing disposition remain pending.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -26234,6 +26780,9 @@ computed:
     - de-kg-dakg-A9
     - de-kg-dakg-V14.3
     - de-kg-dakg-V23.1
+    - de-kg-discovery-00aab547379e68f7
+    - de-kg-discovery-0a5820943b10e4f9
+    - de-kg-discovery-175a2b2bae32af40
     - de-kg-discovery-20d4058656e75e8c
     - de-kg-discovery-3a8452d6c8893e0d
     - de-kg-discovery-4a16231e30b5e62b
@@ -26264,6 +26813,7 @@ computed:
     - de-kg-instr-43b69c0fdc7079aa
     - de-kg-instr-63ae4bcff4818d3a
     - de-kg-instr-6abee6f46fd03a40
+    - de-kg-instr-6cf659dd66fd5e85
     - de-kg-instr-703d3b12aaab39f8
     - de-kg-instr-73d798cce838ed41
     - de-kg-instr-75c3f434723fb3e9
@@ -26293,12 +26843,12 @@ computed:
     - de-kg-suppl-019
     - de-kg-suppl-020
     - de-kg-suppl-021
-    instruments_bearing_on_computed_count: 153
-    open_dependency_count: 161
+    instruments_bearing_on_computed_count: 157
+    open_dependency_count: 165
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 788
+    bearing_candidate_instruments: 813
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

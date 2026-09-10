@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "83d849b23af1fed43d472a2cb226adfabb223b6b05201d45e63dcd9e175b830d"
+      "sha256": "b650d617a4a47c6d0589107162a657ed00b4f952d93a7c4a70c7526b271825f7"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "95417218eb188f11e3f90a3a226ce5b395e7ecaaa0fb679e0eacc6940ee705bb",
+      "sha256": "ebd680d00ac072fc5394c74f3e74605793c419990a3b7459c2a0d96dc81b7647",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "85cb659f0436c917b6336d0073753441f65bd46c5f012e02d5c702b711b8b5a8"
+      "sha256": "767f78a533558d0a2dbf32542efa1d8cdd0dba32cd40b98c542d2e798d5e3b62"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-10-kindergeld-generations-service",
+      "corpus_release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -235,7 +235,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "cc5ce033086776b8c787c272760fb37739b6522fa5c4c1ffc3b2583c4bedf237",
+      "subgraph_sha256": "002b69e961e2cb431da4ac0fae9f12c003534a52f92d6de8cb23909ec3bce706",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
