@@ -217,7 +217,7 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     assert index["act_count"] == len(index["acts"]) == 76
     assert index["mechanism_counts"] == {
         "amendment_targets": 38,
-        "explicit_cross_reference_body": 4772,
+        "explicit_cross_reference_body": 4766,
         "law_metadata_changed_by": 23,
         "law_metadata_fundstelle": 29,
     }

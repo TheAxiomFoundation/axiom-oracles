@@ -139,6 +139,11 @@
   the DVKA extracts omit the Kindergeld chapters; full BGBl II texts are
   needed to encode. Frontier 4 of 492 (classes only); 145 open dependencies
   (8 law-derived, 0 unclassified, 137 bearing).
+- Resolver fix (2026-09-08): raw-reference hint table added to the capture
+  script; AufenthG, FreizügG/EU and the EEA Agreement now bind to their
+  corpus rows (UHV: AufenthG, BGB). Counts unchanged (4 of 492; 145 open).
+  Remaining in-repo frontier work: none until the encoder or corpus lane
+  delivers (full agreement texts, class channels).
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

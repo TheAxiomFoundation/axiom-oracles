@@ -400,6 +400,25 @@ _RAW_REFERENCE_RULES: tuple[tuple[str, str], ...] = (
     ("sgb-9", r"\b(?:SGB\s+IX|Neunten Buch(?:es)?(?: Sozialgesetzbuch)?)\b"),
     ("sgb-10", r"\b(?:SGB\s+X|Zehnten Buch(?:es)? Sozialgesetzbuch)\b"),
 )
+#: Corpus document paths for the raw-reference rules. A rule resolves to its
+#: hint only when that document is a pinned corpus row; otherwise the match
+#: stays an unresolved reference. The inflected act names in the EStG text
+#: ("Aufenthaltsgesetzes", "Freizügigkeitsgesetzes/EU", "Abkommen über den
+#: Europäischen Wirtschaftsraum") never appear in the captured rows' title
+#: metadata, so alias matching cannot reach them; the hint table can.
+_RAW_REFERENCE_CORPUS_HINTS: dict[str, str] = {
+    "abgabenordnung": "de/statute/ao-1977",
+    "ewr-abkommen": "de/regulation/eea-agreement",
+    "freizuegigkeitsgesetz-eu": "de/statute/freiz-gg-eu-2004",
+    "aufenthaltsgesetz": "de/statute/aufenthg-2004",
+    "bgb": "de/statute/bgb",
+    "sgb-1": "de/statute/sgb-1",
+    "sgb-4": "de/statute/sgb-4",
+    "sgb-7": "de/statute/sgb-7",
+    "sgb-8": "de/statute/sgb-8",
+    "sgb-9": "de/statute/sgb-9",
+    "sgb-10": "de/statute/sgb-10",
+}
 _EU_REGULATION = re.compile(r"\bVerordnung \((?:EG|EU)\) (?:Nr\.\s*)?\d{3,4}/\d+\b")
 _HISTORICAL_ACT = re.compile(
     r"\bGesetzes vom \d{1,2}\. [A-ZÄÖÜa-zäöüß]+ \d{4} "
@@ -548,20 +567,17 @@ def _global_row_findings(
                     }
                 )
 
-    corpus_hints = {
-        "sgb-1": "de/statute/sgb-1",
-        "sgb-4": "de/statute/sgb-4",
-        "sgb-7": "de/statute/sgb-7",
-        "sgb-8": "de/statute/sgb-8",
-        "sgb-9": "de/statute/sgb-9",
-        "sgb-10": "de/statute/sgb-10",
-    }
+    corpus_hints = _RAW_REFERENCE_CORPUS_HINTS
     for key, pattern in _RAW_REFERENCE_RULES:
         for match in re.finditer(pattern, body, flags=re.IGNORECASE):
             if any(start <= match.start() and match.end() <= end for start, end in named_spans):
                 continue
             named_spans.append(match.span())
             target = corpus_hints.get(key)
+            if target is not None and target == source_document:
+                # An act naming itself is not a cross-reference (the alias
+                # loop above skips same-document matches the same way).
+                continue
             fact = {
                 "mechanism": "explicit_cross_reference_body",
                 "source_citation_path": row.path,
@@ -1088,14 +1104,7 @@ def _discover_corpus_program(
                 if any(start <= match.start() and match.end() <= end for start, end in named_spans):
                     continue
                 named_spans.append(match.span())
-                corpus_hint = {
-                    "sgb-1": "de/statute/sgb-1",
-                    "sgb-4": "de/statute/sgb-4",
-                    "sgb-7": "de/statute/sgb-7",
-                    "sgb-8": "de/statute/sgb-8",
-                    "sgb-9": "de/statute/sgb-9",
-                    "sgb-10": "de/statute/sgb-10",
-                }.get(key)
+                corpus_hint = _RAW_REFERENCE_CORPUS_HINTS.get(key)
                 if corpus_hint and corpus_hint in corpus.documents:
                     add_path(
                         corpus_hint,

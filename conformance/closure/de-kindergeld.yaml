@@ -360,10 +360,10 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 47f0a28512fecd92b696a55b09358275277e8af174f9e0a5a93caf3049a131fe
+    snapshot_sha256: 39169c1a158644ea307788bfac9e10a7d17620358c3317adc2dfc6ef841dff39
     channel_receipts:
-      corpus_release: 61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b
-      subject_matter_search: 61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8
+      corpus_release: bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3
+      subject_matter_search: 4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
@@ -6322,13 +6322,6 @@ generated_facts:
       citation_label: lsth-2023-9
       document_citation_path: de/guidance/lsth-2023-9
       title: lsth-2023-9
-    - id: de-kg-instr-32a81be6d35e33be
-      status: pending
-      discovery_refs:
-      - de-corpus-4b0837db61b89b31ba27
-      identity_kind: unresolved_reference
-      raw_references:
-      - Freizügigkeitsgesetzes/EU
     - id: de-kg-instr-3841260753e31d86
       status: pending
       discovery_refs:
@@ -6343,13 +6336,6 @@ generated_facts:
       document_citation_path: de/statute/sgb-6
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_6/
       fundstelle: BGBl I 1989, 2261 (1990 I 1337)
-    - id: de-kg-instr-3875634198c25414
-      status: pending
-      discovery_refs:
-      - de-corpus-d4040ccf15ddd057ae22
-      identity_kind: unresolved_reference
-      raw_references:
-      - Aufenthaltsgesetzes
     - id: de-kg-instr-43b69c0fdc7079aa
       status: pending
       discovery_refs:
@@ -6480,14 +6466,6 @@ generated_facts:
       citation_label: esth-2024-32
       document_citation_path: de/guidance/esth-2024-32
       title: esth-2024-32
-    - id: de-kg-instr-87d3e50373adabc2
-      status: pending
-      discovery_refs:
-      - de-corpus-334b97469237730f3b68
-      - de-corpus-3829f704c28eb570310c
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abkommen über den Europäischen Wirtschaftsraum
     - id: de-kg-instr-8939b62ab3b44a39
       status: pending
       discovery_refs:
@@ -6562,6 +6540,19 @@ generated_facts:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-kg-instr-cb904458feb0fc04
+      status: pending
+      discovery_refs:
+      - de-corpus-0676fb4896605ba0400a
+      - de-corpus-6a03673a9187c8662edc
+      identity_kind: corpus_citation
+      citation_path: de/regulation/eea-agreement
+      row_sha256: 3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9
+      document_class: regulation
+      citation_label: Abkommen über den Europäischen Wirtschaftsraum (Auszüge)
+      document_citation_path: de/regulation/eea-agreement
+      title: Abkommen über den Europäischen Wirtschaftsraum (Auszüge)
+      document_type: international agreement
     - id: de-kg-instr-ce168756ed1a28cb
       status: pending
       discovery_refs:
@@ -6601,6 +6592,19 @@ generated_facts:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-kg-instr-deae252c91737d46
+      status: pending
+      discovery_refs:
+      - de-corpus-a8e9584af9544b92136c
+      identity_kind: corpus_citation
+      citation_path: de/statute/freiz-gg-eu-2004
+      row_sha256: 9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132
+      document_class: statute
+      citation_label: Gesetz über die allgemeine Freizügigkeit von Unionsbürgern
+      body_sha256: cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01
+      document_citation_path: de/statute/freiz-gg-eu-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/freiz_gg_eu_2004/
+      fundstelle: BGBl I 2004, 1950, 1986
     - id: de-kg-instr-e1efdfd629d56e5f
       status: pending
       discovery_refs:
@@ -6612,6 +6616,19 @@ generated_facts:
       citation_label: esth-2024-33a
       document_citation_path: de/guidance/esth-2024-33a
       title: esth-2024-33a
+    - id: de-kg-instr-e5490882a4dcdc9f
+      status: pending
+      discovery_refs:
+      - de-corpus-22f275a6aeadaa95586f
+      identity_kind: corpus_citation
+      citation_path: de/statute/aufenthg-2004
+      row_sha256: 213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b
+      document_class: statute
+      citation_label: Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet
+      body_sha256: 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a
+      document_citation_path: de/statute/aufenthg-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/aufenthg_2004/
+      fundstelle: BGBl I 2004, 1950
     - id: de-kg-instr-f480bf90ee72ae1d
       status: pending
       discovery_refs:
@@ -6621,7 +6638,7 @@ generated_facts:
       - Ersten Buches Sozialgesetzbuch
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: d98a5cbb3b771320e1a70e35526b6e91e84342fe130553c445286fcec11a0b32
+      sha256: 49a30d970023654857618375c16b6cad6ee77e4ccab7b19f1ccce99aa3bb9523
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -6649,8 +6666,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b
-        subject_matter_search: 61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8
+        corpus_release: bed595b636936f06d517b0da9cda3c89761576a9f22c9e542f8dd4bb7082d7b3
+        subject_matter_search: 4406107376080daddc29716d2b186fd4936d015eccd96bc03471ca4e6bd14f06
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -9330,21 +9347,11 @@ committed_decisions:
     classification: entitlement_guidance
     reason: BMF Amtliches Lohnsteuer-Handbuch 2023, § 9 page (de/guidance/lsth-2023-9), captured as a corpus guidance row and discovered because its text cites § 65 EStG. It carries R 9.1–R 9.13 (Werbungskosten) and R 9.2 with H 9.2 'Ausbildungsdienstverhältnis' — 'Werbungskosten liegen dagegen nach § 9 Abs. 6 EStG vor, wenn … die Berufsausbildung oder das Studium Gegenstand eines Dienstverhältnisses (Ausbildungsdienstverhältnis) ist', with the Referendariat, Beamtenanwärter and seconded-officer examples — which the DA-KG applies in A 19.5.1 Satz 4 (a disabled child's employment income) and A 20.3.2 Abs. 1 Satz 2 (the harmless training service relationship under § 32 Abs. 4 Satz 3 EStG). Also bound by de-kg-suppl-003/004; this row is the channel-discovered identity of the page. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.
     bears_on_computed_surface: true
-  - id: de-kg-instr-32a81be6d35e33be
-    status: classified-with-reason
-    classification: entitlement_condition
-    reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
-    bears_on_computed_surface: true
   - id: de-kg-instr-3841260753e31d86
     status: classified-with-reason
     body_sha256: c11d89ee6b4d2dfd607f4fccb1ed272c72035aae7b7b7d5e58b7d50324dc7a03
     classification: exclusion_comparator
     reason: SGB VI (act-level corpus row), cited by § 65 Satz 1 Nr. 1 EStG as the comparator 'dem Kinderzuschuss aus der gesetzlichen Rentenversicherung nach § 270 des Sechsten Buches Sozialgesetzbuch in der bis zum 16. November 2016 geltenden Fassung'. Whether a foreign child benefit excludes Kindergeld is tested by comparability with that (repealed) SGB VI child supplement, so the comparator's definition is part of the exclusion rule (A 28.2). Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
-    bears_on_computed_surface: true
-  - id: de-kg-instr-3875634198c25414
-    status: classified-with-reason
-    classification: entitlement_condition
-    reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
     bears_on_computed_surface: true
   - id: de-kg-instr-43b69c0fdc7079aa
     status: classified-with-reason
@@ -9411,11 +9418,6 @@ committed_decisions:
     reason: 'BMF Amtliches Einkommensteuer-Handbuch 2024, § 32 page (de/guidance/esth-2024-32), captured as a corpus guidance row and discovered because its text cites the spine (''§ 66 Abs. 2 EStG'' and ''§ 70 Abs. 2 Satz 1 EStG'' in the H 32 hints). The page carries R 32.1–R 32.11 and the H 32 hints on §§ 32 Abs. 1–5 children — first-degree relatives, foster children (R 32.2: family-like long-term bond, ''Zu Erwerbszwecken in den Haushalt aufgenommen sind z. B. Kostkinder'', the more-than-six-children presumption, no remaining care relationship to the natural parents), job-seeking, training, transition, lacking a place, voluntary services, disability, gainful activity and the extension grounds — which the DA-KG applies in A 11.3 and A 14–A 20. The same page is bound by the supplemental rows de-kg-suppl-001/002 (EStR/EStH), which cover the handbook''s other cited pages as well; this row is the channel-discovered identity of that page. Bears on the law-derived input qualifying_child_count
       (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
     bears_on_computed_surface: true
-  - id: de-kg-instr-87d3e50373adabc2
-    status: classified-with-reason
-    classification: entitlement_condition
-    reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
-    bears_on_computed_surface: true
   - id: de-kg-instr-8939b62ab3b44a39
     status: excluded-with-reason
     classification: amendment_outside_spine
@@ -9451,6 +9453,11 @@ committed_decisions:
     classification: recovery_reference
     reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-cb904458feb0fc04
+    status: classified-with-reason
+    classification: entitlement_condition
+    reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them. Now bound to the captured row de/regulation/eea-agreement (Abkommen über den Europäischen Wirtschaftsraum, DVKA extract; text in .../document-1, body_sha256 3c7045ad694a…); resolved through the raw-reference hint table.
+    bears_on_computed_surface: true
   - id: de-kg-instr-ce168756ed1a28cb
     status: classified-with-reason
     body_sha256: 039de9931d61ee11b13fe82082115c085a24f84017c78fd2779dbad4118fde6b
@@ -9469,10 +9476,22 @@ committed_decisions:
     classification: entitlement_condition
     reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-deae252c91737d46
+    status: classified-with-reason
+    body_sha256: cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01
+    classification: entitlement_condition
+    reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it. Now bound to the captured act row de/statute/freiz-gg-eu-2004 (Gesetz über die allgemeine Freizügigkeit von Unionsbürgern), whose § 2 (Recht auf Einreise und Aufenthalt) is captured in the same scope; the reference resolves through the raw-reference hint table rather than the row''s title metadata, which carries no inflected short title.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-e1efdfd629d56e5f
     status: classified-with-reason
     classification: entitlement_guidance
     reason: BMF Amtliches Einkommensteuer-Handbuch 2024, § 33a page (de/guidance/esth-2024-33a), captured as a corpus guidance row and discovered because its text cites '§ 63 Abs. 1 EStG'. It carries R 33a.1 (Aufwendungen für den Unterhalt und eine etwaige Berufsausbildung), whose Abs. 3 on Einkünfte und Bezüge — 'Bezüge i. S. v. § 33a Abs. 1 Satz 5 EStG sind alle Einnahmen in Geld oder Geldeswert, die nicht im Rahmen der einkommensteuerrechtlichen Einkunftsermittlung erfasst werden' and the cost lump sum — the DA-KG applies in A 19.5.2 Abs. 2 Satz 1 (180 EUR Kostenpauschale) when computing a disabled child's own means. Also bound by de-kg-suppl-001/002; this row is the channel-discovered identity of the page. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-e5490882a4dcdc9f
+    status: classified-with-reason
+    body_sha256: 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a
+    classification: entitlement_condition
+    reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it. Now bound to the captured act row de/statute/aufenthg-2004 (Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet), whose sections are captured in the same scope; resolved through the raw-reference hint table.
     bears_on_computed_surface: true
   - id: de-kg-instr-f480bf90ee72ae1d
     status: excluded-with-reason
@@ -17603,16 +17622,6 @@ computed:
       classification: entitlement_guidance
       reason: BMF Amtliches Lohnsteuer-Handbuch 2023, § 9 page (de/guidance/lsth-2023-9), captured as a corpus guidance row and discovered because its text cites § 65 EStG. It carries R 9.1–R 9.13 (Werbungskosten) and R 9.2 with H 9.2 'Ausbildungsdienstverhältnis' — 'Werbungskosten liegen dagegen nach § 9 Abs. 6 EStG vor, wenn … die Berufsausbildung oder das Studium Gegenstand eines Dienstverhältnisses (Ausbildungsdienstverhältnis) ist', with the Referendariat, Beamtenanwärter and seconded-officer examples — which the DA-KG applies in A 19.5.1 Satz 4 (a disabled child's employment income) and A 20.3.2 Abs. 1 Satz 2 (the harmless training service relationship under § 32 Abs. 4 Satz 3 EStG). Also bound by de-kg-suppl-003/004; this row is the channel-discovered identity of the page. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.
       bears_on_computed_surface: true
-    - id: de-kg-instr-32a81be6d35e33be
-      status: classified-with-reason
-      discovery_refs:
-      - de-corpus-4b0837db61b89b31ba27
-      identity_kind: unresolved_reference
-      raw_references:
-      - Freizügigkeitsgesetzes/EU
-      classification: entitlement_condition
-      reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
-      bears_on_computed_surface: true
     - id: de-kg-instr-3841260753e31d86
       status: classified-with-reason
       discovery_refs:
@@ -17629,16 +17638,6 @@ computed:
       fundstelle: BGBl I 1989, 2261 (1990 I 1337)
       classification: exclusion_comparator
       reason: SGB VI (act-level corpus row), cited by § 65 Satz 1 Nr. 1 EStG as the comparator 'dem Kinderzuschuss aus der gesetzlichen Rentenversicherung nach § 270 des Sechsten Buches Sozialgesetzbuch in der bis zum 16. November 2016 geltenden Fassung'. Whether a foreign child benefit excludes Kindergeld is tested by comparability with that (repealed) SGB VI child supplement, so the comparator's definition is part of the exclusion rule (A 28.2). Bears on the law-derived input substitute_child_benefit_exclusion (open dependency); open until § 65 EStG is encoded and the comparator is bound to it.
-      bears_on_computed_surface: true
-    - id: de-kg-instr-3875634198c25414
-      status: classified-with-reason
-      discovery_refs:
-      - de-corpus-d4040ccf15ddd057ae22
-      identity_kind: unresolved_reference
-      raw_references:
-      - Aufenthaltsgesetzes
-      classification: entitlement_condition
-      reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). The act is not in the pinned corpus release; it must be captured to be encoded. Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.
       bears_on_computed_surface: true
     - id: de-kg-instr-43b69c0fdc7079aa
       status: classified-with-reason
@@ -17806,17 +17805,6 @@ computed:
       reason: 'BMF Amtliches Einkommensteuer-Handbuch 2024, § 32 page (de/guidance/esth-2024-32), captured as a corpus guidance row and discovered because its text cites the spine (''§ 66 Abs. 2 EStG'' and ''§ 70 Abs. 2 Satz 1 EStG'' in the H 32 hints). The page carries R 32.1–R 32.11 and the H 32 hints on §§ 32 Abs. 1–5 children — first-degree relatives, foster children (R 32.2: family-like long-term bond, ''Zu Erwerbszwecken in den Haushalt aufgenommen sind z. B. Kostkinder'', the more-than-six-children presumption, no remaining care relationship to the natural parents), job-seeking, training, transition, lacking a place, voluntary services, disability, gainful activity and the extension grounds — which the DA-KG applies in A 11.3 and A 14–A 20. The same page is bound by the supplemental rows de-kg-suppl-001/002 (EStR/EStH), which cover the handbook''s other cited pages as well; this row is the channel-discovered identity of that page. Bears on the law-derived input qualifying_child_count
         (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.'
       bears_on_computed_surface: true
-    - id: de-kg-instr-87d3e50373adabc2
-      status: classified-with-reason
-      discovery_refs:
-      - de-corpus-334b97469237730f3b68
-      - de-corpus-3829f704c28eb570310c
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abkommen über den Europäischen Wirtschaftsraum
-      classification: entitlement_condition
-      reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is not in the pinned corpus release. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
-      bears_on_computed_surface: true
     - id: de-kg-instr-8939b62ab3b44a39
       status: excluded-with-reason
       discovery_refs:
@@ -17910,6 +17898,22 @@ computed:
       classification: recovery_reference
       reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
       bears_on_computed_surface: false
+    - id: de-kg-instr-cb904458feb0fc04
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-0676fb4896605ba0400a
+      - de-corpus-6a03673a9187c8662edc
+      identity_kind: corpus_citation
+      citation_path: de/regulation/eea-agreement
+      row_sha256: 3153f3e0544bded4be408ef3f699cb80b54e0c7acdecb9f3584ddb6abb1502a9
+      document_class: regulation
+      citation_label: Abkommen über den Europäischen Wirtschaftsraum (Auszüge)
+      document_citation_path: de/regulation/eea-agreement
+      title: Abkommen über den Europäischen Wirtschaftsraum (Auszüge)
+      document_type: international agreement
+      classification: entitlement_condition
+      reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them. Now bound to the captured row de/regulation/eea-agreement (Abkommen über den Europäischen Wirtschaftsraum, DVKA extract; text in .../document-1, body_sha256 3c7045ad694a…); resolved through the raw-reference hint table.
+      bears_on_computed_surface: true
     - id: de-kg-instr-ce168756ed1a28cb
       status: classified-with-reason
       discovery_refs:
@@ -17959,6 +17963,23 @@ computed:
       classification: entitlement_condition
       reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
       bears_on_computed_surface: true
+    - id: de-kg-instr-deae252c91737d46
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-a8e9584af9544b92136c
+      identity_kind: corpus_citation
+      citation_path: de/statute/freiz-gg-eu-2004
+      row_sha256: 9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132
+      document_class: statute
+      citation_label: Gesetz über die allgemeine Freizügigkeit von Unionsbürgern
+      body_sha256: cf52abb7b297b2d32c8f291cc49d18dba855f17f602d7936ffbc36f664e5dd01
+      document_citation_path: de/statute/freiz-gg-eu-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/freiz_gg_eu_2004/
+      fundstelle: BGBl I 2004, 1950, 1986
+      classification: entitlement_condition
+      reason: 'Unresolved reference ''Freizügigkeitsgesetzes/EU'' matched in § 62 Abs. 1a Satz 3 EStG: after the first three months an EU/EEA national has a claim ''es sei denn, die Voraussetzungen des § 2 Absatz 2 oder Absatz 3 des Freizügigkeitsgesetzes/EU liegen nicht vor oder es sind nur die Voraussetzungen des § 2 Absatz 2 Nummer 1a … erfüllt''. The FreizügG/EU § 2 Abs. 2 and 3 grounds (worker, self-employed, job-seeker, family member, permanent-residence right) are thus conditions of the claimant''s entitlement (A 4.2). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it. Now bound to the captured act row de/statute/freiz-gg-eu-2004 (Gesetz über die allgemeine Freizügigkeit von Unionsbürgern), whose § 2 (Recht auf Einreise und Aufenthalt) is captured in the same scope; the reference resolves through the raw-reference hint table rather than the row''s title metadata, which carries no inflected short
+        title.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-e1efdfd629d56e5f
       status: classified-with-reason
       discovery_refs:
@@ -17972,6 +17993,22 @@ computed:
       title: esth-2024-33a
       classification: entitlement_guidance
       reason: BMF Amtliches Einkommensteuer-Handbuch 2024, § 33a page (de/guidance/esth-2024-33a), captured as a corpus guidance row and discovered because its text cites '§ 63 Abs. 1 EStG'. It carries R 33a.1 (Aufwendungen für den Unterhalt und eine etwaige Berufsausbildung), whose Abs. 3 on Einkünfte und Bezüge — 'Bezüge i. S. v. § 33a Abs. 1 Satz 5 EStG sind alle Einnahmen in Geld oder Geldeswert, die nicht im Rahmen der einkommensteuerrechtlichen Einkunftsermittlung erfasst werden' and the cost lump sum — the DA-KG applies in A 19.5.2 Abs. 2 Satz 1 (180 EUR Kostenpauschale) when computing a disabled child's own means. Also bound by de-kg-suppl-001/002; this row is the channel-discovered identity of the page. Bears on the law-derived input qualifying_child_count (open dependency); open until §§ 63, 32 EStG are encoded and the guidance is bound to them.
+      bears_on_computed_surface: true
+    - id: de-kg-instr-e5490882a4dcdc9f
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-22f275a6aeadaa95586f
+      identity_kind: corpus_citation
+      citation_path: de/statute/aufenthg-2004
+      row_sha256: 213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b
+      document_class: statute
+      citation_label: Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet
+      body_sha256: 1adde02cb8f6f881a65fda631894ab1f13e32d847e81a58ec86e20ddd8f1cb3a
+      document_citation_path: de/statute/aufenthg-2004
+      legal_authority_url: https://www.gesetze-im-internet.de/aufenthg_2004/
+      fundstelle: BGBl I 2004, 1950
+      classification: entitlement_condition
+      reason: Unresolved reference 'Aufenthaltsgesetzes' matched in § 62 Abs. 2 EStG, whose catalogue of qualifying residence titles (Niederlassungserlaubnis, Daueraufenthalt-EU, Blaue Karte EU, ICT cards, Aufenthaltserlaubnis) and exceptions is defined by reference to §§ 16b, 16d, 16e, 19c Abs. 1, 19e, 20, 20a Abs. 5, 23 Abs. 1, 23a, 25 Abs. 3–5, 60a Abs. 2 Satz 3 and 60d AufenthG. Those AufenthG title types are conditions of a non-privileged foreigner's entitlement (A 4.1, A 4.3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it. Now bound to the captured act row de/statute/aufenthg-2004 (Gesetz über den Aufenthalt, die Erwerbstätigkeit und die Integration von Ausländern im Bundesgebiet), whose sections are captured in the same scope; resolved through the raw-reference hint table.
       bears_on_computed_surface: true
     - id: de-kg-instr-f480bf90ee72ae1d
       status: excluded-with-reason
@@ -18703,21 +18740,21 @@ computed:
     - de-kg-instr-002
     - de-kg-instr-003
     - de-kg-instr-26ba3514c162c52d
-    - de-kg-instr-32a81be6d35e33be
     - de-kg-instr-3841260753e31d86
-    - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
     - de-kg-instr-57142250c1d7c52f
     - de-kg-instr-703d3b12aaab39f8
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-7d7a5efb6250df56
-    - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-b96e03076e143e8e
+    - de-kg-instr-cb904458feb0fc04
     - de-kg-instr-ce168756ed1a28cb
     - de-kg-instr-d0ffa65a02a956b9
     - de-kg-instr-db7693cd9f018ff4
+    - de-kg-instr-deae252c91737d46
     - de-kg-instr-e1efdfd629d56e5f
+    - de-kg-instr-e5490882a4dcdc9f
     - de-kg-suppl-001
     - de-kg-suppl-002
     - de-kg-suppl-003
