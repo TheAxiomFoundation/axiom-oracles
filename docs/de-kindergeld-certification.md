@@ -194,6 +194,23 @@ producer's exact rederivation before it reaches certify.
   social-security agreements; Regulations (EC) 883/2004, 987/2009,
   859/2003, Regulation (EU) 1231/2010, and the EU/UK Withdrawal Agreement.
   Frontier 463 candidates, 436 pending.
+- 2026-09-07 — DA-KG 2025 Kapitel V (Verfahren), 148 headings: 144 excluded
+  (structural headings, five "(weggefallen)", competence, procedure —
+  participation, application, fact-finding, cooperation duties, notices,
+  provisional and reserved fixings, limitation, the §§ 129–175 AO and § 70
+  Abs. 2/3 EStG correction rules — payment mechanics, recovery and
+  enforcement — deferral, remission, allocation, set-off under § 75, payment
+  limitation, interest, surcharges, reminders, enforcement, write-off,
+  liability — and payout routing — attachment, assignment, diversion under
+  § 74 Abs. 1, refunds under § 74 Abs. 2, claimant change, forwarding).
+  Four headings bear on the computed surface and are classified as OPEN
+  bearing restatements of spine provisions (`bears_on_computed_surface:
+  true`, counted as open dependencies): V 14.3 (month principle of § 66
+  Abs. 2 EStG), V 23.1 (fixed amount is paid unrounded — to reconcile with
+  the captured module's `kindergeld_before_whole_euro_rounding` rule),
+  V 23.4 (six-month payout limit of § 70 Abs. 1 Satz 2–3 EStG), V 24.2
+  (per-child share of the household total, § 76 EStG). Frontier 463
+  candidates, 288 pending; 12 open dependencies.
 
 ## Closing worklist (seed enumeration — discovery incomplete)
 

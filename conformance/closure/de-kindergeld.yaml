@@ -6760,6 +6760,894 @@ committed_decisions:
     classification: administration_only
     reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
     bears_on_computed_surface: false
+  - id: de-kg-dakg-V1
+    status: excluded-with-reason
+    body_sha256: 4d6f2171c70d8cd99da2bfac3d561644361b22f9eb97457a7fa05f7f8c0c5374
+    classification: structural_heading
+    reason: Heading line only ("V 1 Sachliche Zuständigkeit i. S. d. § 16 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V1.1
+    status: excluded-with-reason
+    body_sha256: 86afe13a3d8f9ef58fc70eb12be689490eaed6b5bd58af72e016a02f0c07ca23
+    classification: administration_only
+    reason: Subject-matter competence of the Familienkassen (§ 5 Abs. 1 Nr. 11 FVG) for fixing and paying Kindergeld. Institutional assignment; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V1.2
+    status: excluded-with-reason
+    body_sha256: 7f93737f93a1adf1854a05eb13d975a72cceb7b5d3b9921177eb9d9d52d970d7
+    classification: repealed
+    reason: 'The complete located text of V 1.2 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V1.3
+    status: excluded-with-reason
+    body_sha256: 689a41a65e87bcb95c3b23a38dfbd0757a002cd9608cd207cbb5ac9e186ae801
+    classification: repealed
+    reason: 'The complete located text of V 1.3 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V1.4
+    status: excluded-with-reason
+    body_sha256: e36d90d99d0d027b49c411854d071414555f0fed6c16f4b71058a36d2be77a1c
+    classification: repealed
+    reason: 'The complete located text of V 1.4 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V1.5
+    status: excluded-with-reason
+    body_sha256: 39329fc975086b7f5d0aee71de86acf4c1eec2ef7375a1e1ce27cff5344252ae
+    classification: repealed
+    reason: 'The complete located text of V 1.5 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V10
+    status: excluded-with-reason
+    body_sha256: c165cf4189da5301d2d667fb7886a8178ad4761b335b1f450b0f7d30bdd75294
+    classification: procedure
+    reason: Fixing by written notice per child (§ 70 Abs. 1 EStG, § 157 AO), types of decision, forms KG 2 / KG 2f, reasoning requirements (§ 121 AO), fixing for the whole applied period with a note on the § 70 Abs. 1 payout limit, time-limiting fixings for minors to the month of the 18th birthday (legacy cases from 2007 continue to lapse), notification rules (§§ 122, 122a AO), informing other bodies, and changing a fixing before altering payment. Abs. 1 Satz 4 dispenses with a new notice when only the § 66 Abs. 1 EStG amounts rise. Procedure on the form and timing of decisions; the amounts and conditions decided are on the spine (§§ 66, 70 EStG).
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V11
+    status: excluded-with-reason
+    body_sha256: c1cfb17a214a2fbb8fbcd61b27230a99c9d3db6fdcda1fec576c2ee396189c46
+    classification: structural_heading
+    reason: Heading line only ("V 11 Vorbehalt der Nachprüfung und Vorläufigkeit"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V11.1
+    status: excluded-with-reason
+    body_sha256: 0d72789406e758b498d2be9df34d54a89dec388bae2d09a81d23af75f9d04d4e
+    classification: procedure
+    reason: Fixing subject to review (§ 164 AO) only on instruction of the supervisory authority, scope, free amendment while effective, and lapse with the regular limitation period. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V11.2
+    status: excluded-with-reason
+    body_sha256: e60aec5ec0737f161088f721c728bb2dc96c857500c81c6930137198472cf83c
+    classification: procedure
+    reason: Provisional fixing (§ 165 AO) where entitlement conditions are uncertain, only on instruction by supervision or BMF letter, limited to the uncertain conditions, correction within that scope, declaration of finality, and lapse with the limitation period (§ 171 Abs. 8 AO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V12
+    status: excluded-with-reason
+    body_sha256: 2ad37c16dc23cc7db76c57f13d18292e48a7bdfd2af49640d1716c9fd6742f0b
+    classification: procedure
+    reason: 'Limitation of the fixing power (§ 169 AO): no fixing or correction after expiry; the notice must leave the office before expiry and actually reach the claimant; service with certificate for adverse notices near expiry. Limitation procedure governing when a decision can still be made; it does not define the monthly entitlement.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V12.1
+    status: excluded-with-reason
+    body_sha256: f614b98fecd18d7a1e229f65d2a90eaa5f08c60c88e5b1473c1f98dea1288809
+    classification: procedure
+    reason: Limitation period four years, ten for tax evasion, five for reckless understatement (§ 169 Abs. 2 AO). Limitation of enforceability; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V12.2
+    status: excluded-with-reason
+    body_sha256: 2c0c9ded8bb723298c00c3d3d212338f4a61d76ba459fe40b6f75ca6535481c6
+    classification: procedure
+    reason: 'Start of the limitation period: end of the year the claim arose (§ 170 Abs. 1 AO), not before the year of application for corrections (§ 170 Abs. 3 AO), and the year of the event for § 175 Abs. 1 Satz 1 Nr. 2 AO. Limitation procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V12.3
+    status: excluded-with-reason
+    body_sha256: 2a41e773c0be2a0f4af5728d917a6c546874a1ed553c8612bf21d0363eb17f94
+    classification: procedure
+    reason: 'Suspension of expiry (§ 171 AO): one year after notification for § 129 / § 173a AO corrections, pending applications (§ 171 Abs. 3 AO), tax evasion and reckless understatement (§ 171 Abs. 7 AO, retroactive revocation possible back to the first causal payment), provisional fixings (§ 171 Abs. 8 AO), and basis notices (§ 171 Abs. 10 AO). Limitation procedure; the worked example concerns a double fixing, not an amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V13
+    status: excluded-with-reason
+    body_sha256: 2e051aba27d70841b7f003b5928dcfc99f085e9e4d5d39e1172b4e04d87e9365
+    classification: procedure
+    reason: Corrections only within the limitation period and under an applicable correction rule, in the order § 70 Abs. 2 Satz 1 EStG, AO rules, § 70 Abs. 3 EStG; the § 70 Abs. 1 payout limit does not apply to retroactive fixings made under a correction rule; §§ 130, 131 AO inapplicable; refusal of a correction request is itself refused, not the fixing. Procedure on when a decision may be revisited; no monthly entitlement rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V14
+    status: excluded-with-reason
+    body_sha256: 02eba5efaeeeedb63a5ed5f118c8f23fda0f6301c09501dbdf1451890d9715bf
+    classification: structural_heading
+    reason: Heading line only ("V 14 Korrektur bei einer Änderung in den Verhältnissen nach § 70 Abs. 2 Satz 1 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V14.1
+    status: excluded-with-reason
+    body_sha256: 7997e07362a9833f76aea4c5f907f73c7c9089199fa481318baba7e90831149c
+    classification: procedure
+    reason: 'Scope of § 70 Abs. 2 Satz 1 EStG: revocation or amendment from the change in relevant circumstances, for or against the claimant, only of an amount fixing; examples (reaching 25, self-fixing after a competence change, loss of § 62 EStG conditions even where BKGG applies); not for fixings that lapsed at 18; recovery under § 37 Abs. 2 AO. Procedure for adjusting a decision; the conditions whose change it reacts to are in Kapitel A and on the spine.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V14.2
+    status: excluded-with-reason
+    body_sha256: d85e30eaee617381a126996663aa25fae36d45b15c05e228c4c985c81e266bc2
+    classification: procedure
+    reason: 'What counts as a change in circumstances: factual or legal changes after the fixing, not changes of legal opinion by courts or administrative instructions, and the change must affect the claim. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V14.3
+    status: classified-with-reason
+    body_sha256: 0f61f0887509efde0af4336bac615327f5b7a0118f964d703495f7bef4cc91c4
+    classification: spine_restatement
+    reason: Correction is mandatory for the future and retroactively to the change; and, with reference to § 66 Abs. 2 EStG, a change during a month in the claimant's favour counts from that month while a change to the claimant's detriment takes effect only from the following month. Sentences 2 and 3 state the month principle that decides for which calendar months the per-child amount is due — a rule on the computed surface that restates § 66 Abs. 2 EStG on the spine. Open until that provision is encoded and the monthly-attribution rule is bound to it.
+    bears_on_computed_surface: true
+  - id: de-kg-dakg-V15
+    status: excluded-with-reason
+    body_sha256: e5bfba0045b817fdade7757d229192a453a84e0d69979d73145b60a135d9003a
+    classification: structural_heading
+    reason: Heading line only ("V 15 Berichtigung offenbarer Unrichtigkeiten nach § 129 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V15.1
+    status: excluded-with-reason
+    body_sha256: 935335637de37c05aeb5b35c766d1769f404e8442149f96de54c1d016c9ae9d4
+    classification: procedure
+    reason: 'Correction of obvious errors (§ 129 AO): mechanical slips of the office, not errors of law, fact assessment or investigation; obviousness to a neutral third party from the file; errors of the claimant adopted by the office. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V15.2
+    status: excluded-with-reason
+    body_sha256: d1043605fef21aafdd5f4ddafc9a57129adcf6c9541f410f1cc273be84fd1837
+    classification: procedure
+    reason: A § 129 AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V16
+    status: excluded-with-reason
+    body_sha256: 2cb5a4520a0fd992dd2ef394da042621841c690156b7cfbf7ccefa12bda66b1d
+    classification: structural_heading
+    reason: Heading line only ("V 16 Änderung von Bescheiden nach § 172 Abs. 1 Satz 1 Nr. 2 Buchst. a AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V16.1
+    status: excluded-with-reason
+    body_sha256: 52bde95067c087c7def27181ae4a02a21e145f1146bb820767905bca8eba7b7e
+    classification: procedure
+    reason: 'Amendment with the claimant''s consent or on their application (§ 172 Abs. 1 Satz 1 Nr. 2 Buchst. a AO): form-free request, treatment of requests within the appeal period, no extension after it, no suspension of enforcement, deadlines after an appeal decision. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V16.2
+    status: excluded-with-reason
+    body_sha256: 402fc1217f00be79aa04b6c9149ce19d31aa104fa63f487d14cf9f723056d958
+    classification: procedure
+    reason: A § 172 AO amendment acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17
+    status: excluded-with-reason
+    body_sha256: af2c8a53899a1d53f42c2df3eae9c7b0c746297c7452fc4800027a0ae60bba88
+    classification: structural_heading
+    reason: Heading line only ("V 17 Aufhebung oder Änderung aufgrund neuer Tatsachen oder Beweismittel nach § 173 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.1
+    status: excluded-with-reason
+    body_sha256: ef84c7cdff6177ec7bae00a1e48ef8b66328b399910e780ea8a61c45f8d402de
+    classification: structural_heading
+    reason: Heading line only ("V 17.1 Änderung zu Ungunsten des Berechtigten"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.1.1
+    status: excluded-with-reason
+    body_sha256: ae14f6e27f0bdf6baa239c784bba581fa97e494f769118f97a55c6b6d9b3fbe6
+    classification: procedure
+    reason: Revocation or amendment against the claimant on facts or evidence later becoming known (§ 173 Abs. 1 Nr. 1 AO). Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.1.2
+    status: excluded-with-reason
+    body_sha256: b5dcc82b2e842e368caec802eb047d11b440ddfac082ddb5ffab49c95018ca97
+    classification: procedure
+    reason: What are facts and evidence under § 173 AO (including inner facts), and what are not (legal norms, legal assessments, court decisions, later law changes). Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.1.3
+    status: excluded-with-reason
+    body_sha256: 2c84b986216d316362c0490c94d8c96bad996fab9377a5ed878e97c416fdc8a8
+    classification: procedure
+    reason: 'When facts become known ''subsequently'': existing at the time of the decision, known to the responsible case officer after the decision was signed off, not merely to another unit. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.1.4
+    status: excluded-with-reason
+    body_sha256: 09513eb6de419939a6a5c592181b3e007272087afcdd0764c2ee4b6538aab781
+    classification: procedure
+    reason: 'Legal relevance: the office would with near certainty have decided differently under the case law and instructions binding at the time. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.2
+    status: excluded-with-reason
+    body_sha256: a55a05aa79e4fc8b277d4bd54a693afe8cd6c3e577710074e2d9c985e7f61f79
+    classification: procedure
+    reason: Amendment in the claimant's favour on new facts (§ 173 Abs. 1 Nr. 2 AO) requires absence of gross fault. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.2.1
+    status: excluded-with-reason
+    body_sha256: 50968ebb414d400a75ae63863be2b324ecee1b83d6522185b6fb67d0d2c2a73f
+    classification: procedure
+    reason: 'Gross fault: intent and gross negligence, burden on the claimant, ignorance of tax law alone insufficient, disregard of express hints in leaflets, forms or specific application questions is grossly negligent, office investigation failures do not excuse except where causal (misleading advice). Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.3
+    status: excluded-with-reason
+    body_sha256: 8390c0f0906b826d580a580b0c70ab420c34dc148fb000ab3f988f61101d3727
+    classification: procedure
+    reason: A § 173 AO correction is limited to the effect of the new facts (point correction). Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V17.4
+    status: excluded-with-reason
+    body_sha256: d240ec98f958746546ede6bf2ed330d6c5864e5312cea8ba7181c44bd1879afa
+    classification: procedure
+    reason: A § 173 AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V18
+    status: excluded-with-reason
+    body_sha256: a3e661778afb0f86430a461bebf9f5f3fb389f19b2208ecbc72805b543594ca5
+    classification: structural_heading
+    reason: Heading line only ("V 18 Korrektur nach § 173a AO aufgrund von Schreib- oder Rechenfehlern bei der Beantragung von Kindergeld"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V18.1
+    status: excluded-with-reason
+    body_sha256: 5445208bd49c89f34e7a6496166ae51fd36a3abfa20f1efdcee688e20c1a4fce
+    classification: procedure
+    reason: 'Correction for the claimant''s own writing or arithmetic errors in the application (§ 173a AO): recognisable to a neutral third party, not omissions, adopted errors go under § 129 AO instead. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V18.2
+    status: excluded-with-reason
+    body_sha256: 1df859b5757daec14f0230cf1cbf89df2dd927872decf41d231dc951840ba6e9
+    classification: procedure
+    reason: A § 173a AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V19
+    status: excluded-with-reason
+    body_sha256: b62c45f07be36450b8e12441a0293fabe1e4bd7f40da5dc531d69e0cf7f1ef66
+    classification: structural_heading
+    reason: Heading line only ("V 19 Widerstreitende Festsetzungen nach § 174 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V19.1
+    status: excluded-with-reason
+    body_sha256: 815c5d99e7d7819af8fcb309ddab67843615457c519ab9f0af043f5d131fb1bf
+    classification: procedure
+    reason: 'Conflicting fixings (§ 174 AO): correction on application where a fact was counted against a claimant twice, ex officio where counted in favour twice (double fixings) if traceable to the claimant''s application or declaration, with cross-references. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V19.2
+    status: excluded-with-reason
+    body_sha256: 5966752e26f1878a898d1b8990dd12537058a2836b10336cac74e20236e0fc5d
+    classification: procedure
+    reason: A § 174 AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V2
+    status: excluded-with-reason
+    body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    classification: administration_only
+    reason: Local competence by the claimant's residence or habitual abode (§ 19 AO), BA-assigned special competences (cross-border cases, seafarers), and that a fixing by a locally incompetent Familienkasse is not void (§§ 125, 127 AO). Which office decides; not what is due.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V20
+    status: excluded-with-reason
+    body_sha256: dca18d0c03fb197f8d07f3fb4088460f4133022d8b91282a3dd325d9bc60cdc1
+    classification: structural_heading
+    reason: Heading line only ("V 20 Korrektur von Folgebescheiden nach § 175 Abs. 1 Satz 1 Nr. 1 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V20.1
+    status: excluded-with-reason
+    body_sha256: aea98d0cfb01f52fd220076a07e09808467dfc885cb8a6d382e6547357f5e4d4
+    classification: procedure
+    reason: 'Correction following a binding basis notice (§ 175 Abs. 1 Satz 1 Nr. 1 AO): recognition as refugee and the social-law classification as foster child are basis notices, the child''s income-tax assessment is not. Procedure; the substantive conditions those notices establish are in Kapitel A.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V20.2
+    status: excluded-with-reason
+    body_sha256: c7fbe9d5cb04850d30eec4894524b6a9037f14b90f001010b00b6cd36e33b910
+    classification: procedure
+    reason: A § 175 Abs. 1 Satz 1 Nr. 1 AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V21
+    status: excluded-with-reason
+    body_sha256: 78f323639f93844b05b6ee517ca5cc5e9602b96580e6bae069dc3dcbe3d358f4
+    classification: structural_heading
+    reason: Heading line only ("V 21 Korrektur aufgrund eines rückwirkenden Ereignisses nach § 175 Abs. 1 Satz 1 Nr. 2 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V21.1
+    status: excluded-with-reason
+    body_sha256: 9fbf2290703f7acbced637e2aeffb37fc627f4fb4ef7efd7471a677d365ab769
+    classification: procedure
+    reason: 'Correction on a retroactive event (§ 175 Abs. 1 Satz 1 Nr. 2 AO), with examples: exceeding the 20-hour work limit making an earlier extension harmful, loss of § 62 Abs. 1 Nr. 2 Buchst. b EStG status through changed income, late issuance of an IdNr, acknowledged or contested paternity. Procedure on when a decision reopens; the entitlement conditions in the examples are Kapitel A matters.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V21.2
+    status: excluded-with-reason
+    body_sha256: 188ce17fb85044de2bf6147c9ae3422c36fa3e296bd5cc9b2abd0a88d7fd372b
+    classification: procedure
+    reason: A § 175 Abs. 1 Satz 1 Nr. 2 AO correction acts for the past and the future. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V22
+    status: excluded-with-reason
+    body_sha256: d1dcc381bdede485c9def8c2b79027bb30a03ba4a7c1ebaf28fb6ad59340fea7
+    classification: structural_heading
+    reason: Heading line only ("V 22 Korrektur einer materiell fehlerhaften Kindergeldfestsetzung nach § 70 Abs. 3 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V22.1
+    status: excluded-with-reason
+    body_sha256: 114ce03ada5aebff14971b547bf852c72b93d3c2dd18e9971e8b868fcfee9a40
+    classification: procedure
+    reason: Mandatory ex officio correction of a substantively wrong amount fixing under § 70 Abs. 3 EStG (bound decision, BFH III R 14/17), suggesting a new application where a fixing was wrongly refused, and correction after a change of supreme-court case law (§ 70 Abs. 3 Satz 3 EStG). Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V22.2
+    status: excluded-with-reason
+    body_sha256: 48754431649a7305f15fb80ee5b6a093d4f420e16b6c129c91b61093e7bce86b
+    classification: procedure
+    reason: A § 70 Abs. 3 EStG correction acts only for the future, from the month after notification. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V23
+    status: excluded-with-reason
+    body_sha256: 038045cb877f99122b8e9350e10e584c619b60271a3c9872b1e89e81421b08b0
+    classification: structural_heading
+    reason: Heading line only ("V 23 Auszahlung und Rückforderung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V23.1
+    status: classified-with-reason
+    body_sha256: a05f55831bb8bc106689f9faf23c14230a143ccf5f2d9d3cf5b55153b2ae1fe7
+    classification: spine_restatement
+    reason: 'Due date on notification of the fixing (§ 220 Abs. 2 AO), monthly payment during the month, no advance payment or capitalisation, continuity of payment while an amount fixing exists, and the recovery machinery (demand for payment with a one-month period, immediate maturity where set-off is possible, late-payment surcharges, reminder, enforcement, write-off). Abs. 1 Satz 3 — "Das festgesetzte Kindergeld ist ungerundet auszuhlen" — is a rule on the paid amount: the fixed amount is paid without rounding. The captured EStG § 66 module carries a rule named kindergeld_before_whole_euro_rounding, so this sentence bears on the computed surface and must be reconciled with (encoded in, or shown inert for) that module before it can be closed. Open.'
+    bears_on_computed_surface: true
+  - id: de-kg-dakg-V23.2
+    status: excluded-with-reason
+    body_sha256: beeb1533043b4b77669bf1284eb0bb88a9f8217d4655e321c69c92dc54d505dd
+    classification: payment_mechanics
+    reason: Payment by bank transfer to an account named by the claimant (§ 224 Abs. 3 AO), who need not be the account holder; no reimbursement of account fees; cash or payment order by post only where an account cannot be opened. Payment channel; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V23.3
+    status: excluded-with-reason
+    body_sha256: 7da8f874f0dd037ffada4d597b2c015962f9c0795666ece2110d6b41dcd3ec37
+    classification: payment_mechanics
+    reason: 'Provisional suspension of payment (§ 71 EStG) on knowledge of facts leading to retroactive revocation: notice and hearing, not permissible merely for missing review documents or where the case is ready for decision, typical situations, and the two-month deadline to amend or resume payment. Payment procedure; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V23.4
+    status: classified-with-reason
+    body_sha256: af525cbf50dce8ff1e8658de1559874c626e79e6d1a89cdff3c2a07441c59bc6
+    classification: spine_restatement
+    reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. This is a rule on how much is paid for past months — a computed-surface rule restating § 70 Abs. 1 Satz 2 and 3 EStG on the spine. Open until that provision is encoded or excluded at spine level.
+    bears_on_computed_surface: true
+  - id: de-kg-dakg-V24
+    status: excluded-with-reason
+    body_sha256: 3aaff7248b7c25363a94a5d87c75df5c6ee2f70803dfc6cb96ba8eca193b1de2
+    classification: structural_heading
+    reason: Heading line only ("V 24 Pfändung und Berechnung des auf ein Kind entfallenden Kindergeldanteils"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V24.1
+    status: excluded-with-reason
+    body_sha256: 449ae12d59c21f174b7972216ede26c6e70e16522d48281a328a71d1ece7c65d
+    classification: payout_routing
+    reason: Attachment of the Kindergeld claim only for a child's statutory maintenance claims (§ 76 EStG), nullity of premature attachments (§ 46 AO), the office's duties to object to unlawful attachments (§ 840 ZPO, § 766 ZPO, § 347 AO). Creditor routing of the payout; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V24.2
+    status: classified-with-reason
+    body_sha256: e16138a780f98f79b6e482bb4e2f48b1be50c11c514d81fecab206df53f7aee2
+    classification: spine_restatement
+    reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). This defines how the household total is split into a per-child share — a computed-surface rule (per-child amount and its attribution) restating § 76 EStG on the spine. Open until the per-child attribution is encoded and bound to that provision.
+    bears_on_computed_surface: true
+  - id: de-kg-dakg-V24.3
+    status: excluded-with-reason
+    body_sha256: cc483be4acb524974de1e1fe539914bb4162fee8dab06a95a42e5620ee665c98
+    classification: payout_routing
+    reason: Assignment (§ 46 AO, § 400 BGB) and pledge of the claim only within the limits of attachability under § 76 EStG, also to an adult child; V 24.2 applies accordingly. Creditor routing; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V25
+    status: excluded-with-reason
+    body_sha256: 95c5aa6ccc84239668d8f2eb18448f3416656a5919c32a3576c5f9145d584fbc
+    classification: structural_heading
+    reason: Heading line only ("V 25 Stundung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V25.1
+    status: excluded-with-reason
+    body_sha256: 150dfec5d7f03247f42a921fefa73babf1c5ded167fabc1b25049b7b180bdda2
+    classification: recovery_and_enforcement
+    reason: 'Deferral of recovery claims (§ 222 AO): on application, security beyond six months, forms KG 90/91, discretionary, revocable, instalments only within a deferral, appeal, interest under § 234 AO. Recovery administration; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V25.2
+    status: excluded-with-reason
+    body_sha256: 639d165828b298e72f1d591c0b0dc42510ff83a913b45bee63ae99636f32822a
+    classification: recovery_and_enforcement
+    reason: 'Conditions for deferral: substantial hardship, objective grounds (imminent counter-claims) or personal grounds (worthiness and need, with examples), and no endangerment of the claim. Recovery administration; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V25.3
+    status: excluded-with-reason
+    body_sha256: f7292150413d3d34a63f8f858e22a47f1d6952a78b66caae46cdae5da2aba3aa
+    classification: recovery_and_enforcement
+    reason: BZSt approval required for deferrals over EUR 5,000 or six months, with a written report. Supervisory procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V26
+    status: excluded-with-reason
+    body_sha256: 7e6371f3d8b6b037df37bb97bdc122c43b7e5c4ad04e8de69fa34a0b2a893c13
+    classification: structural_heading
+    reason: Heading line only ("V 26 Erlass"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V26.1
+    status: excluded-with-reason
+    body_sha256: ee22f38b5aa3f7463bc3645c022e61ec58b10e55841a6123bd65bf21fa4ccf63
+    classification: recovery_and_enforcement
+    reason: Remission of recovery claims where collection would be inequitable (§ 227 AO), extinguishing the claim (§ 47 AO), on application, by administrative act with appeal and §§ 129–131 AO correction. Recovery administration; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V26.2
+    status: excluded-with-reason
+    body_sha256: 6b1f8b1e1f7774ca9f7b0768a835946dacd09182e9320f06f8ade6711bc6d074
+    classification: recovery_and_enforcement
+    reason: Objective equity grounds (legislative intent, Kindergeld counted as income under SGB II without possible correction, purely procedural recovery despite substantive entitlement, unavoidable overpayment months) and personal grounds (need and worthiness), with the degree of fault weighed. Recovery administration; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V26.3
+    status: excluded-with-reason
+    body_sha256: b1faaae367388baa5f67d47a4e6d8bec381d25097484432f4627f55f260b9de8
+    classification: recovery_and_enforcement
+    reason: BZSt approval for remissions on personal grounds above EUR 2,500, none for objective grounds. Supervisory procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V27
+    status: excluded-with-reason
+    body_sha256: 81f2e8d8139d83a56ae4bc04bb927fe8a0606a73d5c2f41dbf74334ee3835f38
+    classification: structural_heading
+    reason: Heading line only ("V 27 Reihenfolge der Tilgung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V27.1
+    status: excluded-with-reason
+    body_sha256: bc8ea5142b7011dc001aa76bd9cab07bdccfcc676da64768d30db0da79b13696
+    classification: recovery_and_enforcement
+    reason: Allocation of an insufficient payment as designated by the debtor (§ 225 Abs. 1 AO). Recovery accounting; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V27.2
+    status: excluded-with-reason
+    body_sha256: f0b58d4be9eb01388b7e828d1972cb4bbee3769d207bea3d616209932a593599
+    classification: recovery_and_enforcement
+    reason: 'Statutory allocation order without designation (§ 225 Abs. 2 AO: fines, coercive fines, Kindergeld, costs, interest, surcharges), oldest maturity first, lowest Kindergeld debt first with tie-breaks by month, child age and first name, and the enforcement authority''s order for enforced payments. Recovery accounting of repayments; it does not determine the entitlement amount.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V28
+    status: excluded-with-reason
+    body_sha256: 0ec2c277f55c0463e8f9f5ecb4a9b998006c9c917122b07cc1f0704bd009d6cd
+    classification: structural_heading
+    reason: Heading line only ("V 28 Aufrechnung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V28.1
+    status: excluded-with-reason
+    body_sha256: eb2f6f1d62dd28c0dec2f805e5d829dab7a3b9695df52190a9885bdd7fe5f285
+    classification: recovery_and_enforcement
+    reason: Set-off of a Kindergeld recovery claim against half of the current Kindergeld payout (§ 75 Abs. 1 EStG) unless the claimant proves resulting need under SGB II/XII, only against matured recovery claims, also against a co-resident claimant's half (§ 75 Abs. 2 EStG), set-off against other claims under § 226 AO and §§ 387 ff. BGB, set-off as a unilateral declaration not an administrative act, mandatory use, no set-off of payable Kindergeld under § 226 AO, accounting notice on objection, no netting with social-benefit bodies without consent. This governs how an overpayment is recovered from the payout stream; it does not change the monthly amount to which the claimant is entitled. § 75 EStG itself is on the spine and is decided there.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V28.2
+    status: excluded-with-reason
+    body_sha256: 35693fa37b718fe93a67d08c0b92c892d29ed96173df0bb769561340213556b9
+    classification: recovery_and_enforcement
+    reason: Set-off is not barred by diversion, refund, assignment, pledge or attachment; timing rules where Kindergeld is paid to a third party (claims arise under § 38 AO with § 66 Abs. 2 EStG at the start of each month); set-off first up to half the total claim, remainder paid subject to the other dispositions, and notice to the recipient. Recovery mechanics against the payout; no entitlement amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V29
+    status: excluded-with-reason
+    body_sha256: da29d8535124c4e7b27081915462096c4186e5ad47613c421c431b656bcdd5d5
+    classification: structural_heading
+    reason: Heading line only ("V 29 Zahlungsverjährung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V29.1
+    status: excluded-with-reason
+    body_sha256: 626d1eb8ae864df79f32a03aff2d52cee2d1db4c033f524b73f87e2d696cb1bb
+    classification: recovery_and_enforcement
+    reason: Payment limitation (§§ 228 ff. AO) applies to the payout claim and to recovery claims and extinguishes them (§§ 232, 47 AO). Limitation of enforceability; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V29.2
+    status: excluded-with-reason
+    body_sha256: c073fbe55b18af1decf0ccbd19cf4cee1e286fa022d4e6162b4a58617c861339
+    classification: recovery_and_enforcement
+    reason: Payment limitation starts at the end of the year of first maturity (or of payment without legal basis) and runs five years, ten for tax evasion (§ 108 AO for computation). Limitation of enforceability; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V29.3
+    status: excluded-with-reason
+    body_sha256: 93e8d31fc59d70559bfc14dc17039fd7638baf803a52ee112c35de83c5eec306
+    classification: recovery_and_enforcement
+    reason: Interruption of payment limitation (§ 231 AO) by written assertion, deferral, suspension, enforcement, and by the claimant's or recipient's written assertion of the payout claim. Limitation procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V3
+    status: excluded-with-reason
+    body_sha256: 8b66ac49d3b1bfc4671440499102e4d5d38d4aee90c2dac81b413510e9bc7f37
+    classification: structural_heading
+    reason: Heading line only ("V 3 Zuständigkeitswechsel"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V3.1
+    status: excluded-with-reason
+    body_sha256: 9b5bb4b8d0aaf1981638768dcba29ea129090371dba948fb64d42d0ae7d8276a
+    classification: administration_only
+    reason: Handover of the file on a change of local competence, full competence of the new office (uncovered periods, corrections, recovery), continuation of appeal proceedings (§ 367 AO), and avoidance/undoing of double fixings via § 70 Abs. 2 EStG, § 174 Abs. 2 or § 173 AO. Administrative procedure between offices; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V3.2
+    status: excluded-with-reason
+    body_sha256: ec37694be1ea7dded90b0a59704afe0b967c435bdf17b652b4120fee562fbf08
+    classification: repealed
+    reason: 'The complete located text of V 3.2 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V3.3
+    status: excluded-with-reason
+    body_sha256: 890fff10565e89b6a538ea3ba5e1e115d1f964f203c5d25f14aba15210377ccd
+    classification: administration_only
+    reason: Timing of a competence change (§ 26 AO) and that the original fixing binds the new office until corrected. Administrative continuity; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30
+    status: excluded-with-reason
+    body_sha256: 2d10c4981a1a253197e974cee427f902d3fc23a8edbb573177837638aa4ec8f7
+    classification: structural_heading
+    reason: Heading line only ("V 30 Zinsen"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30.1
+    status: excluded-with-reason
+    body_sha256: 6b9afd5cd7fdb12b086c02aa4d8874879ac0a8f1a733ec4cdc5af3d49b9a3b9f
+    classification: recovery_and_enforcement
+    reason: No interest on Kindergeld under § 233a AO (BFH III R 64/04); interest only for deferral, suspension of enforcement, evasion, and process interest; 0.5 percent per full month (§ 238 AO), rounding of the base to EUR 50 per child and month, two-year limitation with start points, rounding to whole euro in the claimant's favour and the EUR 10 de minimis (§ 239 AO), inapplicable to § 74 Abs. 2 EStG refund claims. Ancillary levies on recovery debts; the Kindergeld amount itself bears no interest.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30.2
+    status: excluded-with-reason
+    body_sha256: f0b7a2dd7b5cd95dfd802e063996ee117f06db05c5c5a519712d79733b48ee4b
+    classification: recovery_and_enforcement
+    reason: Deferral interest (§ 234 AO) by interest notice (form KG 92), collected with the last instalment, on the deferred amount per child, with the interest period. Ancillary levy; no Kindergeld amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30.3
+    status: excluded-with-reason
+    body_sha256: c62f2fc578f535f4e9e5feb6694e1e9f668ad06c7680a3b6daa314682ed7b7d2
+    classification: recovery_and_enforcement
+    reason: Interest after an unsuccessful appeal for which enforcement was suspended (§ 237 AO), period and form KG 92a. Ancillary levy; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30.4
+    status: excluded-with-reason
+    body_sha256: 562ccd4763bd77dada154239fec1002372a0a182264dbcb25d4ef8fc64be98cb
+    classification: recovery_and_enforcement
+    reason: 'Interest on evaded Kindergeld (§ 235 AO): debtor, requirement of completed evasion without need for conviction, cases of self-disclosure or procedural bars, period, and no double charging with surcharges, deferral or suspension. Ancillary levy; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V30.5
+    status: excluded-with-reason
+    body_sha256: 04dec58c014c3509ea8a38b83b57251070e93d8eba7a8e2278044c381ef08bbf
+    classification: recovery_and_enforcement
+    reason: Process interest (§ 236 AO) where the claimant prevails, from lis pendens to payment, fixed by the office (form KG 95). Ancillary levy; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V31
+    status: excluded-with-reason
+    body_sha256: 0333a0f2222c7b5b526df6e3ca11b04cf0e2e249773328ee62bd3512cf920196
+    classification: structural_heading
+    reason: Heading line only ("V 31 Säumniszuschläge"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V31.1
+    status: excluded-with-reason
+    body_sha256: f3bda89575173b71dcd8b0e69e6fa9a101dcb0745b2481ab9cfc2af9adcc898d
+    classification: recovery_and_enforcement
+    reason: Late-payment surcharges (§ 240 AO) arise by law without fixing or fault, serve as pressure, compensation and administrative cost, may be remitted where that purpose fails, and remain with the office. Ancillary levy on recovery debts; no Kindergeld amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V31.2
+    status: excluded-with-reason
+    body_sha256: 9c89b3cf3ffd2a552e40217e05e533e97a72af64a1ee7d9785fb8828ed6141a3
+    classification: recovery_and_enforcement
+    reason: 'Surcharge computation: none on ancillary levies, rounding of the arrears to EUR 50 per child and month, one percent per commenced month, three-day grace (§ 240 Abs. 3 AO). Ancillary levy; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V31.3
+    status: excluded-with-reason
+    body_sha256: b1e7b5744dd36e1c9def7c56f04fe1304bff89ce9506744f2bbcea7ca3e20cc8
+    classification: recovery_and_enforcement
+    reason: Disputes over surcharges by accounting notice (§ 218 Abs. 2 AO, form KG 93) itemised by type, period and amount (BFH III R 37/22), appeal, §§ 129–131 AO correction. Procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V32
+    status: excluded-with-reason
+    body_sha256: 71ca5b4251684b9bfe89850b756dd4597127cae7aace82d890d9f473f052ffcb
+    classification: structural_heading
+    reason: Heading line only ("V 32 Mahnung, Vollstreckung und Niederschlagung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V32.1
+    status: excluded-with-reason
+    body_sha256: 6c661b42c67aea195eb98c647bb770e4a1c6e5b3316e0a2f713e4e376bff8677
+    classification: recovery_and_enforcement
+    reason: Written reminder with at most one month to pay, showing surcharges and warning of enforcement and penal consequences. Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V32.2
+    status: excluded-with-reason
+    body_sha256: 7bb2f95f88f96b22978209cf5f725004715de089b1e3846aeb26012170e424e0
+    classification: recovery_and_enforcement
+    reason: Arrears notice to the competent Hauptzollamt, enforcement exclusively by customs enforcement units (§ 249 Abs. 1 Satz 3 AO), paperless data exchange. Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V32.3
+    status: excluded-with-reason
+    body_sha256: 8a16f78ba12b85dc59033003103c4595b9306519234c2e66c22c89f8f4684c65
+    classification: recovery_and_enforcement
+    reason: Internal write-off (§ 261 AO) where collection is futile or disproportionate (below EUR 36; below EUR 250 for untraceable debtors), after a fruitless enforcement attempt or proof of insolvency or an asset disclosure, not communicated to the debtor, claim not extinguished, resumption where prospects improve. Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33
+    status: excluded-with-reason
+    body_sha256: 3c2b853ac3c0618a2ca8015984f620737ac31a18ad1bc5c6c663293efb1d627a
+    classification: structural_heading
+    reason: Heading line only ("V 33 Auszahlung an Dritte (Abzweigung)"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.1
+    status: excluded-with-reason
+    body_sha256: c1c9deff952de3f734d9cc641d72b4cfc74c48e748094f77fb103f96577b0f00
+    classification: payout_routing
+    reason: 'Diversion of fixed Kindergeld to the child or a person or body maintaining it where the claimant does not bear maintenance (§ 74 Abs. 1 EStG): the claimant remains entitled, only the payee changes; no bar to § 75 EStG set-off; treatment as an application in legitimate interest where nothing is fixed; disposal only while the claim is still disposable; recovery from the recipient on retroactive correction; written request (form KG 17a), hearing, discretion, revocability, double-effect act with mandatory joinder. Payout routing; the entitlement and its amount are unchanged.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.2
+    status: excluded-with-reason
+    body_sha256: 5fbedac4516f9ced01b3b968690644e63b892c91331a501976f76d607b7b7643
+    classification: payout_routing
+    reason: 'Diversion conditions: claimant regularly pays no or less maintenance than the pro-rata Kindergeld (with enumerated cases and BFH references), none where maintenance exceeds it (household admission presumption and its exceptions), only monthly payments count, no diversion for one-off lapses, later maintenance considered, adult disabled children in institutional care, discretion reduced to zero when met. Payout routing conditions; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.3
+    status: excluded-with-reason
+    body_sha256: ae451166e1d5dd0abd0f487d274e31a419865da52066ef7028f4a7d7b97668cf
+    classification: payout_routing
+    reason: Who may receive a diversion (the child if self-supporting, any person or body maintaining it); the other parent's claim to payment is a § 64 Abs. 2/3 EStG priority question decided by fixing, not by diversion; grandparent household cases. Payout routing; the priority rule is § 64 EStG on the spine.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.4
+    status: excluded-with-reason
+    body_sha256: afe5b095f9889bd5d57efd312c0330f74394981774f661feec3c832db2537573
+    classification: payout_routing
+    reason: Provisional suspension of payment on a diversion request alleging non-maintenance, hearing within two weeks (§ 91 AO), and payout of withheld amounts only after finality where accounts conflict. Payout procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.5
+    status: excluded-with-reason
+    body_sha256: fe5fdfcbd572a552dd0936d75263f395195cbf280cb2bc5e68381f59199eaab6
+    classification: payout_routing
+    reason: 'Amount diverted: up to the child''s pro-rata share under § 76 EStG (computed per V 24.2), set by discretion according to the claimant''s maintenance (full share where none, half where non-trivial expenses per BFH III R 65/04, difference where lower cash maintenance, none where maintenance at least equals the share), only actual expenses count, and no diversion below EUR 5 per month by analogy to § 65 Abs. 2 EStG. This splits the payout of a fixed amount between payees; the entitlement amount and the per-child share it draws on (V 24.2, open) are unchanged.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.6
+    status: excluded-with-reason
+    body_sha256: e67dfde1c0ff99f830f864d04e14e5b08033a7f49a51a47e7adf8d2b51481564
+    classification: payout_routing
+    reason: Both whether and how much to divert are discretionary decisions to be documented. Payout procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V33.7
+    status: excluded-with-reason
+    body_sha256: 46368ac290d998cf68c2a36c381723fcaa7bd5531f0e7d364cebe5a8e400c657
+    classification: payout_routing
+    reason: Correction of diversion decisions under §§ 130, 131 AO with worked examples, uniform withdrawal towards claimant and recipient, and treatment of renewed requests. Payout procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34
+    status: excluded-with-reason
+    body_sha256: 00c8c4b0e48222267ed8ea5389a28430bc4e23428dca37a40d192b918278e85f
+    classification: structural_heading
+    reason: Heading line only ("V 34 Erstattung nach § 74 Abs. 2 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.1
+    status: excluded-with-reason
+    body_sha256: 74bf7ae36d14c749463acfedcb5adbd21d669fdf07ab63839b8fadc216a5c61e
+    classification: payout_routing
+    reason: 'Refund claims of social-benefit bodies against the Familienkasse (§ 74 Abs. 2 EStG with SGB X): for past subordinate benefits without offset, for cost contributions or expense reimbursement, per month with both a benefit and a payout claim, on assertion with forms KG 17b/17c, treatment as application in legitimate interest, no refund once paid out before knowledge (§ 104 SGB X, BFH III R 9/21, III R 36/21), pro-rata for benefited children (V 24.2), information to the claimant without hearing, accounting notice on objection. Payout routing to another public body; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.2
+    status: excluded-with-reason
+    body_sha256: 17d7d938005a1f45e04040e95cdddba55073a4bc5318f3b0b67a7d5debf9d91a
+    classification: payout_routing
+    reason: 'Refund for subordinate benefits (§ 104 Abs. 1 Satz 1 SGB X): whose income the Kindergeld belongs to (claimant, or child where diverted or actually passed on, BFH III R 33/05) with three worked examples, exclusion for months already paid out, same-purpose requirement (basic income support, Bürgergeld, asylum-seeker benefits qualify; youth welfare and integration assistance do not), and the war-victims'' child supplement under § 33b BVG. Payout routing; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.3
+    status: excluded-with-reason
+    body_sha256: 649854ae8e47dc1414e975ec7462f13277508333c99256d261e58ade31641607
+    classification: payout_routing
+    reason: 'Refund for cost contributions or expense reimbursement (§ 104 Abs. 1 Satz 4 SGB X): institutional care under SGB VIII, XII, IX, also for current periods, proof by cost notice, capped by that notice, prior collection efforts, and the youth-welfare cost contribution at least equal to Kindergeld (§ 94 Abs. 3 SGB VIII). Payout routing; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.4
+    status: excluded-with-reason
+    body_sha256: 72ea83d2d4f1bd7db96a294ead5d316a8e369e8a106d5835a3f766bf27b4b664
+    classification: payout_routing
+    reason: Priority of a § 74 Abs. 2 EStG refund over a § 74 Abs. 1 diversion and over assignment, pledge or attachment (§ 113 SGB XII); earlier dispositions lapse; the office's own set-off has priority except where the refund was asserted first that month. Ranking of competing payout dispositions; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.5
+    status: excluded-with-reason
+    body_sha256: 65433981a81075d8f80f56ae2e89018c11ef6cc0982705bf592e96c62eac41ad
+    classification: payout_routing
+    reason: Interest on refund claims of social, youth-welfare and war-victims bodies only on express demand, limited to advance payments (§ 108 SGB X), none on current refunds. Ancillary rule between public bodies; no Kindergeld amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.6
+    status: excluded-with-reason
+    body_sha256: c9af6c24dd06a10642b424d3d548a868f719359b820e37ff8e7736edbb91f77d
+    classification: payout_routing
+    reason: Deemed satisfaction of the claimant's Kindergeld claim to the extent of a refund claim (§ 107 SGB X), also where the refund is time-barred, so arrears for subordinate-benefit months are normally excluded; informal notice where no refund is apparent; accounting notice where Kindergeld was paid despite knowledge. Payout routing; the entitlement amount is not redefined.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V34.7
+    status: excluded-with-reason
+    body_sha256: 44c06db8d027ec0e67d08413f28e7ecc42366e645a48ac6511d2031faad460e2
+    classification: payout_routing
+    reason: Reclaim from a social-benefit body when the fixing is corrected (§ 112 SGB X), by simple letter or general performance action, limitation under § 113 SGB X. Inter-agency recovery; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V35
+    status: excluded-with-reason
+    body_sha256: 8bbf15276f937752e1eeb539013bf27e476fc984df67db7e03cf44326fa9e51e
+    classification: payout_routing
+    reason: Change of the priority claimant under § 64 EStG (change of family circumstances, claimant determination or its revocation, waiver of priority or its revocation), revocation of the previous fixing under § 70 Abs. 2 Satz 1 EStG, retroactive effect only before a fixing, and joinder in priority disputes (§ 174 AO). Procedure implementing the priority rule; § 64 EStG itself is on the spine and Kapitel A 25.1 carries its substance.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V36
+    status: excluded-with-reason
+    body_sha256: 5d63616180c67d1647294e3f198d35d3dfd443386b9dae6298976a5b9a5ef746
+    classification: administration_only
+    reason: 'Cooperation between the two Familienkassen on a claimant change: fixing the date, exchanging anonymised documents, completing investigations, revoking from the following month and fixing from that month, and the year-end office''s binding assessment. Inter-office procedure; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V37
+    status: excluded-with-reason
+    body_sha256: 9cde58d8aead4c2cf5e406806d36aa1279c5b9cb54b88452d101513994363dfc
+    classification: payout_routing
+    reason: 'Discharge of the recovery claim by forwarding: where the former claimant passed the Kindergeld on and the new claimant confirms and waives payout (form KG 14), recovery and payout are omitted as an equity measure; conditions, timing, notices, accounting notice, and the effect where the new claimant''s entitlement is lower or higher; otherwise the § 70 Abs. 1 payout limit applies (V 23.4). Payout routing between claimants; the per-claimant entitlement it compares is decided elsewhere.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V38
+    status: excluded-with-reason
+    body_sha256: f2c3d3703c80ab6d4aea5c71fe1cc6eafdf8c6b6de0eb5070b9042b4a016bf44
+    classification: structural_heading
+    reason: Heading line only ("V 38 Haftungsverfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V38.1
+    status: excluded-with-reason
+    body_sha256: a77e2eb4017fcaca18a0cd77e4baa5a1ea737357e88b4234f15526820b21dc64
+    classification: recovery_and_enforcement
+    reason: 'Liability notices (§ 191 AO) against persons liable by law for recovery of wrongly paid Kindergeld: accessoriness to the recovery claim (§ 37 Abs. 2 AO), joint and several liability (§ 44 AO), bars where the fixing can no longer be revoked or the debt is time-barred or remitted, and subsidiarity (§ 219 AO) with the § 71 AO exception. Recovery against third parties; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V38.2
+    status: excluded-with-reason
+    body_sha256: 6c077b63a02d74f0a043c738c258ca3c79abcd1dbc673d28b21b30273e96c240
+    classification: recovery_and_enforcement
+    reason: Competence and unit for liability examination (§ 24 AO), prompt initiation, discretion whether and whom to hold liable with reasons, exclusion for periods of the office's own delay, and prior written hearing (§ 91 AO). Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V38.3
+    status: excluded-with-reason
+    body_sha256: bdda0d311e581c583de5c9e519286d10ad04267a2fb649c05baaaf6dd5968312
+    classification: recovery_and_enforcement
+    reason: Form and content of the liability notice, joinder of the demand for payment, notification, limitation of four (ten) years from the year the liability arose (§ 191 Abs. 3 AO), and appeal (§ 347 AO). Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V38.4
+    status: excluded-with-reason
+    body_sha256: a304b783b1c22982464ff7ee54833acb4b044fc042169052a15a511d16c55e73
+    classification: recovery_and_enforcement
+    reason: Correction of liability notices under §§ 129–131 AO rather than §§ 172 ff. AO, also in the debtor's favour after the limitation period, and revocation where the underlying debt is later reduced. Recovery procedure; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V39
+    status: excluded-with-reason
+    body_sha256: 6c2a99fa58a99b7237f9b22184bfa2ecc2999c83cd2e13739591a2a6a9103533
+    classification: structural_heading
+    reason: Heading line only ("V 39 Haftungstatbestände"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V39.1
+    status: excluded-with-reason
+    body_sha256: 97128765d78a261d88b428ec230f2cf067cc5ce839e18b8f843e49a81954a739
+    classification: recovery_and_enforcement
+    reason: Liability of legal representatives and asset managers (§§ 69, 34, 35 AO) for wrongly paid Kindergeld and surcharges caused by intentional or grossly negligent breach (wrong application, § 68 Abs. 1 EStG reporting, § 153 AO), causation per the adequacy theory, and the fault standard. Recovery against third parties; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V39.2
+    status: excluded-with-reason
+    body_sha256: 181df3d54e7913191c2405dca6739f1a25a2c030c5e34b99f9830cdc88cb8759
+    classification: recovery_and_enforcement
+    reason: Liability of the tax evader and participants (§ 71 AO) for wrongly paid Kindergeld and evasion interest, irrespective of self-disclosure or prosecution bars, with pre-shaped discretion (BFH XI R 3/03). Recovery against third parties; no amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V4
+    status: excluded-with-reason
+    body_sha256: 28589035d497701740d05bbf4325ee08735a8ac10154a7b8a0ee8e0994823f7c
+    classification: structural_heading
+    reason: Heading line only ("V 4 Beteiligung am Verfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V4.1
+    status: excluded-with-reason
+    body_sha256: 94a8eac47b1d9180d427d01c4f12ba473f8d2e8a05f3fa11149f8703b266eb5c
+    classification: procedure
+    reason: 'Who is a participant (§ 78 AO): the applicant and addressees of administrative acts. Procedural standing; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V4.2
+    status: excluded-with-reason
+    body_sha256: c44aa582591bab772814568f76529b2fe3dde67cd804f0d0f9a408c791811f99
+    classification: procedure
+    reason: 'Capacity to act (§ 79 AO): legal representatives of minors, court-appointed guardians (§§ 1814 ff. BGB), exclusivity declarations, and to whom decisions are notified. Procedural capacity; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V4.3
+    status: excluded-with-reason
+    body_sha256: c19f53906cf734590b2b8df00b105566c9e602f19f4ba1d3f10ba5e136537116
+    classification: procedure
+    reason: 'Authorised representatives (§ 80 AO): scope and proof of a power of attorney, that it does not authorise receipt of payments without a payment instruction, communication via the representative, and its expiry. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V5
+    status: excluded-with-reason
+    body_sha256: 51926288b7d61faa3dd5ea3a54c8603b5bc3afe1cdeb87b667232699fb9145ba
+    classification: structural_heading
+    reason: Heading line only ("V 5 Beginn des Verfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V5.1
+    status: excluded-with-reason
+    body_sha256: 741f8d1616915cc08657120214f23771b358900147b72b8be99e561c0f5a7a96
+    classification: procedure
+    reason: The fixing procedure starts with the application (§ 67 Satz 1 EStG, § 86 AO); electronic filing via the official interface is the rule, written filing permitted. Form of application; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V5.2
+    status: excluded-with-reason
+    body_sha256: 558e34e2188f17dcbc5e127422890973dc9388380006f9bebfeeea6b651d475b
+    classification: procedure
+    reason: Written application requires a handwritten signature (fax allowed, scans not), electronic filing needs a secure procedure (§ 87a Abs. 6 AO), filing at the competent office or a foreign EU/EEA/CH institution, restriction to a period, and which receipt date counts for the six-month window of § 70 Abs. 1 Satz 2 and 3 EStG (forwarded applications, foreign filing per BFH III R 28/21). No new application on change of competence or legal basis. Procedure fixing dates and forms; the payout limit those dates feed is V 23.4 / § 70 EStG on the spine.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V5.3
+    status: excluded-with-reason
+    body_sha256: d1ef922c6f1e3e608a9f2f37b308850dc1131f9460394c547dd8ffed7054467c
+    classification: procedure
+    reason: 'Application by a person with a legitimate interest (§ 67 Satz 2 EStG): who qualifies (maintenance debtors, diversion or refund recipients, the child), proof, that the applicant becomes a participant but not the claimant, identification of the claimant and child by IdNr, notification, appeal rights, and preclusion by a final decision. Procedure; entitlement is still tested in the named claimant under §§ 62, 64 EStG.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V5.4
+    status: excluded-with-reason
+    body_sha256: 1d850ae9338c8559546a3f040c61d39b1a37e0f43a51db92e3412f1d992a5987
+    classification: procedure
+    reason: A new written application is required when the child turns 18 (with V 5.2, V 10 Abs. 4). Procedural trigger; the substantive conditions for adult children are in Kapitel A and § 32 EStG.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V6
+    status: excluded-with-reason
+    body_sha256: 06756dcdf69c25723495a73374566cc6abbae459aa49aaa8718e93fa48da075a
+    classification: structural_heading
+    reason: Heading line only ("V 6 Feststellung der Anspruchsvoraussetzungen"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V6.1
+    status: excluded-with-reason
+    body_sha256: e44d11f8eed46dd27b04229d247e1cb88ea18b10f51e68788808b05c311cf7d6
+    classification: procedure
+    reason: Investigation principle (§ 88 AO), evidence means (§ 92 AO), restraint in demanding affidavits (§ 95 AO), the right to be heard before adverse acts (§ 91 AO) and its curability (§§ 126, 127 AO). Fact-finding procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V6.2
+    status: excluded-with-reason
+    body_sha256: c20efc2ee8b0cc3703823745e18d215c817a06c4096cdfce45ed5fae5c221c47
+    classification: procedure
+    reason: German as official language (§ 87 AO), when translations may be demanded (not in Regulation (EC) 883/2004 cases), and notification in German. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V6.3
+    status: excluded-with-reason
+    body_sha256: d94aa33042e8d3b339e495e1bc85f656416eb948b0a7afd580e54100393b8204
+    classification: procedure
+    reason: 'Avoiding double fixings: checking prior consideration of the child elsewhere, reliance on the co-signature of the other parent for the claimant determination (§ 64 Abs. 2 EStG), and reporting to the BZSt IdNr database with reconciliation on overlap notices. Procedure enforcing the one-claimant rule of § 64 EStG, which sits on the spine.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V6.4
+    status: excluded-with-reason
+    body_sha256: 178d72718ff5b5a422327c7c5115dc61641b73bf6e8710f5d2a44f3df0937201
+    classification: procedure
+    reason: Deception or forged documents in the application procedure may constitute document forgery or tax evasion; the BuStra unit is to be informed (S 5.3). Criminal referral; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7
+    status: excluded-with-reason
+    body_sha256: e56d2b67f1578a885972acd4228894abd240622b601804819468739b05eefed6
+    classification: structural_heading
+    reason: Heading line only ("V 7 Mitwirkungspflichten"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.1
+    status: excluded-with-reason
+    body_sha256: 295b916c547967784fef0f940f7f8523a40855d821abfbfe8366c41ea18dd389
+    classification: structural_heading
+    reason: Heading line only ("V 7.1 Mitwirkungspflichten der Beteiligten"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.1.1
+    status: excluded-with-reason
+    body_sha256: 4b58609831a2cf867983088c22845a2567c01c309016a2959b1e3689c037923f
+    classification: procedure
+    reason: 'Cooperation duties (§§ 90–95, 97 AO; § 68 Abs. 1 EStG): no right to refuse information, adverse inference, subsidiarity of requests to third parties (§ 93 Abs. 1 Satz 3 AO), content of requests, and the heightened duty for foreign facts (§ 90 Abs. 2 AO) discharged with EU forms. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.1.2
+    status: excluded-with-reason
+    body_sha256: 05fd2b7a2d0b7fe82ae50e4385f379181418466b9ca05128630790cb0afb9741
+    classification: procedure
+    reason: Duty to give information (§ 93 Abs. 1 AO), normally discharged by the KG 1 forms, with follow-up requests where insufficient. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.1.3
+    status: excluded-with-reason
+    body_sha256: 2f67fc87c5f343d69610faf5dbfe5c280b26ec3ff451dbb9c0c749ff43696f1d
+    classification: procedure
+    reason: Duty to produce documents (§ 97 AO), no cost-free issuance, plausible statements plus file content may suffice, redaction of unneeded data permitted. Evidence procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.1.4
+    status: excluded-with-reason
+    body_sha256: 7378ee2649da8ab2980b57cadad9b588e9e26449d2eb3c21b93bf3f7631d40a3
+    classification: procedure
+    reason: Duty to report changes in circumstances (§ 68 Abs. 1 Satz 1 EStG) to the competent office, from application onward and after the end of payment, also where a representative applied or payment goes to third parties; breaches may be offences (Kapitel S). Procedural duty; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.2
+    status: excluded-with-reason
+    body_sha256: ceee6a4070ea10b162015de03c4d3bdec3b2bb27cb3dd25b526c489dd8461fc8
+    classification: procedure
+    reason: 'Cooperation duty of adult children (§ 68 Abs. 1 Satz 2 EStG): information and evidence on request, no duty to report changes unprompted, subsidiarity, deadlines (§ 109 AO), enforcement by coercive fine (§ 328 AO). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.3
+    status: excluded-with-reason
+    body_sha256: efb2106e6500b572d4ba69d1590d78ec400fa397ff5c8f945a30ab73e0f923c6
+    classification: procedure
+    reason: Cooperation duties of other persons under §§ 93, 97 AO (the non-priority parent as a third party), the relatives' right to refuse (§ 101 AO), the instruction requirement and its evidential consequence. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V7.4
+    status: excluded-with-reason
+    body_sha256: ab3d8d01a4fd673469be822d8bdab7da92745c14b6e65de252180b445397492a
+    classification: procedure
+    reason: 'Consequences of non-cooperation: refusal or revocation for non-provability (burden of proof), revocation under § 70 Abs. 2 Satz 1 EStG from when entitlement is no longer ascertainable, later cooperation treated as a new application. Procedure on the evidential burden; the entitlement conditions themselves are in Kapitel A and on the spine.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V8
+    status: excluded-with-reason
+    body_sha256: da0b16c32097fcba678f30666d8746d2c6310e0f705bbd93911a9cb5bdb463df
+    classification: procedure
+    reason: 'Advice and information duty (§ 89 AO): no duty to advise on maximising the claim, but a duty to point out an obviously necessary application (e.g. by the spouse); information on procedural rights; the annual payment certificate under § 68 Abs. 3 EStG, also for a non-priority claimant limited to child, year and amount (BFH III R 40/13). Procedure; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-V9
+    status: excluded-with-reason
+    body_sha256: 8d50e73c1da48f962c4d264343faf33b65a743dd1d3049f0c37650bebeb02da2
+    classification: administration_only
+    reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
+    bears_on_computed_surface: false
   leaf_classifications: []
   supplemental_instruments:
   - id: de-kg-suppl-001
@@ -7184,9 +8072,9 @@ computed:
     counts:
       total: 463
       encoded: 0
-      classified-with-reason: 1
-      excluded-with-reason: 26
-      pending: 436
+      classified-with-reason: 5
+      excluded-with-reason: 170
+      pending: 288
     pending:
     - de-kg-dakg-A1
     - de-kg-dakg-A10
@@ -7433,154 +8321,6 @@ computed:
     - de-kg-dakg-S8.1.9
     - de-kg-dakg-S8.2
     - de-kg-dakg-S9
-    - de-kg-dakg-V1
-    - de-kg-dakg-V1.1
-    - de-kg-dakg-V1.2
-    - de-kg-dakg-V1.3
-    - de-kg-dakg-V1.4
-    - de-kg-dakg-V1.5
-    - de-kg-dakg-V10
-    - de-kg-dakg-V11
-    - de-kg-dakg-V11.1
-    - de-kg-dakg-V11.2
-    - de-kg-dakg-V12
-    - de-kg-dakg-V12.1
-    - de-kg-dakg-V12.2
-    - de-kg-dakg-V12.3
-    - de-kg-dakg-V13
-    - de-kg-dakg-V14
-    - de-kg-dakg-V14.1
-    - de-kg-dakg-V14.2
-    - de-kg-dakg-V14.3
-    - de-kg-dakg-V15
-    - de-kg-dakg-V15.1
-    - de-kg-dakg-V15.2
-    - de-kg-dakg-V16
-    - de-kg-dakg-V16.1
-    - de-kg-dakg-V16.2
-    - de-kg-dakg-V17
-    - de-kg-dakg-V17.1
-    - de-kg-dakg-V17.1.1
-    - de-kg-dakg-V17.1.2
-    - de-kg-dakg-V17.1.3
-    - de-kg-dakg-V17.1.4
-    - de-kg-dakg-V17.2
-    - de-kg-dakg-V17.2.1
-    - de-kg-dakg-V17.3
-    - de-kg-dakg-V17.4
-    - de-kg-dakg-V18
-    - de-kg-dakg-V18.1
-    - de-kg-dakg-V18.2
-    - de-kg-dakg-V19
-    - de-kg-dakg-V19.1
-    - de-kg-dakg-V19.2
-    - de-kg-dakg-V2
-    - de-kg-dakg-V20
-    - de-kg-dakg-V20.1
-    - de-kg-dakg-V20.2
-    - de-kg-dakg-V21
-    - de-kg-dakg-V21.1
-    - de-kg-dakg-V21.2
-    - de-kg-dakg-V22
-    - de-kg-dakg-V22.1
-    - de-kg-dakg-V22.2
-    - de-kg-dakg-V23
-    - de-kg-dakg-V23.1
-    - de-kg-dakg-V23.2
-    - de-kg-dakg-V23.3
-    - de-kg-dakg-V23.4
-    - de-kg-dakg-V24
-    - de-kg-dakg-V24.1
-    - de-kg-dakg-V24.2
-    - de-kg-dakg-V24.3
-    - de-kg-dakg-V25
-    - de-kg-dakg-V25.1
-    - de-kg-dakg-V25.2
-    - de-kg-dakg-V25.3
-    - de-kg-dakg-V26
-    - de-kg-dakg-V26.1
-    - de-kg-dakg-V26.2
-    - de-kg-dakg-V26.3
-    - de-kg-dakg-V27
-    - de-kg-dakg-V27.1
-    - de-kg-dakg-V27.2
-    - de-kg-dakg-V28
-    - de-kg-dakg-V28.1
-    - de-kg-dakg-V28.2
-    - de-kg-dakg-V29
-    - de-kg-dakg-V29.1
-    - de-kg-dakg-V29.2
-    - de-kg-dakg-V29.3
-    - de-kg-dakg-V3
-    - de-kg-dakg-V3.1
-    - de-kg-dakg-V3.2
-    - de-kg-dakg-V3.3
-    - de-kg-dakg-V30
-    - de-kg-dakg-V30.1
-    - de-kg-dakg-V30.2
-    - de-kg-dakg-V30.3
-    - de-kg-dakg-V30.4
-    - de-kg-dakg-V30.5
-    - de-kg-dakg-V31
-    - de-kg-dakg-V31.1
-    - de-kg-dakg-V31.2
-    - de-kg-dakg-V31.3
-    - de-kg-dakg-V32
-    - de-kg-dakg-V32.1
-    - de-kg-dakg-V32.2
-    - de-kg-dakg-V32.3
-    - de-kg-dakg-V33
-    - de-kg-dakg-V33.1
-    - de-kg-dakg-V33.2
-    - de-kg-dakg-V33.3
-    - de-kg-dakg-V33.4
-    - de-kg-dakg-V33.5
-    - de-kg-dakg-V33.6
-    - de-kg-dakg-V33.7
-    - de-kg-dakg-V34
-    - de-kg-dakg-V34.1
-    - de-kg-dakg-V34.2
-    - de-kg-dakg-V34.3
-    - de-kg-dakg-V34.4
-    - de-kg-dakg-V34.5
-    - de-kg-dakg-V34.6
-    - de-kg-dakg-V34.7
-    - de-kg-dakg-V35
-    - de-kg-dakg-V36
-    - de-kg-dakg-V37
-    - de-kg-dakg-V38
-    - de-kg-dakg-V38.1
-    - de-kg-dakg-V38.2
-    - de-kg-dakg-V38.3
-    - de-kg-dakg-V38.4
-    - de-kg-dakg-V39
-    - de-kg-dakg-V39.1
-    - de-kg-dakg-V39.2
-    - de-kg-dakg-V4
-    - de-kg-dakg-V4.1
-    - de-kg-dakg-V4.2
-    - de-kg-dakg-V4.3
-    - de-kg-dakg-V5
-    - de-kg-dakg-V5.1
-    - de-kg-dakg-V5.2
-    - de-kg-dakg-V5.3
-    - de-kg-dakg-V5.4
-    - de-kg-dakg-V6
-    - de-kg-dakg-V6.1
-    - de-kg-dakg-V6.2
-    - de-kg-dakg-V6.3
-    - de-kg-dakg-V6.4
-    - de-kg-dakg-V7
-    - de-kg-dakg-V7.1
-    - de-kg-dakg-V7.1.1
-    - de-kg-dakg-V7.1.2
-    - de-kg-dakg-V7.1.3
-    - de-kg-dakg-V7.1.4
-    - de-kg-dakg-V7.2
-    - de-kg-dakg-V7.3
-    - de-kg-dakg-V7.4
-    - de-kg-dakg-V8
-    - de-kg-dakg-V9
     - de-kg-instr-001
     - de-kg-instr-002
     - de-kg-instr-003
@@ -11516,7 +12256,7 @@ computed:
       section_located: true
       body_sha256: bbc5702004b1f2d5f3c14b81078ee4f1ca36c21fdf1a1b97a1d4abf2b3917b70
     - id: de-kg-dakg-V1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11529,8 +12269,11 @@ computed:
       heading_sha256: f2a0b82b65bebbea26e9fd764c8c968959a01e8c91e9889b255426a89191fc20
       section_located: true
       body_sha256: 4d6f2171c70d8cd99da2bfac3d561644361b22f9eb97457a7fa05f7f8c0c5374
+      classification: structural_heading
+      reason: Heading line only ("V 1 Sachliche Zuständigkeit i. S. d. § 16 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11543,8 +12286,11 @@ computed:
       heading_sha256: 4ec372445ba71f066697716b9b1af720a16ef4660aef096f9b015607be7c2787
       section_located: true
       body_sha256: 86afe13a3d8f9ef58fc70eb12be689490eaed6b5bd58af72e016a02f0c07ca23
+      classification: administration_only
+      reason: Subject-matter competence of the Familienkassen (§ 5 Abs. 1 Nr. 11 FVG) for fixing and paying Kindergeld. Institutional assignment; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11557,8 +12303,11 @@ computed:
       heading_sha256: 7742d06772264d32f8b1f37a6ac728f32995022c666301539d7ac06e264529ba
       section_located: true
       body_sha256: 7f93737f93a1adf1854a05eb13d975a72cceb7b5d3b9921177eb9d9d52d970d7
+      classification: repealed
+      reason: 'The complete located text of V 1.2 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11571,8 +12320,11 @@ computed:
       heading_sha256: ba295bd4a7cd897d2117b5ca321cdbefba608db105a0730140141caa75cc36dd
       section_located: true
       body_sha256: 689a41a65e87bcb95c3b23a38dfbd0757a002cd9608cd207cbb5ac9e186ae801
+      classification: repealed
+      reason: 'The complete located text of V 1.3 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11585,8 +12337,11 @@ computed:
       heading_sha256: 7ddad61d38c1ff5dfec2a02ca0ab47fee198ee0cf9b1f24ddefa4cd4ff57d477
       section_located: true
       body_sha256: e36d90d99d0d027b49c411854d071414555f0fed6c16f4b71058a36d2be77a1c
+      classification: repealed
+      reason: 'The complete located text of V 1.4 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11599,8 +12354,11 @@ computed:
       heading_sha256: 58dc117d6ce85a7314ba34df1d4516a197895dba86020c0d59dfaba9834ff453
       section_located: true
       body_sha256: 39329fc975086b7f5d0aee71de86acf4c1eec2ef7375a1e1ce27cff5344252ae
+      classification: repealed
+      reason: 'The complete located text of V 1.5 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11613,8 +12371,11 @@ computed:
       heading_sha256: 51a3ee147d020d18672d3e42815b33c95629e16d71266953531ff385e7d1dca1
       section_located: true
       body_sha256: c165cf4189da5301d2d667fb7886a8178ad4761b335b1f450b0f7d30bdd75294
+      classification: procedure
+      reason: Fixing by written notice per child (§ 70 Abs. 1 EStG, § 157 AO), types of decision, forms KG 2 / KG 2f, reasoning requirements (§ 121 AO), fixing for the whole applied period with a note on the § 70 Abs. 1 payout limit, time-limiting fixings for minors to the month of the 18th birthday (legacy cases from 2007 continue to lapse), notification rules (§§ 122, 122a AO), informing other bodies, and changing a fixing before altering payment. Abs. 1 Satz 4 dispenses with a new notice when only the § 66 Abs. 1 EStG amounts rise. Procedure on the form and timing of decisions; the amounts and conditions decided are on the spine (§§ 66, 70 EStG).
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V11
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11627,8 +12388,11 @@ computed:
       heading_sha256: 9bf6bcbcf3a6938d0a0bb342727b7ba568e8c6fccbde4a5528d97911efc679f2
       section_located: true
       body_sha256: c1cfb17a214a2fbb8fbcd61b27230a99c9d3db6fdcda1fec576c2ee396189c46
+      classification: structural_heading
+      reason: Heading line only ("V 11 Vorbehalt der Nachprüfung und Vorläufigkeit"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V11.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11641,8 +12405,11 @@ computed:
       heading_sha256: daf3c3937651173930da67617300fc6fb08821ec665dad36740a976ef30f579a
       section_located: true
       body_sha256: 0d72789406e758b498d2be9df34d54a89dec388bae2d09a81d23af75f9d04d4e
+      classification: procedure
+      reason: Fixing subject to review (§ 164 AO) only on instruction of the supervisory authority, scope, free amendment while effective, and lapse with the regular limitation period. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V11.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11655,8 +12422,11 @@ computed:
       heading_sha256: e445d2e1788f7228b33cad87e2f56f95020aad6c981e91f0dfb4e390a4742c0d
       section_located: true
       body_sha256: e60aec5ec0737f161088f721c728bb2dc96c857500c81c6930137198472cf83c
+      classification: procedure
+      reason: Provisional fixing (§ 165 AO) where entitlement conditions are uncertain, only on instruction by supervision or BMF letter, limited to the uncertain conditions, correction within that scope, declaration of finality, and lapse with the limitation period (§ 171 Abs. 8 AO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V12
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11669,8 +12439,11 @@ computed:
       heading_sha256: 111d6974b34434792df07764d82c8c104ec6cb34594f0141da54246caf26090d
       section_located: true
       body_sha256: 2ad37c16dc23cc7db76c57f13d18292e48a7bdfd2af49640d1716c9fd6742f0b
+      classification: procedure
+      reason: 'Limitation of the fixing power (§ 169 AO): no fixing or correction after expiry; the notice must leave the office before expiry and actually reach the claimant; service with certificate for adverse notices near expiry. Limitation procedure governing when a decision can still be made; it does not define the monthly entitlement.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V12.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11683,8 +12456,11 @@ computed:
       heading_sha256: 0314bf6b44b84b4a5d1e67adc8c3b9a8da5925982067f3bce868b8cd5d346843
       section_located: true
       body_sha256: f614b98fecd18d7a1e229f65d2a90eaa5f08c60c88e5b1473c1f98dea1288809
+      classification: procedure
+      reason: Limitation period four years, ten for tax evasion, five for reckless understatement (§ 169 Abs. 2 AO). Limitation of enforceability; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V12.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11697,8 +12473,11 @@ computed:
       heading_sha256: c1f696ed2ee691136fb36791a42ab169cfecf4b8b1d7a2b5317b3cf7d8f36d44
       section_located: true
       body_sha256: 2c0c9ded8bb723298c00c3d3d212338f4a61d76ba459fe40b6f75ca6535481c6
+      classification: procedure
+      reason: 'Start of the limitation period: end of the year the claim arose (§ 170 Abs. 1 AO), not before the year of application for corrections (§ 170 Abs. 3 AO), and the year of the event for § 175 Abs. 1 Satz 1 Nr. 2 AO. Limitation procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V12.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11711,8 +12490,11 @@ computed:
       heading_sha256: b9f591cf7e8ac5c058e82a6d900f96f5eba16de4be856383189a9cc83aba9248
       section_located: true
       body_sha256: 2a41e773c0be2a0f4af5728d917a6c546874a1ed553c8612bf21d0363eb17f94
+      classification: procedure
+      reason: 'Suspension of expiry (§ 171 AO): one year after notification for § 129 / § 173a AO corrections, pending applications (§ 171 Abs. 3 AO), tax evasion and reckless understatement (§ 171 Abs. 7 AO, retroactive revocation possible back to the first causal payment), provisional fixings (§ 171 Abs. 8 AO), and basis notices (§ 171 Abs. 10 AO). Limitation procedure; the worked example concerns a double fixing, not an amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V13
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11725,8 +12507,11 @@ computed:
       heading_sha256: f980d1d0fea838f2b9d90970c4819f9b1b26e7133f42ab2867bbe35f32834dca
       section_located: true
       body_sha256: 2e051aba27d70841b7f003b5928dcfc99f085e9e4d5d39e1172b4e04d87e9365
+      classification: procedure
+      reason: Corrections only within the limitation period and under an applicable correction rule, in the order § 70 Abs. 2 Satz 1 EStG, AO rules, § 70 Abs. 3 EStG; the § 70 Abs. 1 payout limit does not apply to retroactive fixings made under a correction rule; §§ 130, 131 AO inapplicable; refusal of a correction request is itself refused, not the fixing. Procedure on when a decision may be revisited; no monthly entitlement rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V14
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11739,8 +12524,11 @@ computed:
       heading_sha256: 7b8a1c6a26df2f45267e45fe52fbd70544e9b7d3da8ef1d5422fb087ba29410e
       section_located: true
       body_sha256: 02eba5efaeeeedb63a5ed5f118c8f23fda0f6301c09501dbdf1451890d9715bf
+      classification: structural_heading
+      reason: Heading line only ("V 14 Korrektur bei einer Änderung in den Verhältnissen nach § 70 Abs. 2 Satz 1 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V14.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11753,8 +12541,11 @@ computed:
       heading_sha256: a9d87f3770561fe978321e3ea13a7edf941d64e4026ec8123baf4bc7c6fa670a
       section_located: true
       body_sha256: 7997e07362a9833f76aea4c5f907f73c7c9089199fa481318baba7e90831149c
+      classification: procedure
+      reason: 'Scope of § 70 Abs. 2 Satz 1 EStG: revocation or amendment from the change in relevant circumstances, for or against the claimant, only of an amount fixing; examples (reaching 25, self-fixing after a competence change, loss of § 62 EStG conditions even where BKGG applies); not for fixings that lapsed at 18; recovery under § 37 Abs. 2 AO. Procedure for adjusting a decision; the conditions whose change it reacts to are in Kapitel A and on the spine.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V14.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11767,8 +12558,11 @@ computed:
       heading_sha256: 0fefa36836b4341572f7d6c576ae7048626032e3e5676372cc190b7fe55e6702
       section_located: true
       body_sha256: d85e30eaee617381a126996663aa25fae36d45b15c05e228c4c985c81e266bc2
+      classification: procedure
+      reason: 'What counts as a change in circumstances: factual or legal changes after the fixing, not changes of legal opinion by courts or administrative instructions, and the change must affect the claim. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V14.3
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11781,8 +12575,11 @@ computed:
       heading_sha256: 6153295bbe807a088f0a0f199d2edfc19ebf01874293708150a329f589f3e840
       section_located: true
       body_sha256: 0f61f0887509efde0af4336bac615327f5b7a0118f964d703495f7bef4cc91c4
+      classification: spine_restatement
+      reason: Correction is mandatory for the future and retroactively to the change; and, with reference to § 66 Abs. 2 EStG, a change during a month in the claimant's favour counts from that month while a change to the claimant's detriment takes effect only from the following month. Sentences 2 and 3 state the month principle that decides for which calendar months the per-child amount is due — a rule on the computed surface that restates § 66 Abs. 2 EStG on the spine. Open until that provision is encoded and the monthly-attribution rule is bound to it.
+      bears_on_computed_surface: true
     - id: de-kg-dakg-V15
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11795,8 +12592,11 @@ computed:
       heading_sha256: 9e8f31746e8865d3cfc5d5f4f0c40d3faa11a8c72faae85ce22e3a0013f8d802
       section_located: true
       body_sha256: e5bfba0045b817fdade7757d229192a453a84e0d69979d73145b60a135d9003a
+      classification: structural_heading
+      reason: Heading line only ("V 15 Berichtigung offenbarer Unrichtigkeiten nach § 129 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V15.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11809,8 +12609,11 @@ computed:
       heading_sha256: 8d49c17e68ccad5cbf709787e9d11a4656442384c7e03e7ab5ef359f076fac8e
       section_located: true
       body_sha256: 935335637de37c05aeb5b35c766d1769f404e8442149f96de54c1d016c9ae9d4
+      classification: procedure
+      reason: 'Correction of obvious errors (§ 129 AO): mechanical slips of the office, not errors of law, fact assessment or investigation; obviousness to a neutral third party from the file; errors of the claimant adopted by the office. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V15.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11823,8 +12626,11 @@ computed:
       heading_sha256: 68bf66e04366c353c666ad4ea896ea8c57426efb1c93b39a90d5eb719ad9453f
       section_located: true
       body_sha256: d1043605fef21aafdd5f4ddafc9a57129adcf6c9541f410f1cc273be84fd1837
+      classification: procedure
+      reason: A § 129 AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V16
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11837,8 +12643,11 @@ computed:
       heading_sha256: 230f472b69560a56dcd0d545229a0740a4f9298027513c90eb8226acb180ef5f
       section_located: true
       body_sha256: 2cb5a4520a0fd992dd2ef394da042621841c690156b7cfbf7ccefa12bda66b1d
+      classification: structural_heading
+      reason: Heading line only ("V 16 Änderung von Bescheiden nach § 172 Abs. 1 Satz 1 Nr. 2 Buchst. a AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V16.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11851,8 +12660,11 @@ computed:
       heading_sha256: 38b825752b92677d8e4ab48bf7522e1b448dc544a23ce4b5aa242fa27f7991e7
       section_located: true
       body_sha256: 52bde95067c087c7def27181ae4a02a21e145f1146bb820767905bca8eba7b7e
+      classification: procedure
+      reason: 'Amendment with the claimant''s consent or on their application (§ 172 Abs. 1 Satz 1 Nr. 2 Buchst. a AO): form-free request, treatment of requests within the appeal period, no extension after it, no suspension of enforcement, deadlines after an appeal decision. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V16.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11865,8 +12677,11 @@ computed:
       heading_sha256: 1bb44d7817b0039884e38096260a298501022e7ed266becf59c6722098539278
       section_located: true
       body_sha256: 402fc1217f00be79aa04b6c9149ce19d31aa104fa63f487d14cf9f723056d958
+      classification: procedure
+      reason: A § 172 AO amendment acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11879,8 +12694,11 @@ computed:
       heading_sha256: 7ca1d1fbb13356199b17fd90fc9932c129bd426280e64716b69581cdc3fec579
       section_located: true
       body_sha256: af2c8a53899a1d53f42c2df3eae9c7b0c746297c7452fc4800027a0ae60bba88
+      classification: structural_heading
+      reason: Heading line only ("V 17 Aufhebung oder Änderung aufgrund neuer Tatsachen oder Beweismittel nach § 173 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11893,8 +12711,11 @@ computed:
       heading_sha256: aeaea40bad6e5be1b473a30cd0195bea8ded4a5cff267ce104e502a4aec44115
       section_located: true
       body_sha256: ef84c7cdff6177ec7bae00a1e48ef8b66328b399910e780ea8a61c45f8d402de
+      classification: structural_heading
+      reason: Heading line only ("V 17.1 Änderung zu Ungunsten des Berechtigten"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11907,8 +12728,11 @@ computed:
       heading_sha256: b6f0747e6ba58eb4a881a409959fb7555f14a9ad55b235ef6a30d6abc70bed87
       section_located: true
       body_sha256: ae14f6e27f0bdf6baa239c784bba581fa97e494f769118f97a55c6b6d9b3fbe6
+      classification: procedure
+      reason: Revocation or amendment against the claimant on facts or evidence later becoming known (§ 173 Abs. 1 Nr. 1 AO). Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11921,8 +12745,11 @@ computed:
       heading_sha256: 0b5d7f7a5cb31fa8f8e298e93189eb81b8d29640d94f80159be9556fcd57b68a
       section_located: true
       body_sha256: b5dcc82b2e842e368caec802eb047d11b440ddfac082ddb5ffab49c95018ca97
+      classification: procedure
+      reason: What are facts and evidence under § 173 AO (including inner facts), and what are not (legal norms, legal assessments, court decisions, later law changes). Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.1.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11935,8 +12762,11 @@ computed:
       heading_sha256: 24fabec3b21259b5f4255dab11ed00a7ea9a85cd0e40578686fe520a56e299f5
       section_located: true
       body_sha256: 2c84b986216d316362c0490c94d8c96bad996fab9377a5ed878e97c416fdc8a8
+      classification: procedure
+      reason: 'When facts become known ''subsequently'': existing at the time of the decision, known to the responsible case officer after the decision was signed off, not merely to another unit. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.1.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11949,8 +12779,11 @@ computed:
       heading_sha256: d75e457bf08c23971697279b86ea22fc5cf72d983b673ba29215bdefb48370d3
       section_located: true
       body_sha256: 09513eb6de419939a6a5c592181b3e007272087afcdd0764c2ee4b6538aab781
+      classification: procedure
+      reason: 'Legal relevance: the office would with near certainty have decided differently under the case law and instructions binding at the time. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11963,8 +12796,11 @@ computed:
       heading_sha256: 3bcdc306c8647f5763070e5c38876a5abb489d51ffa78b4f999b0223df58bfc9
       section_located: true
       body_sha256: a55a05aa79e4fc8b277d4bd54a693afe8cd6c3e577710074e2d9c985e7f61f79
+      classification: procedure
+      reason: Amendment in the claimant's favour on new facts (§ 173 Abs. 1 Nr. 2 AO) requires absence of gross fault. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11977,8 +12813,11 @@ computed:
       heading_sha256: 86e64ce915e87439c60df5915bce28b9167223bde9e335c8bb59f189be435c28
       section_located: true
       body_sha256: 50968ebb414d400a75ae63863be2b324ecee1b83d6522185b6fb67d0d2c2a73f
+      classification: procedure
+      reason: 'Gross fault: intent and gross negligence, burden on the claimant, ignorance of tax law alone insufficient, disregard of express hints in leaflets, forms or specific application questions is grossly negligent, office investigation failures do not excuse except where causal (misleading advice). Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11991,8 +12830,11 @@ computed:
       heading_sha256: 85fc0a9b8d661069ec5fb96f4533ea186abfcd80c0c31fa155f6f014c51bd07d
       section_located: true
       body_sha256: 8390c0f0906b826d580a580b0c70ab420c34dc148fb000ab3f988f61101d3727
+      classification: procedure
+      reason: A § 173 AO correction is limited to the effect of the new facts (point correction). Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V17.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12005,8 +12847,11 @@ computed:
       heading_sha256: 65a27d0c74af8492a67748ff3cad8145e76a26492803cc582cff85da8d64b8cf
       section_located: true
       body_sha256: d240ec98f958746546ede6bf2ed330d6c5864e5312cea8ba7181c44bd1879afa
+      classification: procedure
+      reason: A § 173 AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V18
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12019,8 +12864,11 @@ computed:
       heading_sha256: 896aaa9f488ba9b36f77c0085da667e6e8bd7387851d10e5c1e785e16075294c
       section_located: true
       body_sha256: a3e661778afb0f86430a461bebf9f5f3fb389f19b2208ecbc72805b543594ca5
+      classification: structural_heading
+      reason: Heading line only ("V 18 Korrektur nach § 173a AO aufgrund von Schreib- oder Rechenfehlern bei der Beantragung von Kindergeld"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V18.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12033,8 +12881,11 @@ computed:
       heading_sha256: 55dc6c78b2d70d97aa79a42d34c169bb303740cf75888072e7fd7fe08a74e460
       section_located: true
       body_sha256: 5445208bd49c89f34e7a6496166ae51fd36a3abfa20f1efdcee688e20c1a4fce
+      classification: procedure
+      reason: 'Correction for the claimant''s own writing or arithmetic errors in the application (§ 173a AO): recognisable to a neutral third party, not omissions, adopted errors go under § 129 AO instead. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V18.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12047,8 +12898,11 @@ computed:
       heading_sha256: 523d7cafc8547481a4733682744bb811e5f178655460107aa56749466d95b2e9
       section_located: true
       body_sha256: 1df859b5757daec14f0230cf1cbf89df2dd927872decf41d231dc951840ba6e9
+      classification: procedure
+      reason: A § 173a AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V19
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12061,8 +12915,11 @@ computed:
       heading_sha256: 1b6fd37bc63891d8bbd0e1b55307195af5660858ea60ee7791aa6bf1a607ec10
       section_located: true
       body_sha256: b62c45f07be36450b8e12441a0293fabe1e4bd7f40da5dc531d69e0cf7f1ef66
+      classification: structural_heading
+      reason: Heading line only ("V 19 Widerstreitende Festsetzungen nach § 174 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V19.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12075,8 +12932,11 @@ computed:
       heading_sha256: a52218ff300d090f7306bf834a07ac743e7df353e160132e90dc4c84088198ae
       section_located: true
       body_sha256: 815c5d99e7d7819af8fcb309ddab67843615457c519ab9f0af043f5d131fb1bf
+      classification: procedure
+      reason: 'Conflicting fixings (§ 174 AO): correction on application where a fact was counted against a claimant twice, ex officio where counted in favour twice (double fixings) if traceable to the claimant''s application or declaration, with cross-references. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V19.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12089,8 +12949,11 @@ computed:
       heading_sha256: c8548eee742d9b2fcf47555dcaba37648d2c460ab5566a76b94f700fb2e47d6d
       section_located: true
       body_sha256: 5966752e26f1878a898d1b8990dd12537058a2836b10336cac74e20236e0fc5d
+      classification: procedure
+      reason: A § 174 AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12103,8 +12966,11 @@ computed:
       heading_sha256: 8deaea4ed602e993a1f7d31ab58c4e80a89dee615e55e5b83cf03aab261a811d
       section_located: true
       body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      classification: administration_only
+      reason: Local competence by the claimant's residence or habitual abode (§ 19 AO), BA-assigned special competences (cross-border cases, seafarers), and that a fixing by a locally incompetent Familienkasse is not void (§§ 125, 127 AO). Which office decides; not what is due.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V20
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12117,8 +12983,11 @@ computed:
       heading_sha256: f162c4cdb803ad4bc415ba3922ee537076e7eced982d34ae63acee12e73a231b
       section_located: true
       body_sha256: dca18d0c03fb197f8d07f3fb4088460f4133022d8b91282a3dd325d9bc60cdc1
+      classification: structural_heading
+      reason: Heading line only ("V 20 Korrektur von Folgebescheiden nach § 175 Abs. 1 Satz 1 Nr. 1 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V20.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12131,8 +13000,11 @@ computed:
       heading_sha256: 796a85905b9fdb7020bd6c7939c428969b0dc2df1b92c637acf53fe5e0ff670a
       section_located: true
       body_sha256: aea98d0cfb01f52fd220076a07e09808467dfc885cb8a6d382e6547357f5e4d4
+      classification: procedure
+      reason: 'Correction following a binding basis notice (§ 175 Abs. 1 Satz 1 Nr. 1 AO): recognition as refugee and the social-law classification as foster child are basis notices, the child''s income-tax assessment is not. Procedure; the substantive conditions those notices establish are in Kapitel A.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V20.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12145,8 +13017,11 @@ computed:
       heading_sha256: 53a7ee9184c56a72468b05efd5e47dcdebe1d1712e31d35f26336c50286a3d5a
       section_located: true
       body_sha256: c7fbe9d5cb04850d30eec4894524b6a9037f14b90f001010b00b6cd36e33b910
+      classification: procedure
+      reason: A § 175 Abs. 1 Satz 1 Nr. 1 AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V21
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12159,8 +13034,11 @@ computed:
       heading_sha256: e57ef4dbb2415ef32dcea88e24c3589ab30ddb015492215020024339db8485ad
       section_located: true
       body_sha256: 78f323639f93844b05b6ee517ca5cc5e9602b96580e6bae069dc3dcbe3d358f4
+      classification: structural_heading
+      reason: Heading line only ("V 21 Korrektur aufgrund eines rückwirkenden Ereignisses nach § 175 Abs. 1 Satz 1 Nr. 2 AO"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V21.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12173,8 +13051,11 @@ computed:
       heading_sha256: f1232966aea410ff432f639105e8bcc63f8ea117c102b27ee067c6983a5f6a57
       section_located: true
       body_sha256: 9fbf2290703f7acbced637e2aeffb37fc627f4fb4ef7efd7471a677d365ab769
+      classification: procedure
+      reason: 'Correction on a retroactive event (§ 175 Abs. 1 Satz 1 Nr. 2 AO), with examples: exceeding the 20-hour work limit making an earlier extension harmful, loss of § 62 Abs. 1 Nr. 2 Buchst. b EStG status through changed income, late issuance of an IdNr, acknowledged or contested paternity. Procedure on when a decision reopens; the entitlement conditions in the examples are Kapitel A matters.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V21.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12187,8 +13068,11 @@ computed:
       heading_sha256: 5a066aee0b79b3825cbd9669d982b55b61c1f2b720b9040d3e5c3588f88df131
       section_located: true
       body_sha256: 188ce17fb85044de2bf6147c9ae3422c36fa3e296bd5cc9b2abd0a88d7fd372b
+      classification: procedure
+      reason: A § 175 Abs. 1 Satz 1 Nr. 2 AO correction acts for the past and the future. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V22
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12201,8 +13085,11 @@ computed:
       heading_sha256: 0e51a34b32fa4ce871ff6c21d3841d793319127d33822cf0d2e0166f4d4c8f87
       section_located: true
       body_sha256: d1dcc381bdede485c9def8c2b79027bb30a03ba4a7c1ebaf28fb6ad59340fea7
+      classification: structural_heading
+      reason: Heading line only ("V 22 Korrektur einer materiell fehlerhaften Kindergeldfestsetzung nach § 70 Abs. 3 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V22.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12215,8 +13102,11 @@ computed:
       heading_sha256: 0a0c1b6a1eb841ba107209ad5977aafe86ac678b5c420519b055aa3e665968d2
       section_located: true
       body_sha256: 114ce03ada5aebff14971b547bf852c72b93d3c2dd18e9971e8b868fcfee9a40
+      classification: procedure
+      reason: Mandatory ex officio correction of a substantively wrong amount fixing under § 70 Abs. 3 EStG (bound decision, BFH III R 14/17), suggesting a new application where a fixing was wrongly refused, and correction after a change of supreme-court case law (§ 70 Abs. 3 Satz 3 EStG). Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V22.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12229,8 +13119,11 @@ computed:
       heading_sha256: 3ff05fb55af64a4f5ecd6717d9b7860873f04e174b6cc3e1558de93368d419d0
       section_located: true
       body_sha256: 48754431649a7305f15fb80ee5b6a093d4f420e16b6c129c91b61093e7bce86b
+      classification: procedure
+      reason: A § 70 Abs. 3 EStG correction acts only for the future, from the month after notification. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V23
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12243,8 +13136,11 @@ computed:
       heading_sha256: 8bfa469226408fda9fad1b671ead663f4cf6cbdc4ab311313bc7daaf2d7bd854
       section_located: true
       body_sha256: 038045cb877f99122b8e9350e10e584c619b60271a3c9872b1e89e81421b08b0
+      classification: structural_heading
+      reason: Heading line only ("V 23 Auszahlung und Rückforderung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V23.1
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12257,8 +13153,11 @@ computed:
       heading_sha256: fa1b2d49432e94b3953965134e9de9e7d2338191766700d92bcf496d9c3f2df8
       section_located: true
       body_sha256: a05f55831bb8bc106689f9faf23c14230a143ccf5f2d9d3cf5b55153b2ae1fe7
+      classification: spine_restatement
+      reason: 'Due date on notification of the fixing (§ 220 Abs. 2 AO), monthly payment during the month, no advance payment or capitalisation, continuity of payment while an amount fixing exists, and the recovery machinery (demand for payment with a one-month period, immediate maturity where set-off is possible, late-payment surcharges, reminder, enforcement, write-off). Abs. 1 Satz 3 — "Das festgesetzte Kindergeld ist ungerundet auszuhlen" — is a rule on the paid amount: the fixed amount is paid without rounding. The captured EStG § 66 module carries a rule named kindergeld_before_whole_euro_rounding, so this sentence bears on the computed surface and must be reconciled with (encoded in, or shown inert for) that module before it can be closed. Open.'
+      bears_on_computed_surface: true
     - id: de-kg-dakg-V23.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12271,8 +13170,11 @@ computed:
       heading_sha256: c4f37102aba2f5f7ae5963cc288378dd7e1655acbe61e266fb3093db1521311e
       section_located: true
       body_sha256: beeb1533043b4b77669bf1284eb0bb88a9f8217d4655e321c69c92dc54d505dd
+      classification: payment_mechanics
+      reason: Payment by bank transfer to an account named by the claimant (§ 224 Abs. 3 AO), who need not be the account holder; no reimbursement of account fees; cash or payment order by post only where an account cannot be opened. Payment channel; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V23.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12285,8 +13187,11 @@ computed:
       heading_sha256: c95944a14da265d83c6bc138cce5137b4163324c4399a4026204e167e15a7c57
       section_located: true
       body_sha256: 7da8f874f0dd037ffada4d597b2c015962f9c0795666ece2110d6b41dcd3ec37
+      classification: payment_mechanics
+      reason: 'Provisional suspension of payment (§ 71 EStG) on knowledge of facts leading to retroactive revocation: notice and hearing, not permissible merely for missing review documents or where the case is ready for decision, typical situations, and the two-month deadline to amend or resume payment. Payment procedure; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V23.4
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12299,8 +13204,11 @@ computed:
       heading_sha256: 5a2eccea6f7fe424ba2a63a05d91b8fbfb2569c483db637f33da34cb1dd1f2b3
       section_located: true
       body_sha256: af525cbf50dce8ff1e8658de1559874c626e79e6d1a89cdff3c2a07441c59bc6
+      classification: spine_restatement
+      reason: Under § 70 Abs. 1 Satz 2 and 3 EStG fixed Kindergeld is paid retroactively only for the six months before the month of application (receipt per V 5.2), with a note in the fixing notice, the fixing and the non-payment order being separate acts (BFH III R 50/20), applicable to applications after 18.07.2019 (§ 52 Abs. 50 EStG). The worked example pays from September for a child born in July. This is a rule on how much is paid for past months — a computed-surface rule restating § 70 Abs. 1 Satz 2 and 3 EStG on the spine. Open until that provision is encoded or excluded at spine level.
+      bears_on_computed_surface: true
     - id: de-kg-dakg-V24
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12313,8 +13221,11 @@ computed:
       heading_sha256: f470e66671cd856ae1ce262158fe14c2ec7ed40b230a30f25e47daf01369505f
       section_located: true
       body_sha256: 3aaff7248b7c25363a94a5d87c75df5c6ee2f70803dfc6cb96ba8eca193b1de2
+      classification: structural_heading
+      reason: Heading line only ("V 24 Pfändung und Berechnung des auf ein Kind entfallenden Kindergeldanteils"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V24.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12327,8 +13238,11 @@ computed:
       heading_sha256: e2064ddfc3fd2329f75c761fd0ce144a5a46a73b3c53d7e11663388f13a4f0d5
       section_located: true
       body_sha256: 449ae12d59c21f174b7972216ede26c6e70e16522d48281a328a71d1ece7c65d
+      classification: payout_routing
+      reason: Attachment of the Kindergeld claim only for a child's statutory maintenance claims (§ 76 EStG), nullity of premature attachments (§ 46 AO), the office's duties to object to unlawful attachments (§ 840 ZPO, § 766 ZPO, § 347 AO). Creditor routing of the payout; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V24.2
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12341,8 +13255,11 @@ computed:
       heading_sha256: 97f48a746befb625c766ac2a1dee2332a5f12330a3ea1b67613082bf9d036ecf
       section_located: true
       body_sha256: e16138a780f98f79b6e482bb4e2f48b1be50c11c514d81fecab206df53f7aee2
+      classification: spine_restatement
+      reason: Attachment only up to the fixed Kindergeld actually received for the child; where a claimant has Kindergeld both under § 66 EStG and under a bilateral social-security agreement, the amount attributable to the child is determined separately, only Kindergeld paid under the same provisions counting (BFH III R 44/08). This defines how the household total is split into a per-child share — a computed-surface rule (per-child amount and its attribution) restating § 76 EStG on the spine. Open until the per-child attribution is encoded and bound to that provision.
+      bears_on_computed_surface: true
     - id: de-kg-dakg-V24.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12355,8 +13272,11 @@ computed:
       heading_sha256: 68f85bdccac4e1e1b4459935921c465d00e6902cf8e042b34db46160018e045e
       section_located: true
       body_sha256: cc483be4acb524974de1e1fe539914bb4162fee8dab06a95a42e5620ee665c98
+      classification: payout_routing
+      reason: Assignment (§ 46 AO, § 400 BGB) and pledge of the claim only within the limits of attachability under § 76 EStG, also to an adult child; V 24.2 applies accordingly. Creditor routing; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V25
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12369,8 +13289,11 @@ computed:
       heading_sha256: bbd59c115e8d66398bf725c8dd460c1c33312d477870b1218b06246ce3341bb0
       section_located: true
       body_sha256: 95c5aa6ccc84239668d8f2eb18448f3416656a5919c32a3576c5f9145d584fbc
+      classification: structural_heading
+      reason: Heading line only ("V 25 Stundung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V25.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12383,8 +13306,11 @@ computed:
       heading_sha256: 73aac0e6c8a6caa874f80f54f77b30c1e92a64560a72a757cca4fae94694487f
       section_located: true
       body_sha256: 150dfec5d7f03247f42a921fefa73babf1c5ded167fabc1b25049b7b180bdda2
+      classification: recovery_and_enforcement
+      reason: 'Deferral of recovery claims (§ 222 AO): on application, security beyond six months, forms KG 90/91, discretionary, revocable, instalments only within a deferral, appeal, interest under § 234 AO. Recovery administration; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V25.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12397,8 +13323,11 @@ computed:
       heading_sha256: 353b4162316584597b4b6780554a84ea8ccb4665978d5cdd55c6fefcf3a5d4e3
       section_located: true
       body_sha256: 639d165828b298e72f1d591c0b0dc42510ff83a913b45bee63ae99636f32822a
+      classification: recovery_and_enforcement
+      reason: 'Conditions for deferral: substantial hardship, objective grounds (imminent counter-claims) or personal grounds (worthiness and need, with examples), and no endangerment of the claim. Recovery administration; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V25.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12411,8 +13340,11 @@ computed:
       heading_sha256: 045bcea331e14071df8e6ab33796d8b0127464153522221e58a1f7292725d9c9
       section_located: true
       body_sha256: f7292150413d3d34a63f8f858e22a47f1d6952a78b66caae46cdae5da2aba3aa
+      classification: recovery_and_enforcement
+      reason: BZSt approval required for deferrals over EUR 5,000 or six months, with a written report. Supervisory procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V26
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12425,8 +13357,11 @@ computed:
       heading_sha256: 58facf77049e12e2bc11c67875e2e6eff967f20bb0e4e9bdd4a7d21dbb9d0755
       section_located: true
       body_sha256: 7e6371f3d8b6b037df37bb97bdc122c43b7e5c4ad04e8de69fa34a0b2a893c13
+      classification: structural_heading
+      reason: Heading line only ("V 26 Erlass"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V26.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12439,8 +13374,11 @@ computed:
       heading_sha256: 17571190ba273650c3661ddf7899e751c78c80da1c538caeca4d5b02a50f7d29
       section_located: true
       body_sha256: ee22f38b5aa3f7463bc3645c022e61ec58b10e55841a6123bd65bf21fa4ccf63
+      classification: recovery_and_enforcement
+      reason: Remission of recovery claims where collection would be inequitable (§ 227 AO), extinguishing the claim (§ 47 AO), on application, by administrative act with appeal and §§ 129–131 AO correction. Recovery administration; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V26.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12453,8 +13391,11 @@ computed:
       heading_sha256: cd623d1219c9403a4cccfae1cb82b9c081dc4bc96597ebbfb00ba45282b08f46
       section_located: true
       body_sha256: 6b1f8b1e1f7774ca9f7b0768a835946dacd09182e9320f06f8ade6711bc6d074
+      classification: recovery_and_enforcement
+      reason: Objective equity grounds (legislative intent, Kindergeld counted as income under SGB II without possible correction, purely procedural recovery despite substantive entitlement, unavoidable overpayment months) and personal grounds (need and worthiness), with the degree of fault weighed. Recovery administration; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V26.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12467,8 +13408,11 @@ computed:
       heading_sha256: b0a334e9e8c68ad9eb3e965dec38dcb7a9420a37810598870c26f1f746cb791b
       section_located: true
       body_sha256: b1faaae367388baa5f67d47a4e6d8bec381d25097484432f4627f55f260b9de8
+      classification: recovery_and_enforcement
+      reason: BZSt approval for remissions on personal grounds above EUR 2,500, none for objective grounds. Supervisory procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V27
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12481,8 +13425,11 @@ computed:
       heading_sha256: d4657c8599ad7aa636ed362cd485b5ca9e882ea16b5326f2af2613ec1ee514b2
       section_located: true
       body_sha256: 81f2e8d8139d83a56ae4bc04bb927fe8a0606a73d5c2f41dbf74334ee3835f38
+      classification: structural_heading
+      reason: Heading line only ("V 27 Reihenfolge der Tilgung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V27.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12495,8 +13442,11 @@ computed:
       heading_sha256: fc1ff7a62751b6d88dadde18e06c88a9747174700591cfe6ebb402d4d3504db0
       section_located: true
       body_sha256: bc8ea5142b7011dc001aa76bd9cab07bdccfcc676da64768d30db0da79b13696
+      classification: recovery_and_enforcement
+      reason: Allocation of an insufficient payment as designated by the debtor (§ 225 Abs. 1 AO). Recovery accounting; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V27.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12509,8 +13459,11 @@ computed:
       heading_sha256: 1a49c0542a26fc5b6112eefa167421ecac40abe7d3d8dc14ecefa55ae0af0de4
       section_located: true
       body_sha256: f0b58d4be9eb01388b7e828d1972cb4bbee3769d207bea3d616209932a593599
+      classification: recovery_and_enforcement
+      reason: 'Statutory allocation order without designation (§ 225 Abs. 2 AO: fines, coercive fines, Kindergeld, costs, interest, surcharges), oldest maturity first, lowest Kindergeld debt first with tie-breaks by month, child age and first name, and the enforcement authority''s order for enforced payments. Recovery accounting of repayments; it does not determine the entitlement amount.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V28
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12523,8 +13476,11 @@ computed:
       heading_sha256: 28c5981b0b2f1f40ead40302c5e814e84a2aca4ffe5a386ad9c865bbf5dd4dd9
       section_located: true
       body_sha256: 0ec2c277f55c0463e8f9f5ecb4a9b998006c9c917122b07cc1f0704bd009d6cd
+      classification: structural_heading
+      reason: Heading line only ("V 28 Aufrechnung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V28.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12537,8 +13493,11 @@ computed:
       heading_sha256: 7a5f6f8ed8675bbed0bc4846f5de23c3bb7f1acd16003a1aeeec27f735ec7923
       section_located: true
       body_sha256: eb2f6f1d62dd28c0dec2f805e5d829dab7a3b9695df52190a9885bdd7fe5f285
+      classification: recovery_and_enforcement
+      reason: Set-off of a Kindergeld recovery claim against half of the current Kindergeld payout (§ 75 Abs. 1 EStG) unless the claimant proves resulting need under SGB II/XII, only against matured recovery claims, also against a co-resident claimant's half (§ 75 Abs. 2 EStG), set-off against other claims under § 226 AO and §§ 387 ff. BGB, set-off as a unilateral declaration not an administrative act, mandatory use, no set-off of payable Kindergeld under § 226 AO, accounting notice on objection, no netting with social-benefit bodies without consent. This governs how an overpayment is recovered from the payout stream; it does not change the monthly amount to which the claimant is entitled. § 75 EStG itself is on the spine and is decided there.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V28.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12551,8 +13510,11 @@ computed:
       heading_sha256: 3cec3ae042c5f1d1c8367f98ec914d89e5dc448f7282cd362f4e82b50d6634ed
       section_located: true
       body_sha256: 35693fa37b718fe93a67d08c0b92c892d29ed96173df0bb769561340213556b9
+      classification: recovery_and_enforcement
+      reason: Set-off is not barred by diversion, refund, assignment, pledge or attachment; timing rules where Kindergeld is paid to a third party (claims arise under § 38 AO with § 66 Abs. 2 EStG at the start of each month); set-off first up to half the total claim, remainder paid subject to the other dispositions, and notice to the recipient. Recovery mechanics against the payout; no entitlement amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V29
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12565,8 +13527,11 @@ computed:
       heading_sha256: 59691ce64faa3fb0aa75a3e78779554087a287b0f37c26eca0caaf780a717ec5
       section_located: true
       body_sha256: da29d8535124c4e7b27081915462096c4186e5ad47613c421c431b656bcdd5d5
+      classification: structural_heading
+      reason: Heading line only ("V 29 Zahlungsverjährung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V29.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12579,8 +13544,11 @@ computed:
       heading_sha256: c7a05f8d1bbb5c24b4d8d2dc1139c32936703c6e13d7b8b41fd196f90b43a38a
       section_located: true
       body_sha256: 626d1eb8ae864df79f32a03aff2d52cee2d1db4c033f524b73f87e2d696cb1bb
+      classification: recovery_and_enforcement
+      reason: Payment limitation (§§ 228 ff. AO) applies to the payout claim and to recovery claims and extinguishes them (§§ 232, 47 AO). Limitation of enforceability; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V29.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12593,8 +13561,11 @@ computed:
       heading_sha256: c5040b891437384254d37aa909f165f9718a0be41b5e915c21f1235f9f93bf6e
       section_located: true
       body_sha256: c073fbe55b18af1decf0ccbd19cf4cee1e286fa022d4e6162b4a58617c861339
+      classification: recovery_and_enforcement
+      reason: Payment limitation starts at the end of the year of first maturity (or of payment without legal basis) and runs five years, ten for tax evasion (§ 108 AO for computation). Limitation of enforceability; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V29.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12607,8 +13578,11 @@ computed:
       heading_sha256: 933ef4e015e371f65c60e602b305fc56a76e495ba4b5cc242db3928a3030bb2d
       section_located: true
       body_sha256: 93e8d31fc59d70559bfc14dc17039fd7638baf803a52ee112c35de83c5eec306
+      classification: recovery_and_enforcement
+      reason: Interruption of payment limitation (§ 231 AO) by written assertion, deferral, suspension, enforcement, and by the claimant's or recipient's written assertion of the payout claim. Limitation procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12621,8 +13595,11 @@ computed:
       heading_sha256: 379c69c08f97cde77eeb9279d58c9fd7abb4af0c523d9821be0317d76d627c77
       section_located: true
       body_sha256: 8b66ac49d3b1bfc4671440499102e4d5d38d4aee90c2dac81b413510e9bc7f37
+      classification: structural_heading
+      reason: Heading line only ("V 3 Zuständigkeitswechsel"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V3.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12635,8 +13612,11 @@ computed:
       heading_sha256: ffe64c039b72816c6b63f1265c225af724af2b9083bcef2d926f3ab5056257a6
       section_located: true
       body_sha256: 9b5bb4b8d0aaf1981638768dcba29ea129090371dba948fb64d42d0ae7d8276a
+      classification: administration_only
+      reason: Handover of the file on a change of local competence, full competence of the new office (uncovered periods, corrections, recovery), continuation of appeal proceedings (§ 367 AO), and avoidance/undoing of double fixings via § 70 Abs. 2 EStG, § 174 Abs. 2 or § 173 AO. Administrative procedure between offices; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V3.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12649,8 +13629,11 @@ computed:
       heading_sha256: 2fd72fefb38826e3d1bb05002e554ce909068880c8b8377463d02d223c606fe0
       section_located: true
       body_sha256: ec37694be1ea7dded90b0a59704afe0b967c435bdf17b652b4120fee562fbf08
+      classification: repealed
+      reason: 'The complete located text of V 3.2 is "(weggefallen)": dropped from the 2025 edition, no rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V3.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12663,8 +13646,11 @@ computed:
       heading_sha256: 742895d4dbf2eaddd0d77fc16015b440cabf648e703b4258ef60794b390775cd
       section_located: true
       body_sha256: 890fff10565e89b6a538ea3ba5e1e115d1f964f203c5d25f14aba15210377ccd
+      classification: administration_only
+      reason: Timing of a competence change (§ 26 AO) and that the original fixing binds the new office until corrected. Administrative continuity; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12677,8 +13663,11 @@ computed:
       heading_sha256: 2698af92bb368c35b9616750f0b7b3c49205880f224cbe140a49efba2c9b8b95
       section_located: true
       body_sha256: 2d10c4981a1a253197e974cee427f902d3fc23a8edbb573177837638aa4ec8f7
+      classification: structural_heading
+      reason: Heading line only ("V 30 Zinsen"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12691,8 +13680,11 @@ computed:
       heading_sha256: 911a512239c4ed2ca6b3ba247956148dc6d3eaa8812482a7f1c00ae267f35e80
       section_located: true
       body_sha256: 6b9afd5cd7fdb12b086c02aa4d8874879ac0a8f1a733ec4cdc5af3d49b9a3b9f
+      classification: recovery_and_enforcement
+      reason: No interest on Kindergeld under § 233a AO (BFH III R 64/04); interest only for deferral, suspension of enforcement, evasion, and process interest; 0.5 percent per full month (§ 238 AO), rounding of the base to EUR 50 per child and month, two-year limitation with start points, rounding to whole euro in the claimant's favour and the EUR 10 de minimis (§ 239 AO), inapplicable to § 74 Abs. 2 EStG refund claims. Ancillary levies on recovery debts; the Kindergeld amount itself bears no interest.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12705,8 +13697,11 @@ computed:
       heading_sha256: 09d0ac303fd513a09cc7c5be1aae56b1501f68eeb14b3eee718de9cd8883d1f4
       section_located: true
       body_sha256: f0b7a2dd7b5cd95dfd802e063996ee117f06db05c5c5a519712d79733b48ee4b
+      classification: recovery_and_enforcement
+      reason: Deferral interest (§ 234 AO) by interest notice (form KG 92), collected with the last instalment, on the deferred amount per child, with the interest period. Ancillary levy; no Kindergeld amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12719,8 +13714,11 @@ computed:
       heading_sha256: 32c636ecd67d0d6222f4c767eedb3e6facc5e990079840451025268b3f7f74c5
       section_located: true
       body_sha256: c62f2fc578f535f4e9e5feb6694e1e9f668ad06c7680a3b6daa314682ed7b7d2
+      classification: recovery_and_enforcement
+      reason: Interest after an unsuccessful appeal for which enforcement was suspended (§ 237 AO), period and form KG 92a. Ancillary levy; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12733,8 +13731,11 @@ computed:
       heading_sha256: d7c39da81c845c73bb086e9638a72059533a3aaddc3ec2730e5730e469b3e4e4
       section_located: true
       body_sha256: 562ccd4763bd77dada154239fec1002372a0a182264dbcb25d4ef8fc64be98cb
+      classification: recovery_and_enforcement
+      reason: 'Interest on evaded Kindergeld (§ 235 AO): debtor, requirement of completed evasion without need for conviction, cases of self-disclosure or procedural bars, period, and no double charging with surcharges, deferral or suspension. Ancillary levy; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V30.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12747,8 +13748,11 @@ computed:
       heading_sha256: d43994929817a33d656308fb1c4a5e6f46c00f53bd0889b2c004637cff08bf26
       section_located: true
       body_sha256: 04dec58c014c3509ea8a38b83b57251070e93d8eba7a8e2278044c381ef08bbf
+      classification: recovery_and_enforcement
+      reason: Process interest (§ 236 AO) where the claimant prevails, from lis pendens to payment, fixed by the office (form KG 95). Ancillary levy; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V31
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12761,8 +13765,11 @@ computed:
       heading_sha256: 702d71d6eb60200c8cdb62972bdf0e93f501a90959026a094e03287facbeb148
       section_located: true
       body_sha256: 0333a0f2222c7b5b526df6e3ca11b04cf0e2e249773328ee62bd3512cf920196
+      classification: structural_heading
+      reason: Heading line only ("V 31 Säumniszuschläge"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V31.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12775,8 +13782,11 @@ computed:
       heading_sha256: 74f271b6bbd4c255c86e1c947338a740e1d814fdcf0b049e8ccf763c414baa09
       section_located: true
       body_sha256: f3bda89575173b71dcd8b0e69e6fa9a101dcb0745b2481ab9cfc2af9adcc898d
+      classification: recovery_and_enforcement
+      reason: Late-payment surcharges (§ 240 AO) arise by law without fixing or fault, serve as pressure, compensation and administrative cost, may be remitted where that purpose fails, and remain with the office. Ancillary levy on recovery debts; no Kindergeld amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V31.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12789,8 +13799,11 @@ computed:
       heading_sha256: 74b1be6e07f7eb03b3182b7cd341a8e89306780665c2ce3e26142ec91018a73f
       section_located: true
       body_sha256: 9c89b3cf3ffd2a552e40217e05e533e97a72af64a1ee7d9785fb8828ed6141a3
+      classification: recovery_and_enforcement
+      reason: 'Surcharge computation: none on ancillary levies, rounding of the arrears to EUR 50 per child and month, one percent per commenced month, three-day grace (§ 240 Abs. 3 AO). Ancillary levy; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V31.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12803,8 +13816,11 @@ computed:
       heading_sha256: b150e2160d1d06d07235d83dab65231f61d1f286a04a199ffe94235d0ffead30
       section_located: true
       body_sha256: b1e7b5744dd36e1c9def7c56f04fe1304bff89ce9506744f2bbcea7ca3e20cc8
+      classification: recovery_and_enforcement
+      reason: Disputes over surcharges by accounting notice (§ 218 Abs. 2 AO, form KG 93) itemised by type, period and amount (BFH III R 37/22), appeal, §§ 129–131 AO correction. Procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V32
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12817,8 +13833,11 @@ computed:
       heading_sha256: 2e69b605101ad6ba9356a418365e35f5fc542ec87264455f0be2ed615549d99d
       section_located: true
       body_sha256: 71ca5b4251684b9bfe89850b756dd4597127cae7aace82d890d9f473f052ffcb
+      classification: structural_heading
+      reason: Heading line only ("V 32 Mahnung, Vollstreckung und Niederschlagung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V32.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12831,8 +13850,11 @@ computed:
       heading_sha256: 04c8c1d56c78227c2220104b8d064405b2d3a6ff3dafdbf49ce3cf8aa336ce45
       section_located: true
       body_sha256: 6c661b42c67aea195eb98c647bb770e4a1c6e5b3316e0a2f713e4e376bff8677
+      classification: recovery_and_enforcement
+      reason: Written reminder with at most one month to pay, showing surcharges and warning of enforcement and penal consequences. Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V32.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12845,8 +13867,11 @@ computed:
       heading_sha256: 62d11eea77cfbf7146965f782d5508f4b8f719e40a13b532a98a988fb24c5610
       section_located: true
       body_sha256: 7bb2f95f88f96b22978209cf5f725004715de089b1e3846aeb26012170e424e0
+      classification: recovery_and_enforcement
+      reason: Arrears notice to the competent Hauptzollamt, enforcement exclusively by customs enforcement units (§ 249 Abs. 1 Satz 3 AO), paperless data exchange. Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V32.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12859,8 +13884,11 @@ computed:
       heading_sha256: e21196c4f9132cb225c5615107746b5321e2f9ce752d45fad319a8307195bf45
       section_located: true
       body_sha256: 8a16f78ba12b85dc59033003103c4595b9306519234c2e66c22c89f8f4684c65
+      classification: recovery_and_enforcement
+      reason: Internal write-off (§ 261 AO) where collection is futile or disproportionate (below EUR 36; below EUR 250 for untraceable debtors), after a fruitless enforcement attempt or proof of insolvency or an asset disclosure, not communicated to the debtor, claim not extinguished, resumption where prospects improve. Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12873,8 +13901,11 @@ computed:
       heading_sha256: 913d10b856e38bec8d3b962482ec2642ea7812843dbc3eb085f3f2caf83ab8d4
       section_located: true
       body_sha256: 3c2b853ac3c0618a2ca8015984f620737ac31a18ad1bc5c6c663293efb1d627a
+      classification: structural_heading
+      reason: Heading line only ("V 33 Auszahlung an Dritte (Abzweigung)"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12887,8 +13918,11 @@ computed:
       heading_sha256: fca3f633ec8c517da1df3d06164c80d0f3a9943251c46772597392fe2f1675a1
       section_located: true
       body_sha256: c1c9deff952de3f734d9cc641d72b4cfc74c48e748094f77fb103f96577b0f00
+      classification: payout_routing
+      reason: 'Diversion of fixed Kindergeld to the child or a person or body maintaining it where the claimant does not bear maintenance (§ 74 Abs. 1 EStG): the claimant remains entitled, only the payee changes; no bar to § 75 EStG set-off; treatment as an application in legitimate interest where nothing is fixed; disposal only while the claim is still disposable; recovery from the recipient on retroactive correction; written request (form KG 17a), hearing, discretion, revocability, double-effect act with mandatory joinder. Payout routing; the entitlement and its amount are unchanged.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12901,8 +13935,11 @@ computed:
       heading_sha256: 42ee6dfd48921a9333fcf6357aed747880396d2221dc3e93d44eaec8b62ea9f7
       section_located: true
       body_sha256: 5fbedac4516f9ced01b3b968690644e63b892c91331a501976f76d607b7b7643
+      classification: payout_routing
+      reason: 'Diversion conditions: claimant regularly pays no or less maintenance than the pro-rata Kindergeld (with enumerated cases and BFH references), none where maintenance exceeds it (household admission presumption and its exceptions), only monthly payments count, no diversion for one-off lapses, later maintenance considered, adult disabled children in institutional care, discretion reduced to zero when met. Payout routing conditions; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12915,8 +13952,11 @@ computed:
       heading_sha256: 0c02f308befbbfc93c7191fe702fda40aa952642526b36b9c604ddaa5a9adbd7
       section_located: true
       body_sha256: ae451166e1d5dd0abd0f487d274e31a419865da52066ef7028f4a7d7b97668cf
+      classification: payout_routing
+      reason: Who may receive a diversion (the child if self-supporting, any person or body maintaining it); the other parent's claim to payment is a § 64 Abs. 2/3 EStG priority question decided by fixing, not by diversion; grandparent household cases. Payout routing; the priority rule is § 64 EStG on the spine.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12929,8 +13969,11 @@ computed:
       heading_sha256: ed577b15aeb3b1c0a3e4748d77a41c51051196d301653ab9d81db7acaafc4338
       section_located: true
       body_sha256: afe5b095f9889bd5d57efd312c0330f74394981774f661feec3c832db2537573
+      classification: payout_routing
+      reason: Provisional suspension of payment on a diversion request alleging non-maintenance, hearing within two weeks (§ 91 AO), and payout of withheld amounts only after finality where accounts conflict. Payout procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12943,8 +13986,11 @@ computed:
       heading_sha256: 24dbcc816f25402b47f7d440883aa049a8f16fab2ca451b39b11936780e9303c
       section_located: true
       body_sha256: fe5fdfcbd572a552dd0936d75263f395195cbf280cb2bc5e68381f59199eaab6
+      classification: payout_routing
+      reason: 'Amount diverted: up to the child''s pro-rata share under § 76 EStG (computed per V 24.2), set by discretion according to the claimant''s maintenance (full share where none, half where non-trivial expenses per BFH III R 65/04, difference where lower cash maintenance, none where maintenance at least equals the share), only actual expenses count, and no diversion below EUR 5 per month by analogy to § 65 Abs. 2 EStG. This splits the payout of a fixed amount between payees; the entitlement amount and the per-child share it draws on (V 24.2, open) are unchanged.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12957,8 +14003,11 @@ computed:
       heading_sha256: 4893be74b231a3cb6ae5e4df814f13180c9f85e8fc0e625845bb25fbc614c095
       section_located: true
       body_sha256: e67dfde1c0ff99f830f864d04e14e5b08033a7f49a51a47e7adf8d2b51481564
+      classification: payout_routing
+      reason: Both whether and how much to divert are discretionary decisions to be documented. Payout procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V33.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12971,8 +14020,11 @@ computed:
       heading_sha256: 89c81014c55961d243889f9385565ff6fb2505eb95905ebbd8d63cf8b0f21d0a
       section_located: true
       body_sha256: 46368ac290d998cf68c2a36c381723fcaa7bd5531f0e7d364cebe5a8e400c657
+      classification: payout_routing
+      reason: Correction of diversion decisions under §§ 130, 131 AO with worked examples, uniform withdrawal towards claimant and recipient, and treatment of renewed requests. Payout procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12985,8 +14037,11 @@ computed:
       heading_sha256: b4b3b6f658b794ff9473904ed04879cfa7cabc8a6a5fd2667f1a6cc64605e8e6
       section_located: true
       body_sha256: 00c8c4b0e48222267ed8ea5389a28430bc4e23428dca37a40d192b918278e85f
+      classification: structural_heading
+      reason: Heading line only ("V 34 Erstattung nach § 74 Abs. 2 EStG"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12999,8 +14054,11 @@ computed:
       heading_sha256: 04c353a3f3463d25900522d2fc5c00f99d20290ca4829131230fd8966ef5ee2a
       section_located: true
       body_sha256: 74bf7ae36d14c749463acfedcb5adbd21d669fdf07ab63839b8fadc216a5c61e
+      classification: payout_routing
+      reason: 'Refund claims of social-benefit bodies against the Familienkasse (§ 74 Abs. 2 EStG with SGB X): for past subordinate benefits without offset, for cost contributions or expense reimbursement, per month with both a benefit and a payout claim, on assertion with forms KG 17b/17c, treatment as application in legitimate interest, no refund once paid out before knowledge (§ 104 SGB X, BFH III R 9/21, III R 36/21), pro-rata for benefited children (V 24.2), information to the claimant without hearing, accounting notice on objection. Payout routing to another public body; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13013,8 +14071,11 @@ computed:
       heading_sha256: cfb2038ba121707574efc1574b87d947dddc503bf353b55d6df6e07501e4c602
       section_located: true
       body_sha256: 17d7d938005a1f45e04040e95cdddba55073a4bc5318f3b0b67a7d5debf9d91a
+      classification: payout_routing
+      reason: 'Refund for subordinate benefits (§ 104 Abs. 1 Satz 1 SGB X): whose income the Kindergeld belongs to (claimant, or child where diverted or actually passed on, BFH III R 33/05) with three worked examples, exclusion for months already paid out, same-purpose requirement (basic income support, Bürgergeld, asylum-seeker benefits qualify; youth welfare and integration assistance do not), and the war-victims'' child supplement under § 33b BVG. Payout routing; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13027,8 +14088,11 @@ computed:
       heading_sha256: 33837f5c0d16feb91ecffee0c421a40b3276d5e5a8a7954a29b71a1bcabad75e
       section_located: true
       body_sha256: 649854ae8e47dc1414e975ec7462f13277508333c99256d261e58ade31641607
+      classification: payout_routing
+      reason: 'Refund for cost contributions or expense reimbursement (§ 104 Abs. 1 Satz 4 SGB X): institutional care under SGB VIII, XII, IX, also for current periods, proof by cost notice, capped by that notice, prior collection efforts, and the youth-welfare cost contribution at least equal to Kindergeld (§ 94 Abs. 3 SGB VIII). Payout routing; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13041,8 +14105,11 @@ computed:
       heading_sha256: 37b01b9c1f94808bdac0da425d192eb202e4f0231d94d504847d088eaa7dec19
       section_located: true
       body_sha256: 72ea83d2d4f1bd7db96a294ead5d316a8e369e8a106d5835a3f766bf27b4b664
+      classification: payout_routing
+      reason: Priority of a § 74 Abs. 2 EStG refund over a § 74 Abs. 1 diversion and over assignment, pledge or attachment (§ 113 SGB XII); earlier dispositions lapse; the office's own set-off has priority except where the refund was asserted first that month. Ranking of competing payout dispositions; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13055,8 +14122,11 @@ computed:
       heading_sha256: 1d748f5fbe45159f8f2237e30a9b956bcfdf34e9a1685e97f52b41f2083a7b57
       section_located: true
       body_sha256: 65433981a81075d8f80f56ae2e89018c11ef6cc0982705bf592e96c62eac41ad
+      classification: payout_routing
+      reason: Interest on refund claims of social, youth-welfare and war-victims bodies only on express demand, limited to advance payments (§ 108 SGB X), none on current refunds. Ancillary rule between public bodies; no Kindergeld amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13069,8 +14139,11 @@ computed:
       heading_sha256: ae7167fe1c4770078354ca2ddcd95aad646861d69161244b3694f9ec38eee5e1
       section_located: true
       body_sha256: c9af6c24dd06a10642b424d3d548a868f719359b820e37ff8e7736edbb91f77d
+      classification: payout_routing
+      reason: Deemed satisfaction of the claimant's Kindergeld claim to the extent of a refund claim (§ 107 SGB X), also where the refund is time-barred, so arrears for subordinate-benefit months are normally excluded; informal notice where no refund is apparent; accounting notice where Kindergeld was paid despite knowledge. Payout routing; the entitlement amount is not redefined.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V34.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13083,8 +14156,11 @@ computed:
       heading_sha256: 48694b81d616e0d117abc5dc1714da40a4ef7cdc3243399a3ee6bd18b0f207f4
       section_located: true
       body_sha256: 44c06db8d027ec0e67d08413f28e7ecc42366e645a48ac6511d2031faad460e2
+      classification: payout_routing
+      reason: Reclaim from a social-benefit body when the fixing is corrected (§ 112 SGB X), by simple letter or general performance action, limitation under § 113 SGB X. Inter-agency recovery; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V35
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13097,8 +14173,11 @@ computed:
       heading_sha256: 8ec9110a9414b5df1774a9441e31b776ca5a589108d438884d06f938ea77d0b0
       section_located: true
       body_sha256: 8bbf15276f937752e1eeb539013bf27e476fc984df67db7e03cf44326fa9e51e
+      classification: payout_routing
+      reason: Change of the priority claimant under § 64 EStG (change of family circumstances, claimant determination or its revocation, waiver of priority or its revocation), revocation of the previous fixing under § 70 Abs. 2 Satz 1 EStG, retroactive effect only before a fixing, and joinder in priority disputes (§ 174 AO). Procedure implementing the priority rule; § 64 EStG itself is on the spine and Kapitel A 25.1 carries its substance.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V36
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13111,8 +14190,11 @@ computed:
       heading_sha256: 6ee8413030591705cd9dc814ae2cec8ea8eba1ac09cd817cfcd3a9377f5d5061
       section_located: true
       body_sha256: 5d63616180c67d1647294e3f198d35d3dfd443386b9dae6298976a5b9a5ef746
+      classification: administration_only
+      reason: 'Cooperation between the two Familienkassen on a claimant change: fixing the date, exchanging anonymised documents, completing investigations, revoking from the following month and fixing from that month, and the year-end office''s binding assessment. Inter-office procedure; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V37
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13125,8 +14207,11 @@ computed:
       heading_sha256: 77ea06121f7db30d4d6dacae98812f7766f659dd3d78ef62609d7214636f8198
       section_located: true
       body_sha256: 9cde58d8aead4c2cf5e406806d36aa1279c5b9cb54b88452d101513994363dfc
+      classification: payout_routing
+      reason: 'Discharge of the recovery claim by forwarding: where the former claimant passed the Kindergeld on and the new claimant confirms and waives payout (form KG 14), recovery and payout are omitted as an equity measure; conditions, timing, notices, accounting notice, and the effect where the new claimant''s entitlement is lower or higher; otherwise the § 70 Abs. 1 payout limit applies (V 23.4). Payout routing between claimants; the per-claimant entitlement it compares is decided elsewhere.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V38
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13139,8 +14224,11 @@ computed:
       heading_sha256: e1a4003617100134f6b11b5909728e852faaafeb1c604841d3775c27ee7831ac
       section_located: true
       body_sha256: f2c3d3703c80ab6d4aea5c71fe1cc6eafdf8c6b6de0eb5070b9042b4a016bf44
+      classification: structural_heading
+      reason: Heading line only ("V 38 Haftungsverfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V38.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13153,8 +14241,11 @@ computed:
       heading_sha256: a14dcf01159320760345af273ab2589536bde5f0108a809c7b40fe72af073082
       section_located: true
       body_sha256: a77e2eb4017fcaca18a0cd77e4baa5a1ea737357e88b4234f15526820b21dc64
+      classification: recovery_and_enforcement
+      reason: 'Liability notices (§ 191 AO) against persons liable by law for recovery of wrongly paid Kindergeld: accessoriness to the recovery claim (§ 37 Abs. 2 AO), joint and several liability (§ 44 AO), bars where the fixing can no longer be revoked or the debt is time-barred or remitted, and subsidiarity (§ 219 AO) with the § 71 AO exception. Recovery against third parties; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V38.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13167,8 +14258,11 @@ computed:
       heading_sha256: 22cc15badba045d59dd0af475c784eb285f0c93c9a9b1b6887b849981512da5b
       section_located: true
       body_sha256: 6c077b63a02d74f0a043c738c258ca3c79abcd1dbc673d28b21b30273e96c240
+      classification: recovery_and_enforcement
+      reason: Competence and unit for liability examination (§ 24 AO), prompt initiation, discretion whether and whom to hold liable with reasons, exclusion for periods of the office's own delay, and prior written hearing (§ 91 AO). Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V38.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13181,8 +14275,11 @@ computed:
       heading_sha256: 551a15cc924e46b7b6b0088fdd69824552d8766f4d6b219ef7e778a0e3a7fd81
       section_located: true
       body_sha256: bdda0d311e581c583de5c9e519286d10ad04267a2fb649c05baaaf6dd5968312
+      classification: recovery_and_enforcement
+      reason: Form and content of the liability notice, joinder of the demand for payment, notification, limitation of four (ten) years from the year the liability arose (§ 191 Abs. 3 AO), and appeal (§ 347 AO). Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V38.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13195,8 +14292,11 @@ computed:
       heading_sha256: 28fa74f5facecc9ae81d823e0f0951e99c0f241f41a59e2a4051287340366895
       section_located: true
       body_sha256: a304b783b1c22982464ff7ee54833acb4b044fc042169052a15a511d16c55e73
+      classification: recovery_and_enforcement
+      reason: Correction of liability notices under §§ 129–131 AO rather than §§ 172 ff. AO, also in the debtor's favour after the limitation period, and revocation where the underlying debt is later reduced. Recovery procedure; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V39
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13209,8 +14309,11 @@ computed:
       heading_sha256: 4c6c62bda4bbc3e7e47af37ea6b368247b406958195021dd1388d7bbb6cc8d02
       section_located: true
       body_sha256: 6c2a99fa58a99b7237f9b22184bfa2ecc2999c83cd2e13739591a2a6a9103533
+      classification: structural_heading
+      reason: Heading line only ("V 39 Haftungstatbestände"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V39.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13223,8 +14326,11 @@ computed:
       heading_sha256: f28b43ec5654fc8183848b8f2523d36e27a4edfda6fda12d968830081b526a9a
       section_located: true
       body_sha256: 97128765d78a261d88b428ec230f2cf067cc5ce839e18b8f843e49a81954a739
+      classification: recovery_and_enforcement
+      reason: Liability of legal representatives and asset managers (§§ 69, 34, 35 AO) for wrongly paid Kindergeld and surcharges caused by intentional or grossly negligent breach (wrong application, § 68 Abs. 1 EStG reporting, § 153 AO), causation per the adequacy theory, and the fault standard. Recovery against third parties; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V39.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13237,8 +14343,11 @@ computed:
       heading_sha256: 300e3797809ba9eceadb41476393a5e296542f953f8988eade6d0f562348a8d4
       section_located: true
       body_sha256: 181df3d54e7913191c2405dca6739f1a25a2c030c5e34b99f9830cdc88cb8759
+      classification: recovery_and_enforcement
+      reason: Liability of the tax evader and participants (§ 71 AO) for wrongly paid Kindergeld and evasion interest, irrespective of self-disclosure or prosecution bars, with pre-shaped discretion (BFH XI R 3/03). Recovery against third parties; no amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13251,8 +14360,11 @@ computed:
       heading_sha256: d59ad3d02d9763f75dbd72bcbaa12b1e0843294b2f555a8a368b7771fb657f58
       section_located: true
       body_sha256: 28589035d497701740d05bbf4325ee08735a8ac10154a7b8a0ee8e0994823f7c
+      classification: structural_heading
+      reason: Heading line only ("V 4 Beteiligung am Verfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V4.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13265,8 +14377,11 @@ computed:
       heading_sha256: 6dfcb9367bf177b5e6a62f18efee7858f15103de20fe7298b7a1a114c81d87b0
       section_located: true
       body_sha256: 94a8eac47b1d9180d427d01c4f12ba473f8d2e8a05f3fa11149f8703b266eb5c
+      classification: procedure
+      reason: 'Who is a participant (§ 78 AO): the applicant and addressees of administrative acts. Procedural standing; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V4.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13279,8 +14394,11 @@ computed:
       heading_sha256: c6403464978a414e06483082ac818259f204f258eae43555f640829e7ecc1cff
       section_located: true
       body_sha256: c44aa582591bab772814568f76529b2fe3dde67cd804f0d0f9a408c791811f99
+      classification: procedure
+      reason: 'Capacity to act (§ 79 AO): legal representatives of minors, court-appointed guardians (§§ 1814 ff. BGB), exclusivity declarations, and to whom decisions are notified. Procedural capacity; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V4.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13293,8 +14411,11 @@ computed:
       heading_sha256: dd7008785b68fce53803a70c20dae85b8d8246ef82861b9f07db035ccbecae36
       section_located: true
       body_sha256: c19f53906cf734590b2b8df00b105566c9e602f19f4ba1d3f10ba5e136537116
+      classification: procedure
+      reason: 'Authorised representatives (§ 80 AO): scope and proof of a power of attorney, that it does not authorise receipt of payments without a payment instruction, communication via the representative, and its expiry. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13307,8 +14428,11 @@ computed:
       heading_sha256: 3f5cf2667bbdceeb35688f30e8a4024defabed8ecaab521d194cf760dd7a0b7f
       section_located: true
       body_sha256: 51926288b7d61faa3dd5ea3a54c8603b5bc3afe1cdeb87b667232699fb9145ba
+      classification: structural_heading
+      reason: Heading line only ("V 5 Beginn des Verfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V5.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13321,8 +14445,11 @@ computed:
       heading_sha256: f0761a2b71c231c0b6e274371273ab8fae39995819672c2d8bb8bfe3aa72efaf
       section_located: true
       body_sha256: 741f8d1616915cc08657120214f23771b358900147b72b8be99e561c0f5a7a96
+      classification: procedure
+      reason: The fixing procedure starts with the application (§ 67 Satz 1 EStG, § 86 AO); electronic filing via the official interface is the rule, written filing permitted. Form of application; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V5.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13335,8 +14462,11 @@ computed:
       heading_sha256: aa30b9a7c34b0400d5fd2ee7b4849849e8a46acdd0a606fce2007b19a7284105
       section_located: true
       body_sha256: 558e34e2188f17dcbc5e127422890973dc9388380006f9bebfeeea6b651d475b
+      classification: procedure
+      reason: Written application requires a handwritten signature (fax allowed, scans not), electronic filing needs a secure procedure (§ 87a Abs. 6 AO), filing at the competent office or a foreign EU/EEA/CH institution, restriction to a period, and which receipt date counts for the six-month window of § 70 Abs. 1 Satz 2 and 3 EStG (forwarded applications, foreign filing per BFH III R 28/21). No new application on change of competence or legal basis. Procedure fixing dates and forms; the payout limit those dates feed is V 23.4 / § 70 EStG on the spine.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V5.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13349,8 +14479,11 @@ computed:
       heading_sha256: 5c7f75a9f6bbd2b2aa0ddb2852230b3bad8c98dca254952ae20bc58ccca7bdd4
       section_located: true
       body_sha256: d1ef922c6f1e3e608a9f2f37b308850dc1131f9460394c547dd8ffed7054467c
+      classification: procedure
+      reason: 'Application by a person with a legitimate interest (§ 67 Satz 2 EStG): who qualifies (maintenance debtors, diversion or refund recipients, the child), proof, that the applicant becomes a participant but not the claimant, identification of the claimant and child by IdNr, notification, appeal rights, and preclusion by a final decision. Procedure; entitlement is still tested in the named claimant under §§ 62, 64 EStG.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V5.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13363,8 +14496,11 @@ computed:
       heading_sha256: b896f65dbfd9cd60f2deda259a61b6026caf0c43d97b093b5bb1fb56724aec20
       section_located: true
       body_sha256: 1d850ae9338c8559546a3f040c61d39b1a37e0f43a51db92e3412f1d992a5987
+      classification: procedure
+      reason: A new written application is required when the child turns 18 (with V 5.2, V 10 Abs. 4). Procedural trigger; the substantive conditions for adult children are in Kapitel A and § 32 EStG.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13377,8 +14513,11 @@ computed:
       heading_sha256: 958b101e6466e71a47d3898c85808284ee84ac430319bbfae804d6e9a135747b
       section_located: true
       body_sha256: 06756dcdf69c25723495a73374566cc6abbae459aa49aaa8718e93fa48da075a
+      classification: structural_heading
+      reason: Heading line only ("V 6 Feststellung der Anspruchsvoraussetzungen"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V6.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13391,8 +14530,11 @@ computed:
       heading_sha256: d5b2b50db538fc94161d7a89619b501fe8e7a2c014ad014fa4aa60e8692fb4f6
       section_located: true
       body_sha256: e44d11f8eed46dd27b04229d247e1cb88ea18b10f51e68788808b05c311cf7d6
+      classification: procedure
+      reason: Investigation principle (§ 88 AO), evidence means (§ 92 AO), restraint in demanding affidavits (§ 95 AO), the right to be heard before adverse acts (§ 91 AO) and its curability (§§ 126, 127 AO). Fact-finding procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V6.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13405,8 +14547,11 @@ computed:
       heading_sha256: 855bda0faa5b5ed65f92ec3536e85ea3f06fce27c6372db2cd28b3f9664313b9
       section_located: true
       body_sha256: c20efc2ee8b0cc3703823745e18d215c817a06c4096cdfce45ed5fae5c221c47
+      classification: procedure
+      reason: German as official language (§ 87 AO), when translations may be demanded (not in Regulation (EC) 883/2004 cases), and notification in German. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V6.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13419,8 +14564,11 @@ computed:
       heading_sha256: e4dd76991bb3915d4bf9b56126ed188956d17ff7943dd5f9f82b0ea2983f03c2
       section_located: true
       body_sha256: d94aa33042e8d3b339e495e1bc85f656416eb948b0a7afd580e54100393b8204
+      classification: procedure
+      reason: 'Avoiding double fixings: checking prior consideration of the child elsewhere, reliance on the co-signature of the other parent for the claimant determination (§ 64 Abs. 2 EStG), and reporting to the BZSt IdNr database with reconciliation on overlap notices. Procedure enforcing the one-claimant rule of § 64 EStG, which sits on the spine.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V6.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13433,8 +14581,11 @@ computed:
       heading_sha256: 34daf8e68343803d364ebbe45bbef330fdb8419a81871a8e7cdfd4a99c583bb4
       section_located: true
       body_sha256: 178d72718ff5b5a422327c7c5115dc61641b73bf6e8710f5d2a44f3df0937201
+      classification: procedure
+      reason: Deception or forged documents in the application procedure may constitute document forgery or tax evasion; the BuStra unit is to be informed (S 5.3). Criminal referral; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13447,8 +14598,11 @@ computed:
       heading_sha256: 3450cda4ad2835887584a5c1a65c8738e5ed7c09538c819c3012f4231f5dd708
       section_located: true
       body_sha256: e56d2b67f1578a885972acd4228894abd240622b601804819468739b05eefed6
+      classification: structural_heading
+      reason: Heading line only ("V 7 Mitwirkungspflichten"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13461,8 +14615,11 @@ computed:
       heading_sha256: 39eb9b6afffa10af1d83b81ea946668877cc0c3cefc7a3fa73548620c05b0c07
       section_located: true
       body_sha256: 295b916c547967784fef0f940f7f8523a40855d821abfbfe8366c41ea18dd389
+      classification: structural_heading
+      reason: Heading line only ("V 7.1 Mitwirkungspflichten der Beteiligten"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13475,8 +14632,11 @@ computed:
       heading_sha256: ee7027c1ab25dd9180b548b8a1bb2501765039b85fecb13eb97606244cb2659a
       section_located: true
       body_sha256: 4b58609831a2cf867983088c22845a2567c01c309016a2959b1e3689c037923f
+      classification: procedure
+      reason: 'Cooperation duties (§§ 90–95, 97 AO; § 68 Abs. 1 EStG): no right to refuse information, adverse inference, subsidiarity of requests to third parties (§ 93 Abs. 1 Satz 3 AO), content of requests, and the heightened duty for foreign facts (§ 90 Abs. 2 AO) discharged with EU forms. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13489,8 +14649,11 @@ computed:
       heading_sha256: b96fbcbcf323c68f52158355bf6e30a90d1c82767ab30b65f6cb6ab13ca2e458
       section_located: true
       body_sha256: 05fd2b7a2d0b7fe82ae50e4385f379181418466b9ca05128630790cb0afb9741
+      classification: procedure
+      reason: Duty to give information (§ 93 Abs. 1 AO), normally discharged by the KG 1 forms, with follow-up requests where insufficient. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.1.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13503,8 +14666,11 @@ computed:
       heading_sha256: 53cfd16163f7c1a8251e3e10ddc220cc9bc2ddda7177f6ffb8bb882d7e24a83d
       section_located: true
       body_sha256: 2f67fc87c5f343d69610faf5dbfe5c280b26ec3ff451dbb9c0c749ff43696f1d
+      classification: procedure
+      reason: Duty to produce documents (§ 97 AO), no cost-free issuance, plausible statements plus file content may suffice, redaction of unneeded data permitted. Evidence procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.1.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13517,8 +14683,11 @@ computed:
       heading_sha256: 73d432891ed511078626b37ab696503ea3059fd7d667e3810877c3386bf4e179
       section_located: true
       body_sha256: 7378ee2649da8ab2980b57cadad9b588e9e26449d2eb3c21b93bf3f7631d40a3
+      classification: procedure
+      reason: Duty to report changes in circumstances (§ 68 Abs. 1 Satz 1 EStG) to the competent office, from application onward and after the end of payment, also where a representative applied or payment goes to third parties; breaches may be offences (Kapitel S). Procedural duty; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13531,8 +14700,11 @@ computed:
       heading_sha256: 452af2f47c7b0976dae1e957759c583d2b931597d66d8ed4d9d3a174bdf6c7ed
       section_located: true
       body_sha256: ceee6a4070ea10b162015de03c4d3bdec3b2bb27cb3dd25b526c489dd8461fc8
+      classification: procedure
+      reason: 'Cooperation duty of adult children (§ 68 Abs. 1 Satz 2 EStG): information and evidence on request, no duty to report changes unprompted, subsidiarity, deadlines (§ 109 AO), enforcement by coercive fine (§ 328 AO). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13545,8 +14717,11 @@ computed:
       heading_sha256: db6c97f9dc52f2de890949c2d17a282223e28b351cbc5637e6718095336f3619
       section_located: true
       body_sha256: efb2106e6500b572d4ba69d1590d78ec400fa397ff5c8f945a30ab73e0f923c6
+      classification: procedure
+      reason: Cooperation duties of other persons under §§ 93, 97 AO (the non-priority parent as a third party), the relatives' right to refuse (§ 101 AO), the instruction requirement and its evidential consequence. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V7.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13559,8 +14734,11 @@ computed:
       heading_sha256: bfbaa68b7668e0803877872783b292b0dfbe7f551a4d328a858b7f704d81856a
       section_located: true
       body_sha256: ab3d8d01a4fd673469be822d8bdab7da92745c14b6e65de252180b445397492a
+      classification: procedure
+      reason: 'Consequences of non-cooperation: refusal or revocation for non-provability (burden of proof), revocation under § 70 Abs. 2 Satz 1 EStG from when entitlement is no longer ascertainable, later cooperation treated as a new application. Procedure on the evidential burden; the entitlement conditions themselves are in Kapitel A and on the spine.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13573,8 +14751,11 @@ computed:
       heading_sha256: 501647fa374b4b32b0fe9217590703ae5387e82832d8cb39f4e415afd8a4616b
       section_located: true
       body_sha256: da0b16c32097fcba678f30666d8746d2c6310e0f705bbd93911a9cb5bdb463df
+      classification: procedure
+      reason: 'Advice and information duty (§ 89 AO): no duty to advise on maximising the claim, but a duty to point out an obviously necessary application (e.g. by the spouse); information on procedural rights; the annual payment certificate under § 68 Abs. 3 EStG, also for a non-priority claimant limited to child, year and amount (BFH III R 40/13). Procedure; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -13587,6 +14768,9 @@ computed:
       heading_sha256: 8bb7f6a2efb9edeeae22cfa85e22aad2f4d46383665fc0a5b3452072a2c20423
       section_located: true
       body_sha256: 8d50e73c1da48f962c4d264343faf33b65a743dd1d3049f0c37650bebeb02da2
+      classification: administration_only
+      reason: Data-subject access under Art. 15 DSGVO as limited by § 32c AO, form of disclosure at the office's discretion (BFH III R 59/19), no general right to inspect files (§ 32d AO), and the governing BMF letters. Data-protection procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-instr-001
       status: pending
       discovery_refs:
@@ -14066,9 +15250,13 @@ computed:
     - month_is_on_or_after_first_qualifying_month
     - month_is_on_or_before_last_qualifying_month
     unclassified_input_count: 4
-    instruments_bearing_on_computed: []
-    instruments_bearing_on_computed_count: 0
-    open_dependency_count: 8
+    instruments_bearing_on_computed:
+    - de-kg-dakg-V14.3
+    - de-kg-dakg-V23.1
+    - de-kg-dakg-V23.4
+    - de-kg-dakg-V24.2
+    instruments_bearing_on_computed_count: 4
+    open_dependency_count: 12
     closed: false
   measured_denominators:
     spine_rows: 18
