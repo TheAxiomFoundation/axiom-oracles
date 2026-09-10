@@ -425,9 +425,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 27b4cccee9454f4cf267b611d23230bf61978f518d1c12ba62785e27416740db
+    snapshot_sha256: 45b0cf11084453b41995896aece50c9dd289359eb0c0a9a544f299b44d06fdf8
     channel_receipts:
-      corpus_release: c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c
+      corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
       subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
@@ -465,8 +465,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
-      - de-corpus-54424a966f565cf32a11
       - de-corpus-80ca528e0ed2cceb764a
+      - de-corpus-9e5b0fce008e5455ee6d
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -542,7 +542,7 @@ generated_facts:
     - id: de-uhv-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-a554dc6015adcc579249
+      - de-corpus-9213eaeb43e56344e114
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -564,7 +564,7 @@ generated_facts:
     - id: de-uhv-instr-360df2059e09e33e
       status: pending
       discovery_refs:
-      - de-corpus-a1bbdc42d51c89a6383d
+      - de-corpus-4c94aafc83495aa484db
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
@@ -610,7 +610,7 @@ generated_facts:
     - id: de-uhv-instr-3ae0493a66058fb3
       status: pending
       discovery_refs:
-      - de-corpus-244def7191ae261bc78d
+      - de-corpus-e7fbb7878cef3bf3a26b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
       row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
@@ -621,7 +621,7 @@ generated_facts:
     - id: de-uhv-instr-3be04eb6d61b596b
       status: pending
       discovery_refs:
-      - de-corpus-8c59f324eb341ba46731
+      - de-corpus-90dff6d83f72676f8088
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
       row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
@@ -736,7 +736,7 @@ generated_facts:
     - id: de-uhv-instr-9a821bfac753742b
       status: pending
       discovery_refs:
-      - de-corpus-907618256eb5b8cdc6c1
+      - de-corpus-74347a2806a5b2ae26de
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
@@ -1226,8 +1226,8 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
-      - de-corpus-54424a966f565cf32a11
       - de-corpus-80ca528e0ed2cceb764a
+      - de-corpus-9e5b0fce008e5455ee6d
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -1303,7 +1303,7 @@ computed:
     - id: de-uhv-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-a554dc6015adcc579249
+      - de-corpus-9213eaeb43e56344e114
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -1325,7 +1325,7 @@ computed:
     - id: de-uhv-instr-360df2059e09e33e
       status: pending
       discovery_refs:
-      - de-corpus-a1bbdc42d51c89a6383d
+      - de-corpus-4c94aafc83495aa484db
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
@@ -1371,7 +1371,7 @@ computed:
     - id: de-uhv-instr-3ae0493a66058fb3
       status: pending
       discovery_refs:
-      - de-corpus-244def7191ae261bc78d
+      - de-corpus-e7fbb7878cef3bf3a26b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
       row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
@@ -1382,7 +1382,7 @@ computed:
     - id: de-uhv-instr-3be04eb6d61b596b
       status: pending
       discovery_refs:
-      - de-corpus-8c59f324eb341ba46731
+      - de-corpus-90dff6d83f72676f8088
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
       row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
@@ -1497,7 +1497,7 @@ computed:
     - id: de-uhv-instr-9a821bfac753742b
       status: pending
       discovery_refs:
-      - de-corpus-907618256eb5b8cdc6c1
+      - de-corpus-74347a2806a5b2ae26de
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e

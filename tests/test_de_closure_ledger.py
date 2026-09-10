@@ -124,6 +124,81 @@ def _load_refresh_script():
     return module
 
 
+@pytest.mark.parametrize("body", [
+    "§ 5 BFDG",
+    "§ 5 Absatz 1 Satz 2 Nummer 3 Buchstabe a des BFDG",
+    "BFDG (§ 5)",
+    "BFDG, § 5 Absatz 1",
+    "§ 5\nBFDG",
+])
+def test_inbound_section_reference_requires_connected_citation(body: str) -> None:
+    refresh = _load_refresh_script()
+    assert refresh._explicit_section_reference(body, "5", "BFDG") is not None
+
+
+@pytest.mark.parametrize("body", [
+    "§ 5 Absatz 1 Nummer 11b versicherungspflichtig sind, durch Ableistung "
+    "eines Freiwilligendienstes nach dem Bundesfreiwilligendienstgesetz",
+    "Bundesfreiwilligendienstgesetz oder dem Jugendfreiwilligendienstegesetz "
+    "oder eines vergleichbaren anerkannten Freiwilligendienstes auch nach § 5 "
+    "Absatz 1 Nummer 1 versicherungspflichtig",
+    "§ 50 Bundesfreiwilligendienstgesetz",
+])
+def test_inbound_section_reference_does_not_join_separate_clauses(body: str) -> None:
+    refresh = _load_refresh_script()
+    assert refresh._explicit_section_reference(
+        body, "5", "Bundesfreiwilligendienstgesetz"
+    ) is None
+
+
+def test_inbound_section_reference_finds_later_genuine_citation() -> None:
+    refresh = _load_refresh_script()
+    body = "§ 5 gilt hier; BFDG ist erwähnt. Maßgeblich ist § 5 Absatz 1 BFDG."
+    match = refresh._explicit_section_reference(body, "5", "BFDG")
+    assert match is not None
+    assert match.group(0) == "§ 5 Absatz 1 BFDG"
+
+
+@pytest.mark.parametrize("exact_citation", [False, True])
+def test_inbound_proximity_retains_candidate_without_false_section_binding(
+    exact_citation: bool,
+) -> None:
+    refresh = _load_refresh_script()
+    target = "de/statute/bfdg/5"
+    source = "de/statute/sgb-5/226"
+    values = [
+        {"citation_path": "de/statute/bfdg", "citation_label": "BFDG"},
+        {"citation_path": target, "body": "A preservation norm."},
+        {"citation_path": "de/statute/sgb-5", "citation_label": "SGB V"},
+        {"citation_path": source, "body": "§ 5 Absatz 1 sind versichert; BFDG gilt daneben."},
+    ]
+    if exact_citation:
+        values[-1]["body"] += " Außerdem gilt § 5 BFDG."
+    rows = [refresh.CorpusRow(value, i + 1, "a" * 64, "b" * 64)
+            for i, value in enumerate(values)]
+    by_path = {row.path: row for row in rows}
+    documents = {path: by_path[path] for path in ("de/statute/bfdg", "de/statute/sgb-5")}
+    corpus = refresh.Corpus(rows, by_path, documents, {
+        "de/statute/bfdg": "de/statute/bfdg", target: "de/statute/bfdg",
+        "de/statute/sgb-5": "de/statute/sgb-5", source: "de/statute/sgb-5",
+    }, [], {})
+    evidence = {}
+    candidates = refresh._discover_corpus_program(
+        "de/kindergeld", {"declared_sources": [{"citation_path": target}]},
+        corpus, evidence,
+    )
+    assert "corpus:de/statute/sgb-5" in candidates
+    finding, = evidence.values()
+    if exact_citation:
+        assert finding["mechanism"] == "explicit_cross_reference_inbound"
+        assert finding["resolved_citation_path"] == target
+        assert finding["matched_text"] == "§ 5 BFDG"
+    else:
+        assert finding["mechanism"] == "unresolved_cross_reference_proximity"
+        assert finding["candidate_target_citation_path"] == target
+        assert "resolved_citation_path" not in finding
+
+
 def _artifact_items(module) -> list[tuple[str, Path]]:
     paths = module.ARTIFACT_PATHS
     assert isinstance(paths, dict)
@@ -371,6 +446,37 @@ def test_snapshot_check_is_committed_byte_only(
     assert refresh.main(
         ["--check-snapshot", "--corpus-root", str(missing)]
     ) == 0
+
+
+@pytest.mark.parametrize("mutation", [None, "source", "query_set", "attempt"])
+def test_reused_subject_receipts_preserve_observation_and_reject_drift(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str | None,
+) -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    if mutation in {"source", "query_set"}:
+        snapshot[mutation]["sha256"] = "0" * 64
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "attempt":
+        snapshot["channels"]["subject_matter_search"]["attempts"][0]["captured_at"] = "2099-01-01T00:00:00Z"
+    prior = tmp_path / "prior.json"
+    prior.write_text(json.dumps(snapshot))
+
+    def no_network(*_args, **_kwargs):
+        raise AssertionError("receipt reuse attempted a network observation")
+
+    monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
+    if mutation is not None:
+        with pytest.raises(refresh.CaptureError):
+            refresh._reused_subject_channel(prior, refresh.DEFAULT_SOURCE, refresh.DEFAULT_QUERY_SET)
+    else:
+        reused = refresh._reused_subject_channel(prior, refresh.DEFAULT_SOURCE, refresh.DEFAULT_QUERY_SET)
+        assert reused == snapshot["channels"]["subject_matter_search"]
+
+
+def test_reuse_and_offline_capture_are_mutually_exclusive() -> None:
+    refresh = _load_refresh_script()
+    assert refresh.main(["--offline", "--subject-snapshot", str(SNAPSHOT)]) == 2
 
 
 def test_corpus_root_resolution_precedence_and_missing_error(

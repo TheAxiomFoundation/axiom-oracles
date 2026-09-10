@@ -235,9 +235,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 27b4cccee9454f4cf267b611d23230bf61978f518d1c12ba62785e27416740db
+    snapshot_sha256: 45b0cf11084453b41995896aece50c9dd289359eb0c0a9a544f299b44d06fdf8
     channel_receipts:
-      corpus_release: c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c
+      corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
       subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
@@ -280,7 +280,7 @@ generated_facts:
     - id: de-rv-instr-45a23bb6aa1843b8
       status: pending
       discovery_refs:
-      - de-corpus-262a6432328a23e9d801
+      - de-corpus-a0448494fc9322624917
       identity_kind: corpus_citation
       citation_path: de/statute/estg
       row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee
@@ -495,7 +495,7 @@ computed:
     - id: de-rv-instr-45a23bb6aa1843b8
       status: pending
       discovery_refs:
-      - de-corpus-262a6432328a23e9d801
+      - de-corpus-a0448494fc9322624917
       identity_kind: corpus_citation
       citation_path: de/statute/estg
       row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee

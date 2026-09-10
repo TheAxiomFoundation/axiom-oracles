@@ -1,6 +1,6 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-10T10:29:32Z",
+  "generated_at": "2026-09-10T12:03:53Z",
   "source": {
     "path": "closure/de/source.json",
     "sha256": "d5d4eea595b3bf494837012028d14702f84d98c8510f88578524772146abeed3"
@@ -56985,36 +56985,6 @@
       },
       "evidence": [
         {
-          "id": "de-corpus-01e05aa7f5dd71f7553e",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15/document-1",
-          "source_body_sha256": "b9e019f01a2d26e9b01ec4f8e4692686406416b3b0d654800ad483d3d87edf1f",
-          "source_row_sha256": "5048b374135d0f74ef36073410cc3c1f7300e984f0fd45effda417065e7a0c88",
-          "matched_text": "§ 63 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-01e85aac96e57549cd8f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-24-12-2013-04-11/document-1",
-          "source_body_sha256": "8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605",
-          "source_row_sha256": "d59e40930d475297ce0d1fe75d9c3bb803c0bc517f83d2ca369070040f461d42",
-          "matched_text": "EStG) führen. 10 1. a) Zu Recht ist das FG davon ausgegangen, dass T im Streitzeitraum Januar 2006 bis Dezember 2008 grundsätzlich nach § 63",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-02a06a9e9c90f357f054",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-15-12-2014-12-17/document-1",
-          "source_body_sha256": "28850897ad9f55a122b5a2e7d6df94eaec8648fb1c47a14a7d2e8ca470302a19",
-          "source_row_sha256": "c77f02e8ba8507a30b5de302ff94997ac9ce0c2097dc8a351915bfe98224aa75",
-          "matched_text": "§ 70 Abs 2, EStG VZ 2008 , EStG VZ 2009 , EStG VZ 2010 , EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
           "id": "de-corpus-02c3e286a3632391d014",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "amendment_targets_inbound",
@@ -57025,13 +56995,23 @@
           ]
         },
         {
-          "id": "de-corpus-02c9c42a137aafa13d68",
+          "id": "de-corpus-045f86ac66a8bb0e5366",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-29-09-2012-03-15/document-1",
-          "source_body_sha256": "b14cb626febe596f270d20f68864a2efd70343a2a94414e036032f56d8cc81e0",
-          "source_row_sha256": "c5fdcfc31434cadb79ddc9ddf3f7ad4054a1e538592d63baf3ee3415cc197cab",
-          "matched_text": "§ 63 Abs 1 S 2, EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
+          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
+          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
+          "matched_text": "§ 68 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/68"
+        },
+        {
+          "id": "de-corpus-052476229d91d4583cf1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-27-15-2016-09-08/document-1",
+          "source_body_sha256": "c71ceab0e2ed84aeed030806d5b539e9c5e0575b08e1d67d1cc3a4a2ee6eab8a",
+          "source_row_sha256": "09f439076a247ec76b7ea9d0c5ebfaff9c75217177c1887a874eb22209f3c01c",
+          "matched_text": "EStG § 63",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -57043,6 +57023,16 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Zweiten Buch",
           "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-09437434940495b70a02",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
+          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
+          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
+          "matched_text": "§ 62 Abs. 1 Nr. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-0968fed57876c5e3f015",
@@ -57063,13 +57053,13 @@
           "resolved_citation_path": "de/statute/bgb/1591"
         },
         {
-          "id": "de-corpus-0a272f4768b5aa643793",
+          "id": "de-corpus-09ea98c51b47485f46be",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-68-11-2012-05-24/document-1",
-          "source_body_sha256": "9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93",
-          "source_row_sha256": "e8cf3b0e04365a84cee413ab8da245d2f8d6b9359739964191990fca718aaeb8",
-          "matched_text": "§ 63, EStG",
+          "source_citation_path": "de/guidance/bfh-v-r-27-14-2015-04-15/document-1",
+          "source_body_sha256": "338cc75dd45ca39437fe07d05f8c0d49b8c939dbbbd4114b8b29dea010f34c52",
+          "source_row_sha256": "ffc26506b308d65e35d5a816e63be95cbf0ccec150c36613629241cfdc1cecf5",
+          "matched_text": "§ 63 Abs. 1 Satz 1 Nr. 1 EStG",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -57083,26 +57073,6 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-0c48d85dd9d39c651f1d",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-36-21-2023-01-19/document-1",
-          "source_body_sha256": "75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31",
-          "source_row_sha256": "2c1d7dfc2af38fd4deb44110ad1925bca8ae1c410b4773771b044e37d3d61a06",
-          "matched_text": "§ 63 Abs. 1 Sätze 3 ff. EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-0c57c9fb8c0f37d506b4",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
-          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
-          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
           "id": "de-corpus-0c5da927daa98ce090f4",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57111,6 +57081,16 @@
           "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
           "matched_text": "§ 67 Satz 2 EStG",
           "resolved_citation_path": "de/statute/estg/67"
+        },
+        {
+          "id": "de-corpus-0d37532eb747fab30e27",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-42-18-2019-02-20/document-1",
+          "source_body_sha256": "fc57a968b3a67f723d50473b4c0ea76ad5e5b176c5a229831032e86a468a06d1",
+          "source_row_sha256": "b31c55b863dd78ac91f3a5f2f873e2ef0ac0fd9739109dc75e881210a9d1a515",
+          "matched_text": "§ 63 Abs. 1 Satz 1 Nr. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-0d5daa1f7534f8c2d1c3",
@@ -57123,34 +57103,14 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-0ef2587eb508bf84b38d",
+          "id": "de-corpus-0fc08e64477e9859b7a9",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-7-21-2023-04-20/document-1",
-          "source_body_sha256": "90a8a7b1db30d76718dc4e8c6e9251d170eef404d504cea8087bb94d04aa180f",
-          "source_row_sha256": "0cd451aefce7d77fcf5cc228a4a714dc3eaba8fbb993b9d092f0500973f45692",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
-          "id": "de-corpus-0fdec1e9559d2bc13c14",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
-          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
-          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
-          "matched_text": "§ 74 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/74"
-        },
-        {
-          "id": "de-corpus-10077b85f3e3317e7dc4",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
-          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
-          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
+          "source_citation_path": "de/guidance/bfh-iii-r-21-12-2014-05-08/document-1",
+          "source_body_sha256": "0a415c2dd2ac667797c358fdf1113a271bdae2517ba22b7313379d9976042022",
+          "source_row_sha256": "361d0d3e31b20bd694fafa56e5e9d5b2a9ee5011ee9eda8642d445e47e7a603c",
+          "matched_text": "§ 65 Abs. 1 Satz 1 Nr. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/65"
         },
         {
           "id": "de-corpus-111c2e5574197a8e8017",
@@ -57172,14 +57132,15 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-15717a23d99060611837",
+          "id": "de-corpus-154c7b4436e7570445ce",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-36-21-2023-01-19/document-1",
-          "source_body_sha256": "75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31",
-          "source_row_sha256": "2c1d7dfc2af38fd4deb44110ad1925bca8ae1c410b4773771b044e37d3d61a06",
-          "matched_text": "§ 62, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-vi-r-10-14-2015-06-18/document-1",
+          "source_body_sha256": "f60d4eed1ec0822401a2ef0cc4a7208f078ae5a26135f394d8104cd7236ef0df",
+          "source_row_sha256": "f95410a17c464c2bbe527167c87cf17b198da2677a76be1c878ea8c48079ea6a",
+          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-164bea938c6a3063f131",
@@ -57192,16 +57153,6 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-16c4c6e5eda80ab9de1a",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
-          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
-          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
-          "matched_text": "§ 68 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/68"
-        },
-        {
           "id": "de-corpus-170306142fc9632c0004",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57209,6 +57160,38 @@
           "source_body_sha256": "4a53c27452b5e2715649c45978eede3cea74e5f38de26e7535c5de1898c34a74",
           "source_row_sha256": "24bfc0bdf585626c01e428a3417596fdadecf4e013ec08d5d1f132c0535d52b9",
           "matched_text": "§ 63 Abs. 1 Satz 3 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-178701d718e3cb38ea53",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
+          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
+          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
+          "matched_text": "§§ 62 ff. EStG",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-18f6a44b5b4c894fbc1a",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/wogg/17",
+          "source_body_sha256": "e79e6989f48911c3aaaf644df4b89475b8b5386d8a24366cc7bacc8f3a4b3976",
+          "source_row_sha256": "94c7bccced2e1e13f3c6439de925f02848d7eb4bc2eaa08238f648c150b8e712",
+          "matched_text": "Einkommensteuergesetz oder dem Bundeskindergeldgesetz oder eine in § 65",
+          "candidate_target_citation_path": "de/statute/estg/65",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-194540b4f7173740b0fe",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-vi-r-9-15-2015-09-03/document-1",
+          "source_body_sha256": "12b01243c881bddf100360e0112eec5f996636c0b4f6f18128102a0e3b9e7bc0",
+          "source_row_sha256": "f30dca2fc8a8e5786480d34fa8ef5138c660fc081195c1f1d88faf1f96837e42",
+          "matched_text": "§ 63 Abs. 1 Satz 2 EStG",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -57232,6 +57215,17 @@
           "resolved_citation_path": "de/statute/sgb-3"
         },
         {
+          "id": "de-corpus-1bca258bdba3102dbaa9",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/sgb-5/226",
+          "source_body_sha256": "51497c46cd5b81c2dd43419c585e19bd92f2c43b8efe10f6e188bdcd40bb1036",
+          "source_row_sha256": "6d67cbd667e73f69a83204c984b14701e2dbd1adea0168f9561ee44fb7851013",
+          "matched_text": "§ 5 Absatz 1 Nummer 11b versicherungspflichtig sind, durch Ableistung eines Freiwilligendienstes nach dem Bundesfreiwilligendienstgesetz",
+          "candidate_target_citation_path": "de/statute/bfdg/5",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-1c970c7de71a22236f10",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57239,26 +57233,6 @@
           "source_body_sha256": "b2fc5881b3d894359f94a86c0c94ff128cef96f397a778c1a69135534bf7d9b0",
           "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
           "matched_text": "§ 63 EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-1cbc7577fc3e3e8e28e7",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
-          "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
-          "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-1d0b5701bb3b5ed0b032",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-35-11-2013-04-11/document-1",
-          "source_body_sha256": "1a9c9166235aa1d4b5535943a17a3c064915ed627d3b5fdccfeb593c35df344c",
-          "source_row_sha256": "4a75289579f3ada7c272f903179a2ca5b8427d1d5a2484a2bdfb1dc2adc9dfaa",
-          "matched_text": "§ 63 Abs 1, EStG",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -57270,16 +57244,6 @@
           "source_row_sha256": "4ef7b3e8769a8d039d2f2608fa46793761c17b4dc90b14e1592e3073284777ca",
           "matched_text": "§ 66 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
-          "id": "de-corpus-1d89d88f6aaf05ecc346",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
-          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
-          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
-          "matched_text": "EStG VZ 2009 vorgehend FG München, 10. März 2013, Az: 7 K 477/11 Leitsätze 1. Jedem Steuerpflichtigen, der Anspruch auf Kindergeld gemäß § 62",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-1da0e4fc2277d5705f97",
@@ -57308,24 +57272,24 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-2033174a1a99d1bb31d3",
+          "id": "de-corpus-1f5ac01ef702228a1dea",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-17-18-2019-03-21/document-1",
-          "source_body_sha256": "82f862e1a5634975116dcb19563a2db8dcecd50f922d8330961ad1cf5cb9b5cd",
-          "source_row_sha256": "eecba0bc32ff6c437753db96e073c21b2d8dbbf4400aa045f9129904faaef42d",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
+          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
+          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
+          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-208341f25079067e0f52",
+          "id": "de-corpus-1fe7ebc3106c241b84c6",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-16-17-2018-01-18/document-1",
-          "source_body_sha256": "85fbe569c03d6022c91428003e17745a141c4eafd59a410cec8cfff6fb10d48d",
-          "source_row_sha256": "929bd0ef7d090024a98aa8352eedff0260e64068740eaab9b469ac3c1d4e0f46",
-          "matched_text": "§ 62 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
+          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
+          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
+          "matched_text": "§ 63 Abs. 1 Satz 6 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-20ea970d21a6ba340b2f",
@@ -57358,6 +57322,27 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-226460336311f7713278",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-68-11-2012-05-24/document-1",
+          "source_body_sha256": "9e34591cc17d1ce39ad335ed63ce912678e9a778144e71493cbe322d9c67ae93",
+          "source_row_sha256": "e8cf3b0e04365a84cee413ab8da245d2f8d6b9359739964191990fca718aaeb8",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-2346b5d653dd91ad16ef",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/cjeu-c-411-20/document-1",
+          "source_body_sha256": "3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5",
+          "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
+          "matched_text": "EStG) sieht vor: „(1) 1Für Kinder im Sinne des § 63",
+          "candidate_target_citation_path": "de/statute/estg/63",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-2397f2ff0c5303b88c52",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57368,34 +57353,45 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-244def7191ae261bc78d",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
-          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
-          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
-          "id": "de-corpus-262a6432328a23e9d801",
-          "program": "de/rv-employee-contribution",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/estg/3",
-          "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
-          "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
-          "matched_text": "Sechsten Buches Sozialgesetzbuch erbrachte Leistungen zufließen und der Arbeitgeber für diese Leistungen Beiträge nach § 168",
-          "resolved_citation_path": "de/statute/sgb-6/168"
-        },
-        {
-          "id": "de-corpus-275b8f6521b0915443ed",
+          "id": "de-corpus-23ce9a65886e02630acc",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
-          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
-          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
-          "matched_text": "§§ 70, 72 EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "source_citation_path": "de/guidance/bfh-iii-r-17-18-2019-03-21/document-1",
+          "source_body_sha256": "82f862e1a5634975116dcb19563a2db8dcecd50f922d8330961ad1cf5cb9b5cd",
+          "source_row_sha256": "eecba0bc32ff6c437753db96e073c21b2d8dbbf4400aa045f9129904faaef42d",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-25bab03d1a277b8dc8a1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-63-11-2013-06-13/document-1",
+          "source_body_sha256": "972eeee693cd85419d8b50a673d31cc3af2ba2ab99d73e25f061bb7cd35c6bb4",
+          "source_row_sha256": "56fbcefa4620d085608d2c87be586b049f2f123500caed0bce5d045f73cb0ccb",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-272c08aa29f52270c78f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-32-15-2017-03-15/document-1",
+          "source_body_sha256": "a2737f2087e19783b886063df2252f3ba23da48ce23f26fd1804b47c42583d05",
+          "source_row_sha256": "e45fccc0076b9a8af8e94ca87d9b948a1a78a0348a9d6d419146dc54356f4433",
+          "matched_text": "§ 62 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-276261a84cf3a57d8882",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
+          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
+          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
+          "matched_text": "EStG VZ 2009 vorgehend FG München, 10. März 2013, Az: 7 K 477/11 Leitsätze 1. Jedem Steuerpflichtigen, der Anspruch auf Kindergeld gemäß § 62",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-27b3386012358a3cd94f",
@@ -57407,14 +57403,14 @@
           "matched_text": "Steuerberatungsgesetzes"
         },
         {
-          "id": "de-corpus-2a7c60e49d15d9a78995",
+          "id": "de-corpus-28db1c6c0a5a3d0244ed",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/lsth-2023-9/inhalt",
-          "source_body_sha256": "703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251",
-          "source_row_sha256": "a6203be93b6070be299cc12fea088abc437066664aca42255e94f8f541aeb33b",
-          "matched_text": "EStG ist § 65",
-          "resolved_citation_path": "de/statute/estg/65"
+          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
+          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
+          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-2a89b0b2b0d3457321d9",
@@ -57427,24 +57423,14 @@
           "resolved_citation_path": "de/statute/bfdg/5"
         },
         {
-          "id": "de-corpus-2aac34fca294aefa950e",
+          "id": "de-corpus-2b8254b9a867f733e878",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-38-14-2015-06-23/document-1",
-          "source_body_sha256": "c15a5ddb7b8988cc703ef637ca53eae22eda7f91e2bd12ee780069b546ae9c1d",
-          "source_row_sha256": "633999e725fa36a6c797a6972453db08e6e80555e97ab51b3b0fe8c8f82beca1",
-          "matched_text": "§ 63 Abs 1 S 3, EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-28-17-2019-11-27/document-1",
+          "source_body_sha256": "cf81d3d61331416713891fffa01e43d1b48e067e0e844350d4d66cdec1a82faa",
+          "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
+          "matched_text": "EStG § 63",
           "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-2b1deb2296591337003a",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-10-22-2023-10-12/document-1",
-          "source_body_sha256": "537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027",
-          "source_row_sha256": "4df79d3dc09b793744f59b30f0740341487fd7df0b56d52eb0e4b4ec5736e567",
-          "matched_text": "EStG) ausgeschlossen. 11 1. Nach § 62",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-2bf0470f154a78fd2a70",
@@ -57457,6 +57443,17 @@
           "resolved_citation_path": "de/statute/estg/68"
         },
         {
+          "id": "de-corpus-2d468d2aa05d885c6717",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/sgb-3/26",
+          "source_body_sha256": "5d4aaf46595de37ce42b063c87d6086661cb3a70f8a0719d9203d36e940c5145",
+          "source_row_sha256": "81b52ea3d8382a6c9e8ddd5a4d2c7908b0404eed0a43dee82369f54ddc6379c0",
+          "matched_text": "Einkommensteuergesetz oder Bundeskindergeldgesetz haben oder ohne die Anwendung des § 64",
+          "candidate_target_citation_path": "de/statute/estg/64",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-2d58d909db5ed8d2dd4d",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57467,14 +57464,24 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-2dfb8e8e7b9972130173",
+          "id": "de-corpus-2dfc6ca8af9823cbf702",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-9-12-2013-09-19/document-1",
-          "source_body_sha256": "e6bf6e5fe9a21381ed9c40f1eb23d65600cb814b5fd1b19105676bb62ee13935",
-          "source_row_sha256": "d1304cebe5d5719f0a4993e517a37d7fb169f182a5976a1d143061ca3403f896",
-          "matched_text": "§ 62 Abs 1 Nr 2 Buchst a, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-40-21-2022-09-22/document-1",
+          "source_body_sha256": "1329b29d66b9403c8270a6441d6e54282794824c6494713f8960e16088ff8212",
+          "source_row_sha256": "b0d05c15381ad000bd02c7c9f32779c8dd89407a28ee20791a6b9af3cdfa1d8f",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-2ec721f6243aa7a9c822",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-73-09-2012-02-09/document-1",
+          "source_body_sha256": "a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35",
+          "source_row_sha256": "4c875a4838dad4dec5fa35a5acb57be71f1a82f3dcce6d878025b0bfe4a41c54",
+          "matched_text": "§ 63 Abs. 1 Satz 1 Nr. 3 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-2f102ab8134aa0f24d44",
@@ -57506,6 +57513,26 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
+          "id": "de-corpus-2f7a9a883179090f0c06",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-17-18-2019-03-21/document-1",
+          "source_body_sha256": "82f862e1a5634975116dcb19563a2db8dcecd50f922d8330961ad1cf5cb9b5cd",
+          "source_row_sha256": "eecba0bc32ff6c437753db96e073c21b2d8dbbf4400aa045f9129904faaef42d",
+          "matched_text": "§ 63 Abs. 1 Satz 1 Nr. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-31e61e88272db75b21bf",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
+          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
+          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
+          "matched_text": "§ 68 Abs. 3 EStG",
+          "resolved_citation_path": "de/statute/estg/68"
+        },
+        {
           "id": "de-corpus-31f4641c5fcedc0d42b9",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -57514,6 +57541,16 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Dritten Buch",
           "resolved_citation_path": "de/statute/sgb-3"
+        },
+        {
+          "id": "de-corpus-32f7f741f64ab8902977",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-35-11-2013-04-11/document-1",
+          "source_body_sha256": "1a9c9166235aa1d4b5535943a17a3c064915ed627d3b5fdccfeb593c35df344c",
+          "source_row_sha256": "4a75289579f3ada7c272f903179a2ca5b8427d1d5a2484a2bdfb1dc2adc9dfaa",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-334b97469237730f3b68",
@@ -57525,44 +57562,26 @@
           "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
         },
         {
-          "id": "de-corpus-3393ddac4e2b1bfe7234",
+          "id": "de-corpus-33cbcddd67cd6e674ac2",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-72-11-2012-05-10/document-1",
-          "source_body_sha256": "c063f17cff1ddf5c212c4386d4075fecce994ef149697c305026146a3a99fb68",
-          "source_row_sha256": "fe46b74668b8cea0b4187818677c56b38d5f36374747a78ef6cf2588bef2d9af",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
+          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
+          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
+          "matched_text": "§§ 70, 72 EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
         },
         {
-          "id": "de-corpus-356c30cdda0ef255178d",
+          "id": "de-corpus-351c5921e511fb22722d",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-41-13-2014-05-08/document-1",
-          "source_body_sha256": "4912a29097e9c72d83f855754923d9aef3702adaf3247046a6f3ba7bc12aa68b",
-          "source_row_sha256": "66bd5fc15e3c64a1cbf9c1f7ba16c62474fb8315edddb48f290eb38f260e7bad",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
-          "id": "de-corpus-3573713d84d0945ea71f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
-          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
-          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
-          "id": "de-corpus-35cf58fe9bac00087a26",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-37-21-2022-09-22/document-1",
-          "source_body_sha256": "49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef",
-          "source_row_sha256": "4e914345cf85f9cb49cbcbde24babd99655f27cb419002805b0c0b795355994f",
-          "matched_text": "EStG zu berücksichtigen. 11 1. Nach § 62",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-10-22-2023-10-12/document-1",
+          "source_body_sha256": "537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027",
+          "source_row_sha256": "4df79d3dc09b793744f59b30f0740341487fd7df0b56d52eb0e4b4ec5736e567",
+          "matched_text": "EStG) ausgeschlossen. 11 1. Nach § 62",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-35d2c47e54a9b17d43f6",
@@ -57585,13 +57604,23 @@
           "resolved_citation_path": "de/statute/estg/78"
         },
         {
-          "id": "de-corpus-37e7adcc7f1833e1d40c",
+          "id": "de-corpus-371c309783518901f2d5",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-21-2022-09-22/document-1",
-          "source_body_sha256": "1329b29d66b9403c8270a6441d6e54282794824c6494713f8960e16088ff8212",
-          "source_row_sha256": "b0d05c15381ad000bd02c7c9f32779c8dd89407a28ee20791a6b9af3cdfa1d8f",
-          "matched_text": "§ 63 Abs 1 S 2, EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20/document-1",
+          "source_body_sha256": "fc6abed0a74cd9df954dcc019c0e93eb61c16fbcf9aca81f967858cadaa3326c",
+          "source_row_sha256": "23b6b5443b48d782b6c0a96ecdf0801457bd1a40fdfcc818aba0a5fe96008724",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-37eca41a65dce0c1d131",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-26-18-2018-12-11/document-1",
+          "source_body_sha256": "d0aebd0549b4194514c03ba7a59862e0773e4a71b4ce7ddc02dac77648ce9420",
+          "source_row_sha256": "144e7d170c389802ac1ff2123ba5f89827b359ecbd5a14990f37ef111c5352f9",
+          "matched_text": "EStG § 63",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -57602,16 +57631,6 @@
           "source_body_sha256": "122ef84dee2411c18ab8066e3756e3e18f15658326ce2c34ad097443a48df940",
           "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
           "matched_text": "Abkommen über den Europäischen Wirtschaftsraum"
-        },
-        {
-          "id": "de-corpus-38cee099da9e8c265626",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-27-15-2016-09-08/document-1",
-          "source_body_sha256": "c71ceab0e2ed84aeed030806d5b539e9c5e0575b08e1d67d1cc3a4a2ee6eab8a",
-          "source_row_sha256": "09f439076a247ec76b7ea9d0c5ebfaff9c75217177c1887a874eb22209f3c01c",
-          "matched_text": "§ 63 Abs 1 S 2, EStG VZ 2013 , EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-3945410495307f7f8a69",
@@ -57634,13 +57653,13 @@
           "resolved_citation_path": "de/statute/bkgg-1996"
         },
         {
-          "id": "de-corpus-39ccc058d2fd00218b11",
+          "id": "de-corpus-3a6526f67d54b8372d7f",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14/document-1",
-          "source_body_sha256": "cf945bf873cc1d56890a001e79802778fae4e1e8ea459f1b2da8fe7755ed253d",
-          "source_row_sha256": "87bf4a4a169c92c8417c08f7a1c135c848155ac2b36f4d77a99efc753e144812",
-          "matched_text": "§ 66 Abs. 3 des Einkommensteuergesetzes (EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
+          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
+          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
+          "matched_text": "§ 66 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
@@ -57664,6 +57683,16 @@
           "resolved_citation_path": "de/statute/sgb-7"
         },
         {
+          "id": "de-corpus-3b2c7b9b5abe912013b1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
+          "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
+          "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-3b7b161daf8fe143921a",
           "program": "de/rv-employee-contribution",
           "mechanism": "law_metadata_changed_by",
@@ -57682,24 +57711,26 @@
           "resolved_citation_path": "de/statute/estg/67"
         },
         {
-          "id": "de-corpus-3d784d51abed6e58b199",
+          "id": "de-corpus-3de2dc62ca7b5d5103e8",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
-          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
-          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
-          "matched_text": "§§ 62 ff. EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
+          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
+          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
+          "matched_text": "EStG) oder wegen einer Abzweigung oder Pfändung (§§ 74",
+          "candidate_target_citation_path": "de/statute/estg/74",
+          "resolution": "unresolved_act_section_association"
         },
         {
-          "id": "de-corpus-3faab1cb12cf9bec8438",
+          "id": "de-corpus-3f68bca82ed9109af0b2",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-52-09-2010-04-28/document-1",
-          "source_body_sha256": "9cf84bb018d9f36c27edb646029ca5549a5d0fe57ee07edcfd02ee9f3111128f",
-          "source_row_sha256": "0c43fd4cb9cac230d0ea3304964479b769458ab49d89a6cfd892dc1d0cb6ff74",
-          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. a des Einkommensteuergesetzes in der Fassung für den Streitzeitraum (EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-41-13-2014-05-08/document-1",
+          "source_body_sha256": "4912a29097e9c72d83f855754923d9aef3702adaf3247046a6f3ba7bc12aa68b",
+          "source_row_sha256": "66bd5fc15e3c64a1cbf9c1f7ba16c62474fb8315edddb48f290eb38f260e7bad",
+          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-406eda822701b301f22a",
@@ -57710,6 +57741,16 @@
           "raw_reference": "zuletzt geändert durch Art. 44 G v. 2.12.2024 I Nr. 387"
         },
         {
+          "id": "de-corpus-4092aa86586e608e9be1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-10-17-2018-02-22/document-1",
+          "source_body_sha256": "d93bd590147017159c5cbf728ab3c660494c06e7e2042712d405a68c847ce8aa",
+          "source_row_sha256": "651cf2653f91c4fdb7435a286ed1af252b142410c4be6b676b77fafde34a179e",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. b EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-414d59a54d7295abbda5",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57718,6 +57759,16 @@
           "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
           "matched_text": "§ 66 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-415805f11b69f0db4a20",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15/document-1",
+          "source_body_sha256": "b9e019f01a2d26e9b01ec4f8e4692686406416b3b0d654800ad483d3d87edf1f",
+          "source_row_sha256": "5048b374135d0f74ef36073410cc3c1f7300e984f0fd45effda417065e7a0c88",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-41fd3361fab9f3182830",
@@ -57798,6 +57849,17 @@
           "resolved_citation_path": "de/statute/estg/32"
         },
         {
+          "id": "de-corpus-457837bc6d7e82107003",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-24-12-2013-04-11/document-1",
+          "source_body_sha256": "8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605",
+          "source_row_sha256": "d59e40930d475297ce0d1fe75d9c3bb803c0bc517f83d2ca369070040f461d42",
+          "matched_text": "EStG) führen. 10 1. a) Zu Recht ist das FG davon ausgegangen, dass T im Streitzeitraum Januar 2006 bis Dezember 2008 grundsätzlich nach § 63",
+          "candidate_target_citation_path": "de/statute/estg/63",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-461448dd2f8399f809a7",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57818,14 +57880,14 @@
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-467fc3daea2b8afe5e90",
+          "id": "de-corpus-471ca3eaad0d0db47a44",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-23-21-2022-09-22/document-1",
-          "source_body_sha256": "a7378c8269293195b9dd78a9f8d02cb0c2361f4b18fecf6dad69273bcfae4c31",
-          "source_row_sha256": "fb6a1abfba1cd5ccbfba5d4b3142c87abcae413c134385805e3a86c7dd1ecbc4",
-          "matched_text": "§ 70 Abs 1 S 2, EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "source_citation_path": "de/guidance/bfh-vi-r-45-12-2013-08-08/document-1",
+          "source_body_sha256": "a855ed8d4af2926f00bc900afb0da2ee616429c79ff8fb9d70aaf14e7c6dd3b2",
+          "source_row_sha256": "9e94dc0e15426002918f653f1fba44a4fdbbcb6633a72debdb7267d8eb693e68",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-48b002d52962878d6020",
@@ -57838,26 +57900,6 @@
           "resolved_citation_path": "de/statute/estg/68"
         },
         {
-          "id": "de-corpus-4996b91eb21f103ca1ee",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
-          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
-          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
-          "matched_text": "§ 64 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/64"
-        },
-        {
-          "id": "de-corpus-49de9a7681fedba411e8",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-10-14-2015-06-18/document-1",
-          "source_body_sha256": "f60d4eed1ec0822401a2ef0cc4a7208f078ae5a26135f394d8104cd7236ef0df",
-          "source_row_sha256": "f95410a17c464c2bbe527167c87cf17b198da2677a76be1c878ea8c48079ea6a",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
           "id": "de-corpus-4b0837db61b89b31ba27",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -57867,24 +57909,14 @@
           "matched_text": "Freizügigkeitsgesetzes/EU"
         },
         {
-          "id": "de-corpus-4c662d10afd6c8a759ea",
-          "program": "de/kindergeld",
+          "id": "de-corpus-4c94aafc83495aa484db",
+          "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
-          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
-          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
-          "matched_text": "§ 78, EStG",
-          "resolved_citation_path": "de/statute/estg/78"
-        },
-        {
-          "id": "de-corpus-4ccef59539b790415186",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-26-18-2018-12-11/document-1",
-          "source_body_sha256": "d0aebd0549b4194514c03ba7a59862e0773e4a71b4ce7ddc02dac77648ce9420",
-          "source_row_sha256": "144e7d170c389802ac1ff2123ba5f89827b359ecbd5a14990f37ef111c5352f9",
-          "matched_text": "§ 62 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
+          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
+          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-4da85ff7b2913f67bdbe",
@@ -57897,13 +57929,13 @@
           "resolved_citation_path": "de/statute/estg/76"
         },
         {
-          "id": "de-corpus-4e519857df376489afdb",
+          "id": "de-corpus-4e19821d4d1ef0b26123",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-63-11-2013-06-13/document-1",
-          "source_body_sha256": "972eeee693cd85419d8b50a673d31cc3af2ba2ab99d73e25f061bb7cd35c6bb4",
-          "source_row_sha256": "56fbcefa4620d085608d2c87be586b049f2f123500caed0bce5d045f73cb0ccb",
-          "matched_text": "§ 62, EStG",
+          "source_citation_path": "de/guidance/bfh-vi-r-9-15-2015-09-03/document-1",
+          "source_body_sha256": "12b01243c881bddf100360e0112eec5f996636c0b4f6f18128102a0e3b9e7bc0",
+          "source_row_sha256": "f30dca2fc8a8e5786480d34fa8ef5138c660fc081195c1f1d88faf1f96837e42",
+          "matched_text": "EStG § 62",
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
@@ -57927,6 +57959,27 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
+          "id": "de-corpus-4f93bf3e9a042ed50fbd",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-19-17-2018-09-13/document-1",
+          "source_body_sha256": "ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad",
+          "source_row_sha256": "3ec9eb05f846e02070401dc34cea317c943a04cfe378fae82ab0c6df00a06c1d",
+          "matched_text": "§ 69 Abs 1 Nr 1, EStG VZ 2014 , EStG",
+          "candidate_target_citation_path": "de/statute/estg/69",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-4fa8838e0794b568f2d6",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-35-11-2013-04-11/document-1",
+          "source_body_sha256": "1a9c9166235aa1d4b5535943a17a3c064915ed627d3b5fdccfeb593c35df344c",
+          "source_row_sha256": "4a75289579f3ada7c272f903179a2ca5b8427d1d5a2484a2bdfb1dc2adc9dfaa",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-4fd223b074792f0bf060",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -57946,14 +57999,14 @@
           "resolved_citation_path": "de/statute/sgb-6"
         },
         {
-          "id": "de-corpus-5082f94163cf35c83540",
+          "id": "de-corpus-5077101c63aa301bf080",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-14-17-2018-02-21/document-1",
-          "source_body_sha256": "95bc629191b9c7af1d02095e096374f939e3db5731b861a87be57ba0c309407f",
-          "source_row_sha256": "6eaad7d9c62dc5d0a15f2fe6e00f92abd16556d11318c205bbe813a2b154243b",
-          "matched_text": "§ 70 Abs. 3 Satz 1 EStG ECLI:DE:BFH:2018:U.210218.IIIR14.17.0 BFH III. Senat EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "source_citation_path": "de/guidance/bfh-iii-r-89-09-2010-07-15/document-1",
+          "source_body_sha256": "06c1b02bb6abdaf2698c2c0ec739b648bcafc4a216b3462db99c913d23b5dd48",
+          "source_row_sha256": "4ef7b3e8769a8d039d2f2608fa46793761c17b4dc90b14e1592e3073284777ca",
+          "matched_text": "§ 74 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
         },
         {
           "id": "de-corpus-50e12b4a0eb596787bad",
@@ -57966,6 +58019,38 @@
           "resolved_citation_path": "de/statute/estg/74"
         },
         {
+          "id": "de-corpus-51156c894227c4bf49bc",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-19-17-2018-09-13/document-1",
+          "source_body_sha256": "ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad",
+          "source_row_sha256": "3ec9eb05f846e02070401dc34cea317c943a04cfe378fae82ab0c6df00a06c1d",
+          "matched_text": "§ 62 ff. des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-5253b0a0ad725b94c828",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20/document-1",
+          "source_body_sha256": "fc6abed0a74cd9df954dcc019c0e93eb61c16fbcf9aca81f967858cadaa3326c",
+          "source_row_sha256": "23b6b5443b48d782b6c0a96ecdf0801457bd1a40fdfcc818aba0a5fe96008724",
+          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-52bb4612d9a1e76e2cfe",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
+          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
+          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
+          "matched_text": "§ 62 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-53f9b179189d8108cdd4",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -57976,14 +58061,44 @@
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-54424a966f565cf32a11",
-          "program": "de/unterhaltsvorschuss",
+          "id": "de-corpus-551e3d8454322ff97555",
+          "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
-          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
-          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
-          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
+          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
+          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
+          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
+          "matched_text": "§ 66 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-5603013ef29636fa1cef",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-14-17-2018-02-21/document-1",
+          "source_body_sha256": "95bc629191b9c7af1d02095e096374f939e3db5731b861a87be57ba0c309407f",
+          "source_row_sha256": "6eaad7d9c62dc5d0a15f2fe6e00f92abd16556d11318c205bbe813a2b154243b",
+          "matched_text": "§ 70 Abs. 3 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
+        },
+        {
+          "id": "de-corpus-563526f4d32aba13426b",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-24-13-2014-04-30/document-1",
+          "source_body_sha256": "09555d6bc86ed4c0b0fa59990e6732e8b8c28d04763b45ee71269408b600368b",
+          "source_row_sha256": "6764631b743584cc71d04d898c2e3985bedaedba8c462426bd863f06b6da054d",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-566cbc94dcc63a98d95d",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
+          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
+          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
+          "matched_text": "§ 64 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-57c5b247ffc94f0f1f01",
@@ -58005,6 +58120,26 @@
           "resolved_citation_path": "de/statute/bgb/1591"
         },
         {
+          "id": "de-corpus-580c329817851b74d98e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-44-08-2010-04-28/document-1",
+          "source_body_sha256": "4a53c27452b5e2715649c45978eede3cea74e5f38de26e7535c5de1898c34a74",
+          "source_row_sha256": "24bfc0bdf585626c01e428a3417596fdadecf4e013ec08d5d1f132c0535d52b9",
+          "matched_text": "§ 74 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
+        },
+        {
+          "id": "de-corpus-585ed85fef5ed5a7db20",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-vi-r-45-12-2013-08-08/document-1",
+          "source_body_sha256": "a855ed8d4af2926f00bc900afb0da2ee616429c79ff8fb9d70aaf14e7c6dd3b2",
+          "source_row_sha256": "9e94dc0e15426002918f653f1fba44a4fdbbcb6633a72debdb7267d8eb693e68",
+          "matched_text": "§ 63 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-5891e59f49035c505f7f",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58012,16 +58147,6 @@
           "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
           "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
           "matched_text": "§ 70 Abs. 1 EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
-          "id": "de-corpus-59876532c3c6510b7f9e",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-7-21-2023-04-20/document-1",
-          "source_body_sha256": "90a8a7b1db30d76718dc4e8c6e9251d170eef404d504cea8087bb94d04aa180f",
-          "source_row_sha256": "0cd451aefce7d77fcf5cc228a4a714dc3eaba8fbb993b9d092f0500973f45692",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
@@ -58035,24 +58160,25 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-5aecb3f8846eccbbdb9e",
+          "id": "de-corpus-5a2117ef6b7a7ee6d833",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20/document-1",
-          "source_body_sha256": "fc6abed0a74cd9df954dcc019c0e93eb61c16fbcf9aca81f967858cadaa3326c",
-          "source_row_sha256": "23b6b5443b48d782b6c0a96ecdf0801457bd1a40fdfcc818aba0a5fe96008724",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
+          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
+          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
+          "matched_text": "§ 72 Abs. 1 Satz 3 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/72",
+          "resolution": "unresolved_act_section_association"
         },
         {
-          "id": "de-corpus-5bce6784652b0172b577",
+          "id": "de-corpus-5a247b18425e99ee9280",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-28-17-2019-11-27/document-1",
-          "source_body_sha256": "cf81d3d61331416713891fffa01e43d1b48e067e0e844350d4d66cdec1a82faa",
-          "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
-          "matched_text": "§ 62 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-28-15-2016-04-13/document-1",
+          "source_body_sha256": "77ce9323ebefc7d3894ad4a30327347b5b590b2d0e2b54780a1fe3eccbe0f108",
+          "source_row_sha256": "38d4a8b3733aa6c9f42ca31051827d18a50ac0e5afe4b9b699705b095e63ceef",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-5f4c58f5931a1170395c",
@@ -58072,16 +58198,6 @@
           "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
           "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
           "matched_text": "Bürgerlichen Gesetzbuchs"
-        },
-        {
-          "id": "de-corpus-5fdb3dfc31778b016404",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-9-21-2022-06-02/document-1",
-          "source_body_sha256": "3808e910f1cdfdf3c90f54a0b73fad66a6df16806e10cf9b44af7525ecdded2a",
-          "source_row_sha256": "4c9f3c7c7accab4295cd42be0e8ef5fb2eaa20038f70bfb59c2a58ecb557c211",
-          "matched_text": "§ 62 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-60d4295a9edb13e2c1c3",
@@ -58104,14 +58220,14 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-62426bac3f50a2b0ae6f",
+          "id": "de-corpus-62dc51c9b7cbfd512132",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/wogg/17",
-          "source_body_sha256": "e79e6989f48911c3aaaf644df4b89475b8b5386d8a24366cc7bacc8f3a4b3976",
-          "source_row_sha256": "94c7bccced2e1e13f3c6439de925f02848d7eb4bc2eaa08238f648c150b8e712",
-          "matched_text": "Einkommensteuergesetz oder dem Bundeskindergeldgesetz oder eine in § 65",
-          "resolved_citation_path": "de/statute/estg/65"
+          "source_citation_path": "de/guidance/bfh-iii-r-29-09-2012-03-15/document-1",
+          "source_body_sha256": "b14cb626febe596f270d20f68864a2efd70343a2a94414e036032f56d8cc81e0",
+          "source_row_sha256": "c5fdcfc31434cadb79ddc9ddf3f7ad4054a1e538592d63baf3ee3415cc197cab",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-62e92e01e49ba1d80a17",
@@ -58142,14 +58258,15 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-6509ac22ba7e51dad5f1",
+          "id": "de-corpus-64dd3a55ec99e673f94b",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15/document-1",
-          "source_body_sha256": "b9e019f01a2d26e9b01ec4f8e4692686406416b3b0d654800ad483d3d87edf1f",
-          "source_row_sha256": "5048b374135d0f74ef36073410cc3c1f7300e984f0fd45effda417065e7a0c88",
-          "matched_text": "§ 62 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
+          "candidate_target_citation_path": "de/statute/estg/66",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-65740a9c68e8a6636d75",
@@ -58192,24 +58309,26 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-686312ac39d60705694c",
+          "id": "de-corpus-6888a83ab19a44712a4a",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-28-21-2022-07-14/document-1",
-          "source_body_sha256": "b5860e22c63c9c5a0c120017187294050ab24921348f84841c395aa295581260",
-          "source_row_sha256": "3cf7e786b920d0de23e8e2145b8029613ae861353a89e067639c0e9426308f9f",
-          "matched_text": "§ 70 Abs 1 S 2, EGV 883/2004 Art 68 Abs 3, EGV 883/2004 Art 81, EGV 987/2009 Art 60 Abs 1 S 2, EGV 987/2009 Art 60 Abs 2 S 3, EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-52-09-2010-04-28/document-1",
+          "source_body_sha256": "9cf84bb018d9f36c27edb646029ca5549a5d0fe57ee07edcfd02ee9f3111128f",
+          "source_row_sha256": "0c43fd4cb9cac230d0ea3304964479b769458ab49d89a6cfd892dc1d0cb6ff74",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. a des Einkommensteuergesetzes in der Fassung für den Streitzeitraum (EStG",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
         },
         {
-          "id": "de-corpus-699fbe5f448aca226078",
+          "id": "de-corpus-68abfef7c8d24982e020",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
-          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
-          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
-          "matched_text": "§ 64 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/64"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-22-12-2013-08-08/document-1",
+          "source_body_sha256": "f43964db5751dcac7f53f0a1e57ba4a5a16c33c8e18893e2fc8ec7b6fb9dfd9a",
+          "source_row_sha256": "5ea15059af8d6b6226e329691387e11c9b788400b60d9ba27bf820b778286ae5",
+          "matched_text": "EStG persönlich anspruchsberechtigt. Nach dieser Vorschrift hat Anspruch auf Kindergeld für Kinder i.S. des § 63",
+          "candidate_target_citation_path": "de/statute/estg/63",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-69b44faec773a26d6657",
@@ -58222,6 +58341,17 @@
           "resolved_citation_path": "de/statute/estg/75"
         },
         {
+          "id": "de-corpus-6afaf13787757c0103dd",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-37-21-2022-09-22/document-1",
+          "source_body_sha256": "49b7e2a57b2bc977b7b132018c3544d3214a7ce3c27763a19b188688ebdc79ef",
+          "source_row_sha256": "4e914345cf85f9cb49cbcbde24babd99655f27cb419002805b0c0b795355994f",
+          "matched_text": "EStG zu berücksichtigen. 11 1. Nach § 62",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-6b2f144a8a902fe3ff9a",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58230,16 +58360,6 @@
           "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
           "matched_text": "§ 74 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/74"
-        },
-        {
-          "id": "de-corpus-6b3707f2d34a4246bc9f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
-          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
-          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
-          "matched_text": "§ 63 Abs 1 S 6, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-6c1b70664f2e80798d7f",
@@ -58341,6 +58461,16 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
+          "id": "de-corpus-6f3eda00e6dfb62c26ed",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14/document-1",
+          "source_body_sha256": "cf945bf873cc1d56890a001e79802778fae4e1e8ea459f1b2da8fe7755ed253d",
+          "source_row_sha256": "87bf4a4a169c92c8417c08f7a1c135c848155ac2b36f4d77a99efc753e144812",
+          "matched_text": "§ 66 Abs. 3 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
           "id": "de-corpus-6f9020d3778b517e3e2a",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -58349,16 +58479,6 @@
           "source_row_sha256": "a9864bfdf6e850e6a0e4a6d13c27e78627bd8af57db7391f0502557ce13baefa",
           "matched_text": "Dritten Buches",
           "resolved_citation_path": "de/statute/sgb-3"
-        },
-        {
-          "id": "de-corpus-704cdcd895e253f1127d",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
-          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
-          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
-          "matched_text": "§ 77 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/77"
         },
         {
           "id": "de-corpus-71149390efb48e142347",
@@ -58391,24 +58511,24 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
-          "id": "de-corpus-74a0b8b239d55f688f27",
+          "id": "de-corpus-74152776761c48e810eb",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-5-17-2018-03-14/document-1",
-          "source_body_sha256": "da0e60b75014183219aaae64e8e640d7bd9f52f6b56cbb55c82aab8c7c3a4f40",
-          "source_row_sha256": "23d2e62a742eacea3fcc435d74542f83bbc645997d2b8141590e1cbaa6ed5d59",
-          "matched_text": "§ 62 Abs 1 Nr 2 Buchst b, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
+          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
+          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
+          "matched_text": "§ 73 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/73"
         },
         {
-          "id": "de-corpus-74aeb9d979073507c871",
-          "program": "de/kindergeld",
+          "id": "de-corpus-74347a2806a5b2ae26de",
+          "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-15-12-2014-12-17/document-1",
-          "source_body_sha256": "28850897ad9f55a122b5a2e7d6df94eaec8648fb1c47a14a7d2e8ca470302a19",
-          "source_row_sha256": "c77f02e8ba8507a30b5de302ff94997ac9ce0c2097dc8a351915bfe98224aa75",
-          "matched_text": "§ 67 S 2, EStG",
-          "resolved_citation_path": "de/statute/estg/67"
+          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
+          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
+          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-76f0ac1f8c887e222870",
@@ -58419,16 +58539,6 @@
           "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
           "matched_text": "§ 2",
           "resolved_citation_path": "de/statute/estg/2"
-        },
-        {
-          "id": "de-corpus-7768900596a0e1cb0f67",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-42-18-2019-02-20/document-1",
-          "source_body_sha256": "fc57a968b3a67f723d50473b4c0ea76ad5e5b176c5a229831032e86a468a06d1",
-          "source_row_sha256": "b31c55b863dd78ac91f3a5f2f873e2ef0ac0fd9739109dc75e881210a9d1a515",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-7856b18458aa3760bf10",
@@ -58451,16 +58561,6 @@
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
-          "id": "de-corpus-78b5700863ff01df5e92",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-16-15-2016-07-13/document-1",
-          "source_body_sha256": "b2fc5881b3d894359f94a86c0c94ff128cef96f397a778c1a69135534bf7d9b0",
-          "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
-          "matched_text": "§ 65 Abs. 1 Satz 1 Nr. 3 EStG dar (vgl. A 26.4 Abs. 3 Spiegelstrich 1 der Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz",
-          "resolved_citation_path": "de/statute/estg/65"
-        },
-        {
           "id": "de-corpus-7a8d125ae362392f07e4",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58469,16 +58569,6 @@
           "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
           "matched_text": "§ 75 EStG",
           "resolved_citation_path": "de/statute/estg/75"
-        },
-        {
-          "id": "de-corpus-7af973ef13e85403e536",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-89-09-2010-07-15/document-1",
-          "source_body_sha256": "06c1b02bb6abdaf2698c2c0ec739b648bcafc4a216b3462db99c913d23b5dd48",
-          "source_row_sha256": "4ef7b3e8769a8d039d2f2608fa46793761c17b4dc90b14e1592e3073284777ca",
-          "matched_text": "§ 74 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/74"
         },
         {
           "id": "de-corpus-7aff018523d75266dd56",
@@ -58491,26 +58581,6 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
-          "id": "de-corpus-7b0e1c563ebf1bcf48a3",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
-          "source_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
-          "source_row_sha256": "5a3458a4b614deb7b10143186953e8a5e74a7ff28a9fe76d3d6209ec20db2e48",
-          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
-          "id": "de-corpus-7bc0365fbc1abf2f945a",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20/document-1",
-          "source_body_sha256": "fc6abed0a74cd9df954dcc019c0e93eb61c16fbcf9aca81f967858cadaa3326c",
-          "source_row_sha256": "23b6b5443b48d782b6c0a96ecdf0801457bd1a40fdfcc818aba0a5fe96008724",
-          "matched_text": "§ 63 Abs 1 S 2, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
           "id": "de-corpus-7bd10338303e55be1c0b",
           "program": "de/rv-employee-contribution",
           "mechanism": "explicit_cross_reference_outbound",
@@ -58519,6 +58589,26 @@
           "source_row_sha256": "44e6be9f54162cf4b56b0ee379041f572f160493f72e2ddef8b9d1eb46f97cec",
           "matched_text": "Vierten Buches",
           "resolved_citation_path": "de/statute/sgb-4"
+        },
+        {
+          "id": "de-corpus-7c5c66abfddee11224f4",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-v-r-27-14-2015-04-15/document-1",
+          "source_body_sha256": "338cc75dd45ca39437fe07d05f8c0d49b8c939dbbbd4114b8b29dea010f34c52",
+          "source_row_sha256": "ffc26506b308d65e35d5a816e63be95cbf0ccec150c36613629241cfdc1cecf5",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-7d0435cc3335ee23ce8f",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
+          "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
+          "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-7dd34add44b01ccd165a",
@@ -58540,26 +58630,6 @@
           "matched_text": "Neunten Buch"
         },
         {
-          "id": "de-corpus-7fbb5a9e8622358f8c06",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/sgb-5/226",
-          "source_body_sha256": "51497c46cd5b81c2dd43419c585e19bd92f2c43b8efe10f6e188bdcd40bb1036",
-          "source_row_sha256": "6d67cbd667e73f69a83204c984b14701e2dbd1adea0168f9561ee44fb7851013",
-          "matched_text": "§ 5 Absatz 1 Nummer 11b versicherungspflichtig sind, durch Ableistung eines Freiwilligendienstes nach dem Bundesfreiwilligendienstgesetz",
-          "resolved_citation_path": "de/statute/bfdg/5"
-        },
-        {
-          "id": "de-corpus-80b03a1922bc626a1271",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
-          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
-          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
           "id": "de-corpus-80ca528e0ed2cceb764a",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "amendment_targets_inbound",
@@ -58568,6 +58638,16 @@
           "matched_targets": [
             "de/statute/estg/66"
           ]
+        },
+        {
+          "id": "de-corpus-8110a508d9afec51e181",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-16-17-2018-01-18/document-1",
+          "source_body_sha256": "85fbe569c03d6022c91428003e17745a141c4eafd59a410cec8cfff6fb10d48d",
+          "source_row_sha256": "929bd0ef7d090024a98aa8352eedff0260e64068740eaab9b469ac3c1d4e0f46",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-816b863859c6ea4c5a6f",
@@ -58588,6 +58668,16 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
+          "id": "de-corpus-820445a194efc82211ca",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-16-15-2016-07-13/document-1",
+          "source_body_sha256": "b2fc5881b3d894359f94a86c0c94ff128cef96f397a778c1a69135534bf7d9b0",
+          "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-82304cb623044519d3f6",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58596,16 +58686,6 @@
           "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
           "matched_text": "§ 77 EStG",
           "resolved_citation_path": "de/statute/estg/77"
-        },
-        {
-          "id": "de-corpus-8282919b6c7f38199d81",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-19-17-2018-09-13/document-1",
-          "source_body_sha256": "ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad",
-          "source_row_sha256": "3ec9eb05f846e02070401dc34cea317c943a04cfe378fae82ab0c6df00a06c1d",
-          "matched_text": "§ 62 ff. des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-83a369013d285786dbf3",
@@ -58627,6 +58707,16 @@
           "resolved_citation_path": "de/statute/estg/68"
         },
         {
+          "id": "de-corpus-85fd6aae18e30d9d5574",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-16-15-2016-07-13/document-1",
+          "source_body_sha256": "b2fc5881b3d894359f94a86c0c94ff128cef96f397a778c1a69135534bf7d9b0",
+          "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
+          "matched_text": "§ 65 Abs. 1 Satz 1 Nr. 3 EStG",
+          "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
           "id": "de-corpus-86534602aca6487afa11",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -58637,16 +58727,6 @@
           "resolved_citation_path": "de/statute/sgb-3"
         },
         {
-          "id": "de-corpus-86884f098c386211c388",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-44-08-2010-04-28/document-1",
-          "source_body_sha256": "4a53c27452b5e2715649c45978eede3cea74e5f38de26e7535c5de1898c34a74",
-          "source_row_sha256": "24bfc0bdf585626c01e428a3417596fdadecf4e013ec08d5d1f132c0535d52b9",
-          "matched_text": "§ 74 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/74"
-        },
-        {
           "id": "de-corpus-869f2125c47ff8d4159f",
           "program": "de/kindergeld",
           "mechanism": "law_metadata_changed_by",
@@ -58654,16 +58734,6 @@
           "source_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
           "raw_reference": "zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156",
           "resolved_citation_path": "de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1"
-        },
-        {
-          "id": "de-corpus-86bb5ff9e1471f668dcf",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
-          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
-          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
-          "matched_text": "§ 68 Abs. 3 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/68"
         },
         {
           "id": "de-corpus-887abfa6fcd96f9688f4",
@@ -58676,6 +58746,26 @@
           "resolved_citation_path": "de/statute/estg/68"
         },
         {
+          "id": "de-corpus-88e7b29e3eb9a6782c3e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
+          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
+          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
+          "matched_text": "EStG § 70",
+          "resolved_citation_path": "de/statute/estg/70"
+        },
+        {
+          "id": "de-corpus-891decac88cc855577d3",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-42-18-2019-02-20/document-1",
+          "source_body_sha256": "fc57a968b3a67f723d50473b4c0ea76ad5e5b176c5a229831032e86a468a06d1",
+          "source_row_sha256": "b31c55b863dd78ac91f3a5f2f873e2ef0ac0fd9739109dc75e881210a9d1a515",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-89745d237176ffb31213",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58684,6 +58774,16 @@
           "source_row_sha256": "3cf7e786b920d0de23e8e2145b8029613ae861353a89e067639c0e9426308f9f",
           "matched_text": "§ 62 EStG",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-8b5289f0247ef6ad90f2",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-38-14-2015-06-23/document-1",
+          "source_body_sha256": "c15a5ddb7b8988cc703ef637ca53eae22eda7f91e2bd12ee780069b546ae9c1d",
+          "source_row_sha256": "633999e725fa36a6c797a6972453db08e6e80555e97ab51b3b0fe8c8f82beca1",
+          "matched_text": "§ 63 Abs. 1 Satz 3 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-8b8889a0b2d2e5f82791",
@@ -58706,6 +58806,27 @@
           "resolved_citation_path": "de/statute/sgb-3"
         },
         {
+          "id": "de-corpus-8bbb904a7845c7cd0110",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-23-21-2022-09-22/document-1",
+          "source_body_sha256": "a7378c8269293195b9dd78a9f8d02cb0c2361f4b18fecf6dad69273bcfae4c31",
+          "source_row_sha256": "fb6a1abfba1cd5ccbfba5d4b3142c87abcae413c134385805e3a86c7dd1ecbc4",
+          "matched_text": "§ 70 Abs. 1 Satz 2 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
+        },
+        {
+          "id": "de-corpus-8c0d45c3c6f4b60163e6",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-59-19-2020-11-03/document-1",
+          "source_body_sha256": "1c50babc699c292020cc9a7705987e0724fadf4b34b7c1e92a2901ee5fd83692",
+          "source_row_sha256": "3998b3fde6f2f220ec128317b8833a5f98d62fd8cd7d478a0996d6041b16c7ff",
+          "matched_text": "§§ 67 ff. EStG",
+          "candidate_target_citation_path": "de/statute/estg/67",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-8c0e7466a8366b64b169",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -58716,14 +58837,14 @@
           "resolved_citation_path": "de/statute/bgb/187"
         },
         {
-          "id": "de-corpus-8c59f324eb341ba46731",
-          "program": "de/unterhaltsvorschuss",
+          "id": "de-corpus-8cf5cadf0d4c98644544",
+          "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
-          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
-          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
+          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
+          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
+          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
+          "matched_text": "§ 64 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-8dea5815916d5548e053",
@@ -58734,6 +58855,36 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Zweiten Buches Sozialgesetzbuch",
           "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-8ec012ea0ce9871a3de5",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
+          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
+          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
+          "matched_text": "§ 74 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
+        },
+        {
+          "id": "de-corpus-8f1bf892530fb3c7e621",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-16-08-2010-08-26/document-1",
+          "source_body_sha256": "50bfa037f373a6a86ba655938a652c3c74cdb2d3d9ae4faefbce3adf9cd64fec",
+          "source_row_sha256": "a78bf2e44546e316a8ac9ce1480c0212b93bae7ed616e35ad5c35642f9d913e7",
+          "matched_text": "§ 74 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
+        },
+        {
+          "id": "de-corpus-8f230fbe6c5ed690124c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
+          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
+          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
+          "matched_text": "§ 78 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/78"
         },
         {
           "id": "de-corpus-8f2c91bb84034c948f35",
@@ -58755,22 +58906,22 @@
           "matched_text": "Ersten Buches Sozialgesetzbuch"
         },
         {
-          "id": "de-corpus-907618256eb5b8cdc6c1",
-          "program": "de/unterhaltsvorschuss",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
-          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
-          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
           "id": "de-corpus-90a23c3ab93d95bf6dd8",
           "program": "de/rv-employee-contribution",
           "mechanism": "law_metadata_fundstelle",
           "source_citation_path": "de/regulation/bsv-2018",
           "source_row_sha256": "76b10c8ff0cb0d5d01528107048aa7ab4a723421c66c4653b622444c20d61ba1",
           "raw_reference": "BGBl I 2017, 3976"
+        },
+        {
+          "id": "de-corpus-90dff6d83f72676f8088",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
+          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
+          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
+          "matched_text": "§ 66 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-9140eb4c223a509ac378",
@@ -58802,24 +58953,14 @@
           "matched_text": "Altersteilzeitgesetz"
         },
         {
-          "id": "de-corpus-9378aac3b30acadd43a4",
-          "program": "de/kindergeld",
+          "id": "de-corpus-9213eaeb43e56344e114",
+          "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-27-14-2015-04-15/document-1",
-          "source_body_sha256": "338cc75dd45ca39437fe07d05f8c0d49b8c939dbbbd4114b8b29dea010f34c52",
-          "source_row_sha256": "ffc26506b308d65e35d5a816e63be95cbf0ccec150c36613629241cfdc1cecf5",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-93a986a2a9beeeb60f58",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-28-17-2019-11-27/document-1",
-          "source_body_sha256": "cf81d3d61331416713891fffa01e43d1b48e067e0e844350d4d66cdec1a82faa",
-          "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
+          "source_citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14/document-1",
+          "source_body_sha256": "cf945bf873cc1d56890a001e79802778fae4e1e8ea459f1b2da8fe7755ed253d",
+          "source_row_sha256": "87bf4a4a169c92c8417c08f7a1c135c848155ac2b36f4d77a99efc753e144812",
+          "matched_text": "§ 66 Abs. 3 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-94135621c2c7fc51d641",
@@ -58872,26 +59013,6 @@
           "resolved_citation_path": "de/statute/estg/19"
         },
         {
-          "id": "de-corpus-970989b67ec7f3ee4ac1",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-17-18-2019-03-21/document-1",
-          "source_body_sha256": "82f862e1a5634975116dcb19563a2db8dcecd50f922d8330961ad1cf5cb9b5cd",
-          "source_row_sha256": "eecba0bc32ff6c437753db96e073c21b2d8dbbf4400aa045f9129904faaef42d",
-          "matched_text": "§ 62 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
-          "id": "de-corpus-973b99d9c685cd5d4b54",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-10-14-2015-06-18/document-1",
-          "source_body_sha256": "f60d4eed1ec0822401a2ef0cc4a7208f078ae5a26135f394d8104cd7236ef0df",
-          "source_row_sha256": "f95410a17c464c2bbe527167c87cf17b198da2677a76be1c878ea8c48079ea6a",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-987aa38335eab2d641d5",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "law_metadata_fundstelle",
@@ -58919,16 +59040,6 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-9a43b6948f43ffd14fa0",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
-          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
-          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-9b7206bcbc57f11125c4",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -58937,16 +59048,6 @@
           "source_row_sha256": "2a4472648ac2a7678a43fff5b0c683eb040caff25d644d324302cdac6d737272",
           "matched_text": "§ 31",
           "resolved_citation_path": "de/statute/estg/31"
-        },
-        {
-          "id": "de-corpus-9c34da15e7b1f2cbb3d1",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-10-17-2018-02-22/document-1",
-          "source_body_sha256": "d93bd590147017159c5cbf728ab3c660494c06e7e2042712d405a68c847ce8aa",
-          "source_row_sha256": "651cf2653f91c4fdb7435a286ed1af252b142410c4be6b676b77fafde34a179e",
-          "matched_text": "§ 62 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-9cb03dcc670d396f6662",
@@ -58959,22 +59060,23 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-9d3970d1a7a27b46ba4f",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/uhvorschg/2",
+          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
+          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
+          "matched_text": "Einkommensteuergesetz oder nach dem Bundeskindergeldgesetz in der jeweils geltenden Fassung oder auf eine der in § 65",
+          "candidate_target_citation_path": "de/statute/estg/65",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-9d527daa13fc008a8fa0",
           "program": "de/kindergeld",
           "mechanism": "law_metadata_changed_by",
           "source_citation_path": "de/statute/bgb",
           "source_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee",
           "raw_reference": "zuletzt geändert durch Art. 2 G v. 2.7.2026 I Nr. 198"
-        },
-        {
-          "id": "de-corpus-9d75705c29a3ff731250",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-24-13-2014-04-30/document-1",
-          "source_body_sha256": "09555d6bc86ed4c0b0fa59990e6732e8b8c28d04763b45ee71269408b600368b",
-          "source_row_sha256": "6764631b743584cc71d04d898c2e3985bedaedba8c462426bd863f06b6da054d",
-          "matched_text": "§ 62 Abs 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-9d8abcec25586f6b71be",
@@ -58994,14 +59096,15 @@
           "matched_text": "Altersteilzeitgesetzes"
         },
         {
-          "id": "de-corpus-9e74692afd017eade52c",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
-          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
-          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
-          "matched_text": "§ 63, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
+          "id": "de-corpus-9e5b0fce008e5455ee6d",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
+          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
+          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
+          "candidate_target_citation_path": "de/statute/estg/66",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-9f86038cb34463bd1471",
@@ -59014,12 +59117,43 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
+          "id": "de-corpus-a0448494fc9322624917",
+          "program": "de/rv-employee-contribution",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/statute/estg/3",
+          "source_body_sha256": "d247497a39453e1ff770788866c4bf5d74a4382b97100242dad8a6ab089bdabb",
+          "source_row_sha256": "babd1646d0e7499991df5c3083b51b872e923f7d93c37b3a9577d663a8255b04",
+          "matched_text": "Sechsten Buches Sozialgesetzbuch erbrachte Leistungen zufließen und der Arbeitgeber für diese Leistungen Beiträge nach § 168",
+          "candidate_target_citation_path": "de/statute/sgb-6/168",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-a047bd909d331c4e44d2",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-10-14-2014-09-25/document-1",
+          "source_body_sha256": "8411a7a717cf52623c853283f1af884520e5bf2d87f78c37de3b3102009dbc48",
+          "source_row_sha256": "edd81d4b8b36b2d394539c4cde17cfe98676c7d97f0c3de03cdefa00e9f29e35",
+          "matched_text": "§ 63 Abs. 1 Satz 3 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-a089160c72877d8aa6c1",
           "program": "de/kindergeld",
           "mechanism": "law_metadata_changed_by",
           "source_citation_path": "de/statute/bfdg",
           "source_row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c",
           "raw_reference": "Zuletzt geändert durch Art. 4 G v. 23.5.2024 I Nr. 170"
+        },
+        {
+          "id": "de-corpus-a0f22fa16937b8d08185",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-1-20-2021-04-14/document-1",
+          "source_body_sha256": "0b220f4ab1e0d6220f8565d4bd8dcd66d66972dd8301c1ac9f81cbcd04b05b7e",
+          "source_row_sha256": "3ede026b41268a2e43e0a40e9c4312720fde26cadc7fc927e839bbb7e6de339e",
+          "matched_text": "§ 74 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/74"
         },
         {
           "id": "de-corpus-a12d2b6db22397cc343b",
@@ -59041,14 +59175,24 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-a1bbdc42d51c89a6383d",
-          "program": "de/unterhaltsvorschuss",
+          "id": "de-corpus-a2529365876ae617a375",
+          "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
-          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
-          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
+          "source_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+          "source_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+          "source_row_sha256": "5a3458a4b614deb7b10143186953e8a5e74a7ff28a9fe76d3d6209ec20db2e48",
+          "matched_text": "§ 70 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
+        },
+        {
+          "id": "de-corpus-a30ff1ebb8bf6f81ee6e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-24-13-2014-04-30/document-1",
+          "source_body_sha256": "09555d6bc86ed4c0b0fa59990e6732e8b8c28d04763b45ee71269408b600368b",
+          "source_row_sha256": "6764631b743584cc71d04d898c2e3985bedaedba8c462426bd863f06b6da054d",
+          "matched_text": "§ 63 Abs. 1 Satz 1 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-a4207c2fad0ba9ab6084",
@@ -59061,14 +59205,14 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-a45d95d8c19fc47aa094",
+          "id": "de-corpus-a44ac4d98cca45e24532",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/cjeu-c-411-20/document-1",
-          "source_body_sha256": "3e5c5a645289ff162fa8ef901eff3dc2ca2f36397d1b66fed39dcfb1a5cb0bf5",
-          "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
-          "matched_text": "EStG) sieht vor: „(1) 1Für Kinder im Sinne des § 63",
-          "resolved_citation_path": "de/statute/estg/63"
+          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
+          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
+          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
+          "matched_text": "§ 67 Satz 2 EStG",
+          "resolved_citation_path": "de/statute/estg/67"
         },
         {
           "id": "de-corpus-a49ede988cd5dd032b48",
@@ -59079,14 +59223,14 @@
           "raw_reference": "BGBl. I 2024, Nr. 365"
         },
         {
-          "id": "de-corpus-a554dc6015adcc579249",
-          "program": "de/unterhaltsvorschuss",
+          "id": "de-corpus-a4d5afed312833dbc877",
+          "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14/document-1",
-          "source_body_sha256": "cf945bf873cc1d56890a001e79802778fae4e1e8ea459f1b2da8fe7755ed253d",
-          "source_row_sha256": "87bf4a4a169c92c8417c08f7a1c135c848155ac2b36f4d77a99efc753e144812",
-          "matched_text": "§ 66 Abs. 3 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/66"
+          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
+          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
+          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. b EStG",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-a908aed35b7d1ceeda30",
@@ -59119,16 +59263,6 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-ac9f46b6e8a72dd09c5e",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
-          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
-          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
-          "matched_text": "§§ 62 f. EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-add9b4ac0708e9b85f62",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -59139,16 +59273,6 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-ae122ea0fa4b2caa2520",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
-          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
-          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
-          "matched_text": "§ 62 Abs 1 Nr 2 Buchst b, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-ae7798bcf059f03c5a6d",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -59157,16 +59281,6 @@
           "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
           "matched_text": "§ 70 Abs. 2 Satz 1 EStG",
           "resolved_citation_path": "de/statute/estg/70"
-        },
-        {
-          "id": "de-corpus-aeb26d971cb44d3e6ad4",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-59-19-2020-11-03/document-1",
-          "source_body_sha256": "1c50babc699c292020cc9a7705987e0724fadf4b34b7c1e92a2901ee5fd83692",
-          "source_row_sha256": "3998b3fde6f2f220ec128317b8833a5f98d62fd8cd7d478a0996d6041b16c7ff",
-          "matched_text": "§§ 67 ff. EStG",
-          "resolved_citation_path": "de/statute/estg/67"
         },
         {
           "id": "de-corpus-afcb95a25eb1fc7228ae",
@@ -59189,6 +59303,17 @@
           "resolved_citation_path": "de/statute/estg/74"
         },
         {
+          "id": "de-corpus-b0bd9d4a4d8965a06c4b",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-36-21-2023-01-19/document-1",
+          "source_body_sha256": "75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31",
+          "source_row_sha256": "2c1d7dfc2af38fd4deb44110ad1925bca8ae1c410b4773771b044e37d3d61a06",
+          "matched_text": "§ 63 Abs. 1 Sätze 3 ff. EStG",
+          "candidate_target_citation_path": "de/statute/estg/63",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
           "id": "de-corpus-b148bd4938a47c1c2719",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59207,6 +59332,16 @@
           "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
           "matched_text": "§ 74 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/74"
+        },
+        {
+          "id": "de-corpus-b29b277d4040a30899e3",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
+          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
+          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-b554431cd2c4259bcd01",
@@ -59239,6 +59374,26 @@
           "resolved_citation_path": "de/statute/estg/19a"
         },
         {
+          "id": "de-corpus-b8482aaa8aa64dca4b54",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
+          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
+          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
+          "matched_text": "§ 72 EStG",
+          "resolved_citation_path": "de/statute/estg/72"
+        },
+        {
+          "id": "de-corpus-b8c3b167675359b792d1",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15/document-1",
+          "source_body_sha256": "b9e019f01a2d26e9b01ec4f8e4692686406416b3b0d654800ad483d3d87edf1f",
+          "source_row_sha256": "5048b374135d0f74ef36073410cc3c1f7300e984f0fd45effda417065e7a0c88",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
           "id": "de-corpus-b92763461ba3d89a297c",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59259,14 +59414,15 @@
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-ba21485fd75ad89b02e1",
+          "id": "de-corpus-ba74bd9b74797c226c19",
           "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/uhvorschg/2",
-          "source_body_sha256": "5e4c9a3260bcb64fd2d4bafaa744b9ff135825f7f8af5b42f0084e855ae93f77",
-          "source_row_sha256": "562bb80140f34eb3bb9e287cb17afdd11240357adeca8e340a81e4a1c76575fb",
-          "matched_text": "Einkommensteuergesetz oder nach dem Bundeskindergeldgesetz in der jeweils geltenden Fassung oder auf eine der in § 65",
-          "resolved_citation_path": "de/statute/estg/65"
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
+          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
+          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
+          "matched_text": "§ 63, EStG",
+          "candidate_target_citation_path": "de/statute/estg/63",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-bb0bea162872670bb36e",
@@ -59277,26 +59433,6 @@
           "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
           "matched_text": "Zweiten Buches Sozialgesetzbuch",
           "resolved_citation_path": "de/statute/sgb-2"
-        },
-        {
-          "id": "de-corpus-bdd556d8e4b1531b259f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
-          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
-          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
-          "matched_text": "§ 67 S 2, EStG",
-          "resolved_citation_path": "de/statute/estg/67"
-        },
-        {
-          "id": "de-corpus-bdfa86315e26ccedc08a",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-9-15-2015-09-03/document-1",
-          "source_body_sha256": "12b01243c881bddf100360e0112eec5f996636c0b4f6f18128102a0e3b9e7bc0",
-          "source_row_sha256": "f30dca2fc8a8e5786480d34fa8ef5138c660fc081195c1f1d88faf1f96837e42",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-be8475da8b824aa74500",
@@ -59319,14 +59455,14 @@
           "resolved_citation_path": "de/statute/sgb-2"
         },
         {
-          "id": "de-corpus-bf6f5d15cdf37cb277f4",
+          "id": "de-corpus-bf8dd8d0692c69c903ea",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/sgb-3/26",
-          "source_body_sha256": "5d4aaf46595de37ce42b063c87d6086661cb3a70f8a0719d9203d36e940c5145",
-          "source_row_sha256": "81b52ea3d8382a6c9e8ddd5a4d2c7908b0404eed0a43dee82369f54ddc6379c0",
-          "matched_text": "Einkommensteuergesetz oder Bundeskindergeldgesetz haben oder ohne die Anwendung des § 64",
-          "resolved_citation_path": "de/statute/estg/64"
+          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
+          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
+          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
+          "matched_text": "§ 62 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-bff0604ab434028f691b",
@@ -59347,13 +59483,13 @@
           "raw_reference": "BGBl. I 2025, Nr. 268 (Nr. 312)"
         },
         {
-          "id": "de-corpus-c119116bbc2ca39e7373",
+          "id": "de-corpus-c12c4db12729a1514f1b",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31/document-1",
-          "source_body_sha256": "13562b9e388fd0f9e9559c1c1261a4940f2ba52f539bc2ce3ee14918c3354a84",
-          "source_row_sha256": "f4228a98e73fa9646b66902e0aa34287d9d5eb505a314c417f6772644010705f",
-          "matched_text": "§ 62 Abs 1 S 1, EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-36-21-2023-01-19/document-1",
+          "source_body_sha256": "75280461fdd8a886df8a2c5543fabe1f452ee2c1cc52568e7239c63777809d31",
+          "source_row_sha256": "2c1d7dfc2af38fd4deb44110ad1925bca8ae1c410b4773771b044e37d3d61a06",
+          "matched_text": "EStG § 62",
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
@@ -59377,6 +59513,16 @@
           "resolved_citation_path": "de/statute/estg/70"
         },
         {
+          "id": "de-corpus-c2e52e2e13e9da6c5b55",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-5-17-2018-03-14/document-1",
+          "source_body_sha256": "da0e60b75014183219aaae64e8e640d7bd9f52f6b56cbb55c82aab8c7c3a4f40",
+          "source_row_sha256": "23d2e62a742eacea3fcc435d74542f83bbc645997d2b8141590e1cbaa6ed5d59",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. b EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-c30ae063c5bb2bbca5c6",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59385,6 +59531,16 @@
           "source_row_sha256": "1d9e6909303278d1c7f8533774e4ffa05ff49de197fd6a081d45947df97366a6",
           "matched_text": "§ 39e",
           "resolved_citation_path": "de/statute/estg/39e"
+        },
+        {
+          "id": "de-corpus-c3db2fce1115f8cdcd14",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-xi-r-15-12-2014-12-17/document-1",
+          "source_body_sha256": "28850897ad9f55a122b5a2e7d6df94eaec8648fb1c47a14a7d2e8ca470302a19",
+          "source_row_sha256": "c77f02e8ba8507a30b5de302ff94997ac9ce0c2097dc8a351915bfe98224aa75",
+          "matched_text": "§ 70 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
         },
         {
           "id": "de-corpus-c4939583b6323155513e",
@@ -59397,32 +59553,12 @@
           "resolved_citation_path": "de/statute/estg/64"
         },
         {
-          "id": "de-corpus-c5d5736233a55b7f1822",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-45-12-2013-08-08/document-1",
-          "source_body_sha256": "a855ed8d4af2926f00bc900afb0da2ee616429c79ff8fb9d70aaf14e7c6dd3b2",
-          "source_row_sha256": "9e94dc0e15426002918f653f1fba44a4fdbbcb6633a72debdb7267d8eb693e68",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-c5d6b083b42c643a3855",
           "program": "de/kindergeld",
           "mechanism": "law_metadata_fundstelle",
           "source_citation_path": "de/regulation/milov4",
           "source_row_sha256": "10dc0b5e0cba3b534042b2b0003878ed003ff4e6835002b01ed1d5e3ddc7b6db",
           "raw_reference": "BGBl I 2023, Nr. 321"
-        },
-        {
-          "id": "de-corpus-c5d8bfddb6813f99a97f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-27-14-2015-04-15/document-1",
-          "source_body_sha256": "338cc75dd45ca39437fe07d05f8c0d49b8c939dbbbd4114b8b29dea010f34c52",
-          "source_row_sha256": "ffc26506b308d65e35d5a816e63be95cbf0ccec150c36613629241cfdc1cecf5",
-          "matched_text": "§ 62 Abs 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-c6487482f9862ba1d50e",
@@ -59434,36 +59570,6 @@
           "matched_text": "Zivilprozessordnung"
         },
         {
-          "id": "de-corpus-c6633c70c3a359d64cb0",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21/document-1",
-          "source_body_sha256": "73c0094c4d13f4ed2b9f76351284245a749fd524206633a7f1a12b58a831c5c1",
-          "source_row_sha256": "0ad62052ac175cb1d31f4815287fb6bc2005dfd17e4936353b0caba0a05ba143",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
-          "id": "de-corpus-c7da5d34a03845ff7e89",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-19-17-2018-09-13/document-1",
-          "source_body_sha256": "ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad",
-          "source_row_sha256": "3ec9eb05f846e02070401dc34cea317c943a04cfe378fae82ab0c6df00a06c1d",
-          "matched_text": "§ 69 Abs 1 Nr 1, EStG VZ 2014 , EStG",
-          "resolved_citation_path": "de/statute/estg/69"
-        },
-        {
-          "id": "de-corpus-c9b943d31e2b0a9bed62",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
-          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
-          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
-          "matched_text": "§ 62 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-caf0f56af53ffc8164d1",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59471,26 +59577,6 @@
           "source_body_sha256": "c87c3bb01eae8724c229a848cbe2ab2ee0c55a6621e9d6765980f7554422b60b",
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Bürgerlichen Gesetzbuchs"
-        },
-        {
-          "id": "de-corpus-cd184adb3dbc7832b9a5",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-12-2014-05-08/document-1",
-          "source_body_sha256": "0a415c2dd2ac667797c358fdf1113a271bdae2517ba22b7313379d9976042022",
-          "source_row_sha256": "361d0d3e31b20bd694fafa56e5e9d5b2a9ee5011ee9eda8642d445e47e7a603c",
-          "matched_text": "§ 65 Abs 1 S 1 Nr 2, EWGV 1408/71 , EWGV 574/72 , EStG VZ 2007 , EStG",
-          "resolved_citation_path": "de/statute/estg/65"
-        },
-        {
-          "id": "de-corpus-d03b72fa03a92822b483",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-73-09-2012-02-09/document-1",
-          "source_body_sha256": "a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35",
-          "source_row_sha256": "4c875a4838dad4dec5fa35a5acb57be71f1a82f3dcce6d878025b0bfe4a41c54",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 3, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-d03f7f5a1298c9db19cf",
@@ -59513,16 +59599,6 @@
           "resolved_citation_path": "de/statute/estg/72"
         },
         {
-          "id": "de-corpus-d281fc6d15025bbcdf44",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-22-12-2013-08-08/document-1",
-          "source_body_sha256": "f43964db5751dcac7f53f0a1e57ba4a5a16c33c8e18893e2fc8ec7b6fb9dfd9a",
-          "source_row_sha256": "5ea15059af8d6b6226e329691387e11c9b788400b60d9ba27bf820b778286ae5",
-          "matched_text": "EStG persönlich anspruchsberechtigt. Nach dieser Vorschrift hat Anspruch auf Kindergeld für Kinder i.S. des § 63",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
           "id": "de-corpus-d370335279a8689cbd96",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -59533,14 +59609,14 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-d3bd8baa857af3f6c8fe",
+          "id": "de-corpus-d373fefcce3ccc259b3a",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-19-2021-07-07/document-1",
-          "source_body_sha256": "5cad376c79bfab06fa2769025fee456bb39291af73b35d6aa9da2105cc2cd9d4",
-          "source_row_sha256": "c0242d310dba35493d118599e13d5f6fcc51dd89a29d3fe227667fdcdfef3c88",
-          "matched_text": "§ 72 Abs. 1 Satz 3 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/72"
+          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
+          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
+          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
+          "matched_text": "EStG § 64",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-d3cd3ff26443c2ab5194",
@@ -59562,16 +59638,6 @@
           "matched_text": "Aufenthaltsgesetzes"
         },
         {
-          "id": "de-corpus-d46b38344094719dbf21",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26/document-1",
-          "source_body_sha256": "6dc649b6f97f74075db1ca5908694198b9600a18e18bbbd1c3166dcffab7ab6f",
-          "source_row_sha256": "3681c638a9a7a1354f064a5f6ece0cdad046d484411e7e6e18329b8a15aa2d3b",
-          "matched_text": "§ 66 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/66"
-        },
-        {
           "id": "de-corpus-d48440e9cd964c82d768",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59582,14 +59648,14 @@
           "resolved_citation_path": "de/statute/ersdig"
         },
         {
-          "id": "de-corpus-d646e6f8028da26fa923",
+          "id": "de-corpus-d5cc589986090ede62d1",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-10-14-2014-09-25/document-1",
-          "source_body_sha256": "8411a7a717cf52623c853283f1af884520e5bf2d87f78c37de3b3102009dbc48",
-          "source_row_sha256": "edd81d4b8b36b2d394539c4cde17cfe98676c7d97f0c3de03cdefa00e9f29e35",
-          "matched_text": "§ 63 Abs 1 S 3, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
+          "source_citation_path": "de/guidance/bfh-iii-r-28-21-2022-07-14/document-1",
+          "source_body_sha256": "b5860e22c63c9c5a0c120017187294050ab24921348f84841c395aa295581260",
+          "source_row_sha256": "3cf7e786b920d0de23e8e2145b8029613ae861353a89e067639c0e9426308f9f",
+          "matched_text": "§ 70 Abs. 1 Satz 2 EStG",
+          "resolved_citation_path": "de/statute/estg/70"
         },
         {
           "id": "de-corpus-d6536f114ca5cb12800d",
@@ -59601,14 +59667,36 @@
           "matched_text": "Zehnten Buches Sozialgesetzbuch"
         },
         {
-          "id": "de-corpus-d660ed343bbc8a5870b2",
+          "id": "de-corpus-d65d979b1e9eb90576ba",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11/document-1",
-          "source_body_sha256": "495fe913862ad686692073aaff0647b2557b8640c675e0430d7bfa1ca4ca81de",
-          "source_row_sha256": "1edeb02f2057af6a869d238544fcccebf57826ddd20a972ef449da7ba216c51b",
-          "matched_text": "§ 73 des Einkommensteuergesetzes ‑‑EStG",
-          "resolved_citation_path": "de/statute/estg/73"
+          "source_citation_path": "de/guidance/bfh-iii-r-16-17-2018-01-18/document-1",
+          "source_body_sha256": "85fbe569c03d6022c91428003e17745a141c4eafd59a410cec8cfff6fb10d48d",
+          "source_row_sha256": "929bd0ef7d090024a98aa8352eedff0260e64068740eaab9b469ac3c1d4e0f46",
+          "matched_text": "EStG § 63",
+          "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-d67857af8cf31cb144d5",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-7-21-2023-04-20/document-1",
+          "source_body_sha256": "90a8a7b1db30d76718dc4e8c6e9251d170eef404d504cea8087bb94d04aa180f",
+          "source_row_sha256": "0cd451aefce7d77fcf5cc228a4a714dc3eaba8fbb993b9d092f0500973f45692",
+          "matched_text": "§ 70 Abs. 2 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-d6aab01062574b46488b",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-38-14-2015-06-23/document-1",
+          "source_body_sha256": "c15a5ddb7b8988cc703ef637ca53eae22eda7f91e2bd12ee780069b546ae9c1d",
+          "source_row_sha256": "633999e725fa36a6c797a6972453db08e6e80555e97ab51b3b0fe8c8f82beca1",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. a des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/62",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-d8126b4c20a7244a1f57",
@@ -59631,16 +59719,6 @@
           "resolved_citation_path": "de/statute/sgb-6/163"
         },
         {
-          "id": "de-corpus-d872877ba4130c8500cf",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-35-11-2013-04-11/document-1",
-          "source_body_sha256": "1a9c9166235aa1d4b5535943a17a3c064915ed627d3b5fdccfeb593c35df344c",
-          "source_row_sha256": "4a75289579f3ada7c272f903179a2ca5b8427d1d5a2484a2bdfb1dc2adc9dfaa",
-          "matched_text": "§ 62 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
           "id": "de-corpus-d89cf799cb8ebc53bd98",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -59651,16 +59729,6 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-dac2d2088d02e0ebb9bb",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-v-r-9-12-2013-09-19/document-1",
-          "source_body_sha256": "e6bf6e5fe9a21381ed9c40f1eb23d65600cb814b5fd1b19105676bb62ee13935",
-          "source_row_sha256": "d1304cebe5d5719f0a4993e517a37d7fb169f182a5976a1d143061ca3403f896",
-          "matched_text": "§ 63 Abs 1 S 3, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
           "id": "de-corpus-db8f3aca1ba2a76048cb",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59669,16 +59737,6 @@
           "source_row_sha256": "11bb1dd60e41f2fd0b95f479c0342a496560fe0fbed2691545cd8a29f961fdce",
           "matched_text": "Zwölften Buches",
           "resolved_citation_path": "de/statute/sgb-12"
-        },
-        {
-          "id": "de-corpus-db91435e9e18fd49f807",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-45-12-2013-08-08/document-1",
-          "source_body_sha256": "a855ed8d4af2926f00bc900afb0da2ee616429c79ff8fb9d70aaf14e7c6dd3b2",
-          "source_row_sha256": "9e94dc0e15426002918f653f1fba44a4fdbbcb6633a72debdb7267d8eb693e68",
-          "matched_text": "§ 63, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-dc178935f4d4ae6081e7",
@@ -59701,14 +59759,35 @@
           "resolved_citation_path": "de/statute/bfdg/5"
         },
         {
-          "id": "de-corpus-dd92f3a3dc57026670f7",
+          "id": "de-corpus-dd60ada54b4cc59bba0b",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-73-09-2012-02-09/document-1",
-          "source_body_sha256": "a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35",
-          "source_row_sha256": "4c875a4838dad4dec5fa35a5acb57be71f1a82f3dcce6d878025b0bfe4a41c54",
-          "matched_text": "§ 70 Abs. 4 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/70"
+          "source_citation_path": "de/guidance/bfh-xi-r-15-12-2014-12-17/document-1",
+          "source_body_sha256": "28850897ad9f55a122b5a2e7d6df94eaec8648fb1c47a14a7d2e8ca470302a19",
+          "source_row_sha256": "c77f02e8ba8507a30b5de302ff94997ac9ce0c2097dc8a351915bfe98224aa75",
+          "matched_text": "§ 67 Satz 2 EStG",
+          "resolved_citation_path": "de/statute/estg/67"
+        },
+        {
+          "id": "de-corpus-dd83b877d0e5e812c564",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-9-21-2022-06-02/document-1",
+          "source_body_sha256": "3808e910f1cdfdf3c90f54a0b73fad66a6df16806e10cf9b44af7525ecdded2a",
+          "source_row_sha256": "4c9f3c7c7accab4295cd42be0e8ef5fb2eaa20038f70bfb59c2a58ecb557c211",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-dd8676e616b7cb8a73db",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/lsth-2023-9/inhalt",
+          "source_body_sha256": "703088044a7a0269807aca8b0e0adf13257b871d72e11ac09a215d48e524d251",
+          "source_row_sha256": "a6203be93b6070be299cc12fea088abc437066664aca42255e94f8f541aeb33b",
+          "matched_text": "EStG ist § 65",
+          "candidate_target_citation_path": "de/statute/estg/65",
+          "resolution": "unresolved_act_section_association"
         },
         {
           "id": "de-corpus-ddd3f4e95580682e4e31",
@@ -59719,16 +59798,6 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Elternzeitgesetzes",
           "resolved_citation_path": "de/statute/beeg"
-        },
-        {
-          "id": "de-corpus-de611042f178387861d3",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-32-15-2017-03-15/document-1",
-          "source_body_sha256": "a2737f2087e19783b886063df2252f3ba23da48ce23f26fd1804b47c42583d05",
-          "source_row_sha256": "e45fccc0076b9a8af8e94ca87d9b948a1a78a0348a9d6d419146dc54356f4433",
-          "matched_text": "§ 62 Abs. 2 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-debda12e7904d090ed0c",
@@ -59751,14 +59820,14 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
-          "id": "de-corpus-def7ad9057d716028920",
+          "id": "de-corpus-dfcf666a5b18275ee7f2",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-1-20-2021-04-14/document-1",
-          "source_body_sha256": "0b220f4ab1e0d6220f8565d4bd8dcd66d66972dd8301c1ac9f81cbcd04b05b7e",
-          "source_row_sha256": "3ede026b41268a2e43e0a40e9c4312720fde26cadc7fc927e839bbb7e6de339e",
-          "matched_text": "§ 74 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/74"
+          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
+          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
+          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
+          "matched_text": "§ 64 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-e0b2258a581a1bcb29a4",
@@ -59770,14 +59839,25 @@
           "matched_text": "Bürgerlichen Gesetzbuchs"
         },
         {
-          "id": "de-corpus-e3f58d7235d5879a2a35",
+          "id": "de-corpus-e229d5164de6bea3ea75",
+          "program": "de/kindergeld",
+          "mechanism": "unresolved_cross_reference_proximity",
+          "source_citation_path": "de/guidance/bfh-iii-r-73-09-2012-02-09/document-1",
+          "source_body_sha256": "a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35",
+          "source_row_sha256": "4c875a4838dad4dec5fa35a5acb57be71f1a82f3dcce6d878025b0bfe4a41c54",
+          "matched_text": "§ 70 Abs. 4 des Einkommensteuergesetzes (EStG",
+          "candidate_target_citation_path": "de/statute/estg/70",
+          "resolution": "unresolved_act_section_association"
+        },
+        {
+          "id": "de-corpus-e46d616e9a6a4ba07292",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
-          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
-          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
-          "matched_text": "§ 62 Abs 2, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01/document-1",
+          "source_body_sha256": "6721f8a84650fd3e120dd305341c501a42eb7eb7366b0be5957bdb0b8c02458f",
+          "source_row_sha256": "a575cba12b93895721c7e41302e8d8d18f59b73284148bdb30e58a155fb1ff44",
+          "matched_text": "§ 77 EStG",
+          "resolved_citation_path": "de/statute/estg/77"
         },
         {
           "id": "de-corpus-e5939ec18630d1b88fda",
@@ -59789,26 +59869,6 @@
           "matched_text": "Zehnten Buches Sozialgesetzbuch"
         },
         {
-          "id": "de-corpus-e5ca273c1390f4005159",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-24-13-2014-04-30/document-1",
-          "source_body_sha256": "09555d6bc86ed4c0b0fa59990e6732e8b8c28d04763b45ee71269408b600368b",
-          "source_row_sha256": "6764631b743584cc71d04d898c2e3985bedaedba8c462426bd863f06b6da054d",
-          "matched_text": "§ 63 Abs 1 S 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-e5ee360f0caf97192ffa",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-16-17-2018-01-18/document-1",
-          "source_body_sha256": "85fbe569c03d6022c91428003e17745a141c4eafd59a410cec8cfff6fb10d48d",
-          "source_row_sha256": "929bd0ef7d090024a98aa8352eedff0260e64068740eaab9b469ac3c1d4e0f46",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
           "id": "de-corpus-e637adf550bf2a846e17",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_outbound",
@@ -59817,6 +59877,16 @@
           "source_row_sha256": "13935f8758f5ea7471047d3c3842d847a0c77136cba7f315d49be2433d3f6ddc",
           "matched_text": "Abgabenordnung",
           "resolved_citation_path": "de/statute/ao-1977"
+        },
+        {
+          "id": "de-corpus-e7fbb7878cef3bf3a26b",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24/document-1",
+          "source_body_sha256": "d8d9611f219903ae66ffa1e86e5f0920eedbeb28500ee85c239f8844cd53b44d",
+          "source_row_sha256": "b7eefe8ef8fb1cf733c2bbe817a39af9351c3fb285f6d3732b1ae7725016b5d7",
+          "matched_text": "§ 66 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-e92cecd8d59a1d6a94f5",
@@ -59835,36 +59905,6 @@
           "source_body_sha256": "6b78e9408c0faff81f4ce04c2a0abca3193fdaa4bdb72236576470b20cd9d861",
           "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
           "matched_text": "Verordnung (EG) Nr. 883/2004"
-        },
-        {
-          "id": "de-corpus-eb345f0c9e8e21278a97",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-vi-r-9-15-2015-09-03/document-1",
-          "source_body_sha256": "12b01243c881bddf100360e0112eec5f996636c0b4f6f18128102a0e3b9e7bc0",
-          "source_row_sha256": "f30dca2fc8a8e5786480d34fa8ef5138c660fc081195c1f1d88faf1f96837e42",
-          "matched_text": "§ 62 Abs 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
-          "id": "de-corpus-ebc85dcc067acc6f2bfd",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-xi-r-16-15-2016-07-13/document-1",
-          "source_body_sha256": "b2fc5881b3d894359f94a86c0c94ff128cef96f397a778c1a69135534bf7d9b0",
-          "source_row_sha256": "717a820c61f1ecfb83ef0a73dc741db7606389d46ae73a8ed731606131c00a64",
-          "matched_text": "§ 62 Abs 1 Nr 1, EStG",
-          "resolved_citation_path": "de/statute/estg/62"
-        },
-        {
-          "id": "de-corpus-ebf935dc85f336be6a3e",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-16-08-2010-08-26/document-1",
-          "source_body_sha256": "50bfa037f373a6a86ba655938a652c3c74cdb2d3d9ae4faefbce3adf9cd64fec",
-          "source_row_sha256": "a78bf2e44546e316a8ac9ce1480c0212b93bae7ed616e35ad5c35642f9d913e7",
-          "matched_text": "§ 74 Abs. 1 Satz 1 des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/74"
         },
         {
           "id": "de-corpus-ec66057b34bdb760ed6c",
@@ -59905,23 +59945,13 @@
           "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-efc15565bfb590fef3ab",
+          "id": "de-corpus-ef50a3eab1109dc091c3",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08/document-1",
-          "source_body_sha256": "d3cfd476d6cd82e8a912c89b7aa6e071a3c575b8197b5da2b7b3ea26abdf798d",
-          "source_row_sha256": "9d1c3b925ca5f3f4158d2a3f7e390ac1f77b87beb727c686fc7808e7c24f206a",
-          "matched_text": "§ 64 Abs 2 S 3, EStG",
-          "resolved_citation_path": "de/statute/estg/64"
-        },
-        {
-          "id": "de-corpus-f1cf3fb74cda5c200109",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-42-18-2019-02-20/document-1",
-          "source_body_sha256": "fc57a968b3a67f723d50473b4c0ea76ad5e5b176c5a229831032e86a468a06d1",
-          "source_row_sha256": "b31c55b863dd78ac91f3a5f2f873e2ef0ac0fd9739109dc75e881210a9d1a515",
-          "matched_text": "§ 62 Abs 1 S 1 Nr 1, EStG",
+          "source_citation_path": "de/guidance/bfh-iii-r-28-17-2019-11-27/document-1",
+          "source_body_sha256": "cf81d3d61331416713891fffa01e43d1b48e067e0e844350d4d66cdec1a82faa",
+          "source_row_sha256": "7bf9b1eef185d4917aaf528c403d2b884b95e720111e2f6fecc0e35c79fcf547",
+          "matched_text": "EStG § 62",
           "resolved_citation_path": "de/statute/estg/62"
         },
         {
@@ -59934,14 +59964,14 @@
           "matched_text": "Aufenthaltsgesetz"
         },
         {
-          "id": "de-corpus-f1fb74119d4f695df860",
+          "id": "de-corpus-f36e48b35aaf9a5e2131",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
-          "source_body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
-          "source_row_sha256": "8a52fba969db7d7420ca9fec92f79ebc5547b29c8da7fba7f27e20c5e5a2f1f6",
-          "matched_text": "§ 66 Absatz 1 wird die Angabe „250 Euro“ durch die Angabe „255 Euro“ ersetzt. Artikel 2 Weitere Änderung des Einkommensteuergesetzes Das Einkommensteuergesetz",
-          "resolved_citation_path": "de/statute/estg/66"
+          "source_citation_path": "de/guidance/bfh-vi-r-10-14-2015-06-18/document-1",
+          "source_body_sha256": "f60d4eed1ec0822401a2ef0cc4a7208f078ae5a26135f394d8104cd7236ef0df",
+          "source_row_sha256": "f95410a17c464c2bbe527167c87cf17b198da2677a76be1c878ea8c48079ea6a",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-f45fc2be2eafde486fd7",
@@ -59962,23 +59992,23 @@
           "resolved_citation_path": "de/statute/beeg"
         },
         {
-          "id": "de-corpus-f58ed09ede3536ecc1a5",
+          "id": "de-corpus-f4b5eb529cf8127bb224",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-38-14-2015-06-23/document-1",
-          "source_body_sha256": "c15a5ddb7b8988cc703ef637ca53eae22eda7f91e2bd12ee780069b546ae9c1d",
-          "source_row_sha256": "633999e725fa36a6c797a6972453db08e6e80555e97ab51b3b0fe8c8f82beca1",
-          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. a des Einkommensteuergesetzes (EStG",
-          "resolved_citation_path": "de/statute/estg/62"
+          "source_citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04/document-1",
+          "source_body_sha256": "01e2559c0539fa22f4baf9d92a6b826947a1a7590fe9e2bbf32429b43cff09aa",
+          "source_row_sha256": "0a02348d0016fbe180393c30711d248facbf111ac5edf7ca501725ab812fefa2",
+          "matched_text": "§ 66 EStG",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
-          "id": "de-corpus-f5e9afc0869c7ed35510",
+          "id": "de-corpus-f4ef4518a3b9da361eb3",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-26-18-2018-12-11/document-1",
-          "source_body_sha256": "d0aebd0549b4194514c03ba7a59862e0773e4a71b4ce7ddc02dac77648ce9420",
-          "source_row_sha256": "144e7d170c389802ac1ff2123ba5f89827b359ecbd5a14990f37ef111c5352f9",
-          "matched_text": "§ 63 Abs 1 S 1 Nr 1, EStG",
+          "source_citation_path": "de/guidance/bfh-v-r-9-12-2013-09-19/document-1",
+          "source_body_sha256": "e6bf6e5fe9a21381ed9c40f1eb23d65600cb814b5fd1b19105676bb62ee13935",
+          "source_row_sha256": "d1304cebe5d5719f0a4993e517a37d7fb169f182a5976a1d143061ca3403f896",
+          "matched_text": "§ 63 Abs. 1 Satz 2 EStG",
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
@@ -59990,6 +60020,16 @@
           "source_row_sha256": "9365692d53428fa1538b3259b5a35f062e85deac3777bd347532c5d500322cd4",
           "matched_text": "Unterhaltsvorschussgesetzes",
           "resolved_citation_path": "de/statute/uhvorschg"
+        },
+        {
+          "id": "de-corpus-f62eef520e7245326f22",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-v-r-9-12-2013-09-19/document-1",
+          "source_body_sha256": "e6bf6e5fe9a21381ed9c40f1eb23d65600cb814b5fd1b19105676bb62ee13935",
+          "source_row_sha256": "d1304cebe5d5719f0a4993e517a37d7fb169f182a5976a1d143061ca3403f896",
+          "matched_text": "§ 62 Abs. 1 Nr. 2 Buchst. a EStG",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-f70f49fa4c281cc7de8c",
@@ -60012,53 +60052,33 @@
           "resolved_citation_path": "de/statute/estg/65"
         },
         {
-          "id": "de-corpus-fa7abd7e5f1b019adae2",
+          "id": "de-corpus-f88c13ced838e0fe748a",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27/document-1",
-          "source_body_sha256": "9ba58cf130a0bf739ade06c06f8d9e2103146636617ef06dbda489fbb2ad2465",
-          "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
-          "matched_text": "§§ 74, 76 EStG",
-          "resolved_citation_path": "de/statute/estg/74"
+          "source_citation_path": "de/guidance/bfh-iii-r-7-21-2023-04-20/document-1",
+          "source_body_sha256": "90a8a7b1db30d76718dc4e8c6e9251d170eef404d504cea8087bb94d04aa180f",
+          "source_row_sha256": "0cd451aefce7d77fcf5cc228a4a714dc3eaba8fbb993b9d092f0500973f45692",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-fb3d46550956235bed6d",
+          "id": "de-corpus-fb4e8fa70f486759fb89",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
-          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
-          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
-          "matched_text": "§ 64 Abs 2 S 2, EStG",
-          "resolved_citation_path": "de/statute/estg/64"
+          "source_citation_path": "de/guidance/bfh-iii-r-26-18-2018-12-11/document-1",
+          "source_body_sha256": "d0aebd0549b4194514c03ba7a59862e0773e4a71b4ce7ddc02dac77648ce9420",
+          "source_row_sha256": "144e7d170c389802ac1ff2123ba5f89827b359ecbd5a14990f37ef111c5352f9",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
-          "id": "de-corpus-fb673a9ec048cbdc2c9c",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19/document-1",
-          "source_body_sha256": "442d2f3e330102a6a26cbf49bd760e321c3fd1f6d01784445e6344eba58eabf8",
-          "source_row_sha256": "51b2f8babfec827de6aa61b44fec0b7483facf506a9feec03ad923d1cd1097a4",
-          "matched_text": "§ 72, EStG VZ 2013 , EStG",
-          "resolved_citation_path": "de/statute/estg/72"
-        },
-        {
-          "id": "de-corpus-fce1d64190b7179a570f",
-          "program": "de/kindergeld",
-          "mechanism": "explicit_cross_reference_inbound",
-          "source_citation_path": "de/guidance/bfh-iii-r-28-15-2016-04-13/document-1",
-          "source_body_sha256": "77ce9323ebefc7d3894ad4a30327347b5b590b2d0e2b54780a1fe3eccbe0f108",
-          "source_row_sha256": "38d4a8b3733aa6c9f42ca31051827d18a50ac0e5afe4b9b699705b095e63ceef",
-          "matched_text": "§ 63 Abs 1, EStG",
-          "resolved_citation_path": "de/statute/estg/63"
-        },
-        {
-          "id": "de-corpus-fda3a981199db0758446",
+          "id": "de-corpus-fc09dfbbf412855028eb",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
           "source_citation_path": "de/guidance/bfh-v-r-48-11-2013-04-18/document-1",
           "source_body_sha256": "75a92fa587a90163ba34e8b78f48af52a907d627b15e9937ddd89f815b864da6",
           "source_row_sha256": "e9a19c4edff7857acfa58e828a525840db0a8470a4ce2dda5dc77b98f79fba92",
-          "matched_text": "§ 74 Abs. 2 des Einkommensteuergesetzes (EStG",
+          "matched_text": "§ 74 Abs. 1 EStG",
           "resolved_citation_path": "de/statute/estg/74"
         },
         {
@@ -60081,6 +60101,16 @@
           "resolved_citation_path": "de/statute/ao-1977"
         },
         {
+          "id": "de-corpus-ffa95c0c9c03160d0c67",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-vi-r-72-11-2012-05-10/document-1",
+          "source_body_sha256": "c063f17cff1ddf5c212c4386d4075fecce994ef149697c305026146a3a99fb68",
+          "source_row_sha256": "fe46b74668b8cea0b4187818677c56b38d5f36374747a78ef6cf2588bef2d9af",
+          "matched_text": "EStG § 62",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-ffd851e9123ab32ab5fd",
           "program": "de/unterhaltsvorschuss",
           "mechanism": "explicit_cross_reference_outbound",
@@ -60090,7 +60120,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c"
+      "receipt_sha256": "16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -60428,7 +60458,7 @@
           "id": "de-kg-instr-028b46da9b934bf7",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-aeb26d971cb44d3e6ad4"
+            "de-corpus-8c0d45c3c6f4b60163e6"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-59-19-2020-11-03",
@@ -60457,11 +60487,11 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-0c5da927daa98ce090f4",
-            "de-corpus-5bce6784652b0172b577",
+            "de-corpus-2b8254b9a867f733e878",
             "de-corpus-66c0926477e013118366",
             "de-corpus-6b2f144a8a902fe3ff9a",
-            "de-corpus-93a986a2a9beeeb60f58",
-            "de-corpus-c158bc9734053479c0e8"
+            "de-corpus-c158bc9734053479c0e8",
+            "de-corpus-ef50a3eab1109dc091c3"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-28-17-2019-11-27",
@@ -60476,8 +60506,8 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-42cb174d59c13ca15840",
-            "de-corpus-6d4c3e36d18b468a9b05",
-            "de-corpus-f1fb74119d4f695df860"
+            "de-corpus-64dd3a55ec99e673f94b",
+            "de-corpus-6d4c3e36d18b468a9b05"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -60494,8 +60524,8 @@
           "id": "de-kg-instr-1945c20cac056911",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-686312ac39d60705694c",
-            "de-corpus-89745d237176ffb31213"
+            "de-corpus-89745d237176ffb31213",
+            "de-corpus-d5cc589986090ede62d1"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-28-21-2022-07-14",
@@ -60509,8 +60539,8 @@
           "id": "de-kg-instr-1c560d43302dedf2",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-621a661459b128097025",
-            "de-corpus-7af973ef13e85403e536"
+            "de-corpus-5077101c63aa301bf080",
+            "de-corpus-621a661459b128097025"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-89-09-2010-07-15",
@@ -60536,11 +60566,11 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-2f133166ae69264b2ba4",
-            "de-corpus-ac9f46b6e8a72dd09c5e",
+            "de-corpus-a44ac4d98cca45e24532",
             "de-corpus-b22116b1e8963b259125",
-            "de-corpus-bdd556d8e4b1531b259f",
+            "de-corpus-bf8dd8d0692c69c903ea",
             "de-corpus-d03f7f5a1298c9db19cf",
-            "de-corpus-efc15565bfb590fef3ab"
+            "de-corpus-dfcf666a5b18275ee7f2"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-3-13-2013-08-08",
@@ -60555,8 +60585,8 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-1c970c7de71a22236f10",
-            "de-corpus-78b5700863ff01df5e92",
-            "de-corpus-ebc85dcc067acc6f2bfd"
+            "de-corpus-820445a194efc82211ca",
+            "de-corpus-85fd6aae18e30d9d5574"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-xi-r-16-15-2016-07-13",
@@ -60570,7 +60600,7 @@
           "id": "de-kg-instr-26ba3514c162c52d",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-2a7c60e49d15d9a78995"
+            "de-corpus-dd8676e616b7cb8a73db"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/lsth-2023-9",
@@ -60599,8 +60629,8 @@
           "id": "de-kg-instr-295706eb9fcb6809",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-d03b72fa03a92822b483",
-            "de-corpus-dd92f3a3dc57026670f7"
+            "de-corpus-2ec721f6243aa7a9c822",
+            "de-corpus-e229d5164de6bea3ea75"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-73-09-2012-02-09",
@@ -60625,7 +60655,7 @@
           "id": "de-kg-instr-2b121051486857aa",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-5082f94163cf35c83540"
+            "de-corpus-5603013ef29636fa1cef"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-14-17-2018-02-21",
@@ -60639,9 +60669,9 @@
           "id": "de-kg-instr-2c28748809bc5f0a",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-02a06a9e9c90f357f054",
-            "de-corpus-74aeb9d979073507c871",
-            "de-corpus-b0a8a31f2ba2a50e5cfa"
+            "de-corpus-b0a8a31f2ba2a50e5cfa",
+            "de-corpus-c3db2fce1115f8cdcd14",
+            "de-corpus-dd60ada54b4cc59bba0b"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-xi-r-15-12-2014-12-17",
@@ -60655,10 +60685,10 @@
           "id": "de-kg-instr-2da01fc3ad71bd83",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-0c48d85dd9d39c651f1d",
-            "de-corpus-15717a23d99060611837",
             "de-corpus-2106da243fb5e024a263",
-            "de-corpus-916b11da697e717aa71c"
+            "de-corpus-916b11da697e717aa71c",
+            "de-corpus-b0bd9d4a4d8965a06c4b",
+            "de-corpus-c12c4db12729a1514f1b"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-36-21-2023-01-19",
@@ -60672,10 +60702,10 @@
           "id": "de-kg-instr-2e3e1e94e8491798",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-0fdec1e9559d2bc13c14",
-            "de-corpus-275b8f6521b0915443ed",
-            "de-corpus-704cdcd895e253f1127d",
-            "de-corpus-9e74692afd017eade52c"
+            "de-corpus-33cbcddd67cd6e674ac2",
+            "de-corpus-8ec012ea0ce9871a3de5",
+            "de-corpus-ba74bd9b74797c226c19",
+            "de-corpus-e46d616e9a6a4ba07292"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-18-21-2021-09-01",
@@ -60689,8 +60719,8 @@
           "id": "de-kg-instr-2f1ac975f16fdbf6",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-3393ddac4e2b1bfe7234",
-            "de-corpus-dec83906f5795f4824de"
+            "de-corpus-dec83906f5795f4824de",
+            "de-corpus-ffa95c0c9c03160d0c67"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-vi-r-72-11-2012-05-10",
@@ -60726,7 +60756,7 @@
           "id": "de-kg-instr-337d81a4694fca6a",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-39ccc058d2fd00218b11"
+            "de-corpus-6f3eda00e6dfb62c26ed"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14",
@@ -60741,7 +60771,7 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-682153d250410ec8f830",
-            "de-corpus-ebf935dc85f336be6a3e"
+            "de-corpus-8f1bf892530fb3c7e621"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-16-08-2010-08-26",
@@ -60755,10 +60785,10 @@
           "id": "de-kg-instr-360df2059e09e33e",
           "status": "pending",
           "discovery_refs": [
+            "de-corpus-1fe7ebc3106c241b84c6",
+            "de-corpus-3a6526f67d54b8372d7f",
             "de-corpus-461448dd2f8399f809a7",
-            "de-corpus-6b3707f2d34a4246bc9f",
-            "de-corpus-ae7798bcf059f03c5a6d",
-            "de-corpus-c6633c70c3a359d64cb0"
+            "de-corpus-ae7798bcf059f03c5a6d"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21",
@@ -60772,9 +60802,9 @@
           "id": "de-kg-instr-3815239cc1f2caaf",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-1d0b5701bb3b5ed0b032",
             "de-corpus-1eed741c0ec999b8293d",
-            "de-corpus-d872877ba4130c8500cf"
+            "de-corpus-32f7f741f64ab8902977",
+            "de-corpus-4fa8838e0794b568f2d6"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-35-11-2013-04-11",
@@ -60834,8 +60864,8 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-164bea938c6a3063f131",
-            "de-corpus-6ca53ad3e1fd2762a3be",
-            "de-corpus-de611042f178387861d3"
+            "de-corpus-272c08aa29f52270c78f",
+            "de-corpus-6ca53ad3e1fd2762a3be"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-32-15-2017-03-15",
@@ -60849,9 +60879,9 @@
           "id": "de-kg-instr-3ae0493a66058fb3",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-10077b85f3e3317e7dc4",
             "de-corpus-21573c05ac813801a3e0",
-            "de-corpus-ae122ea0fa4b2caa2520"
+            "de-corpus-551e3d8454322ff97555",
+            "de-corpus-a4d5afed312833dbc877"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24",
@@ -60865,10 +60895,10 @@
           "id": "de-kg-instr-3be04eb6d61b596b",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-0c57c9fb8c0f37d506b4",
+            "de-corpus-178701d718e3cb38ea53",
             "de-corpus-3bb543f1851a0d787977",
-            "de-corpus-3d784d51abed6e58b199",
-            "de-corpus-c1edf1df4fc69c5fbd6c"
+            "de-corpus-c1edf1df4fc69c5fbd6c",
+            "de-corpus-f4b5eb529cf8127bb224"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04",
@@ -60882,8 +60912,8 @@
           "id": "de-kg-instr-3f1f4f2a618a6442",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-208341f25079067e0f52",
-            "de-corpus-e5ee360f0caf97192ffa"
+            "de-corpus-8110a508d9afec51e181",
+            "de-corpus-d65d979b1e9eb90576ba"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-16-17-2018-01-18",
@@ -60899,8 +60929,8 @@
           "discovery_refs": [
             "de-corpus-170306142fc9632c0004",
             "de-corpus-4da85ff7b2913f67bdbe",
-            "de-corpus-81d6a86fe9a55499b410",
-            "de-corpus-86884f098c386211c388"
+            "de-corpus-580c329817851b74d98e",
+            "de-corpus-81d6a86fe9a55499b410"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-44-08-2010-04-28",
@@ -60930,7 +60960,7 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-6c1b70664f2e80798d7f",
-            "de-corpus-fda3a981199db0758446"
+            "de-corpus-fc09dfbbf412855028eb"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-v-r-48-11-2013-04-18",
@@ -60955,10 +60985,10 @@
           "id": "de-kg-instr-514272088fbc14af",
           "status": "pending",
           "discovery_refs": [
+            "de-corpus-52bb4612d9a1e76e2cfe",
             "de-corpus-aa9325533b069e99b39a",
-            "de-corpus-e3f58d7235d5879a2a35",
-            "de-corpus-fb3d46550956235bed6d",
-            "de-corpus-fb673a9ec048cbdc2c9c"
+            "de-corpus-b8482aaa8aa64dca4b54",
+            "de-corpus-d373fefcce3ccc259b3a"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-31-15-2017-01-19",
@@ -60972,8 +61002,8 @@
           "id": "de-kg-instr-55b78f1e0b14946b",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-5aecb3f8846eccbbdb9e",
-            "de-corpus-7bc0365fbc1abf2f945a"
+            "de-corpus-371c309783518901f2d5",
+            "de-corpus-5253b0a0ad725b94c828"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20",
@@ -60987,7 +61017,7 @@
           "id": "de-kg-instr-5c0851a954940f82",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-4e519857df376489afdb",
+            "de-corpus-25bab03d1a277b8dc8a1",
             "de-corpus-94135621c2c7fc51d641",
             "de-corpus-94eb31dc34a0c566444a",
             "de-corpus-9cb03dcc670d396f6662"
@@ -61022,7 +61052,7 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-4673d88a1bae3344cb29",
-            "de-corpus-d281fc6d15025bbcdf44"
+            "de-corpus-68abfef7c8d24982e020"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-22-12-2013-08-08",
@@ -61036,7 +61066,7 @@
           "id": "de-kg-instr-63ae4bcff4818d3a",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-0a272f4768b5aa643793"
+            "de-corpus-226460336311f7713278"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-68-11-2012-05-24",
@@ -61050,7 +61080,7 @@
           "id": "de-kg-instr-6568b0e3e8e4b33c",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-02c9c42a137aafa13d68"
+            "de-corpus-62dc51c9b7cbfd512132"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-29-09-2012-03-15",
@@ -61064,7 +61094,7 @@
           "id": "de-kg-instr-6571f5d198cf30bd",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-7fbb5a9e8622358f8c06"
+            "de-corpus-1bca258bdba3102dbaa9"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/sgb-5",
@@ -61105,7 +61135,7 @@
           "id": "de-kg-instr-6cf659dd66fd5e85",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-7b0e1c563ebf1bcf48a3"
+            "de-corpus-a2529365876ae617a375"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15",
@@ -61119,7 +61149,7 @@
           "id": "de-kg-instr-6e0720e53a02234e",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-62426bac3f50a2b0ae6f"
+            "de-corpus-18f6a44b5b4c894fbc1a"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/wogg",
@@ -61167,9 +61197,9 @@
           "id": "de-kg-instr-73d798cce838ed41",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-1cbc7577fc3e3e8e28e7",
-            "de-corpus-887abfa6fcd96f9688f4",
-            "de-corpus-c119116bbc2ca39e7373"
+            "de-corpus-3b2c7b9b5abe912013b1",
+            "de-corpus-7d0435cc3335ee23ce8f",
+            "de-corpus-887abfa6fcd96f9688f4"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-41-19-2021-08-31",
@@ -61183,9 +61213,9 @@
           "id": "de-kg-instr-75c3f434723fb3e9",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-80b03a1922bc626a1271",
-            "de-corpus-c9b943d31e2b0a9bed62",
-            "de-corpus-d3bd8baa857af3f6c8fe",
+            "de-corpus-1f5ac01ef702228a1dea",
+            "de-corpus-5a2117ef6b7a7ee6d833",
+            "de-corpus-b29b277d4040a30899e3",
             "de-corpus-d89cf799cb8ebc53bd98"
           ],
           "identity_kind": "corpus_citation",
@@ -61269,7 +61299,7 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-6d51618dea25df463cf4",
-            "de-corpus-d646e6f8028da26fa923"
+            "de-corpus-a047bd909d331c4e44d2"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-10-14-2014-09-25",
@@ -61284,8 +61314,8 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-48b002d52962878d6020",
-            "de-corpus-8282919b6c7f38199d81",
-            "de-corpus-c7da5d34a03845ff7e89"
+            "de-corpus-4f93bf3e9a042ed50fbd",
+            "de-corpus-51156c894227c4bf49bc"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-19-17-2018-09-13",
@@ -61300,7 +61330,7 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-2397f2ff0c5303b88c52",
-            "de-corpus-3faab1cb12cf9bec8438"
+            "de-corpus-6888a83ab19a44712a4a"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-52-09-2010-04-28",
@@ -61326,8 +61356,8 @@
           "id": "de-kg-instr-8a5bf72ed2cf253f",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-9378aac3b30acadd43a4",
-            "de-corpus-c5d8bfddb6813f99a97f"
+            "de-corpus-09ea98c51b47485f46be",
+            "de-corpus-7c5c66abfddee11224f4"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-v-r-27-14-2015-04-15",
@@ -61341,13 +61371,13 @@
           "id": "de-kg-instr-9728a65b720a8ab3",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-1d89d88f6aaf05ecc346",
+            "de-corpus-276261a84cf3a57d8882",
+            "de-corpus-31e61e88272db75b21bf",
+            "de-corpus-3de2dc62ca7b5d5103e8",
+            "de-corpus-566cbc94dcc63a98d95d",
             "de-corpus-5891e59f49035c505f7f",
-            "de-corpus-699fbe5f448aca226078",
             "de-corpus-69b44faec773a26d6657",
-            "de-corpus-6c46669af2192750d874",
-            "de-corpus-86bb5ff9e1471f668dcf",
-            "de-corpus-fa7abd7e5f1b019adae2"
+            "de-corpus-6c46669af2192750d874"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-40-13-2014-02-27",
@@ -61361,8 +61391,8 @@
           "id": "de-kg-instr-9886b8cf5a4c26e8",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-74a0b8b239d55f688f27",
-            "de-corpus-9a09c765dac29c788da8"
+            "de-corpus-9a09c765dac29c788da8",
+            "de-corpus-c2e52e2e13e9da6c5b55"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-5-17-2018-03-14",
@@ -61391,10 +61421,10 @@
           "id": "de-kg-instr-9a821bfac753742b",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-16c4c6e5eda80ab9de1a",
-            "de-corpus-3573713d84d0945ea71f",
-            "de-corpus-9a43b6948f43ffd14fa0",
-            "de-corpus-d46b38344094719dbf21"
+            "de-corpus-045f86ac66a8bb0e5366",
+            "de-corpus-09437434940495b70a02",
+            "de-corpus-28db1c6c0a5a3d0244ed",
+            "de-corpus-88e7b29e3eb9a6782c3e"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26",
@@ -61408,7 +61438,7 @@
           "id": "de-kg-instr-9dfa8fc6d1681fbb",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-2b1deb2296591337003a"
+            "de-corpus-351c5921e511fb22722d"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-10-22-2023-10-12",
@@ -61422,8 +61452,8 @@
           "id": "de-kg-instr-9ea3370bf9f2ad0d",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-c5d5736233a55b7f1822",
-            "de-corpus-db91435e9e18fd49f807"
+            "de-corpus-471ca3eaad0d0db47a44",
+            "de-corpus-585ed85fef5ed5a7db20"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-vi-r-45-12-2013-08-08",
@@ -61437,7 +61467,7 @@
           "id": "de-kg-instr-a2bd2172735c10fa",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-37e7adcc7f1833e1d40c",
+            "de-corpus-2dfc6ca8af9823cbf702",
             "de-corpus-a13f712d405675724300"
           ],
           "identity_kind": "corpus_citation",
@@ -61452,7 +61482,7 @@
           "id": "de-kg-instr-a365b83505706342",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-ba21485fd75ad89b02e1",
+            "de-corpus-9d3970d1a7a27b46ba4f",
             "de-corpus-f61bee0c29ccd5d670fb"
           ],
           "identity_kind": "corpus_citation",
@@ -61496,8 +61526,8 @@
           "id": "de-kg-instr-ac571daf105e0ae9",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-9d75705c29a3ff731250",
-            "de-corpus-e5ca273c1390f4005159"
+            "de-corpus-563526f4d32aba13426b",
+            "de-corpus-a30ff1ebb8bf6f81ee6e"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-xi-r-24-13-2014-04-30",
@@ -61511,7 +61541,7 @@
           "id": "de-kg-instr-ad3045c5a5d2f5bd",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-35cf58fe9bac00087a26"
+            "de-corpus-6afaf13787757c0103dd"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-37-21-2022-09-22",
@@ -61525,7 +61555,7 @@
           "id": "de-kg-instr-b25507686192c311",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-467fc3daea2b8afe5e90"
+            "de-corpus-8bbb904a7845c7cd0110"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-23-21-2022-09-22",
@@ -61555,7 +61585,7 @@
           "id": "de-kg-instr-b794d203afd4361a",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-def7ad9057d716028920"
+            "de-corpus-a0f22fa16937b8d08185"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-1-20-2021-04-14",
@@ -61569,7 +61599,7 @@
           "id": "de-kg-instr-b8899970af340fb3",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-fce1d64190b7179a570f"
+            "de-corpus-5a247b18425e99ee9280"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-28-15-2016-04-13",
@@ -61584,12 +61614,12 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-1b65ac76074a9e4d0fd1",
+            "de-corpus-2d468d2aa05d885c6717",
             "de-corpus-443ad0c2567894367d0f",
             "de-corpus-60d4295a9edb13e2c1c3",
             "de-corpus-6f9020d3778b517e3e2a",
             "de-corpus-86534602aca6487afa11",
-            "de-corpus-8bba30603b49eb761e1d",
-            "de-corpus-bf6f5d15cdf37cb277f4"
+            "de-corpus-8bba30603b49eb761e1d"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/sgb-3",
@@ -61605,8 +61635,8 @@
           "id": "de-kg-instr-ba4f2fb8eccf8b99",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-7768900596a0e1cb0f67",
-            "de-corpus-f1cf3fb74cda5c200109"
+            "de-corpus-0d37532eb747fab30e27",
+            "de-corpus-891decac88cc855577d3"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-42-18-2019-02-20",
@@ -61620,8 +61650,8 @@
           "id": "de-kg-instr-ba577440348ecedd",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-bdfa86315e26ccedc08a",
-            "de-corpus-eb345f0c9e8e21278a97"
+            "de-corpus-194540b4f7173740b0fe",
+            "de-corpus-4e19821d4d1ef0b26123"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-vi-r-9-15-2015-09-03",
@@ -61635,8 +61665,8 @@
           "id": "de-kg-instr-ba85f6a53f1f2f11",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-4ccef59539b790415186",
-            "de-corpus-f5e9afc0869c7ed35510"
+            "de-corpus-37eca41a65dce0c1d131",
+            "de-corpus-fb4e8fa70f486759fb89"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-26-18-2018-12-11",
@@ -61651,11 +61681,11 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-2bf0470f154a78fd2a70",
-            "de-corpus-4996b91eb21f103ca1ee",
-            "de-corpus-4c662d10afd6c8a759ea",
             "de-corpus-6ecae1b1cb1d2867a6e9",
-            "de-corpus-d0478f88a64d7cf4bc7c",
-            "de-corpus-d660ed343bbc8a5870b2"
+            "de-corpus-74152776761c48e810eb",
+            "de-corpus-8cf5cadf0d4c98644544",
+            "de-corpus-8f230fbe6c5ed690124c",
+            "de-corpus-d0478f88a64d7cf4bc7c"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-xi-r-42-11-2013-12-11",
@@ -61669,8 +61699,8 @@
           "id": "de-kg-instr-bf9c57bd5c2a3d58",
           "status": "pending",
           "discovery_refs": [
+            "de-corpus-4092aa86586e608e9be1",
             "de-corpus-647601ad2ce6391ac52e",
-            "de-corpus-9c34da15e7b1f2cbb3d1",
             "de-corpus-f84821bbe73a349bbbe1"
           ],
           "identity_kind": "corpus_citation",
@@ -61685,7 +61715,7 @@
           "id": "de-kg-instr-c2c05925823952b6",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-01e85aac96e57549cd8f",
+            "de-corpus-457837bc6d7e82107003",
             "de-corpus-786be9224348f88b6a31"
           ],
           "identity_kind": "corpus_citation",
@@ -61734,7 +61764,7 @@
           "id": "de-kg-instr-c80165befa9ab1c1",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-38cee099da9e8c265626"
+            "de-corpus-052476229d91d4583cf1"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-27-15-2016-09-08",
@@ -61748,8 +61778,8 @@
           "id": "de-kg-instr-ccf56f3091f029e7",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-2dfb8e8e7b9972130173",
-            "de-corpus-dac2d2088d02e0ebb9bb"
+            "de-corpus-f4ef4518a3b9da361eb3",
+            "de-corpus-f62eef520e7245326f22"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-v-r-9-12-2013-09-19",
@@ -61778,8 +61808,8 @@
           "id": "de-kg-instr-d0ffa65a02a956b9",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-67a85788481346c5eb32",
-            "de-corpus-a45d95d8c19fc47aa094"
+            "de-corpus-2346b5d653dd91ad16ef",
+            "de-corpus-67a85788481346c5eb32"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/cjeu-c-411-20",
@@ -61882,7 +61912,7 @@
           "id": "de-kg-instr-e832fabf332bce62",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-cd184adb3dbc7832b9a5",
+            "de-corpus-0fc08e64477e9859b7a9",
             "de-corpus-dc178935f4d4ae6081e7"
           ],
           "identity_kind": "corpus_citation",
@@ -61897,9 +61927,9 @@
           "id": "de-kg-instr-e92627717e6aac58",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-0ef2587eb508bf84b38d",
-            "de-corpus-59876532c3c6510b7f9e",
-            "de-corpus-d8126b4c20a7244a1f57"
+            "de-corpus-d67857af8cf31cb144d5",
+            "de-corpus-d8126b4c20a7244a1f57",
+            "de-corpus-f88c13ced838e0fe748a"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-7-21-2023-04-20",
@@ -61939,8 +61969,8 @@
           "id": "de-kg-instr-f7545c420f92465c",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-2aac34fca294aefa950e",
-            "de-corpus-f58ed09ede3536ecc1a5"
+            "de-corpus-8b5289f0247ef6ad90f2",
+            "de-corpus-d6aab01062574b46488b"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-38-14-2015-06-23",
@@ -61954,8 +61984,8 @@
           "id": "de-kg-instr-f8172fd80d730a38",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-01e05aa7f5dd71f7553e",
-            "de-corpus-6509ac22ba7e51dad5f1"
+            "de-corpus-415805f11b69f0db4a20",
+            "de-corpus-b8c3b167675359b792d1"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-48-20-2021-12-15",
@@ -61969,7 +61999,7 @@
           "id": "de-kg-instr-f87f215f5ca7e7eb",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-356c30cdda0ef255178d"
+            "de-corpus-3f68bca82ed9109af0b2"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-41-13-2014-05-08",
@@ -61983,8 +62013,8 @@
           "id": "de-kg-instr-f99d3dc89d577c15",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-2033174a1a99d1bb31d3",
-            "de-corpus-970989b67ec7f3ee4ac1"
+            "de-corpus-23ce9a65886e02630acc",
+            "de-corpus-2f7a9a883179090f0c06"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-17-18-2019-03-21",
@@ -61998,9 +62028,9 @@
           "id": "de-kg-instr-fa626aa971b4e396",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-49de9a7681fedba411e8",
-            "de-corpus-973b99d9c685cd5d4b54",
-            "de-corpus-add9b4ac0708e9b85f62"
+            "de-corpus-154c7b4436e7570445ce",
+            "de-corpus-add9b4ac0708e9b85f62",
+            "de-corpus-f36e48b35aaf9a5e2131"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-vi-r-10-14-2015-06-18",
@@ -62016,7 +62046,7 @@
           "discovery_refs": [
             "de-corpus-0bdbb79c60ae8f06b9ee",
             "de-corpus-50e12b4a0eb596787bad",
-            "de-corpus-5fdb3dfc31778b016404"
+            "de-corpus-dd83b877d0e5e812c564"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-9-21-2022-06-02",
@@ -62083,7 +62113,7 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c",
+            "corpus_release": "16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f",
             "subject_matter_search": "0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
@@ -62139,7 +62169,7 @@
           "id": "de-rv-instr-45a23bb6aa1843b8",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-262a6432328a23e9d801"
+            "de-corpus-a0448494fc9322624917"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/estg",
@@ -62279,8 +62309,8 @@
           "status": "pending",
           "discovery_refs": [
             "de-corpus-02c3e286a3632391d014",
-            "de-corpus-54424a966f565cf32a11",
-            "de-corpus-80ca528e0ed2cceb764a"
+            "de-corpus-80ca528e0ed2cceb764a",
+            "de-corpus-9e5b0fce008e5455ee6d"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -62384,7 +62414,7 @@
           "id": "de-uhv-instr-337d81a4694fca6a",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-a554dc6015adcc579249"
+            "de-corpus-9213eaeb43e56344e114"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-50-20-2021-04-14",
@@ -62412,7 +62442,7 @@
           "id": "de-uhv-instr-360df2059e09e33e",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-a1bbdc42d51c89a6383d"
+            "de-corpus-4c94aafc83495aa484db"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21",
@@ -62471,7 +62501,7 @@
           "id": "de-uhv-instr-3ae0493a66058fb3",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-244def7191ae261bc78d"
+            "de-corpus-e7fbb7878cef3bf3a26b"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-v-r-43-11-2012-10-24",
@@ -62485,7 +62515,7 @@
           "id": "de-uhv-instr-3be04eb6d61b596b",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-8c59f324eb341ba46731"
+            "de-corpus-90dff6d83f72676f8088"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-71-10-2011-08-04",
@@ -62636,7 +62666,7 @@
           "id": "de-uhv-instr-9a821bfac753742b",
           "status": "pending",
           "discovery_refs": [
-            "de-corpus-907618256eb5b8cdc6c1"
+            "de-corpus-74347a2806a5b2ae26de"
           ],
           "identity_kind": "corpus_citation",
           "citation_path": "de/guidance/bfh-iii-r-21-13-2014-06-26",
@@ -62817,5 +62847,5 @@
       ]
     }
   ],
-  "receipt_sha256": "217529472a7df80703c04de00288a6e0403d0e5e6a773e6f07f2fe2459e3f9a1"
+  "receipt_sha256": "61997827b45b3716f0bc2814f2c29bd76cbea20c4e32b59e6e689d53bbb87b56"
 }

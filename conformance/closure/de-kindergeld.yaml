@@ -967,9 +967,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 27b4cccee9454f4cf267b611d23230bf61978f518d1c12ba62785e27416740db
+    snapshot_sha256: 45b0cf11084453b41995896aece50c9dd289359eb0c0a9a544f299b44d06fdf8
     channel_receipts:
-      corpus_release: c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c
+      corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
       subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
@@ -8948,7 +8948,7 @@ generated_facts:
     - id: de-kg-instr-028b46da9b934bf7
       status: pending
       discovery_refs:
-      - de-corpus-aeb26d971cb44d3e6ad4
+      - de-corpus-8c0d45c3c6f4b60163e6
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-59-19-2020-11-03
       row_sha256: bf2e82e594fde8e6a5d288f72e1771a6ed5f41261600582c5c3811c6ebc5a8c4
@@ -8971,11 +8971,11 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-0c5da927daa98ce090f4
-      - de-corpus-5bce6784652b0172b577
+      - de-corpus-2b8254b9a867f733e878
       - de-corpus-66c0926477e013118366
       - de-corpus-6b2f144a8a902fe3ff9a
-      - de-corpus-93a986a2a9beeeb60f58
       - de-corpus-c158bc9734053479c0e8
+      - de-corpus-ef50a3eab1109dc091c3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
       row_sha256: 40555419d498300a595a02e0fc7e81270a47ef2d060b0b0a5bf37dde2f25377d
@@ -8987,8 +8987,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-42cb174d59c13ca15840
+      - de-corpus-64dd3a55ec99e673f94b
       - de-corpus-6d4c3e36d18b468a9b05
-      - de-corpus-f1fb74119d4f695df860
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -9002,8 +9002,8 @@ generated_facts:
     - id: de-kg-instr-1945c20cac056911
       status: pending
       discovery_refs:
-      - de-corpus-686312ac39d60705694c
       - de-corpus-89745d237176ffb31213
+      - de-corpus-d5cc589986090ede62d1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-21-2022-07-14
       row_sha256: 836ed3e2e14c974c38d65c06cfadd9b6c60c26b30ca8e33af48d0d34d7f35d13
@@ -9014,8 +9014,8 @@ generated_facts:
     - id: de-kg-instr-1c560d43302dedf2
       status: pending
       discovery_refs:
+      - de-corpus-5077101c63aa301bf080
       - de-corpus-621a661459b128097025
-      - de-corpus-7af973ef13e85403e536
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
       row_sha256: d71da6bdad6dde7194ea0f0a376b370e8b5cb577a85e2c1692fb538dde9be770
@@ -9034,11 +9034,11 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2f133166ae69264b2ba4
-      - de-corpus-ac9f46b6e8a72dd09c5e
+      - de-corpus-a44ac4d98cca45e24532
       - de-corpus-b22116b1e8963b259125
-      - de-corpus-bdd556d8e4b1531b259f
+      - de-corpus-bf8dd8d0692c69c903ea
       - de-corpus-d03f7f5a1298c9db19cf
-      - de-corpus-efc15565bfb590fef3ab
+      - de-corpus-dfcf666a5b18275ee7f2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-3-13-2013-08-08
       row_sha256: ac182197e0e0fdf40b0dc9aebb25bb8dbadc8b66b1151d0de421376240e91e45
@@ -9050,8 +9050,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-1c970c7de71a22236f10
-      - de-corpus-78b5700863ff01df5e92
-      - de-corpus-ebc85dcc067acc6f2bfd
+      - de-corpus-820445a194efc82211ca
+      - de-corpus-85fd6aae18e30d9d5574
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-16-15-2016-07-13
       row_sha256: e0c5eb3f5d01f381e86f89c1a513adda6fbfa4af61db8ecbee0c07d020bbe48d
@@ -9062,7 +9062,7 @@ generated_facts:
     - id: de-kg-instr-26ba3514c162c52d
       status: pending
       discovery_refs:
-      - de-corpus-2a7c60e49d15d9a78995
+      - de-corpus-dd8676e616b7cb8a73db
       identity_kind: corpus_citation
       citation_path: de/guidance/lsth-2023-9
       row_sha256: 4be02c352e54313f08e3bd344831d8738ccf01786b30bca4f06c29bddb519021
@@ -9085,8 +9085,8 @@ generated_facts:
     - id: de-kg-instr-295706eb9fcb6809
       status: pending
       discovery_refs:
-      - de-corpus-d03b72fa03a92822b483
-      - de-corpus-dd92f3a3dc57026670f7
+      - de-corpus-2ec721f6243aa7a9c822
+      - de-corpus-e229d5164de6bea3ea75
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-73-09-2012-02-09
       row_sha256: d90042f7820188bae7105a60a6886d375fec0e5e60050aec5c53173bd8602b58
@@ -9104,7 +9104,7 @@ generated_facts:
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
-      - de-corpus-5082f94163cf35c83540
+      - de-corpus-5603013ef29636fa1cef
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-14-17-2018-02-21
       row_sha256: bf7b0a4cdd7d06e9586f3d27ae68dd22a2dd8e234800ea928e24fcd53ffe8311
@@ -9115,9 +9115,9 @@ generated_facts:
     - id: de-kg-instr-2c28748809bc5f0a
       status: pending
       discovery_refs:
-      - de-corpus-02a06a9e9c90f357f054
-      - de-corpus-74aeb9d979073507c871
       - de-corpus-b0a8a31f2ba2a50e5cfa
+      - de-corpus-c3db2fce1115f8cdcd14
+      - de-corpus-dd60ada54b4cc59bba0b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-15-12-2014-12-17
       row_sha256: d7a3b2a19ed0c6ad375be661be1f5c2560adb5966ffd0a2d43912ce070ae07f4
@@ -9128,10 +9128,10 @@ generated_facts:
     - id: de-kg-instr-2da01fc3ad71bd83
       status: pending
       discovery_refs:
-      - de-corpus-0c48d85dd9d39c651f1d
-      - de-corpus-15717a23d99060611837
       - de-corpus-2106da243fb5e024a263
       - de-corpus-916b11da697e717aa71c
+      - de-corpus-b0bd9d4a4d8965a06c4b
+      - de-corpus-c12c4db12729a1514f1b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-36-21-2023-01-19
       row_sha256: 32d50c589e0ed68775a2ac0b5fe5c4f59e89b1752278b230f759a5bb21d08e20
@@ -9142,10 +9142,10 @@ generated_facts:
     - id: de-kg-instr-2e3e1e94e8491798
       status: pending
       discovery_refs:
-      - de-corpus-0fdec1e9559d2bc13c14
-      - de-corpus-275b8f6521b0915443ed
-      - de-corpus-704cdcd895e253f1127d
-      - de-corpus-9e74692afd017eade52c
+      - de-corpus-33cbcddd67cd6e674ac2
+      - de-corpus-8ec012ea0ce9871a3de5
+      - de-corpus-ba74bd9b74797c226c19
+      - de-corpus-e46d616e9a6a4ba07292
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-18-21-2021-09-01
       row_sha256: 863d1f341f8e7ccb31aba9678d5a1efe123406f29edcc384fb30073338493163
@@ -9156,8 +9156,8 @@ generated_facts:
     - id: de-kg-instr-2f1ac975f16fdbf6
       status: pending
       discovery_refs:
-      - de-corpus-3393ddac4e2b1bfe7234
       - de-corpus-dec83906f5795f4824de
+      - de-corpus-ffa95c0c9c03160d0c67
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-72-11-2012-05-10
       row_sha256: 0e7597c1b457cdca32b61a52c1c9550aa6c017ba666fec8077fa8d2ec3babe4f
@@ -9182,7 +9182,7 @@ generated_facts:
     - id: de-kg-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-39ccc058d2fd00218b11
+      - de-corpus-6f3eda00e6dfb62c26ed
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -9194,7 +9194,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-682153d250410ec8f830
-      - de-corpus-ebf935dc85f336be6a3e
+      - de-corpus-8f1bf892530fb3c7e621
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
@@ -9205,10 +9205,10 @@ generated_facts:
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
+      - de-corpus-1fe7ebc3106c241b84c6
+      - de-corpus-3a6526f67d54b8372d7f
       - de-corpus-461448dd2f8399f809a7
-      - de-corpus-6b3707f2d34a4246bc9f
       - de-corpus-ae7798bcf059f03c5a6d
-      - de-corpus-c6633c70c3a359d64cb0
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
@@ -9219,9 +9219,9 @@ generated_facts:
     - id: de-kg-instr-3815239cc1f2caaf
       status: pending
       discovery_refs:
-      - de-corpus-1d0b5701bb3b5ed0b032
       - de-corpus-1eed741c0ec999b8293d
-      - de-corpus-d872877ba4130c8500cf
+      - de-corpus-32f7f741f64ab8902977
+      - de-corpus-4fa8838e0794b568f2d6
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
       row_sha256: 60050cc85d4effbe0effcd2faf7e0eea390be425f1ce8ce407c7dbabbf21550f
@@ -9268,8 +9268,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-164bea938c6a3063f131
+      - de-corpus-272c08aa29f52270c78f
       - de-corpus-6ca53ad3e1fd2762a3be
-      - de-corpus-de611042f178387861d3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-32-15-2017-03-15
       row_sha256: 83e56135a34905a6bf1644c2630162d41a5d953ac7c47031377fab1be97f8128
@@ -9280,9 +9280,9 @@ generated_facts:
     - id: de-kg-instr-3ae0493a66058fb3
       status: pending
       discovery_refs:
-      - de-corpus-10077b85f3e3317e7dc4
       - de-corpus-21573c05ac813801a3e0
-      - de-corpus-ae122ea0fa4b2caa2520
+      - de-corpus-551e3d8454322ff97555
+      - de-corpus-a4d5afed312833dbc877
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
       row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
@@ -9293,10 +9293,10 @@ generated_facts:
     - id: de-kg-instr-3be04eb6d61b596b
       status: pending
       discovery_refs:
-      - de-corpus-0c57c9fb8c0f37d506b4
+      - de-corpus-178701d718e3cb38ea53
       - de-corpus-3bb543f1851a0d787977
-      - de-corpus-3d784d51abed6e58b199
       - de-corpus-c1edf1df4fc69c5fbd6c
+      - de-corpus-f4b5eb529cf8127bb224
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
       row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
@@ -9307,8 +9307,8 @@ generated_facts:
     - id: de-kg-instr-3f1f4f2a618a6442
       status: pending
       discovery_refs:
-      - de-corpus-208341f25079067e0f52
-      - de-corpus-e5ee360f0caf97192ffa
+      - de-corpus-8110a508d9afec51e181
+      - de-corpus-d65d979b1e9eb90576ba
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-17-2018-01-18
       row_sha256: f14c28debb697176aee417d78758fc369eab2ca53a8bab1bd66a8b7adfa2e7ea
@@ -9321,8 +9321,8 @@ generated_facts:
       discovery_refs:
       - de-corpus-170306142fc9632c0004
       - de-corpus-4da85ff7b2913f67bdbe
+      - de-corpus-580c329817851b74d98e
       - de-corpus-81d6a86fe9a55499b410
-      - de-corpus-86884f098c386211c388
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
       row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
@@ -9346,7 +9346,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-6c1b70664f2e80798d7f
-      - de-corpus-fda3a981199db0758446
+      - de-corpus-fc09dfbbf412855028eb
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-48-11-2013-04-18
       row_sha256: c2facdb93e1393569a3a8921b0f7741d159e8af512682db31ffbb6c1799ed7ba
@@ -9364,10 +9364,10 @@ generated_facts:
     - id: de-kg-instr-514272088fbc14af
       status: pending
       discovery_refs:
+      - de-corpus-52bb4612d9a1e76e2cfe
       - de-corpus-aa9325533b069e99b39a
-      - de-corpus-e3f58d7235d5879a2a35
-      - de-corpus-fb3d46550956235bed6d
-      - de-corpus-fb673a9ec048cbdc2c9c
+      - de-corpus-b8482aaa8aa64dca4b54
+      - de-corpus-d373fefcce3ccc259b3a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-31-15-2017-01-19
       row_sha256: 2fe64b365a513d4ada6c59897c9be6ca58cc33c72cce20401943261d25b0414f
@@ -9378,8 +9378,8 @@ generated_facts:
     - id: de-kg-instr-55b78f1e0b14946b
       status: pending
       discovery_refs:
-      - de-corpus-5aecb3f8846eccbbdb9e
-      - de-corpus-7bc0365fbc1abf2f945a
+      - de-corpus-371c309783518901f2d5
+      - de-corpus-5253b0a0ad725b94c828
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       row_sha256: 11986fea527775345d675f14309099c47ac086cfcc0461ef8dbd728914f331cd
@@ -9390,7 +9390,7 @@ generated_facts:
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
-      - de-corpus-4e519857df376489afdb
+      - de-corpus-25bab03d1a277b8dc8a1
       - de-corpus-94135621c2c7fc51d641
       - de-corpus-94eb31dc34a0c566444a
       - de-corpus-9cb03dcc670d396f6662
@@ -9419,7 +9419,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-4673d88a1bae3344cb29
-      - de-corpus-d281fc6d15025bbcdf44
+      - de-corpus-68abfef7c8d24982e020
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-22-12-2013-08-08
       row_sha256: 4d9aa9a4712d45520b299538f79a6abba122cd477a8dcd21cebf70b81fc7f806
@@ -9430,7 +9430,7 @@ generated_facts:
     - id: de-kg-instr-63ae4bcff4818d3a
       status: pending
       discovery_refs:
-      - de-corpus-0a272f4768b5aa643793
+      - de-corpus-226460336311f7713278
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-68-11-2012-05-24
       row_sha256: 05ad072e8622fbdb85a9a9efd01859374a3fb3f8e5fd20a039f7348a4e733548
@@ -9441,7 +9441,7 @@ generated_facts:
     - id: de-kg-instr-6568b0e3e8e4b33c
       status: pending
       discovery_refs:
-      - de-corpus-02c9c42a137aafa13d68
+      - de-corpus-62dc51c9b7cbfd512132
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-29-09-2012-03-15
       row_sha256: 5e850b9f883b90f6df1080f7c3cfd2decff37c77897e591bec89321de5846dcb
@@ -9452,7 +9452,7 @@ generated_facts:
     - id: de-kg-instr-6571f5d198cf30bd
       status: pending
       discovery_refs:
-      - de-corpus-7fbb5a9e8622358f8c06
+      - de-corpus-1bca258bdba3102dbaa9
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-5
       row_sha256: 73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426
@@ -9483,7 +9483,7 @@ generated_facts:
     - id: de-kg-instr-6cf659dd66fd5e85
       status: pending
       discovery_refs:
-      - de-corpus-7b0e1c563ebf1bcf48a3
+      - de-corpus-a2529365876ae617a375
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-43-20-2021-12-15
       row_sha256: 96d3e126313bd7350745cdcb5adf4b772255adee74137a5a3ec0298f926827b0
@@ -9494,7 +9494,7 @@ generated_facts:
     - id: de-kg-instr-6e0720e53a02234e
       status: pending
       discovery_refs:
-      - de-corpus-62426bac3f50a2b0ae6f
+      - de-corpus-18f6a44b5b4c894fbc1a
       identity_kind: corpus_citation
       citation_path: de/statute/wogg
       row_sha256: 0c75816689d2cf1d91917c024d3bb2760ba821c2af162fd347863d5d5b4b5386
@@ -9533,9 +9533,9 @@ generated_facts:
     - id: de-kg-instr-73d798cce838ed41
       status: pending
       discovery_refs:
-      - de-corpus-1cbc7577fc3e3e8e28e7
+      - de-corpus-3b2c7b9b5abe912013b1
+      - de-corpus-7d0435cc3335ee23ce8f
       - de-corpus-887abfa6fcd96f9688f4
-      - de-corpus-c119116bbc2ca39e7373
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-19-2021-08-31
       row_sha256: 8c53948ddcb3fed1150cd1c65454593f7bb9e128364692e069c95185f25632fc
@@ -9546,9 +9546,9 @@ generated_facts:
     - id: de-kg-instr-75c3f434723fb3e9
       status: pending
       discovery_refs:
-      - de-corpus-80b03a1922bc626a1271
-      - de-corpus-c9b943d31e2b0a9bed62
-      - de-corpus-d3bd8baa857af3f6c8fe
+      - de-corpus-1f5ac01ef702228a1dea
+      - de-corpus-5a2117ef6b7a7ee6d833
+      - de-corpus-b29b277d4040a30899e3
       - de-corpus-d89cf799cb8ebc53bd98
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
@@ -9617,7 +9617,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-6d51618dea25df463cf4
-      - de-corpus-d646e6f8028da26fa923
+      - de-corpus-a047bd909d331c4e44d2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-14-2014-09-25
       row_sha256: c0a33ff49e3a46a817e766e5eef78efb484b4b55028fd32f3b596d201e5d4808
@@ -9629,8 +9629,8 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-48b002d52962878d6020
-      - de-corpus-8282919b6c7f38199d81
-      - de-corpus-c7da5d34a03845ff7e89
+      - de-corpus-4f93bf3e9a042ed50fbd
+      - de-corpus-51156c894227c4bf49bc
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-19-17-2018-09-13
       row_sha256: 49758e06d3a304b2659e41a975f3ef12b7adb3ecaa7466a7e498cc1446e3bbae
@@ -9642,7 +9642,7 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2397f2ff0c5303b88c52
-      - de-corpus-3faab1cb12cf9bec8438
+      - de-corpus-6888a83ab19a44712a4a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       row_sha256: 6121522ba80e3e85463abc2a128f527e144fc0a71820ad1caa08e2f23c854edc
@@ -9661,8 +9661,8 @@ generated_facts:
     - id: de-kg-instr-8a5bf72ed2cf253f
       status: pending
       discovery_refs:
-      - de-corpus-9378aac3b30acadd43a4
-      - de-corpus-c5d8bfddb6813f99a97f
+      - de-corpus-09ea98c51b47485f46be
+      - de-corpus-7c5c66abfddee11224f4
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-27-14-2015-04-15
       row_sha256: 77f8e7ee1e30484a2edf68fef33ed8ec9336c0d098f9be10c856964c586d21e5
@@ -9673,13 +9673,13 @@ generated_facts:
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
-      - de-corpus-1d89d88f6aaf05ecc346
+      - de-corpus-276261a84cf3a57d8882
+      - de-corpus-31e61e88272db75b21bf
+      - de-corpus-3de2dc62ca7b5d5103e8
+      - de-corpus-566cbc94dcc63a98d95d
       - de-corpus-5891e59f49035c505f7f
-      - de-corpus-699fbe5f448aca226078
       - de-corpus-69b44faec773a26d6657
       - de-corpus-6c46669af2192750d874
-      - de-corpus-86bb5ff9e1471f668dcf
-      - de-corpus-fa7abd7e5f1b019adae2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-13-2014-02-27
       row_sha256: b47edc79ca389d12b665bc97c2fe7588657635dc1c678e1dc991af808e6eb594
@@ -9690,8 +9690,8 @@ generated_facts:
     - id: de-kg-instr-9886b8cf5a4c26e8
       status: pending
       discovery_refs:
-      - de-corpus-74a0b8b239d55f688f27
       - de-corpus-9a09c765dac29c788da8
+      - de-corpus-c2e52e2e13e9da6c5b55
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
       row_sha256: eb678a1f9028e8651ba5b84faaf5861f0db9d7b40232d95ce11a4f7aa2f07820
@@ -9714,10 +9714,10 @@ generated_facts:
     - id: de-kg-instr-9a821bfac753742b
       status: pending
       discovery_refs:
-      - de-corpus-16c4c6e5eda80ab9de1a
-      - de-corpus-3573713d84d0945ea71f
-      - de-corpus-9a43b6948f43ffd14fa0
-      - de-corpus-d46b38344094719dbf21
+      - de-corpus-045f86ac66a8bb0e5366
+      - de-corpus-09437434940495b70a02
+      - de-corpus-28db1c6c0a5a3d0244ed
+      - de-corpus-88e7b29e3eb9a6782c3e
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
@@ -9728,7 +9728,7 @@ generated_facts:
     - id: de-kg-instr-9dfa8fc6d1681fbb
       status: pending
       discovery_refs:
-      - de-corpus-2b1deb2296591337003a
+      - de-corpus-351c5921e511fb22722d
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-22-2023-10-12
       row_sha256: b379b748838e3b1f183d246659fc0dcfef0aaab0ba3c10fd09d3307dfda39690
@@ -9739,8 +9739,8 @@ generated_facts:
     - id: de-kg-instr-9ea3370bf9f2ad0d
       status: pending
       discovery_refs:
-      - de-corpus-c5d5736233a55b7f1822
-      - de-corpus-db91435e9e18fd49f807
+      - de-corpus-471ca3eaad0d0db47a44
+      - de-corpus-585ed85fef5ed5a7db20
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
       row_sha256: deb8f6e5ae9442e152d801950203bd87e527ac497e7b090a44b57e65920c16d3
@@ -9751,7 +9751,7 @@ generated_facts:
     - id: de-kg-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
-      - de-corpus-37e7adcc7f1833e1d40c
+      - de-corpus-2dfc6ca8af9823cbf702
       - de-corpus-a13f712d405675724300
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
@@ -9763,7 +9763,7 @@ generated_facts:
     - id: de-kg-instr-a365b83505706342
       status: pending
       discovery_refs:
-      - de-corpus-ba21485fd75ad89b02e1
+      - de-corpus-9d3970d1a7a27b46ba4f
       - de-corpus-f61bee0c29ccd5d670fb
       identity_kind: corpus_citation
       citation_path: de/statute/uhvorschg
@@ -9797,8 +9797,8 @@ generated_facts:
     - id: de-kg-instr-ac571daf105e0ae9
       status: pending
       discovery_refs:
-      - de-corpus-9d75705c29a3ff731250
-      - de-corpus-e5ca273c1390f4005159
+      - de-corpus-563526f4d32aba13426b
+      - de-corpus-a30ff1ebb8bf6f81ee6e
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-24-13-2014-04-30
       row_sha256: c23e548ebf6fec3e5b9b9458f0407180429485cc32358298c72c9d0ba49fe162
@@ -9809,7 +9809,7 @@ generated_facts:
     - id: de-kg-instr-ad3045c5a5d2f5bd
       status: pending
       discovery_refs:
-      - de-corpus-35cf58fe9bac00087a26
+      - de-corpus-6afaf13787757c0103dd
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-37-21-2022-09-22
       row_sha256: 901f124cbfb533657205536f2e94841be2f92fbb7a3b3acd2bfebeecd59abfd1
@@ -9820,7 +9820,7 @@ generated_facts:
     - id: de-kg-instr-b25507686192c311
       status: pending
       discovery_refs:
-      - de-corpus-467fc3daea2b8afe5e90
+      - de-corpus-8bbb904a7845c7cd0110
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-23-21-2022-09-22
       row_sha256: ec79e7b225a622b7a34caaa3d28b6d903b62ec2fff19419c75b00190b3ce9c31
@@ -9844,7 +9844,7 @@ generated_facts:
     - id: de-kg-instr-b794d203afd4361a
       status: pending
       discovery_refs:
-      - de-corpus-def7ad9057d716028920
+      - de-corpus-a0f22fa16937b8d08185
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-1-20-2021-04-14
       row_sha256: c3c7c3503fd9f943b125544df606482afd28280c66186529fa44ee90f9b3e97a
@@ -9855,7 +9855,7 @@ generated_facts:
     - id: de-kg-instr-b8899970af340fb3
       status: pending
       discovery_refs:
-      - de-corpus-fce1d64190b7179a570f
+      - de-corpus-5a247b18425e99ee9280
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-15-2016-04-13
       row_sha256: f4ff7b211cbb6d5f5cfa34f3787086c0c99c3a9e4e5adcfbf8ec2a2442ee073b
@@ -9867,12 +9867,12 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-1b65ac76074a9e4d0fd1
+      - de-corpus-2d468d2aa05d885c6717
       - de-corpus-443ad0c2567894367d0f
       - de-corpus-60d4295a9edb13e2c1c3
       - de-corpus-6f9020d3778b517e3e2a
       - de-corpus-86534602aca6487afa11
       - de-corpus-8bba30603b49eb761e1d
-      - de-corpus-bf6f5d15cdf37cb277f4
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
       row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
@@ -9885,8 +9885,8 @@ generated_facts:
     - id: de-kg-instr-ba4f2fb8eccf8b99
       status: pending
       discovery_refs:
-      - de-corpus-7768900596a0e1cb0f67
-      - de-corpus-f1cf3fb74cda5c200109
+      - de-corpus-0d37532eb747fab30e27
+      - de-corpus-891decac88cc855577d3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-42-18-2019-02-20
       row_sha256: 27f42198ac73da267a89b42f7769c1653eba758e27d7a10db75c05b710fabf34
@@ -9897,8 +9897,8 @@ generated_facts:
     - id: de-kg-instr-ba577440348ecedd
       status: pending
       discovery_refs:
-      - de-corpus-bdfa86315e26ccedc08a
-      - de-corpus-eb345f0c9e8e21278a97
+      - de-corpus-194540b4f7173740b0fe
+      - de-corpus-4e19821d4d1ef0b26123
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-9-15-2015-09-03
       row_sha256: 2c77390f4158e9947c2eb6c9d25295c0920fca6e9d5594be794021dce68d6d36
@@ -9909,8 +9909,8 @@ generated_facts:
     - id: de-kg-instr-ba85f6a53f1f2f11
       status: pending
       discovery_refs:
-      - de-corpus-4ccef59539b790415186
-      - de-corpus-f5e9afc0869c7ed35510
+      - de-corpus-37eca41a65dce0c1d131
+      - de-corpus-fb4e8fa70f486759fb89
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-26-18-2018-12-11
       row_sha256: 6aa63be38084cb5105ac557fe19ee57314533a78d4e9672a1202933ca962176e
@@ -9922,11 +9922,11 @@ generated_facts:
       status: pending
       discovery_refs:
       - de-corpus-2bf0470f154a78fd2a70
-      - de-corpus-4996b91eb21f103ca1ee
-      - de-corpus-4c662d10afd6c8a759ea
       - de-corpus-6ecae1b1cb1d2867a6e9
+      - de-corpus-74152776761c48e810eb
+      - de-corpus-8cf5cadf0d4c98644544
+      - de-corpus-8f230fbe6c5ed690124c
       - de-corpus-d0478f88a64d7cf4bc7c
-      - de-corpus-d660ed343bbc8a5870b2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-42-11-2013-12-11
       row_sha256: 3d35d38cdcc2ee765ac67ffe0ac9c2ba362215108862383f73fb161e4c9fa102
@@ -9937,8 +9937,8 @@ generated_facts:
     - id: de-kg-instr-bf9c57bd5c2a3d58
       status: pending
       discovery_refs:
+      - de-corpus-4092aa86586e608e9be1
       - de-corpus-647601ad2ce6391ac52e
-      - de-corpus-9c34da15e7b1f2cbb3d1
       - de-corpus-f84821bbe73a349bbbe1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
@@ -9950,7 +9950,7 @@ generated_facts:
     - id: de-kg-instr-c2c05925823952b6
       status: pending
       discovery_refs:
-      - de-corpus-01e85aac96e57549cd8f
+      - de-corpus-457837bc6d7e82107003
       - de-corpus-786be9224348f88b6a31
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-24-12-2013-04-11
@@ -9990,7 +9990,7 @@ generated_facts:
     - id: de-kg-instr-c80165befa9ab1c1
       status: pending
       discovery_refs:
-      - de-corpus-38cee099da9e8c265626
+      - de-corpus-052476229d91d4583cf1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-27-15-2016-09-08
       row_sha256: b919322f320c56d487e8b24c816b2146d3e0b7e68e98bc0c4da48527b55096e7
@@ -10001,8 +10001,8 @@ generated_facts:
     - id: de-kg-instr-ccf56f3091f029e7
       status: pending
       discovery_refs:
-      - de-corpus-2dfb8e8e7b9972130173
-      - de-corpus-dac2d2088d02e0ebb9bb
+      - de-corpus-f4ef4518a3b9da361eb3
+      - de-corpus-f62eef520e7245326f22
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-9-12-2013-09-19
       row_sha256: 270f49d629233804f6d619916dcf9265aa0253aade426ddf3f32550444fbac2d
@@ -10025,8 +10025,8 @@ generated_facts:
     - id: de-kg-instr-d0ffa65a02a956b9
       status: pending
       discovery_refs:
+      - de-corpus-2346b5d653dd91ad16ef
       - de-corpus-67a85788481346c5eb32
-      - de-corpus-a45d95d8c19fc47aa094
       identity_kind: corpus_citation
       citation_path: de/guidance/cjeu-c-411-20
       row_sha256: f4600965e8faeb7a2a3ead975193b78acd7f6a10272a8b89bcab96217c4e5762
@@ -10110,7 +10110,7 @@ generated_facts:
     - id: de-kg-instr-e832fabf332bce62
       status: pending
       discovery_refs:
-      - de-corpus-cd184adb3dbc7832b9a5
+      - de-corpus-0fc08e64477e9859b7a9
       - de-corpus-dc178935f4d4ae6081e7
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-12-2014-05-08
@@ -10122,9 +10122,9 @@ generated_facts:
     - id: de-kg-instr-e92627717e6aac58
       status: pending
       discovery_refs:
-      - de-corpus-0ef2587eb508bf84b38d
-      - de-corpus-59876532c3c6510b7f9e
+      - de-corpus-d67857af8cf31cb144d5
       - de-corpus-d8126b4c20a7244a1f57
+      - de-corpus-f88c13ced838e0fe748a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-7-21-2023-04-20
       row_sha256: 71ce1830fe31f10601f6f6d467cc1f5135c8b962298006c9633e169deeb92eed
@@ -10154,8 +10154,8 @@ generated_facts:
     - id: de-kg-instr-f7545c420f92465c
       status: pending
       discovery_refs:
-      - de-corpus-2aac34fca294aefa950e
-      - de-corpus-f58ed09ede3536ecc1a5
+      - de-corpus-8b5289f0247ef6ad90f2
+      - de-corpus-d6aab01062574b46488b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-38-14-2015-06-23
       row_sha256: 62dee8eb4963e72aab68e1db4ce0ed588b038a79db9a78ef8205d98614072e7f
@@ -10166,8 +10166,8 @@ generated_facts:
     - id: de-kg-instr-f8172fd80d730a38
       status: pending
       discovery_refs:
-      - de-corpus-01e05aa7f5dd71f7553e
-      - de-corpus-6509ac22ba7e51dad5f1
+      - de-corpus-415805f11b69f0db4a20
+      - de-corpus-b8c3b167675359b792d1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-48-20-2021-12-15
       row_sha256: f8f37b6d90e74afe818c88512014814610f4b9182417df6846d26bd39e5216e0
@@ -10178,7 +10178,7 @@ generated_facts:
     - id: de-kg-instr-f87f215f5ca7e7eb
       status: pending
       discovery_refs:
-      - de-corpus-356c30cdda0ef255178d
+      - de-corpus-3f68bca82ed9109af0b2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-13-2014-05-08
       row_sha256: 5afb226db1b4e7c44b0071cd26b3cc1a461b3545e2e445dd68969207645163f0
@@ -10189,8 +10189,8 @@ generated_facts:
     - id: de-kg-instr-f99d3dc89d577c15
       status: pending
       discovery_refs:
-      - de-corpus-2033174a1a99d1bb31d3
-      - de-corpus-970989b67ec7f3ee4ac1
+      - de-corpus-23ce9a65886e02630acc
+      - de-corpus-2f7a9a883179090f0c06
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-17-18-2019-03-21
       row_sha256: f747bb93a2e6dabde8882920f09db76da4bf4f65211ea14befbb123314a514af
@@ -10201,9 +10201,9 @@ generated_facts:
     - id: de-kg-instr-fa626aa971b4e396
       status: pending
       discovery_refs:
-      - de-corpus-49de9a7681fedba411e8
-      - de-corpus-973b99d9c685cd5d4b54
+      - de-corpus-154c7b4436e7570445ce
       - de-corpus-add9b4ac0708e9b85f62
+      - de-corpus-f36e48b35aaf9a5e2131
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-10-14-2015-06-18
       row_sha256: d284b59679096903ad1fd5e7492a56961908ff925cd3ebff7d1e335e59db733c
@@ -10216,7 +10216,7 @@ generated_facts:
       discovery_refs:
       - de-corpus-0bdbb79c60ae8f06b9ee
       - de-corpus-50e12b4a0eb596787bad
-      - de-corpus-5fdb3dfc31778b016404
+      - de-corpus-dd83b877d0e5e812c564
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
       row_sha256: 8e3398004ac3c18e14b2a7cf8b553ae565b808f1c60e3c010da8f67997ab0cf8
@@ -10245,7 +10245,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: beedfbe84dc164a7c137ae79d6710f8dd55db8a85ebe9e272fe9482acadd2872
+      sha256: 01c5f94578fa6046fd2bfce6ecafdcbcb22c04373ff842a096992eabb66c9028
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10293,7 +10293,7 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: c199d3870345808a758816fe9cf186635e9113c753e2f07c79faa584b496892c
+        corpus_release: 16d76e9fa2d81681f3b7a37ad06ae9852e3009c59f72bdc6c76c7bf60387560f
         subject_matter_search: 0c5d014b3e3df36f70ac96283632e2755941e42badb40dabe3a946ae5dd6e5eb
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
@@ -23885,7 +23885,7 @@ computed:
     - id: de-kg-instr-028b46da9b934bf7
       status: pending
       discovery_refs:
-      - de-corpus-aeb26d971cb44d3e6ad4
+      - de-corpus-8c0d45c3c6f4b60163e6
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-59-19-2020-11-03
       row_sha256: bf2e82e594fde8e6a5d288f72e1771a6ed5f41261600582c5c3811c6ebc5a8c4
@@ -23908,11 +23908,11 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-0c5da927daa98ce090f4
-      - de-corpus-5bce6784652b0172b577
+      - de-corpus-2b8254b9a867f733e878
       - de-corpus-66c0926477e013118366
       - de-corpus-6b2f144a8a902fe3ff9a
-      - de-corpus-93a986a2a9beeeb60f58
       - de-corpus-c158bc9734053479c0e8
+      - de-corpus-ef50a3eab1109dc091c3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
       row_sha256: 40555419d498300a595a02e0fc7e81270a47ef2d060b0b0a5bf37dde2f25377d
@@ -23924,8 +23924,8 @@ computed:
       status: encoded
       discovery_refs:
       - de-corpus-42cb174d59c13ca15840
+      - de-corpus-64dd3a55ec99e673f94b
       - de-corpus-6d4c3e36d18b468a9b05
-      - de-corpus-f1fb74119d4f695df860
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
       row_sha256: 1a58102b96b66a3a005531c06b2a0e4773d5f310e260ba10cccfb89460833840
@@ -23942,8 +23942,8 @@ computed:
     - id: de-kg-instr-1945c20cac056911
       status: pending
       discovery_refs:
-      - de-corpus-686312ac39d60705694c
       - de-corpus-89745d237176ffb31213
+      - de-corpus-d5cc589986090ede62d1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-21-2022-07-14
       row_sha256: 836ed3e2e14c974c38d65c06cfadd9b6c60c26b30ca8e33af48d0d34d7f35d13
@@ -23954,8 +23954,8 @@ computed:
     - id: de-kg-instr-1c560d43302dedf2
       status: pending
       discovery_refs:
+      - de-corpus-5077101c63aa301bf080
       - de-corpus-621a661459b128097025
-      - de-corpus-7af973ef13e85403e536
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
       row_sha256: d71da6bdad6dde7194ea0f0a376b370e8b5cb577a85e2c1692fb538dde9be770
@@ -23977,11 +23977,11 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-2f133166ae69264b2ba4
-      - de-corpus-ac9f46b6e8a72dd09c5e
+      - de-corpus-a44ac4d98cca45e24532
       - de-corpus-b22116b1e8963b259125
-      - de-corpus-bdd556d8e4b1531b259f
+      - de-corpus-bf8dd8d0692c69c903ea
       - de-corpus-d03f7f5a1298c9db19cf
-      - de-corpus-efc15565bfb590fef3ab
+      - de-corpus-dfcf666a5b18275ee7f2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-3-13-2013-08-08
       row_sha256: ac182197e0e0fdf40b0dc9aebb25bb8dbadc8b66b1151d0de421376240e91e45
@@ -23993,8 +23993,8 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-1c970c7de71a22236f10
-      - de-corpus-78b5700863ff01df5e92
-      - de-corpus-ebc85dcc067acc6f2bfd
+      - de-corpus-820445a194efc82211ca
+      - de-corpus-85fd6aae18e30d9d5574
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-16-15-2016-07-13
       row_sha256: e0c5eb3f5d01f381e86f89c1a513adda6fbfa4af61db8ecbee0c07d020bbe48d
@@ -24005,7 +24005,7 @@ computed:
     - id: de-kg-instr-26ba3514c162c52d
       status: classified-with-reason
       discovery_refs:
-      - de-corpus-2a7c60e49d15d9a78995
+      - de-corpus-dd8676e616b7cb8a73db
       identity_kind: corpus_citation
       citation_path: de/guidance/lsth-2023-9
       row_sha256: 4be02c352e54313f08e3bd344831d8738ccf01786b30bca4f06c29bddb519021
@@ -24034,8 +24034,8 @@ computed:
     - id: de-kg-instr-295706eb9fcb6809
       status: classified-with-reason
       discovery_refs:
-      - de-corpus-d03b72fa03a92822b483
-      - de-corpus-dd92f3a3dc57026670f7
+      - de-corpus-2ec721f6243aa7a9c822
+      - de-corpus-e229d5164de6bea3ea75
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-73-09-2012-02-09
       row_sha256: d90042f7820188bae7105a60a6886d375fec0e5e60050aec5c53173bd8602b58
@@ -24057,7 +24057,7 @@ computed:
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
-      - de-corpus-5082f94163cf35c83540
+      - de-corpus-5603013ef29636fa1cef
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-14-17-2018-02-21
       row_sha256: bf7b0a4cdd7d06e9586f3d27ae68dd22a2dd8e234800ea928e24fcd53ffe8311
@@ -24068,9 +24068,9 @@ computed:
     - id: de-kg-instr-2c28748809bc5f0a
       status: pending
       discovery_refs:
-      - de-corpus-02a06a9e9c90f357f054
-      - de-corpus-74aeb9d979073507c871
       - de-corpus-b0a8a31f2ba2a50e5cfa
+      - de-corpus-c3db2fce1115f8cdcd14
+      - de-corpus-dd60ada54b4cc59bba0b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-15-12-2014-12-17
       row_sha256: d7a3b2a19ed0c6ad375be661be1f5c2560adb5966ffd0a2d43912ce070ae07f4
@@ -24081,10 +24081,10 @@ computed:
     - id: de-kg-instr-2da01fc3ad71bd83
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-0c48d85dd9d39c651f1d
-      - de-corpus-15717a23d99060611837
       - de-corpus-2106da243fb5e024a263
       - de-corpus-916b11da697e717aa71c
+      - de-corpus-b0bd9d4a4d8965a06c4b
+      - de-corpus-c12c4db12729a1514f1b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-36-21-2023-01-19
       row_sha256: 32d50c589e0ed68775a2ac0b5fe5c4f59e89b1752278b230f759a5bb21d08e20
@@ -24099,10 +24099,10 @@ computed:
     - id: de-kg-instr-2e3e1e94e8491798
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-0fdec1e9559d2bc13c14
-      - de-corpus-275b8f6521b0915443ed
-      - de-corpus-704cdcd895e253f1127d
-      - de-corpus-9e74692afd017eade52c
+      - de-corpus-33cbcddd67cd6e674ac2
+      - de-corpus-8ec012ea0ce9871a3de5
+      - de-corpus-ba74bd9b74797c226c19
+      - de-corpus-e46d616e9a6a4ba07292
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-18-21-2021-09-01
       row_sha256: 863d1f341f8e7ccb31aba9678d5a1efe123406f29edcc384fb30073338493163
@@ -24117,8 +24117,8 @@ computed:
     - id: de-kg-instr-2f1ac975f16fdbf6
       status: pending
       discovery_refs:
-      - de-corpus-3393ddac4e2b1bfe7234
       - de-corpus-dec83906f5795f4824de
+      - de-corpus-ffa95c0c9c03160d0c67
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-72-11-2012-05-10
       row_sha256: 0e7597c1b457cdca32b61a52c1c9550aa6c017ba666fec8077fa8d2ec3babe4f
@@ -24151,7 +24151,7 @@ computed:
     - id: de-kg-instr-337d81a4694fca6a
       status: pending
       discovery_refs:
-      - de-corpus-39ccc058d2fd00218b11
+      - de-corpus-6f3eda00e6dfb62c26ed
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
       row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
@@ -24163,7 +24163,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-682153d250410ec8f830
-      - de-corpus-ebf935dc85f336be6a3e
+      - de-corpus-8f1bf892530fb3c7e621
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
@@ -24174,10 +24174,10 @@ computed:
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
+      - de-corpus-1fe7ebc3106c241b84c6
+      - de-corpus-3a6526f67d54b8372d7f
       - de-corpus-461448dd2f8399f809a7
-      - de-corpus-6b3707f2d34a4246bc9f
       - de-corpus-ae7798bcf059f03c5a6d
-      - de-corpus-c6633c70c3a359d64cb0
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
@@ -24188,9 +24188,9 @@ computed:
     - id: de-kg-instr-3815239cc1f2caaf
       status: pending
       discovery_refs:
-      - de-corpus-1d0b5701bb3b5ed0b032
       - de-corpus-1eed741c0ec999b8293d
-      - de-corpus-d872877ba4130c8500cf
+      - de-corpus-32f7f741f64ab8902977
+      - de-corpus-4fa8838e0794b568f2d6
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
       row_sha256: 60050cc85d4effbe0effcd2faf7e0eea390be425f1ce8ce407c7dbabbf21550f
@@ -24248,8 +24248,8 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-164bea938c6a3063f131
+      - de-corpus-272c08aa29f52270c78f
       - de-corpus-6ca53ad3e1fd2762a3be
-      - de-corpus-de611042f178387861d3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-32-15-2017-03-15
       row_sha256: 83e56135a34905a6bf1644c2630162d41a5d953ac7c47031377fab1be97f8128
@@ -24260,9 +24260,9 @@ computed:
     - id: de-kg-instr-3ae0493a66058fb3
       status: pending
       discovery_refs:
-      - de-corpus-10077b85f3e3317e7dc4
       - de-corpus-21573c05ac813801a3e0
-      - de-corpus-ae122ea0fa4b2caa2520
+      - de-corpus-551e3d8454322ff97555
+      - de-corpus-a4d5afed312833dbc877
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
       row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
@@ -24273,10 +24273,10 @@ computed:
     - id: de-kg-instr-3be04eb6d61b596b
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-0c57c9fb8c0f37d506b4
+      - de-corpus-178701d718e3cb38ea53
       - de-corpus-3bb543f1851a0d787977
-      - de-corpus-3d784d51abed6e58b199
       - de-corpus-c1edf1df4fc69c5fbd6c
+      - de-corpus-f4b5eb529cf8127bb224
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
       row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
@@ -24291,8 +24291,8 @@ computed:
     - id: de-kg-instr-3f1f4f2a618a6442
       status: pending
       discovery_refs:
-      - de-corpus-208341f25079067e0f52
-      - de-corpus-e5ee360f0caf97192ffa
+      - de-corpus-8110a508d9afec51e181
+      - de-corpus-d65d979b1e9eb90576ba
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-16-17-2018-01-18
       row_sha256: f14c28debb697176aee417d78758fc369eab2ca53a8bab1bd66a8b7adfa2e7ea
@@ -24305,8 +24305,8 @@ computed:
       discovery_refs:
       - de-corpus-170306142fc9632c0004
       - de-corpus-4da85ff7b2913f67bdbe
+      - de-corpus-580c329817851b74d98e
       - de-corpus-81d6a86fe9a55499b410
-      - de-corpus-86884f098c386211c388
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
       row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
@@ -24333,7 +24333,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-6c1b70664f2e80798d7f
-      - de-corpus-fda3a981199db0758446
+      - de-corpus-fc09dfbbf412855028eb
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-48-11-2013-04-18
       row_sha256: c2facdb93e1393569a3a8921b0f7741d159e8af512682db31ffbb6c1799ed7ba
@@ -24354,10 +24354,10 @@ computed:
     - id: de-kg-instr-514272088fbc14af
       status: pending
       discovery_refs:
+      - de-corpus-52bb4612d9a1e76e2cfe
       - de-corpus-aa9325533b069e99b39a
-      - de-corpus-e3f58d7235d5879a2a35
-      - de-corpus-fb3d46550956235bed6d
-      - de-corpus-fb673a9ec048cbdc2c9c
+      - de-corpus-b8482aaa8aa64dca4b54
+      - de-corpus-d373fefcce3ccc259b3a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-31-15-2017-01-19
       row_sha256: 2fe64b365a513d4ada6c59897c9be6ca58cc33c72cce20401943261d25b0414f
@@ -24368,8 +24368,8 @@ computed:
     - id: de-kg-instr-55b78f1e0b14946b
       status: pending
       discovery_refs:
-      - de-corpus-5aecb3f8846eccbbdb9e
-      - de-corpus-7bc0365fbc1abf2f945a
+      - de-corpus-371c309783518901f2d5
+      - de-corpus-5253b0a0ad725b94c828
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       row_sha256: 11986fea527775345d675f14309099c47ac086cfcc0461ef8dbd728914f331cd
@@ -24380,7 +24380,7 @@ computed:
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
-      - de-corpus-4e519857df376489afdb
+      - de-corpus-25bab03d1a277b8dc8a1
       - de-corpus-94135621c2c7fc51d641
       - de-corpus-94eb31dc34a0c566444a
       - de-corpus-9cb03dcc670d396f6662
@@ -24412,7 +24412,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-4673d88a1bae3344cb29
-      - de-corpus-d281fc6d15025bbcdf44
+      - de-corpus-68abfef7c8d24982e020
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-22-12-2013-08-08
       row_sha256: 4d9aa9a4712d45520b299538f79a6abba122cd477a8dcd21cebf70b81fc7f806
@@ -24423,7 +24423,7 @@ computed:
     - id: de-kg-instr-63ae4bcff4818d3a
       status: pending
       discovery_refs:
-      - de-corpus-0a272f4768b5aa643793
+      - de-corpus-226460336311f7713278
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-68-11-2012-05-24
       row_sha256: 05ad072e8622fbdb85a9a9efd01859374a3fb3f8e5fd20a039f7348a4e733548
@@ -24434,7 +24434,7 @@ computed:
     - id: de-kg-instr-6568b0e3e8e4b33c
       status: pending
       discovery_refs:
-      - de-corpus-02c9c42a137aafa13d68
+      - de-corpus-62dc51c9b7cbfd512132
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-29-09-2012-03-15
       row_sha256: 5e850b9f883b90f6df1080f7c3cfd2decff37c77897e591bec89321de5846dcb
@@ -24445,7 +24445,7 @@ computed:
     - id: de-kg-instr-6571f5d198cf30bd
       status: pending
       discovery_refs:
-      - de-corpus-7fbb5a9e8622358f8c06
+      - de-corpus-1bca258bdba3102dbaa9
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-5
       row_sha256: 73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426
@@ -24479,7 +24479,7 @@ computed:
     - id: de-kg-instr-6cf659dd66fd5e85
       status: pending
       discovery_refs:
-      - de-corpus-7b0e1c563ebf1bcf48a3
+      - de-corpus-a2529365876ae617a375
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-43-20-2021-12-15
       row_sha256: 96d3e126313bd7350745cdcb5adf4b772255adee74137a5a3ec0298f926827b0
@@ -24490,7 +24490,7 @@ computed:
     - id: de-kg-instr-6e0720e53a02234e
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-62426bac3f50a2b0ae6f
+      - de-corpus-18f6a44b5b4c894fbc1a
       identity_kind: corpus_citation
       citation_path: de/statute/wogg
       row_sha256: 0c75816689d2cf1d91917c024d3bb2760ba821c2af162fd347863d5d5b4b5386
@@ -24539,9 +24539,9 @@ computed:
     - id: de-kg-instr-73d798cce838ed41
       status: pending
       discovery_refs:
-      - de-corpus-1cbc7577fc3e3e8e28e7
+      - de-corpus-3b2c7b9b5abe912013b1
+      - de-corpus-7d0435cc3335ee23ce8f
       - de-corpus-887abfa6fcd96f9688f4
-      - de-corpus-c119116bbc2ca39e7373
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-19-2021-08-31
       row_sha256: 8c53948ddcb3fed1150cd1c65454593f7bb9e128364692e069c95185f25632fc
@@ -24552,9 +24552,9 @@ computed:
     - id: de-kg-instr-75c3f434723fb3e9
       status: pending
       discovery_refs:
-      - de-corpus-80b03a1922bc626a1271
-      - de-corpus-c9b943d31e2b0a9bed62
-      - de-corpus-d3bd8baa857af3f6c8fe
+      - de-corpus-1f5ac01ef702228a1dea
+      - de-corpus-5a2117ef6b7a7ee6d833
+      - de-corpus-b29b277d4040a30899e3
       - de-corpus-d89cf799cb8ebc53bd98
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
@@ -24633,7 +24633,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-6d51618dea25df463cf4
-      - de-corpus-d646e6f8028da26fa923
+      - de-corpus-a047bd909d331c4e44d2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-14-2014-09-25
       row_sha256: c0a33ff49e3a46a817e766e5eef78efb484b4b55028fd32f3b596d201e5d4808
@@ -24645,8 +24645,8 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-48b002d52962878d6020
-      - de-corpus-8282919b6c7f38199d81
-      - de-corpus-c7da5d34a03845ff7e89
+      - de-corpus-4f93bf3e9a042ed50fbd
+      - de-corpus-51156c894227c4bf49bc
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-19-17-2018-09-13
       row_sha256: 49758e06d3a304b2659e41a975f3ef12b7adb3ecaa7466a7e498cc1446e3bbae
@@ -24662,7 +24662,7 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-2397f2ff0c5303b88c52
-      - de-corpus-3faab1cb12cf9bec8438
+      - de-corpus-6888a83ab19a44712a4a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       row_sha256: 6121522ba80e3e85463abc2a128f527e144fc0a71820ad1caa08e2f23c854edc
@@ -24685,8 +24685,8 @@ computed:
     - id: de-kg-instr-8a5bf72ed2cf253f
       status: pending
       discovery_refs:
-      - de-corpus-9378aac3b30acadd43a4
-      - de-corpus-c5d8bfddb6813f99a97f
+      - de-corpus-09ea98c51b47485f46be
+      - de-corpus-7c5c66abfddee11224f4
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-27-14-2015-04-15
       row_sha256: 77f8e7ee1e30484a2edf68fef33ed8ec9336c0d098f9be10c856964c586d21e5
@@ -24697,13 +24697,13 @@ computed:
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
-      - de-corpus-1d89d88f6aaf05ecc346
+      - de-corpus-276261a84cf3a57d8882
+      - de-corpus-31e61e88272db75b21bf
+      - de-corpus-3de2dc62ca7b5d5103e8
+      - de-corpus-566cbc94dcc63a98d95d
       - de-corpus-5891e59f49035c505f7f
-      - de-corpus-699fbe5f448aca226078
       - de-corpus-69b44faec773a26d6657
       - de-corpus-6c46669af2192750d874
-      - de-corpus-86bb5ff9e1471f668dcf
-      - de-corpus-fa7abd7e5f1b019adae2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-13-2014-02-27
       row_sha256: b47edc79ca389d12b665bc97c2fe7588657635dc1c678e1dc991af808e6eb594
@@ -24714,8 +24714,8 @@ computed:
     - id: de-kg-instr-9886b8cf5a4c26e8
       status: pending
       discovery_refs:
-      - de-corpus-74a0b8b239d55f688f27
       - de-corpus-9a09c765dac29c788da8
+      - de-corpus-c2e52e2e13e9da6c5b55
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
       row_sha256: eb678a1f9028e8651ba5b84faaf5861f0db9d7b40232d95ce11a4f7aa2f07820
@@ -24741,10 +24741,10 @@ computed:
     - id: de-kg-instr-9a821bfac753742b
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-16c4c6e5eda80ab9de1a
-      - de-corpus-3573713d84d0945ea71f
-      - de-corpus-9a43b6948f43ffd14fa0
-      - de-corpus-d46b38344094719dbf21
+      - de-corpus-045f86ac66a8bb0e5366
+      - de-corpus-09437434940495b70a02
+      - de-corpus-28db1c6c0a5a3d0244ed
+      - de-corpus-88e7b29e3eb9a6782c3e
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
@@ -24759,7 +24759,7 @@ computed:
     - id: de-kg-instr-9dfa8fc6d1681fbb
       status: pending
       discovery_refs:
-      - de-corpus-2b1deb2296591337003a
+      - de-corpus-351c5921e511fb22722d
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-22-2023-10-12
       row_sha256: b379b748838e3b1f183d246659fc0dcfef0aaab0ba3c10fd09d3307dfda39690
@@ -24770,8 +24770,8 @@ computed:
     - id: de-kg-instr-9ea3370bf9f2ad0d
       status: pending
       discovery_refs:
-      - de-corpus-c5d5736233a55b7f1822
-      - de-corpus-db91435e9e18fd49f807
+      - de-corpus-471ca3eaad0d0db47a44
+      - de-corpus-585ed85fef5ed5a7db20
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
       row_sha256: deb8f6e5ae9442e152d801950203bd87e527ac497e7b090a44b57e65920c16d3
@@ -24782,7 +24782,7 @@ computed:
     - id: de-kg-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
-      - de-corpus-37e7adcc7f1833e1d40c
+      - de-corpus-2dfc6ca8af9823cbf702
       - de-corpus-a13f712d405675724300
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
@@ -24794,7 +24794,7 @@ computed:
     - id: de-kg-instr-a365b83505706342
       status: excluded-with-reason
       discovery_refs:
-      - de-corpus-ba21485fd75ad89b02e1
+      - de-corpus-9d3970d1a7a27b46ba4f
       - de-corpus-f61bee0c29ccd5d670fb
       identity_kind: corpus_citation
       citation_path: de/statute/uhvorschg
@@ -24837,8 +24837,8 @@ computed:
     - id: de-kg-instr-ac571daf105e0ae9
       status: pending
       discovery_refs:
-      - de-corpus-9d75705c29a3ff731250
-      - de-corpus-e5ca273c1390f4005159
+      - de-corpus-563526f4d32aba13426b
+      - de-corpus-a30ff1ebb8bf6f81ee6e
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-24-13-2014-04-30
       row_sha256: c23e548ebf6fec3e5b9b9458f0407180429485cc32358298c72c9d0ba49fe162
@@ -24849,7 +24849,7 @@ computed:
     - id: de-kg-instr-ad3045c5a5d2f5bd
       status: classified-with-reason
       discovery_refs:
-      - de-corpus-35cf58fe9bac00087a26
+      - de-corpus-6afaf13787757c0103dd
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-37-21-2022-09-22
       row_sha256: 901f124cbfb533657205536f2e94841be2f92fbb7a3b3acd2bfebeecd59abfd1
@@ -24864,7 +24864,7 @@ computed:
     - id: de-kg-instr-b25507686192c311
       status: pending
       discovery_refs:
-      - de-corpus-467fc3daea2b8afe5e90
+      - de-corpus-8bbb904a7845c7cd0110
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-23-21-2022-09-22
       row_sha256: ec79e7b225a622b7a34caaa3d28b6d903b62ec2fff19419c75b00190b3ce9c31
@@ -24888,7 +24888,7 @@ computed:
     - id: de-kg-instr-b794d203afd4361a
       status: pending
       discovery_refs:
-      - de-corpus-def7ad9057d716028920
+      - de-corpus-a0f22fa16937b8d08185
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-1-20-2021-04-14
       row_sha256: c3c7c3503fd9f943b125544df606482afd28280c66186529fa44ee90f9b3e97a
@@ -24899,7 +24899,7 @@ computed:
     - id: de-kg-instr-b8899970af340fb3
       status: pending
       discovery_refs:
-      - de-corpus-fce1d64190b7179a570f
+      - de-corpus-5a247b18425e99ee9280
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-28-15-2016-04-13
       row_sha256: f4ff7b211cbb6d5f5cfa34f3787086c0c99c3a9e4e5adcfbf8ec2a2442ee073b
@@ -24911,12 +24911,12 @@ computed:
       status: classified-with-reason
       discovery_refs:
       - de-corpus-1b65ac76074a9e4d0fd1
+      - de-corpus-2d468d2aa05d885c6717
       - de-corpus-443ad0c2567894367d0f
       - de-corpus-60d4295a9edb13e2c1c3
       - de-corpus-6f9020d3778b517e3e2a
       - de-corpus-86534602aca6487afa11
       - de-corpus-8bba30603b49eb761e1d
-      - de-corpus-bf6f5d15cdf37cb277f4
       identity_kind: corpus_citation
       citation_path: de/statute/sgb-3
       row_sha256: c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed
@@ -24932,8 +24932,8 @@ computed:
     - id: de-kg-instr-ba4f2fb8eccf8b99
       status: pending
       discovery_refs:
-      - de-corpus-7768900596a0e1cb0f67
-      - de-corpus-f1cf3fb74cda5c200109
+      - de-corpus-0d37532eb747fab30e27
+      - de-corpus-891decac88cc855577d3
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-42-18-2019-02-20
       row_sha256: 27f42198ac73da267a89b42f7769c1653eba758e27d7a10db75c05b710fabf34
@@ -24944,8 +24944,8 @@ computed:
     - id: de-kg-instr-ba577440348ecedd
       status: pending
       discovery_refs:
-      - de-corpus-bdfa86315e26ccedc08a
-      - de-corpus-eb345f0c9e8e21278a97
+      - de-corpus-194540b4f7173740b0fe
+      - de-corpus-4e19821d4d1ef0b26123
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-9-15-2015-09-03
       row_sha256: 2c77390f4158e9947c2eb6c9d25295c0920fca6e9d5594be794021dce68d6d36
@@ -24956,8 +24956,8 @@ computed:
     - id: de-kg-instr-ba85f6a53f1f2f11
       status: pending
       discovery_refs:
-      - de-corpus-4ccef59539b790415186
-      - de-corpus-f5e9afc0869c7ed35510
+      - de-corpus-37eca41a65dce0c1d131
+      - de-corpus-fb4e8fa70f486759fb89
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-26-18-2018-12-11
       row_sha256: 6aa63be38084cb5105ac557fe19ee57314533a78d4e9672a1202933ca962176e
@@ -24969,11 +24969,11 @@ computed:
       status: pending
       discovery_refs:
       - de-corpus-2bf0470f154a78fd2a70
-      - de-corpus-4996b91eb21f103ca1ee
-      - de-corpus-4c662d10afd6c8a759ea
       - de-corpus-6ecae1b1cb1d2867a6e9
+      - de-corpus-74152776761c48e810eb
+      - de-corpus-8cf5cadf0d4c98644544
+      - de-corpus-8f230fbe6c5ed690124c
       - de-corpus-d0478f88a64d7cf4bc7c
-      - de-corpus-d660ed343bbc8a5870b2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-xi-r-42-11-2013-12-11
       row_sha256: 3d35d38cdcc2ee765ac67ffe0ac9c2ba362215108862383f73fb161e4c9fa102
@@ -24984,8 +24984,8 @@ computed:
     - id: de-kg-instr-bf9c57bd5c2a3d58
       status: pending
       discovery_refs:
+      - de-corpus-4092aa86586e608e9be1
       - de-corpus-647601ad2ce6391ac52e
-      - de-corpus-9c34da15e7b1f2cbb3d1
       - de-corpus-f84821bbe73a349bbbe1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
@@ -24997,7 +24997,7 @@ computed:
     - id: de-kg-instr-c2c05925823952b6
       status: pending
       discovery_refs:
-      - de-corpus-01e85aac96e57549cd8f
+      - de-corpus-457837bc6d7e82107003
       - de-corpus-786be9224348f88b6a31
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-24-12-2013-04-11
@@ -25043,7 +25043,7 @@ computed:
     - id: de-kg-instr-c80165befa9ab1c1
       status: pending
       discovery_refs:
-      - de-corpus-38cee099da9e8c265626
+      - de-corpus-052476229d91d4583cf1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-27-15-2016-09-08
       row_sha256: b919322f320c56d487e8b24c816b2146d3e0b7e68e98bc0c4da48527b55096e7
@@ -25054,8 +25054,8 @@ computed:
     - id: de-kg-instr-ccf56f3091f029e7
       status: pending
       discovery_refs:
-      - de-corpus-2dfb8e8e7b9972130173
-      - de-corpus-dac2d2088d02e0ebb9bb
+      - de-corpus-f4ef4518a3b9da361eb3
+      - de-corpus-f62eef520e7245326f22
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-v-r-9-12-2013-09-19
       row_sha256: 270f49d629233804f6d619916dcf9265aa0253aade426ddf3f32550444fbac2d
@@ -25081,8 +25081,8 @@ computed:
     - id: de-kg-instr-d0ffa65a02a956b9
       status: classified-with-reason
       discovery_refs:
+      - de-corpus-2346b5d653dd91ad16ef
       - de-corpus-67a85788481346c5eb32
-      - de-corpus-a45d95d8c19fc47aa094
       identity_kind: corpus_citation
       citation_path: de/guidance/cjeu-c-411-20
       row_sha256: f4600965e8faeb7a2a3ead975193b78acd7f6a10272a8b89bcab96217c4e5762
@@ -25175,7 +25175,7 @@ computed:
     - id: de-kg-instr-e832fabf332bce62
       status: pending
       discovery_refs:
-      - de-corpus-cd184adb3dbc7832b9a5
+      - de-corpus-0fc08e64477e9859b7a9
       - de-corpus-dc178935f4d4ae6081e7
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-21-12-2014-05-08
@@ -25187,9 +25187,9 @@ computed:
     - id: de-kg-instr-e92627717e6aac58
       status: pending
       discovery_refs:
-      - de-corpus-0ef2587eb508bf84b38d
-      - de-corpus-59876532c3c6510b7f9e
+      - de-corpus-d67857af8cf31cb144d5
       - de-corpus-d8126b4c20a7244a1f57
+      - de-corpus-f88c13ced838e0fe748a
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-7-21-2023-04-20
       row_sha256: 71ce1830fe31f10601f6f6d467cc1f5135c8b962298006c9633e169deeb92eed
@@ -25222,8 +25222,8 @@ computed:
     - id: de-kg-instr-f7545c420f92465c
       status: pending
       discovery_refs:
-      - de-corpus-2aac34fca294aefa950e
-      - de-corpus-f58ed09ede3536ecc1a5
+      - de-corpus-8b5289f0247ef6ad90f2
+      - de-corpus-d6aab01062574b46488b
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-38-14-2015-06-23
       row_sha256: 62dee8eb4963e72aab68e1db4ce0ed588b038a79db9a78ef8205d98614072e7f
@@ -25234,8 +25234,8 @@ computed:
     - id: de-kg-instr-f8172fd80d730a38
       status: pending
       discovery_refs:
-      - de-corpus-01e05aa7f5dd71f7553e
-      - de-corpus-6509ac22ba7e51dad5f1
+      - de-corpus-415805f11b69f0db4a20
+      - de-corpus-b8c3b167675359b792d1
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-48-20-2021-12-15
       row_sha256: f8f37b6d90e74afe818c88512014814610f4b9182417df6846d26bd39e5216e0
@@ -25246,7 +25246,7 @@ computed:
     - id: de-kg-instr-f87f215f5ca7e7eb
       status: pending
       discovery_refs:
-      - de-corpus-356c30cdda0ef255178d
+      - de-corpus-3f68bca82ed9109af0b2
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-41-13-2014-05-08
       row_sha256: 5afb226db1b4e7c44b0071cd26b3cc1a461b3545e2e445dd68969207645163f0
@@ -25257,8 +25257,8 @@ computed:
     - id: de-kg-instr-f99d3dc89d577c15
       status: pending
       discovery_refs:
-      - de-corpus-2033174a1a99d1bb31d3
-      - de-corpus-970989b67ec7f3ee4ac1
+      - de-corpus-23ce9a65886e02630acc
+      - de-corpus-2f7a9a883179090f0c06
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-17-18-2019-03-21
       row_sha256: f747bb93a2e6dabde8882920f09db76da4bf4f65211ea14befbb123314a514af
@@ -25269,9 +25269,9 @@ computed:
     - id: de-kg-instr-fa626aa971b4e396
       status: pending
       discovery_refs:
-      - de-corpus-49de9a7681fedba411e8
-      - de-corpus-973b99d9c685cd5d4b54
+      - de-corpus-154c7b4436e7570445ce
       - de-corpus-add9b4ac0708e9b85f62
+      - de-corpus-f36e48b35aaf9a5e2131
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-vi-r-10-14-2015-06-18
       row_sha256: d284b59679096903ad1fd5e7492a56961908ff925cd3ebff7d1e335e59db733c
@@ -25284,7 +25284,7 @@ computed:
       discovery_refs:
       - de-corpus-0bdbb79c60ae8f06b9ee
       - de-corpus-50e12b4a0eb596787bad
-      - de-corpus-5fdb3dfc31778b016404
+      - de-corpus-dd83b877d0e5e812c564
       identity_kind: corpus_citation
       citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
       row_sha256: 8e3398004ac3c18e14b2a7cf8b553ae565b808f1c60e3c010da8f67997ab0cf8

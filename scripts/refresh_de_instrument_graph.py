@@ -384,6 +384,31 @@ def _alias_pattern(alias: str) -> str:
     return rf"(?<![\w]){re.escape(alias)}(?![\w])"
 
 
+def _explicit_section_reference(body: str, section: str, alias: str) -> re.Match[str] | None:
+    """Require citation syntax between a section number and its act title.
+
+    Proximity alone joins unrelated clauses, for example SGB V § 226(6)'s
+    own § 5 reference and a later mention of the Bundesfreiwilligendienstgesetz.
+    This resolves exact section references, not every mention of an act.
+    """
+    subdivision = (
+        r"(?:(?:Absatz|Absätze|Abs\.|Satz|Sätze|S\.|Nummer|Nummern|Nr\.|"
+        r"Buchstabe|Buchstaben|Buchst\.|Halbsatz|Alternative)\s*"
+        r"[0-9]+[a-z]?|(?:Buchstabe|Buchstaben|Buchst\.)\s*[a-z])"
+    )
+    citation_tail = rf"(?:\s+{subdivision})*"
+    title = _alias_pattern(alias)
+    number = rf"§{{1,2}}\s*{re.escape(section)}\b"
+    before = re.compile(
+        rf"{number}{citation_tail}\s*(?:(?:des|der)\s+)?{title}",
+        flags=re.IGNORECASE,
+    )
+    after = re.compile(
+        rf"{title}\s*[,:(]?\s*{number}", flags=re.IGNORECASE,
+    )
+    return before.search(body) or after.search(body)
+
+
 _RAW_REFERENCE_RULES: tuple[tuple[str, str], ...] = (
     ("abgabenordnung", r"\bAbgabenordnung\b"),
     ("ewr-abkommen", r"\b(?:Abkommen über den Europäischen Wirtschaftsraum|EWR-Abkommen)\b"),
@@ -1284,7 +1309,7 @@ def _discover_corpus_program(
                     },
                 )
 
-    # Every pinned row participates in the two inbound mechanisms. Body matching
+    # Every pinned row participates in the inbound mechanisms. Body matching
     # is targeted to explicit act+section citations to configured roots; it is
     # not the future comprehensive citation scan tracked in corpus#611.
     exact_targets = sorted(scope | declared)
@@ -1321,17 +1346,9 @@ def _discover_corpus_program(
             if not target_row or not target_document or target == target_document:
                 continue
             section = target.rsplit("/", 1)[-1]
+            unresolved_match = None
             for alias in aliases[target_document]:
-                alias_re = _alias_pattern(alias)
-                before = re.compile(
-                    rf"§{{1,2}}\s*{re.escape(section)}\b[^§\n]{{0,140}}{alias_re}",
-                    flags=re.IGNORECASE,
-                )
-                after = re.compile(
-                    rf"{alias_re}[^§\n]{{0,140}}§{{1,2}}\s*{re.escape(section)}\b",
-                    flags=re.IGNORECASE,
-                )
-                reference_match = before.search(body) or after.search(body)
+                reference_match = _explicit_section_reference(body, section, alias)
                 if reference_match is not None:
                     source_candidate = corpus.document_for_path.get(row.path, row.path)
                     if source_candidate not in excluded:
@@ -1348,8 +1365,35 @@ def _discover_corpus_program(
                         )
                     break
                 else:
+                    # Preserve recall for citation forms not yet understood by
+                    # the exact matcher. Proximity is discovery evidence only:
+                    # it must not assert that this section belongs to this act.
+                    alias_re = _alias_pattern(alias)
+                    proximity = re.search(
+                        rf"§{{1,2}}\s*{re.escape(section)}\b[^§\n]{{0,140}}{alias_re}"
+                        rf"|{alias_re}[^§\n]{{0,140}}§{{1,2}}\s*{re.escape(section)}\b",
+                        body,
+                        flags=re.IGNORECASE,
+                    )
+                    if proximity is not None and unresolved_match is None:
+                        unresolved_match = proximity
                     continue
-                break
+            else:
+                if unresolved_match is not None:
+                    source_candidate = corpus.document_for_path.get(row.path, row.path)
+                    if source_candidate not in excluded:
+                        add_path(
+                            source_candidate,
+                            {
+                                "mechanism": "unresolved_cross_reference_proximity",
+                                "source_citation_path": row.path,
+                                "source_body_sha256": row.body_sha256,
+                                "source_row_sha256": row.raw_sha256,
+                                "matched_text": unresolved_match.group(0),
+                                "candidate_target_citation_path": target,
+                                "resolution": "unresolved_act_section_association",
+                            },
+                        )
     return candidates
 
 
@@ -1525,6 +1569,16 @@ def _render_candidates(program: str, candidates: Mapping[str, Candidate]) -> lis
     return rendered
 
 
+def _reused_subject_channel(
+    snapshot_path: str | Path, source_path: Path, query_set_path: Path,
+) -> dict[str, Any]:
+    prior_snapshot = json.loads(Path(snapshot_path).read_bytes())
+    # Preserve the original attempt timestamps, successes and failures. A
+    # refresh of corpus evidence is not a fresh network observation.
+    validate_snapshot(prior_snapshot, source_path=source_path, query_set_path=query_set_path)
+    return copy.deepcopy(prior_snapshot["channels"]["subject_matter_search"])
+
+
 def build_snapshot(
     query_set_path: str | Path,
     source_path: str | Path,
@@ -1532,12 +1586,17 @@ def build_snapshot(
     attempt_network: bool = True,
     *,
     timeout: float = DEFAULT_TIMEOUT,
+    subject_snapshot_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build one DE discovery snapshot from pinned corpus blobs and URL attempts."""
     query_path = Path(query_set_path).resolve()
     source_file = Path(source_path).resolve()
     source, source_raw = _read_json(source_file, SOURCE_SCHEMA)
     query_set, query_raw = _read_json(query_path, QUERY_SCHEMA)
+    reused_subject = (
+        _reused_subject_channel(subject_snapshot_path, source_file, query_path)
+        if subject_snapshot_path is not None else None
+    )
     if set(source.get("programs", {})) != set(PROGRAMS):
         raise CaptureError("source.json program set is not the preregistered DE candidate set")
     root = _resolve_corpus_root(corpus_root)
@@ -1571,7 +1630,10 @@ def build_snapshot(
             "evidence": sorted(evidence.values(), key=lambda row: row["id"]),
         }
     )
-    subject_channel = _subject_channel(query_set, attempt_network, timeout, captured_at)
+    if reused_subject is not None:
+        subject_channel = reused_subject
+    else:
+        subject_channel = _subject_channel(query_set, attempt_network, timeout, captured_at)
     query_by_id = {row["id"]: row for row in query_set["queries"]}
     for program in PROGRAMS:
         _merge_subject_candidates(
@@ -1849,6 +1911,10 @@ def main(argv: list[str] | None = None) -> int:
         help="validate committed snapshot bytes without corpus or network access",
     )
     parser.add_argument("--offline", action="store_true", help="capture explicit unretrieved attempts without network")
+    parser.add_argument(
+        "--subject-snapshot", type=Path,
+        help="reuse original subject-channel receipts from a validated snapshot with identical source and query bindings",
+    )
     parser.add_argument("--diff", action="store_true", help="capture, show semantic drift, and write nothing")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--query-set", type=Path, default=DEFAULT_QUERY_SET)
@@ -1868,12 +1934,15 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.timeout <= 0:
             raise CaptureError("--timeout must be positive")
+        if args.offline and args.subject_snapshot is not None:
+            raise CaptureError("--offline and --subject-snapshot are mutually exclusive")
         snapshot = build_snapshot(
             args.query_set,
             args.source,
             args.corpus_root,
             attempt_network=not args.offline,
             timeout=args.timeout,
+            subject_snapshot_path=args.subject_snapshot,
         )
         if args.diff:
             if not args.output.exists():
