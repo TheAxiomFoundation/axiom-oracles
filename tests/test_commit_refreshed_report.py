@@ -398,7 +398,7 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     # every artifact while keeping the honest certified=no.
     assert certificate["blockers"] == [
         'closed: instrument frontier incomplete — 45 of 465 subordinate/bearing instruments pending disposition (oracles#491)',
-        'closed: dependency closure open — 104 open dependencies (4 law-derived inputs, 4 unclassified inputs, 96 bearing instruments) (CERTIFIED.md v3)',
+        'closed: dependency closure open — 102 open dependencies (8 law-derived inputs, 0 unclassified inputs, 94 bearing instruments) (CERTIFIED.md v3)',
     ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"

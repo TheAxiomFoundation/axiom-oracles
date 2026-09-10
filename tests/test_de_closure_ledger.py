@@ -66,7 +66,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 465, 4, 1, 0, 0),
+    "de/kindergeld": (18, 465, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -487,8 +487,20 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
 
     boundary = document["computed"]["boundary_frontier"]
     assert boundary["input_count"] == len(leaves)
-    assert boundary["pending_count"] == len(boundary["pending"]) == len(leaves)
-    assert boundary["complete"] is False
+    assert boundary["pending_count"] == len(boundary["pending"])
+    if program == "de/kindergeld":
+        # The four source-typed law-derived leaves cannot be classified in the
+        # ledger and stay pending; the four module inputs carry committed
+        # law_derived classifications and remain open dependencies below.
+        assert set(boundary["pending"]) == KINDERGELD_LAW_DERIVED
+        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program]
+        assert len(dependency_inputs) == len(leaves)
+        # Every leaf is typed, so the boundary is complete; the eight
+        # law-derived leaves keep dependency closure (below) open.
+        assert boundary["complete"] is True
+    else:
+        assert boundary["pending_count"] == len(leaves)
+        assert boundary["complete"] is False
 
     dependency = document["computed"]["dependency_closure"]
     for key in (
