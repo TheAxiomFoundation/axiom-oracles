@@ -16,6 +16,16 @@
   it reads, not the whole certificate file — the certificate embeds the
   ledger's own SHA-256 as closure evidence, so whole-file binding had no
   fixpoint. Regenerating either side now converges in one pass.
+- Ledger consumes committed decisions: `committed_decisions.provisions`
+  (bound by citation_path + spine body_sha256), `instrument_dispositions`
+  (bound by candidate id + body_sha256 for corpus rows, with the v3
+  bears_on_computed_surface rule), and `leaf_classifications` (bound by
+  frontier input; source-typed law_derived leaves cannot be demoted) overlay
+  the generated facts in `computed`; `closed` computes true only when every
+  row is dispositioned and the dependency closure is empty. Committed
+  ledgers unchanged (empty decisions reproduce the all-pending join).
+  Kindergeld discovery reads can now be recorded row by row
+  (docs/de-kindergeld-certification.md, "Recording dispositions").
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

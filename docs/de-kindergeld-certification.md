@@ -132,6 +132,42 @@ status computes `computed_invalid` with a blocker naming the asset and its
 expected hash — never a silent pass. Producing a new receipt (`--run`) still
 requires the producing target and its archive.
 
+## Recording dispositions in the ledger
+
+Discovery reads land as rows under `committed_decisions` in
+`conformance/closure/de-kindergeld.yaml`; `scripts/de_closure_ledger.py
+--check --artifact all` validates every row against the generated fact it
+binds and rederives `computed` from the join. Nothing a decision says can
+create a fact; a row that binds nothing, binds the wrong text, or decides a
+fact twice fails the check. The three sections:
+
+- `provisions` — one row per spine citation: `citation_path`, the spine
+  row's `body_sha256` (text binding; a corpus refresh that changes the text
+  retires the decision), `status` ∈ `encoded` / `partially-encoded` /
+  `classified-with-reason` / `excluded-with-reason`, `classification` +
+  `reason` for classified/excluded, and `encoded_by` naming a captured
+  RuleSpec module bound to that citation for encoded/partially-encoded
+  (`partially-encoded` also needs a `reason` saying what remains).
+- `instrument_dispositions` — one row per candidate `id` from the instrument
+  graph (`de-kg-instr-*`): `status` ∈ `encoded` / `classified-with-reason` /
+  `excluded-with-reason`, `classification`, `reason`, the candidate's
+  `body_sha256` when it is a captured corpus row, and — for classified or
+  excluded — `bears_on_computed_surface: true|false`. Per CERTIFIED.md v3 a
+  bearing instrument classified around stays an open dependency; only
+  `encoded` (with `encoded_by`) removes it.
+- `leaf_classifications` — one row per frontier `input` the ledger lists as
+  `unclassified`: `leaf_kind` ∈ `world_fact` / `law_derived`, `reason`, and
+  for `law_derived` the `defining_citation_path`. Leaves already typed
+  `law_derived` by `closure/de/source.json` cannot be reclassified here;
+  they leave the frontier only when a RuleSpec module encodes them.
+
+`closed` computes true only when no spine row, candidate, or leaf is
+pending, every non-encoded row carries a reason, and the dependency closure
+has zero law-derived leaves, zero unclassified leaves, and zero bearing
+instruments. The central gate (`scripts/closure_gate.py`) re-derives that
+verdict from the committed block; a hand-edited `closed: true` fails the
+producer's exact rederivation before it reaches certify.
+
 ## Closing worklist (seed enumeration — discovery incomplete)
 
 Stable IDs; each row is a node of the open frontier, not an engineering

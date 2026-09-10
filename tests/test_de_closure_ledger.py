@@ -827,3 +827,349 @@ def test_work_inventory_binds_certificate_premises_not_the_ledger_derived_verdic
         "conformant"
     ]["value"]
     assert basis_for(mutated_premise)["certificate_premises_sha256"] != baseline
+
+
+# ---------------------------------------------------------------------------
+# committed_decisions: text-bound dispositions overlay the generated facts.
+# ---------------------------------------------------------------------------
+
+
+def _full_dispositions(module, document: dict) -> dict:
+    """Every spine row excluded, every candidate excluded as non-bearing, every
+    unclassified leaf typed world_fact — the cheapest complete overlay."""
+
+    facts = document["generated_facts"]
+    provisions = [
+        {
+            "citation_path": row["citation_path"],
+            "body_sha256": row["body_sha256"],
+            "status": "excluded-with-reason",
+            "classification": "test_only_exclusion",
+            "reason": f"synthetic exclusion of {row['citation_path']} for the contract test",
+        }
+        for row in facts["provision_spine"]
+    ]
+    dispositions = []
+    for row in facts["instrument_graph"]["candidates"]:
+        entry = {
+            "id": row["id"],
+            "status": "excluded-with-reason",
+            "classification": "test_only_exclusion",
+            "reason": f"synthetic exclusion of {row['id']}",
+            "bears_on_computed_surface": False,
+        }
+        if isinstance(row.get("body_sha256"), str):
+            entry["body_sha256"] = row["body_sha256"]
+        dispositions.append(entry)
+    leaves = [
+        {
+            "input": row["input"],
+            "leaf_kind": "world_fact",
+            "reason": f"synthetic world-fact typing of {row['input']}",
+        }
+        for row in facts["leaf_frontier"]
+        if row["leaf_kind"] == "unclassified"
+    ]
+    return {
+        "provisions": provisions,
+        "instrument_dispositions": dispositions,
+        "leaf_classifications": leaves,
+    }
+
+
+def _with_decisions(module, program: str, decisions: dict) -> dict:
+    document = copy.deepcopy(_document(module, Path(module.ARTIFACT_PATHS[program])))
+    facts = document["generated_facts"]
+    errors: list[str] = []
+    canonical = module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert errors == [], errors
+    document["committed_decisions"] = canonical
+    document["computed"] = module._computed(
+        facts["provision_spine"],
+        facts["leaf_frontier"],
+        facts["instrument_graph"],
+        facts["measurement_basis"],
+        canonical,
+    )
+    return document
+
+
+def test_empty_decisions_reproduce_the_committed_all_pending_join() -> None:
+    module = _load_script()
+    for program in PROGRAMS:
+        document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+        assert document["committed_decisions"] == module._empty_decisions()
+        facts = document["generated_facts"]
+        assert (
+            module._computed(
+                facts["provision_spine"],
+                facts["leaf_frontier"],
+                facts["instrument_graph"],
+                facts["measurement_basis"],
+            )
+            == document["computed"]
+        )
+
+
+def test_full_dispositions_close_a_ledger_with_no_law_derived_leaves() -> None:
+    """rv-employee-contribution has no source-typed law-derived leaves, so a
+    complete, non-bearing overlay closes it; kindergeld keeps its four
+    law-derived leaves open with the same overlay."""
+
+    module = _load_script()
+    rv = _with_decisions(
+        module,
+        "de/rv-employee-contribution",
+        _full_dispositions(
+            module, _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+        ),
+    )
+    summary = module.validate_artifact(rv)
+    computed = rv["computed"]
+    assert computed["pending"] == []
+    assert computed["provision_counts"]["excluded-with-reason"] == computed["provision_counts"]["total"]
+    assert computed["instrument_frontier"]["complete"] is True
+    assert computed["instrument_frontier"]["pending"] == []
+    assert computed["boundary_frontier"]["complete"] is True
+    assert computed["dependency_closure"] == {
+        "law_derived_inputs": [],
+        "law_derived_input_count": 0,
+        "unclassified_inputs": [],
+        "unclassified_input_count": 0,
+        "instruments_bearing_on_computed": [],
+        "instruments_bearing_on_computed_count": 0,
+        "open_dependency_count": 0,
+        "closed": True,
+    }
+    assert computed["closed"] is True
+    assert summary.closed is True and summary.open_dependencies == 0
+
+    kg = _with_decisions(
+        module,
+        "de/kindergeld",
+        _full_dispositions(module, _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))),
+    )
+    summary = module.validate_artifact(kg)
+    assert kg["computed"]["instrument_frontier"]["complete"] is True
+    assert kg["computed"]["boundary_frontier"]["complete"] is True
+    assert kg["computed"]["dependency_closure"]["open_dependency_count"] == 4
+    assert kg["computed"]["dependency_closure"]["law_derived_inputs"] == [
+        "claimant_entitlement",
+        "qualifying_child_count",
+        "recipient_priority",
+        "substitute_child_benefit_exclusion",
+    ]
+    assert kg["computed"]["closed"] is False
+    assert summary.closed is False and summary.open_dependencies == 4
+
+
+def test_closed_ledger_passes_the_central_gate_through_certify(tmp_path, monkeypatch) -> None:
+    module = _load_script()
+    rv = _with_decisions(
+        module,
+        "de/rv-employee-contribution",
+        _full_dispositions(
+            module, _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+        ),
+    )
+    artifact = tmp_path / "de-rv-employee-contribution.yaml"
+    artifact.write_text(module.serialize(rv))
+    certify_spec = importlib.util.spec_from_file_location(
+        "certify_for_ledger_test", REPO_ROOT / "scripts" / "certify.py"
+    )
+    certify = importlib.util.module_from_spec(certify_spec)
+    sys.modules[certify_spec.name] = certify
+    certify_spec.loader.exec_module(certify)
+    real_path = certify._repo_artifact_path
+    monkeypatch.setattr(
+        certify,
+        "_repo_artifact_path",
+        lambda relative, label: (
+            artifact if str(relative).endswith("de-rv-employee-contribution.yaml") else real_path(relative, label=label)
+        ),
+    )
+    verdict = certify._producer_closed_verdict(
+        "de/rv-employee-contribution",
+        certify.PROGRAMS["de/rv-employee-contribution"],
+        [],
+    )
+    assert verdict["value"] is True
+    assert verdict["status"] == "computed_closed"
+    assert verdict["blockers"] == []
+    assert verdict["instrument_frontier"]["complete"] is True
+    assert verdict["dependency_closure"]["closed"] is True
+
+
+def test_bearing_instrument_classified_around_stays_an_open_dependency() -> None:
+    module = _load_script()
+    base = _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+    decisions = _full_dispositions(module, base)
+    decisions["instrument_dispositions"][0]["bears_on_computed_surface"] = True
+    decisions["instrument_dispositions"][0]["status"] = "classified-with-reason"
+    document = _with_decisions(module, "de/rv-employee-contribution", decisions)
+    computed = document["computed"]
+    assert computed["instrument_frontier"]["complete"] is True
+    assert computed["dependency_closure"]["instruments_bearing_on_computed"] == [
+        decisions["instrument_dispositions"][0]["id"]
+    ]
+    assert computed["dependency_closure"]["open_dependency_count"] == 1
+    assert computed["closed"] is False
+    assert module.validate_artifact(document).closed is False
+
+
+def test_law_derived_leaf_classification_stays_open_until_encoded() -> None:
+    module = _load_script()
+    base = _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+    decisions = _full_dispositions(module, base)
+    decisions["leaf_classifications"][0].update(
+        {"leaf_kind": "law_derived", "defining_citation_path": "de/statute/sgb-6/168"}
+    )
+    document = _with_decisions(module, "de/rv-employee-contribution", decisions)
+    dependency = document["computed"]["dependency_closure"]
+    assert dependency["law_derived_inputs"] == [decisions["leaf_classifications"][0]["input"]]
+    assert dependency["unclassified_inputs"] == []
+    assert document["computed"]["boundary_frontier"]["complete"] is True
+    assert document["computed"]["closed"] is False
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (
+            lambda d: d["provisions"][0].__setitem__("citation_path", "de/statute/estg/999"),
+            "not in the generated spine",
+        ),
+        (
+            lambda d: d["provisions"][0].__setitem__("body_sha256", "0" * 64),
+            "does not bind the spine row's provision text",
+        ),
+        (
+            lambda d: d["provisions"].append(copy.deepcopy(d["provisions"][0])),
+            "duplicate provision decision",
+        ),
+        (
+            lambda d: d["provisions"][0].update({"status": "encoded", "encoded_by": "de:statutes/nothing"}),
+            "encoded_by must name a captured RuleSpec module",
+        ),
+        (
+            lambda d: d["provisions"][0].__setitem__("reason", "  "),
+            "reason must be non-empty",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].__setitem__("id", "de-kg-instr-999"),
+            "not a generated instrument candidate",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].pop("bears_on_computed_surface"),
+            "bears_on_computed_surface must be true or false",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].__setitem__("status", "pending"),
+            "status must be one of",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("input", "not_a_leaf"),
+            "not a generated frontier leaf",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("leaf_kind", "encoded"),
+            "leaf_kind must be one of",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("leaf_kind", "law_derived"),
+            "defining_citation_path must name the DE provision",
+        ),
+        (
+            lambda d: d.__setitem__("extra", []),
+            "unknown sections",
+        ),
+    ],
+)
+def test_decision_binding_mutants_are_rejected(mutation, message: str) -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    mutation(decisions)
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any(message in error for error in errors), errors
+
+
+def test_corpus_bound_instrument_requires_its_body_hash() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    corpus_row = next(
+        row for row in decisions["instrument_dispositions"] if "body_sha256" in row
+    )
+    corpus_row["body_sha256"] = "1" * 64
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any("does not bind the captured instrument text" in e for e in errors), errors
+
+
+def test_source_typed_law_derived_leaf_cannot_be_reclassified() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    decisions["leaf_classifications"].append(
+        {"input": "claimant_entitlement", "leaf_kind": "world_fact", "reason": "forged demotion"}
+    )
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any("cannot be reclassified in the ledger" in e for e in errors), errors
+
+
+def test_non_canonical_or_forged_computed_with_decisions_is_rejected() -> None:
+    module = _load_script()
+    program = "de/rv-employee-contribution"
+    base = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    document = _with_decisions(module, program, _full_dispositions(module, base))
+    assert module.validate_artifact(document).closed is True
+
+    reordered = copy.deepcopy(document)
+    reordered["committed_decisions"]["provisions"].reverse()
+    with pytest.raises(module.ClosureLedgerError, match="not canonical"):
+        module.validate_artifact(reordered)
+
+    stale = copy.deepcopy(document)
+    stale["computed"] = copy.deepcopy(base["computed"])
+    with pytest.raises(module.ClosureLedgerError, match="does not equal the pure derivation"):
+        module.validate_artifact(stale)
+
+    # A committed decision that binds nothing cannot survive regeneration.
+    broken = copy.deepcopy(document)
+    broken["committed_decisions"]["provisions"][0]["body_sha256"] = "2" * 64
+    with pytest.raises(module.ClosureLedgerError, match="does not bind"):
+        module.validate_artifact(broken)
