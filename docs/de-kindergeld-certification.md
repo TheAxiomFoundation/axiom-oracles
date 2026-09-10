@@ -300,6 +300,64 @@ them with receipted bytes.
 Result: frontier 5 of 465 pending; 126 open dependencies (8 law-derived
 inputs, 0 unclassified inputs, 118 bearing instruments).
 
+## Corpus repin to the kindergeld-civil release (2026-09-08)
+
+`closure/de/source.json` now pins the signed corpus release
+`de-rulespec-2026-09-08-kindergeld-civil` (axiom-corpus commit
+`15402878eed59a0ab56e7428fe6caa052b5c098a`, content sha
+`3a9fd00b…`, 17 scopes, 7,637 rows). The two July scopes are byte-identical
+in the new release, so every spine row, every DA-KG heading and every
+existing disposition kept its binding; the review pin in
+`scripts/de_closure.py` moved with the source. The release object is read
+from the corpus checkout's `releases/<name>/<content_sha>.json` cache,
+fetched from the public mirror
+(`https://pub-a8952f8657fc49fda358146ac001366c.r2.dev/releases/…`) and
+verified against its content hash before use.
+
+What the new scopes changed in the Kindergeld frontier:
+
+- `scripts/refresh_de_instrument_graph.py` now pairs each provisions file
+  with the inventory of its own scope (it used to keep one inventory per
+  document class), so a multi-scope release captures correctly.
+- The unresolved "Abgabenordnung" reference resolved to the captured act
+  row `de/statute/ao-1977` (its §§ 8, 9, 139a, 139b are captured too); the
+  row is dispositioned as a bearing entitlement condition in place of the
+  retired unresolved row.
+- Four inbound citations of the spine entered as candidates: the
+  Einkommensteuer-Handbuch 2024 pages for §§ 32 and 33a, the
+  Lohnsteuer-Handbuch 2023 page for § 9 (all bearing guidance, the
+  channel-discovered identities of pages the supplemental rows already
+  bind), and the CJEU judgment C-411/20 (bearing: its operative part
+  disapplies § 62 Abs. 1a Sätze 1–2 for economically inactive EU citizens
+  in the first three months).
+- The 2026 amending act "Art. 3 G v. 26.5.2026 I Nr. 156" is captured
+  (Altersvorsorgereformgesetz) and excluded: it amends §§ 82 ff. EStG and
+  other acts, never §§ 62–78.
+- The 13 supplementals decided on page captures are rebound to the corpus
+  rows of the same texts (`text_source` names the rows; multi-row bindings
+  hash the joined body hashes).
+- The class "bilateral social-security agreements" is now enumerated by
+  the corpus scope `2026-09-08-de-kindergeld-bilateral`: the 22 DVKA
+  reprints (SVA, Schlussprotokoll and Durchführungsvereinbarung for Bosnia
+  and Herzegovina, Kosovo, Morocco, Montenegro, Serbia, Türkiye and
+  Tunisia, plus Tunisia's Zusatzprotokoll) and ARB 3/80 are enrolled as
+  `de-kg-suppl-018`–`040`, pending until read. The class row itself stays
+  pending until every member is decided.
+- AufenthG, FreizügG/EU, SGB VI § 270 (old), SGB VII § 217 (old), the EEA
+  Agreement, BGB and the Einigungsvertrag are captured but the citation
+  scan still records them as unresolved references or does not reach them;
+  their existing dispositions stand and can be rebound once the resolver
+  recognises the inflected act names.
+
+The executable contract (`conformance/executable/de-kindergeld-manifest.json`)
+still binds the July release: the signed § 66 module's source hash is the
+same row in both releases, and the contract is re-attested only by the
+signing lane.
+
+Result: spine 5 pending of 18; frontier 27 of 492 pending (4 classes and
+23 enrolled members); 130 open dependencies (8 law-derived inputs, 0
+unclassified inputs, 122 bearing instruments).
+
 ## Reads log
 
 - 2026-09-07 — DA-KG 2025 Kapitel O (Organisation), 27 headings: 26

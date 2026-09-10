@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f
+    sha256: b89af9957d62a6e3fa0302fd71c67dfe5677a40012efd72a3b9aa59bf2ad9bae
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6f064ee6081f16440dc706ae09ac60652bb67570
-    release: de-rulespec-2026-07-21
-    release_content_sha256: b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574
+    commit: 15402878eed59a0ab56e7428fe6caa052b5c098a
+    release: de-rulespec-2026-09-08-kindergeld-civil
+    release_content_sha256: 3a9fd00b3e189d9158e221b45251b1e30b4ee29d33c68ede0d1eb974206cce35
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -40,12 +40,57 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl
+      sha256: 80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
+      sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl
+      sha256: 3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14
+      row_count: 16
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
+      sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
+      sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl
+      sha256: 29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl
+      sha256: f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e
+      row_count: 44
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97
+      row_count: 9
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl
+      sha256: 5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl
+      sha256: 5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
+      sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
+      sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl
+      sha256: 3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68
+      row_count: 3136
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
+      row_count: 854
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
+      sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -308,15 +353,15 @@ generated_facts:
     imports: captured per module; selected DE modules currently declare none
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
+    snapshot_sha256: 47f0a28512fecd92b696a55b09358275277e8af174f9e0a5a93caf3049a131fe
     channel_receipts:
-      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+      corpus_release: 61ef40ccb8d839f459f78ce23cdd5cc80a87b19a20b7eb325f03c35dceeda31b
+      subject_matter_search: 61ac38197113b57bdc3c87d39e5910765b0e0a6db0745c7c6f917ca5585516b8
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 15
       unretrieved: 4
-    candidate_count: 21
+    candidate_count: 23
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
@@ -399,13 +444,6 @@ generated_facts:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
-    - id: de-uhv-instr-4e1f544ea66cccdf
-      status: pending
-      discovery_refs:
-      - de-corpus-3472b2f7643e1b771a3a
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -425,6 +463,19 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Achten Buch Sozialgesetzbuch
+    - id: de-uhv-instr-78841044a219e9b8
+      status: pending
+      discovery_refs:
+      - de-corpus-7aff018523d75266dd56
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
     - id: de-uhv-instr-7aa5943b5f0a6e6c
       status: pending
       discovery_refs:
@@ -435,6 +486,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
+    - id: de-uhv-instr-7d7a5efb6250df56
+      status: pending
+      discovery_refs:
+      - de-corpus-3a8e5242492cc3cf31de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/esth-2024-32
+      row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
+      document_class: guidance
+      citation_label: esth-2024-32
+      document_citation_path: de/guidance/esth-2024-32
+      title: esth-2024-32
     - id: de-uhv-instr-8939b62ab3b44a39
       status: pending
       discovery_refs:
@@ -485,6 +547,13 @@ generated_facts:
       document_citation_path: de/statute/sgb-3
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_3/
       fundstelle: BGBl I 1997, 594, 595
+    - id: de-uhv-instr-c29a0cb26e4cbc1d
+      status: pending
+      discovery_refs:
+      - de-corpus-ec66057b34bdb760ed6c
+      identity_kind: unresolved_reference
+      raw_references:
+      - Einkommensteuergesetzes
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -794,13 +863,13 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 21
+    instrument_count: 23
     counts:
-      total: 21
+      total: 23
       encoded: 0
       classified-with-reason: 0
       excluded-with-reason: 0
-      pending: 21
+      pending: 23
     pending:
     - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-1808736a82828a59
@@ -810,16 +879,18 @@ computed:
     - de-uhv-instr-2b0a8f983f861591
     - de-uhv-instr-333ba26c32e038d3
     - de-uhv-instr-3875634198c25414
-    - de-uhv-instr-4e1f544ea66cccdf
     - de-uhv-instr-703d3b12aaab39f8
     - de-uhv-instr-73cb585362978769
+    - de-uhv-instr-78841044a219e9b8
     - de-uhv-instr-7aa5943b5f0a6e6c
+    - de-uhv-instr-7d7a5efb6250df56
     - de-uhv-instr-8939b62ab3b44a39
     - de-uhv-instr-906e7387d896596c
     - de-uhv-instr-a303758d3667d729
     - de-uhv-instr-a66a4cb13aaf0599
     - de-uhv-instr-a9efdae38748dd9f
     - de-uhv-instr-b96e03076e143e8e
+    - de-uhv-instr-c29a0cb26e4cbc1d
     - de-uhv-instr-c795a7af57079afc
     - de-uhv-instr-db7693cd9f018ff4
     - de-uhv-instr-guidance
@@ -906,13 +977,6 @@ computed:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
-    - id: de-uhv-instr-4e1f544ea66cccdf
-      status: pending
-      discovery_refs:
-      - de-corpus-3472b2f7643e1b771a3a
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -932,6 +996,19 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Achten Buch Sozialgesetzbuch
+    - id: de-uhv-instr-78841044a219e9b8
+      status: pending
+      discovery_refs:
+      - de-corpus-7aff018523d75266dd56
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
     - id: de-uhv-instr-7aa5943b5f0a6e6c
       status: pending
       discovery_refs:
@@ -942,6 +1019,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
+    - id: de-uhv-instr-7d7a5efb6250df56
+      status: pending
+      discovery_refs:
+      - de-corpus-3a8e5242492cc3cf31de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/esth-2024-32
+      row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
+      document_class: guidance
+      citation_label: esth-2024-32
+      document_citation_path: de/guidance/esth-2024-32
+      title: esth-2024-32
     - id: de-uhv-instr-8939b62ab3b44a39
       status: pending
       discovery_refs:
@@ -992,6 +1080,13 @@ computed:
       document_citation_path: de/statute/sgb-3
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_3/
       fundstelle: BGBl I 1997, 594, 595
+    - id: de-uhv-instr-c29a0cb26e4cbc1d
+      status: pending
+      discovery_refs:
+      - de-corpus-ec66057b34bdb760ed6c
+      identity_kind: unresolved_reference
+      raw_references:
+      - Einkommensteuergesetzes
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -1051,7 +1146,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 21
+    bearing_candidate_instruments: 23
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2

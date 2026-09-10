@@ -4,7 +4,7 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
     "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "76f3afec2b36ef2e4e6b9245536a42cbcb4465e75da64791a4b1e2a591848305"
+      "sha256": "441a7ddf63e1509de9f8c4d3d245024e5e359ddf7051a9081866f85308a11392"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "211365f6f2e4d82ca3c4da6654301b21dab1aecf5ff9943476ac6bd3c8df20ea",
+      "sha256": "9cd98b1955ea4bbdc3588756547850c5483a9467dac6d4242eaf94e863187fa7",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
+      "sha256": "2dfcdba2a118ed5d3bc8b4e658420c6cc68ebe9a92794ce032a1b62e30c98ac0"
     }
   ],
   "period": "2025",
@@ -93,7 +93,7 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-07-21",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-civil",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -298,10 +298,10 @@
           "classified-with-reason": 0,
           "encoded": 0,
           "excluded-with-reason": 0,
-          "pending": 21,
-          "total": 21
+          "pending": 23,
+          "total": 23
         },
-        "instrument_count": 21,
+        "instrument_count": 23,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
           "de-uhv-instr-1808736a82828a59",
@@ -311,16 +311,18 @@
           "de-uhv-instr-2b0a8f983f861591",
           "de-uhv-instr-333ba26c32e038d3",
           "de-uhv-instr-3875634198c25414",
-          "de-uhv-instr-4e1f544ea66cccdf",
           "de-uhv-instr-703d3b12aaab39f8",
           "de-uhv-instr-73cb585362978769",
+          "de-uhv-instr-78841044a219e9b8",
           "de-uhv-instr-7aa5943b5f0a6e6c",
+          "de-uhv-instr-7d7a5efb6250df56",
           "de-uhv-instr-8939b62ab3b44a39",
           "de-uhv-instr-906e7387d896596c",
           "de-uhv-instr-a303758d3667d729",
           "de-uhv-instr-a66a4cb13aaf0599",
           "de-uhv-instr-a9efdae38748dd9f",
           "de-uhv-instr-b96e03076e143e8e",
+          "de-uhv-instr-c29a0cb26e4cbc1d",
           "de-uhv-instr-c795a7af57079afc",
           "de-uhv-instr-db7693cd9f018ff4",
           "de-uhv-instr-guidance"
@@ -355,7 +357,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "subgraph_sha256": "5fc329cc2a13343f26a21fd0ef1fbcf3f26182fa63fe51ae60befd349caf89d3",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
