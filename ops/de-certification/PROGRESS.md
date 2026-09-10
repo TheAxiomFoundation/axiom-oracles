@@ -26,6 +26,15 @@
   ledgers unchanged (empty decisions reproduce the all-pending join).
   Kindergeld discovery reads can now be recorded row by row
   (docs/de-kindergeld-certification.md, "Recording dispositions").
+- Document layer measured: DA-KG 2025 (the retrieved `de-subject-003`
+  bytes, sha-verified against the snapshot receipt) parsed with
+  `pdftotext -layout` into 420 numbered headings, all 420 section bodies
+  located and hashed (`scripts/parse_de_subject_documents.py`,
+  `conformance/closure/de-subject-document-headings.json`). The ledger
+  consumes the committed JSON hermetically; kindergeld's instrument frontier
+  is now 448 candidates (28 + 420), all pending. The four unretrieved
+  subject queries are 404s on preregistered URLs, not connectivity; fixing
+  them is a query-set revision plus a corpus recapture, left open.
 - Remaining sprint items: single claim-surface digest bound across all four
   premises; import / root-reachable dependency-edge traversal; successful
   subject-query result capture and pagination; corpus citation scan (#611);

@@ -180,9 +180,15 @@ v3) and `scripts/refresh_instrument_graph.py`.
 Instrument frontier (`de-kg-instr-*`):
 
 - `de-kg-instr-001` DA-KG (BZSt Dienstanweisung zum Kindergeld, 2025
-  edition, ~173 pp / ~419 numbered headings) — bears directly on computed
+  edition, 173 pp / 420 numbered headings) — bears directly on computed
   surfaces; requires per-heading disposition rows with body-hash binding,
-  encode-vs-classify split per the bearing test.
+  encode-vs-classify split per the bearing test. MEASURED 2026-09-07: the
+  retrieved document (`de-subject-003`, byte-bound by the snapshot receipt)
+  is parsed by `scripts/parse_de_subject_documents.py` into
+  `conformance/closure/de-subject-document-headings.json` — 420 headings,
+  420 section bodies located — and each heading enters the kindergeld
+  frontier as a pending `document_heading` candidate (`de-kg-dakg-<code>`)
+  whose `body_sha256` is the section text a disposition must cite.
 - `de-kg-instr-002` BKGG (Bundeskindergeldgesetz) — alternative/interacting
   scheme; must be dispositioned as such, not left an unnamed boundary.
 - `de-kg-instr-003` EStG §31 (Familienleistungsausgleich) — the
