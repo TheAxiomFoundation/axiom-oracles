@@ -66,7 +66,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 463, 4, 1, 0, 0),
+    "de/kindergeld": (18, 465, 4, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1340,13 +1340,17 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 15
+    assert len(supplemental) == 17
     assert all(row["status"] == "pending" for row in supplemental)
-    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4"}
-    o24 = next(r for r in document["committed_decisions"]["instrument_dispositions"] if r["id"] == "de-kg-dakg-O2.4")
-    assert {row["discovered_in_body_sha256"] for row in supplemental} == {o24["body_sha256"]}
+    from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
+    assert len(from_o24) == 15
+    dispositions = {r["id"]: r for r in document["committed_decisions"]["instrument_dispositions"]}
+    for row in supplemental:
+        # every enrolment binds the discovering read's section text
+        assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
+    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 448 + 15
+    assert frontier["instrument_count"] == 448 + 17
     assert all(sid in frontier["pending"] for sid in (row["id"] for row in supplemental))
 
 

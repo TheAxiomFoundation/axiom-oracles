@@ -211,6 +211,25 @@ producer's exact rederivation before it reaches certify.
   V 23.4 (six-month payout limit of § 70 Abs. 1 Satz 2–3 EStG), V 24.2
   (per-child share of the household total, § 76 EStG). Frontier 463
   candidates, 288 pending; 12 open dependencies.
+- 2026-09-07 — DA-KG 2025 Kapitel R (Rechtsbehelfsverfahren), 69 headings:
+  all excluded — the appeals register, the extra-judicial appeal
+  (admissibility, periods, restoration, suspension of enforcement, stay,
+  joinder, withdrawal, relief, appeal decision and its parts, costs under
+  § 77 EStG) and the fiscal-court procedure (types of action, admissibility,
+  course, ending, costs, process interest). R 6.4 Abs. 3 governs the temporal
+  reach of a rejected revocation, not the monthly amount. No bearing rows.
+- 2026-09-07 — DA-KG 2025 Kapitel S (Steuerstraftaten und
+  -ordnungswidrigkeiten), 64 headings: all excluded — competence, the
+  offences and their elements, intent / recklessness / guilt, attempt,
+  limitation, grounds for investigation, self-disclosure, procedure,
+  sentencing and fine scales (the per-month-and-child daily-rate guide and
+  the EUR 600 / 1,500 / 5,000 / 25,000 thresholds size penalties and
+  prosecution discretion, not the Kindergeld amount), registers. S 12's
+  section text carries the document's appendices after the last heading.
+  Two supplemental enrolments from these reads: KiZDAV (`de-kg-suppl-016`,
+  issued under § 68 Abs. 5 EStG, from O 4.5) and RiStBV (`de-kg-suppl-017`,
+  from S 1.2). Frontier 465 candidates, 157 pending (all in Kapitel A plus
+  the 28 discovered candidates and 17 supplementals); 12 open dependencies.
 
 ## Closing worklist (seed enumeration — discovery incomplete)
 

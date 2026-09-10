@@ -6760,6 +6760,804 @@ committed_decisions:
     classification: administration_only
     reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
     bears_on_computed_surface: false
+  - id: de-kg-dakg-R1
+    status: excluded-with-reason
+    body_sha256: c5a101b2835552a10a2cbce6ea038c955830ca1fd133f4d016b0b7b08228c59d
+    classification: administration_only
+    reason: 'Keeping the appeals register (form KGRb 6): half-yearly checks, sequential entries with the contested act and the manner of disposal, notes on suspension and stays, one entry per multi-period appeal, split entries on partial relief, transfers between offices. Register administration; no entitlement or amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10
+    status: excluded-with-reason
+    body_sha256: cae38fda5335c582e3eb1d67babce3a3bd79e4861c643ceefffafe579c86e1b8
+    classification: court_procedure
+    reason: Admissibility of the action is examined by the FG. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.1
+    status: excluded-with-reason
+    body_sha256: f18a3da4dd7fdfb05272eba54ade998fe3048e6c76fbe55bcdbf57845bff9e26
+    classification: court_procedure
+    reason: Fiscal-court jurisdiction for tax-law Kindergeld (§ 33 FGO, § 6 AO, § 5 FVG); BKGG disputes go to the social courts (§ 15 BKGG); referral where the wrong court system is chosen. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.10
+    status: excluded-with-reason
+    body_sha256: dd7a7a6f314cb46f031ae99f18a064fb7d4888ea7c7375b4c36e8b49c1474e81
+    classification: court_procedure
+    reason: The correct defendant office (§ 63 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.11
+    status: excluded-with-reason
+    body_sha256: 0d567215bd1b109896b07a6d7439633bb1de3338c2351035a90143bcb69b82f0
+    classification: court_procedure
+    reason: Proper filing of the action (§§ 64, 52a, 65 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.12
+    status: excluded-with-reason
+    body_sha256: 79f12b318d7399817106f83851aad68d03094703acd2f1060ea2ae33c876ffd9
+    classification: court_procedure
+    reason: Need for legal protection, absent where the aim is reachable more simply. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.13
+    status: excluded-with-reason
+    body_sha256: b68c37b0553f1dd8d4e1cf0a2cf86bdd2ed2409835c389d42f85f9c9f356ad50
+    classification: court_procedure
+    reason: 'Negative admissibility conditions: no waiver, no withdrawal, no lis pendens, no final judgment on the same subject. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.2
+    status: excluded-with-reason
+    body_sha256: da9bac653bada76b56d800eaeff054e869b80f2993d1039b2331faf1e106e0cc
+    classification: court_procedure
+    reason: Subject-matter and local jurisdiction (§§ 35, 36, 38 Abs. 2a FGO) and referral (§ 70 FGO, § 17a GVG). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.3
+    status: excluded-with-reason
+    body_sha256: 1d9e39c9d30c8214cd835e854747fa85af371a8dc3d2e3fe44a27ea1e9260b87
+    classification: court_procedure
+    reason: The admissible type of action follows the claimant's aim, interpreted by the court (§ 96 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.4
+    status: excluded-with-reason
+    body_sha256: 81792a3b3c24f3e92679305621dddaaf531ea094cf02c287719c9333fa1dfebf
+    classification: court_procedure
+    reason: Requirement of an unsuccessful appeal for annulment and order actions (§ 44 FGO), not for performance and declaratory actions, with the exceptions (excluded appeal, inaction action, leap action, arrest, first-time grievance of a third party). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.5
+    status: excluded-with-reason
+    body_sha256: 96a3922dc88a63bcfffb1d9aceb803fad5980ef615c52511eb3f7a8fa97129a0
+    classification: court_procedure
+    reason: Standing (§ 40 Abs. 2 FGO) and the declaratory interest (§ 41 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.6
+    status: excluded-with-reason
+    body_sha256: 24a246d5a1fa4ef4a0ca338e4942e1aaee2dfa78ab2b2d46a4dd776deece8b06
+    classification: court_procedure
+    reason: Capacity to be a party (§ 57 FGO), including a minor child demanding payment to itself. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.7
+    status: excluded-with-reason
+    body_sha256: 2fdbfeb7b9c47a44777f0957d72c8296c678a566bcc95612a4193249388a6008
+    classification: court_procedure
+    reason: Capacity to conduct proceedings (§ 58 FGO) mirrors § 79 AO. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.8
+    status: excluded-with-reason
+    body_sha256: 18cf1bf984a4301268dce8317715f254296140d49356442c2f5a06062c3277f9
+    classification: court_procedure
+    reason: 'Representation: optional before the FG, mandatory before the BFH (§ 62 FGO) including for authorities, and how the office secures qualified representation. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R10.9
+    status: excluded-with-reason
+    body_sha256: 4b755f50cdca88a675cf6ad2d8455b78c63642ca3c35b3d6488d02dfcf8353fa
+    classification: court_procedure
+    reason: One-month period for annulment and order actions (one year with defective instruction), deemed met when lodged with the office, forwarding duty; no period for performance and declaratory actions. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R11
+    status: excluded-with-reason
+    body_sha256: 080055b696e66e50379da31ecdcb45c9f3752807aa2b7e2545738adccc8d9b6d
+    classification: structural_heading
+    reason: Heading line only ("R 11 Gang des finanzgerichtlichen Verfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R11.1
+    status: excluded-with-reason
+    body_sha256: f81b92db2e29e838ae47fb9563d6380c0759bd74d279a984dd068de26d0aca48
+    classification: court_procedure
+    reason: Court investigation ex officio and the parties' duty of complete and truthful statements (§ 76 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R11.2
+    status: excluded-with-reason
+    body_sha256: c02bb4d2bb5cb570496e194b4d8cf3cf1219de2ba45bc30dbb4bda07e448c1ca
+    classification: court_procedure
+    reason: Third-party joinder before the court (§ 60 FGO), simple and necessary, rights of the joined party, extension of res judicata. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R11.3
+    status: excluded-with-reason
+    body_sha256: a72b92ccd83b1118d73ecac0dd8e53f38b33e26352119b8b401c4f3d3e97a192
+    classification: court_procedure
+    reason: Access to court files (§ 78 FGO). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R11.4
+    status: excluded-with-reason
+    body_sha256: cf4cdde420c2ca76fb2d1032340bd061a97cbbda1f10d89f74812ed4667a2a4f
+    classification: court_procedure
+    reason: 'Conciliation judge proceedings (§ 155 FGO, § 278 Abs. 5 ZPO): suited to disputed facts or discretionary matters, no settlement on pure questions of law, consent, no suspension of periods, outcomes. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R12
+    status: excluded-with-reason
+    body_sha256: cfaae5964b28bd0992cd38b7effa8ec33bd355d288c22cd5f36da8d6fff8f5fc
+    classification: court_procedure
+    reason: Ending the court proceedings by judgment or court order (§ 90a FGO), revision where admitted, or request for oral hearing. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R12.1
+    status: excluded-with-reason
+    body_sha256: ceae1458b44f4ef63679d204714968652690b20ed32b6fb3e58029f0b726042f
+    classification: court_procedure
+    reason: 'Judgment: annulment with binding legal assessment (§ 100 Abs. 1 FGO), the court''s power to fix the Kindergeld at a different amount or replace a finding (§ 100 Abs. 2 FGO), annulment for further investigation (§ 100 Abs. 3 FGO), and orders to issue or re-decide (§ 101 FGO). Court procedure on remedies; the amount the court may fix is governed by the substantive law on the spine, not by this heading.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R12.2
+    status: excluded-with-reason
+    body_sha256: ffd787643701494b55b8d50c5f66ab66e2f6490240857a2f5341b7cf34ee97c6
+    classification: court_procedure
+    reason: Declaration of settlement by all parties ends the dispute without judgment. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R12.3
+    status: excluded-with-reason
+    body_sha256: ae0819934d98f0c7ec17655df92c074df068a804773ac31f4c3e16f57a85a083
+    classification: court_procedure
+    reason: Withdrawal of the action (§ 72 FGO), consent requirements, loss of the action for period-bound actions, contrast with withdrawal of the appeal or the revision. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R12.4
+    status: excluded-with-reason
+    body_sha256: 69a28d4766b1f73d416196467fb9c757c68c24c1992ea62112c3a3da5dacce17
+    classification: court_procedure
+    reason: No settlements in fiscal-court proceedings; factual agreements on the underlying facts are possible, legal effects follow from statute. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R13
+    status: excluded-with-reason
+    body_sha256: c87c429fd93dcbfecae90aecc02af66d62ced33771dad5b33354ea324399479e
+    classification: court_procedure
+    reason: 'Court costs (GKG): the office is exempt from court fees but not from reimbursing a successful claimant, loser pays (§§ 135 ff. FGO) with fault-based exceptions, costs on settlement and on withdrawal. Cost procedure; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R14
+    status: excluded-with-reason
+    body_sha256: 298cf5e1cb8a0cd8e31f15111e0beaf0ad1d55b035ef5f409b4759ec95e337e4
+    classification: appeals_procedure
+    reason: 'Cross-reference: check process interest where the claimant prevails (V 30.1, V 30.5). Ancillary levy; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R2
+    status: excluded-with-reason
+    body_sha256: 7e976ba441e9bf7c0c4148d81c2963af282299e15cfabf7f37f85d1dcd10fd00
+    classification: appeals_procedure
+    reason: 'Nature and functions of the extra-judicial appeal (Einspruch): initiated only by the appellant, protects rights and self-checks the administration, relieves the courts; the fixing-procedure rules apply (§ 365 AO). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R2.1
+    status: excluded-with-reason
+    body_sha256: ea3f2adfd05d39d8c3f950b22557cfc74b45cac5dea3cae47e69b7ba4370af06
+    classification: appeals_procedure
+    reason: Investigation ex officio in the appeal (§ 88 AO, V 6.1) and V 6.4 for deception. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R2.2
+    status: excluded-with-reason
+    body_sha256: 0bfd9a37d24589727230f924c21d8c432342a99e87ca94c6ed402a047305cde5
+    classification: appeals_procedure
+    reason: Cooperation duties in the appeal (§§ 90 ff. AO, § 68 Abs. 1 EStG, V 7). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R2.3
+    status: excluded-with-reason
+    body_sha256: 812c3ed28775b526a2f35ffe66e62dfd3e3fd6b8600c70632906f8efe34f35e3
+    classification: appeals_procedure
+    reason: Hearing before an appeal decision that does not fully grant relief (V 6.1 Abs. 3). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R3
+    status: excluded-with-reason
+    body_sha256: 100e02fd0cacd666f3fead76b67b8234134d889558057fb41511328d53a7dca8
+    classification: appeals_procedure
+    reason: Formal appeals under AO/FGO distinguished from informal remedies, and the appeal from a request for amendment (in doubt an amendment request is treated as an appeal; the appeal prevents finality, allows suspension and may lead to a worse decision). Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4
+    status: excluded-with-reason
+    body_sha256: aabc135662a4e4393fcf9eed4fa31f44e1bb614e4d55bfc3ed513a739b42b110
+    classification: structural_heading
+    reason: Heading line only ("R 4 Zulässigkeitsvoraussetzungen"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.1
+    status: excluded-with-reason
+    body_sha256: cd1c9e2dade9e50ac17a559ec3b694f41577556f4faf8666501e2e6f6dc330c1
+    classification: appeals_procedure
+    reason: An appeal requires a contested act or a failure to act; admissibility under § 358 AO is checked ex officio and an inadmissible appeal is dismissed. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.2
+    status: excluded-with-reason
+    body_sha256: f6c2080ae67193a5e62678cbfaa9ffc32e763f4ca46798e05173b7cf50cc1423
+    classification: appeals_procedure
+    reason: 'Admissibility of the Einspruch (§§ 347, 348 AO): Kindergeld as a tax refund falls under the AO, the inaction appeal after six months, appeals against void acts, and the exclusions (appeal decisions, non-decision). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.3
+    status: excluded-with-reason
+    body_sha256: 0d4eb052be9083c3f6596dc935bf6ad8fec7990eaed69f1f3a561a5a172a3a91
+    classification: appeals_procedure
+    reason: 'Grievance (Beschwer): the appellant must allege being affected in their own rights, including seeking a more favourable decision such as a higher amount; standing of an applicant in legitimate interest or a diversion recipient; the general need for legal protection, present for prospective revocations despite the possibility of a new application because § 77 EStG costs would be lost. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.4
+    status: excluded-with-reason
+    body_sha256: 23db77629850e2ecfb2258e973ff48371467d98d0be09f04844e9cf6f024812e
+    classification: appeals_procedure
+    reason: 'Where and how to lodge the appeal (§ 357 AO): the issuing office, forwarding within the period, written or electronic form or on record, no signature or label required, content per § 357 Abs. 3 AO not mandatory. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.5
+    status: excluded-with-reason
+    body_sha256: fb34829221c1ad419ae7f5ae585df70714cc97d088d13bf5f919add6df4c0c3f
+    classification: appeals_procedure
+    reason: Appeal period of one month after proper notification (§ 355 AO), one year without or with a wrong instruction (§ 356 AO), inaction and void-act appeals unlimited, no extension (§ 109 AO), restoration (§ 110 AO), and forwarding by an incompetent authority. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.5.1
+    status: excluded-with-reason
+    body_sha256: d9c6b452067c671476c96bc015dc8b3e80dd47b46f934e873a85610819926dff
+    classification: appeals_procedure
+    reason: 'Restoration to the previous status (§ 110 AO): one-month application after the obstacle ends, one-year outer limit, fault standard including the representative''s, illness, absence up to six weeks, workload and language difficulties, using the full period with postal times, substantiation, and that the decision is part of the appeal decision. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R4.6
+    status: excluded-with-reason
+    body_sha256: 623db07a4f34f1929c712cf58a0e8877bc175c65e4ba83063ca0fecb38a89912
+    classification: appeals_procedure
+    reason: 'Consequences of inadmissibility: dismissal (§ 358 AO) after hearing and suggesting withdrawal, no substantive review, finality of the contested act, no worsening. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5
+    status: excluded-with-reason
+    body_sha256: eea324fca951c62a2e9dad419a3ed6850d4f4e6d334a71b78488940fef82d09e
+    classification: structural_heading
+    reason: Heading line only ("R 5 Durchführung des außergerichtlichen Rechtsbehelfsverfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.1
+    status: excluded-with-reason
+    body_sha256: f93482e48aad9b64c0c9e91afd4586771b69c1d9f68ab3d0a4d4f3f330d5d6d0
+    classification: structural_heading
+    reason: Heading line only ("R 5.1 Aussetzung der Vollziehung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.1.1
+    status: excluded-with-reason
+    body_sha256: 85d9fda96a0e1f821d4f033f26943722c87731bffc871ccfc5f758a989c41efb
+    classification: appeals_procedure
+    reason: 'Suspension of enforcement (§ 361 AO) as provisional legal protection: an appeal does not suspend recovery; suspension relieves the appellant provisionally; separate act (form KGRb 2). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.1.2
+    status: excluded-with-reason
+    body_sha256: dcd7af3989e82bae14968c68d8ce0cc336f9ea3001a42cb6a9dc36b8100022e8
+    classification: appeals_procedure
+    reason: Suspension requires a contested, enforceable act (a money claim such as recovery; refusals are not enforceable — interim order under § 114 FGO instead), serious doubts on lawfulness or undue hardship, form-free application or ex officio. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.1.3
+    status: excluded-with-reason
+    body_sha256: 1c19168f8a452eebed67f56d3ba4cdd9b312cdcaef17f330a1bec84b0b1f0fab
+    classification: appeals_procedure
+    reason: 'Effects of suspension: prompt decision, no enforcement meanwhile, effectiveness on notification, no surcharges during suspension, start and end dates, interest check if the appeal fails, remedies against refusal (§ 69 FGO). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.2
+    status: excluded-with-reason
+    body_sha256: 135acd9218d824352af79b80a5b004322a8248f46048ee805e40280bb28368d8
+    classification: appeals_procedure
+    reason: Access to stored data (V 9) and communication of the taxation documents on request (§ 364 AO) to appeal-entitled participants. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.3
+    status: excluded-with-reason
+    body_sha256: f79596f0752149fa94cdae2ed5ed853fdcb63551de9dcdc88f47fc7bd0eb3d6e
+    classification: appeals_procedure
+    reason: Oral discussion of the facts and law (§ 364a AO) should be granted; a breach makes the decision unlawful but not void. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.4
+    status: excluded-with-reason
+    body_sha256: 3d89a6340dc543b2698d76bd14e778bbea59f8da83792d51cb90ec635472eee5
+    classification: appeals_procedure
+    reason: The preclusion period of § 364b AO is not applied in Kindergeld proceedings. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.5
+    status: excluded-with-reason
+    body_sha256: 3d6b64a21bf9dfc7ddc8fd93c89765eeb0571107a203e7a4032ce2d82c2239d3
+    classification: appeals_procedure
+    reason: 'Worsening (§ 367 Abs. 2 AO): definition, prior reasoned notice with opportunity to withdraw, when the notice is dispensable, mandatory hearing, no discretion. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.6
+    status: excluded-with-reason
+    body_sha256: 139fe3cbc242187f20b9d8567931eafe0d6dd8b4ab228b023426809141aa4c9c
+    classification: appeals_procedure
+    reason: 'Stay of the appeal (§ 363 AO): by consent for important reasons coordinated with the BZSt, as a discretionary revocable order, and the statutory stay pending EuGH/BVerfG/BFH proceedings on which the appeal relies. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R5.7
+    status: excluded-with-reason
+    body_sha256: 0c2eb070c88fa0299f9262a49c400f1d0838facbdece3a912226798ae062e436
+    classification: appeals_procedure
+    reason: 'Joinder of the other party in priority disputes under § 64 EStG (§ 174 Abs. 5 AO), in diversion, legitimate-interest and § 74 Abs. 2 refund disputes (§ 360 Abs. 3 AO): the joined party''s status and rights, competence, notice and the option to withdraw, disclosure limits, decision by formal appeal decision also notified to the joined party, and copy to the other office. Procedure; the priority rule itself is § 64 EStG on the spine.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6
+    status: excluded-with-reason
+    body_sha256: 007bfe1f20ff7902cd35598a27651404e53cbed0ac072e61eaab25a957a7733d
+    classification: appeals_procedure
+    reason: The appeal ends by withdrawal, relief, or appeal decision. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.1
+    status: excluded-with-reason
+    body_sha256: 8ff968a6452ef32698b83bd49291a279456d12981d3d1e9f63279139e243aef8
+    classification: appeals_procedure
+    reason: Full review of the contested act for and against the appellant (§ 367 Abs. 2 AO), limited to that act as the formal subject (BFH III R 50/20); outcomes rejection, relief, or worsening. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.2
+    status: excluded-with-reason
+    body_sha256: 6ef178df212eb3c08748f65801d75b34d0cea46df906e8b6d045877a77e7bba8
+    classification: appeals_procedure
+    reason: 'Withdrawal of the appeal (§ 362 AO): form, who may withdraw, effect on notification, loss of the appeal, register entry, end of suspension after one month, lapse of joinder, renewed appeal within the period. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.3
+    status: excluded-with-reason
+    body_sha256: 30e051c0ff7597aad403325be88808b7590c473f8a312f5c94fadb3452e82c81
+    classification: appeals_procedure
+    reason: 'Relief and partial relief notices: no formal decision where relief is granted (§ 367 Abs. 2 Satz 3 AO), content and legal basis of the relief notice, partial relief becomes subject of the pending appeal, relief for part of the period ends the appeal for that period only. Procedure; no amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.4
+    status: excluded-with-reason
+    body_sha256: d53ed967a099db328bbde9c850ffbc092d26da6d2f00ea22e31ed3cdc6d8bba3
+    classification: appeals_procedure
+    reason: The appeal decision as the statutory regular disposal where relief is not granted, its form (§ 366 AO, form KGRb 1) and parts; and that rejecting an appeal against a revocation or refusal extends that act's binding effect to the month of the appeal decision unless the appeal was limited to a past period (BFH III R 71/10). Procedure on the temporal reach of a decision; no monthly entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.4.1
+    status: excluded-with-reason
+    body_sha256: 0aabab680d3f2defb7786f5cd2c25c655117de84131112e3ceef2fd6d59f74a8
+    classification: appeals_procedure
+    reason: 'Content of the heading (Rubrum): appellant, representative, joined party, receipt date, subject matter, contested act and any amending act. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.4.2
+    status: excluded-with-reason
+    body_sha256: f913a2fdfd867eb26b710eaf3027782aa4d1611faa92610c95fd5effa2c9c656
+    classification: appeals_procedure
+    reason: Operative wording (Tenor) for inadmissible, unfounded, partly founded, and worsening decisions. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.4.3
+    status: excluded-with-reason
+    body_sha256: af86ac8279b1d8894cb9c3d5be32ead3ef8fd9aa6a2029d793262e874a30cffe
+    classification: appeals_procedure
+    reason: 'Reasoning: purpose, third-person drafting, citation conventions, reference to public administrative instructions and case law, division into facts and legal assessment. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.4.4
+    status: excluded-with-reason
+    body_sha256: d88dbdadb5ad8c8d60d0c6849bbf7bd76e704d4c12e7547e1c7f3de799335e95
+    classification: appeals_procedure
+    reason: 'Instruction on remedies: one-month action at the FG of the claimant''s residence (§§ 47, 38 Abs. 2a, 55 FGO). Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R6.5
+    status: excluded-with-reason
+    body_sha256: bfd4d67cf0121fbda0aba3279bad76f2f1f8ac136dec5f09a29e898a10dec096
+    classification: appeals_procedure
+    reason: 'Costs of the appeal (§ 77 EStG): scope (all Kindergeld appeal proceedings; not simple amendment requests, supervisory complaints, evasion-interest appeals or equity requests), joined parties, success or curing of procedural defects, exclusion for culpable delay, cost decision ex officio in tenths rounded up, necessity of representation, fixing on application, borne by the office. Cost procedure; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R7
+    status: excluded-with-reason
+    body_sha256: 3e111d9d6a46307860fa1a794f64aa3db9f42dd511fa7520e490d80e3a0b3d4e
+    classification: court_procedure
+    reason: The FGO as the basis of the court procedure, contrasted with the AO appeal. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R8
+    status: excluded-with-reason
+    body_sha256: c6dba214399ac9bcb362b736f4b41371e27d67201500d0a6cd3a3f12b56a39d4
+    classification: court_procedure
+    reason: Two-tier fiscal jurisdiction (FG as the only fact instance, BFH as appellate instance), the appellate remedies and their effects, no suspension by filing, when the office must appeal or file a non-admission complaint, and reporting duties to the BZSt with BMF joinder in significant cases. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9
+    status: excluded-with-reason
+    body_sha256: 815f1ae5c0e0cf039fa85a7e7d4621381f64e8f965e79952d430ae3dc82476f7
+    classification: court_procedure
+    reason: Types of action under § 40 Abs. 1 FGO. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9.1
+    status: excluded-with-reason
+    body_sha256: 3e81a397a20de95af21a4b1e12682822da5833c1ab40f017e121cdffdb2828c8
+    classification: court_procedure
+    reason: 'Action for annulment: annulment and amendment variants, subject is the original act as shaped by the appeal decision, no future binding effect of a confirmed refusal, replacement acts during the action (§ 68 FGO), and void acts. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9.2
+    status: excluded-with-reason
+    body_sha256: cae16fe3166041b0ba39b45ae9dccfe882450c13d1ab0a714e425b7c8675670e
+    classification: court_procedure
+    reason: Action for an order (Verpflichtungsklage) where fixing, payment or diversion is refused or not decided. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9.3
+    status: excluded-with-reason
+    body_sha256: 781028abc5ad796cc759206aadea811e4c9f34274ce54cbd13580bf102028f26
+    classification: court_procedure
+    reason: General action for performance for non-administrative-act services (actual payout under an existing fixing) and for § 74 Abs. 2 EStG refund and reclaim disputes. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9.4
+    status: excluded-with-reason
+    body_sha256: df9b1716d040d2ad4586ada445d7bfef3f67b370ca7623bcd64cbdfca4b49192
+    classification: court_procedure
+    reason: Declaratory action (§ 41 FGO) and its subsidiarity. Procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-R9.5
+    status: excluded-with-reason
+    body_sha256: 373d0a2a69b67c9ca83c27f84accec3ea7c4f3023f43b44f5838cb7c1624a115
+    classification: court_procedure
+    reason: 'Interim relief alongside the main proceedings: no suspension by filing, suspension by the office or court (§ 69 FGO) after a prior request to the office, ex officio suspension, R 5.1 applies, and interim orders (§ 114 FGO) against non-enforceable acts. Procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S1
+    status: excluded-with-reason
+    body_sha256: 6e178364233269fd7df1fa2f4bbcd33700bf4a7e5524c45d441e0e578f031e0c
+    classification: penal_procedure
+    reason: Familienkassen are competent to prosecute and sanction tax offences and tax misdemeanours connected with Kindergeld (§ 386 AO), with the rights of tax offices and under BZSt supervision. Penal competence; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S1.1
+    status: excluded-with-reason
+    body_sha256: 354a40e0e24bcb0710e6da9a485b82539da878a88571cfa97d2b0a76b70079b0
+    classification: penal_procedure
+    reason: Catalogue of the applicable penal and misdemeanour provisions of the AO, StGB, StPO, OWiG and JGG. Penal law index; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S1.2
+    status: excluded-with-reason
+    body_sha256: e99a50a4a88223d40a4ca0a4c193b6981327b55198bcd973e803c0b965931606
+    classification: penal_procedure
+    reason: The AStBV (St) 2023/2024 (and 2025 from 01.04.2025) and, supplementarily, the RiStBV are to be observed. Penal-procedure guidance references; the AStBV (St) is already a pending supplemental candidate and the RiStBV is enrolled from this row. No computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10
+    status: excluded-with-reason
+    body_sha256: 246d7cb490b4cab7a47b197aaeaebcb0c455ca2d2300c43d0d90e8b63831bb0f
+    classification: structural_heading
+    reason: Heading line only ("S 10 Ahndung von Ordnungswidrigkeiten"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10.1
+    status: excluded-with-reason
+    body_sha256: eb9a67991682da9c15dd0ca102a345d8bc51515b66a8e4c2357b0f67c38c9478
+    classification: penal_procedure
+    reason: Fine assessment follows § 17 OWiG with Kindergeld-specific practice (the monthly tax-refund character under § 66 EStG), preventive purpose, the BuStra unit's sole discretion to refrain or close (§ 47 OWiG), and formal warnings with or without a warning fine (§ 56 OWiG, form KGStB 16). Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10.2
+    status: excluded-with-reason
+    body_sha256: 0c82bd90faa70ee50515e7daa3ea1c91ac479c8c5adf2c0a9b78cb23e6ff2420
+    classification: penal_procedure
+    reason: The following assessment principles serve uniform handling. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10.2.1
+    status: excluded-with-reason
+    body_sha256: 03675de97cc8b36b545fe9531e3e50eefa1665e65e376431adbed3abcd5dbbdc
+    classification: penal_procedure
+    reason: 'Fines for reckless understatement (§ 378 AO): half the hypothetical criminal fine as the base, warnings without a fine up to EUR 600 of overpayment and with a EUR 55 warning fine up to EUR 1,500, reductions up to 50 percent (prompt restitution, poor finances, no repetition risk) and increases of at least 50 percent for aggravated fault, preconditions and reasoning. Penalty scale; it sizes the fine by the overpayment, it does not define the Kindergeld amount.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10.2.2
+    status: excluded-with-reason
+    body_sha256: 462d74f5c03a75b72198129829e57248e86ef8df9b76a79fbd1979672c32bdcf
+    classification: penal_procedure
+    reason: 'Fines for false vouchers (§ 379 Abs. 1 Satz 1 Nr. 1 AO): base EUR 500, aggravating and mitigating factors, range EUR 5 to 5,000 for recklessness. Penalty scale; no Kindergeld amount rule.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S10.3
+    status: excluded-with-reason
+    body_sha256: 243782e63528a1b8f9a7d29e2c500f6b306e244c1be6159bb8d16af841142f32
+    classification: administration_only
+    reason: Fines accrue to the federal treasury (§ 90 Abs. 2 OWiG) and are collected by the Familienkassen; procedure costs stay with the office. Fiscal allocation of fines; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S11
+    status: excluded-with-reason
+    body_sha256: 23422931f2e22f6d04c6afea88a34b896f94510fb15cf537459fd4b03d13ed42
+    classification: penal_procedure
+    reason: Fee for the fine notice (five percent, EUR 25 to 7,500, § 107 OWiG) and enforcement of fine notices under the AO's enforcement rules (§§ 249 ff. AO) rather than the VwVG. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S12
+    status: excluded-with-reason
+    body_sha256: a3e6614ba21c7edc47458be420b652d43c733fa0ace379dece2d8127484540d1
+    classification: administration_only
+    reason: Fine and monitoring registers (forms KGStB 18/19) with half-yearly supervisory checks, statistics on further instruction, and transfer of only the penal file to prosecutors or courts. The located section text also carries the document's appendices that follow the last heading (form index, keyword index, abbreviations), which contain no rules. Register administration; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2
+    status: excluded-with-reason
+    body_sha256: eb63d4014b6fbd4d04b86d556e2f95325d48f5c64bc06a0b6930284abe0ae2b9
+    classification: structural_heading
+    reason: Heading line only ("S 2 Tatbestände des Steuerstraf- und Steuerordnungswidrigkeitenrechts"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.1
+    status: excluded-with-reason
+    body_sha256: b662e86bca20d56da1d997cd25011c136e7e1cc96a98073c5365d967a55ede9d
+    classification: penal_substantive
+    reason: Elements of tax evasion (§ 370 Abs. 1 Nr. 1 and 2 AO) as lex specialis to fraud, intent requirement, evasion also where fixings are provisional or under review, irrelevance of the duration of the advantage. Penal law; the Kindergeld the offence concerns is defined elsewhere.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.1.1
+    status: excluded-with-reason
+    body_sha256: 243d2eecefb9d3a9260a6ad44d79ab202cc78b1759c1d7ab38d9f7e3931f4c1f
+    classification: penal_substantive
+    reason: Evasion by false statements (result offence) and by failing to report changes under § 68 Abs. 1 EStG (omission offence), no offence where the legal basis of the claim is unchanged (apprenticeship replaced by studies), adult children as offenders, § 153 AO, the compensation bar (§ 370 Abs. 4 Satz 3 AO) computed as the difference between the fixed and the correct Kindergeld, and abetting versus obstruction with three examples. Penal law; the comparison it describes uses the entitlement rules of Kapitel A and the spine, it does not set them.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.1.2
+    status: excluded-with-reason
+    body_sha256: c74cfa2b2574e7c6a3aaa92d8884bf3c41a1b01e34a068e45ef7b100ae8d13b9
+    classification: penal_substantive
+    reason: Perpetration requires control over the act and the will to commit it as one's own. Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.1.2.1
+    status: excluded-with-reason
+    body_sha256: 5979e6dd934110bceffb334bccb4a8784554e66ea8e2b27c4496fee7481b65c0
+    classification: penal_substantive
+    reason: Joint perpetration (§ 25 Abs. 2 StGB) and indirect perpetration (§ 25 Abs. 1 Alt. 2 StGB) with Kindergeld examples (stepfather and mother concealing a child's rental income; son deceiving his mother with forged study certificates). Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.1.2.2
+    status: excluded-with-reason
+    body_sha256: 748105160b5850a4cdae159e7e07a32291d9910a20cea17b263807ce3f773523
+    classification: penal_substantive
+    reason: Participation by aiding (§ 27 StGB) and instigation (§ 26 StGB), double intent, with an example. Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.2
+    status: excluded-with-reason
+    body_sha256: 075c19aa224393d5f456269f1fbd1e5dd2bc0dfbe948254d62999e72ca6eae3a
+    classification: penal_substantive
+    reason: 'Misdemeanours: reckless understatement (§ 378 AO) with the same objective elements as evasion but recklessness suffices, opportunity principle, endangerment by issuing false vouchers (§ 379 AO) including what a voucher is and when issued, subsidiarity to §§ 370, 378 AO and § 267 StGB, no attempt liability, no fine-exempting self-disclosure but opportunity discretion after correction. Penal law; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3
+    status: excluded-with-reason
+    body_sha256: ca02c5255927acf4819b05684463be8eff6f5806e358fedd2d0643192fe3f630
+    classification: structural_heading
+    reason: Heading line only ("S 2.3 Vorsatz, Leichtfertigkeit, Schuld"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.1
+    status: excluded-with-reason
+    body_sha256: ce0f5ec63ffa2e28108c63390dcb9e5a38ea659ee41d933d45aa01e2a865b8c4
+    classification: structural_heading
+    reason: Heading line only ("S 2.3.1 Vorsatz"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.1.1
+    status: excluded-with-reason
+    body_sha256: dc1f4a7b3186c8488c3a25d45a45ce2961539a3562e9ab4d49fee124e4326289
+    classification: penal_substantive
+    reason: Definition of intent (direct and conditional) and its documentation in the closing note. Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.1.2
+    status: excluded-with-reason
+    body_sha256: f14e27565ce1505cc01a5963c7488166821add64567b3a1886969e045e74fdcf
+    classification: penal_substantive
+    reason: Mistake of fact (§ 16 StGB) excludes intent, e.g. not knowing an adult child's harmful employment under § 32 Abs. 4 Satz 2 EStG; later knowledge triggers the § 153 AO correction duty. Penal law; the entitlement rule it references is in Kapitel A.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.2
+    status: excluded-with-reason
+    body_sha256: 08a98b5e46b14c920da5fa655a2716750d068f98fd05f39bd72ed0f6cc2d00b3
+    classification: structural_heading
+    reason: Heading line only ("S 2.3.2 Leichtfertigkeit"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.2.1
+    status: excluded-with-reason
+    body_sha256: 9cf4d569465eccece0e906c6df1c900480d17ec8b28177e65c7e252a61880587
+    classification: penal_substantive
+    reason: Definition of recklessness as a grave breach of care, required findings including exculpatory circumstances, § 378 AO as the fallback where intent cannot be proven, in dubio pro reo, no automatic downgrade. Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.2.2
+    status: excluded-with-reason
+    body_sha256: 1af812234cf50e6d3837751e4b9e0ed7186556186f941c3c818d1550c63fbe80
+    classification: penal_substantive
+    reason: Distinguishing simple negligence, recklessness and conditional intent by the severity of the breach and the offender's awareness, with three examples (unread notice; tax adviser). Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.3
+    status: excluded-with-reason
+    body_sha256: 46b9b6cf3131214fad54bea7c818457bed48edf2c4e83235103169e9e5c58487
+    classification: structural_heading
+    reason: Heading line only ("S 2.3.3 Schuld"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.3.1
+    status: excluded-with-reason
+    body_sha256: faf934579d656309b1bb9156e69c889c4f5dc4e496efced5f366bc4b26887c7f
+    classification: penal_substantive
+    reason: Definition of guilt and criminal capacity (§§ 19, 20 StGB). Penal law; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.3.3.2
+    status: excluded-with-reason
+    body_sha256: 0958a363a8c5f283a6514a5d81bf88d6fb7cb9748a272777347a5c70f3db98c5
+    classification: penal_substantive
+    reason: 'Mistake of law (§ 17 StGB): leaves intent intact, may exclude guilt only if unavoidable, duty to inquire, usually avoidable for § 370 AO. Penal law; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.4
+    status: excluded-with-reason
+    body_sha256: 5ed9ef668861ba699bc03641828a2f2cef1d403c337009e0f4a49b51b10879ac
+    classification: penal_substantive
+    reason: 'Attempted evasion (§ 370 Abs. 2 AO, §§ 22, 23 StGB): start of the attempt with the false statement or, for omission, after the § 68 EStG report is no longer prompt (one month, exceptionally six), preparatory acts and § 379 AO, withdrawal (§ 24 StGB) only by active conduct, coexistence with self-disclosure. Penal law; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S2.5
+    status: excluded-with-reason
+    body_sha256: 4f825d0b9abaeecc803b624036362ef377abee1c101690f202b8ad658c2f36ed
+    classification: penal_substantive
+    reason: 'Completion versus termination: successive participation until termination, termination only when the wrongful fixing ceases to have effect, limitation starts with the last payout (BFH III R 21/13). Penal law; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S3
+    status: excluded-with-reason
+    body_sha256: 1f69081ba1d2c05d7d742f4d46ab92849dc3bd5b4193aeeafd6e450baa8e62cf
+    classification: penal_substantive
+    reason: 'Possible offenders: claimants and recipients, adult children, employers, representatives, issuers of certificates. Penal law; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S4
+    status: excluded-with-reason
+    body_sha256: 930426e4290588310a6bafb3cc742729941187b05d41bdb251dd325cb16bad7a
+    classification: structural_heading
+    reason: Heading line only ("S 4 Verfolgungsverjährung"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S4.1
+    status: excluded-with-reason
+    body_sha256: 26e0b43518be9524c608ddf7408b6b43045afddb0c523f62a0ecbfca2d5e131e
+    classification: penal_procedure
+    reason: 'Limitation of prosecution for tax offences: five years from termination, fifteen for especially serious cases (§ 376 AO), start with the last payout, interruption (§ 78c StGB, § 376 Abs. 2 AO), and the effect on the fixing limitation (V 12.3). Penal limitation; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S4.2
+    status: excluded-with-reason
+    body_sha256: d57711f8b6cb06c1d2c69ef963ff6f1a85fe5a3e846bb4816e540bd4f1c8deba
+    classification: penal_procedure
+    reason: 'Limitation for misdemeanours: five years under § 384 AO, computed as in S 4.1. Penal limitation; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S5
+    status: excluded-with-reason
+    body_sha256: 743eceedf506bcfafb0e77067414b6d2130ba0928a5eda2937d32d2083760f82
+    classification: penal_procedure
+    reason: 'Grounds for investigation: late change notices and hearing statements may found suspicion; mere non-cooperation in a review does not; three case groups. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S5.1
+    status: excluded-with-reason
+    body_sha256: e2515a8f8a1a46a541d4ea5e8752b0ac3ada816ad99f8c454d7f87091f02d48f
+    classification: penal_procedure
+    reason: 'Late notice by the person concerned: revocation and recovery for unexpired periods, evasion interest check, initiation via the BuStra unit (form KGStB 3), closure on timely payment where self-disclosure conditions are met, deadline under § 371 Abs. 3 AO, information duties on appeals or payments. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S5.2
+    status: excluded-with-reason
+    body_sha256: d42aa1d1e19e5f41e5690d55d3fff3f1f36068a813f359d78ba4cfc3bc10c9b4
+    classification: penal_procedure
+    reason: 'Third-party notices: weighing reliability, initiation on initial suspicion once the recovery facts are known, penal instruction, statements in the § 91 AO hearing no longer count as self-disclosure, revocation and recovery within one month, otherwise further fact-finding. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S5.3
+    status: excluded-with-reason
+    body_sha256: ed521c231f2cff1e067a59d1ef4af064083f14a85c58a97a25f4e4f254cdb8e0
+    classification: penal_procedure
+    reason: 'Other grounds: an official learning of facts founding suspicion must record a file note; AStBV (St) Nr. 130–133 on informing the BuStra unit, not forwarded where at most simple negligence; failure to inform may itself be obstruction or abetting. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6
+    status: excluded-with-reason
+    body_sha256: 059ba67e9ef5261800fccdcb25caadd8ccf033ec18bff679d84a00b1a91ce798
+    classification: structural_heading
+    reason: Heading line only ("S 6 Selbstanzeige"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.1
+    status: excluded-with-reason
+    body_sha256: e90681f73db2110500e8186217cb9740e1696f96df46cb1b0d7ee9ce6b65541e
+    classification: penal_procedure
+    reason: 'Self-disclosure with exemption from punishment (§ 371 AO): complete correction for all unexpired offences (at least the last ten calendar years plus the current year), exclusion grounds, payment of the evaded Kindergeld and interest within the period, no exemption for general crimes (forgery, fraud against the employer), and the consequences of an incomplete disclosure after a § 170 Abs. 2 StPO closure versus a final decision. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.2
+    status: excluded-with-reason
+    body_sha256: eb0484192446e34a817450c4768e81088795f52e3ac2ea1b02dec3f8f75e30d2
+    classification: penal_procedure
+    reason: 'Form and content of the self-disclosure: full correction enabling assessment without further inquiry, no label or self-incrimination needed, repayment alone insufficient, to a tax authority, forwarding by an incompetent body, only for the discloser. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.3
+    status: excluded-with-reason
+    body_sha256: 667aa537ca0d1de0359668bb7c6a43a57bf751dd498180ecfaea4d7610256339
+    classification: penal_procedure
+    reason: 'Exclusion grounds (§ 371 Abs. 2 AO): notified initiation of proceedings (what counts), discovery of the offence and the offender''s knowledge as a rebuttable rule, and the EUR 25,000 per offence cap with reference to § 398a AO. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.4
+    status: excluded-with-reason
+    body_sha256: 95a33a3751e6defd0af7333f4fe449ee3dfd13533aebe1c95c3f4c6695cdf9e6
+    classification: penal_procedure
+    reason: Duty to pay the evaded amounts and interest within a criminal-law period (§ 371 Abs. 3 AO) sized to the offender's capacity, consequences of missing it, extendability, appealable to the criminal courts, set-off permitted. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.5
+    status: excluded-with-reason
+    body_sha256: 007a76fd5d8b70b3695eb18d4b03861e49fccc40399e594adc9b9309a338749b
+    classification: penal_procedure
+    reason: Ending the proceedings on a valid self-disclosure by § 170 Abs. 2 StPO closure, continuation otherwise, mitigation for ineffective disclosures and part payments. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.6
+    status: excluded-with-reason
+    body_sha256: ab3e07c8167c152f15caf22ab5318a52d330a2ab0471b0c7072f4b79aaf32ec4
+    classification: penal_procedure
+    reason: Refraining from prosecution under § 398a AO where only the EUR 25,000 cap defeats exemption, on payment of the Kindergeld, interest and the § 398a surcharge (form KGStB 17), payable by each participant. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S6.7
+    status: excluded-with-reason
+    body_sha256: db10451f50d354f5a8253a29b232ae73628e07948b67a7a1cb70c0bcbf1a8f14
+    classification: penal_procedure
+    reason: 'Fine-exempting self-disclosure for misdemeanours (§ 378 Abs. 3 AO): barred only by notified initiation, repayment suffices as no evasion interest arises. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S7
+    status: excluded-with-reason
+    body_sha256: 4da2bb098fd80668ebfe0997ed231b35986203a431539ce06287cb6211bc9503
+    classification: penal_procedure
+    reason: Suspension of penal or fine proceedings until the revocation notice is final where the offence depends on it (§§ 396, 410 AO), with limitation suspended. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8
+    status: excluded-with-reason
+    body_sha256: edef42f975c6a0fa8789e03a3d898cd1040605b0b28a2b9acadecf641ccce807
+    classification: penal_procedure
+    reason: 'The BuStra unit: transfer of the full file via the head of office with reasons, review, copies in running cases, notice of the outcome, prompt decisions (AStBV (St) Nr. 6 and 8), support for courts and prosecutors. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1
+    status: excluded-with-reason
+    body_sha256: 7f98b5e27c260e6ca7fb5163aa61519df2fd244e3a960d3bdc538c1bfc075a92
+    classification: structural_heading
+    reason: Heading line only ("S 8.1 Steuerstrafverfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.1
+    status: excluded-with-reason
+    body_sha256: 768f932866a5dc1cd1b6a834e4ba467af6acd6aaf01b4476e1f24bcb5f8ea8e4
+    classification: penal_procedure
+    reason: Subject-matter and local competence in penal proceedings (§§ 386–390 AO), priority of the office that initiated first, takeover where expedient. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.10
+    status: excluded-with-reason
+    body_sha256: 396265eedbd23ee47f1d72e9c39d73cb0dd04236d06041472df25e6e7c3e4789
+    classification: penal_procedure
+    reason: Reporting duties to the immigration authority for foreign accused (§ 87 Abs. 4 AufenthG), including EU free-movement beneficiaries, except misdemeanours with fines up to EUR 1,000. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.2
+    status: excluded-with-reason
+    body_sha256: 292e5b9117a0dd0b6a7a9cb2a498812c4e0f5d3fec504e5beb95e0c773e58ce2
+    classification: penal_procedure
+    reason: The BuStra unit's independent investigation with the rights of the prosecutor for pure tax offences (§§ 386, 399 AO), discretionary transfer to the prosecutor (AStBV (St) Nr. 22), and the consequences of transfer. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.3
+    status: excluded-with-reason
+    body_sha256: b7cd977fab0d098316230fd7022e6902d4035141c78c953dc2948f240126fe25
+    classification: penal_procedure
+    reason: Prosecutor as master of the investigation where tax offences coincide with other offences or custody orders (§ 386 Abs. 2 Nr. 2, Abs. 3 AO), the procedural concept of the act (§ 264 StPO), and the BuStra unit's police-like role and duties in that case. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.4
+    status: excluded-with-reason
+    body_sha256: 752cb8c0e69747499b162e0681393855b548dd7471e60e9ea4a707e3b86c8862
+    classification: penal_procedure
+    reason: Legality principle and the initial suspicion threshold (§ 152 Abs. 2 StPO), the aim of the investigation (sufficient suspicion for public charges, § 170 StPO). Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.5
+    status: excluded-with-reason
+    body_sha256: 85d0dc8e52769589cfb4c6a25212d3d3ad0cba1062fb044b0f63bacbca1e66f5
+    classification: penal_procedure
+    reason: 'Initiation of the investigation (§ 397 AO, form KGStB 3): what counts as initiation, file note, informing the competent office (§ 393 AO), notification and instruction of the accused (right to silence, counsel, non-enforceable cooperation), exclusion of self-disclosure thereafter, interruption of limitation. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.6
+    status: excluded-with-reason
+    body_sha256: 615be44979001fa45d81393311f0d4d48550885ed3eee625037af325e96b24d2
+    classification: penal_procedure
+    reason: 'Course of the investigation: scope (§§ 160, 161 StPO), federal criminal register enquiry, rule-of-law standards, use of the Kindergeld file and office staff as witnesses, examination of the accused or written statement, employer information. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.7
+    status: excluded-with-reason
+    body_sha256: 14b3572bdf7dda138752ba8385b770140bea84eb1ac5fcc27d6a017e9f371b08
+    classification: penal_procedure
+    reason: Closing note (§ 169a StPO, form KGStB 10) with course, result and next step; defence counsel's unrestricted file access afterwards (§ 147 StPO). Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.7.1
+    status: excluded-with-reason
+    body_sha256: 30ac898defe15e9f49fadb46686a0288355f7f078f3567f40ea36f1f9d73894c
+    classification: penal_procedure
+    reason: Closure for lack of sufficient suspicion (§ 170 Abs. 2 StPO), e.g. no intent or valid self-disclosure, notice to the accused (form KGStB 14), no res judicata, and conversion to fine proceedings where recklessness is found with a fresh hearing. Penal procedure; no computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.7.2
+    status: excluded-with-reason
+    body_sha256: 5c0c8d5d1b96f1ff5c1eca315d0aa3790ae9f5b0a3cf815a7eb52e0b5b6f7842
+    classification: penal_procedure
+    reason: 'Discretionary closure despite sufficient suspicion (§ 398 AO, §§ 153 ff. StPO): minor advantage (overpaid Kindergeld up to EUR 1,500 by reference to § 66 Abs. 1 and 2 EStG), minor guilt (six to eight daily rates), no public interest, closure on conditions (§ 153a StPO, forms KGStB 15), and § 154 StPO where other penalties exist. Penal procedure; the EUR 1,500 threshold sizes prosecution discretion, not the Kindergeld entitlement.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.7.3
+    status: excluded-with-reason
+    body_sha256: 440bb091e0c3607643a14e35a44f4d603e0aed920007105d4e89cf5df3a8102b
+    classification: penal_procedure
+    reason: 'Application for a penal order (§ 400 AO, § 407 StPO, form KGStB 11): competent local court, suitability, content (§ 409 StPO), closing note first, public charges raised on filing, transfer of control to the court, interruption of limitation. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.8
+    status: excluded-with-reason
+    body_sha256: 7e055c023d524c9057088420d3143038933aba53bad7e77e84feef1d5bb76c08
+    classification: penal_procedure
+    reason: 'Procedural bars: prosecution limitation, lis pendens and res judicata (Art. 103 Abs. 3 GG), § 84 OWiG. Penal procedure; no computational content.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.1.9
+    status: excluded-with-reason
+    body_sha256: f94ae865477736eec6d0270c55d6e527a23b5d4fed7333c14f5738da26ce7f51
+    classification: penal_procedure
+    reason: Reporting duties to disciplinary authorities for civil-servant accused (§ 49 BeamtStG, § 115 BBG) under the BMF letters of 12.01.2018 and 13.01.2023, extended to comparable public-service employees. Penal procedure; the BMF letters are members of the pending BMF-Schreiben class. No computational content.
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S8.2
+    status: excluded-with-reason
+    body_sha256: 9e8ddbdb0f4baa0e0ecaf1ed76325fddd32d68ea4aaf5d606d5d891cbfa6ccfb
+    classification: penal_procedure
+    reason: 'Fine proceedings: OWiG procedure as modified by §§ 409–412 AO, opportunity principle with criteria, refraining from prosecution below EUR 5,000 wrongly obtained (EUR 1,500 in repeat cases), competent authority and court (§§ 391, 410 AO), stronger participation rights (§ 407 AO), objection within two weeks (§ 67 OWiG) and its handling. Penal procedure; the thresholds size prosecution discretion, not the Kindergeld entitlement.'
+    bears_on_computed_surface: false
+  - id: de-kg-dakg-S9
+    status: excluded-with-reason
+    body_sha256: bbc5702004b1f2d5f3c14b81078ee4f1ca36c21fdf1a1b97a1d4abf2b3917b70
+    classification: penal_substantive
+    reason: 'Sentencing (§ 46 StGB): general and special prevention, guilt as the basis, amount and duration of the wrongly obtained Kindergeld as key factors, daily-rate fines (three per month and child as a guide, at least four after 17 months), restrictions on short custodial sentences (§ 47 StGB), attempt mitigation. Penal law; the per-month-and-child guide sizes the fine, not the Kindergeld amount.'
+    bears_on_computed_surface: false
   - id: de-kg-dakg-V1
     status: excluded-with-reason
     body_sha256: 4d6f2171c70d8cd99da2bfac3d561644361b22f9eb97457a7fa05f7f8c0c5374
@@ -7770,6 +8568,22 @@ committed_decisions:
     discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
     provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
     status: pending
+  - id: de-kg-suppl-016
+    identity: Kinderzuschlag-Datenabrufverordnung (KiZDAV), BGBl. 2023 I Nr. 376 — Verordnung nach § 68 Abs. 5 EStG
+    title_short: KiZDAV
+    relation: issued_under
+    discovered_by: de-kg-dakg-O4.5
+    discovered_in_body_sha256: 264987bc1bebb81f96a3f2f23252cccbafc4731ba3b61de479bdfdee37bb9f73
+    provenance: DA-KG 2025 O 4.5 Abs. 1 Satz 2 (Datenabruf durch die KiZ-Stellen)
+    status: pending
+  - id: de-kg-suppl-017
+    identity: Richtlinien für das Strafverfahren und das Bußgeldverfahren (RiStBV)
+    title_short: RiStBV
+    relation: guidance
+    discovered_by: de-kg-dakg-S1.2
+    discovered_in_body_sha256: e99a50a4a88223d40a4ca0a4c193b6981327b55198bcd973e803c0b965931606
+    provenance: DA-KG 2025 S 1.2 Satz 2 (ergänzend heranzuziehen im Rahmen des § 386 AO)
+    status: pending
 computed:
   ledger:
   - ordinal: 1
@@ -8068,13 +8882,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 463
+    instrument_count: 465
     counts:
-      total: 463
+      total: 465
       encoded: 0
       classified-with-reason: 5
-      excluded-with-reason: 170
-      pending: 288
+      excluded-with-reason: 303
+      pending: 157
     pending:
     - de-kg-dakg-A1
     - de-kg-dakg-A10
@@ -8188,139 +9002,6 @@ computed:
     - de-kg-dakg-A7
     - de-kg-dakg-A8
     - de-kg-dakg-A9
-    - de-kg-dakg-R1
-    - de-kg-dakg-R10
-    - de-kg-dakg-R10.1
-    - de-kg-dakg-R10.10
-    - de-kg-dakg-R10.11
-    - de-kg-dakg-R10.12
-    - de-kg-dakg-R10.13
-    - de-kg-dakg-R10.2
-    - de-kg-dakg-R10.3
-    - de-kg-dakg-R10.4
-    - de-kg-dakg-R10.5
-    - de-kg-dakg-R10.6
-    - de-kg-dakg-R10.7
-    - de-kg-dakg-R10.8
-    - de-kg-dakg-R10.9
-    - de-kg-dakg-R11
-    - de-kg-dakg-R11.1
-    - de-kg-dakg-R11.2
-    - de-kg-dakg-R11.3
-    - de-kg-dakg-R11.4
-    - de-kg-dakg-R12
-    - de-kg-dakg-R12.1
-    - de-kg-dakg-R12.2
-    - de-kg-dakg-R12.3
-    - de-kg-dakg-R12.4
-    - de-kg-dakg-R13
-    - de-kg-dakg-R14
-    - de-kg-dakg-R2
-    - de-kg-dakg-R2.1
-    - de-kg-dakg-R2.2
-    - de-kg-dakg-R2.3
-    - de-kg-dakg-R3
-    - de-kg-dakg-R4
-    - de-kg-dakg-R4.1
-    - de-kg-dakg-R4.2
-    - de-kg-dakg-R4.3
-    - de-kg-dakg-R4.4
-    - de-kg-dakg-R4.5
-    - de-kg-dakg-R4.5.1
-    - de-kg-dakg-R4.6
-    - de-kg-dakg-R5
-    - de-kg-dakg-R5.1
-    - de-kg-dakg-R5.1.1
-    - de-kg-dakg-R5.1.2
-    - de-kg-dakg-R5.1.3
-    - de-kg-dakg-R5.2
-    - de-kg-dakg-R5.3
-    - de-kg-dakg-R5.4
-    - de-kg-dakg-R5.5
-    - de-kg-dakg-R5.6
-    - de-kg-dakg-R5.7
-    - de-kg-dakg-R6
-    - de-kg-dakg-R6.1
-    - de-kg-dakg-R6.2
-    - de-kg-dakg-R6.3
-    - de-kg-dakg-R6.4
-    - de-kg-dakg-R6.4.1
-    - de-kg-dakg-R6.4.2
-    - de-kg-dakg-R6.4.3
-    - de-kg-dakg-R6.4.4
-    - de-kg-dakg-R6.5
-    - de-kg-dakg-R7
-    - de-kg-dakg-R8
-    - de-kg-dakg-R9
-    - de-kg-dakg-R9.1
-    - de-kg-dakg-R9.2
-    - de-kg-dakg-R9.3
-    - de-kg-dakg-R9.4
-    - de-kg-dakg-R9.5
-    - de-kg-dakg-S1
-    - de-kg-dakg-S1.1
-    - de-kg-dakg-S1.2
-    - de-kg-dakg-S10
-    - de-kg-dakg-S10.1
-    - de-kg-dakg-S10.2
-    - de-kg-dakg-S10.2.1
-    - de-kg-dakg-S10.2.2
-    - de-kg-dakg-S10.3
-    - de-kg-dakg-S11
-    - de-kg-dakg-S12
-    - de-kg-dakg-S2
-    - de-kg-dakg-S2.1
-    - de-kg-dakg-S2.1.1
-    - de-kg-dakg-S2.1.2
-    - de-kg-dakg-S2.1.2.1
-    - de-kg-dakg-S2.1.2.2
-    - de-kg-dakg-S2.2
-    - de-kg-dakg-S2.3
-    - de-kg-dakg-S2.3.1
-    - de-kg-dakg-S2.3.1.1
-    - de-kg-dakg-S2.3.1.2
-    - de-kg-dakg-S2.3.2
-    - de-kg-dakg-S2.3.2.1
-    - de-kg-dakg-S2.3.2.2
-    - de-kg-dakg-S2.3.3
-    - de-kg-dakg-S2.3.3.1
-    - de-kg-dakg-S2.3.3.2
-    - de-kg-dakg-S2.4
-    - de-kg-dakg-S2.5
-    - de-kg-dakg-S3
-    - de-kg-dakg-S4
-    - de-kg-dakg-S4.1
-    - de-kg-dakg-S4.2
-    - de-kg-dakg-S5
-    - de-kg-dakg-S5.1
-    - de-kg-dakg-S5.2
-    - de-kg-dakg-S5.3
-    - de-kg-dakg-S6
-    - de-kg-dakg-S6.1
-    - de-kg-dakg-S6.2
-    - de-kg-dakg-S6.3
-    - de-kg-dakg-S6.4
-    - de-kg-dakg-S6.5
-    - de-kg-dakg-S6.6
-    - de-kg-dakg-S6.7
-    - de-kg-dakg-S7
-    - de-kg-dakg-S8
-    - de-kg-dakg-S8.1
-    - de-kg-dakg-S8.1.1
-    - de-kg-dakg-S8.1.10
-    - de-kg-dakg-S8.1.2
-    - de-kg-dakg-S8.1.3
-    - de-kg-dakg-S8.1.4
-    - de-kg-dakg-S8.1.5
-    - de-kg-dakg-S8.1.6
-    - de-kg-dakg-S8.1.7
-    - de-kg-dakg-S8.1.7.1
-    - de-kg-dakg-S8.1.7.2
-    - de-kg-dakg-S8.1.7.3
-    - de-kg-dakg-S8.1.8
-    - de-kg-dakg-S8.1.9
-    - de-kg-dakg-S8.2
-    - de-kg-dakg-S9
     - de-kg-instr-001
     - de-kg-instr-002
     - de-kg-instr-003
@@ -8364,6 +9045,8 @@ computed:
     - de-kg-suppl-013
     - de-kg-suppl-014
     - de-kg-suppl-015
+    - de-kg-suppl-016
+    - de-kg-suppl-017
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -10394,7 +11077,7 @@ computed:
       reason: Automated data retrieval and notifications to the Kinderzuschlag offices under § 68 Abs. 5 EStG and the KiZDAV (BGBl. 2023 I Nr. 376). Data transfer for another benefit; no bearing on the Kindergeld amount.
       bears_on_computed_surface: false
     - id: de-kg-dakg-R1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10407,8 +11090,11 @@ computed:
       heading_sha256: ca9afa1c586e39ae8f789ebce08ea02f37bb8747c0d0feadeda3f6fd591f7b87
       section_located: true
       body_sha256: c5a101b2835552a10a2cbce6ea038c955830ca1fd133f4d016b0b7b08228c59d
+      classification: administration_only
+      reason: 'Keeping the appeals register (form KGRb 6): half-yearly checks, sequential entries with the contested act and the manner of disposal, notes on suspension and stays, one entry per multi-period appeal, split entries on partial relief, transfers between offices. Register administration; no entitlement or amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10421,8 +11107,11 @@ computed:
       heading_sha256: a128ad8c4e05462da0a3569e6d5df78272a099ba18de65b7cac2a816433b9ab2
       section_located: true
       body_sha256: cae38fda5335c582e3eb1d67babce3a3bd79e4861c643ceefffafe579c86e1b8
+      classification: court_procedure
+      reason: Admissibility of the action is examined by the FG. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10435,8 +11124,11 @@ computed:
       heading_sha256: 3e3920295ef57a0b23ac6c12d38ab0ada16eba7ef72bebdd59e982b04ece93bc
       section_located: true
       body_sha256: f18a3da4dd7fdfb05272eba54ade998fe3048e6c76fbe55bcdbf57845bff9e26
+      classification: court_procedure
+      reason: Fiscal-court jurisdiction for tax-law Kindergeld (§ 33 FGO, § 6 AO, § 5 FVG); BKGG disputes go to the social courts (§ 15 BKGG); referral where the wrong court system is chosen. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10449,8 +11141,11 @@ computed:
       heading_sha256: 61a9a4f3f30dac95d982e155d0b01e76c97a199a8e6ceb29958ee713ba5fd827
       section_located: true
       body_sha256: dd7a7a6f314cb46f031ae99f18a064fb7d4888ea7c7375b4c36e8b49c1474e81
+      classification: court_procedure
+      reason: The correct defendant office (§ 63 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.11
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10463,8 +11158,11 @@ computed:
       heading_sha256: 8b2f5c57f14afc57c65f480fbaf7edc84af4b6295f3b42f05f0d79b953359dd1
       section_located: true
       body_sha256: 0d567215bd1b109896b07a6d7439633bb1de3338c2351035a90143bcb69b82f0
+      classification: court_procedure
+      reason: Proper filing of the action (§§ 64, 52a, 65 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.12
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10477,8 +11175,11 @@ computed:
       heading_sha256: 4c9438c892abcf8ad07b7490aa2a298755fad7a62ad819c8dd69f1cd51d024f8
       section_located: true
       body_sha256: 79f12b318d7399817106f83851aad68d03094703acd2f1060ea2ae33c876ffd9
+      classification: court_procedure
+      reason: Need for legal protection, absent where the aim is reachable more simply. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.13
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10491,8 +11192,11 @@ computed:
       heading_sha256: b87ecca79511c204a941c459d7f3ea24dea888fb543854e1049e472bdcc961fc
       section_located: true
       body_sha256: b68c37b0553f1dd8d4e1cf0a2cf86bdd2ed2409835c389d42f85f9c9f356ad50
+      classification: court_procedure
+      reason: 'Negative admissibility conditions: no waiver, no withdrawal, no lis pendens, no final judgment on the same subject. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10505,8 +11209,11 @@ computed:
       heading_sha256: 2bc40a1c24a4d84cec806cf732789c2887b149ad2224ac56149d726bf3278d17
       section_located: true
       body_sha256: da9bac653bada76b56d800eaeff054e869b80f2993d1039b2331faf1e106e0cc
+      classification: court_procedure
+      reason: Subject-matter and local jurisdiction (§§ 35, 36, 38 Abs. 2a FGO) and referral (§ 70 FGO, § 17a GVG). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10519,8 +11226,11 @@ computed:
       heading_sha256: c42a6c17119b01c5f88d618b475086978b77a7623ebf9efb35275352798c6db1
       section_located: true
       body_sha256: 1d9e39c9d30c8214cd835e854747fa85af371a8dc3d2e3fe44a27ea1e9260b87
+      classification: court_procedure
+      reason: The admissible type of action follows the claimant's aim, interpreted by the court (§ 96 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10533,8 +11243,11 @@ computed:
       heading_sha256: 3df4190b7b89a52909b418990baba8eadd8b040521f23b35a6d4c690a56d7378
       section_located: true
       body_sha256: 81792a3b3c24f3e92679305621dddaaf531ea094cf02c287719c9333fa1dfebf
+      classification: court_procedure
+      reason: Requirement of an unsuccessful appeal for annulment and order actions (§ 44 FGO), not for performance and declaratory actions, with the exceptions (excluded appeal, inaction action, leap action, arrest, first-time grievance of a third party). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10547,8 +11260,11 @@ computed:
       heading_sha256: afbbf45fe1d8c7183ba6f33f4f6c0506a9539d725a805c05e53c79842f386021
       section_located: true
       body_sha256: 96a3922dc88a63bcfffb1d9aceb803fad5980ef615c52511eb3f7a8fa97129a0
+      classification: court_procedure
+      reason: Standing (§ 40 Abs. 2 FGO) and the declaratory interest (§ 41 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10561,8 +11277,11 @@ computed:
       heading_sha256: 71bd6eefd0c9161f1b9a75fe8fc6db4b5ffd723cc650e463f0239101dfe0e283
       section_located: true
       body_sha256: 24a246d5a1fa4ef4a0ca338e4942e1aaee2dfa78ab2b2d46a4dd776deece8b06
+      classification: court_procedure
+      reason: Capacity to be a party (§ 57 FGO), including a minor child demanding payment to itself. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10575,8 +11294,11 @@ computed:
       heading_sha256: ae1e3ef734cd0d7d9cd55d8e7e9814adba10a53fc6a1dae34f28223ae087b1c7
       section_located: true
       body_sha256: 2fdbfeb7b9c47a44777f0957d72c8296c678a566bcc95612a4193249388a6008
+      classification: court_procedure
+      reason: Capacity to conduct proceedings (§ 58 FGO) mirrors § 79 AO. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10589,8 +11311,11 @@ computed:
       heading_sha256: 62ad99fd1861b536402048397165e82c377154a6d6b16e09223eaec819cd1db5
       section_located: true
       body_sha256: 18cf1bf984a4301268dce8317715f254296140d49356442c2f5a06062c3277f9
+      classification: court_procedure
+      reason: 'Representation: optional before the FG, mandatory before the BFH (§ 62 FGO) including for authorities, and how the office secures qualified representation. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R10.9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10603,8 +11328,11 @@ computed:
       heading_sha256: 6a7121ff3e0215233be80e2c06004e8e6187ee2fca91c525e3f2cf75ac86c10e
       section_located: true
       body_sha256: 4b755f50cdca88a675cf6ad2d8455b78c63642ca3c35b3d6488d02dfcf8353fa
+      classification: court_procedure
+      reason: One-month period for annulment and order actions (one year with defective instruction), deemed met when lodged with the office, forwarding duty; no period for performance and declaratory actions. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R11
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10617,8 +11345,11 @@ computed:
       heading_sha256: f248f215cbcb337e49f876c1d747b5198d82660bcbdf77db8e6e36285fa5a875
       section_located: true
       body_sha256: 080055b696e66e50379da31ecdcb45c9f3752807aa2b7e2545738adccc8d9b6d
+      classification: structural_heading
+      reason: Heading line only ("R 11 Gang des finanzgerichtlichen Verfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R11.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10631,8 +11362,11 @@ computed:
       heading_sha256: d0f24470e345bc530556a94501d1b70f38eaf75fa622f0909c562805b1fdd6aa
       section_located: true
       body_sha256: f81b92db2e29e838ae47fb9563d6380c0759bd74d279a984dd068de26d0aca48
+      classification: court_procedure
+      reason: Court investigation ex officio and the parties' duty of complete and truthful statements (§ 76 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R11.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10645,8 +11379,11 @@ computed:
       heading_sha256: 083debf2187a0a548b8455bb4d77f86dfd958e81045fc978223802fc3145654f
       section_located: true
       body_sha256: c02bb4d2bb5cb570496e194b4d8cf3cf1219de2ba45bc30dbb4bda07e448c1ca
+      classification: court_procedure
+      reason: Third-party joinder before the court (§ 60 FGO), simple and necessary, rights of the joined party, extension of res judicata. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R11.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10659,8 +11396,11 @@ computed:
       heading_sha256: 2aaffe692f3ec4a172e4123acd0b50ee03aa47239ea6b818a459a5c3859f0da7
       section_located: true
       body_sha256: a72b92ccd83b1118d73ecac0dd8e53f38b33e26352119b8b401c4f3d3e97a192
+      classification: court_procedure
+      reason: Access to court files (§ 78 FGO). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R11.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10673,8 +11413,11 @@ computed:
       heading_sha256: ae32a9f28e0e35d370e1086f79de75e66d24566a7c64d3f19db7f15c056d5ab2
       section_located: true
       body_sha256: cf4cdde420c2ca76fb2d1032340bd061a97cbbda1f10d89f74812ed4667a2a4f
+      classification: court_procedure
+      reason: 'Conciliation judge proceedings (§ 155 FGO, § 278 Abs. 5 ZPO): suited to disputed facts or discretionary matters, no settlement on pure questions of law, consent, no suspension of periods, outcomes. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R12
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10687,8 +11430,11 @@ computed:
       heading_sha256: cb3cac61be4e09afd81794357a756e2c05a976f7c8ae9cacd3b529210b700de8
       section_located: true
       body_sha256: cfaae5964b28bd0992cd38b7effa8ec33bd355d288c22cd5f36da8d6fff8f5fc
+      classification: court_procedure
+      reason: Ending the court proceedings by judgment or court order (§ 90a FGO), revision where admitted, or request for oral hearing. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R12.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10701,8 +11447,11 @@ computed:
       heading_sha256: ea0ae2aae215a1738a445e506efba5df79fce174f283a207d36fd7f730074b53
       section_located: true
       body_sha256: ceae1458b44f4ef63679d204714968652690b20ed32b6fb3e58029f0b726042f
+      classification: court_procedure
+      reason: 'Judgment: annulment with binding legal assessment (§ 100 Abs. 1 FGO), the court''s power to fix the Kindergeld at a different amount or replace a finding (§ 100 Abs. 2 FGO), annulment for further investigation (§ 100 Abs. 3 FGO), and orders to issue or re-decide (§ 101 FGO). Court procedure on remedies; the amount the court may fix is governed by the substantive law on the spine, not by this heading.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R12.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10715,8 +11464,11 @@ computed:
       heading_sha256: d93037145bda016fd6d5de55600dbf1934042713f5e30c898406b9187bd3cb3e
       section_located: true
       body_sha256: ffd787643701494b55b8d50c5f66ab66e2f6490240857a2f5341b7cf34ee97c6
+      classification: court_procedure
+      reason: Declaration of settlement by all parties ends the dispute without judgment. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R12.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10729,8 +11481,11 @@ computed:
       heading_sha256: 48383f496fb672580d89f944f38ff2648f3850137122df37a672ad3cf389a4a2
       section_located: true
       body_sha256: ae0819934d98f0c7ec17655df92c074df068a804773ac31f4c3e16f57a85a083
+      classification: court_procedure
+      reason: Withdrawal of the action (§ 72 FGO), consent requirements, loss of the action for period-bound actions, contrast with withdrawal of the appeal or the revision. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R12.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10743,8 +11498,11 @@ computed:
       heading_sha256: 5883b7d31dc91ae88c7f93e8f5d0b5b076db098681ca0c022ded942622ef88bb
       section_located: true
       body_sha256: 69a28d4766b1f73d416196467fb9c757c68c24c1992ea62112c3a3da5dacce17
+      classification: court_procedure
+      reason: No settlements in fiscal-court proceedings; factual agreements on the underlying facts are possible, legal effects follow from statute. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R13
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10757,8 +11515,11 @@ computed:
       heading_sha256: a93f2611e14effe68b68e7baae1101da2eb0ec53942ba3bc99e6c4827f92e82f
       section_located: true
       body_sha256: c87c429fd93dcbfecae90aecc02af66d62ced33771dad5b33354ea324399479e
+      classification: court_procedure
+      reason: 'Court costs (GKG): the office is exempt from court fees but not from reimbursing a successful claimant, loser pays (§§ 135 ff. FGO) with fault-based exceptions, costs on settlement and on withdrawal. Cost procedure; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R14
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10771,8 +11532,11 @@ computed:
       heading_sha256: 094f42c58fe7363c0c843e1336c2baecf9e78082bac623d013c0b20dd40a8d2c
       section_located: true
       body_sha256: 298cf5e1cb8a0cd8e31f15111e0beaf0ad1d55b035ef5f409b4759ec95e337e4
+      classification: appeals_procedure
+      reason: 'Cross-reference: check process interest where the claimant prevails (V 30.1, V 30.5). Ancillary levy; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10785,8 +11549,11 @@ computed:
       heading_sha256: 28a845e2827e8f3022d242ff806d62fc8867d72c7e075f198d566ab0503687e4
       section_located: true
       body_sha256: 7e976ba441e9bf7c0c4148d81c2963af282299e15cfabf7f37f85d1dcd10fd00
+      classification: appeals_procedure
+      reason: 'Nature and functions of the extra-judicial appeal (Einspruch): initiated only by the appellant, protects rights and self-checks the administration, relieves the courts; the fixing-procedure rules apply (§ 365 AO). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10799,8 +11566,11 @@ computed:
       heading_sha256: efd114328f5a48eec203e9d79fe56f34bd083c247a06ac97578c00684336d4e0
       section_located: true
       body_sha256: ea3f2adfd05d39d8c3f950b22557cfc74b45cac5dea3cae47e69b7ba4370af06
+      classification: appeals_procedure
+      reason: Investigation ex officio in the appeal (§ 88 AO, V 6.1) and V 6.4 for deception. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10813,8 +11583,11 @@ computed:
       heading_sha256: bbde120601ce771c556a0e681ec49e8b7cf06c9f5cf3bf962474d2f997403494
       section_located: true
       body_sha256: 0bfd9a37d24589727230f924c21d8c432342a99e87ca94c6ed402a047305cde5
+      classification: appeals_procedure
+      reason: Cooperation duties in the appeal (§§ 90 ff. AO, § 68 Abs. 1 EStG, V 7). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R2.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10827,8 +11600,11 @@ computed:
       heading_sha256: da57c85c2a4270189c1833725a1f46f5655bb4ea8b08885fe6a7b4005a621b5a
       section_located: true
       body_sha256: 812c3ed28775b526a2f35ffe66e62dfd3e3fd6b8600c70632906f8efe34f35e3
+      classification: appeals_procedure
+      reason: Hearing before an appeal decision that does not fully grant relief (V 6.1 Abs. 3). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10841,8 +11617,11 @@ computed:
       heading_sha256: bf5b3afd5eefa4b71c524a43f13c7b7352672f035114d7efae11521d360315f8
       section_located: true
       body_sha256: 100e02fd0cacd666f3fead76b67b8234134d889558057fb41511328d53a7dca8
+      classification: appeals_procedure
+      reason: Formal appeals under AO/FGO distinguished from informal remedies, and the appeal from a request for amendment (in doubt an amendment request is treated as an appeal; the appeal prevents finality, allows suspension and may lead to a worse decision). Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10855,8 +11634,11 @@ computed:
       heading_sha256: f668061fc1130b673d4e733be08233b423248493fec41342c7ff252037bb120c
       section_located: true
       body_sha256: aabc135662a4e4393fcf9eed4fa31f44e1bb614e4d55bfc3ed513a739b42b110
+      classification: structural_heading
+      reason: Heading line only ("R 4 Zulässigkeitsvoraussetzungen"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10869,8 +11651,11 @@ computed:
       heading_sha256: 7b9d01411537107603b8fe136eb765dac3a544b2d7704075753b1aab16733ae1
       section_located: true
       body_sha256: cd1c9e2dade9e50ac17a559ec3b694f41577556f4faf8666501e2e6f6dc330c1
+      classification: appeals_procedure
+      reason: An appeal requires a contested act or a failure to act; admissibility under § 358 AO is checked ex officio and an inadmissible appeal is dismissed. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10883,8 +11668,11 @@ computed:
       heading_sha256: 62518d9f4b8e5fe33b5ffb946f252e7cbb2d3d4a4e72bf5507ba736e018059ba
       section_located: true
       body_sha256: f6c2080ae67193a5e62678cbfaa9ffc32e763f4ca46798e05173b7cf50cc1423
+      classification: appeals_procedure
+      reason: 'Admissibility of the Einspruch (§§ 347, 348 AO): Kindergeld as a tax refund falls under the AO, the inaction appeal after six months, appeals against void acts, and the exclusions (appeal decisions, non-decision). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10897,8 +11685,11 @@ computed:
       heading_sha256: 81bd78aa4d86e1e6407067a30e1bcac85e28c9fcc86aa4dd538ff20bd1723775
       section_located: true
       body_sha256: 0d4eb052be9083c3f6596dc935bf6ad8fec7990eaed69f1f3a561a5a172a3a91
+      classification: appeals_procedure
+      reason: 'Grievance (Beschwer): the appellant must allege being affected in their own rights, including seeking a more favourable decision such as a higher amount; standing of an applicant in legitimate interest or a diversion recipient; the general need for legal protection, present for prospective revocations despite the possibility of a new application because § 77 EStG costs would be lost. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10911,8 +11702,11 @@ computed:
       heading_sha256: 36ea5a38f13dd49eb9178af5a35bee5b25d92677495b2818b35f3be75a16e3d8
       section_located: true
       body_sha256: 23db77629850e2ecfb2258e973ff48371467d98d0be09f04844e9cf6f024812e
+      classification: appeals_procedure
+      reason: 'Where and how to lodge the appeal (§ 357 AO): the issuing office, forwarding within the period, written or electronic form or on record, no signature or label required, content per § 357 Abs. 3 AO not mandatory. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10925,8 +11719,11 @@ computed:
       heading_sha256: 688dc8c078b60d53d488c2b24f0eb0dcc49f53850ffa7785a8e36167e388cc1c
       section_located: true
       body_sha256: fb34829221c1ad419ae7f5ae585df70714cc97d088d13bf5f919add6df4c0c3f
+      classification: appeals_procedure
+      reason: Appeal period of one month after proper notification (§ 355 AO), one year without or with a wrong instruction (§ 356 AO), inaction and void-act appeals unlimited, no extension (§ 109 AO), restoration (§ 110 AO), and forwarding by an incompetent authority. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.5.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10939,8 +11736,11 @@ computed:
       heading_sha256: 1c99cb84e8eced5690191d21b4ce2459f995556335c7d3127e23248b83a6aaea
       section_located: true
       body_sha256: d9c6b452067c671476c96bc015dc8b3e80dd47b46f934e873a85610819926dff
+      classification: appeals_procedure
+      reason: 'Restoration to the previous status (§ 110 AO): one-month application after the obstacle ends, one-year outer limit, fault standard including the representative''s, illness, absence up to six weeks, workload and language difficulties, using the full period with postal times, substantiation, and that the decision is part of the appeal decision. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R4.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10953,8 +11753,11 @@ computed:
       heading_sha256: 44d33b4f32681e5b497a97874b3129b1e91edff89b11f74ff107815cddf5540f
       section_located: true
       body_sha256: 623db07a4f34f1929c712cf58a0e8877bc175c65e4ba83063ca0fecb38a89912
+      classification: appeals_procedure
+      reason: 'Consequences of inadmissibility: dismissal (§ 358 AO) after hearing and suggesting withdrawal, no substantive review, finality of the contested act, no worsening. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10967,8 +11770,11 @@ computed:
       heading_sha256: 93e1a0b014f12621ffe6208f10f723b70adc940ce9e2f6985922fab75c43337f
       section_located: true
       body_sha256: eea324fca951c62a2e9dad419a3ed6850d4f4e6d334a71b78488940fef82d09e
+      classification: structural_heading
+      reason: Heading line only ("R 5 Durchführung des außergerichtlichen Rechtsbehelfsverfahrens"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10981,8 +11787,11 @@ computed:
       heading_sha256: 658799fa9c35fc0e11af0b62b8faf9dfed806f472956ab0da849292b51cef94e
       section_located: true
       body_sha256: f93482e48aad9b64c0c9e91afd4586771b69c1d9f68ab3d0a4d4f3f330d5d6d0
+      classification: structural_heading
+      reason: Heading line only ("R 5.1 Aussetzung der Vollziehung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -10995,8 +11804,11 @@ computed:
       heading_sha256: d512261d3af723d12cfbfa90a7c5a1cd5fb1b249348681545eb991c6321b162b
       section_located: true
       body_sha256: 85d9fda96a0e1f821d4f033f26943722c87731bffc871ccfc5f758a989c41efb
+      classification: appeals_procedure
+      reason: 'Suspension of enforcement (§ 361 AO) as provisional legal protection: an appeal does not suspend recovery; suspension relieves the appellant provisionally; separate act (form KGRb 2). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11009,8 +11821,11 @@ computed:
       heading_sha256: 5a7992dc4695cd3fe1a10be11fca0fd09030aea8188076682e4df197e9baf8a4
       section_located: true
       body_sha256: dcd7af3989e82bae14968c68d8ce0cc336f9ea3001a42cb6a9dc36b8100022e8
+      classification: appeals_procedure
+      reason: Suspension requires a contested, enforceable act (a money claim such as recovery; refusals are not enforceable — interim order under § 114 FGO instead), serious doubts on lawfulness or undue hardship, form-free application or ex officio. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.1.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11023,8 +11838,11 @@ computed:
       heading_sha256: 4ca98ff298eb06ce886ceee89a2d24607b08bf1f76e66ab14bb992dc8d76cac0
       section_located: true
       body_sha256: 1c19168f8a452eebed67f56d3ba4cdd9b312cdcaef17f330a1bec84b0b1f0fab
+      classification: appeals_procedure
+      reason: 'Effects of suspension: prompt decision, no enforcement meanwhile, effectiveness on notification, no surcharges during suspension, start and end dates, interest check if the appeal fails, remedies against refusal (§ 69 FGO). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11037,8 +11855,11 @@ computed:
       heading_sha256: 4dcf0c7d278bc876c704926c1eae22c495bc98029a3b0475cbdfa1d1864745ba
       section_located: true
       body_sha256: 135acd9218d824352af79b80a5b004322a8248f46048ee805e40280bb28368d8
+      classification: appeals_procedure
+      reason: Access to stored data (V 9) and communication of the taxation documents on request (§ 364 AO) to appeal-entitled participants. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11051,8 +11872,11 @@ computed:
       heading_sha256: 891f03e0a2f93595aeb032535de53d4f652d9918b4a264358b3293a2f6cdf7cd
       section_located: true
       body_sha256: f79596f0752149fa94cdae2ed5ed853fdcb63551de9dcdc88f47fc7bd0eb3d6e
+      classification: appeals_procedure
+      reason: Oral discussion of the facts and law (§ 364a AO) should be granted; a breach makes the decision unlawful but not void. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11065,8 +11889,11 @@ computed:
       heading_sha256: 1ea72391f26b3faab0ad149ee449d5a27c264d04711acc50dec76cb8a8e840ba
       section_located: true
       body_sha256: 3d89a6340dc543b2698d76bd14e778bbea59f8da83792d51cb90ec635472eee5
+      classification: appeals_procedure
+      reason: The preclusion period of § 364b AO is not applied in Kindergeld proceedings. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11079,8 +11906,11 @@ computed:
       heading_sha256: dc9d7f3120908ad3e9d9755cdc43456e7ea21371f7cf40d58cac09f25b130ab2
       section_located: true
       body_sha256: 3d6b64a21bf9dfc7ddc8fd93c89765eeb0571107a203e7a4032ce2d82c2239d3
+      classification: appeals_procedure
+      reason: 'Worsening (§ 367 Abs. 2 AO): definition, prior reasoned notice with opportunity to withdraw, when the notice is dispensable, mandatory hearing, no discretion. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11093,8 +11923,11 @@ computed:
       heading_sha256: 10748eed96f23cc4e0db2eeda4a0cc800970a04ff853f708a4ac91bd814e0726
       section_located: true
       body_sha256: 139fe3cbc242187f20b9d8567931eafe0d6dd8b4ab228b023426809141aa4c9c
+      classification: appeals_procedure
+      reason: 'Stay of the appeal (§ 363 AO): by consent for important reasons coordinated with the BZSt, as a discretionary revocable order, and the statutory stay pending EuGH/BVerfG/BFH proceedings on which the appeal relies. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R5.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11107,8 +11940,11 @@ computed:
       heading_sha256: 1d02cee8e940a9534b3065a92f5c2fd41dd15c8a8860499ba439b9db57bf9771
       section_located: true
       body_sha256: 0c2eb070c88fa0299f9262a49c400f1d0838facbdece3a912226798ae062e436
+      classification: appeals_procedure
+      reason: 'Joinder of the other party in priority disputes under § 64 EStG (§ 174 Abs. 5 AO), in diversion, legitimate-interest and § 74 Abs. 2 refund disputes (§ 360 Abs. 3 AO): the joined party''s status and rights, competence, notice and the option to withdraw, disclosure limits, decision by formal appeal decision also notified to the joined party, and copy to the other office. Procedure; the priority rule itself is § 64 EStG on the spine.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11121,8 +11957,11 @@ computed:
       heading_sha256: 350902c22a75055c8254cfa55c376687657d59428a618720c834b14d384d5372
       section_located: true
       body_sha256: 007bfe1f20ff7902cd35598a27651404e53cbed0ac072e61eaab25a957a7733d
+      classification: appeals_procedure
+      reason: The appeal ends by withdrawal, relief, or appeal decision. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11135,8 +11974,11 @@ computed:
       heading_sha256: 72d4fc0ce8ffab38e5a3ea3b987b820905174b6e733366bfaeac5e26358dffcc
       section_located: true
       body_sha256: 8ff968a6452ef32698b83bd49291a279456d12981d3d1e9f63279139e243aef8
+      classification: appeals_procedure
+      reason: Full review of the contested act for and against the appellant (§ 367 Abs. 2 AO), limited to that act as the formal subject (BFH III R 50/20); outcomes rejection, relief, or worsening. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11149,8 +11991,11 @@ computed:
       heading_sha256: b8f27217fc2e17c4fbefa8a8c19f41d683a610b64a2c23a1493965efc9f6fe54
       section_located: true
       body_sha256: 6ef178df212eb3c08748f65801d75b34d0cea46df906e8b6d045877a77e7bba8
+      classification: appeals_procedure
+      reason: 'Withdrawal of the appeal (§ 362 AO): form, who may withdraw, effect on notification, loss of the appeal, register entry, end of suspension after one month, lapse of joinder, renewed appeal within the period. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11163,8 +12008,11 @@ computed:
       heading_sha256: 04ebfa9b6178e31d3a3f4a8755cf0c4fc20b00c245dcbd8c17b5a1c37b1e90c3
       section_located: true
       body_sha256: 30e051c0ff7597aad403325be88808b7590c473f8a312f5c94fadb3452e82c81
+      classification: appeals_procedure
+      reason: 'Relief and partial relief notices: no formal decision where relief is granted (§ 367 Abs. 2 Satz 3 AO), content and legal basis of the relief notice, partial relief becomes subject of the pending appeal, relief for part of the period ends the appeal for that period only. Procedure; no amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11177,8 +12025,11 @@ computed:
       heading_sha256: baa6c8babaf4faca772f809c6421cb1036b79e20eec28972370aeed8940c72f3
       section_located: true
       body_sha256: d53ed967a099db328bbde9c850ffbc092d26da6d2f00ea22e31ed3cdc6d8bba3
+      classification: appeals_procedure
+      reason: The appeal decision as the statutory regular disposal where relief is not granted, its form (§ 366 AO, form KGRb 1) and parts; and that rejecting an appeal against a revocation or refusal extends that act's binding effect to the month of the appeal decision unless the appeal was limited to a past period (BFH III R 71/10). Procedure on the temporal reach of a decision; no monthly entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.4.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11191,8 +12042,11 @@ computed:
       heading_sha256: c6967467d0bd31bdca04a146161fabbf1c1733e9baa912446cbeafe8d4c61e7f
       section_located: true
       body_sha256: 0aabab680d3f2defb7786f5cd2c25c655117de84131112e3ceef2fd6d59f74a8
+      classification: appeals_procedure
+      reason: 'Content of the heading (Rubrum): appellant, representative, joined party, receipt date, subject matter, contested act and any amending act. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.4.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11205,8 +12059,11 @@ computed:
       heading_sha256: 9635ac3deab60c22f630faa607c994e3d318ddb78a49027a66020349ae92cdb1
       section_located: true
       body_sha256: f913a2fdfd867eb26b710eaf3027782aa4d1611faa92610c95fd5effa2c9c656
+      classification: appeals_procedure
+      reason: Operative wording (Tenor) for inadmissible, unfounded, partly founded, and worsening decisions. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.4.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11219,8 +12076,11 @@ computed:
       heading_sha256: 7ef1b05ff554026d6d762910d4312e1043b5324494cbf1842f725cf0aebf3490
       section_located: true
       body_sha256: af86ac8279b1d8894cb9c3d5be32ead3ef8fd9aa6a2029d793262e874a30cffe
+      classification: appeals_procedure
+      reason: 'Reasoning: purpose, third-person drafting, citation conventions, reference to public administrative instructions and case law, division into facts and legal assessment. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.4.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11233,8 +12093,11 @@ computed:
       heading_sha256: 7f233a7e51dba94a14d441fd5e647c37858c1a0cdfc751d9331948f5f5101d69
       section_located: true
       body_sha256: d88dbdadb5ad8c8d60d0c6849bbf7bd76e704d4c12e7547e1c7f3de799335e95
+      classification: appeals_procedure
+      reason: 'Instruction on remedies: one-month action at the FG of the claimant''s residence (§§ 47, 38 Abs. 2a, 55 FGO). Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R6.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11247,8 +12110,11 @@ computed:
       heading_sha256: 06d5f854d92ae6113c5345aba59ea3bb097037aa4afa9e01ceb495cb02366d9b
       section_located: true
       body_sha256: bfd4d67cf0121fbda0aba3279bad76f2f1f8ac136dec5f09a29e898a10dec096
+      classification: appeals_procedure
+      reason: 'Costs of the appeal (§ 77 EStG): scope (all Kindergeld appeal proceedings; not simple amendment requests, supervisory complaints, evasion-interest appeals or equity requests), joined parties, success or curing of procedural defects, exclusion for culpable delay, cost decision ex officio in tenths rounded up, necessity of representation, fixing on application, borne by the office. Cost procedure; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11261,8 +12127,11 @@ computed:
       heading_sha256: 7cd40a14200738723176eaadab2e8120397f403e0e089d199426480bba6cbda1
       section_located: true
       body_sha256: 3e111d9d6a46307860fa1a794f64aa3db9f42dd511fa7520e490d80e3a0b3d4e
+      classification: court_procedure
+      reason: The FGO as the basis of the court procedure, contrasted with the AO appeal. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11275,8 +12144,11 @@ computed:
       heading_sha256: 7914d27614c91f7821ce5a6065ff20c25d2d341f1855343ee355157675c0bfce
       section_located: true
       body_sha256: c6dba214399ac9bcb362b736f4b41371e27d67201500d0a6cd3a3f12b56a39d4
+      classification: court_procedure
+      reason: Two-tier fiscal jurisdiction (FG as the only fact instance, BFH as appellate instance), the appellate remedies and their effects, no suspension by filing, when the office must appeal or file a non-admission complaint, and reporting duties to the BZSt with BMF joinder in significant cases. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11289,8 +12161,11 @@ computed:
       heading_sha256: 176053df2285ca5828fe29f8e947bfb76010614305dec8d30dcc471d46914800
       section_located: true
       body_sha256: 815f1ae5c0e0cf039fa85a7e7d4621381f64e8f965e79952d430ae3dc82476f7
+      classification: court_procedure
+      reason: Types of action under § 40 Abs. 1 FGO. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11303,8 +12178,11 @@ computed:
       heading_sha256: 190ca621a1588110fffcc85211fd5fe95ef451f9611d4b7759a6e8253e17bd0f
       section_located: true
       body_sha256: 3e81a397a20de95af21a4b1e12682822da5833c1ab40f017e121cdffdb2828c8
+      classification: court_procedure
+      reason: 'Action for annulment: annulment and amendment variants, subject is the original act as shaped by the appeal decision, no future binding effect of a confirmed refusal, replacement acts during the action (§ 68 FGO), and void acts. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11317,8 +12195,11 @@ computed:
       heading_sha256: 5a45e7d6771bf545cb63fe9d0d0c6c7f8436307a2217d623e15d404d5aa4668c
       section_located: true
       body_sha256: cae16fe3166041b0ba39b45ae9dccfe882450c13d1ab0a714e425b7c8675670e
+      classification: court_procedure
+      reason: Action for an order (Verpflichtungsklage) where fixing, payment or diversion is refused or not decided. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11331,8 +12212,11 @@ computed:
       heading_sha256: e55c90e6a4859174f8d1b8c948127d059f3beb73a9ad4eaac3a9bc43b71158eb
       section_located: true
       body_sha256: 781028abc5ad796cc759206aadea811e4c9f34274ce54cbd13580bf102028f26
+      classification: court_procedure
+      reason: General action for performance for non-administrative-act services (actual payout under an existing fixing) and for § 74 Abs. 2 EStG refund and reclaim disputes. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11345,8 +12229,11 @@ computed:
       heading_sha256: 129be5079684981480ec9fbf2bec16e8ae72e8f1a0cad6e27f1efeab8349c42f
       section_located: true
       body_sha256: df9b1716d040d2ad4586ada445d7bfef3f67b370ca7623bcd64cbdfca4b49192
+      classification: court_procedure
+      reason: Declaratory action (§ 41 FGO) and its subsidiarity. Procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-R9.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11359,8 +12246,11 @@ computed:
       heading_sha256: f7399d888ab269e6e1998292e46059b21ef8dda53169bcdba1d2233c5bb25349
       section_located: true
       body_sha256: 373d0a2a69b67c9ca83c27f84accec3ea7c4f3023f43b44f5838cb7c1624a115
+      classification: court_procedure
+      reason: 'Interim relief alongside the main proceedings: no suspension by filing, suspension by the office or court (§ 69 FGO) after a prior request to the office, ex officio suspension, R 5.1 applies, and interim orders (§ 114 FGO) against non-enforceable acts. Procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11373,8 +12263,11 @@ computed:
       heading_sha256: 00efa8300292249dc03d9fef329d27b7d988514f42eacfd61b0d97304e6bb4e4
       section_located: true
       body_sha256: 6e178364233269fd7df1fa2f4bbcd33700bf4a7e5524c45d441e0e578f031e0c
+      classification: penal_procedure
+      reason: Familienkassen are competent to prosecute and sanction tax offences and tax misdemeanours connected with Kindergeld (§ 386 AO), with the rights of tax offices and under BZSt supervision. Penal competence; no entitlement or amount rule.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11387,8 +12280,11 @@ computed:
       heading_sha256: 9dadb3eceb5e5460cdd13ae1e673c00bc4c900a3cf3413320613d889395a7690
       section_located: true
       body_sha256: 354a40e0e24bcb0710e6da9a485b82539da878a88571cfa97d2b0a76b70079b0
+      classification: penal_procedure
+      reason: Catalogue of the applicable penal and misdemeanour provisions of the AO, StGB, StPO, OWiG and JGG. Penal law index; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11401,8 +12297,11 @@ computed:
       heading_sha256: 0b26d8a15a52f9a8817707c6e9284ef3c971a5110cd5401ae3a0a1ea51fc37a7
       section_located: true
       body_sha256: e99a50a4a88223d40a4ca0a4c193b6981327b55198bcd973e803c0b965931606
+      classification: penal_procedure
+      reason: The AStBV (St) 2023/2024 (and 2025 from 01.04.2025) and, supplementarily, the RiStBV are to be observed. Penal-procedure guidance references; the AStBV (St) is already a pending supplemental candidate and the RiStBV is enrolled from this row. No computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11415,8 +12314,11 @@ computed:
       heading_sha256: 9efc285aefa96d3f0369c9f27e810f24e47aad30db2842a0e546bd026454ff26
       section_located: true
       body_sha256: 246d7cb490b4cab7a47b197aaeaebcb0c455ca2d2300c43d0d90e8b63831bb0f
+      classification: structural_heading
+      reason: Heading line only ("S 10 Ahndung von Ordnungswidrigkeiten"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11429,8 +12331,11 @@ computed:
       heading_sha256: d595d078a41b7ea01c44ecabf8f94b790f87385b8f3a785cda2b7b5ffce7973a
       section_located: true
       body_sha256: eb9a67991682da9c15dd0ca102a345d8bc51515b66a8e4c2357b0f67c38c9478
+      classification: penal_procedure
+      reason: Fine assessment follows § 17 OWiG with Kindergeld-specific practice (the monthly tax-refund character under § 66 EStG), preventive purpose, the BuStra unit's sole discretion to refrain or close (§ 47 OWiG), and formal warnings with or without a warning fine (§ 56 OWiG, form KGStB 16). Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11443,8 +12348,11 @@ computed:
       heading_sha256: 25102e0c95d8242af3167693c8619bee906e763e1ec94ffcfb941facc689514e
       section_located: true
       body_sha256: 0c82bd90faa70ee50515e7daa3ea1c91ac479c8c5adf2c0a9b78cb23e6ff2420
+      classification: penal_procedure
+      reason: The following assessment principles serve uniform handling. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10.2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11457,8 +12365,11 @@ computed:
       heading_sha256: 900fcffcbd03ae8dc1611307b04548fb8336fa1bd9f076917a38c88477041c79
       section_located: true
       body_sha256: 03675de97cc8b36b545fe9531e3e50eefa1665e65e376431adbed3abcd5dbbdc
+      classification: penal_procedure
+      reason: 'Fines for reckless understatement (§ 378 AO): half the hypothetical criminal fine as the base, warnings without a fine up to EUR 600 of overpayment and with a EUR 55 warning fine up to EUR 1,500, reductions up to 50 percent (prompt restitution, poor finances, no repetition risk) and increases of at least 50 percent for aggravated fault, preconditions and reasoning. Penalty scale; it sizes the fine by the overpayment, it does not define the Kindergeld amount.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10.2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11471,8 +12382,11 @@ computed:
       heading_sha256: 0c50a8b67c8b38c360e6839e7e9f022cd5679780ca8fba6eb5f8ee0b5392edd6
       section_located: true
       body_sha256: 462d74f5c03a75b72198129829e57248e86ef8df9b76a79fbd1979672c32bdcf
+      classification: penal_procedure
+      reason: 'Fines for false vouchers (§ 379 Abs. 1 Satz 1 Nr. 1 AO): base EUR 500, aggravating and mitigating factors, range EUR 5 to 5,000 for recklessness. Penalty scale; no Kindergeld amount rule.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S10.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11485,8 +12399,11 @@ computed:
       heading_sha256: cde8beeeba169ae4a39370b1b433e2937848ad344a5966ca6732ab97af74da9f
       section_located: true
       body_sha256: 243782e63528a1b8f9a7d29e2c500f6b306e244c1be6159bb8d16af841142f32
+      classification: administration_only
+      reason: Fines accrue to the federal treasury (§ 90 Abs. 2 OWiG) and are collected by the Familienkassen; procedure costs stay with the office. Fiscal allocation of fines; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S11
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11499,8 +12416,11 @@ computed:
       heading_sha256: 53bd5e805f6cbfa0e36de1629b010f90beece13b8027e8929de38f360d9c93a1
       section_located: true
       body_sha256: 23422931f2e22f6d04c6afea88a34b896f94510fb15cf537459fd4b03d13ed42
+      classification: penal_procedure
+      reason: Fee for the fine notice (five percent, EUR 25 to 7,500, § 107 OWiG) and enforcement of fine notices under the AO's enforcement rules (§§ 249 ff. AO) rather than the VwVG. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S12
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11513,8 +12433,11 @@ computed:
       heading_sha256: 1174b69e05025fcfceed42556e85b1ae7a45ba7f798a5cbcda712fadfd0f33dc
       section_located: true
       body_sha256: a3e6614ba21c7edc47458be420b652d43c733fa0ace379dece2d8127484540d1
+      classification: administration_only
+      reason: Fine and monitoring registers (forms KGStB 18/19) with half-yearly supervisory checks, statistics on further instruction, and transfer of only the penal file to prosecutors or courts. The located section text also carries the document's appendices that follow the last heading (form index, keyword index, abbreviations), which contain no rules. Register administration; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11527,8 +12450,11 @@ computed:
       heading_sha256: 02270472f576bf508b005592b8de6cdb7a3bc76d545cad0772cea748c0164ca6
       section_located: true
       body_sha256: eb63d4014b6fbd4d04b86d556e2f95325d48f5c64bc06a0b6930284abe0ae2b9
+      classification: structural_heading
+      reason: Heading line only ("S 2 Tatbestände des Steuerstraf- und Steuerordnungswidrigkeitenrechts"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11541,8 +12467,11 @@ computed:
       heading_sha256: 6f5b6b33d04ef83db92ef1da22d91dc42449451dc62b359255f849ce84142756
       section_located: true
       body_sha256: b662e86bca20d56da1d997cd25011c136e7e1cc96a98073c5365d967a55ede9d
+      classification: penal_substantive
+      reason: Elements of tax evasion (§ 370 Abs. 1 Nr. 1 and 2 AO) as lex specialis to fraud, intent requirement, evasion also where fixings are provisional or under review, irrelevance of the duration of the advantage. Penal law; the Kindergeld the offence concerns is defined elsewhere.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11555,8 +12484,11 @@ computed:
       heading_sha256: a2b8f211ca8022291cb16f9f0c685f7b017124f094c1cc2fd59be5486000253a
       section_located: true
       body_sha256: 243d2eecefb9d3a9260a6ad44d79ab202cc78b1759c1d7ab38d9f7e3931f4c1f
+      classification: penal_substantive
+      reason: Evasion by false statements (result offence) and by failing to report changes under § 68 Abs. 1 EStG (omission offence), no offence where the legal basis of the claim is unchanged (apprenticeship replaced by studies), adult children as offenders, § 153 AO, the compensation bar (§ 370 Abs. 4 Satz 3 AO) computed as the difference between the fixed and the correct Kindergeld, and abetting versus obstruction with three examples. Penal law; the comparison it describes uses the entitlement rules of Kapitel A and the spine, it does not set them.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11569,8 +12501,11 @@ computed:
       heading_sha256: 4e6270e37d273605fa34a7c8e2eae0c62a49213b1482ca2431dfa035a3a62902
       section_located: true
       body_sha256: c74cfa2b2574e7c6a3aaa92d8884bf3c41a1b01e34a068e45ef7b100ae8d13b9
+      classification: penal_substantive
+      reason: Perpetration requires control over the act and the will to commit it as one's own. Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.1.2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11583,8 +12518,11 @@ computed:
       heading_sha256: ccc5f4cea8236165d30e1e9dc5d1fc69de40fc3737acba5a912ef04329425ac7
       section_located: true
       body_sha256: 5979e6dd934110bceffb334bccb4a8784554e66ea8e2b27c4496fee7481b65c0
+      classification: penal_substantive
+      reason: Joint perpetration (§ 25 Abs. 2 StGB) and indirect perpetration (§ 25 Abs. 1 Alt. 2 StGB) with Kindergeld examples (stepfather and mother concealing a child's rental income; son deceiving his mother with forged study certificates). Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.1.2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11597,8 +12535,11 @@ computed:
       heading_sha256: c6ca15c98b8d12fe3b78d73048c83f1fc4521f0e75d495102eb582663ad027ce
       section_located: true
       body_sha256: 748105160b5850a4cdae159e7e07a32291d9910a20cea17b263807ce3f773523
+      classification: penal_substantive
+      reason: Participation by aiding (§ 27 StGB) and instigation (§ 26 StGB), double intent, with an example. Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11611,8 +12552,11 @@ computed:
       heading_sha256: 2a8b40d52686af7c9f8f76c09821fab74e099374be5f7a287cc324ee7312232d
       section_located: true
       body_sha256: 075c19aa224393d5f456269f1fbd1e5dd2bc0dfbe948254d62999e72ca6eae3a
+      classification: penal_substantive
+      reason: 'Misdemeanours: reckless understatement (§ 378 AO) with the same objective elements as evasion but recklessness suffices, opportunity principle, endangerment by issuing false vouchers (§ 379 AO) including what a voucher is and when issued, subsidiarity to §§ 370, 378 AO and § 267 StGB, no attempt liability, no fine-exempting self-disclosure but opportunity discretion after correction. Penal law; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11625,8 +12569,11 @@ computed:
       heading_sha256: 26e53a0ea6f0f0cd4b9915fadde28b3b5267e3bcb775f489d08929c03d066789
       section_located: true
       body_sha256: ca02c5255927acf4819b05684463be8eff6f5806e358fedd2d0643192fe3f630
+      classification: structural_heading
+      reason: Heading line only ("S 2.3 Vorsatz, Leichtfertigkeit, Schuld"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11639,8 +12586,11 @@ computed:
       heading_sha256: 5f60bd1b0e41f9e5bbf384458ff9f71241007cacb55a38c999dbfb0457cfbe40
       section_located: true
       body_sha256: ce0f5ec63ffa2e28108c63390dcb9e5a38ea659ee41d933d45aa01e2a865b8c4
+      classification: structural_heading
+      reason: Heading line only ("S 2.3.1 Vorsatz"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11653,8 +12603,11 @@ computed:
       heading_sha256: 1ae1dc447731ca93a3d8351d52b4392fca5692f755b15b45176e8ee12b0be6b5
       section_located: true
       body_sha256: dc1f4a7b3186c8488c3a25d45a45ce2961539a3562e9ab4d49fee124e4326289
+      classification: penal_substantive
+      reason: Definition of intent (direct and conditional) and its documentation in the closing note. Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11667,8 +12620,11 @@ computed:
       heading_sha256: 87aa55f9e710d824cdc1778d24478df566ffbec9de63a30b10894e81eebc444a
       section_located: true
       body_sha256: f14e27565ce1505cc01a5963c7488166821add64567b3a1886969e045e74fdcf
+      classification: penal_substantive
+      reason: Mistake of fact (§ 16 StGB) excludes intent, e.g. not knowing an adult child's harmful employment under § 32 Abs. 4 Satz 2 EStG; later knowledge triggers the § 153 AO correction duty. Penal law; the entitlement rule it references is in Kapitel A.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11681,8 +12637,11 @@ computed:
       heading_sha256: a9ff984908eeaaea3a2dbdb6003241fca44853756219be608d69ea2acc6e7037
       section_located: true
       body_sha256: 08a98b5e46b14c920da5fa655a2716750d068f98fd05f39bd72ed0f6cc2d00b3
+      classification: structural_heading
+      reason: Heading line only ("S 2.3.2 Leichtfertigkeit"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.2.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11695,8 +12654,11 @@ computed:
       heading_sha256: 7fbc342405d37af10a66d19ec709753524f173ce177c6d86e32054a54d6ad6e6
       section_located: true
       body_sha256: 9cf4d569465eccece0e906c6df1c900480d17ec8b28177e65c7e252a61880587
+      classification: penal_substantive
+      reason: Definition of recklessness as a grave breach of care, required findings including exculpatory circumstances, § 378 AO as the fallback where intent cannot be proven, in dubio pro reo, no automatic downgrade. Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.2.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11709,8 +12671,11 @@ computed:
       heading_sha256: f16fe4bdd4b42ad2a5aab7a292669cf868506d44062593838ee4fe0b31e79860
       section_located: true
       body_sha256: 1af812234cf50e6d3837751e4b9e0ed7186556186f941c3c818d1550c63fbe80
+      classification: penal_substantive
+      reason: Distinguishing simple negligence, recklessness and conditional intent by the severity of the breach and the offender's awareness, with three examples (unread notice; tax adviser). Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11723,8 +12688,11 @@ computed:
       heading_sha256: 540bf3785f207f5ce50b9c1d440e57ec1e04210a9e537d74f4c8e024ab497d90
       section_located: true
       body_sha256: 46b9b6cf3131214fad54bea7c818457bed48edf2c4e83235103169e9e5c58487
+      classification: structural_heading
+      reason: Heading line only ("S 2.3.3 Schuld"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.3.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11737,8 +12705,11 @@ computed:
       heading_sha256: 96c19b116636610bab4802eae0169b160044ea05e4debbcf90563a73c104e5c7
       section_located: true
       body_sha256: faf934579d656309b1bb9156e69c889c4f5dc4e496efced5f366bc4b26887c7f
+      classification: penal_substantive
+      reason: Definition of guilt and criminal capacity (§§ 19, 20 StGB). Penal law; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.3.3.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11751,8 +12722,11 @@ computed:
       heading_sha256: fa96ecdd03ccab4c33e37b13f323dcd6937d8ae12891a2b5b89c86fce8261a81
       section_located: true
       body_sha256: 0958a363a8c5f283a6514a5d81bf88d6fb7cb9748a272777347a5c70f3db98c5
+      classification: penal_substantive
+      reason: 'Mistake of law (§ 17 StGB): leaves intent intact, may exclude guilt only if unavoidable, duty to inquire, usually avoidable for § 370 AO. Penal law; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11765,8 +12739,11 @@ computed:
       heading_sha256: 6a8204626fa742c633e0aa39c7fa66a3e27de636f0f8db3813aeae0c5c4a0e08
       section_located: true
       body_sha256: 5ed9ef668861ba699bc03641828a2f2cef1d403c337009e0f4a49b51b10879ac
+      classification: penal_substantive
+      reason: 'Attempted evasion (§ 370 Abs. 2 AO, §§ 22, 23 StGB): start of the attempt with the false statement or, for omission, after the § 68 EStG report is no longer prompt (one month, exceptionally six), preparatory acts and § 379 AO, withdrawal (§ 24 StGB) only by active conduct, coexistence with self-disclosure. Penal law; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S2.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11779,8 +12756,11 @@ computed:
       heading_sha256: c29c30e4f57b4d6bcf7744ba1a34ab3ce8f7d225da24bfce3ef1d7cbc8113072
       section_located: true
       body_sha256: 4f825d0b9abaeecc803b624036362ef377abee1c101690f202b8ad658c2f36ed
+      classification: penal_substantive
+      reason: 'Completion versus termination: successive participation until termination, termination only when the wrongful fixing ceases to have effect, limitation starts with the last payout (BFH III R 21/13). Penal law; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11793,8 +12773,11 @@ computed:
       heading_sha256: 4a2d55b4c912e14e4e95548112af45dea3457978f24f1cdcd597e618c4ca3bd4
       section_located: true
       body_sha256: 1f69081ba1d2c05d7d742f4d46ab92849dc3bd5b4193aeeafd6e450baa8e62cf
+      classification: penal_substantive
+      reason: 'Possible offenders: claimants and recipients, adult children, employers, representatives, issuers of certificates. Penal law; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11807,8 +12790,11 @@ computed:
       heading_sha256: 57b0bc098d3175b09b3f260155455e153558d1755ed9953f16be608af6786fb0
       section_located: true
       body_sha256: 930426e4290588310a6bafb3cc742729941187b05d41bdb251dd325cb16bad7a
+      classification: structural_heading
+      reason: Heading line only ("S 4 Verfolgungsverjährung"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S4.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11821,8 +12807,11 @@ computed:
       heading_sha256: 38e7e570e299ba607717f79caac39b141b67892f63289177b095c2139d654e1a
       section_located: true
       body_sha256: 26e0b43518be9524c608ddf7408b6b43045afddb0c523f62a0ecbfca2d5e131e
+      classification: penal_procedure
+      reason: 'Limitation of prosecution for tax offences: five years from termination, fifteen for especially serious cases (§ 376 AO), start with the last payout, interruption (§ 78c StGB, § 376 Abs. 2 AO), and the effect on the fixing limitation (V 12.3). Penal limitation; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S4.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11835,8 +12824,11 @@ computed:
       heading_sha256: 1853a9c8ecd97eb88aae6c6836a08fe4042741cb7ddfa0b19037aff0775aad52
       section_located: true
       body_sha256: d57711f8b6cb06c1d2c69ef963ff6f1a85fe5a3e846bb4816e540bd4f1c8deba
+      classification: penal_procedure
+      reason: 'Limitation for misdemeanours: five years under § 384 AO, computed as in S 4.1. Penal limitation; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11849,8 +12841,11 @@ computed:
       heading_sha256: f2154ce6a1977790ddf186171ab65ff19b103fc637112617dbeaa4c6806f68e4
       section_located: true
       body_sha256: 743eceedf506bcfafb0e77067414b6d2130ba0928a5eda2937d32d2083760f82
+      classification: penal_procedure
+      reason: 'Grounds for investigation: late change notices and hearing statements may found suspicion; mere non-cooperation in a review does not; three case groups. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S5.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11863,8 +12858,11 @@ computed:
       heading_sha256: 710fdc62c0383d27ecc5ebf1da0b748179104c6b3aee26fc0d86dfa6b9167d28
       section_located: true
       body_sha256: e2515a8f8a1a46a541d4ea5e8752b0ac3ada816ad99f8c454d7f87091f02d48f
+      classification: penal_procedure
+      reason: 'Late notice by the person concerned: revocation and recovery for unexpired periods, evasion interest check, initiation via the BuStra unit (form KGStB 3), closure on timely payment where self-disclosure conditions are met, deadline under § 371 Abs. 3 AO, information duties on appeals or payments. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S5.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11877,8 +12875,11 @@ computed:
       heading_sha256: 338850b5fb47c65bb951272641a656bc54d30f2c2d991df9c1d9c3cc5097ac1d
       section_located: true
       body_sha256: d42aa1d1e19e5f41e5690d55d3fff3f1f36068a813f359d78ba4cfc3bc10c9b4
+      classification: penal_procedure
+      reason: 'Third-party notices: weighing reliability, initiation on initial suspicion once the recovery facts are known, penal instruction, statements in the § 91 AO hearing no longer count as self-disclosure, revocation and recovery within one month, otherwise further fact-finding. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S5.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11891,8 +12892,11 @@ computed:
       heading_sha256: ef48bc3a155ecbfe53c0ae890010a09e8cd93bacbf98976d16507d75395a8238
       section_located: true
       body_sha256: ed521c231f2cff1e067a59d1ef4af064083f14a85c58a97a25f4e4f254cdb8e0
+      classification: penal_procedure
+      reason: 'Other grounds: an official learning of facts founding suspicion must record a file note; AStBV (St) Nr. 130–133 on informing the BuStra unit, not forwarded where at most simple negligence; failure to inform may itself be obstruction or abetting. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11905,8 +12909,11 @@ computed:
       heading_sha256: db31258b5a0c59af0cfd6025e8b63b3af310a209715a6371a690610a9b9510e8
       section_located: true
       body_sha256: 059ba67e9ef5261800fccdcb25caadd8ccf033ec18bff679d84a00b1a91ce798
+      classification: structural_heading
+      reason: Heading line only ("S 6 Selbstanzeige"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11919,8 +12926,11 @@ computed:
       heading_sha256: 0cc3b3ddbfe36ad37e56ec5ff99fc94b5be8f3ab00b4e66596507caf42398e63
       section_located: true
       body_sha256: e90681f73db2110500e8186217cb9740e1696f96df46cb1b0d7ee9ce6b65541e
+      classification: penal_procedure
+      reason: 'Self-disclosure with exemption from punishment (§ 371 AO): complete correction for all unexpired offences (at least the last ten calendar years plus the current year), exclusion grounds, payment of the evaded Kindergeld and interest within the period, no exemption for general crimes (forgery, fraud against the employer), and the consequences of an incomplete disclosure after a § 170 Abs. 2 StPO closure versus a final decision. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11933,8 +12943,11 @@ computed:
       heading_sha256: ff4b680e38a4a0581803b29a275451962758b9cedb91b2d4f4b5268a30fba6dd
       section_located: true
       body_sha256: eb0484192446e34a817450c4768e81088795f52e3ac2ea1b02dec3f8f75e30d2
+      classification: penal_procedure
+      reason: 'Form and content of the self-disclosure: full correction enabling assessment without further inquiry, no label or self-incrimination needed, repayment alone insufficient, to a tax authority, forwarding by an incompetent body, only for the discloser. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11947,8 +12960,11 @@ computed:
       heading_sha256: 3a70492e37be220627277593ff2849b016b8a6858c27d483d1e20ef2667f4918
       section_located: true
       body_sha256: 667aa537ca0d1de0359668bb7c6a43a57bf751dd498180ecfaea4d7610256339
+      classification: penal_procedure
+      reason: 'Exclusion grounds (§ 371 Abs. 2 AO): notified initiation of proceedings (what counts), discovery of the offence and the offender''s knowledge as a rebuttable rule, and the EUR 25,000 per offence cap with reference to § 398a AO. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11961,8 +12977,11 @@ computed:
       heading_sha256: bae5c5a6572bf012a76b8cf2981b39db8f25cc15e886c499ab67dfc29b263c13
       section_located: true
       body_sha256: 95a33a3751e6defd0af7333f4fe449ee3dfd13533aebe1c95c3f4c6695cdf9e6
+      classification: penal_procedure
+      reason: Duty to pay the evaded amounts and interest within a criminal-law period (§ 371 Abs. 3 AO) sized to the offender's capacity, consequences of missing it, extendability, appealable to the criminal courts, set-off permitted. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11975,8 +12994,11 @@ computed:
       heading_sha256: 0059139668a2c307b69be7282b3a1e711cd436e302325bbdbfb46ef39f38c812
       section_located: true
       body_sha256: 007a76fd5d8b70b3695eb18d4b03861e49fccc40399e594adc9b9309a338749b
+      classification: penal_procedure
+      reason: Ending the proceedings on a valid self-disclosure by § 170 Abs. 2 StPO closure, continuation otherwise, mitigation for ineffective disclosures and part payments. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -11989,8 +13011,11 @@ computed:
       heading_sha256: 2c3183679091e7fee13e1bf53a688db9478cba559bc2c0b969b0d70d66f5d962
       section_located: true
       body_sha256: ab3e07c8167c152f15caf22ab5318a52d330a2ab0471b0c7072f4b79aaf32ec4
+      classification: penal_procedure
+      reason: Refraining from prosecution under § 398a AO where only the EUR 25,000 cap defeats exemption, on payment of the Kindergeld, interest and the § 398a surcharge (form KGStB 17), payable by each participant. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S6.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12003,8 +13028,11 @@ computed:
       heading_sha256: 520f94b298fa5ae5a9ee864f3e1b2a35c5f7f296b1e6bf387c8663aae698122b
       section_located: true
       body_sha256: db10451f50d354f5a8253a29b232ae73628e07948b67a7a1cb70c0bcbf1a8f14
+      classification: penal_procedure
+      reason: 'Fine-exempting self-disclosure for misdemeanours (§ 378 Abs. 3 AO): barred only by notified initiation, repayment suffices as no evasion interest arises. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12017,8 +13045,11 @@ computed:
       heading_sha256: a5d1be68ba3eec10abe121408f8ca117073f37d6f00f9b2a64a3dd96bab098be
       section_located: true
       body_sha256: 4da2bb098fd80668ebfe0997ed231b35986203a431539ce06287cb6211bc9503
+      classification: penal_procedure
+      reason: Suspension of penal or fine proceedings until the revocation notice is final where the offence depends on it (§§ 396, 410 AO), with limitation suspended. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12031,8 +13062,11 @@ computed:
       heading_sha256: ef27a0a115612ce82ebb95b2da9544ae93c28922c6b442979727d044ece8236b
       section_located: true
       body_sha256: edef42f975c6a0fa8789e03a3d898cd1040605b0b28a2b9acadecf641ccce807
+      classification: penal_procedure
+      reason: 'The BuStra unit: transfer of the full file via the head of office with reasons, review, copies in running cases, notice of the outcome, prompt decisions (AStBV (St) Nr. 6 and 8), support for courts and prosecutors. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12045,8 +13079,11 @@ computed:
       heading_sha256: ab8d91a515de5b335bba99e53d1458203ccea46a675f6b6a17a95664cb20a340
       section_located: true
       body_sha256: 7f98b5e27c260e6ca7fb5163aa61519df2fd244e3a960d3bdc538c1bfc075a92
+      classification: structural_heading
+      reason: Heading line only ("S 8.1 Steuerstrafverfahren"); operative text is in its numbered sub-headings, dispositioned separately.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12059,8 +13096,11 @@ computed:
       heading_sha256: 1a580da25fa8392724aa95057f391c18eb45d602ecb47849f152696ec3ab6d05
       section_located: true
       body_sha256: 768f932866a5dc1cd1b6a834e4ba467af6acd6aaf01b4476e1f24bcb5f8ea8e4
+      classification: penal_procedure
+      reason: Subject-matter and local competence in penal proceedings (§§ 386–390 AO), priority of the office that initiated first, takeover where expedient. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.10
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12073,8 +13113,11 @@ computed:
       heading_sha256: 76b719d65c8aa2351c709ad37255573668a7b8bd2b9356e916175ae7e8e9aded
       section_located: true
       body_sha256: 396265eedbd23ee47f1d72e9c39d73cb0dd04236d06041472df25e6e7c3e4789
+      classification: penal_procedure
+      reason: Reporting duties to the immigration authority for foreign accused (§ 87 Abs. 4 AufenthG), including EU free-movement beneficiaries, except misdemeanours with fines up to EUR 1,000. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12087,8 +13130,11 @@ computed:
       heading_sha256: a244c14c2af4a61f85207d7097613a779a0844e301085504feeb40cc3201dad1
       section_located: true
       body_sha256: 292e5b9117a0dd0b6a7a9cb2a498812c4e0f5d3fec504e5beb95e0c773e58ce2
+      classification: penal_procedure
+      reason: The BuStra unit's independent investigation with the rights of the prosecutor for pure tax offences (§§ 386, 399 AO), discretionary transfer to the prosecutor (AStBV (St) Nr. 22), and the consequences of transfer. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12101,8 +13147,11 @@ computed:
       heading_sha256: ba7f5a501c9eb18000aac6e5aa0d1f9294f06082fe404c09b2cacd8a7ce695ef
       section_located: true
       body_sha256: b7cd977fab0d098316230fd7022e6902d4035141c78c953dc2948f240126fe25
+      classification: penal_procedure
+      reason: Prosecutor as master of the investigation where tax offences coincide with other offences or custody orders (§ 386 Abs. 2 Nr. 2, Abs. 3 AO), the procedural concept of the act (§ 264 StPO), and the BuStra unit's police-like role and duties in that case. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.4
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12115,8 +13164,11 @@ computed:
       heading_sha256: 8de37a578c2fb323d1f29b40cdb31b02f3be7bc1735a33974ebd3303503aec60
       section_located: true
       body_sha256: 752cb8c0e69747499b162e0681393855b548dd7471e60e9ea4a707e3b86c8862
+      classification: penal_procedure
+      reason: Legality principle and the initial suspicion threshold (§ 152 Abs. 2 StPO), the aim of the investigation (sufficient suspicion for public charges, § 170 StPO). Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.5
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12129,8 +13181,11 @@ computed:
       heading_sha256: 3b1445ac45c6a1a116e7fb456d41853aa096905afbe1a1e24556e7e3fbc584fe
       section_located: true
       body_sha256: 85d0dc8e52769589cfb4c6a25212d3d3ad0cba1062fb044b0f63bacbca1e66f5
+      classification: penal_procedure
+      reason: 'Initiation of the investigation (§ 397 AO, form KGStB 3): what counts as initiation, file note, informing the competent office (§ 393 AO), notification and instruction of the accused (right to silence, counsel, non-enforceable cooperation), exclusion of self-disclosure thereafter, interruption of limitation. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.6
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12143,8 +13198,11 @@ computed:
       heading_sha256: a8ed9672ead8a1099a3d5c1740dabaa89b5bbfde1c09efd09736bd255075c5fa
       section_located: true
       body_sha256: 615be44979001fa45d81393311f0d4d48550885ed3eee625037af325e96b24d2
+      classification: penal_procedure
+      reason: 'Course of the investigation: scope (§§ 160, 161 StPO), federal criminal register enquiry, rule-of-law standards, use of the Kindergeld file and office staff as witnesses, examination of the accused or written statement, employer information. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.7
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12157,8 +13215,11 @@ computed:
       heading_sha256: 61f24fbd535ab35bfc42d21b214fdcacd335d4f158b419aaa72ef42ad13f3a65
       section_located: true
       body_sha256: 14b3572bdf7dda138752ba8385b770140bea84eb1ac5fcc27d6a017e9f371b08
+      classification: penal_procedure
+      reason: Closing note (§ 169a StPO, form KGStB 10) with course, result and next step; defence counsel's unrestricted file access afterwards (§ 147 StPO). Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.7.1
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12171,8 +13232,11 @@ computed:
       heading_sha256: 8d0a8f9d1afa7806d3fae92998dcc7df742bb314b0d87de9927c5671cacf2b07
       section_located: true
       body_sha256: 30ac898defe15e9f49fadb46686a0288355f7f078f3567f40ea36f1f9d73894c
+      classification: penal_procedure
+      reason: Closure for lack of sufficient suspicion (§ 170 Abs. 2 StPO), e.g. no intent or valid self-disclosure, notice to the accused (form KGStB 14), no res judicata, and conversion to fine proceedings where recklessness is found with a fresh hearing. Penal procedure; no computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.7.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12185,8 +13249,11 @@ computed:
       heading_sha256: 3f0a46f9c94005d4190af43203280d45277c590d3b3194631c1e681dff6d736e
       section_located: true
       body_sha256: 5c0c8d5d1b96f1ff5c1eca315d0aa3790ae9f5b0a3cf815a7eb52e0b5b6f7842
+      classification: penal_procedure
+      reason: 'Discretionary closure despite sufficient suspicion (§ 398 AO, §§ 153 ff. StPO): minor advantage (overpaid Kindergeld up to EUR 1,500 by reference to § 66 Abs. 1 and 2 EStG), minor guilt (six to eight daily rates), no public interest, closure on conditions (§ 153a StPO, forms KGStB 15), and § 154 StPO where other penalties exist. Penal procedure; the EUR 1,500 threshold sizes prosecution discretion, not the Kindergeld entitlement.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.7.3
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12199,8 +13266,11 @@ computed:
       heading_sha256: c62698fa1483b330c4bce617cc10a01f0fb2302adaaa8c98b13d1ef1e1975fc0
       section_located: true
       body_sha256: 440bb091e0c3607643a14e35a44f4d603e0aed920007105d4e89cf5df3a8102b
+      classification: penal_procedure
+      reason: 'Application for a penal order (§ 400 AO, § 407 StPO, form KGStB 11): competent local court, suitability, content (§ 409 StPO), closing note first, public charges raised on filing, transfer of control to the court, interruption of limitation. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.8
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12213,8 +13283,11 @@ computed:
       heading_sha256: 8201e365cdb4e485c47ffe88b9f723fdc45cc4e4715d0b5b673b2f39d595b372
       section_located: true
       body_sha256: 7e055c023d524c9057088420d3143038933aba53bad7e77e84feef1d5bb76c08
+      classification: penal_procedure
+      reason: 'Procedural bars: prosecution limitation, lis pendens and res judicata (Art. 103 Abs. 3 GG), § 84 OWiG. Penal procedure; no computational content.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.1.9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12227,8 +13300,11 @@ computed:
       heading_sha256: dd819f3453e9e7595df2349eaeed413b8e51df0c316b6ef1be86d41fa47393b7
       section_located: true
       body_sha256: f94ae865477736eec6d0270c55d6e527a23b5d4fed7333c14f5738da26ce7f51
+      classification: penal_procedure
+      reason: Reporting duties to disciplinary authorities for civil-servant accused (§ 49 BeamtStG, § 115 BBG) under the BMF letters of 12.01.2018 and 13.01.2023, extended to comparable public-service employees. Penal procedure; the BMF letters are members of the pending BMF-Schreiben class. No computational content.
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S8.2
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12241,8 +13317,11 @@ computed:
       heading_sha256: aefe72fe7d07caa8fda341fca6e9d9b27ed4de87bd7279d00e219de692e6a762
       section_located: true
       body_sha256: 9e8ddbdb0f4baa0e0ecaf1ed76325fddd32d68ea4aaf5d606d5d891cbfa6ccfb
+      classification: penal_procedure
+      reason: 'Fine proceedings: OWiG procedure as modified by §§ 409–412 AO, opportunity principle with criteria, refraining from prosecution below EUR 5,000 wrongly obtained (EUR 1,500 in repeat cases), competent authority and court (§§ 391, 410 AO), stronger participation rights (§ 407 AO), objection within two weeks (§ 67 OWiG) and its handling. Penal procedure; the thresholds size prosecution discretion, not the Kindergeld entitlement.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-S9
-      status: pending
+      status: excluded-with-reason
       discovery_refs:
       - de-kg-instr-001
       - de-subject-003
@@ -12255,6 +13334,9 @@ computed:
       heading_sha256: d77c32abb54cf35446a94b0cc07eba65a3334e2f1ed0adf543eaf2e48aad5af3
       section_located: true
       body_sha256: bbc5702004b1f2d5f3c14b81078ee4f1ca36c21fdf1a1b97a1d4abf2b3917b70
+      classification: penal_substantive
+      reason: 'Sentencing (§ 46 StGB): general and special prevention, guilt as the basis, amount and duration of the wrongly obtained Kindergeld as key factors, daily-rate fines (three per month and child as a guide, at least four after 17 months), restrictions on short custodial sentences (§ 47 StGB), attempt mitigation. Penal law; the per-month-and-child guide sizes the fine, not the Kindergeld amount.'
+      bears_on_computed_surface: false
     - id: de-kg-dakg-V1
       status: excluded-with-reason
       discovery_refs:
@@ -15237,6 +16319,26 @@ computed:
       relation: coordination
       discovered_in_body_sha256: 44f75b5971083ee237919ab2371b1acc9a6dd819ac42df6e54e9cfbe7dd4baa1
       provenance: DA-KG 2025 O 2.4 Abs. 2 Satz 3–4 (über- und zwischenstaatliche Rechtsvorschriften, in besonderen Fällen)
+    - id: de-kg-suppl-016
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-O4.5
+      identity_kind: supplemental
+      identity: Kinderzuschlag-Datenabrufverordnung (KiZDAV), BGBl. 2023 I Nr. 376 — Verordnung nach § 68 Abs. 5 EStG
+      title_short: KiZDAV
+      relation: issued_under
+      discovered_in_body_sha256: 264987bc1bebb81f96a3f2f23252cccbafc4731ba3b61de479bdfdee37bb9f73
+      provenance: DA-KG 2025 O 4.5 Abs. 1 Satz 2 (Datenabruf durch die KiZ-Stellen)
+    - id: de-kg-suppl-017
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-S1.2
+      identity_kind: supplemental
+      identity: Richtlinien für das Strafverfahren und das Bußgeldverfahren (RiStBV)
+      title_short: RiStBV
+      relation: guidance
+      discovered_in_body_sha256: e99a50a4a88223d40a4ca0a4c193b6981327b55198bcd973e803c0b965931606
+      provenance: DA-KG 2025 S 1.2 Satz 2 (ergänzend heranzuziehen im Rahmen des § 386 AO)
   dependency_closure:
     law_derived_inputs:
     - claimant_entitlement
@@ -15260,7 +16362,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 463
+    bearing_candidate_instruments: 465
     law_derived_leaf_nodes: 4
     max_depth_estimate: 1
     remaining_oracle_work: 0

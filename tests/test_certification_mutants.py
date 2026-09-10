@@ -48,7 +48,7 @@ def _load(name: str):
 #: + 4 unclassified leaves). Certificates and the DE census must both carry
 #: exactly these — they are derived, never typed, in the producers.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 288 of 463 subordinate/bearing "
+    "closed: instrument frontier incomplete — 157 of 465 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
     "closed: dependency closure open — 12 open dependencies (4 law-derived "
     "inputs, 4 unclassified inputs, 4 bearing instruments) (CERTIFIED.md v3)",
@@ -3902,7 +3902,7 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     # The v3 discovery ledger is consumed through the central gate: the
     # frontier and dependency blocks are DECLARED and open, not missing.
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["instrument_frontier"]["instrument_count"] == 463
+    assert closed["instrument_frontier"]["instrument_count"] == 465
     assert closed["dependency_closure"]["closed"] is False
     assert closed["dependency_closure"]["open_dependency_count"] == 12
     assert len(closed["dependency_closure"]["unclassified_inputs"]) == 4
@@ -5756,7 +5756,7 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["mode"] == "computed"
     assert closed["value"] is False
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
-    assert closed["instrument_frontier"]["instrument_count"] == 463
+    assert closed["instrument_frontier"]["instrument_count"] == 465
     assert closed["instrument_frontier"]["complete"] is False
     assert closed["dependency_closure"]["open_dependency_count"] == 12
     assert closed["dependency_closure"]["unclassified_inputs"]
