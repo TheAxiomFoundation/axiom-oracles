@@ -2,7 +2,7 @@
   "schema": "de-kindergeld.derived-relation-engine-review.v1",
   "engine_pr": "https://github.com/TheAxiomFoundation/axiom-rules-engine/pull/177",
   "engine_head": "3edeab416cf34f7c96305d764c6c7d90ec563635",
-  "status": "Engine PR177 merged after all required exact-head checks passed; dedicated DE engine pin pending",
+  "status": "Engine PR177 and dedicated DE pin PR99 merged after all required exact-head checks passed; subsequent protected BGB126(2) run failed model/test validation and did not produce an accepted module.",
   "reproductions": [
     {
       "test": "file_derived_relations_resolve_local_sources_before_execution",
@@ -52,5 +52,13 @@
     "No new encoded module or closure claim."
   ],
   "engine_merge": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
-  "engine_ci_run": 34591671708
+  "engine_ci_run": 34591671708,
+  "de_pin_merge": {
+    "pull_request": "https://github.com/TheAxiomFoundation/rulespec-de/pull/99",
+    "merge_commit": "ba8af2e8709ae8c2edfcc05e41eb41da8b739395",
+    "checked_head": "2d5fba7a545217e92f759c39c6b09066347a86a1",
+    "ci_run": 34592002990,
+    "required_checks": "all three passed",
+    "scope": "one engine ref change in repository-checks.yml; generated module and manifest bytes unchanged"
+  }
 }

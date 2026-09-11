@@ -1,0 +1,53 @@
+{
+  "run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34592983488",
+  "status": "failed_unsigned_not_applied",
+  "engine_commit": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "rulespec_commit": "ba8af2e8709ae8c2edfcc05e41eb41da8b739395",
+  "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+  "budget": {
+    "streak_before": 2,
+    "budget": 3,
+    "enforced": true,
+    "next_action": "No unchanged retry or budget override. Standard model-bearing attempt budget exhausted."
+  },
+  "evidence": [
+    {
+      "artifact_path": "./generated/target/final-rejected-candidate/statutes/bgb/126/absatz-2/inhalt.test.yaml",
+      "bytes": 24166,
+      "sha256": "3013c17ed057bc9796c6087b6e034f454bf3bd57d9b57de3706dc5d093fb899a"
+    },
+    {
+      "artifact_path": "./generated/target/final-rejected-candidate/statutes/bgb/126/absatz-2/inhalt.yaml",
+      "bytes": 10040,
+      "sha256": "da84c7b557cbed6b05b80a3b50af4253d86a47a4aaf2d29e441b752d262b1424"
+    },
+    {
+      "artifact_path": "./generated/target/final-rejected-candidate/issues.json",
+      "bytes": 1745,
+      "sha256": "be2e2e43fc0a0764e710a6d8d6613a448955964173d95cf6aa6aa5093f15c6bc"
+    }
+  ],
+  "native_validation": {
+    "attempt_count": 4,
+    "citation": "de/statute/bgb/126/absatz-2/inhalt",
+    "encoder_version": "0.2.1973",
+    "issues": [
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: Judgment rule missing positive companion output coverage: `de:statutes/bgb/126/absatz-2/inhalt#party_is_document_recipient` is not asserted as `holds` by the companion `.test.yaml` file.",
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: Judgment rule missing positive companion output coverage: `de:statutes/bgb/126/absatz-2/inhalt#common_deed_is_signed_by_every_contract_party` is not asserted as `holds` by the companion `.test.yaml` file.",
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: Judgment rule missing positive companion output coverage: `de:statutes/bgb/126/absatz-2/inhalt#counterpart_is_signed_for_another_contract_party` is not asserted as `holds` by the companion `.test.yaml` file.",
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: [complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/bgb/126/absatz-2/inhalt(2) [Absatz 2] [change]: `Werden über den Vertrag mehrere gleichlautende Urkunden aufgenommen, so genügt es, wenn jede Partei die für die andere Partei bestimmte Urkunde unterzeichnet.`."
+    ],
+    "path": "statutes/bgb/126/absatz-2/inhalt.yaml",
+    "rulespec_sha256": "da84c7b557cbed6b05b80a3b50af4253d86a47a4aaf2d29e441b752d262b1424",
+    "schema": "axiom-encode/failed-encode-candidate/v1",
+    "tests_sha256": "3013c17ed057bc9796c6087b6e034f454bf3bd57d9b57de3706dc5d093fb899a"
+  },
+  "review_findings": [
+    "Native validation reports missing positive coverage for three judgments and missing paired principal-output coverage for the counterpart condition. These gates did not pass.",
+    "The principal counterpart branch compares a count of qualifying documents with the party count, without requiring distinct signers covering every party. Duplicate documents from one signer can therefore satisfy that count while another party has not signed. This is a formula-level finding; no local mutation or acceptance was performed.",
+    "The counterpart branch checks each document wording identifier is positive but never compares wording identifiers across the documents. It does not establish the source requirement mehrere gleichlautende Urkunden.",
+    "The common-deed branch compares every Party identifier with the single signature issuer on the current Document through party_is_document_signer. The model does not represent multiple signature records on one shared physical deed; positive multi-party common-deed behavior remains unsupported.",
+    "No source-level encoding acceptance, new signed module, declaration, or closed frontier row follows from this failed run."
+  ],
+  "next_step": "Resolve model and test design within protected generation policy; retain existing accepted paragraph-1 module unchanged."
+}
