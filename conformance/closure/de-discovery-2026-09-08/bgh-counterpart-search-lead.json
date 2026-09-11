@@ -1,0 +1,15 @@
+{
+  "schema": "de-kindergeld.search-lead.v1",
+  "query": "site.bundesgerichtshof.de \"gleichlautenden Urkunden\" \"Unterschriften\"",
+  "identity": "BGH XII ZR 129/16, 2018-03-07",
+  "official_source_url": "https://juris.bundesgerichtshof.de/cgi-bin/rechtsprechung/document.py?Art=en&Blank=1.pdf&Datum=2018-3-7&Gericht=bgh&Sort=3&anz=24&nr=82745&pos=22",
+  "retrieval": "Official PDF open returned HTTP403; no complete original source or corpus receipt obtained.",
+  "potential_relevance": "Search lead during BGB126(2) counterpart review. The result concerns the rental written-form requirement. Its applicability to general contract form and the generations-service agreement requires original-source and scope review.",
+  "status": "pending",
+  "limitations": [
+    "Not a quotation from a reviewed judgment.",
+    "No BStBlII membership claim.",
+    "Not a direct citation in DA-KG A18.7.",
+    "No encoded or non-bearing disposition."
+  ]
+}

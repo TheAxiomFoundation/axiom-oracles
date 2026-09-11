@@ -15209,6 +15209,14 @@ committed_decisions:
     discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
     provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Gesetz zur Familienförderung 1999 (1999-12-22; BGBl I p2552). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
     status: pending
+  - id: de-kg-suppl-132
+    identity: BGH XII ZR 129/16, 2018-03-07
+    title_short: BGH XII ZR 129/16
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.7
+    discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+    provenance: Subject-matter search during review of the written generations-service agreement dependency associated with DA-KG A18.7. This is not a direct DA-KG citation. Official judgment candidate https://juris.bundesgerichtshof.de/cgi-bin/rechtsprechung/document.py?Art=en&Blank=1.pdf&Datum=2018-3-7&Gericht=bgh&Sort=3&anz=24&nr=82745&pos=22; original PDF retrieval returned HTTP403. Search lead snapshot bgh-counterpart-search-lead.json SHA256 7d31637e7a9b52e6a47783fee5383400d34807786294a5cd6a3eaea3b3eb62b1. Exact original identity, complete text, contract-form versus rental-form scope, historical applicability and computed-surface bearing remain pending; no rule or exclusion is inferred from search results.
+    status: pending
 computed:
   ledger:
   - ordinal: 1
@@ -15947,13 +15955,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 898
+    instrument_count: 899
     counts:
-      total: 898
+      total: 899
       encoded: 2
       classified-with-reason: 181
       excluded-with-reason: 349
-      pending: 366
+      pending: 367
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -16321,6 +16329,7 @@ computed:
     - de-kg-suppl-129
     - de-kg-suppl-130
     - de-kg-suppl-131
+    - de-kg-suppl-132
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -28763,6 +28772,16 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Gesetz zur Familienförderung 1999 (1999-12-22; BGBl I p2552). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-132
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.7
+      identity_kind: supplemental
+      identity: BGH XII ZR 129/16, 2018-03-07
+      title_short: BGH XII ZR 129/16
+      relation: bears_on
+      discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+      provenance: Subject-matter search during review of the written generations-service agreement dependency associated with DA-KG A18.7. This is not a direct DA-KG citation. Official judgment candidate https://juris.bundesgerichtshof.de/cgi-bin/rechtsprechung/document.py?Art=en&Blank=1.pdf&Datum=2018-3-7&Gericht=bgh&Sort=3&anz=24&nr=82745&pos=22; original PDF retrieval returned HTTP403. Search lead snapshot bgh-counterpart-search-lead.json SHA256 7d31637e7a9b52e6a47783fee5383400d34807786294a5cd6a3eaea3b3eb62b1. Exact original identity, complete text, contract-form versus rental-form scope, historical applicability and computed-surface bearing remain pending; no rule or exclusion is inferred from search results.
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -28949,7 +28968,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 898
+    bearing_candidate_instruments: 899
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
