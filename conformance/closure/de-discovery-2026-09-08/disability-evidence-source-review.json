@@ -1,0 +1,438 @@
+{
+  "schema": "de-kindergeld.disability-evidence-source-review.v1",
+  "status": "source-reviewed; bearing rules unencoded",
+  "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+  "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+  "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+  "reviewed_full_decision": {
+    "citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+    "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201750080?type=1646225765",
+    "body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+    "body": "Urteil vom 19. Januar 2017, III R 44/14 Kindergeld: Anspruch auf Kindergeld für ein volljähriges, psychisch erkranktes Kind - Keine Bindungswirkung des Revisionsgerichts bei fehlender tragfähiger Tatsachengrundlage ECLI:DE:BFH:2017:U.190117.IIIR44.14.0 BFH III. Senat EStG § 32 Abs 4 S 1 Nr 3, SGB 9 § 2 Abs 1 S 1, FGO § 118 Abs 2 vorgehend FG Köln, 12. März 2014, Az: 15 K 768/09 Leitsätze 1. NV: Für die Beurteilung des Merkmals \"Behinderung\" i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG ist die in § 2 Abs. 1 Satz 1 SGB IX enthaltene Legaldefinition maßgeblich (Anschluss an BFH-Urteile vom 21. Oktober 2015 XI R 17/14, BFH/NV 2016, 190; vom 28. Mai 2013 XI R 44/11, BFH/NV 2013, 1409, und vom 23. Februar 2012 V R 39/11, BFH/NV 2012, 1584). 2. NV: Die Folgerung des FG, dass ein volljähriges Kind behindert ist, kann grundsätzlich nur das Ergebnis einer durch das FG vorzunehmenden Würdigung aller Umstände des Einzelfalls sein. Tenor Auf die Revision der Beklagten wird das Urteil des Finanzgerichts Köln vom 13. März 2014 15 K 768/09 aufgehoben. Die Sache wird an das Finanzgericht Köln zurückverwiesen. Diesem wird die Entscheidung über die Kosten des Revisionsverfahrens übertragen. Tatbestand I. Streitig ist der Kindergeldanspruch für das Kind X für die Monate Juni 2002 und Juli 2002 sowie April 2003. 1 Die Klägerin und Revisionsbeklagte (Klägerin) ist die Mutter des im Mai 1981 geborenen Sohnes X. X war seit seinem 16. Lebensjahr bis in den streitigen Zeitraum hinein drogenabhängig und psychisch krank. In dem Zeitraum vom 27. Juni 2002 bis 8. Juli 2002 und im April 2003 war X stationär in einer Klinik aufgenommen. 2 Die Klägerin beantragte am 28. August 2006 Kindergeld für X. Dem Kindergeldantrag war ein Attest des Landschaftsverbandes R vom 21. August 2006 beigefügt. Hiernach befinde sich X wegen einer psychiatrischen Erkrankung seit 2003 in regelmäßiger fachpsychiatrischer Behandlung. Die Ersterkrankung sei auf das Jahr 2002 zurückzudatieren. Auch unter medikamentösen und nichtmedikamentösen Behandlungsmaßnahmen bestehe durch die Erkrankung weiterhin eine erhebliche Beeinträchtigung des Leistungsvermögens. X sei derzeit aufgrund der Erkrankung für einen noch nicht absehbaren Zeitraum nicht in der Lage, einer Erwerbstätigkeit nachzugehen und dadurch den Lebensunterhalt sicherzustellen. 3 Mit Bescheid vom 26. März 2008 lehnte die Beklagte und Revisionsklägerin (Familienkasse) den Antrag der Klägerin auf Kindergeld für X ab, da laut Stellungnahme des ärztlichen Dienstes eine nachträgliche Aussage oder Entscheidung über die Erwerbsfähigkeit nicht mehr möglich sei. 4 Der dagegen gerichtete Einspruch hatte keinen Erfolg (Einspruchsentscheidung vom 4. Februar 2009). 5 Mit der hiergegen gerichteten Klage begehrte die Klägerin Kindergeld für X, zuletzt für die Monate Juni 2002 und Juli 2002 sowie April 2003. Zum Beleg ihres Vortrags, X sei aufgrund seiner Behinderung erwerbsunfähig gewesen, 6 Seite 1 von 5\n\nEntscheidungsgründe legte sie eine Bescheinigung des Landschaftsverbands R vom 2. Januar 2009 vor, aus der sich u.a. ergibt, dass X seit dem Jahr 2002 psychisch erkrankt ist. Das Finanzgericht (FG) holte zunächst eine Stellungnahme, sodann eine schriftliche Zeugenaussage des den Sohn im Streitzeitraum behandelnden Arztes ein. Zu der Frage, ob die krankheitsbedingten Folgen so stark gewesen seien, dass X nicht in der Lage gewesen sei, eine berufliche Tätigkeit von mindestens 15 Stunden in der Woche auszuüben, erklärte dieser, eine Einschätzung sei ihm zwar nicht mehr möglich, aufgrund der Aufzeichnungen sei jedoch davon auszugehen, dass X nicht in der Lage gewesen sei, einer strukturierten Arbeit vollschichtig nachzugehen. 7 Am 18. Juli 2012 erließ das FG einen Beweisbeschluss zur Einholung eines Sachverständigengutachtens über die Fragen, \"1. ob das Kind X ... im Zeitraum Januar 2002 bis Juli 2003 oder in Teilen dieser Zeit aufgrund einer psychischen Erkrankung behindert war, 2. ..., welcher Grad der Behinderung und welches Merkmal festgestellt werden kann, 3. ..., ob das Kind nach Art und Umfang der Behinderung in der Lage war, eine mindestens 15 Wochenstunden umfassende versicherungspflichtige Beschäftigung unter den üblichen Bedingungen des für ihn in Betracht kommenden Arbeitsmarktes auszuüben\". 8 Der Sachverständige kam in seinem Gutachten vom 2. Oktober 2013 im Wesentlichen zu folgendem Ergebnis: \"... 1. ... X ... war im Zeitraum von Januar 2002 bis Juli 2003 in Teilen dieser Zeit aufgrund einer psychischen Erkrankung behindert. Allerdings lässt sich diese Feststellung nur treffen für die Zeiträume zwischen dem 27. Juni 2002 bis zum 8. Juli 2002 sowie zwischen 1. April 2003 bis zum 8. April 2003, da es sich hierbei um die Dauer der stationären Aufenthalte handelte. ... 2. Daher ist für die genannte Dauer der stationären Behandlung ein Grad der Behinderung von 100 % festzustellen unter der Diagnose einer akuten ... psychotischen Störung mit Symptomen einer ... 3. Für die genannten Zeiträume der stationären Behandlung ... war der Proband nicht in der Lage, eine mindestens 15 Stunden pro Woche umfassende versicherungspflichtige Beschäftigung unter den üblichen Bedingungen des für ihn in Betracht kommenden Arbeitsmarktes auszuüben. Über die weiteren Zeiträume kann keine Aussage getroffen werden. ...\". 9 Das FG gab der Klage mit dem in Entscheidungen der Finanzgerichte (EFG) 2015, 821 veröffentlichten Urteil statt. Es hob den Bescheid vom 26. März 2008 und die hierzu ergangene Einspruchsentscheidung vom 4. Februar 2009 teilweise auf und setzte Kindergeld für den Sohn X für den zuletzt streitigen Zeitraum Juni 2002 und Juli 2002 sowie April 2003 fest. 10 Mit der Revision rügt die Familienkasse die sich aus einer unzutreffenden Auslegung des § 32 Abs. 4 Satz 1 Nr. 3 des Einkommensteuergesetzes in der im Streitzeitraum geltenden Fassung (EStG) ergebende Verletzung materiellen Rechts sowie Verfahrensfehler. 11 Die Familienkasse beantragt, das Urteil des FG Köln vom 13. März 2014 15 K 768/09 aufzuheben und die Klage abzuweisen. 12 Die Klägerin beantragt, die Revision zurückzuweisen. 13 II. Die Revision ist begründet. Das angefochtene Urteil ist aufzuheben und die Sache zur anderweitigen Verhandlung und Entscheidung an das FG zurückzuverweisen (§ 126 Abs. 3 Satz 1 Nr. 2 der Finanzgerichtsordnung ‑‑FGO‑‑). Die Entscheidung des FG, dass X als behindertes Kind nach § 32 Abs. 4 Satz 1 Nr. 3 EStG kindergeldrechtlich zu berücksichtigen ist, wird durch die tatsächlichen Feststellungen des FG nicht getragen. Die Revision hat somit bereits mit der Sachrüge Erfolg, so dass es auf die erhobenen Verfahrensrügen nicht mehr ankommt (vgl. z.B. Urteil des Bundesfinanzhofs ‑‑BFH‑‑ vom 19. Oktober 2011 X R 65/09, BFHE 235, 304, BStBl II 2012, 345, Rz 50, m.w.N.). 14 1. Gemäß § 62 Abs. 1, § 63 Abs. 1 Sätze 1 und 2 i.V.m. § 32 Abs. 4 Satz 1 Nr. 3 EStG besteht für ein Kind, das das 18. Lebensjahr vollendet hat, ein Anspruch auf Kindergeld, wenn es wegen körperlicher, geistiger oder seelischer 15 Seite 2 von 5\n\nBehinderung außerstande ist, sich selbst zu unterhalten, sofern die Behinderung vor Vollendung des 27. Lebensjahres eingetreten ist. a) Nach der Rechtsprechung des BFH ist ein Mensch behindert, wenn seine körperliche Funktion, geistige Fähigkeit oder seelische Gesundheit mit hoher Wahrscheinlichkeit länger als sechs Monate von dem für das Lebensalter typischen Zustand abweicht und daher seine Teilhabe am Leben in der Gesellschaft beeinträchtigt ist (vgl. § 2 Abs. 1 Satz 1 des Neunten Buchs Sozialgesetzbuch ‑‑SGB IX‑‑; z.B. BFH-Urteile vom 23. Februar 2012 V R 39/11, BFH/NV 2012, 1584, Rz 22; vom 28. Mai 2013 XI R 44/11, BFH/NV 2013, 1409, Rz 14, m.w.N., und vom 21. Oktober 2015 XI R 17/14, BFH/NV 2016, 190, Rz 27, m.w.N.). 16 aa) Seelisch behindert ist, wer infolge seelischer Störung in der Funktionsfähigkeit entsprechend gemindert ist. Als solche seelische Störungen kommen körperlich nicht begründbare Psychosen, seelische Störungen als Folge von Krankheit oder Verletzung des Gehirns, Anfallsleiden oder körperliche Beeinträchtigungen, Suchtkrankheiten, Neurosen und Persönlichkeitsstörungen in Betracht (BFH-Urteil vom 18. Juni 2015 VI R 31/14, BFHE 251, 147, BStBl II 2016, 40, Rz 21, m.w.N.). 17 bb) Eine Behinderung nach § 2 Abs. 1 Satz 1 SGB IX setzt zudem eine mit hoher Wahrscheinlichkeit länger als sechs Monate sich erstreckende Gesundheitsstörung voraus. Entscheidend ist nicht die seit Beginn der Erkrankung oder seit ihrer erstmaligen ärztlichen Feststellung tatsächlich abgelaufene Zeit, sondern die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden Funktionsbeeinträchtigung (vgl. BFH-Urteil in BFHE 251, 147, BStBl II 2016, 40, Rz 22, m.w.N.). Zur Beurteilung dieser Frage ist (ggf.) eine Prognose zur (weiteren) Entwicklung der Funktionsbeeinträchtigung zu stellen (vgl. Urteil des Bundessozialgerichts ‑‑BSG‑‑ vom 12. April 2000 B 9 SB 3/99 R, Sozialrecht ‑‑SozR‑‑ 3-3870 § 3 Nr 9, zu § 3 Abs. 1 Satz 3 des Schwerbehindertengesetzes). 18 cc) Die (seelische) Gesundheit muss nach § 2 Abs. 1 Satz 1 SGB IX zudem \"von dem für das Lebensalter typischen Zustand\" abweichen. Leistungseinschränkungen, die für das jeweilige Alter nach ihrer Art und ihrem Umfang typisch sind, stellen keine Behinderung dar. Bei Kindern ist zur Feststellung einer Behinderung die Abgrenzung altersadäquater Gesundheitszustände notwendig. Erforderlich ist ein Vergleich der körperlichen, geistigen bzw. seelischen Fähigkeiten mit denen eines altersentsprechenden nicht behinderten Kindes (vgl. BFH-Urteil in BFHE 251, 147, BStBl II 2016, 40, Rz 23, m.w.N.). 19 dd) Für die Frage, ob in Folge einer seelischen Störung die Teilhabe am Leben in der Gesellschaft beeinträchtigt ist, kommt es auf das Ausmaß und den Grad der seelischen Störung an. Entscheidend ist, ob die seelische Störung nach Breite, Tiefe und Dauer so intensiv ist, dass sie die Fähigkeit zur Eingliederung in die Gesellschaft beeinträchtigt. Die Prüfung einer Teilhabebeeinträchtigung hat aufgrund einer umfassenden Kenntnis des sozialen Umfelds des betroffenen Kindes oder Jugendlichen nach sozialpädagogischem und gegebenenfalls psychologischem Sachverstand zu erfolgen (vgl. BFH-Urteil in BFHE 251, 147, BStBl II 2016, 40, Rz 24, m.w.N.; vgl. auch BSG-Urteil vom 30. September 2015 B 3 KR 14/14 R, SozR 4-2500 § 33 Nr. 48, Rz 19). 20 b) Das FG ist zu dem Ergebnis gekommen, dass X im Streitzeitraum i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG behindert war. Es stützt seine Würdigung auf die Ausführungen des Sachverständigen. Dieser hat in seinem wissenschaftlich- psychiatrischen Gutachten u.a. die Feststellung getroffen, dass X im Zeitraum der stationären Klinikaufenthalte (27. Juni 2002 bis 8. Juli 2002 und 1. April 2003 bis 8. April 2003) aufgrund einer psychischen Erkrankung behindert gewesen sei. Diese ärztliche Beurteilung kann eine Grundlage der vom FG vorzunehmenden Gesamtwürdigung sein. Die Frage, ob eine Behinderung i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG vorliegt, ist hingegen eine Rechtsfrage. Dem Sachverständigen, der Beweismittel ist und dem Gericht im Wesentlichen die allgemeinen Erfahrungssätze aus seinem Fachgebiet vermittelt, darf die Prüfung von Rechtsfragen nicht übertragen werden (vgl. BFH-Urteil vom 8. Januar 1991 VII R 16-19/89, BFH/NV 1991, 850, unter II.2.b, m.w.N.; vgl. auch Stiepel in Beermann/Gosch, FGO § 82 Rz 132, und Schallmoser in Hübschmann/Hepp/Spitaler, § 82 FGO Rz 140). Die Folgerung des FG, dass X im Streitzeitraum i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG behindert war, kann daher nur das Ergebnis der durch das FG vorzunehmenden Gesamtwürdigung sein. 21 2. Zwar ist die finanzrichterliche Überzeugungsbildung revisionsrechtlich nur eingeschränkt auf Verstöße gegen Denkgesetze und allgemeine Erfahrungssätze überprüfbar. Das FG hat jedoch im Einzelnen darzulegen, wie und dass es seine Überzeugung in rechtlich zulässiger und einwandfreier Weise gewonnen hat. Die aus dem Gesamtergebnis des Verfahrens zu gewinnende Würdigung des FG ist nur dann ausreichend und für das Revisionsgericht bindend, wenn sie auf einer logischen, verstandesmäßig einsichtigen Würdigung beruht, deren nachvollziehbare Folgerungen den Denkgesetzen entsprechen und von den festgestellten Tatsachen getragen werden. Fehlt es an einer tragfähigen Tatsachengrundlage für die Folgerungen in der tatrichterlichen Entscheidung 22 Seite 3 von 5\n\noder fehlt die nachvollziehbare Ableitung dieser Folgerungen aus den festgestellten Tatsachen und Umständen, liegt ein Verstoß gegen die Denkgesetze vor (z.B. BFH-Urteil vom 26. Juni 2014 VI R 51/13, BFHE 246, 326, BStBl II 2015, 9, Rz 21, m.w.N.; vgl. auch Senatsurteil vom 16. April 2015 III R 6/14, BFH/NV 2015, 1237, Rz 16, m.w.N.). Auch unter Berücksichtigung dieses eingeschränkten Prüfungsmaßstabes ist die vom FG vorgenommene Würdigung zu beanstanden. Denn für den Senat ist nicht nachvollziehbar, auf welche Tatsachen und Umstände das FG seine Folgerung stützt, dass X im Streitzeitraum i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG behindert war. Es fehlt an einer tragfähigen Tatsachengrundlage. 23 a) Zwar diagnostizierte der Sachverständige bei X für die Dauer der stationären Behandlung eine akute psychotische Störung. Das FG hat aber weder Feststellungen dazu getroffen, ob die seelische Gesundheit des X tatsächlich oder mit hoher Wahrscheinlichkeit länger als sechs Monate von dem für das Lebensalter typischen Zustand abwich noch hat es aus dem seelischen Zustand des X sich ableitende, für eine Beeinträchtigung der Teilhabe am Leben in der Gesellschaft bedeutsame Umstände festgestellt. Zwar ist der Vorentscheidung zu entnehmen, dass X seit seinem 16. Lebensjahr bis in den streitigen Zeitraum hinein drogenabhängig und psychisch krank war. Es sind aber weder Ausmaß noch Folgen der psychischen Erkrankung insbesondere in psychischer, physischer, beruflicher und sozialer Hinsicht ersichtlich (vgl. z.B. BFH-Urteil vom 16. April 2002 VIII R 62/99, BFHE 198, 567, BStBl II 2002, 738, unter II.2.b bb, zur Teilnahme an einem Polamidon-Substitutions-Programm). 24 b) Entsprechende Anhaltspunkte ergeben sich auch nicht aus dem vom FG in Bezug genommenen Sachverständigengutachten. Zwar führt der Sachverständige darin aus, dass von einer initial durch ausgeprägten Drogenkonsum angestoßenen psychotischen Entwicklung im Jahr 2002 auszugehen sei. Der Sachverständige beschränkt seine Feststellungen aber ausdrücklich auf die Dauer des 12-tägigen und des 8-tägigen stationären Klinikaufenthalts des X. Allein die Diagnose einer psychotischen Störung für die Dauer der stationären Klinikaufenthalte lässt jedoch unter Beachtung der unter II.1.a dargelegten Maßstäbe nicht den Schluss zu, dass X i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG behindert war (vgl. z.B. BFH-Urteil in BFHE 198, 567, BStBl II 2002, 738, unter II.2.b bb, zur Teilnahme an einem Polamidon-Substitutions-Programm). 25 3. Die Vorentscheidung war somit aufzuheben. Die Sache ist nicht spruchreif und daher gemäß § 126 Abs. 3 Satz 1 Nr. 2 FGO an die Vorinstanz zurückzuverweisen. Im zweiten Rechtsgang wird das FG die entsprechenden Feststellungen, gegebenenfalls nach persönlicher Anhörung des Sachverständigen, zu treffen haben. 26 a) Sollte sich eine Behinderung i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG nicht feststellen lassen, geht der fehlende Nachweis der Behinderung nach den Regeln der objektiven Beweislast (Feststellungslast) zu Lasten des Kindergeldberechtigten (z.B. Senatsurteil vom 19. November 2008 III R 105/07, BFHE 223, 365, BStBl II 2010, 1057, unter II.1.c; vgl. auch BFH-Urteil in BFH/NV 2013, 1409, Rz 14, m.w.N.). 27 b) Für den Fall, dass bei X im Streitzeitraum eine Behinderung i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG vorgelegen haben sollte, wird das FG weiter aufzuklären haben, ob X wegen seiner Behinderung außerstande war, sich selbst zu unterhalten. 28 Für die Prüfung der Fähigkeit zum Selbstunterhalt wird das FG den gesamten existenziellen Lebensbedarf (Grundbedarf und behinderungsbedingter Mehrbedarf) des X einerseits und dessen finanzielle Mittel andererseits gegenüberzustellen haben (vgl. z.B. Senatsurteil vom 13. April 2016 III R 28/15, BFHE 253, 249, BStBl II 2016, 648, Rz 10 ff., m.w.N.). Auch hier tragen die in sich nicht widerspruchsfreien Feststellungen der angefochtenen Vorentscheidung nicht den Schluss, dass X mangels tatsächlicher Erwerbstätigkeit und fehlender Anhaltspunkte für einen Arbeitslosengeldbezug außerstande war, sich selbst zu unterhalten. Denn ausweislich des Sitzungsprotokolls zur mündlichen Verhandlung vom 13. März 2014 erklärte der Prozessbevollmächtigte der Klägerin, X habe im streitigen Zeitraum Sozialleistungen erhalten, aber kein sonstiges Erwerbseinkommen erzielt. Zu den Bezügen, mit deren Hilfe ein behindertes volljähriges Kind seinen existenziellen Grundbedarf abdecken kann, können jedoch grundsätzlich auch Leistungen zur Sicherung des Lebensunterhalts und für die Kosten für Unterkunft und Heizung nach dem Zweiten Buch Sozialgesetzbuch gehören (vgl. z.B. Senatsurteil vom 5. Februar 2015 III R 31/13, BFHE 249, 144, BStBl II 2015, 1017, Rz 15, m.w.N.); soweit ein Sozialleistungsträger für seine Leistungen bei den Eltern Rückgriff nimmt, dürfen solche Leistungen nicht als Bezüge des Kindes angesehen werden (vgl. z.B. BFH-Urteile vom 26. November 2003 VIII R 32/02, BFHE 204, 454, BStBl II 2004, 588, unter 2.b, m.w.N., und vom 12. Dezember 2012 VI R 101/10, BFHE 240, 50, BStBl II 2015, 651, Rz 12, m.w.N.). Die Schlussfolgerung des FG, dass X außerstande war, sich selbst zu unterhalten, kann daher ohne konkrete Feststellungen dazu, ob und welche Sozialleistungen X, gegebenenfalls in welcher Höhe, im streitigen Zeitraum bezogen hat, nicht getroffen werden. In 29 Seite 4 von 5\n\nQuelle: www.bundesfinanzhof.de diesem Zusammenhang ist auch auf die sich bei den Akten befindliche Aufstellung vom 10. März 2008 hinzuweisen, aus der Immobilienvermögen des X hervorgeht (vgl. Kindergeldakte Bl. 543). c) Die Entscheidung über die Mitursächlichkeit hat das FG schließlich unter Berücksichtigung aller Umstände des einzelnen Falles und unter Abwägung der für und gegen eine Mitursächlichkeit sprechenden Indizien zu treffen (z.B. Senatsurteil vom 22. Dezember 2011 III R 46/08, BFH/NV 2012, 730, Rz 20). Zur Vermeidung von Wiederholungen wird im Übrigen auf die Entscheidungsgründe in den BFH-Urteilen in BFH/NV 2012, 730, Rz 13 ff.; vom 15. März 2012 III R 29/09, BFHE 237, 68, BStBl II 2012, 892, Rz 27, und in BFH/NV 2016, 190, Rz 29 ff., m.w.N. Bezug genommen. 30 4. Die Übertragung der Kostenentscheidung auf das FG beruht auf § 143 Abs. 2 FGO. 31 Seite 5 von 5"
+  },
+  "reviewed_full_guidance": [
+    {
+      "id": "de-kg-dakg-A19.1",
+      "body_sha256": "c670dbd32039d473970aadd5aa952efa5664124e273d24e41b8795fe2e54e1be",
+      "reviewed_full_section": "A 19.1       Allgemeines\n(1) Nach § 32 Abs. 4 Satz 1 Nr. 3 EStG ist ein Kind, das das 18. Lebensjahr vollendet hat, zu\nberücksichtigen, wenn\n      − es wegen körperlicher, geistiger oder seelischer Behinderung außerstande ist, sich selbst zu\n          unterhalten, und\n      − die Behinderung vor Vollendung des 25. Lebensjahres eingetreten ist.\n(2) 1Eine Behinderung i. S. d. § 32 Abs. 4 Satz 1 Nr. 3 EStG liegt vor, wenn die in § 2 Abs. 1\nSatz 1 und 2 SGB IX genannten Voraussetzungen erfüllt sind. 2Dies ist der Fall, wenn das Kind\nkörperliche, seelische, geistige oder Sinnesbeeinträchtigungen hat, die es in Wechselwirkung mit\neinstellungs- und umweltbedingten Barrieren an der gleichberechtigten Teilhabe an der Gesellschaft mit\nhoher Wahrscheinlichkeit länger als sechs Monate hindern können. 3Eine Beeinträchtigung nach Satz 2\nliegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand\nabweicht. 4Zu einer Behinderung können auch Suchtkrankheiten (z. B. Drogenabhängigkeit,\nAlkoholismus) führen (BFH vom 16.04.2002, VIII R 62/99, BStBl II S. 738). 5Nicht zu den\nBehinderungen zählen Krankheiten, deren Verlauf sich auf eine im Voraus abschätzbare Dauer\nbeschränkt, insbesondere akute Erkrankungen.\n(3) 1Das Kind muss nach den Gesamtumständen des Einzelfalles wegen der Behinderung\naußerstande sein, sich selbst zu unterhalten. 2Dem Kind muss es objektiv unmöglich sein, seinen\ngesamten notwendigen Lebensbedarf durch eigene Mittel zu decken. 3Ist das Kind trotz seiner\nBehinderung in der Lage, z. B. aufgrund hohen verfügbaren Einkommens, selbst für seinen\nLebensunterhalt zu sorgen, besteht kein Anspruch auf Kindergeld (vgl. A 19.4).\n(4) 1Die Behinderung selbst muss zwar vor Vollendung des 25. Lebensjahres eingetreten sein, nicht\njedoch die Ursächlichkeit oder Unfähigkeit, sich selbst zu unterhalten. 2Die Altersgrenze des 25.\nLebensjahres gilt auch, wenn das Kind früher gesetzlichen GWD oder ZD leistete (BFH vom 02.06.2005,\nIII R 86/03, BStBl II S. 756). 3Diese Altersgrenze ist nach der Übergangsregelung des § 52 Abs. 32\nSatz 1 EStG erstmals für Kinder anzuwenden, die im Kalenderjahr 2007 wegen einer vor Vollendung\ndes 25. Lebensjahres eingetretenen körperlichen, geistigen oder seelischen Behinderung außerstande\nsind, sich selbst zu unterhalten. 4Für Kinder, die wegen einer vor dem 01.01.2007 in der Zeit ab der\nVollendung des 25. Lebensjahres und vor Vollendung des 27. Lebensjahres eingetretenen Behinderung\naußerstande sind, sich selbst zu unterhalten, ist weiterhin die bis zum 31.12.2006 geltende Altersgrenze\ndes vollendeten 27. Lebensjahres anzuwenden.\n(5) Für die Prüfung, ob die Voraussetzungen nach § 32 Abs. 4 Satz 1 Nr. 3 EStG vorliegen, stehen die\nVordrucke KG 4c bis KG 4m zur Verfügung.\n(6) 1Wird für ein Kind mit Behinderung Kindergeld beantragt, ist zunächst zu prüfen, ob eine\nBerücksichtigung als Kind, das für einen Beruf ausgebildet wird (vgl. A 15.4), oder wegen fehlenden\nAusbildungs- bzw. Arbeitsplatzes möglich ist. 2Wenn nach diesen Tatbeständen eine Berücksichtigung\nnicht in Betracht kommt, sind Nachweise zur Behinderung (vgl. A 19.2), zur Ursächlichkeit (vgl. A 19.3)\nund zum verfügbaren Nettoeinkommen (vgl. A 19.4 bis A 19.6) anzufordern. 3Das gilt auch, wenn das\n\n                                                  53\n\fKind mit Behinderung zwar die territorialen Voraussetzungen erfüllt (vgl. A 23), seinen Wohnsitz jedoch\nnicht im Inland hat.\n(7) 1Grundätzlich ist das Vorliegen sämtlicher Anspruchsvoraussetzungen des § 32 Abs. 4 Satz 1\nNr. 3 EStG jährlich zu prüfen. 2Wird ein Kind mit Behinderung vorrangig nach § 32 Abs. 4 Satz 1 Nr. 1\noder 2 EStG berücksichtigt, gelten die Prüfintervalle für den jeweiligen Anspruchstatbestand. 3Die\nPrüfungen sind so rechtzeitig durchzuführen, dass bei Vorliegen der Anspruchsvoraussetzungen (vgl.\nAbs. 2) eine lückenlose Kindergeldzahlung gewährleistet ist.\n(8) 1Bei Vorliegen eines GdB von 50 oder mehr oder bei einer auf Dauer angelegten voll- oder\nteilstationären Unterbringung in einer Einrichtung für Menschen mit Behinderungen sind die Anspruchs-\nvoraussetzungen im Abstand von fünf Jahren zu prüfen. 2Dies gilt auch für Kinder mit einer Einstufung\nin den Pflegegrad 4 oder 5 nach dem SGB XI oder diesem entsprechenden Bestimmungen.\n3Abweichend von O 2.10 Abs. 2 Satz 3 hat die Prüfung vorerst nur für das zuletzt abgelaufene Jahr zu\n\nerfolgen. 4Stellt sich dabei heraus, dass der Berechtigte seine Mitwirkungspflichten verletzt hat, sind\nauch die zurückliegenden Zeiträume zu prüfen. 5Teilt der Berechtigte innerhalb des Zeitraumes nach\nSatz 1 Änderungen in den Verhältnissen mit, hat die Familienkasse Auswirkungen auf die rechtliche\nWürdigung des Sachverhaltes zeitnah zu prüfen. 6Abweichend von Satz 1 hat die Familienkasse die\nAnspruchsvoraussetzungen jährlich zu prüfen, wenn:\n      − der notwendige Lebensbedarf des Kindes die kindeseigenen Mittel um nicht mehr als 1 000 €\n          übersteigt,\n      − der Nachweis der Behinderung nach A 19.2 Abs. 1 Satz 2 und 3 erbracht wird oder\n      − die Feststellung der Ursächlichkeit der Behinderung nach A 19.3 Abs. 3 bis 5 erfolgt ist."
+    },
+    {
+      "id": "de-kg-dakg-A19.2",
+      "body_sha256": "f06939e892b151c54422ecae1bab9210da1a607190545373927a5fcd104978b8",
+      "reviewed_full_section": "A 19.2       Nachweis der Behinderung\n(1)   1Den Nachweis einer Behinderung kann der Berechtigte erbringen:\n\n\n      1. bei einer Behinderung, deren Grad auf mindestens 50 festgestellt ist, durch einen Ausweis nach\n         dem SGB IX oder durch einen Bescheid der nach § 152 Abs. 1 SGB IX zuständigen Behörde,\n      2. bei einer Behinderung, deren Grad auf weniger als 50, aber mindestens 20 festgestellt ist,\n          a) durch eine Bescheinigung der nach § 152 Abs. 1 SGB IX zuständigen Behörde oder,\n          b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten\n             oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen\n             entsprechenden Bescheid,\n      3. bei einer Einstufung in den Pflegegrad 4 oder 5 nach dem SGB XI oder diesem entsprechenden\n         Bestimmungen durch den entsprechenden Bescheid.\n2Der Nachweis der Behinderung kann auch in Form einer Bescheinigung bzw. eines Zeugnisses des\n\nbehandelnden Arztes oder eines ärztlichen Gutachtens erbracht werden (BFH vom 16.04.2002,\nVIII R 62/99, BStBl II S. 738). 3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes\nhervorgehen:\n      − Vorliegen der Behinderung,\n      − Beginn der Behinderung, soweit das Kind das 25. Lebensjahr vollendet hat, und\n      − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.\n(2) 1Wird der Nachweis der Behinderung nur für einen begrenzten Zeitraum geführt, kann das Kind\njeweils nur für diesen Zeitraum nach § 32 Abs. 4 Satz 1 Nr. 3 EStG berücksichtigt werden. 2Wird ein\nAusweis nach dem SGB IX befristet ausgestellt, ist dies kein Grund, die Kindergeldfestsetzung ebenfalls\nauf den Zeitpunkt zu befristen, zu dem dieser Ausweis ungültig wird. 3Zur Überprüfung der Festsetzung\nvgl. A 19.1 Abs. 7 und 8."
+    },
+    {
+      "id": "de-kg-dakg-A19.3",
+      "body_sha256": "4d4d3b85f3de330cd9ec788d6a6e76b481387a58a2775b67218dfcaf01f74b70",
+      "reviewed_full_section": "A 19.3       Ursächlichkeit der Behinderung\n(1)   1Die Behinderung muss ursächlich für die Unfähigkeit des Kindes sein, sich selbst zu unterhalten.\n2Allein die Feststellung eines sehr hohen GdB rechtfertigt die Annahme der Ursächlichkeit jedoch nicht.\n\n\n(2)   1Die Ursächlichkeit ist anzunehmen, wenn:\n\n\n      − das Kind in einer Werkstatt für behinderte Menschen, bei einem anderen Leistungsanbieter nach\n         § 60 SGB IX oder in einer Tagesförderstätte betreut wird,\n\n                                                   54\n\f    − das Kind in einer vollstationären Einrichtung für Menschen mit Behinderungen oder einer\n        besonderen Wohnform lebt,\n    − Leistungen der Grundsicherung im Alter und bei Erwerbsminderung nach dem Vierten Kapitel\n        SGB XII bezogen werden,\n    − das Kind das Regelrentenalter (§§ 35 Satz 2 SGB VI; 235 SGB VI; 37 Satz 1 Nr. 1 SGB VI; 236a\n        SGB VI) erreicht hat,\n    − der GdB 50 oder mehr beträgt (vgl. A 19.2 Abs. 1 Satz 1 Nr. 1) und das Kind für einen Beruf\n        ausgebildet wird,\n    − im Ausweis nach dem SGB IX das Merkmal „H“ (hilflos) eingetragen oder im\n        Feststellungsbescheid festgestellt ist, dass die Voraussetzungen für das Merkmal „H“ (hilflos)\n        vorliegen, oder\n    − eine volle Erwerbsminderungsrente gegenüber dem Kind bewilligt ist oder eine dauerhafte volle\n        Erwerbsminderung nach § 45 SGB XII festgestellt ist.\n2Dem Merkzeichen „H“ steht die Einstufung in die Pflegegrade 4 oder 5 nach dem SGB XI oder diesem\n\nentsprechenden Bestimmungen gleich. 3Die Einstufung als pflegebedürftige Person mit schwersten\nBeeinträchtigungen ist durch Vorlage des entsprechenden Bescheides nachzuweisen.\n(3) 1Liegt kein Fall des Abs. 2 vor, ist zur Feststellung der Ursächlichkeit durch den Berechtigten eine\nBescheinigung des behandelnden Arztes beizubringen. 2Aus dieser muss hervorgehen, in welchem\nzeitlichen Umfang das Kind aufgrund seiner Behinderung in der Lage ist, eine Erwerbstätigkeit\nauszuüben. 3Für die Bescheinigung des behandelnden Arztes steht der Vordruck KG 4l zur Verfügung.\n4Die Ursächlichkeit der Behinderung ist gegeben, wenn das Kind nicht in der Lage ist, eine mindestens\n\n15 Stunden wöchentlich umfassende Beschäftigung unter den üblichen Bedingungen des für ihn in\nBetracht kommenden Arbeitsmarktes auszuüben.\n(4) 1Die Behinderung muss nicht die einzige Ursache dafür sein, dass das Kind außerstande ist, sich\nselbst zu unterhalten. 2Eine Mitursächlichkeit ist ausreichend, wenn ihr nach den Gesamtumständen\ndes Einzelfalls erhebliche Bedeutung zukommt (BFH vom 19.11.2008, III R 105/07, BStBl II 2010\nS. 1057). 3Die Prüfung der Mitursächlichkeit kommt in den Fällen zum Tragen, in denen das Kind\ngrundsätzlich in der Lage ist, eine Erwerbstätigkeit auf dem allgemeinen Arbeitsmarkt auszuüben (d. h.\neine mindestens 15 Stunden wöchentlich umfassende Beschäftigung), die Behinderung der Vermittlung\neiner Arbeitsstelle jedoch entgegensteht. 4Eine allgemein ungünstige Situation auf dem Arbeitsmarkt\noder andere Umstände (z. B. mangelnde Mitwirkung bei der Arbeitsvermittlung, Ablehnung von\nStellenangeboten), die zur Arbeitslosigkeit des Kindes führen, begründen hingegen keine\nBerücksichtigung nach § 32 Abs. 4 Satz 1 Nr. 3 EStG. 5Auch wenn das Kind erwerbstätig ist, kann die\nBehinderung mitursächlich sein. 6Ist das Kind trotz seiner Erwerbstätigkeit nicht in der Lage, seinen\nnotwendigen Lebensbedarf zu bestreiten (vgl. A 19.4), ist im Einzelfall zu prüfen, ob die Behinderung\nfür die mangelnde Fähigkeit zum Selbstunterhalt mitursächlich ist (BFH vom 15.03.2012, III R 29/09,\nBStBl II S. 892).\n(5) 1In der Regel wird die Ursächlichkeit der Behinderung für die Unfähigkeit des Kindes, sich selbst\nzu unterhalten, nicht angenommen, wenn es sich in Untersuchungs- oder Strafhaft befindet, auch dann\nnicht, wenn die Straftat durch die Behinderung gefördert wurde (BFH vom 30.04.2014, XI R 24/13,\nBStBl II S. 1014). 2Die Entscheidung, ob die Mitursächlichkeit (vgl. Abs. 4), trotz eines\nFreiheitsentzuges aufgrund einer begangenen Tat vorliegt, ist im Rahmen einer\nGesamtwürdigung aller Umstände des Einzelfalls zu treffen. 3Anhaltspunkte hierfür können sich\naus dem Straf- beziehungsweise Sicherungsverfahren ergeben. 4Die Mitursächlichkeit einer vor\nVollendung des 25. Lebensjahres eingetretenen seelischen Behinderung liegt vor, wenn ein Kind\nnach § 63 StGB in einem psychiatrischen Krankenhaus aufgrund einer schuldlos begangenen\nTat (§ 20 StGB) untergebracht ist (BFH vom 30.01.2024, III R 42/22, BStBl II 2025 S.16)."
+    },
+    {
+      "id": "de-kg-dakg-A19.4",
+      "body_sha256": "36d06e2c65409dbd310e012c899d8accfbb61f641bb0a2075207ca509b1ce9df",
+      "reviewed_full_section": "A 19.4     Außerstande sein, sich selbst zu unterhalten\n(1) 1Bei Kindern mit Behinderung ist grundsätzlich der notwendige Lebensbedarf den kindeseigenen\nMitteln gegenüberzustellen (vgl. aber Abs. 3). 2Übersteigen die kindeseigenen Mittel nicht den\nnotwendigen Lebensbedarf, ist das Kind außerstande, sich selbst zu unterhalten. 3Falls die\nkindeseigenen Mittel den notwendigen Lebensbedarf überschreiten und ungleichmäßig zufließen (z. B.\ndurch eine Nachzahlung oder die erstmalige Zahlung einer Rente), ist zu prüfen, ab welchem vollen\nMonat das Kind in der Lage ist, sich selbst zu unterhalten. 4Führt eine Nachzahlung dazu, dass das\nKind nicht länger außerstande ist, sich selbst zu unterhalten, ist die Kindergeldfestsetzung erst ab dem\nFolgemonat des Zuflusses aufzuheben (vgl. BFH vom 11.04.2013, III R 35/11, BStBl II S. 1037).\n\n                                                  55\n\f(2) 1Der notwendige Lebensbedarf des Kindes mit Behinderung setzt sich aus dem allgemeinen\nLebensbedarf und dem individuellen behinderungsbedingten Mehrbedarf zusammen (vgl. BFH vom\n15.10.1999, VI R 40/98 und VI R 182/98, BStBl II 2000 S. 75 und 79). 2Als allgemeiner Lebensbedarf\nist der Grundfreibetrag nach § 32a Abs. 1 Satz 2 Nr. 1 EStG i. H. v. 12 096 € (2024: 11 784, 2023:\n10 908 €, 2022: 10 347 €, 2021: 9 744 €) anzusetzen; zum behinderungsbedingten Mehrbedarf vgl.\nAbs. 4 und 5. 3Die kindeseigenen Mittel setzen sich aus dem verfügbaren Nettoeinkommen nach A 19.5\nund sämtlichen Leistungen Dritter nach A 19.6 zusammen; das Vermögen des Kindes gehört nicht zu\nden kindeseigenen Mitteln (BFH vom 19.08.2002, VIII R 17/02 und VIII R 51/01, BStBl II 2003 S. 88 und\n91). 4Einzelheiten insbesondere zu Sonderzuwendungen und einmaligen Nachzahlungen siehe BMF-\nSchreiben vom 22.11.2010 Abschnitt VI – BStBl I S. 1346. 5Die Umrechnung von nicht auf Euro\nlautenden kindeseigenen Mitteln erfolgt nach H 8.1 (1-4) [Ausländische Währung] LStH 2023.\n(3) 1Übersteigen die kindeseigenen Mittel nicht den allgemeinen Lebensbedarf, ist davon auszugehen,\ndass das Kind außerstande ist, sich selbst zu unterhalten (vgl. S. 1 des Vordrucks KG 4c). 2Bei dieser\nvereinfachten Berechnung zählen zum verfügbaren Nettoeinkommen und den Leistungen Dritter keine\nLeistungen, die dem Kind wegen eines behinderungsbedingten Bedarfs zweckgebunden zufließen,\ninsbesondere sind dies:\n       − Pflegegeld bzw. -zulage aus der gesetzlichen Unfallversicherung, nach § 35 BVG oder nach\n           § 64a SGB XII,\n       − Ersatz der Mehrkosten für den Kleider- und Wäscheverschleiß (z. B. § 15 BVG i. d. F. bis\n           31.12.2023 i. V. m. § 143 Abs. 2, 3 SGB XIV; ab 01.01.2024 gemäß § 46 Abs. 1 S. 1 Nr. 2\n           SGB XIV),\n       − Grundrente und Schwerstbeschädigtenzulage nach § 31 BVG,\n       − Leistungen der Pflegeversicherung (§ 3 Nr. 1a EStG),\n       − Leistungen nach dem ContStifG,\n       − Eingliederungshilfe (§§ 90 ff. SGB IX).\n3Wird nach dieser Berechnung der allgemeine Lebensbedarf überschritten, ist eine ausführliche\nBerechnung (vgl. Abs. 1 Satz 1 und S. 2 und 3 des Vordrucks KG 4c) vorzunehmen.\n(4) 1Zum behinderungsbedingten Mehrbedarf gehören alle mit einer Behinderung zusammen-\nhängenden außergewöhnlichen Belastungen, z. B. Aufwendungen für die Hilfe bei den gewöhnlichen\nund regelmäßig wiederkehrenden Verrichtungen des täglichen Lebens, für die Pflege sowie für einen\nerhöhten Wäschebedarf. 2Sofern kein Einzelnachweis erfolgt, bemisst sich der behinderungsbedingte\nMehrbedarf grundsätzlich in Anlehnung an den Pauschbetrag für Menschen mit Behinderungen des\n§ 33b Abs. 3 EStG, A 19.3 Abs. 2 Satz 2 ist zu beachten. 3Als Einzelnachweis sind beispielsweise zu\nberücksichtigen:\n       − sämtliche Leistungen nach dem SGB XII, ggf. abzüglich des Verpflegungsanteils (vgl. Abs. 6\n           Satz 4 und Abs. 7 Satz 2),\n       − Pflegegeld aus der Pflegeversicherung (BFH vom 24.08.2004, VIII R 50/03, BStBl II 2010\n           S. 1052),\n       − Landespflegegeld nach dem Bayerischen Landespflegegeldgesetz,\n       − Blindengeld (BFH vom 31.08.2006, III R 71/05, BStBl II 2010 S. 1054),\n       − Leistungen nach dem ContStifG,\n       − Leistungen der Beihilfe zur Unterbringung,\n       − Leistungen der Eingliederungshilfe (§§ 90 ff. SGB IX).\n4Die  Sätze 1 bis 3 sind bei allen Kindern mit Behinderungen unabhängig von ihrer Wohn- oder\nUnterbringungssituation anzuwenden. 5Erhält das Kind Leistungen nach SGB XII und ggf. der\nEingliederungshilfe nach SGB IX oder SGB VIII, sind Abs. 6 und 7 zu beachten.\n(5) 1Neben dem nach Abs. 4 ermittelten behinderungsbedingten Mehrbedarf (einschließlich\nLeistungen nach SGB XII und Eingliederungshilfe nach SGB IX oder SGB VIII) kann ein weiterer\nbehinderungsbedingter Mehrbedarf angesetzt werden. 2Hierzu gehören alle übrigen durch die\nBehinderung bedingten Aufwendungen wie z. B. Operationskosten und Heilbehandlungen, Kuren, Arzt-\nund Arzneikosten, soweit sie nicht von der Krankenkasse bzw. einer Krankenversicherung getragen\nwerden. 3Bestehen Zweifel darüber, ob die Aufwendungen durch die Behinderung bedingt sind, ist eine\närztliche Bescheinigung hierüber vorzulegen. 4Zum weiteren behinderungsbedingten Mehrbedarf\nzählen bei allen Kindern mit Behinderungen auch Betreuungsleistungen, soweit sie nach Bescheinigung\ndes Amtsarztes oder des behandelnden Arztes unbedingt erforderlich sind. 5Der hierfür anzusetzende\nStundensatz beträgt 10 €; der sich daraus ergebende Betrag ist nur zu berücksichtigen, soweit er das\nnach Abs. 4 Satz 3 anzusetzende Pflegegeld übersteigt. 6Für die Bescheinigung des behandelnden\n                                                 56\n\fArztes steht der Vordruck KG 4k zur Verfügung. 7Für Aufwendungen für durch die Behinderung\nveranlasste Fahrten wird eine jährliche Pauschale von 900 € berücksichtigt, wenn ein GdB von\nmindestens 80 oder ein GdB von mindestens 70 und das Merkzeichen „G“ vorliegt. 8Liegt das\nMerkzeichen „aG“, „Bl“, „TBl“ oder „H“ vor, beträgt die jährliche Pauschale 4 500 €; A 19.3 Abs. 2 Satz 2\nist zu beachten. 9Abweichend von § 33 Abs. 2a EStG sind Aufwendungen für durch die Behinderung\nveranlasste Fahrten auch ohne Vorliegen eines GdB anzuerkennen, soweit sie nachgewiesen oder\nglaubhaft gemacht werden und angemessen sind; ein Aufwand von 0,30 € je gefahrenen Kilometer für\nFahrten bis zu 3 000 km im Jahr kann als angemessen angesehen werden. 10Mehraufwendungen, die\neinem Kind mit Behinderung anlässlich einer Urlaubsreise durch Kosten für Fahrten, Unterbringung und\nVerpflegung einer Begleitperson entstehen und nachgewiesen werden, können ebenfalls i. H. v. bis zu\n767 € pro Kalenderjahr als behinderungsbedingter Mehrbedarf berücksichtigt werden, sofern die\nNotwendigkeit ständiger Begleitung durch\n    − das Merkzeichen B im Ausweis nach SGB IX,\n    − den Vermerk „Die Notwendigkeit ständiger Begleitung ist nachgewiesen“ im\n       Feststellungsbescheid der nach § 152 Abs. 1 SGB IX zuständigen Behörde (vgl. BFH vom\n       04.07.2002, III R 58/98, BStBl II S. 765) oder\n    − durch Bescheinigung des behandelnden Arztes (siehe Vordruck KG 4m)\nnachgewiesen ist. 11Wurden für nachgewiesenen bzw. glaubhaft gemachten behinderungsbedingten\nMehrbedarf Leistungen durch einen Sozialleistungsträger erbracht, ist darauf zu achten, dass der\nMehrbedarf nur einmal berücksichtigt wird. 12Die kindeseigenen Mittel, die an einen\nSozialleistungsträger abgezweigt, übergeleitet oder diesem erstattet werden, mindern nicht den\nbehinderungsbedingten Mehrbedarf des Kindes, sondern die Leistungen des Sozialleistungsträgers in\nentsprechender Höhe. 13Dies gilt auch für einen Kostenbeitrag der Eltern und des Kindes.\n(6) 1Ein Kind ist vollstationär oder auf vergleichbare Weise untergebracht, wenn es nicht im Haushalt\nder Eltern lebt, sondern anderweitig auf Kosten eines Dritten untergebracht ist. 2Dies ist z. B. der Fall,\nwenn existenzsichernde Leistungen nach dem SGB XII oder Leistungen der Eingliederungshilfe nach\nSGB IX oder SGB VIII für die Betreuung erbracht werden, nicht aber Leistungen nach SGB II. 3Dabei\nist es unerheblich, ob das Kind vollstationär versorgt wird, in einer eigenen Wohnung oder in sonstigen\nWohneinrichtungen (z. B. betreutes Wohnen) lebt. 4Vollstationäre oder vergleichbare Unterbringung\nliegt auch dann vor, wenn sich das Kind zwar zeitweise (z. B. am Wochenende oder in den Ferien) im\nHaushalt der Eltern aufhält, der Platz in der Einrichtung für Menschen mit Behinderungen (z. B. im\nRahmen des betreuten Wohnens) aber durchgehend während dieser Zeit zur Verfügung steht. 5Die\nErmittlung des behinderungsbedingten Mehrbedarfs erfolgt regelmäßig durch Einzelnachweis der\nAufwendungen, indem die z. B. im Wege der Grundsicherung nach SGB XII und ggf. durch die\nEingliederungshilfe nach SGB IX übernommenen Kosten für die vollstationäre oder vergleichbare\nUnterbringung ggf. abzüglich des nach der SvEV zu ermittelnden Wertes der Verpflegung angesetzt\nwerden. 6Der Pauschbetrag für Menschen mit Behinderungen ist nicht neben den Kosten der\nUnterbringung zu berücksichtigen, da deren Ansatz einem Einzelnachweis entspricht. 7Liegt eine\nvollstationäre Unterbringung in einer Einrichtung für Menschen mit Behinderungen vor, kann evtl.\ngezahltes Pflege- oder Blindengeld nicht neben der Eingliederungshilfe als behinderungsbedingter\nMehrbedarf berücksichtigt werden. 8Der Berechtigte kann weiteren behinderungsbedingten Mehrbedarf\nglaubhaft machen (vgl. Abs. 5).\n   Beispiel\n   Die 39-jährige Tochter (GdB 100 seit Geburt) eines Berechtigten lebt 24 Stunden am Tag, sieben Tage die\n   Woche (vollstationär) in einer besonderen Wohnform für Menschen mit Behinderungen. Dort erhält sie täglich\n   drei Mahlzeiten. An zwei Wochenenden im Monat und während des Urlaubs hält sie sich im Haushalt des\n   Berechtigten auf. Die Kosten der Unterbringung und Betreuung in der Einrichtung von jährlich 40 000 € tragen\n   der Träger der Eingliederungshilfe nach SGB IX (Betreuung 19 200 €) sowie der Sozialleistungsträger\n   (Grundsicherung nach SGB XII 17 608 €) i. H. v. insgesamt 36 808 € und die Pflegeversicherung i. H. v. 3 192 €\n   (Pflegegeld wird direkt einbehalten und übergeleitet). Die Tochter bezieht eine Rente von monatlich 1 370 €\n   (Sozialversicherungsbeiträge 120 €). Diese rechnet der Sozialleistungsträger in Höhe v. 1 250 € mtl. an.\n   Lösung:\n   vereinfachte Berechnung für 2025\n      Brutto-Renteneinnahmen (1 370 € x 12)                                                             16 440 €\n      Werbungskosten-Pauschbetrag (§ 9a Satz 1 Nr. 3 EStG)                                        -        102 €\n      Kostenpauschale                                                                             -        180 €\n      Sozialversicherungsbeiträge                                                                 -      1 440 €\n      Summe                                                                                             14 718 €\n                                                      57\n\f   Da die kindeseigenen Mittel nach der vereinfachten Berechnung den allgemeinen Lebensbedarf in Höhe des\n   Grundfreibetrags von 12 096 € übersteigen, muss eine ausführliche Berechnung durchgeführt werden.\n\n   ausführliche Berechnung für 2025\n      notwendiger Lebensbedarf\n         allgemeiner Lebensbedarf in Höhe des Grundfreibetrags                                          12 096 €\n         behinderungsbedingter Mehrbedarf *\n         Kosten d. vollstationären Unterbringung                                                  +     40 000 €\n         Verpflegungsanteil (SvEV; 333 € x 12)                                                    -      3 996 €\n         Fahrtkostenpauschale (§ 33 Abs. 2a Satz 3 EStG)                                          +        900 €\n         Summe                                                                                          49 000 €\n\n      kindeseigene Mittel\n          Brutto-Renteneinnahmen (1 370 € x 12)                                                         16 440 €\n          Werbungskosten-Pauschbetrag (§ 9a Satz 1 Nr. 3 EStG)                                    -        102 €\n          Kostenpauschale                                                                         -        180 €\n          Sozialversicherungsbeiträge                                                             -      1 440 €\n          Eingliederungshilfe                                                 19 200 €\n          Grundsicherung                                                    + 17 608 €\n          Leistungen der Pflegeversicherung                                  + 3 192 €\n          abzüglich angerechneter Rente 1 250 € x 12                          15 000 €\n          Zwischensumme                                                       25 000 €            +     25 000 €\n          Summe                                                                                         39 718 €\n\n      * kein Ansatz des Pauschbetrags für Menschen mit Behinderungen nach § 33b Abs. 3 EStG (vgl. A 19.4\n      Abs. 6 Satz 6)\n\n   Das Kind ist außerstande, sich selbst zu unterhalten, da die kindeseigenen Mittel den notwendigen\n   Lebensbedarf nicht übersteigen. Es besteht ein Anspruch auf Kindergeld nach § 32 Abs. 4 Satz 1 Nr. 3 EStG.\n(7) 1Ein Kind ist teilstationär untergebracht, wenn es z. B. bei seinen Eltern lebt und zeitweise in einer\nEinrichtung (beispielsweise Werkstatt für behinderte Menschen, anderer Leistungsanbieter nach § 60\nSGB IX oder Tagesförderstätte) betreut wird. 2Die Leistungen im Rahmen der Eingliederungshilfe nach\nSGB IX für die Betreuung, ggf. abzüglich des nach SvEV zu bestimmenden Wertes der Verpflegung\nsind als behinderungsbedingter Mehrbedarf anzusetzen. 3Für die Pflege und Betreuung außerhalb der\nteilstationären Unterbringung ist neben dem behinderungsbedingten Mehrbedarf nach Satz 2\nmindestens ein Betrag in Höhe des Pauschbetrags für Menschen mit Behinderungen nach § 33b\nAbs. 3 EStG als Bedarf des Kindes zu berücksichtigen. 4Der Berechtigte kann weiteren\nbehinderungsbedingten Mehrbedarf glaubhaft machen (vgl. Abs. 5).\n   Beispiel\n   Im Haushalt eines Berechtigten lebt dessen 39-jähriger Sohn, der seit einem Unfall im Alter von 21 Jahren eine\n   Behinderung hat (GdB 70, Merkzeichen „B“). Er arbeitet tagsüber in einer Werkstatt für behinderte Menschen.\n   Hierfür erhält er ein monatliches Arbeitsentgelt von 420 €. Die Kosten für die Beschäftigung in der Werkstatt\n   von monatlich 1 250 € und die Fahrtkosten von 100 € monatlich für die arbeitstägliche Beförderung zur\n   Werkstatt trägt der Sozialleistungsträger im Rahmen der Eingliederungshilfe nach SGB IX. Der Sohn bezieht\n   daneben eine Rente wegen voller Erwerbsminderung aus der gesetzlichen Rentenversicherung von monatlich\n   600 €, wovon nach Abzug eines Eigenanteils zur gesetzlichen Kranken- und Pflegeversicherung i. H. v. 72 €\n   noch 528 € ausgezahlt werden. Außerdem erhält er eine private Rente von monatlich 220 €. Der Berechtigte\n   hat Mehraufwendungen von 767 € nachgewiesen, die anlässlich einer Urlaubsreise des Sohnes für Fahrten,\n   Unterbringung und Verpflegung einer Begleitperson entstanden sind. Der Sohn nimmt am gemeinschaftlichen\n   Mittagessen in der Werkstatt teil. Hierfür zahlt er einen monatlichen Kostenbeitrag von 60 €.\n   Lösung:\n   vereinfachte Berechnung für 2025\n      Einkünfte aus nichtselbständiger Tätigkeit, § 19 EStG (420 € x 12)                                 5 040 €\n      Arbeitnehmer-Pauschbetrag (§ 9a Satz 1 Nr. 1 Buchst. a EStG)                                -      1 230 €\n      Brutto-Renteneinnahmen (600 € x 12 und 220 € x 12)                                          +      9 840 €\n      Werbungskosten-Pauschbetrag (§ 9a Satz 1 Nr. 3 EStG)                                        -        102 €\n                                                       58\n\f         Kostenpauschale                                                                       -       180 €\n         Sozialversicherungsbeiträge (72 € x 12)                                               -       864 €\n         Summe                                                                                      12 504 €\n\n   Da die kindeseigenen Mittel nach der vereinfachten Berechnung den allgemeinen Lebensbedarf in Höhe des\n   Grundfreibetrags von 12 096 € übersteigen, muss eine ausführliche Berechnung durchgeführt werden.\n\n   ausführliche Berechnung für 2025\n      notwendiger Lebensbedarf\n         allgemeiner Lebensbedarf in Höhe des Grundfreibetrags                                      12 096 €\n         behinderungsbedingter Mehrbedarf\n         Pauschbetrag für Menschen mit Behinderungen (§ 33b Abs. 3 EStG)                       +     1 780 €\n         Kosten der Beschäftigung in der Werkstatt\n         (nach SGB IX; 1.250 € x 12)                                                           +    15 000 €\n         Verpflegungsanteil (SvEV für Mittag; 132 € x 12)                                      -     1 584 €\n         Fahrtkosten zur Werkstatt (nach SGB IX; 100 € x 12)                                   +     1 200 €\n         Aufwendungen für Begleitperson anlässlich einer Urlaubsreise                          +       767 €\n         Summe                                                                                      29 259 €\n\n         kindeseigene Mittel\n             Einkünfte aus nichtselbständiger Tätigkeit, § 19 EStG (420 € x 12)                      5 040 €\n             Arbeitnehmer-Pauschbetrag (§ 9a Satz 1 Nr. 1 Buchst. a EStG)                      -     1 230 €\n             Brutto-Renteneinnahmen (600 € x 12 und 220 € x 12)                                +     9 840 €\n             Werbungskosten-Pauschbetrag (§ 9a Satz 1 Nr. 3 EStG)                              -       102 €\n             Kostenpauschale                                                                   -       180 €\n             Eingliederungshilfe für Werkstatt (nach SGB IX; 1 250 € x 12)                     +    15 000 €\n             Kostenbeitrag 60 € x 12                                                           -       720 €\n             Eingliederungshilfe für Fahrten zur Werkstatt (nach SGB IX; 100 € x 12)           +     1 200 €\n             Sozialversicherungsbeiträge (72 € x 12)                                           -       864 €\n             Summe                                                                                  27 984 €\n\n   Das Kind ist außerstande, sich selbst zu unterhalten, da die kindeseigenen Mittel den notwendigen\n   Lebensbedarf nicht übersteigen. Es besteht ein Anspruch auf Kindergeld nach § 32 Abs. 4 Satz 1 Nr. 3 EStG."
+    }
+  ],
+  "findings": [
+    "The complete five-page judgment concerns June and July 2002 and April 2003, not the 2025 assessment period. The appeal succeeded because findings were inadequate, followed by remand; this is neither an unconditional benefit award nor a final finding that the child had no disability.",
+    "Paragraphs 15–20 use the historical SGB IX legal definition. Expected duration of functional impairment, departure from the age-typical condition and participation impairment must be evaluated separately. The relevant duration is a prognosis of the impairment, not simply elapsed time since diagnosis or the length of a hospital stay. The current DA-KG A19.1 definition also addresses interaction with attitudinal and environmental barriers; the old definition must not silently replace that current formulation.",
+    "Paragraphs 21–25 distinguish medical expert evidence from the court’s legal assessment. An acute diagnosis during 12-day and 8-day hospital stays, even alongside a longer history of illness and addiction, did not by itself establish all legal disability conditions. The expert’s 100-percent statement and the 15-hour question are not a universal diagnosis-to-eligibility rule. Observable diagnoses, clinical findings, functional limitations, prognosis and their dated evidentiary scope support derived criteria; an expert’s unanalysed legal conclusion is not a substitute for those rules.",
+    "Paragraph 27 allocates the consequences of an unresolved failure to prove disability after fact finding. This does not license converting every missing intake field into a substantive negative judgment or rejecting all retrospective medical evidence; the decision remands for further findings, including possible oral expert evidence.",
+    "Paragraphs 28–29 require a comparison of total necessary living costs, including disability-related additional need, with the child’s actual available means. No earnings and no known unemployment payments are insufficient without findings about actual social benefits. The cited principle about subsistence/housing benefits is not a retroactive application of SGB II to 2002. Amounts, payment dates, applicable benefit law and parental recourse must be established; recourse against parents affects whether benefits count.",
+    "The reference to real estate in paragraph 29 calls for concrete financial findings; it does not establish a general duty to consume capital. Current A19.4 expressly excludes the child’s assets from own means. Do not collapse capital ownership, investment income and actual benefit receipts into one resources input. Current A19.4 also separates the simplified and detailed need comparisons and prevents duplicate recognition of covered additional costs.",
+    "Paragraph 30 leaves the disability’s substantial contribution to inability to self-support to an individual overall assessment. The medical disability finding, means comparison and causation must be independently derived. Current A19.3 likewise does not infer causation from a high disability grade alone.",
+    "The judgment’s age 27 belongs to the historical regime. Current A19.1 has age 25 with a specific pre-2007 transition; do not insert a universal age-27 onset rule. The onset-age rule concerns disability itself, separately from the later onset of inability to self-support.",
+    "The judgment is marked NV. Its body and citations do not independently verify its BStBl II membership or exhaustive class discovery. Procedural precedents and older disability/means cases need their own original-source, period and surface assessment."
+  ],
+  "disposition": {
+    "id": "de-kg-suppl-030",
+    "identity": "BFH III R 44/14, 2017-01-19, indirectly cited in the illness/training precedent review",
+    "title_short": "BFH III R 44/14",
+    "relation": "bears_on",
+    "discovered_by": "de-kg-dakg-A17.2",
+    "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+    "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c, corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-14-2017-01-19/document-1, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, original PDF SHA-256 e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.",
+    "status": "classified-with-reason",
+    "classification": "adult_child_disability_evidence_and_self_support",
+    "reason": "Complete BFH III R44/14 (19 January 2017), five pages, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, reviewed with full DA-KG 2025 A19.1–A19.4. Expected impairment duration, age-relative and participation limitations, evidence-to-legal-assessment separation, actual means versus necessary living costs, parental recourse and individual disability causation bear on EStG32(4) qualifying_child_count and remain unencoded. Acute hospital diagnoses and the expert grade alone did not establish all conditions; the case was remanded for further findings. The historical age27 and old SGBIX definition are not universal 2025 parameters. No income does not prove inability to self-support; assets are not automatically available income. Full source, current-guidance comparison and pending citation spans are in disability-evidence-source-review.json. No blanket rejection of retrospective evidence or verified BStBlII membership is asserted.",
+    "bears_on_computed_surface": true,
+    "text_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+    "text_source": "Complete corpus row de/guidance/bfh-iii-r-44-14-2017-01-19/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-evidence-source-review.json."
+  },
+  "new_pending_indirect_precedents": [
+    {
+      "id": "de-kg-suppl-087",
+      "identity": "BFH XI R 17/14, 2015-10-21, indirectly cited in the disability-evidence review",
+      "title_short": "BFH XI R 17/14",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 17/14 dated 2015-10-21. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-088",
+      "identity": "BFH XI R 44/11, 2013-05-28, indirectly cited in the disability-evidence review",
+      "title_short": "BFH XI R 44/11",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 44/11 dated 2013-05-28. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-089",
+      "identity": "BFH V R 39/11, 2012-02-23, indirectly cited in the disability-evidence review",
+      "title_short": "BFH V R 39/11",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH V R 39/11 dated 2012-02-23. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-090",
+      "identity": "BFH X R 65/09, 2011-10-19, indirectly cited in the disability-evidence review",
+      "title_short": "BFH X R 65/09",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH X R 65/09 dated 2011-10-19. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-091",
+      "identity": "BSG B 9 SB 3/99 R, 2000-04-12, indirectly cited in the disability-evidence review",
+      "title_short": "BSG B 9 SB 3/99 R",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 9 SB 3/99 R dated 2000-04-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-092",
+      "identity": "BSG B 3 KR 14/14 R, 2015-09-30, indirectly cited in the disability-evidence review",
+      "title_short": "BSG B 3 KR 14/14 R",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 3 KR 14/14 R dated 2015-09-30. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-093",
+      "identity": "BFH VII R 16-19/89, 1991-01-08, indirectly cited in the disability-evidence review",
+      "title_short": "BFH VII R 16-19/89",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VII R 16-19/89 dated 1991-01-08. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-094",
+      "identity": "BFH VI R 51/13, 2014-06-26, indirectly cited in the disability-evidence review",
+      "title_short": "BFH VI R 51/13",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 51/13 dated 2014-06-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-095",
+      "identity": "BFH III R 6/14, 2015-04-16, indirectly cited in the disability-evidence review",
+      "title_short": "BFH III R 6/14",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 6/14 dated 2015-04-16. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-096",
+      "identity": "BFH VIII R 32/02, 2003-11-26, indirectly cited in the disability-evidence review",
+      "title_short": "BFH VIII R 32/02",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VIII R 32/02 dated 2003-11-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-097",
+      "identity": "BFH VI R 101/10, 2012-12-12, indirectly cited in the disability-evidence review",
+      "title_short": "BFH VI R 101/10",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 101/10 dated 2012-12-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-098",
+      "identity": "BFH III R 46/08, 2011-12-22, indirectly cited in the disability-evidence review",
+      "title_short": "BFH III R 46/08",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 46/08 dated 2011-12-22. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.",
+      "status": "pending"
+    }
+  ],
+  "existing_precedent_identities": [
+    {
+      "court": "BFH",
+      "docket": "VI R 31/14",
+      "existing_ids": [
+        "de-kg-instr-29a6a70e18440300",
+        "de-kg-suppl-034"
+      ]
+    },
+    {
+      "court": "BFH",
+      "docket": "VIII R 62/99",
+      "existing_ids": [
+        "de-kg-discovery-9a4f325687f3bf74"
+      ]
+    },
+    {
+      "court": "BFH",
+      "docket": "III R 105/07",
+      "existing_ids": [
+        "de-kg-discovery-359e9a2ce0db9b88"
+      ]
+    },
+    {
+      "court": "BFH",
+      "docket": "III R 28/15",
+      "existing_ids": [
+        "de-kg-discovery-b88635d70c7e1487",
+        "de-kg-instr-b8899970af340fb3"
+      ]
+    },
+    {
+      "court": "BFH",
+      "docket": "III R 31/13",
+      "existing_ids": [
+        "de-kg-suppl-037"
+      ]
+    },
+    {
+      "court": "BFH",
+      "docket": "III R 29/09",
+      "existing_ids": [
+        "de-kg-discovery-957b1d766d1aa0c0",
+        "de-kg-instr-6568b0e3e8e4b33c"
+      ]
+    }
+  ],
+  "indirect_discovery_citation_spans": [
+    {
+      "ids": [
+        "de-kg-suppl-087"
+      ],
+      "court": "BFH",
+      "docket": "XI R 17/14",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG ist die in § 2 Abs. 1 Satz 1 SGB IX enthaltene Legaldefinition maßgeblich (Anschluss an BFH-Urteile vom 21. Oktober 2015 XI R 17/14, BFH/NV 2016, 190; vom 28. Mai 2013 XI R 44/11, BFH/NV 2013, 1409, und vom 23. Februar 2012 V R 39/11, BFH/NV 2012, 1584). 2. NV: Die Folgerung des FG, dass ei",
+      "excerpt_sha256": "a4e6e4f993ee472285cc465649cf21282bb6a3aff58acf50c1a6d043c6f5e570"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-088"
+      ],
+      "court": "BFH",
+      "docket": "XI R 44/11",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "in § 2 Abs. 1 Satz 1 SGB IX enthaltene Legaldefinition maßgeblich (Anschluss an BFH-Urteile vom 21. Oktober 2015 XI R 17/14, BFH/NV 2016, 190; vom 28. Mai 2013 XI R 44/11, BFH/NV 2013, 1409, und vom 23. Februar 2012 V R 39/11, BFH/NV 2012, 1584). 2. NV: Die Folgerung des FG, dass ein volljähriges Kind behindert ist, kann grundsä",
+      "excerpt_sha256": "0cc61be8104c55aef2b30790b4c3329004a33ec0a80f12df14c2dc3be9eb2f4d"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-089"
+      ],
+      "court": "BFH",
+      "docket": "V R 39/11",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "aßgeblich (Anschluss an BFH-Urteile vom 21. Oktober 2015 XI R 17/14, BFH/NV 2016, 190; vom 28. Mai 2013 XI R 44/11, BFH/NV 2013, 1409, und vom 23. Februar 2012 V R 39/11, BFH/NV 2012, 1584). 2. NV: Die Folgerung des FG, dass ein volljähriges Kind behindert ist, kann grundsätzlich nur das Ergebnis einer durch das FG vorzunehmend",
+      "excerpt_sha256": "dbba49cc1f6890340104b99ea3cb8ab76162700910e53ec4884f8b2b49cde219"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-090"
+      ],
+      "court": "BFH",
+      "docket": "X R 65/09",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "ts mit der Sachrüge Erfolg, so dass es auf die erhobenen Verfahrensrügen nicht mehr ankommt (vgl. z.B. Urteil des Bundesfinanzhofs ‑‑BFH‑‑ vom 19. Oktober 2011 X R 65/09, BFHE 235, 304, BStBl II 2012, 345, Rz 50, m.w.N.). 14 1. Gemäß § 62 Abs. 1, § 63 Abs. 1 Sätze 1 und 2 i.V.m. § 32 Abs. 4 Satz 1 Nr. 3 EStG besteht für ein Kin",
+      "excerpt_sha256": "219d8c9af751cbb3389f2f5576886348e32f008f20d7333a4919a20480da7969"
+    },
+    {
+      "ids": [
+        "de-kg-instr-29a6a70e18440300",
+        "de-kg-suppl-034"
+      ],
+      "court": "BFH",
+      "docket": "VI R 31/14",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "s Gehirns, Anfallsleiden oder körperliche Beeinträchtigungen, Suchtkrankheiten, Neurosen und Persönlichkeitsstörungen in Betracht (BFH-Urteil vom 18. Juni 2015 VI R 31/14, BFHE 251, 147, BStBl II 2016, 40, Rz 21, m.w.N.). 17 bb) Eine Behinderung nach § 2 Abs. 1 Satz 1 SGB IX setzt zudem eine mit hoher Wahrscheinlichkeit länger a",
+      "excerpt_sha256": "33dc52eb96d26d58200e07714890ac7629422661ba9fdb729ab106f51a3f3d3e"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-091"
+      ],
+      "court": "BSG",
+      "docket": "B 9 SB 3/99 R",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "e ist (ggf.) eine Prognose zur (weiteren) Entwicklung der Funktionsbeeinträchtigung zu stellen (vgl. Urteil des Bundessozialgerichts ‑‑BSG‑‑ vom 12. April 2000 B 9 SB 3/99 R, Sozialrecht ‑‑SozR‑‑ 3-3870 § 3 Nr 9, zu § 3 Abs. 1 Satz 3 des Schwerbehindertengesetzes). 18 cc) Die (seelische) Gesundheit muss nach § 2 Abs. 1 Satz 1 SGB I",
+      "excerpt_sha256": "49e0edd1b194835c36c943a2d3662f8d24a4b4c9b6efe8d890ee9f3123eb168c"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-092"
+      ],
+      "court": "BSG",
+      "docket": "B 3 KR 14/14 R",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "falls psychologischem Sachverstand zu erfolgen (vgl. BFH-Urteil in BFHE 251, 147, BStBl II 2016, 40, Rz 24, m.w.N.; vgl. auch BSG-Urteil vom 30. September 2015 B 3 KR 14/14 R, SozR 4-2500 § 33 Nr. 48, Rz 19). 20 b) Das FG ist zu dem Ergebnis gekommen, dass X im Streitzeitraum i.S. des § 32 Abs. 4 Satz 1 Nr. 3 EStG behindert war. Es ",
+      "excerpt_sha256": "39d8d4c3192603bfb8a5792e904392674afcf1474344e49556f612131fd7c00a"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-093"
+      ],
+      "court": "BFH",
+      "docket": "VII R 16-19/89",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "die allgemeinen Erfahrungssätze aus seinem Fachgebiet vermittelt, darf die Prüfung von Rechtsfragen nicht übertragen werden (vgl. BFH-Urteil vom 8. Januar 1991 VII R 16-19/89, BFH/NV 1991, 850, unter II.2.b, m.w.N.; vgl. auch Stiepel in Beermann/Gosch, FGO § 82 Rz 132, und Schallmoser in Hübschmann/Hepp/Spitaler, § 82 FGO Rz 140). D",
+      "excerpt_sha256": "a18d4932d2caa70e38ca20c246b712db2bd128ff838a4b9d776e23d24707c7e5"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-094"
+      ],
+      "court": "BFH",
+      "docket": "VI R 51/13",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "are Ableitung dieser Folgerungen aus den festgestellten Tatsachen und Umständen, liegt ein Verstoß gegen die Denkgesetze vor (z.B. BFH-Urteil vom 26. Juni 2014 VI R 51/13, BFHE 246, 326, BStBl II 2015, 9, Rz 21, m.w.N.; vgl. auch Senatsurteil vom 16. April 2015 III R 6/14, BFH/NV 2015, 1237, Rz 16, m.w.N.). Auch unter Berücksich",
+      "excerpt_sha256": "99f085a9675b17fceb2f1376f5aad2c637456779931f421c725f76b710892a22"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-095"
+      ],
+      "court": "BFH",
+      "docket": "III R 6/14",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "en die Denkgesetze vor (z.B. BFH-Urteil vom 26. Juni 2014 VI R 51/13, BFHE 246, 326, BStBl II 2015, 9, Rz 21, m.w.N.; vgl. auch Senatsurteil vom 16. April 2015 III R 6/14, BFH/NV 2015, 1237, Rz 16, m.w.N.). Auch unter Berücksichtigung dieses eingeschränkten Prüfungsmaßstabes ist die vom FG vorgenommene Würdigung zu beanstanden. ",
+      "excerpt_sha256": "b11939b680e0261b9e39ac4b8548f89a75af763751c8e63a305bc43b7ccf70e3"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-9a4f325687f3bf74"
+      ],
+      "court": "BFH",
+      "docket": "VIII R 62/99",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "lgen der psychischen Erkrankung insbesondere in psychischer, physischer, beruflicher und sozialer Hinsicht ersichtlich (vgl. z.B. BFH-Urteil vom 16. April 2002 VIII R 62/99, BFHE 198, 567, BStBl II 2002, 738, unter II.2.b bb, zur Teilnahme an einem Polamidon-Substitutions-Programm). 24 b) Entsprechende Anhaltspunkte ergeben sich a",
+      "excerpt_sha256": "1e6097887d9412ed32f30be89e1fb76dec1f3b3a498a53a96cec2f1b4d92cf8a"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-359e9a2ce0db9b88"
+      ],
+      "court": "BFH",
+      "docket": "III R 105/07",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "eis der Behinderung nach den Regeln der objektiven Beweislast (Feststellungslast) zu Lasten des Kindergeldberechtigten (z.B. Senatsurteil vom 19. November 2008 III R 105/07, BFHE 223, 365, BStBl II 2010, 1057, unter II.1.c; vgl. auch BFH-Urteil in BFH/NV 2013, 1409, Rz 14, m.w.N.). 27 b) Für den Fall, dass bei X im Streitzeitraum ",
+      "excerpt_sha256": "5235beeca7386895fe7e19706bb3faa8eacc476dfbdd155786dffae60ff882e9"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-b88635d70c7e1487",
+        "de-kg-instr-b8899970af340fb3"
+      ],
+      "court": "BFH",
+      "docket": "III R 28/15",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "hinderungsbedingter Mehrbedarf) des X einerseits und dessen finanzielle Mittel andererseits gegenüberzustellen haben (vgl. z.B. Senatsurteil vom 13. April 2016 III R 28/15, BFHE 253, 249, BStBl II 2016, 648, Rz 10 ff., m.w.N.). Auch hier tragen die in sich nicht widerspruchsfreien Feststellungen der angefochtenen Vorentscheidung ",
+      "excerpt_sha256": "778bab9ad221ac8997983901637c70d1e35805ccc19635acd6c96c097fd32003"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-037"
+      ],
+      "court": "BFH",
+      "docket": "III R 31/13",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "g des Lebensunterhalts und für die Kosten für Unterkunft und Heizung nach dem Zweiten Buch Sozialgesetzbuch gehören (vgl. z.B. Senatsurteil vom 5. Februar 2015 III R 31/13, BFHE 249, 144, BStBl II 2015, 1017, Rz 15, m.w.N.); soweit ein Sozialleistungsträger für seine Leistungen bei den Eltern Rückgriff nimmt, dürfen solche Leistu",
+      "excerpt_sha256": "ef059fb7e92672af74036b0a198af04f84457189b1a931e1609c83036fcfafbe"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-096"
+      ],
+      "court": "BFH",
+      "docket": "VIII R 32/02",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "e Leistungen bei den Eltern Rückgriff nimmt, dürfen solche Leistungen nicht als Bezüge des Kindes angesehen werden (vgl. z.B. BFH-Urteile vom 26. November 2003 VIII R 32/02, BFHE 204, 454, BStBl II 2004, 588, unter 2.b, m.w.N., und vom 12. Dezember 2012 VI R 101/10, BFHE 240, 50, BStBl II 2015, 651, Rz 12, m.w.N.). Die Schlussfolg",
+      "excerpt_sha256": "0e7ff03fff2b6583ef006743b6ec4abaa89d4b833e5405d492a12f7bed1017ff"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-097"
+      ],
+      "court": "BFH",
+      "docket": "VI R 101/10",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "des angesehen werden (vgl. z.B. BFH-Urteile vom 26. November 2003 VIII R 32/02, BFHE 204, 454, BStBl II 2004, 588, unter 2.b, m.w.N., und vom 12. Dezember 2012 VI R 101/10, BFHE 240, 50, BStBl II 2015, 651, Rz 12, m.w.N.). Die Schlussfolgerung des FG, dass X außerstande war, sich selbst zu unterhalten, kann daher ohne konkrete Fe",
+      "excerpt_sha256": "8bab983e9b8f48969e0c06f0a73064c7d8c56674be29c5edcd0abddd2bb69c2b"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-098"
+      ],
+      "court": "BFH",
+      "docket": "III R 46/08",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "tände des einzelnen Falles und unter Abwägung der für und gegen eine Mitursächlichkeit sprechenden Indizien zu treffen (z.B. Senatsurteil vom 22. Dezember 2011 III R 46/08, BFH/NV 2012, 730, Rz 20). Zur Vermeidung von Wiederholungen wird im Übrigen auf die Entscheidungsgründe in den BFH-Urteilen in BFH/NV 2012, 730, Rz 13 ff.; vo",
+      "excerpt_sha256": "98d91ad3fa9b5dd1c4762d7aff62d3b57ecd482b9be67b955d527457060e5648"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-957b1d766d1aa0c0",
+        "de-kg-instr-6568b0e3e8e4b33c"
+      ],
+      "court": "BFH",
+      "docket": "III R 29/09",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "referring_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "citation_excerpt": "30, Rz 20). Zur Vermeidung von Wiederholungen wird im Übrigen auf die Entscheidungsgründe in den BFH-Urteilen in BFH/NV 2012, 730, Rz 13 ff.; vom 15. März 2012 III R 29/09, BFHE 237, 68, BStBl II 2012, 892, Rz 27, und in BFH/NV 2016, 190, Rz 29 ff., m.w.N. Bezug genommen. 30 4. Die Übertragung der Kostenentscheidung auf das FG be",
+      "excerpt_sha256": "617a02426632a061dbaec0379f6fa40523608eb9e5405fa7371e5de952f70079"
+    }
+  ],
+  "limitations": [
+    "No generated RuleSpec change or new encoded coverage.",
+    "Current SGBIX and historical onset-age transition require their own statutory encoding; guidance is not a substitute for missing corpus statutes.",
+    "No exhaustive discovery or certified claim."
+  ]
+}

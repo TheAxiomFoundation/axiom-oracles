@@ -14362,7 +14362,12 @@ committed_decisions:
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
       corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-14-2017-01-19/document-1, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, original PDF SHA-256 e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
-    status: pending
+    status: classified-with-reason
+    classification: adult_child_disability_evidence_and_self_support
+    reason: Complete BFH III R44/14 (19 January 2017), five pages, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, reviewed with full DA-KG 2025 A19.1–A19.4. Expected impairment duration, age-relative and participation limitations, evidence-to-legal-assessment separation, actual means versus necessary living costs, parental recourse and individual disability causation bear on EStG32(4) qualifying_child_count and remain unencoded. Acute hospital diagnoses and the expert grade alone did not establish all conditions; the case was remanded for further findings. The historical age27 and old SGBIX definition are not universal 2025 parameters. No income does not prove inability to self-support; assets are not automatically available income. Full source, current-guidance comparison and pending citation spans are in disability-evidence-source-review.json. No blanket rejection of retrospective evidence or verified BStBlII membership is asserted.
+    text_source: Complete corpus row de/guidance/bfh-iii-r-44-14-2017-01-19/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-evidence-source-review.json.
+    text_sha256: cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b
+    bears_on_computed_surface: true
   - id: de-kg-suppl-031
     identity: BFH III R 65/18, 2019-11-27, indirectly cited in the illness/training precedent review
     title_short: BFH III R 65/18
@@ -14819,6 +14824,102 @@ committed_decisions:
     discovered_by: de-kg-dakg-A17.2
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 79/97 dated 2000-11-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-087
+    identity: BFH XI R 17/14, 2015-10-21, indirectly cited in the disability-evidence review
+    title_short: BFH XI R 17/14
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 17/14 dated 2015-10-21. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-088
+    identity: BFH XI R 44/11, 2013-05-28, indirectly cited in the disability-evidence review
+    title_short: BFH XI R 44/11
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 44/11 dated 2013-05-28. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-089
+    identity: BFH V R 39/11, 2012-02-23, indirectly cited in the disability-evidence review
+    title_short: BFH V R 39/11
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH V R 39/11 dated 2012-02-23. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-090
+    identity: BFH X R 65/09, 2011-10-19, indirectly cited in the disability-evidence review
+    title_short: BFH X R 65/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH X R 65/09 dated 2011-10-19. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-091
+    identity: BSG B 9 SB 3/99 R, 2000-04-12, indirectly cited in the disability-evidence review
+    title_short: BSG B 9 SB 3/99 R
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 9 SB 3/99 R dated 2000-04-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-092
+    identity: BSG B 3 KR 14/14 R, 2015-09-30, indirectly cited in the disability-evidence review
+    title_short: BSG B 3 KR 14/14 R
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 3 KR 14/14 R dated 2015-09-30. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-093
+    identity: BFH VII R 16-19/89, 1991-01-08, indirectly cited in the disability-evidence review
+    title_short: BFH VII R 16-19/89
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VII R 16-19/89 dated 1991-01-08. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-094
+    identity: BFH VI R 51/13, 2014-06-26, indirectly cited in the disability-evidence review
+    title_short: BFH VI R 51/13
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 51/13 dated 2014-06-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-095
+    identity: BFH III R 6/14, 2015-04-16, indirectly cited in the disability-evidence review
+    title_short: BFH III R 6/14
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 6/14 dated 2015-04-16. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-096
+    identity: BFH VIII R 32/02, 2003-11-26, indirectly cited in the disability-evidence review
+    title_short: BFH VIII R 32/02
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VIII R 32/02 dated 2003-11-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-097
+    identity: BFH VI R 101/10, 2012-12-12, indirectly cited in the disability-evidence review
+    title_short: BFH VI R 101/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 101/10 dated 2012-12-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-098
+    identity: BFH III R 46/08, 2011-12-22, indirectly cited in the disability-evidence review
+    title_short: BFH III R 46/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 46/08 dated 2011-12-22. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
     status: pending
 computed:
   ledger:
@@ -15558,13 +15659,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 853
+    instrument_count: 865
     counts:
-      total: 853
+      total: 865
       encoded: 2
-      classified-with-reason: 176
+      classified-with-reason: 177
       excluded-with-reason: 349
-      pending: 326
+      pending: 337
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -15836,7 +15937,6 @@ computed:
     - de-kg-suppl-025
     - de-kg-suppl-027
     - de-kg-suppl-029
-    - de-kg-suppl-030
     - de-kg-suppl-032
     - de-kg-suppl-033
     - de-kg-suppl-034
@@ -15892,6 +15992,18 @@ computed:
     - de-kg-suppl-084
     - de-kg-suppl-085
     - de-kg-suppl-086
+    - de-kg-suppl-087
+    - de-kg-suppl-088
+    - de-kg-suppl-089
+    - de-kg-suppl-090
+    - de-kg-suppl-091
+    - de-kg-suppl-092
+    - de-kg-suppl-093
+    - de-kg-suppl-094
+    - de-kg-suppl-095
+    - de-kg-suppl-096
+    - de-kg-suppl-097
+    - de-kg-suppl-098
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -27280,7 +27392,7 @@ computed:
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VI B 322/98 dated 1999-11-08 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
     - id: de-kg-suppl-030
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A17.2
       identity_kind: supplemental
@@ -27290,6 +27402,11 @@ computed:
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
         corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-14-2017-01-19/document-1, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, original PDF SHA-256 e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+      classification: adult_child_disability_evidence_and_self_support
+      reason: Complete BFH III R44/14 (19 January 2017), five pages, body SHA-256 cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b, reviewed with full DA-KG 2025 A19.1–A19.4. Expected impairment duration, age-relative and participation limitations, evidence-to-legal-assessment separation, actual means versus necessary living costs, parental recourse and individual disability causation bear on EStG32(4) qualifying_child_count and remain unencoded. Acute hospital diagnoses and the expert grade alone did not establish all conditions; the case was remanded for further findings. The historical age27 and old SGBIX definition are not universal 2025 parameters. No income does not prove inability to self-support; assets are not automatically available income. Full source, current-guidance comparison and pending citation spans are in disability-evidence-source-review.json. No blanket rejection of retrospective evidence or verified BStBlII membership is asserted.
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bfh-iii-r-44-14-2017-01-19/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-evidence-source-review.json.
+      text_sha256: cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b
     - id: de-kg-suppl-031
       status: classified-with-reason
       discovery_refs:
@@ -27859,6 +27976,126 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 79/97 dated 2000-11-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-087
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH XI R 17/14, 2015-10-21, indirectly cited in the disability-evidence review
+      title_short: BFH XI R 17/14
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 17/14 dated 2015-10-21. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-088
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH XI R 44/11, 2013-05-28, indirectly cited in the disability-evidence review
+      title_short: BFH XI R 44/11
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH XI R 44/11 dated 2013-05-28. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-089
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH V R 39/11, 2012-02-23, indirectly cited in the disability-evidence review
+      title_short: BFH V R 39/11
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH V R 39/11 dated 2012-02-23. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-090
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH X R 65/09, 2011-10-19, indirectly cited in the disability-evidence review
+      title_short: BFH X R 65/09
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH X R 65/09 dated 2011-10-19. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-091
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BSG B 9 SB 3/99 R, 2000-04-12, indirectly cited in the disability-evidence review
+      title_short: BSG B 9 SB 3/99 R
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 9 SB 3/99 R dated 2000-04-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-092
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BSG B 3 KR 14/14 R, 2015-09-30, indirectly cited in the disability-evidence review
+      title_short: BSG B 3 KR 14/14 R
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BSG B 3 KR 14/14 R dated 2015-09-30. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-093
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VII R 16-19/89, 1991-01-08, indirectly cited in the disability-evidence review
+      title_short: BFH VII R 16-19/89
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VII R 16-19/89 dated 1991-01-08. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-094
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VI R 51/13, 2014-06-26, indirectly cited in the disability-evidence review
+      title_short: BFH VI R 51/13
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 51/13 dated 2014-06-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-095
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 6/14, 2015-04-16, indirectly cited in the disability-evidence review
+      title_short: BFH III R 6/14
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 6/14 dated 2015-04-16. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-096
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VIII R 32/02, 2003-11-26, indirectly cited in the disability-evidence review
+      title_short: BFH VIII R 32/02
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VIII R 32/02 dated 2003-11-26. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-097
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VI R 101/10, 2012-12-12, indirectly cited in the disability-evidence review
+      title_short: BFH VI R 101/10
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH VI R 101/10 dated 2012-12-12. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-098
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 46/08, 2011-12-22, indirectly cited in the disability-evidence review
+      title_short: BFH III R 46/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 46/08 dated 2011-12-22. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -28034,13 +28271,14 @@ computed:
     - de-kg-suppl-021
     - de-kg-suppl-026
     - de-kg-suppl-028
+    - de-kg-suppl-030
     - de-kg-suppl-031
-    instruments_bearing_on_computed_count: 162
-    open_dependency_count: 170
+    instruments_bearing_on_computed_count: 163
+    open_dependency_count: 171
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 853
+    bearing_candidate_instruments: 865
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
