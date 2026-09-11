@@ -13839,6 +13839,12 @@ committed_decisions:
     classification: entitlement_condition
     reason: 'BEEG (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG: holders of the named residence titles are entitled only while employed, drawing SGB III cash benefits or taking ''Elternzeit nach § 15 des Bundeselterngeld- und Elternzeitgesetzes''. § 15 BEEG (the right to parental leave) is thus a condition of a non-privileged foreigner''s entitlement (A 4.3.4 Abs. 2 and 3). Bears on the law-derived input claimant_entitlement (open dependency); open until § 62 EStG is encoded and the cited rule is bound to it.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-df39c3eca6f41704
+    status: classified-with-reason
+    classification: adult_child_search_and_access_historical_boundary
+    reason: 'The full five-page BFH III R24/08 judgment (7 April2011, paragraphs1–35), corpus body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, was reviewed with complete current DA-KG A14.1, A14.2 and A17.2 and the earlier full III R49/18 review. Paragraphs19–27 distinguish a missing training place from independent legal obstacles to commencement, and actual search/reporting acts from registry formality. These principles bear on qualifying_child_count and remain unencoded. Historical three-month renewal, the former27-year age limit, and pre2005 AuslG/ArGV permit rules are not current2025 parameters. Paragraph24 distinguishes objective inability to obtain permission from merely not holding a permit while searching; absence of a permit alone is not the stated exclusion. Paragraph32 leaves ARB1/80Art7/9 access undecided. Paragraph33 remands for findings on issued employment restrictions, not automatic entitlement. Current A14.1 requires examination of lawful discontinuance
+      and SGBIII38 duties, not automatic loss through deletion or an imported old renewal deadline. Current temporary-illness/maternity exceptions remain separate. Full text, boundaries and newly pending cited authorities: historical-search-access-source-review.json.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-e1efdfd629d56e5f
     status: classified-with-reason
     classification: document_container
@@ -14310,7 +14316,13 @@ committed_decisions:
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 24/08 dated 2011-04-07 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
       corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-24-08-2011-04-07/document-1, body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, original PDF SHA-256 6439d45600fb8f471153ddd9b0e819ad42edde10a788e56a43af124a5415dad5. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
-    status: pending
+    status: classified-with-reason
+    classification: adult_child_search_and_access_historical_boundary
+    reason: 'The full five-page BFH III R24/08 judgment (7 April2011, paragraphs1–35), corpus body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, was reviewed with complete current DA-KG A14.1, A14.2 and A17.2 and the earlier full III R49/18 review. Paragraphs19–27 distinguish a missing training place from independent legal obstacles to commencement, and actual search/reporting acts from registry formality. These principles bear on qualifying_child_count and remain unencoded. Historical three-month renewal, the former27-year age limit, and pre2005 AuslG/ArGV permit rules are not current2025 parameters. Paragraph24 distinguishes objective inability to obtain permission from merely not holding a permit while searching; absence of a permit alone is not the stated exclusion. Paragraph32 leaves ARB1/80Art7/9 access undecided. Paragraph33 remands for findings on issued employment restrictions, not automatic entitlement. Current A14.1 requires examination of lawful discontinuance
+      and SGBIII38 duties, not automatic loss through deletion or an imported old renewal deadline. Current temporary-illness/maternity exceptions remain separate. Full text, boundaries and newly pending cited authorities: historical-search-access-source-review.json.'
+    text_source: Complete corpus row de/guidance/bfh-iii-r-24-08-2011-04-07/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full body retained in historical-search-access-source-review.json.
+    text_sha256: 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1
+    bears_on_computed_surface: true
   - id: de-kg-suppl-027
     identity: BFH VIII R 71/99, 2003-07-15, indirectly cited in the illness/training precedent review
     title_short: BFH VIII R 71/99
@@ -14537,6 +14549,182 @@ committed_decisions:
     discovered_by: de-kg-dakg-A15.11
     discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
     provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20; that judgment cites III R65/18; the fully reviewed III R65/18 body ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d in turn cites BFH III R 70/07 dated 2009-09-24. The earlier links are receipted in illness-prognosis-source-review.json; this exact citation span is retained in training-examination-source-review.json. This is not a claim that DA-KG directly names the case. Its own source, historical applicability, bearing and exact publication membership remain pending. A citation alone supplies neither encoded coverage nor a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-054
+    identity: BFH VII R 147/97, 1998-12-01, indirectly cited in the historical search-access review
+    title_short: BFH VII R 147/97, 1998-12-01
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-055
+    identity: BFH III R 68/05, 2008-06-19, indirectly cited in the historical search-access review
+    title_short: BFH III R 68/05, 2008-06-19
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-056
+    identity: BFH III R 10/06, 2008-11-20, indirectly cited in the historical search-access review
+    title_short: BFH III R 10/06, 2008-11-20
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-057
+    identity: BFH III R 91/07, 2008-09-25, indirectly cited in the historical search-access review
+    title_short: BFH III R 91/07, 2008-09-25
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-058
+    identity: BFH III R 66/05, 2008-06-19, indirectly cited in the historical search-access review
+    title_short: BFH III R 66/05, 2008-06-19
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-059
+    identity: BFH III R 95/07, 2008-07-17, indirectly cited in the historical search-access review
+    title_short: BFH III R 95/07, 2008-07-17
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-060
+    identity: BFH III R 106/07, 2008-07-17, indirectly cited in the historical search-access review
+    title_short: BFH III R 106/07, 2008-07-17
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-061
+    identity: BSG 7 RAr 5/77, 1977-11-22, indirectly cited in the historical search-access review
+    title_short: BSG 7 RAr 5/77, 1977-11-22
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-062
+    identity: BSG 7 RAr 94/88, 1989-10-25, indirectly cited in the historical search-access review
+    title_short: BSG 7 RAr 94/88, 1989-10-25
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-063
+    identity: BFH III B 52/08, 2009-09-25, indirectly cited in the historical search-access review
+    title_short: BFH III B 52/08, 2009-09-25
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-064
+    identity: BSG 7 RAr 120/89, 1990-08-09, indirectly cited in the historical search-access review
+    title_short: BSG 7 RAr 120/89, 1990-08-09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-065
+    identity: LSG Baden-Württemberg L 13 AL 2554/03 ER-B, 2003-08-04, indirectly cited in the historical search-access review
+    title_short: LSG Baden-Württemberg L 13 AL 2554/03 ER-B, 2003-08-04
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-066
+    identity: BFH I R 297/83, 1987-07-01, indirectly cited in the historical search-access review
+    title_short: BFH I R 297/83, 1987-07-01
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-067
+    identity: BFH IV R 236/71, 1976-06-03, indirectly cited in the historical search-access review
+    title_short: BFH IV R 236/71, 1976-06-03
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-068
+    identity: Ausländergesetz1990, historical provisions cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Ausländergesetz1990, historical provisions cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-069
+    identity: Arbeitsgenehmigungsverordnung, historical provisions cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Arbeitsgenehmigungsverordnung, historical provisions cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-070
+    identity: Assoziationsrat EWG/Türkei Beschluss1/80, 1980-09-19, indirectly cited in the historical search-access review
+    title_short: Assoziationsrat EWG/Türkei Beschluss1/80, 1980-09-19
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-071
+    identity: Bundestag Drucksache15/91, page19 cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Bundestag Drucksache15/91, page19 cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-072
+    identity: Bundestag Drucksache15/26, page29 cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Bundestag Drucksache15/26, page29 cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-073
+    identity: Bundestag Drucksache11/6321, page80 cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Bundestag Drucksache11/6321, page80 cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-074
+    identity: Allgemeine Verwaltungsvorschrift zum Ausländergesetz, 2000-06-28, indirectly cited in the historical search-access review
+    title_short: Allgemeine Verwaltungsvorschrift zum Ausländergesetz, 2000-06-28
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-075
+    identity: Zuwanderungsgesetz, pre/post2005 boundary cited in III R24/08, indirectly cited in the historical search-access review
+    title_short: Zuwanderungsgesetz, pre/post2005 boundary cited in III R24/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
     status: pending
 computed:
   ledger:
@@ -15276,13 +15464,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 820
+    instrument_count: 842
     counts:
-      total: 820
+      total: 842
       encoded: 2
-      classified-with-reason: 173
+      classified-with-reason: 175
       excluded-with-reason: 349
-      pending: 296
+      pending: 316
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -15532,7 +15720,6 @@ computed:
     - de-kg-instr-ccf56f3091f029e7
     - de-kg-instr-dakg-2026
     - de-kg-instr-dde9fcbc9faae4c7
-    - de-kg-instr-df39c3eca6f41704
     - de-kg-instr-e0b7829aa64b55e5
     - de-kg-instr-e832fabf332bce62
     - de-kg-instr-e92627717e6aac58
@@ -15553,7 +15740,6 @@ computed:
     - de-kg-suppl-023
     - de-kg-suppl-024
     - de-kg-suppl-025
-    - de-kg-suppl-026
     - de-kg-suppl-027
     - de-kg-suppl-028
     - de-kg-suppl-029
@@ -15580,6 +15766,28 @@ computed:
     - de-kg-suppl-051
     - de-kg-suppl-052
     - de-kg-suppl-053
+    - de-kg-suppl-054
+    - de-kg-suppl-055
+    - de-kg-suppl-056
+    - de-kg-suppl-057
+    - de-kg-suppl-058
+    - de-kg-suppl-059
+    - de-kg-suppl-060
+    - de-kg-suppl-061
+    - de-kg-suppl-062
+    - de-kg-suppl-063
+    - de-kg-suppl-064
+    - de-kg-suppl-065
+    - de-kg-suppl-066
+    - de-kg-suppl-067
+    - de-kg-suppl-068
+    - de-kg-suppl-069
+    - de-kg-suppl-070
+    - de-kg-suppl-071
+    - de-kg-suppl-072
+    - de-kg-suppl-073
+    - de-kg-suppl-074
+    - de-kg-suppl-075
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -26388,7 +26596,7 @@ computed:
       raw_references:
       - Mindestlohngesetzes
     - id: de-kg-instr-df39c3eca6f41704
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-f4513c4dc19bdbef458e
       identity_kind: corpus_citation
@@ -26398,6 +26606,10 @@ computed:
       citation_label: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
       document_citation_path: de/guidance/bfh-iii-r-24-08-2011-04-07
       title: 'BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse'
+      classification: adult_child_search_and_access_historical_boundary
+      reason: 'The full five-page BFH III R24/08 judgment (7 April2011, paragraphs1–35), corpus body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, was reviewed with complete current DA-KG A14.1, A14.2 and A17.2 and the earlier full III R49/18 review. Paragraphs19–27 distinguish a missing training place from independent legal obstacles to commencement, and actual search/reporting acts from registry formality. These principles bear on qualifying_child_count and remain unencoded. Historical three-month renewal, the former27-year age limit, and pre2005 AuslG/ArGV permit rules are not current2025 parameters. Paragraph24 distinguishes objective inability to obtain permission from merely not holding a permit while searching; absence of a permit alone is not the stated exclusion. Paragraph32 leaves ARB1/80Art7/9 access undecided. Paragraph33 remands for findings on issued employment restrictions, not automatic entitlement. Current A14.1 requires examination of lawful
+        discontinuance and SGBIII38 duties, not automatic loss through deletion or an imported old renewal deadline. Current temporary-illness/maternity exceptions remain separate. Full text, boundaries and newly pending cited authorities: historical-search-access-source-review.json.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-e0b7829aa64b55e5
       status: pending
       discovery_refs:
@@ -26910,7 +27122,7 @@ computed:
       provenance: 'Indirect reading discovery from the predecessor-service route in full DA-KG A18.4(1); this earlier instrument is not expressly named in A18.4. Regulation1288/2013 Article37(1)–(2) expressly names Decision1298/2008/EC among repealed predecessor programmes and actions begun by31December2013. The complete referring article and its body/excerpt hashes are retained in eu-service-transition-review.json. The complete original German Official Journal instrument is now captured in the pinned release. Selected complete operative spans are reviewed in eu-earlier-service-source-review.json. Determination of its historical application to the 2025 Kindergeld surface remains pending; no applicability or exclusion is inferred from the old date alone. Receipted corpus row de/regulation/eu-1298-2008/document-1; release de-rulespec-2026-09-10-kindergeld-generations-service, commit 4779d3deb7db854bdb6e702abc523dee8d95fb31, content SHA-256 4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982.
         Selected-span review: eu-earlier-service-source-review.json. The body receipt does not disposition the instrument. Full corpus body SHA-256 4c2ea767684d0b5d4acbbc9fb90cf7c47f95a36029cca8e3288feb8f2fe855b0.'
     - id: de-kg-suppl-026
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A17.2
       identity_kind: supplemental
@@ -26920,6 +27132,12 @@ computed:
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 24/08 dated 2011-04-07 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
         corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-24-08-2011-04-07/document-1, body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, original PDF SHA-256 6439d45600fb8f471153ddd9b0e819ad42edde10a788e56a43af124a5415dad5. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+      classification: adult_child_search_and_access_historical_boundary
+      reason: 'The full five-page BFH III R24/08 judgment (7 April2011, paragraphs1–35), corpus body SHA-256 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1, was reviewed with complete current DA-KG A14.1, A14.2 and A17.2 and the earlier full III R49/18 review. Paragraphs19–27 distinguish a missing training place from independent legal obstacles to commencement, and actual search/reporting acts from registry formality. These principles bear on qualifying_child_count and remain unencoded. Historical three-month renewal, the former27-year age limit, and pre2005 AuslG/ArGV permit rules are not current2025 parameters. Paragraph24 distinguishes objective inability to obtain permission from merely not holding a permit while searching; absence of a permit alone is not the stated exclusion. Paragraph32 leaves ARB1/80Art7/9 access undecided. Paragraph33 remands for findings on issued employment restrictions, not automatic entitlement. Current A14.1 requires examination of lawful
+        discontinuance and SGBIII38 duties, not automatic loss through deletion or an imported old renewal deadline. Current temporary-illness/maternity exceptions remain separate. Full text, boundaries and newly pending cited authorities: historical-search-access-source-review.json.'
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bfh-iii-r-24-08-2011-04-07/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full body retained in historical-search-access-source-review.json.
+      text_sha256: 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1
     - id: de-kg-suppl-027
       status: pending
       discovery_refs:
@@ -27201,6 +27419,226 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20; that judgment cites III R65/18; the fully reviewed III R65/18 body ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d in turn cites BFH III R 70/07 dated 2009-09-24. The earlier links are receipted in illness-prognosis-source-review.json; this exact citation span is retained in training-examination-source-review.json. This is not a claim that DA-KG directly names the case. Its own source, historical applicability, bearing and exact publication membership remain pending. A citation alone supplies neither encoded coverage nor a non-bearing exclusion.'
+    - id: de-kg-suppl-054
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VII R 147/97, 1998-12-01, indirectly cited in the historical search-access review
+      title_short: BFH VII R 147/97, 1998-12-01
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-055
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 68/05, 2008-06-19, indirectly cited in the historical search-access review
+      title_short: BFH III R 68/05, 2008-06-19
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-056
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 10/06, 2008-11-20, indirectly cited in the historical search-access review
+      title_short: BFH III R 10/06, 2008-11-20
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-057
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 91/07, 2008-09-25, indirectly cited in the historical search-access review
+      title_short: BFH III R 91/07, 2008-09-25
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-058
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 66/05, 2008-06-19, indirectly cited in the historical search-access review
+      title_short: BFH III R 66/05, 2008-06-19
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-059
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 95/07, 2008-07-17, indirectly cited in the historical search-access review
+      title_short: BFH III R 95/07, 2008-07-17
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-060
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 106/07, 2008-07-17, indirectly cited in the historical search-access review
+      title_short: BFH III R 106/07, 2008-07-17
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-061
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BSG 7 RAr 5/77, 1977-11-22, indirectly cited in the historical search-access review
+      title_short: BSG 7 RAr 5/77, 1977-11-22
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-062
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BSG 7 RAr 94/88, 1989-10-25, indirectly cited in the historical search-access review
+      title_short: BSG 7 RAr 94/88, 1989-10-25
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-063
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III B 52/08, 2009-09-25, indirectly cited in the historical search-access review
+      title_short: BFH III B 52/08, 2009-09-25
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-064
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BSG 7 RAr 120/89, 1990-08-09, indirectly cited in the historical search-access review
+      title_short: BSG 7 RAr 120/89, 1990-08-09
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-065
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: LSG Baden-Württemberg L 13 AL 2554/03 ER-B, 2003-08-04, indirectly cited in the historical search-access review
+      title_short: LSG Baden-Württemberg L 13 AL 2554/03 ER-B, 2003-08-04
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-066
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH I R 297/83, 1987-07-01, indirectly cited in the historical search-access review
+      title_short: BFH I R 297/83, 1987-07-01
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-067
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH IV R 236/71, 1976-06-03, indirectly cited in the historical search-access review
+      title_short: BFH IV R 236/71, 1976-06-03
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-068
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Ausländergesetz1990, historical provisions cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Ausländergesetz1990, historical provisions cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-069
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Arbeitsgenehmigungsverordnung, historical provisions cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Arbeitsgenehmigungsverordnung, historical provisions cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-070
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Assoziationsrat EWG/Türkei Beschluss1/80, 1980-09-19, indirectly cited in the historical search-access review
+      title_short: Assoziationsrat EWG/Türkei Beschluss1/80, 1980-09-19
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-071
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Bundestag Drucksache15/91, page19 cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Bundestag Drucksache15/91, page19 cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-072
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Bundestag Drucksache15/26, page29 cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Bundestag Drucksache15/26, page29 cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-073
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Bundestag Drucksache11/6321, page80 cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Bundestag Drucksache11/6321, page80 cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-074
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Allgemeine Verwaltungsvorschrift zum Ausländergesetz, 2000-06-28, indirectly cited in the historical search-access review
+      title_short: Allgemeine Verwaltungsvorschrift zum Ausländergesetz, 2000-06-28
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-075
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: Zuwanderungsgesetz, pre/post2005 boundary cited in III R24/08, indirectly cited in the historical search-access review
+      title_short: Zuwanderungsgesetz, pre/post2005 boundary cited in III R24/08
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -27359,6 +27797,7 @@ computed:
     - de-kg-instr-ce168756ed1a28cb
     - de-kg-instr-d0ffa65a02a956b9
     - de-kg-instr-db7693cd9f018ff4
+    - de-kg-instr-df39c3eca6f41704
     - de-kg-suppl-001
     - de-kg-suppl-002
     - de-kg-suppl-003
@@ -27373,13 +27812,14 @@ computed:
     - de-kg-suppl-019
     - de-kg-suppl-020
     - de-kg-suppl-021
+    - de-kg-suppl-026
     - de-kg-suppl-031
-    instruments_bearing_on_computed_count: 159
-    open_dependency_count: 167
+    instruments_bearing_on_computed_count: 161
+    open_dependency_count: 169
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 820
+    bearing_candidate_instruments: 842
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

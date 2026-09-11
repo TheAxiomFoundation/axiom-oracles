@@ -1,0 +1,51 @@
+{
+  "engine_base_commit": "f6b0d15246a7db1403836628576f11e0d334348c",
+  "fixed_binary_sha256": "bd71baaf9d4f0aeb073f8ef70a426a3558ac1d185281f9edb74524f36dec88ad",
+  "results": [
+    {
+      "mode": "fast",
+      "exit_code": 0,
+      "request_sha256": "ee50506477bd2d3ef3ecdf0bcd622df6d5e33e2a6150167bfe9d11a31612c784",
+      "response_sha256": "9b1be39a214bf619aae433051f5f3986a20b50a60dc1e9f248c69e549759d042",
+      "actual_mode": "fast"
+    },
+    {
+      "mode": "explain",
+      "exit_code": 0,
+      "request_sha256": "82e2a59fcfb79e5bb99ad03cb777d81ee069d051909ce75200f6243a822d68ab",
+      "response_sha256": "122f5dfdbcbaea582dc806b6ccdec67bc9c07a2c6934fd9bdf53024289c1f7a9",
+      "actual_mode": "explain"
+    }
+  ],
+  "claim": "Technical correlated scalar predicate only; no claim of complete legal \u00a7126(2) implementation.",
+  "engine_pr": 173,
+  "engine_native_head": "78e944252aa579aea93d6de08f7d9f365d2cbc05",
+  "engine_merge_commit": "f19b03a6aafc9503c943510bc7946127e291784f",
+  "exact_head_ci_run": 34545802544,
+  "required_ci_passed": true,
+  "local_validation": {
+    "engine-relation-context-tests.log": {
+      "passed": 307,
+      "failed": 0,
+      "ignored": 0,
+      "test_binaries": 25,
+      "has_failed_result": false
+    },
+    "engine-relation-context-schema-tests.log": {
+      "passed": 322,
+      "failed": 0,
+      "ignored": 0,
+      "test_binaries": 25,
+      "has_failed_result": false
+    },
+    "engine-relation-context-trace-test.log": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "test_binaries": 1,
+      "has_failed_result": false
+    }
+  },
+  "regression_fixture": "tests/fixtures/execution/relation-scalar-context.json",
+  "regression_test": "tests/relation_scalar_context.rs"
+}

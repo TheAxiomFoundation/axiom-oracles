@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 296 of 820 instruments
-pending, and dependency closure has 167 open dependencies: eight law-derived
-inputs and 159 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 316 of 842 instruments
+pending, and dependency closure has 169 open dependencies: eight law-derived
+inputs and 161 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
@@ -881,3 +881,24 @@ already supports related derived judgments and current-entity predicates.
 `bgb1262-release50-failure-review.json` retains the exact rejected source, artifact
 hash, validation issues and limitation of that diagnosis. No §126(2) coverage is
 claimed, and a cosmetic serialization repair alone would not close it.
+
+
+The full five-page BFH III R24/08 judgment and current DA-KG A14.1, A14.2 and
+A17.2 are retained in `historical-search-access-source-review.json`. Its two
+Kindergeld identities are bearing and unencoded. The review distinguishes legal
+inability to obtain work permission from merely not holding permission while
+searching, and excludes automatic reuse of the historical three-month renewal,
+former age27 limit and pre-2005 permit regime as current parameters. The remand
+for findings on issued restrictions is not an award. ARB1/80 Articles7/9 access
+was expressly left undecided. Twenty-two indirectly cited authorities enter the
+pending frontier as supplemental054–075; they include historical and procedural
+material requiring its own source and current-surface review. There are75
+supplementals; this review adds no encoded module or closed spine provision.
+
+Engine PR173 subsequently merged as `f19b03a6aafc9503c943510bc7946127e291784f`
+after all required exact-head checks passed. It fixes the demonstrated scalar
+scope discrepancy; the technical regression covers both entity scopes, duplicate
+facts, a shared record, empty/mismatching groups and conditional fallback traces.
+Default307 and schema322 engine tests pass, along with the release build and
+Python binding check. This is a verified engine primitive, not a §126(2) encoding;
+the dedicated DE pinPR98 and the next native source-bound attempt are separate.
