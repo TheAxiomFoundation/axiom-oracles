@@ -6,15 +6,15 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 291 of 813 instruments
-pending, and dependency closure has 165 open dependencies: eight law-derived
-inputs and 157 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 296 of 820 instruments
+pending, and dependency closure has 167 open dependencies: eight law-derived
+inputs and 159 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
 earnings threshold, BFDG §5 recognition-preservation norms and the BGB §126(1)
 documentary signature mechanism are declared at
-RuleSpec merge `019619f0422766eab2e30b73d465c5309f0b5b47`; the live amount-only oracle and
+RuleSpec merge `b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967`; the live amount-only oracle and
 replay pins remain scoped to their existing §66 evidence. The §78 helpers
 add five observable payment-record and filing facts; full transition priority
 and same-child credit remain deferred to §64, and the §78 spine remains pending.
@@ -836,7 +836,7 @@ The complete III R49/18, III R43/20 and III R23/22 decisions were reviewed with 
 
 Native ledger generation records four additional bearing identities and 21 newly discovered pending authorities, including contextual/comparison citations requiring their own bearing review. The generated result is 291 pending of 813 instruments and 165 open dependencies: eight law-derived inputs and 157 bearing instruments. No statutory spine provision is closed by these reviews.
 
-The six recovered illness/training originals are now bound to published corpus release `de-rulespec-2026-09-11-kindergeld-illness-precedents`, merged in corpus PR684. Native publication 34538761714 and mirror 34539151964 succeeded. The release signature and all 388 artifact bytes match the merge commit; the public mirror matches the signed object exactly. These receipts replace indirect-source-only provenance for supplemental rows 026, 028, 030, 031, 033 and 034, while their original-source legal reviews remain pending.
+The six recovered illness/training originals are now bound to published corpus release `de-rulespec-2026-09-11-kindergeld-illness-precedents`, merged in corpus PR684. Native publication 34538761714 and mirror 34539151964 succeeded. The release signature and all 388 artifact bytes match the merge commit; the public mirror matches the signed object exactly. These receipts replace indirect-source-only provenance for supplemental rows 026, 028, 030, 031, 033 and 034. At that publication step their original-source legal reviews remained pending; the later III R65/18 review is recorded below.
 
 Fresh graph capture against the 50-scope release adds four pending Kindergeld corpus identities and one UHV identity, with no removals. These are separately discovered rows for recovered named cases; the supplemental reading discoveries remain explicit. The global index contains 9,894 rows, 9,697 body rows, 237 document roots and 6,827 explicit body references. The exact before/after hashes and added identities are retained in the illness-prognosis review artifact.
 
@@ -847,3 +847,37 @@ RuleSpec PR93 merged as `019619f0422766eab2e30b73d465c5309f0b5b47` after exact-h
 The declared paragraph module derives only documentary conformance with the issuer-signature mechanism: a handwritten name signature, or an issued notarial authentication associated with the observed handmark, issuer, document and version. It does not decide statutory applicability, whole-contract validity, other writing substitutes or service eligibility. Its fourteen used inputs describe retained observations. Positive surrogate identifiers preserve observed identity, while zero represents absent/unidentified associations; this convention is technical, not a statutory numerical threshold. All14 complete companion cases and six additional pinned-engine counterexamples passed, including absent identities, mismatches, unrelated authentication and an unknown physical method. Full-paragraph proof binds body SHA-256 `28ff8e921b9384a922dbc2ed654e199ae40fc5b5226306ecb2581a8cef3dffb0`.
 
 The source and manifest are declared in `closure/de/source.json`; `bgb1261-signature-mechanism-review.json` records the replay and observable-input bindings. SGBVII §2(1a), BGB §126(2), DA-KGA18.7 and BFHIII R68/11 remain open. This prerequisite does not close a Kindergeld spine provision or remove the eight law-derived inputs.
+
+
+The complete BFH III R65/18 examination judgment is reviewed with DA-KG 2025
+A15.2, A15.7 and A15.10 in `training-examination-source-review.json`. Its
+supplemental and corpus-graph identities are bearing and unencoded. The decision
+requires actual training efforts and distinguishes final loss of examination
+rights from preparation for a possible repeat examination. It does not support
+an automatic exclusion for every missed examination or a determination based
+solely on formal enrolment or exmatriculation. Seven earlier cited authorities
+are enrolled as pending supplemental rows 047–053; their own source review and
+historical application remain open. There are now 53 supplemental instruments.
+
+
+The native BGB §126(1) release refresh in RuleSpec PR97 merged as `b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967`.
+Its signed source attestation now matches the published illness-precedents release.
+The fourteen-input contract and executable rules, proofs and versions are identical
+to PR93; the generated summary and companion fixtures changed. The original 20-case
+replay still produces byte-identical responses, and all 14 current companion cases
+pass. Both requests and responses are retained beside
+`bgb1261-release50-refresh-review.json` in the discovery review directory.
+This remains a documentary signature mechanism: it does not determine statutory
+writing applicability, whole-contract validity or other writing substitutes.
+The 2025 observation boundary is not statutory commencement. This refresh adds no
+declared root or coverage and leaves §126(2) and the service prerequisites open.
+
+
+The subsequent native §126(2) run34544226511 passed existing-import verification
+but produced an unsigned, rejected candidate: every output was deferred, rules
+and cases were empty, and `imports: null` failed compilation. Its reported lack
+of a relational mechanism is not independently established; the pinned engine
+already supports related derived judgments and current-entity predicates.
+`bgb1262-release50-failure-review.json` retains the exact rejected source, artifact
+hash, validation issues and limitation of that diagnosis. No §126(2) coverage is
+claimed, and a cosmetic serialization repair alone would not close it.

@@ -17,7 +17,7 @@
     "citation_roots": [
       {
         "attestation": {
-          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "ref": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/regulation/bsv-2018/1",
@@ -30,7 +30,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-          "ref": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "ref": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
         },
@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "f50fbc79de68e29d2fa9a9cef83a35f8c792a3cc02f6ae8a866a70d29a083533"
+      "sha256": "160870b991467a6a9202b4c33efe2b4a052cf016316ee7c1c02cabe506ae4abc"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "28774badadf9f930e4deacd492d0c6f41bfdd5ff38e0c1fbf874b45c95394f2a",
+      "sha256": "b874c33d599ad36dabb321f23f5ed8732464df5e3843dc459a97bd91ee582d6e",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "412fa050e58b5472f28d20a4de8fb1c8814659e19e6e6e150d4cd960ae4cbaaf"
+      "sha256": "662162471b0261817fc21382ae4ed5f32ed931cb510430762526ba82749af53f"
     }
   ],
   "period": "2025",
@@ -222,7 +222,7 @@
         "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
         "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
       ],
-      "rulespec_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+      "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
       "signature_blockers": [
         "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
         "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"

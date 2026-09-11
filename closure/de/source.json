@@ -919,7 +919,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+    "observed_main_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
     "claim_mode": "attested",
     "modules": [
       {
@@ -936,7 +936,7 @@
         "claim_mode": "attested",
         "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/eu-987-2009/article-59/document-1.yaml",
           "sha256": "500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
@@ -950,7 +950,7 @@
         "claim_mode": "attested",
         "reason": "Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/milov4/1.yaml",
           "sha256": "5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
@@ -964,7 +964,7 @@
         "claim_mode": "attested",
         "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/milov5/1.yaml",
           "sha256": "6f2e281426c8471958b41a99b5ebc91212d8641041ed016257bd1f2d58b8b74e",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
@@ -978,7 +978,7 @@
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -992,7 +992,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
@@ -1006,7 +1006,7 @@
         "claim_mode": "attested",
         "reason": "Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/bfdg/5.yaml",
           "sha256": "8ba253fa78e604313092461338d0c369e3494734ca04c23f3b789d4c6550be99",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bfdg/5.json",
@@ -1020,11 +1020,11 @@
         "claim_mode": "attested",
         "reason": "Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/bgb/126/absatz-1/inhalt.yaml",
-          "sha256": "eddd00d7ac369c39641b3c82061a1e04369174184dc3ab08bab3b1e6044296e8",
+          "sha256": "9901cf59bbfd874a433f8e8f32d2d14998b6a933183c5752de8e2677af97796d",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json",
-          "manifest_sha256": "b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893"
+          "manifest_sha256": "3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5"
         }
       },
       {
@@ -1034,7 +1034,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/bgb/1591.yaml",
           "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
@@ -1048,7 +1048,7 @@
         "claim_mode": "attested",
         "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/bgb/187.yaml",
           "sha256": "e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
@@ -1062,7 +1062,7 @@
         "claim_mode": "attested",
         "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/estg/32/absatz-3/document-1.yaml",
           "sha256": "37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
@@ -1076,7 +1076,7 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
@@ -1090,7 +1090,7 @@
         "claim_mode": "attested",
         "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/estg/78.yaml",
           "sha256": "b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
@@ -1104,7 +1104,7 @@
         "claim_mode": "attested",
         "reason": "SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
         "artifact": {
-          "commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.yaml",
           "sha256": "5306768441081fa65ea33cc75e23cb1f5eac281e26e592e697f986f341042c86",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",

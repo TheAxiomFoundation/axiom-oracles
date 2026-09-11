@@ -112,7 +112,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 813, 8, 1, 0, 0),
+    "de/kindergeld": (18, 820, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 41, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1574,11 +1574,11 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 46
+    assert len(supplemental) == 53
     # The four classes remain pending because enumeration is incomplete;
-    # citation seeds have their own frontier rows. Seventeen named documents are
+    # citation seeds have their own frontier rows. Eighteen named documents are
     # decided on captured text; four earlier programme instruments await legal review.
-    # Twenty-one indirect case citations require original-source/bearing review.
+    # Twenty-seven indirect case citations require original-source/bearing review.
     pending_classes = {
         "de-kg-suppl-007",
         "de-kg-suppl-008",
@@ -1591,7 +1591,9 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-suppl-024",
         "de-kg-suppl-025",
     }
-    pending_indirect_cases = {f"de-kg-suppl-{number:03d}" for number in range(26, 47)}
+    pending_indirect_cases = {
+        f"de-kg-suppl-{number:03d}" for number in range(26, 54) if number != 31
+    }
     assert {
         row["id"] for row in supplemental if row["status"] == "pending"
     } == pending_classes | pending_earlier_instruments | pending_indirect_cases
@@ -1624,7 +1626,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-dakg-A19.5.3",
     }
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 538 + 46 + 229
+    assert frontier["instrument_count"] == 538 + 53 + 229
     assert all(
         sid in frontier["pending"]
         for sid in pending_classes

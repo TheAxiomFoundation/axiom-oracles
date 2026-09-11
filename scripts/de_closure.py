@@ -28,7 +28,7 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "fae4f5a5df3c500f9e3e5b6b5eeacfbb771e96489cc0183a4f7a5932ae5c5e75"
+SOURCE_SHA256 = "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
@@ -36,7 +36,7 @@ RELEASE = 'de-rulespec-2026-09-11-kindergeld-illness-precedents'
 RELEASE_CONTENT_SHA256 = '1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c'
 RELEASE_SELECTOR_SHA256 = 'a8f4521f60195362fa2aec2034a44aa4777775572a4a13bc906332090d4ba945'
 CORPUS_COMMIT = '279e27503c00ce1fab35809d069c076d3abad362'
-RULESPEC_COMMIT = "019619f0422766eab2e30b73d465c5309f0b5b47"
+RULESPEC_COMMIT = "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
     "filename_filters": False,

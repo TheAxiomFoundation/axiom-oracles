@@ -29,7 +29,7 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: fae4f5a5df3c500f9e3e5b6b5eeacfbb771e96489cc0183a4f7a5932ae5c5e75
+    sha256: dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
     commit: 279e27503c00ce1fab35809d069c076d3abad362
@@ -225,8 +225,8 @@ generated_facts:
     state: no_artifact
   - citation_path: de/regulation/svbezgrv-2025/4
     state: captured
-    ref: 019619f0422766eab2e30b73d465c5309f0b5b47
-    commit: 019619f0422766eab2e30b73d465c5309f0b5b47
+    ref: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
+    commit: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
     path: de/regulations/svbezgrv-2025/4.yaml
     sha256: 970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8
     module_id: de:regulations/svbezgrv-2025/4
@@ -262,10 +262,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 823c1ff2e0b27581b835479735ba50c79c02b5658dd4982bb3a80ac48682be4a
+    snapshot_sha256: 6371f9ff6fb68695a44fc4651ef13e92904c394b38997f77e1eae35ddea145f5
     channel_receipts:
       corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-      subject_matter_search: 2f1da1662df40b0966c61333abb2c74e6f15f93c14296437a4b4d0a53f84bbba
+      subject_matter_search: af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

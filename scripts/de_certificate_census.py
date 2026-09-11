@@ -38,7 +38,7 @@ EXECUTABLE_MANIFEST_PATH = (
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "019619f0422766eab2e30b73d465c5309f0b5b47"
+RULESPEC_MAIN_COMMIT = "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
@@ -139,7 +139,7 @@ ATTESTED_SIGNED_ROOTS = {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
         "path": '.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
-        "sha256": 'b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893',
+        "sha256": '3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5',
     },
     'de/statute/bfdg/5': {
         "repository": RULESPEC_REPOSITORY,
@@ -255,7 +255,7 @@ PROGRAM_DECLARATIONS = {
                 classification="encoded",
                 signature_state="signed",
                 source_path='.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
-                source_sha256='b3d1421ed7e3776cb8d8498e44cc1dd25930bb487b16058040dd1cab44931893',
+                source_sha256='3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5',
                 reason='Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.',
             ),
             _root(

@@ -47,10 +47,10 @@ def _load(name: str):
 #: incomplete; the signed BGB1591 prerequisite does not close the eight
 #: law-derived inputs or the remaining bearing instruments.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 291 of 813 subordinate/bearing "
+    "closed: instrument frontier incomplete — 296 of 820 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
-    "closed: dependency closure open — 165 open dependencies (8 law-derived "
-    "inputs, 0 unclassified inputs, 157 bearing instruments) (CERTIFIED.md v3)",
+    "closed: dependency closure open — 167 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 159 bearing instruments) (CERTIFIED.md v3)",
 ]
 
 
@@ -3926,9 +3926,9 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     # The v3 discovery ledger is consumed through the central gate: the
     # frontier and dependency blocks are DECLARED and open, not missing.
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["instrument_frontier"]["instrument_count"] == 813
+    assert closed["instrument_frontier"]["instrument_count"] == 820
     assert closed["dependency_closure"]["closed"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 165
+    assert closed["dependency_closure"]["open_dependency_count"] == 167
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     # Resolving all declared roots does not close the governing-act spine.
     assert closed["declared_sources_closed"] is True
@@ -5785,14 +5785,14 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["mode"] == "computed"
     assert closed["value"] is False
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
-    assert closed["instrument_frontier"]["instrument_count"] == 813
+    assert closed["instrument_frontier"]["instrument_count"] == 820
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 165
+    assert closed["dependency_closure"]["open_dependency_count"] == 167
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5
     # The exact-path summary still contributes its scope fields only.
-    assert closed["rulespec_commit"] == "019619f0422766eab2e30b73d465c5309f0b5b47"
+    assert closed["rulespec_commit"] == "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
     assert closed["by_signature_state"] is not None
     claims = {row["claim"] for row in evidence}
     assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims

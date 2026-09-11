@@ -429,7 +429,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+  "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -438,7 +438,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "fae4f5a5df3c500f9e3e5b6b5eeacfbb771e96489cc0183a4f7a5932ae5c5e75"
+    "sha256": "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
   },
   "spine_closed": false
 }
