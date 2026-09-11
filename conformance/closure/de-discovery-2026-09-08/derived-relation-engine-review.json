@@ -2,7 +2,7 @@
   "schema": "de-kindergeld.derived-relation-engine-review.v1",
   "engine_pr": "https://github.com/TheAxiomFoundation/axiom-rules-engine/pull/177",
   "engine_head": "3edeab416cf34f7c96305d764c6c7d90ec563635",
-  "status": "reviewed and pushed; exact-head CI pending; no country pin changed",
+  "status": "Engine PR177 merged after all required exact-head checks passed; dedicated DE engine pin pending",
   "reproductions": [
     {
       "test": "file_derived_relations_resolve_local_sources_before_execution",
@@ -50,5 +50,7 @@
     "The first diagnostic after rebuilding reused older compiled metadata and was correctly rejected by the artifact-integrity gate. Recompiling the same source with the new binary produced the recorded missing-current-entity-input failures. The gate was not weakened.",
     "Current/related bare-input scope, signature-record ownership, intended-recipient party membership, mixed-entity test outputs and paired condition coverage still require native candidate repair.",
     "No new encoded module or closure claim."
-  ]
+  ],
+  "engine_merge": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "engine_ci_run": 34591671708
 }
