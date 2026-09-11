@@ -13597,6 +13597,12 @@ committed_decisions:
     reason: 'Full four-page BFH III R73/09 decision (9 February 2012), paragraphs1–23: the original dispute concerns the 2002 annual income ceiling, but paragraphs17–22 explain why maintenance for the child''s own child does not reduce the child''s own available income. Current DA-KG2025 A19.5 sentence3 expressly applies this decision to the disposable-net-income calculation for the disability self-support test under EStG32(4) sentence1 number3. Therefore the decision cannot be excluded merely because the old annual ceiling is superseded. Its surviving maintenance-payment treatment bears on qualifying_child_count through the unencoded disability means calculation; it remains an open dependency until that computation is encoded and bound. This disposition does not import the former7188 EUR annual ceiling or former27-year age limit into2025. Text-bound source: de/guidance/bfh-iii-r-73-09-2012-02-09/document-1, body SHA-256 a7700391b96700b4ff40a6f2ddaefd8ee59b21ced5d6cacf0d5b0ddffb9d0e35, pinned
       corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509; DA-KG A19.5 body SHA-2565e01053a9e249527e8f62b66c40f5300ef973ea39d3f93ba91f49f1f6206e6ac. Exact BStBl II issue/page verification and exhaustive class discovery remain open.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-29a6a70e18440300
+    status: classified-with-reason
+    classification: disability_definition_distinct_from_deduction_evidence
+    reason: 'Complete original BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe 1, corpus body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, reviewed with full DA-KG 2025 A19.1–A19.4. The historical EStG33/EStDV64 deduction dispute supplies disability-definition reasoning later used by III R44/14. Functional impairment, expected duration, age-relative difference and participation effects require separate findings. A diagnosis code is not an automatic disability result. The special pre-treatment official-certificate rule applies to the specified deduction context and is not a universal Kindergeld prerequisite; the reliance-period question described in paragraphs15–16 was not universally resolved. The case was remanded, not finally awarded. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact cited-authority spans are retained in disability-onset-source-reviews.json.
+      No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-2da01fc3ad71bd83
     status: excluded-with-reason
     classification: payout_routing
@@ -13758,6 +13764,12 @@ committed_decisions:
     classification: entitlement_condition
     reason: Unresolved reference 'Abkommen über den Europäischen Wirtschaftsraum' matched in § 62 Abs. 1a Satz 1 (nationals of 'eines Staates, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet') and § 63 Abs. 1 Satz 6 (children resident 'in einem Staat, auf den das Abkommen über den Europäischen Wirtschaftsraum Anwendung findet' count). The EEA Agreement's territorial scope (Iceland, Liechtenstein, Norway, listed in A 4.2 Abs. 1 Satz 4) is thus a term in both the claimant and the child condition. The Agreement is now captured at de/regulation/eea-agreement/document-1 (body SHA-256 3c7045ad694acf462da974a05bfd28144e3bf0a708f81312f4500d29b7377435). The official contracting-party statement is captured at de/guidance/efta/eea-contracting-parties/contracting-parties (body SHA-256 988024fe72fad0d3409d6dbc19318854ea1d0f2a69142ce956bf25f022988ae9). These source receipts do not themselves encode territorial applicability; the raw discovery identity remains unresolved by
       the parser. Bears on the law-derived inputs claimant_entitlement and qualifying_child_count (open dependencies); open until §§ 62, 63 EStG are encoded with the EEA state list bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-8d943b84c0c798b3
+    status: classified-with-reason
+    classification: disability_actual_onset_and_retrospective_evidence
+    reason: 'Complete original BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres 1, corpus body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, reviewed with full DA-KG 2025 A19.1–A19.4. The judgment requires the complete disability criteria both before the applicable age limit and in the claimed months. A congenital genetic defect or merely threatened disability is insufficient. Later diagnosis/evidence can establish earlier functional and participation impairment; certificate issuance date is not automatically onset. Inability to self-support may arise later, but participation impairment is part of disability and must meet the onset deadline. The statutory age25/pre-2007 age27 transition and period-specific SGBIX definition remain separate. The case was remanded for findings. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact
+      cited-authority spans are retained in disability-onset-source-reviews.json. No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
     bears_on_computed_surface: true
   - id: de-kg-instr-995400ec8f736a51
     status: excluded-with-reason
@@ -14399,7 +14411,13 @@ committed_decisions:
     discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
     provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 44/17 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
       corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-17-2019-11-27/document-1, body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, original PDF SHA-256 ea39ab05e23d041900c8721a54469b1f27cb2e6c1146ff9f3f693536bccfd92f. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
-    status: pending
+    status: classified-with-reason
+    classification: disability_actual_onset_and_retrospective_evidence
+    reason: 'Complete original BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres 1, corpus body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, reviewed with full DA-KG 2025 A19.1–A19.4. The judgment requires the complete disability criteria both before the applicable age limit and in the claimed months. A congenital genetic defect or merely threatened disability is insufficient. Later diagnosis/evidence can establish earlier functional and participation impairment; certificate issuance date is not automatically onset. Inability to self-support may arise later, but participation impairment is part of disability and must meet the onset deadline. The statutory age25/pre-2007 age27 transition and period-specific SGBIX definition remain separate. The case was remanded for findings. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact
+      cited-authority spans are retained in disability-onset-source-reviews.json. No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+    text_source: Complete corpus row de/guidance/bfh-iii-r-44-17-2019-11-27/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-onset-source-reviews.json.
+    text_sha256: 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0
+    bears_on_computed_surface: true
   - id: de-kg-suppl-034
     identity: BFH VI R 31/14, 2015-06-18, indirectly cited in the illness/training precedent review
     title_short: BFH VI R 31/14
@@ -14408,7 +14426,13 @@ committed_decisions:
     discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
     provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH VI R 31/14 dated 2015-06-18 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
       corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-vi-r-31-14-2015-06-18/document-1, body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, original PDF SHA-256 e5c347c4968b7a4903bfc7e27d9ed6bddeb3ab92d0a9f7edea0e6ca3a16c7649. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
-    status: pending
+    status: classified-with-reason
+    classification: disability_definition_distinct_from_deduction_evidence
+    reason: 'Complete original BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe 1, corpus body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, reviewed with full DA-KG 2025 A19.1–A19.4. The historical EStG33/EStDV64 deduction dispute supplies disability-definition reasoning later used by III R44/14. Functional impairment, expected duration, age-relative difference and participation effects require separate findings. A diagnosis code is not an automatic disability result. The special pre-treatment official-certificate rule applies to the specified deduction context and is not a universal Kindergeld prerequisite; the reliance-period question described in paragraphs15–16 was not universally resolved. The case was remanded, not finally awarded. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact cited-authority spans are retained in disability-onset-source-reviews.json.
+      No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+    text_source: Complete corpus row de/guidance/bfh-vi-r-31-14-2015-06-18/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-onset-source-reviews.json.
+    text_sha256: 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2
+    bears_on_computed_surface: true
   - id: de-kg-suppl-035
     identity: BFH III R 19/19, 2021-10-27, indirectly cited in the disability annuity/capital review
     title_short: BFH III R 19/19
@@ -14920,6 +14944,270 @@ committed_decisions:
     discovered_by: de-kg-dakg-A17.2
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 46/08 dated 2011-12-22. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    status: pending
+  - id: de-kg-suppl-099
+    identity: BFH III R 129/86, 1989-09-29, indirectly cited in the disability-onset review
+    title_short: BFH III R 129/86
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 129/86 (1989-09-29). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-100
+    identity: BFH VI R 77/78, 1981-07-17, indirectly cited in the disability-onset review
+    title_short: BFH VI R 77/78
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 77/78 (1981-07-17). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-101
+    identity: BFH III R 208/81, 1987-02-13, indirectly cited in the disability-onset review
+    title_short: BFH III R 208/81
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 208/81 (1987-02-13). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-102
+    identity: BFH III R 150/86, 1987-03-20, indirectly cited in the disability-onset review
+    title_short: BFH III R 150/86
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 150/86 (1987-03-20). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-103
+    identity: BFH III R 22/00, 2001-02-01, indirectly cited in the disability-onset review
+    title_short: BFH III R 22/00
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 22/00 (2001-02-01). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-104
+    identity: BFH III R 5/98, 1998-12-03, indirectly cited in the disability-onset review
+    title_short: BFH III R 5/98
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 5/98 (1998-12-03). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-105
+    identity: BFH III R 84/96, 1997-06-18, indirectly cited in the disability-onset review
+    title_short: BFH III R 84/96
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 84/96 (1997-06-18). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-106
+    identity: BFH VI R 74/10, 2012-04-19, indirectly cited in the disability-onset review
+    title_short: BFH VI R 74/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 74/10 (2012-04-19). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-107
+    identity: BFH VI R 61/12, 2014-02-06, indirectly cited in the disability-onset review
+    title_short: BFH VI R 61/12
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 61/12 (2014-02-06). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-108
+    identity: BFH VI R 27/13, 2014-02-26, indirectly cited in the disability-onset review
+    title_short: BFH VI R 27/13
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 27/13 (2014-02-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-109
+    identity: BFH VI R 16/09, 2010-11-11, indirectly cited in the disability-onset review
+    title_short: BFH VI R 16/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 16/09 (2010-11-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-110
+    identity: BFH VI R 17/09, 2010-11-11, indirectly cited in the disability-onset review
+    title_short: BFH VI R 17/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 17/09 (2010-11-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-111
+    identity: BFH III R 45/03, 2005-04-21, indirectly cited in the disability-onset review
+    title_short: BFH III R 45/03
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 45/03 (2005-04-21). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-112
+    identity: BFH VI R 85/13, 2015-01-15, indirectly cited in the disability-onset review
+    title_short: BFH VI R 85/13
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 85/13 (2015-01-15). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-113
+    identity: BSG 9 RVs 1/95, 1997-02-12, indirectly cited in the disability-onset review
+    title_short: BSG 9 RVs 1/95
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BSG 9 RVs 1/95 (1997-02-12). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-114
+    identity: BVerwG 5 C 38/97, 1998-11-26, indirectly cited in the disability-onset review
+    title_short: BVerwG 5 C 38/97
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BVerwG 5 C 38/97 (1998-11-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-115
+    identity: Hessischer VGH 10 A 1623/09, 2010-05-04, indirectly cited in the disability-onset review
+    title_short: Hessischer VGH 10 A 1623/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Hessischer VGH 10 A 1623/09 (2010-05-04). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-116
+    identity: OVG Lüneburg 4 ME 184/08, 2008-06-11, indirectly cited in the disability-onset review
+    title_short: OVG Lüneburg 4 ME 184/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites OVG Lüneburg 4 ME 184/08 (2008-06-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-117
+    identity: OVG Nordrhein-Westfalen 12 B 1040/11, 2011-09-19, indirectly cited in the disability-onset review
+    title_short: OVG Nordrhein-Westfalen 12 B 1040/11
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites OVG Nordrhein-Westfalen 12 B 1040/11 (2011-09-19). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-118
+    identity: Deutscher Bundestag BT-Drucksache 10/3138 p16, historical bill cited by court, indirectly cited in the disability-onset review
+    title_short: Deutscher Bundestag BT-Drucksache 10/3138 p16
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Deutscher Bundestag BT-Drucksache 10/3138 p16 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-119
+    identity: Bundesgesetzgeber Steuervereinfachungsgesetz 2011, BGBl I 2011 p2131, indirectly cited in the disability-onset review
+    title_short: Bundesgesetzgeber Steuervereinfachungsgesetz 2011
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Bundesgesetzgeber Steuervereinfachungsgesetz 2011 (BGBl I 2011 p2131). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-120
+    identity: BMF Einkommensteuer-Richtlinien 2008 R33.4, 2008 guidance, indirectly cited in the disability-onset review
+    title_short: BMF Einkommensteuer-Richtlinien 2008 R33.4
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BMF Einkommensteuer-Richtlinien 2008 R33.4 (2008 guidance). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-121
+    identity: BFH VI R 56/98, 2001-07-26, indirectly cited in the disability-onset review
+    title_short: BFH VI R 56/98
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH VI R 56/98 (2001-07-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-122
+    identity: BSG 8/12 RKg 7/77, 1977-06-23, indirectly cited in the disability-onset review
+    title_short: BSG 8/12 RKg 7/77
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG 8/12 RKg 7/77 (1977-06-23). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-123
+    identity: BSG 10 RKg 6/83, 1984-08-14, indirectly cited in the disability-onset review
+    title_short: BSG 10 RKg 6/83
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG 10 RKg 6/83 (1984-08-14). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-124
+    identity: BSG B 3 KR 3/14 R, 2015-04-22, indirectly cited in the disability-onset review
+    title_short: BSG B 3 KR 3/14 R
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG B 3 KR 3/14 R (2015-04-22). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-125
+    identity: BFH VI R 69/83, 1984-10-11, indirectly cited in the disability-onset review
+    title_short: BFH VI R 69/83
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH VI R 69/83 (1984-10-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-126
+    identity: BFH III R 61/08, 2011-06-09, indirectly cited in the disability-onset review
+    title_short: BFH III R 61/08
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH III R 61/08 (2011-06-09). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-127
+    identity: BFH III R 24/09, 2011-08-04, indirectly cited in the disability-onset review
+    title_short: BFH III R 24/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH III R 24/09 (2011-08-04). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-128
+    identity: Deutscher Bundestag BT-Drucksache 14/5074 p98, historical bill cited by court, indirectly cited in the disability-onset review
+    title_short: Deutscher Bundestag BT-Drucksache 14/5074 p98
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Deutscher Bundestag BT-Drucksache 14/5074 p98 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-129
+    identity: Deutscher Bundestag BT-Drucksache 14/1513 p14, historical bill cited by court, indirectly cited in the disability-onset review
+    title_short: Deutscher Bundestag BT-Drucksache 14/1513 p14
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Deutscher Bundestag BT-Drucksache 14/1513 p14 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-130
+    identity: Bundesgesetzgeber Steueränderungsgesetz 2007, 2006-07-19; BGBl I p1652, indirectly cited in the disability-onset review
+    title_short: Bundesgesetzgeber Steueränderungsgesetz 2007
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Steueränderungsgesetz 2007 (2006-07-19; BGBl I p1652). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    status: pending
+  - id: de-kg-suppl-131
+    identity: Bundesgesetzgeber Gesetz zur Familienförderung 1999, 1999-12-22; BGBl I p2552, indirectly cited in the disability-onset review
+    title_short: Bundesgesetzgeber Gesetz zur Familienförderung 1999
+    relation: bears_on
+    discovered_by: de-kg-dakg-A15.11
+    discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+    provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Gesetz zur Familienförderung 1999 (1999-12-22; BGBl I p2552). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
     status: pending
 computed:
   ledger:
@@ -15659,13 +15947,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 865
+    instrument_count: 898
     counts:
-      total: 865
+      total: 898
       encoded: 2
-      classified-with-reason: 177
+      classified-with-reason: 181
       excluded-with-reason: 349
-      pending: 337
+      pending: 366
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -15871,7 +16159,6 @@ computed:
     - de-kg-instr-1c560d43302dedf2
     - de-kg-instr-25b1ea0557c352eb
     - de-kg-instr-29707b769759e246
-    - de-kg-instr-29a6a70e18440300
     - de-kg-instr-2b121051486857aa
     - de-kg-instr-2c28748809bc5f0a
     - de-kg-instr-2f1ac975f16fdbf6
@@ -15895,7 +16182,6 @@ computed:
     - de-kg-instr-7e37eabb86048805
     - de-kg-instr-8570a332681be6e4
     - de-kg-instr-8a5bf72ed2cf253f
-    - de-kg-instr-8d943b84c0c798b3
     - de-kg-instr-9728a65b720a8ab3
     - de-kg-instr-9886b8cf5a4c26e8
     - de-kg-instr-9ea3370bf9f2ad0d
@@ -15938,8 +16224,6 @@ computed:
     - de-kg-suppl-027
     - de-kg-suppl-029
     - de-kg-suppl-032
-    - de-kg-suppl-033
-    - de-kg-suppl-034
     - de-kg-suppl-035
     - de-kg-suppl-036
     - de-kg-suppl-037
@@ -16004,6 +16288,39 @@ computed:
     - de-kg-suppl-096
     - de-kg-suppl-097
     - de-kg-suppl-098
+    - de-kg-suppl-099
+    - de-kg-suppl-100
+    - de-kg-suppl-101
+    - de-kg-suppl-102
+    - de-kg-suppl-103
+    - de-kg-suppl-104
+    - de-kg-suppl-105
+    - de-kg-suppl-106
+    - de-kg-suppl-107
+    - de-kg-suppl-108
+    - de-kg-suppl-109
+    - de-kg-suppl-110
+    - de-kg-suppl-111
+    - de-kg-suppl-112
+    - de-kg-suppl-113
+    - de-kg-suppl-114
+    - de-kg-suppl-115
+    - de-kg-suppl-116
+    - de-kg-suppl-117
+    - de-kg-suppl-118
+    - de-kg-suppl-119
+    - de-kg-suppl-120
+    - de-kg-suppl-121
+    - de-kg-suppl-122
+    - de-kg-suppl-123
+    - de-kg-suppl-124
+    - de-kg-suppl-125
+    - de-kg-suppl-126
+    - de-kg-suppl-127
+    - de-kg-suppl-128
+    - de-kg-suppl-129
+    - de-kg-suppl-130
+    - de-kg-suppl-131
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -25606,7 +25923,7 @@ computed:
       raw_references:
       - Zuletzt geändert durch Art. 4 G v. 23.5.2024 I Nr. 170
     - id: de-kg-instr-29a6a70e18440300
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-d114ab925636568ac2f1
       identity_kind: corpus_citation
@@ -25616,6 +25933,10 @@ computed:
       citation_label: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
       document_citation_path: de/guidance/bfh-vi-r-31-14-2015-06-18
       title: 'BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe'
+      classification: disability_definition_distinct_from_deduction_evidence
+      reason: 'Complete original BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe 1, corpus body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, reviewed with full DA-KG 2025 A19.1–A19.4. The historical EStG33/EStDV64 deduction dispute supplies disability-definition reasoning later used by III R44/14. Functional impairment, expected duration, age-relative difference and participation effects require separate findings. A diagnosis code is not an automatic disability result. The special pre-treatment official-certificate rule applies to the specified deduction context and is not a universal Kindergeld prerequisite; the reliance-period question described in paragraphs15–16 was not universally resolved. The case was remanded, not finally awarded. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact cited-authority spans are retained in disability-onset-source-reviews.json.
+        No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-2b121051486857aa
       status: pending
       discovery_refs:
@@ -26327,7 +26648,7 @@ computed:
       document_citation_path: de/guidance/bfh-v-r-27-14-2015-04-15
       title: 'BFH, V R 27/14, 2015-04-15: Kindergeld: Abschluss einer erstmaligen Berufsausbildung bei mehraktiger Ausbildung'
     - id: de-kg-instr-8d943b84c0c798b3
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-2c23960b9c4604f17fb3
       - de-corpus-afbef9e671489df19b64
@@ -26338,6 +26659,10 @@ computed:
       citation_label: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
       document_citation_path: de/guidance/bfh-iii-r-44-17-2019-11-27
       title: 'BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres'
+      classification: disability_actual_onset_and_retrospective_evidence
+      reason: 'Complete original BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres 1, corpus body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, reviewed with full DA-KG 2025 A19.1–A19.4. The judgment requires the complete disability criteria both before the applicable age limit and in the claimed months. A congenital genetic defect or merely threatened disability is insufficient. Later diagnosis/evidence can establish earlier functional and participation impairment; certificate issuance date is not automatically onset. Inability to self-support may arise later, but participation impairment is part of disability and must meet the onset deadline. The statutory age25/pre-2007 age27 transition and period-specific SGBIX definition remain separate. The case was remanded for findings. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact
+        cited-authority spans are retained in disability-onset-source-reviews.json. No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-9728a65b720a8ab3
       status: pending
       discovery_refs:
@@ -27435,7 +27760,7 @@ computed:
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 69/04 dated 2006-07-20 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
     - id: de-kg-suppl-033
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A15.11
       identity_kind: supplemental
@@ -27445,8 +27770,14 @@ computed:
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 44/17 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
         corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-44-17-2019-11-27/document-1, body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, original PDF SHA-256 ea39ab05e23d041900c8721a54469b1f27cb2e6c1146ff9f3f693536bccfd92f. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+      classification: disability_actual_onset_and_retrospective_evidence
+      reason: 'Complete original BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres 1, corpus body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, reviewed with full DA-KG 2025 A19.1–A19.4. The judgment requires the complete disability criteria both before the applicable age limit and in the claimed months. A congenital genetic defect or merely threatened disability is insufficient. Later diagnosis/evidence can establish earlier functional and participation impairment; certificate issuance date is not automatically onset. Inability to self-support may arise later, but participation impairment is part of disability and must meet the onset deadline. The statutory age25/pre-2007 age27 transition and period-specific SGBIX definition remain separate. The case was remanded for findings. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact
+        cited-authority spans are retained in disability-onset-source-reviews.json. No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bfh-iii-r-44-17-2019-11-27/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-onset-source-reviews.json.
+      text_sha256: 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0
     - id: de-kg-suppl-034
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A15.11
       identity_kind: supplemental
@@ -27456,6 +27787,12 @@ computed:
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH VI R 31/14 dated 2015-06-18 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
         corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-vi-r-31-14-2015-06-18/document-1, body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, original PDF SHA-256 e5c347c4968b7a4903bfc7e27d9ed6bddeb3ab92d0a9f7edea0e6ca3a16c7649. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+      classification: disability_definition_distinct_from_deduction_evidence
+      reason: 'Complete original BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe 1, corpus body SHA-256 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2, reviewed with full DA-KG 2025 A19.1–A19.4. The historical EStG33/EStDV64 deduction dispute supplies disability-definition reasoning later used by III R44/14. Functional impairment, expected duration, age-relative difference and participation effects require separate findings. A diagnosis code is not an automatic disability result. The special pre-treatment official-certificate rule applies to the specified deduction context and is not a universal Kindergeld prerequisite; the reliance-period question described in paragraphs15–16 was not universally resolved. The case was remanded, not finally awarded. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact cited-authority spans are retained in disability-onset-source-reviews.json.
+        No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bfh-vi-r-31-14-2015-06-18/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in disability-onset-source-reviews.json.
+      text_sha256: 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2
     - id: de-kg-suppl-035
       status: pending
       discovery_refs:
@@ -28096,6 +28433,336 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R44/14. The fully reviewed III R44/14 corpus body cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b cites BFH III R 46/08 dated 2011-12-22. Exact referring span is in disability-evidence-source-review.json. This is not direct DA-KG naming, independent capture of the cited original, or verified BStBlII membership. Original-source, historical/current applicability and surface-bearing review remain pending; some references concern litigation evidence or procedure. No encoded coverage or exclusion follows solely from the citation.'
+    - id: de-kg-suppl-099
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 129/86, 1989-09-29, indirectly cited in the disability-onset review
+      title_short: BFH III R 129/86
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 129/86 (1989-09-29). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-100
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 77/78, 1981-07-17, indirectly cited in the disability-onset review
+      title_short: BFH VI R 77/78
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 77/78 (1981-07-17). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-101
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 208/81, 1987-02-13, indirectly cited in the disability-onset review
+      title_short: BFH III R 208/81
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 208/81 (1987-02-13). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-102
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 150/86, 1987-03-20, indirectly cited in the disability-onset review
+      title_short: BFH III R 150/86
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 150/86 (1987-03-20). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-103
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 22/00, 2001-02-01, indirectly cited in the disability-onset review
+      title_short: BFH III R 22/00
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 22/00 (2001-02-01). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-104
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 5/98, 1998-12-03, indirectly cited in the disability-onset review
+      title_short: BFH III R 5/98
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 5/98 (1998-12-03). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-105
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 84/96, 1997-06-18, indirectly cited in the disability-onset review
+      title_short: BFH III R 84/96
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 84/96 (1997-06-18). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-106
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 74/10, 2012-04-19, indirectly cited in the disability-onset review
+      title_short: BFH VI R 74/10
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 74/10 (2012-04-19). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-107
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 61/12, 2014-02-06, indirectly cited in the disability-onset review
+      title_short: BFH VI R 61/12
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 61/12 (2014-02-06). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-108
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 27/13, 2014-02-26, indirectly cited in the disability-onset review
+      title_short: BFH VI R 27/13
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 27/13 (2014-02-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-109
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 16/09, 2010-11-11, indirectly cited in the disability-onset review
+      title_short: BFH VI R 16/09
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 16/09 (2010-11-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-110
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 17/09, 2010-11-11, indirectly cited in the disability-onset review
+      title_short: BFH VI R 17/09
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 17/09 (2010-11-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-111
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 45/03, 2005-04-21, indirectly cited in the disability-onset review
+      title_short: BFH III R 45/03
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH III R 45/03 (2005-04-21). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-112
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 85/13, 2015-01-15, indirectly cited in the disability-onset review
+      title_short: BFH VI R 85/13
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BFH VI R 85/13 (2015-01-15). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-113
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BSG 9 RVs 1/95, 1997-02-12, indirectly cited in the disability-onset review
+      title_short: BSG 9 RVs 1/95
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BSG 9 RVs 1/95 (1997-02-12). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-114
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BVerwG 5 C 38/97, 1998-11-26, indirectly cited in the disability-onset review
+      title_short: BVerwG 5 C 38/97
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BVerwG 5 C 38/97 (1998-11-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-115
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Hessischer VGH 10 A 1623/09, 2010-05-04, indirectly cited in the disability-onset review
+      title_short: Hessischer VGH 10 A 1623/09
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Hessischer VGH 10 A 1623/09 (2010-05-04). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-116
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: OVG Lüneburg 4 ME 184/08, 2008-06-11, indirectly cited in the disability-onset review
+      title_short: OVG Lüneburg 4 ME 184/08
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites OVG Lüneburg 4 ME 184/08 (2008-06-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-117
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: OVG Nordrhein-Westfalen 12 B 1040/11, 2011-09-19, indirectly cited in the disability-onset review
+      title_short: OVG Nordrhein-Westfalen 12 B 1040/11
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites OVG Nordrhein-Westfalen 12 B 1040/11 (2011-09-19). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-118
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Deutscher Bundestag BT-Drucksache 10/3138 p16, historical bill cited by court, indirectly cited in the disability-onset review
+      title_short: Deutscher Bundestag BT-Drucksache 10/3138 p16
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Deutscher Bundestag BT-Drucksache 10/3138 p16 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-119
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Bundesgesetzgeber Steuervereinfachungsgesetz 2011, BGBl I 2011 p2131, indirectly cited in the disability-onset review
+      title_short: Bundesgesetzgeber Steuervereinfachungsgesetz 2011
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites Bundesgesetzgeber Steuervereinfachungsgesetz 2011 (BGBl I 2011 p2131). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-120
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BMF Einkommensteuer-Richtlinien 2008 R33.4, 2008 guidance, indirectly cited in the disability-onset review
+      title_short: BMF Einkommensteuer-Richtlinien 2008 R33.4
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-vi-r-31-14-2015-06-18/document-1; that body 6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2 cites BMF Einkommensteuer-Richtlinien 2008 R33.4 (2008 guidance). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-121
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 56/98, 2001-07-26, indirectly cited in the disability-onset review
+      title_short: BFH VI R 56/98
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH VI R 56/98 (2001-07-26). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-122
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BSG 8/12 RKg 7/77, 1977-06-23, indirectly cited in the disability-onset review
+      title_short: BSG 8/12 RKg 7/77
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG 8/12 RKg 7/77 (1977-06-23). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-123
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BSG 10 RKg 6/83, 1984-08-14, indirectly cited in the disability-onset review
+      title_short: BSG 10 RKg 6/83
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG 10 RKg 6/83 (1984-08-14). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-124
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BSG B 3 KR 3/14 R, 2015-04-22, indirectly cited in the disability-onset review
+      title_short: BSG B 3 KR 3/14 R
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BSG B 3 KR 3/14 R (2015-04-22). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-125
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH VI R 69/83, 1984-10-11, indirectly cited in the disability-onset review
+      title_short: BFH VI R 69/83
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH VI R 69/83 (1984-10-11). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-126
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 61/08, 2011-06-09, indirectly cited in the disability-onset review
+      title_short: BFH III R 61/08
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH III R 61/08 (2011-06-09). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-127
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: BFH III R 24/09, 2011-08-04, indirectly cited in the disability-onset review
+      title_short: BFH III R 24/09
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites BFH III R 24/09 (2011-08-04). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-128
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Deutscher Bundestag BT-Drucksache 14/5074 p98, historical bill cited by court, indirectly cited in the disability-onset review
+      title_short: Deutscher Bundestag BT-Drucksache 14/5074 p98
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Deutscher Bundestag BT-Drucksache 14/5074 p98 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-129
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Deutscher Bundestag BT-Drucksache 14/1513 p14, historical bill cited by court, indirectly cited in the disability-onset review
+      title_short: Deutscher Bundestag BT-Drucksache 14/1513 p14
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Deutscher Bundestag BT-Drucksache 14/1513 p14 (historical bill cited by court). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-130
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Bundesgesetzgeber Steueränderungsgesetz 2007, 2006-07-19; BGBl I p1652, indirectly cited in the disability-onset review
+      title_short: Bundesgesetzgeber Steueränderungsgesetz 2007
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Steueränderungsgesetz 2007 (2006-07-19; BGBl I p1652). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
+    - id: de-kg-suppl-131
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A15.11
+      identity_kind: supplemental
+      identity: Bundesgesetzgeber Gesetz zur Familienförderung 1999, 1999-12-22; BGBl I p2552, indirectly cited in the disability-onset review
+      title_short: Bundesgesetzgeber Gesetz zur Familienförderung 1999
+      relation: bears_on
+      discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
+      provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Gesetz zur Familienförderung 1999 (1999-12-22; BGBl I p2552). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -28231,6 +28898,7 @@ computed:
     - de-kg-instr-1cf23bf8090c91b9
     - de-kg-instr-2264ad62fc60eb93
     - de-kg-instr-295706eb9fcb6809
+    - de-kg-instr-29a6a70e18440300
     - de-kg-instr-2e123c165d3631db
     - de-kg-instr-32a81be6d35e33be
     - de-kg-instr-3841260753e31d86
@@ -28245,6 +28913,7 @@ computed:
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
+    - de-kg-instr-8d943b84c0c798b3
     - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-a5848a433a63d2cb
     - de-kg-instr-ad3045c5a5d2f5bd
@@ -28273,12 +28942,14 @@ computed:
     - de-kg-suppl-028
     - de-kg-suppl-030
     - de-kg-suppl-031
-    instruments_bearing_on_computed_count: 163
-    open_dependency_count: 171
+    - de-kg-suppl-033
+    - de-kg-suppl-034
+    instruments_bearing_on_computed_count: 167
+    open_dependency_count: 175
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 865
+    bearing_candidate_instruments: 898
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
