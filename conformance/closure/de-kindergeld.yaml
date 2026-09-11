@@ -14339,7 +14339,13 @@ committed_decisions:
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
       corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-70-11-2012-09-27/document-1, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, original PDF SHA-256 1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
-    status: pending
+    status: classified-with-reason
+    classification: adult_child_training_search_during_service
+    reason: Complete BFH III R 70/11 (27 September 2012), five pages, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, reviewed with full DA-KG 2025 A16, A17.1 and A17.2. Serious efforts for the next possible training start, institutionally delayed admissions, and availability at that start bear on EStG32(4) qualifying_child_count. Concurrent civil service alone did not exclude the March 2008 application where service ended before the next semester. The five-month transition did not qualify even for its first four months; the search route was independently available. Historical income limits and compulsory-service categories are not current 2025 parameters; current second-training employment restrictions remain separately required. These bearing rules remain unencoded. Procedural time scope, costs, historical distinctions and exact citation spans are recorded in service-search-source-review.json. No blanket eligibility from service, universal illness exclusion,
+      or independently verified BStBlII membership is asserted.
+    text_source: Complete corpus row de/guidance/bfh-iii-r-70-11-2012-09-27/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in service-search-source-review.json.
+    text_sha256: 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f
+    bears_on_computed_surface: true
   - id: de-kg-suppl-029
     identity: BFH VI B 322/98, 1999-11-08, indirectly cited in the illness/training precedent review
     title_short: BFH VI B 322/98
@@ -14725,6 +14731,94 @@ committed_decisions:
     discovered_by: de-kg-dakg-A17.2
     discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
     provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    status: pending
+  - id: de-kg-suppl-076
+    identity: BFH VIII R 61/01, 2002-05-14, indirectly cited in the training-search-during-service review
+    title_short: BFH VIII R 61/01
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 61/01 dated 2002-05-14; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-077
+    identity: BFH III R 41/07, 2011-12-22, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 41/07
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 41/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-078
+    identity: BFH III R 84/07, 2009-11-26, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 84/07
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 84/07 dated 2009-11-26; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-079
+    identity: BFH III R 5/07, 2011-12-22, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 5/07
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 5/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-080
+    identity: BFH III R 68/10, 2012-02-09, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 68/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 68/10 dated 2012-02-09; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-081
+    identity: BFH III R 25/09, 2012-05-24, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 25/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 25/09 dated 2012-05-24; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-082
+    identity: BFH VIII R 86/02, 2004-03-16, indirectly cited in the training-search-during-service review
+    title_short: BFH VIII R 86/02
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 86/02 dated 2004-03-16; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-083
+    identity: BFH III R 34/09, 2010-06-17, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 34/09
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 34/09 dated 2010-06-17; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-084
+    identity: BFH III R 50/10, 2011-04-07, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 50/10
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 50/10 dated 2011-04-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-085
+    identity: BFH I R 76/84, 1989-09-13, indirectly cited in the training-search-during-service review
+    title_short: BFH I R 76/84
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH I R 76/84 dated 1989-09-13; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    status: pending
+  - id: de-kg-suppl-086
+    identity: BFH III R 79/97, 2000-11-07, indirectly cited in the training-search-during-service review
+    title_short: BFH III R 79/97
+    relation: bears_on
+    discovered_by: de-kg-dakg-A17.2
+    discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+    provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 79/97 dated 2000-11-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
     status: pending
 computed:
   ledger:
@@ -15464,13 +15558,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 842
+    instrument_count: 853
     counts:
-      total: 842
+      total: 853
       encoded: 2
-      classified-with-reason: 175
+      classified-with-reason: 176
       excluded-with-reason: 349
-      pending: 316
+      pending: 326
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -15741,7 +15835,6 @@ computed:
     - de-kg-suppl-024
     - de-kg-suppl-025
     - de-kg-suppl-027
-    - de-kg-suppl-028
     - de-kg-suppl-029
     - de-kg-suppl-030
     - de-kg-suppl-032
@@ -15788,6 +15881,17 @@ computed:
     - de-kg-suppl-073
     - de-kg-suppl-074
     - de-kg-suppl-075
+    - de-kg-suppl-076
+    - de-kg-suppl-077
+    - de-kg-suppl-078
+    - de-kg-suppl-079
+    - de-kg-suppl-080
+    - de-kg-suppl-081
+    - de-kg-suppl-082
+    - de-kg-suppl-083
+    - de-kg-suppl-084
+    - de-kg-suppl-085
+    - de-kg-suppl-086
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -27149,7 +27253,7 @@ computed:
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VIII R 71/99 dated 2003-07-15 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.'
     - id: de-kg-suppl-028
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A17.2
       identity_kind: supplemental
@@ -27159,6 +27263,12 @@ computed:
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c,
         corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-70-11-2012-09-27/document-1, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, original PDF SHA-256 1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.'
+      classification: adult_child_training_search_during_service
+      reason: Complete BFH III R 70/11 (27 September 2012), five pages, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, reviewed with full DA-KG 2025 A16, A17.1 and A17.2. Serious efforts for the next possible training start, institutionally delayed admissions, and availability at that start bear on EStG32(4) qualifying_child_count. Concurrent civil service alone did not exclude the March 2008 application where service ended before the next semester. The five-month transition did not qualify even for its first four months; the search route was independently available. Historical income limits and compulsory-service categories are not current 2025 parameters; current second-training employment restrictions remain separately required. These bearing rules remain unencoded. Procedural time scope, costs, historical distinctions and exact citation spans are recorded in service-search-source-review.json. No blanket eligibility from service, universal illness exclusion,
+        or independently verified BStBlII membership is asserted.
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bfh-iii-r-70-11-2012-09-27/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in service-search-source-review.json.
+      text_sha256: 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f
     - id: de-kg-suppl-029
       status: pending
       discovery_refs:
@@ -27639,6 +27749,116 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
       provenance: 'Indirect source chain: DA-KG A17.2 cites III R49/18, which cites III R24/08. The complete reviewed III R24/08 body 4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1 cites this authority; its exact referring span is retained in historical-search-access-source-review.json. This does not assert direct DA-KG naming, current force, current bearing, BStBlII membership, or an independently captured original. The source discusses2003–2004 law and also procedural matters; each authority requires its own original-source and historical/surface review. No present-day parameter, exclusion or encoding follows from this reference alone.'
+    - id: de-kg-suppl-076
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VIII R 61/01, 2002-05-14, indirectly cited in the training-search-during-service review
+      title_short: BFH VIII R 61/01
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 61/01 dated 2002-05-14; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-077
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 41/07, 2011-12-22, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 41/07
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 41/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-078
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 84/07, 2009-11-26, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 84/07
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 84/07 dated 2009-11-26; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-079
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 5/07, 2011-12-22, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 5/07
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 5/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-080
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 68/10, 2012-02-09, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 68/10
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 68/10 dated 2012-02-09; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-081
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 25/09, 2012-05-24, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 25/09
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 25/09 dated 2012-05-24; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-082
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH VIII R 86/02, 2004-03-16, indirectly cited in the training-search-during-service review
+      title_short: BFH VIII R 86/02
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 86/02 dated 2004-03-16; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-083
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 34/09, 2010-06-17, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 34/09
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 34/09 dated 2010-06-17; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-084
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 50/10, 2011-04-07, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 50/10
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 50/10 dated 2011-04-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-085
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH I R 76/84, 1989-09-13, indirectly cited in the training-search-during-service review
+      title_short: BFH I R 76/84
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH I R 76/84 dated 1989-09-13; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
+    - id: de-kg-suppl-086
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A17.2
+      identity_kind: supplemental
+      identity: BFH III R 79/97, 2000-11-07, indirectly cited in the training-search-during-service review
+      title_short: BFH III R 79/97
+      relation: bears_on
+      discovered_in_body_sha256: 31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962
+      provenance: 'Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 79/97 dated 2000-11-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -27813,13 +28033,14 @@ computed:
     - de-kg-suppl-020
     - de-kg-suppl-021
     - de-kg-suppl-026
+    - de-kg-suppl-028
     - de-kg-suppl-031
-    instruments_bearing_on_computed_count: 161
-    open_dependency_count: 169
+    instruments_bearing_on_computed_count: 162
+    open_dependency_count: 170
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 842
+    bearing_candidate_instruments: 853
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
