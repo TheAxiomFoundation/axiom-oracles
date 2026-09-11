@@ -393,10 +393,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "f6b0d15246a7db1403836628576f11e0d334348c",
+      "axiom_rules_engine_sha": "f19b03a6aafc9503c943510bc7946127e291784f",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-10T21:01:20Z",
+    "generated_at": "2026-09-11T04:53:57Z",
     "generated_by": "scripts/run_comparison.py::be-pensioner-contributions",
     "oracle": {
       "euromod_country": "BE",
