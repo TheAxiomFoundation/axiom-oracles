@@ -4,7 +4,7 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: instrument frontier incomplete \u2014 41 of 42 subordinate/bearing instruments pending disposition (oracles#491)",
     "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "cd66a6235dcd3f80fac12717d51f0653ddcd1cb56cf9596becf835cd75d38bc1"
+      "sha256": "9df0814a0c526b5b0410f81593d25270cdd630d59cadef5eee8b12addeaa7b13"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "1a84b982da29e6152543b6827ff8b2f9e1f78f00530f61b65c79e94b9d56e9da",
+      "sha256": "31a062fe5c090070999fb0580d83f6655b3c3524036ed29fb8f75fc9551fff52",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "662162471b0261817fc21382ae4ed5f32ed931cb510430762526ba82749af53f"
+      "sha256": "f86ef479e9484c26dd68c92a49c217d1afe5089be2ca6293f3166a5099a7dff0"
     }
   ],
   "period": "2025",
@@ -93,7 +93,7 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete \u2014 41 of 42 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -302,10 +302,10 @@
           "classified-with-reason": 1,
           "encoded": 0,
           "excluded-with-reason": 0,
-          "pending": 40,
-          "total": 41
+          "pending": 41,
+          "total": 42
         },
-        "instrument_count": 41,
+        "instrument_count": 42,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
           "de-uhv-instr-11b2fee91a7250af",
@@ -344,6 +344,7 @@
           "de-uhv-instr-b96e03076e143e8e",
           "de-uhv-instr-bf9c57bd5c2a3d58",
           "de-uhv-instr-c795a7af57079afc",
+          "de-uhv-instr-c7a1a1943b91b3d8",
           "de-uhv-instr-db7693cd9f018ff4",
           "de-uhv-instr-fbb51fe84fb002e1",
           "de-uhv-instr-guidance"
@@ -378,7 +379,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "91324387f01b4bf8b3dab821cb2bc26bf30953b9470948cf48d99116b84de9b2",
+      "subgraph_sha256": "1643ccde90c6ecfdbfd7130ed2bcd023440af43bf8f535f1d22b02d80fd076d0",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

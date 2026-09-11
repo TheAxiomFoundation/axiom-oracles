@@ -1,0 +1,53 @@
+{
+  "schema": "de-kindergeld.sgbix2-native-failure-review.v1",
+  "run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34647449032",
+  "citation_path": "de/statute/sgb-9-2018/2/absatz-1/inhalt",
+  "source_body_sha256": "ca98fd427cc197ff85e96b8b6882fe04bed8fcf1caed0fa8cab6aaf53d4d7c4d",
+  "corpus_commit": "3551d366ec6fa276acc193276abafdfbdbf122ca",
+  "rulespec_commit": "6efa64965b935c7c32a5b093bc718f316e8df47b",
+  "engine_commit": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "encoder_commit": "b041b6b5a0e39f2c05c93669f354f8a54e9a84c3",
+  "native_result": {
+    "attempt_count": 4,
+    "citation": "de/statute/sgb-9-2018/2/absatz-1/inhalt",
+    "encoder_version": "0.2.1973",
+    "issues": [
+      "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml: ci: [complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.`; de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.`."
+    ],
+    "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml",
+    "rulespec_sha256": "212f0ad1cba952e43177ed0513074427d7d898a89aed4209b63d392ac6a21673",
+    "schema": "axiom-encode/failed-encode-candidate/v1",
+    "tests_sha256": "80e2105b338982287c6c625471ecb7d5b7670cc59c8504546f8a3865dc9aba90"
+  },
+  "evidence": [
+    {
+      "path": "issues.json",
+      "bytes": 1160,
+      "sha256": "ac775831775d27805069575ce9f649523a05d8977939eb89d0ba070cb2a7042c"
+    },
+    {
+      "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml",
+      "bytes": 7562,
+      "sha256": "212f0ad1cba952e43177ed0513074427d7d898a89aed4209b63d392ac6a21673"
+    },
+    {
+      "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.test.yaml",
+      "bytes": 19529,
+      "sha256": "80e2105b338982287c6c625471ecb7d5b7670cc59c8504546f8a3865dc9aba90"
+    }
+  ],
+  "findings": [
+    "Four internal candidates failed the paired positive/blocking source-condition test gate. The final candidate is unsigned and was not applied.",
+    "The candidate accepts forecasted_hindrance_calendar_month_count as a precomputed Decimal and compares it with6. It does not derive the calendar interval from dated forecast evidence as requested. A decimal month convention is unspecified.",
+    "Bare body_or_health_condition_deviates_from_age_typical_condition and impairment_interacts_with_barriers_to_hinder_equal_participation inputs reproduce constituent legal standards without a documented observable-record derivation or explanation of independently existing medical observations. The requested leaf boundary was not established.",
+    "The sixteen-input scalar model contains no actual assessment, subject, observation, issuance or prognosis date associations. Its Boolean forecast labels cannot by themselves prove which person or period a real finding describes.",
+    "The permanent-hindrance branch avoids a finite end date, but this does not cure the broader evidence and duration-boundary defects.",
+    "Fixing only the missing companion pairs would not make this candidate acceptable. A repair needs an observable evidence model and exact temporal rules, or an explicit unresolved qualitative-definition dependency; no renamed legal-status inputs."
+  ],
+  "disposition": "No module or manifest declared. No spine or legal dependency closed. Do not replay unchanged or weaken tests; native standard budget remains in force.",
+  "paired_witness_diagnostic": {
+    "path": "sgbix2-paired-witness-diagnostic.json",
+    "sha256": "118c7f09981e68ce7b6ca35e16376d17e8dc1c7b96c0832e37b9d3ef6ca99e30",
+    "finding": "The unchanged validator recognizes eight one-input toggled witnesses, including the age-deviation and threatened-disability pairs, but assigns no witness to either German source clause. This localizes the failed gate to source-to-selector matching, not absence of all attempted pairs. Precise matching repair remains unresolved; no gate was weakened. The independent law-derived-input and temporal defects still reject the candidate."
+  }
+}

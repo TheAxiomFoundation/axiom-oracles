@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
-  "corpus_release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
-  "corpus_release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+  "corpus_commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+  "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+  "corpus_release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -248,7 +248,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "91fd959d24ba392d408bf18ceb66c7d85c35469f791a25cad5712d9e7c5d5189",
+      "subgraph_sha256": "0f1f049627984e6a04d65ebe10507359c45aadb717fb2fe7a9857b43cc81d90e",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -332,7 +332,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "002b69e961e2cb431da4ac0fae9f12c003534a52f92d6de8cb23909ec3bce706",
+      "subgraph_sha256": "4481e7bdd3e6eae737fb9d1560f9e816563681318b9c211eb1e312688b22ce90",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -415,7 +415,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "91324387f01b4bf8b3dab821cb2bc26bf30953b9470948cf48d99116b84de9b2",
+      "subgraph_sha256": "1643ccde90c6ecfdbfd7130ed2bcd023440af43bf8f535f1d22b02d80fd076d0",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -438,7 +438,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
+    "sha256": "3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740"
   },
   "spine_closed": false
 }

@@ -28,14 +28,14 @@ _REQUIREMENT_DEPENDENCY = (
     "dependency (CERTIFIED.md v3); this closure declares no "
     "dependency-closure block"
 )
-SOURCE_SHA256 = "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
+SOURCE_SHA256 = '3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740'
 
 SOURCE_SCHEMA = "axiom_oracles.de_closure_source.v1"
 SUMMARY_SCHEMA = "axiom_oracles.de_closure_summary.v1"
-RELEASE = 'de-rulespec-2026-09-11-kindergeld-illness-precedents'
-RELEASE_CONTENT_SHA256 = '1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c'
-RELEASE_SELECTOR_SHA256 = 'a8f4521f60195362fa2aec2034a44aa4777775572a4a13bc906332090d4ba945'
-CORPUS_COMMIT = '279e27503c00ce1fab35809d069c076d3abad362'
+RELEASE = 'de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor'
+RELEASE_CONTENT_SHA256 = '2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914'
+RELEASE_SELECTOR_SHA256 = '440bc1611dd3d2cde8e82fd3cee430180d216d7947d5d80c67bdedca6cf34c5b'
+CORPUS_COMMIT = '4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2'
 RULESPEC_COMMIT = "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
 RESOLUTION_PROTOCOL = {
     "descendants_by": "parent_citation_path",
@@ -109,6 +109,8 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json': ('f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d', 2),
     'data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json': ('981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47', 2),
     'data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json': ('f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d', 2),
+    'data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.json': ('3df1d54070aa79c3e137e34d1e324da0a00ebc6cff69ad75dbf436c8325d46b3', 2),
+    'data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.json': ('352cd7e15b4e9fc43cfdcb386a1b9c33b49c7c94be831735c88147537928b28f', 2),
     'data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-illness-precedents.json': ('cb645cdb33c96563e9868759bc146eb76fdbfc4ddb5e092690231204a24ac077', 12),
     'data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json': ('1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70', 172),
     'data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json': ('b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2', 2),
@@ -146,6 +148,9 @@ EXPECTED_INVENTORIES = {
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json': ('a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830', 4),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json': ('956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865', 46),
     'data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json': ('a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6', 598),
+    'data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition-history.json': ('353dd48419738279b8b3bd160b9a02d7efe529abd2c3f7b4ddd1c519b6aab40a', 4),
+    'data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition.json': ('a9c486cb8e3ed0be52aa2eeff924dfb752b623eea4c92de006a95c13e529b088', 307),
+    'data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.json': ('912cd40f3bdc97b93dfb8dba128f698a8af3c60891d7437dfabdaf3ced301be1', 4),
 }
 EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl': ('80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29', 2),
@@ -161,6 +166,8 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl': ('847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050', 2),
     'data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl': ('4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b', 2),
     'data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl': ('a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408', 2),
+    'data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl': ('8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06', 2),
+    'data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl': ('807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a', 2),
     'data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl': ('1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee', 12),
     'data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl': ('abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528', 172),
     'data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl': ('29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df', 2),
@@ -198,6 +205,9 @@ EXPECTED_PROVISION_SOURCES = {
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl': ('87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668', 4),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl': ('2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5', 46),
     'data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl': ('65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1', 598),
+    'data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl': ('85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034', 4),
+    'data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl': ('d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86', 307),
+    'data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl': ('9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015', 4),
 }
 
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")

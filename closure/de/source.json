@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "279e27503c00ce1fab35809d069c076d3abad362",
-    "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
-    "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
-    "release_selector_sha256": "a8f4521f60195362fa2aec2034a44aa4777775572a4a13bc906332090d4ba945",
+    "commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+    "release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+    "release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
+    "release_selector_sha256": "440bc1611dd3d2cde8e82fd3cee430180d216d7947d5d80c67bdedca6cf34c5b",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -79,6 +79,16 @@
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json",
         "sha256": "f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.json",
+        "sha256": "3df1d54070aa79c3e137e34d1e324da0a00ebc6cff69ad75dbf436c8325d46b3",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.json",
+        "sha256": "352cd7e15b4e9fc43cfdcb386a1b9c33b49c7c94be831735c88147537928b28f",
         "row_count": 2
       },
       {
@@ -265,6 +275,21 @@
         "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json",
         "sha256": "a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6",
         "row_count": 598
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition-history.json",
+        "sha256": "353dd48419738279b8b3bd160b9a02d7efe529abd2c3f7b4ddd1c519b6aab40a",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition.json",
+        "sha256": "a9c486cb8e3ed0be52aa2eeff924dfb752b623eea4c92de006a95c13e529b088",
+        "row_count": 307
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.json",
+        "sha256": "912cd40f3bdc97b93dfb8dba128f698a8af3c60891d7437dfabdaf3ced301be1",
+        "row_count": 4
       }
     ],
     "provision_sources": [
@@ -331,6 +356,16 @@
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
         "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl",
+        "sha256": "8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl",
+        "sha256": "807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a",
         "row_count": 2
       },
       {
@@ -517,6 +552,21 @@
         "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
         "sha256": "65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1",
         "row_count": 598
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl",
+        "sha256": "85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl",
+        "sha256": "d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86",
+        "row_count": 307
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl",
+        "sha256": "9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015",
+        "row_count": 4
       }
     ],
     "rows": [

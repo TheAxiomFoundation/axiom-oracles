@@ -112,8 +112,8 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 899, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 41, 0, 2, 2, 1),
+    "de/kindergeld": (18, 903, 8, 1, 0, 0),
+    "de/unterhaltsvorschuss": (12, 42, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -335,7 +335,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 9894
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 10213
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -387,16 +387,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=9894)
-    assert index["row_count"] == index["mapped_row_count"] == 9894
-    assert index["body_row_count"] == 9697
+    refresh._validate_global_extraction_index(index, scanned_row_count=10213)
+    assert index["row_count"] == index["mapped_row_count"] == 10213
+    assert index["body_row_count"] == 10003
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 237
+    assert index["act_count"] == len(index["acts"]) == 245
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 6827,
-        "law_metadata_changed_by": 34,
-        "law_metadata_fundstelle": 42,
+        "explicit_cross_reference_body": 6987,
+        "law_metadata_changed_by": 36,
+        "law_metadata_fundstelle": 44,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]
@@ -1574,11 +1574,11 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 132
+    assert len(supplemental) == 135
     # The four classes remain pending because enumeration is incomplete;
-    # citation seeds have their own frontier rows. Twenty-three named documents are
+    # citation seeds have their own frontier rows. Twenty-five named documents are
     # decided on captured text; four earlier programme instruments await legal review.
-    # One hundred and one indirect or search-discovered authorities require original-source/bearing review.
+    # One hundred and two indirect or search-discovered authorities require original-source/bearing review.
     pending_classes = {
         "de-kg-suppl-007",
         "de-kg-suppl-008",
@@ -1592,7 +1592,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-suppl-025",
     }
     pending_indirect_authorities = {
-        f"de-kg-suppl-{number:03d}" for number in range(26, 133) if number not in (26, 28, 30, 31, 33, 34)
+        f"de-kg-suppl-{number:03d}" for number in range(26, 136) if number not in (26, 28, 30, 31, 33, 34, 132, 133)
     }
     assert {
         row["id"] for row in supplemental if row["status"] == "pending"
@@ -1627,7 +1627,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-dakg-A19.5.3",
     }
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 538 + 132 + 229
+    assert frontier["instrument_count"] == 539 + 135 + 229
     assert all(
         sid in frontier["pending"]
         for sid in pending_classes

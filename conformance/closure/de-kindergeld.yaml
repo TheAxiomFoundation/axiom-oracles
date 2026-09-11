@@ -43,12 +43,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e
+    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 279e27503c00ce1fab35809d069c076d3abad362
-    release: de-rulespec-2026-09-11-kindergeld-illness-precedents
-    release_content_sha256: 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c
+    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
+    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
+    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -94,6 +94,12 @@ generated_facts:
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
       sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl
+      sha256: 8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl
+      sha256: 807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
       sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
@@ -206,6 +212,15 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl
       sha256: 65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1
       row_count: 598
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl
+      sha256: 85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl
+      sha256: d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86
+      row_count: 307
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl
+      sha256: 9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 62
@@ -1187,15 +1202,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 6371f9ff6fb68695a44fc4651ef13e92904c394b38997f77e1eae35ddea145f5
+    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
     channel_receipts:
-      corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-      subject_matter_search: af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2
+      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 767
+    candidate_count: 768
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10326,6 +10341,19 @@ generated_facts:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-kg-instr-c7a1a1943b91b3d8
+      status: pending
+      discovery_refs:
+      - de-corpus-1111e472b3e730333f32
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-9-2018
+      row_sha256: d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9
+      document_class: statute
+      citation_label: Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)
+      body_sha256: a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca
+      document_citation_path: de/statute/sgb-9-2018
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_9_2018/
+      fundstelle: BGBl I 2016, 3234
     - id: de-kg-instr-c80165befa9ab1c1
       status: pending
       discovery_refs:
@@ -10595,7 +10623,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 5ce4c055bd21dff2bd7b2d444b716169a0a8223f879c77e3b4450bf1f11a5d72
+      sha256: 2b2bff81ceccab411e3797092b33f5e2734be9f15d933e8a7a6404b50442fae3
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10644,8 +10672,8 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-        subject_matter_search: af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2
+        corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+        subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
     work_inventory:
@@ -13834,6 +13862,13 @@ committed_decisions:
     classification: recovery_reference
     reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
     bears_on_computed_surface: false
+  - id: de-kg-instr-c7a1a1943b91b3d8
+    status: classified-with-reason
+    body_sha256: a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca
+    classification: disability_definition_condition
+    reason: The current SGBIX act is bearing through its complete §2 disability definition, read from de/statute/sgb-9-2018/2 (bodySHA256 eef5e8fabc429e5d830b9c1a1e4a76678875b4fad16cd227dcab7aa228d6cf0a) and the separately captured official2018 version, preserved in verified corpus release de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2. The ordinary paragraph1 definition must be distinguished from threatened disability and the severe-disability/equal-treatment rules in paragraphs2and3. It is an upstream requirement for the EStG32(4) disability route and qualifying_child_count. The complete reviewed definition and historical/source limitations are retained in disability-definition-source-review.json; this is not a claim that all307 captured provisions were legally reviewed. Native paragraph1 run34647449032 failed and was unsigned; its source-to-selector test mismatch, precomputed duration and unresolved observable-evidence boundary are retained
+      in sgbix2-native-failure-review.json. The definition and other bearing SGBIX dependencies remain unencoded; no medical score, GdB50 shortcut or case-supplied disability verdict closes them.
+    bears_on_computed_surface: true
   - id: de-kg-instr-ce168756ed1a28cb
     status: classified-with-reason
     body_sha256: 039de9931d61ee11b13fe82082115c085a24f84017c78fd2779dbad4118fde6b
@@ -15215,7 +15250,41 @@ committed_decisions:
     relation: bears_on
     discovered_by: de-kg-dakg-A18.7
     discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
-    provenance: Subject-matter search during review of the written generations-service agreement dependency associated with DA-KG A18.7. This is not a direct DA-KG citation. Official judgment candidate https://juris.bundesgerichtshof.de/cgi-bin/rechtsprechung/document.py?Art=en&Blank=1.pdf&Datum=2018-3-7&Gericht=bgh&Sort=3&anz=24&nr=82745&pos=22; original PDF retrieval returned HTTP403. Search lead snapshot bgh-counterpart-search-lead.json SHA256 7d31637e7a9b52e6a47783fee5383400d34807786294a5cd6a3eaea3b3eb62b1. Exact original identity, complete text, contract-form versus rental-form scope, historical applicability and computed-surface bearing remain pending; no rule or exclusion is inferred from search results.
+    provenance: Subject-matter search during the DA-KG A18.7 written-agreement dependency review, not a direct DA-KG citation. The initial failed retrieval remains documented in bgh-counterpart-search-lead.json. The complete official13-page original is now receipted in de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2, contentSHA256 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914. Full review and exact operative spans are in bgh-counterpart-source-review.json. Capture supersedes the earlier source-access gap; it does not encode the general contract-form conditions.
+    status: classified-with-reason
+    classification: written_contract_formation_condition
+    reason: The complete original BGH XII ZR129/16 judgment was reviewed, including its distinction between general statutory written-form contract formation in paragraphs17–18/23 and the special BGB550 external-documentation rule in paragraphs19–27. General offer and acceptance must reach the other party in the required form; the fax copies in the case did not suffice for that general requirement. The rental-form no-receipt exception must not be generalized to the written generations-service agreement upstream of qualifying_child_count. The two-party example does not settle all multi-party signature arrangements. Paragraph28 remands other form defects. These contract-form conditions remain unencoded; the accepted BGB126(1) documentary issuer-signature module alone does not implement them. No BStBlII membership or final entitlement award is inferred.
+    text_source: Complete corpus row de/guidance/bgh-xii-zr-129-16-2018-03-07/document-1 at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2; full body retained in bgh-counterpart-source-review.json.
+    text_sha256: 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1
+    bears_on_computed_surface: true
+  - id: de-kg-suppl-133
+    identity: BGH XII ZR98/13, 2015-06-17
+    title_short: BGH XII ZR98/13
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.7
+    discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+    provenance: Indirect chain from DA-KG A18.7 written-agreement review through BGH XII ZR129/16 paragraphs17/21, bodySHA256 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1. Its exact references and full source are retained in bgh-counterpart-source-review.json. Complete2015 original now receipted in de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor, commit 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2, bodySHA256 dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c; separate full review in bgh-form-predecessor-source-review.json. Not a direct DA-KG citation.
+    status: classified-with-reason
+    classification: written_contract_formation_condition
+    reason: The complete16-page BGH XII ZR98/13 judgment was reviewed. Paragraphs30–31 require written-form offer and acceptance and receipt for absent parties, and apply BGB150(2) to modified acceptance. Paragraphs32–34 distinguish the special BGB550 rental external-documentation rule. Paragraphs36–38 discuss the document appearance of representation in that rental setting; the actual signatory contracted in his own name, not as representative. These passages do not validate every single-signature arrangement or a merely oral generations-service agreement. The general contract-form conditions upstream of qualifying_child_count remain unencoded. The court restored dismissal of the eviction claim; no Kindergeld award or BStBlII membership follows.
+    text_source: Complete corpus row de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1 at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2; full body in bgh-form-predecessor-source-review.json.
+    text_sha256: dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c
+    bears_on_computed_surface: true
+  - id: de-kg-suppl-134
+    identity: BGH VIII ZR244/96, 1997-07-30
+    title_short: BGH VIII ZR244/96
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.7
+    discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+    provenance: Indirect chain from the A18.7 written-agreement dependency through BGH XII ZR129/16 paragraph18, bodySHA256 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1; exact referring span in bgh-counterpart-source-review.json. The1997 original remains uncaptured. The court's official pre2000 decision-access page and SHA-bound receipt are retained in bgh-viii244-96-access-receipt.json and bgh-before2000-official.html. The listed route requires a paid postal-copy request and mailing address; none was submitted. Other official recovery routes are not asserted exhausted. Original source, historical applicability and substantive bearing review remain pending; secondary reproductions are not used as encoding sources.
+    status: pending
+  - id: de-kg-suppl-135
+    identity: BGB §150, verspätete und abändernde Annahme
+    title_short: BGB §150
+    relation: bears_on
+    discovered_by: de-kg-dakg-A18.7
+    discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+    provenance: Indirect chain from A18.7 through the reviewed BGH2018 and2015 decisions. Paragraph31 of de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1, bodySHA256 dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c, expressly applies BGB150(2) to modified acceptance. Exact referring span is in bgh-counterpart-source-review.json. The current whole section de/statute/bgb/150 is captured; historical applicability, late-acceptance dependencies and complete statutory implementation remain pending. No caller-supplied contract-validity predicate closes this rule.
     status: pending
 computed:
   ledger:
@@ -15955,13 +16024,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 899
+    instrument_count: 903
     counts:
-      total: 899
+      total: 903
       encoded: 2
-      classified-with-reason: 181
+      classified-with-reason: 184
       excluded-with-reason: 349
-      pending: 367
+      pending: 368
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -16329,7 +16398,8 @@ computed:
     - de-kg-suppl-129
     - de-kg-suppl-130
     - de-kg-suppl-131
-    - de-kg-suppl-132
+    - de-kg-suppl-134
+    - de-kg-suppl-135
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -27038,6 +27108,23 @@ computed:
       classification: recovery_reference
       reason: 'SGB II (act-level corpus row), cited twice in § 75 Abs. 1 EStG: set-off is barred where the claimant would become ''hilfebedürftig … im Sinne der Vorschriften des Zweiten Buches Sozialgesetzbuch über die Leistungen zur Sicherung des Lebensunterhalts''. Qualifies the excluded set-off machinery; no entitlement or amount rule.'
       bears_on_computed_surface: false
+    - id: de-kg-instr-c7a1a1943b91b3d8
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-1111e472b3e730333f32
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-9-2018
+      row_sha256: d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9
+      document_class: statute
+      citation_label: Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)
+      body_sha256: a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca
+      document_citation_path: de/statute/sgb-9-2018
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_9_2018/
+      fundstelle: BGBl I 2016, 3234
+      classification: disability_definition_condition
+      reason: The current SGBIX act is bearing through its complete §2 disability definition, read from de/statute/sgb-9-2018/2 (bodySHA256 eef5e8fabc429e5d830b9c1a1e4a76678875b4fad16cd227dcab7aa228d6cf0a) and the separately captured official2018 version, preserved in verified corpus release de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2. The ordinary paragraph1 definition must be distinguished from threatened disability and the severe-disability/equal-treatment rules in paragraphs2and3. It is an upstream requirement for the EStG32(4) disability route and qualifying_child_count. The complete reviewed definition and historical/source limitations are retained in disability-definition-source-review.json; this is not a claim that all307 captured provisions were legally reviewed. Native paragraph1 run34647449032 failed and was unsigned; its source-to-selector test mismatch, precomputed duration and unresolved observable-evidence boundary are
+        retained in sgbix2-native-failure-review.json. The definition and other bearing SGBIX dependencies remain unencoded; no medical score, GdB50 shortcut or case-supplied disability verdict closes them.
+      bears_on_computed_surface: true
     - id: de-kg-instr-c80165befa9ab1c1
       status: pending
       discovery_refs:
@@ -28773,7 +28860,7 @@ computed:
       discovered_in_body_sha256: c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c
       provenance: 'Indirect chain: DA-KG A15.11 cites III R43/20, which cites the present reviewed original de/guidance/bfh-iii-r-44-17-2019-11-27/document-1; that body 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0 cites Bundesgesetzgeber Gesetz zur Familienförderung 1999 (1999-12-22; BGBl I p2552). Exact referring span retained in disability-onset-source-reviews.json. This is not direct DA-KG naming or an independently captured original. Original-source, historical applicability, computed-surface bearing and publication membership remain pending. The referring texts include deduction-only evidence rules, historical transitions and procedural matters; no current eligibility rule, encoded coverage or non-bearing exclusion is inferred from citation alone.'
     - id: de-kg-suppl-132
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-A18.7
       identity_kind: supplemental
@@ -28781,7 +28868,47 @@ computed:
       title_short: BGH XII ZR 129/16
       relation: bears_on
       discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
-      provenance: Subject-matter search during review of the written generations-service agreement dependency associated with DA-KG A18.7. This is not a direct DA-KG citation. Official judgment candidate https://juris.bundesgerichtshof.de/cgi-bin/rechtsprechung/document.py?Art=en&Blank=1.pdf&Datum=2018-3-7&Gericht=bgh&Sort=3&anz=24&nr=82745&pos=22; original PDF retrieval returned HTTP403. Search lead snapshot bgh-counterpart-search-lead.json SHA256 7d31637e7a9b52e6a47783fee5383400d34807786294a5cd6a3eaea3b3eb62b1. Exact original identity, complete text, contract-form versus rental-form scope, historical applicability and computed-surface bearing remain pending; no rule or exclusion is inferred from search results.
+      provenance: Subject-matter search during the DA-KG A18.7 written-agreement dependency review, not a direct DA-KG citation. The initial failed retrieval remains documented in bgh-counterpart-search-lead.json. The complete official13-page original is now receipted in de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2, contentSHA256 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914. Full review and exact operative spans are in bgh-counterpart-source-review.json. Capture supersedes the earlier source-access gap; it does not encode the general contract-form conditions.
+      classification: written_contract_formation_condition
+      reason: The complete original BGH XII ZR129/16 judgment was reviewed, including its distinction between general statutory written-form contract formation in paragraphs17–18/23 and the special BGB550 external-documentation rule in paragraphs19–27. General offer and acceptance must reach the other party in the required form; the fax copies in the case did not suffice for that general requirement. The rental-form no-receipt exception must not be generalized to the written generations-service agreement upstream of qualifying_child_count. The two-party example does not settle all multi-party signature arrangements. Paragraph28 remands other form defects. These contract-form conditions remain unencoded; the accepted BGB126(1) documentary issuer-signature module alone does not implement them. No BStBlII membership or final entitlement award is inferred.
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bgh-xii-zr-129-16-2018-03-07/document-1 at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2; full body retained in bgh-counterpart-source-review.json.
+      text_sha256: 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1
+    - id: de-kg-suppl-133
+      status: classified-with-reason
+      discovery_refs:
+      - de-kg-dakg-A18.7
+      identity_kind: supplemental
+      identity: BGH XII ZR98/13, 2015-06-17
+      title_short: BGH XII ZR98/13
+      relation: bears_on
+      discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+      provenance: Indirect chain from DA-KG A18.7 written-agreement review through BGH XII ZR129/16 paragraphs17/21, bodySHA256 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1. Its exact references and full source are retained in bgh-counterpart-source-review.json. Complete2015 original now receipted in de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor, commit 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2, bodySHA256 dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c; separate full review in bgh-form-predecessor-source-review.json. Not a direct DA-KG citation.
+      classification: written_contract_formation_condition
+      reason: The complete16-page BGH XII ZR98/13 judgment was reviewed. Paragraphs30–31 require written-form offer and acceptance and receipt for absent parties, and apply BGB150(2) to modified acceptance. Paragraphs32–34 distinguish the special BGB550 rental external-documentation rule. Paragraphs36–38 discuss the document appearance of representation in that rental setting; the actual signatory contracted in his own name, not as representative. These passages do not validate every single-signature arrangement or a merely oral generations-service agreement. The general contract-form conditions upstream of qualifying_child_count remain unencoded. The court restored dismissal of the eviction claim; no Kindergeld award or BStBlII membership follows.
+      bears_on_computed_surface: true
+      text_source: Complete corpus row de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1 at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2; full body in bgh-form-predecessor-source-review.json.
+      text_sha256: dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c
+    - id: de-kg-suppl-134
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.7
+      identity_kind: supplemental
+      identity: BGH VIII ZR244/96, 1997-07-30
+      title_short: BGH VIII ZR244/96
+      relation: bears_on
+      discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+      provenance: Indirect chain from the A18.7 written-agreement dependency through BGH XII ZR129/16 paragraph18, bodySHA256 38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1; exact referring span in bgh-counterpart-source-review.json. The1997 original remains uncaptured. The court's official pre2000 decision-access page and SHA-bound receipt are retained in bgh-viii244-96-access-receipt.json and bgh-before2000-official.html. The listed route requires a paid postal-copy request and mailing address; none was submitted. Other official recovery routes are not asserted exhausted. Original source, historical applicability and substantive bearing review remain pending; secondary reproductions are not used as encoding sources.
+    - id: de-kg-suppl-135
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A18.7
+      identity_kind: supplemental
+      identity: BGB §150, verspätete und abändernde Annahme
+      title_short: BGB §150
+      relation: bears_on
+      discovered_in_body_sha256: fa03839b7aca629bbbcd4b8574b0fca8d92fbfdaf03308728d046e305b4d6ec3
+      provenance: Indirect chain from A18.7 through the reviewed BGH2018 and2015 decisions. Paragraph31 of de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1, bodySHA256 dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c, expressly applies BGB150(2) to modified acceptance. Exact referring span is in bgh-counterpart-source-review.json. The current whole section de/statute/bgb/150 is captured; historical applicability, late-acceptance dependencies and complete statutory implementation remain pending. No caller-supplied contract-validity predicate closes this rule.
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -28939,6 +29066,7 @@ computed:
     - de-kg-instr-b7704b22cefd934c
     - de-kg-instr-b96e03076e143e8e
     - de-kg-instr-c3642f7b68a0f9a8
+    - de-kg-instr-c7a1a1943b91b3d8
     - de-kg-instr-ce168756ed1a28cb
     - de-kg-instr-d0ffa65a02a956b9
     - de-kg-instr-db7693cd9f018ff4
@@ -28963,12 +29091,14 @@ computed:
     - de-kg-suppl-031
     - de-kg-suppl-033
     - de-kg-suppl-034
-    instruments_bearing_on_computed_count: 167
-    open_dependency_count: 175
+    - de-kg-suppl-132
+    - de-kg-suppl-133
+    instruments_bearing_on_computed_count: 170
+    open_dependency_count: 178
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 899
+    bearing_candidate_instruments: 903
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

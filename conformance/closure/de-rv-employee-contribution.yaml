@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e
+    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 279e27503c00ce1fab35809d069c076d3abad362
-    release: de-rulespec-2026-09-11-kindergeld-illness-precedents
-    release_content_sha256: 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c
+    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
+    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
+    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -80,6 +80,12 @@ generated_facts:
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
       sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl
+      sha256: 8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl
+      sha256: 807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a
       row_count: 2
     - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
       sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
@@ -192,6 +198,15 @@ generated_facts:
     - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl
       sha256: 65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1
       row_count: 598
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl
+      sha256: 85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl
+      sha256: d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86
+      row_count: 307
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl
+      sha256: 9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -262,10 +277,10 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 6371f9ff6fb68695a44fc4651ef13e92904c394b38997f77e1eae35ddea145f5
+    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
     channel_receipts:
-      corpus_release: f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0
-      subject_matter_search: af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2
+      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17

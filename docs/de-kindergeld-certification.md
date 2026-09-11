@@ -6,9 +6,9 @@ exercised (13-household variation), executable (the signed EStG 66 module
 replayed in pinned release v0.2.2) — and `closed` computes false from the
 v3 discovery ledger (`conformance/closure/de-kindergeld.yaml`), consumed
 through the same central gate (`scripts/closure_gate.py`) that judges every
-other closure artifact. The current frontier has 367 of 899 instruments
-pending, and dependency closure has 175 open dependencies: eight law-derived
-inputs and 167 bearing instruments, with no unclassified inputs. The signed
+other closure artifact. The current frontier has 368 of 903 instruments
+pending, and dependency closure has 178 open dependencies: eight law-derived
+inputs and 170 bearing instruments, with no unclassified inputs. The signed
 BGB §§1591 and 187 prerequisites, EStG §78 record helpers, EStG §32(3) age
 criterion Regulation 987/2009 Article 59 payment-continuity rules, and the MiLoV4 §1
 historical minimum-wage parameter, MiLoV5 §1 future rates, historical SGB IV §8(1a)
@@ -326,10 +326,10 @@ bearing through the EStG §2(8) spouse-equivalence bridge into §§63 and64; its
 encoding is pending. Treaty applicability and encoding remain pending. The Swiss free-movement agreement (consolidated 2021) and Joint Committee
 Decision 1/2012 are now receipted discovery members; their applicability and
 coordination rules remain pending. The consumer now pins the additive
-`de-rulespec-2026-09-11-kindergeld-illness-precedents` release at commit
-`279e27503c00ce1fab35809d069c076d3abad362`, content SHA-256
-`1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c`
-(9,894 rows, 50 scopes). The complete DA-KG 2026 edition is separately
+`de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor` release at commit
+`4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2`, content SHA-256
+`2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914`
+(10,213 rows, 55 scopes). The complete DA-KG 2026 edition is separately
 receipted at `de/guidance/bzst-dakg-2026/document-1`, body SHA-256
 `2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58`.
 Its applicability remains pending; it does not replace the retained 2025 edition. The additive service captures cover JFDG, BFDG,
@@ -902,3 +902,48 @@ facts, a shared record, empty/mismatching groups and conditional fallback traces
 Default307 and schema322 engine tests pass, along with the release build and
 Python binding check. This is a verified engine primitive, not a §126(2) encoding;
 the dedicated DE pinPR98 and the next native source-bound attempt are separate.
+
+
+## Disability definitions and contract-form originals
+
+Corpus PR685 captures the current SGBIX/BTHG source rows and separate official
+2001/2018 disability definitions. PR686 adds exact paragraph1 units and the
+complete13-page BGH XII ZR129/16 judgment; PR688 adds the complete16-page
+BGH XII ZR98/13 predecessor. Publication34647306835 and mirror34647797851
+succeeded. Native verification accepted the release signature and all411
+artifact hashes; the public object is byte-identical to the signed object.
+The current consolidation and the official2018 section2 body agree after
+whitespace normalization. The2001 wording and its temporal limits remain
+separate. Severe disability and threatened disability are not substituted for
+the ordinary paragraph1 definition.
+
+The complete BGH originals distinguish general written-form contract formation
+from the special BGB550 rental-documentation rule. Their no-receipt/oral-contract
+external-documentation exceptions do not justify the same shortcut for a
+Kindergeld service agreement. Supplemental132and133 are bearing and unencoded.
+The1997 VIII ZR244/96 original and the BGB150 modified-acceptance dependency
+enter as pending134and135. An official pre2000 postal-copy route is retained
+with its page hash; it requires an address and a paid request, neither submitted
+by this work. Alternate official recovery routes are not declared exhausted.
+No BStBlII membership is inferred from these captures.
+
+Fresh graph capture adds the SGBIX act to Kindergeld and UHV, with no removals.
+The index scans10,213 rows, including10,003 body rows and245 document roots,
+and records6,987 explicit body references. Exact before/after graph hashes
+and added identities are in `bgh-disability-graph-review.json`. The SGBIX
+Kindergeld identity is bearing through §2 and remains unencoded. This limited
+finding does not claim a legal review of all307 captured statutory rows.
+
+Native §2(1) run34647449032 used merged DEpin100 and the verified54-scope
+release. Its four internal candidates failed and no signature or module was
+applied. The rejected candidate uses a precomputed decimal duration and bare
+constituent legal-condition inputs without dated evidence associations.
+Read-only diagnosis recognizes eight one-input toggle witnesses but matches
+none to the two German clauses, localizing a separate source-to-selector
+matching problem. Fixing that test gate alone would not cure the substantive
+input and temporal defects. Both findings and exact rejected-artifact hashes
+are retained in `sgbix2-native-failure-review.json` and the companion diagnostic.
+
+Native generation reports368 pending of903 instruments and178 open dependencies:
+eight law-derived inputs and170 bearing instruments. Five spine rows remain
+pending and §66 remains partial. No new module or closed dependency is claimed.

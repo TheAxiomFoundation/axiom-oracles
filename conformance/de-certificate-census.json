@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
+    "sha256": "3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -16,8 +16,8 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 367 of 899 subordinate/bearing instruments pending disposition (oracles#491)",
-        "closed: dependency closure open — 175 open dependencies (8 law-derived inputs, 0 unclassified inputs, 167 bearing instruments) (CERTIFIED.md v3)"
+        "closed: instrument frontier incomplete — 368 of 903 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 178 open dependencies (8 law-derived inputs, 0 unclassified inputs, 170 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
       "certificate_status": "pending",
@@ -332,7 +332,7 @@
         "no comparison record has been declared",
         "de/statute/uhvorschg/2: final-amount encoding remains partial",
         "executable reproduction receipt pending",
-        "closed: instrument frontier incomplete — 40 of 41 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: instrument frontier incomplete — 41 of 42 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-unterhaltsvorschuss.json",

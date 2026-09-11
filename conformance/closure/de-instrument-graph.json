@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-10T23:55:07Z",
+  "generated_at": "2026-09-11T21:11:17Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "dc3ef3647a5febbbc05936fefe46334f9cf0edf0c932c2ed3fb5b947cd64383e"
+    "sha256": "3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
-      "commit": "279e27503c00ce1fab35809d069c076d3abad362",
-      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+      "commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+      "release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-11-kindergeld-illness-precedents/1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c.json",
-        "raw_sha256": "2dc60ae5b5b7968b25298e48b69b63769878c4cc110aea397f63d971aa1336ce",
-        "content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c"
+        "path": "releases/de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor/2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914.json",
+        "raw_sha256": "522d100bb62ac32ab95895c696cf8ca27b3e1b108c60593c423a0c594df0b422",
+        "content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914"
       },
       "scans": [
         {
@@ -188,6 +188,32 @@
           "provisions": {
             "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
             "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.json",
+            "sha256": "3df1d54070aa79c3e137e34d1e324da0a00ebc6cff69ad75dbf436c8325d46b3",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl",
+            "sha256": "8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06",
+            "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.json",
+            "sha256": "352cd7e15b4e9fc43cfdcb386a1b9c33b49c7c94be831735c88147537928b28f",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl",
+            "sha256": "807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a",
             "row_count": 2
           }
         },
@@ -671,25 +697,64 @@
             "sha256": "65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1",
             "row_count": 598
           }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition-history.json",
+            "sha256": "353dd48419738279b8b3bd160b9a02d7efe529abd2c3f7b4ddd1c519b6aab40a",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl",
+            "sha256": "85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034",
+            "row_count": 4
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition.json",
+            "sha256": "a9c486cb8e3ed0be52aa2eeff924dfb752b623eea4c92de006a95c13e529b088",
+            "row_count": 307
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl",
+            "sha256": "d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86",
+            "row_count": 307
+          }
+        },
+        {
+          "document_class": "statute",
+          "inventory": {
+            "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.json",
+            "sha256": "912cd40f3bdc97b93dfb8dba128f698a8af3c60891d7437dfabdaf3ced301be1",
+            "row_count": 4
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl",
+            "sha256": "9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015",
+            "row_count": 4
+          }
         }
       ],
-      "scanned_row_count": 9894,
+      "scanned_row_count": 10213,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 9894,
-        "body_row_count": 9697,
-        "mapped_row_count": 9894,
+        "row_count": 10213,
+        "body_row_count": 10003,
+        "mapped_row_count": 10213,
         "unmapped_row_count": 0,
-        "act_count": 237,
+        "act_count": 245,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 6827,
-          "law_metadata_changed_by": 34,
-          "law_metadata_fundstelle": 42
+          "explicit_cross_reference_body": 6987,
+          "law_metadata_changed_by": 36,
+          "law_metadata_fundstelle": 44
         },
-        "row_scan_sha256": "0a84412af60d83517738d055d71e042611934fc289ac838d18deaa6a2ca2c6b2",
-        "canonical_index_sha256": "9c5bf6decb80db7a43e4dcd9d8ea10c81e5dafc422c77423417dc16e6689a86b",
-        "per_act_sha256": "8db803e9f38c5e174935f9a2b12e9cd7d0bcf8e430e335b7ec0b178fe66240ff",
+        "row_scan_sha256": "51d00b2760c52ae0b106b304e776599ea1589ef741e4267a71e410a0d0347eaf",
+        "canonical_index_sha256": "1adfc35902309d4c2f925cc8666b33582dbf3ad2977867475d1285d2e6d17805",
+        "per_act_sha256": "2632798b17109009459a43b8c99c5d48686f5eb1383e490ecdce68d886be4f64",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -3779,11 +3844,11 @@
             "row_count": 2,
             "mechanism_counts": {
               "amendment_targets": 0,
-              "explicit_cross_reference_body": 5,
+              "explicit_cross_reference_body": 6,
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "9dba6a5ff3f54a4388d153ad396ae1a1b266ab72a2b9ed6d8e38c3b2b0ad2c5f",
+            "findings_sha256": "dd2909d3b55c3808ccb43cfd5cc62dd327f1ef50f8726b021c7460ddd7e0c5dc",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3825,8 +3890,18 @@
                 "source_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
                 "source_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
                 "source_row_sha256": "5a3458a4b614deb7b10143186953e8a5e74a7ff28a9fe76d3d6209ec20db2e48",
+                "matched_text": "SGB 9 2018",
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+                "source_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+                "source_row_sha256": "5a3458a4b614deb7b10143186953e8a5e74a7ff28a9fe76d3d6209ec20db2e48",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               }
             ]
           },
@@ -3954,7 +4029,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "b0020d41395ed93311b35c0190d3a2e4c3d1ecf91de9bc86775835c793f869f5",
+            "findings_sha256": "0a9a22503d4081b505caffdbf08e1d3ceaf380922d44b4954934ec5a9b528533",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -3980,7 +4055,8 @@
                 "source_body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
                 "source_row_sha256": "c53c31f39a2de36f10cdf6ada3f5335ddc1524c58ad6647bf76f9a4f9c642a69",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4020,7 +4096,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "045500354f4a250aa3fd856beef7450e8b420c33653da286dff17f1ca9a03a6b",
+            "findings_sha256": "18633dd4ad6124929dc8b917d54fde7c16c9ee62b27fca47f65b81a36db9e90f",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4071,7 +4147,8 @@
                 "source_body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
                 "source_row_sha256": "b9e53697425674875d04be7023569ac5a6f56db8c753affab34c94c2a95cc6a9",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4168,7 +4245,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "6878a8baa0326833e612507f7af7ccae3fd582c33885fbdfc78d174c7e973c5f",
+            "findings_sha256": "798016db229264bf38eaeff0699ae7a26671cc5b795d6c2ab48667d128a7b4bf",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4176,7 +4253,8 @@
                 "source_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
                 "source_row_sha256": "d09c3163004ec054cf5afe4c0c6fba508861744b3d50b6299fb9d3559d71db5d",
                 "matched_text": "Bundesteilhabegesetzes",
-                "unresolved_identity": "named-instrument:bundesteilhabegesetzes"
+                "target_citation_path": "de/statute/bthg",
+                "target_row_sha256": "219e21693bd998f7c44eb4eb65aa554569415016dde96d0f982c9400c5ba7fe9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -4229,7 +4307,8 @@
                 "source_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
                 "source_row_sha256": "d09c3163004ec054cf5afe4c0c6fba508861744b3d50b6299fb9d3559d71db5d",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               }
             ]
           },
@@ -5983,7 +6062,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "a927f54d4af3533eac947009da7ebbed71437f576a05a3265421a8eec89173d9",
+            "findings_sha256": "2a8a394d1fea3a59056dd9e2d74dc42dc006e2866fe08820ce89a05653fc4cd5",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6079,7 +6158,8 @@
                 "source_body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
                 "source_row_sha256": "e1883f9316ab44075365a67ca190a6462938b36d2c556af795a7de924942d229",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6469,6 +6549,68 @@
             ]
           },
           {
+            "document_citation_path": "de/guidance/bgh-xii-zr-129-16-2018-03-07",
+            "document_row_sha256": "fa7ff5d44a1e3c9ad31ddfaef5514eea9fd181d9de537d668b9124a6742ab977",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "4bb18be1a2705031a993f6acab2d59b1ae156035bee046480e67bc273f8bb91a",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bgh-xii-zr-129-16-2018-03-07/document-1",
+                "source_body_sha256": "38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1",
+                "source_row_sha256": "a39d649a14b67b9a18c9a59258ac546ee81f2e59572fcd9cf86f5a7b3e65e5d1",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bgh-xii-zr-129-16-2018-03-07/document-1",
+                "source_body_sha256": "38fa9681d5c77d35e1ad648cdb50839d6ad4715fc869d8c4439db382c75627f1",
+                "source_row_sha256": "a39d649a14b67b9a18c9a59258ac546ee81f2e59572fcd9cf86f5a7b3e65e5d1",
+                "matched_text": "ZPO",
+                "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bgh-xii-zr-98-13-2015-06-17",
+            "document_row_sha256": "18823d73c52e66f29ab32035e443cd5eb64500c1b83b2648b12513dd7fb13d39",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "975ebac46a861dba5915dde99c9b62bec8a9af8ca34c3b135a0ed7b2d3258ae7",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1",
+                "source_body_sha256": "dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c",
+                "source_row_sha256": "db97e89d2a14bef0a8cb7191a6b8e7aaaaeaa82f3dfad5f2ad1f0e08f6afc365",
+                "matched_text": "BGB",
+                "target_citation_path": "de/statute/bgb",
+                "target_row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bgh-xii-zr-98-13-2015-06-17/document-1",
+                "source_body_sha256": "dd3f890063aabfa3037d0ec29ee9c3e3747b4359eb015e6a1fc92a2f8b5a608c",
+                "source_row_sha256": "db97e89d2a14bef0a8cb7191a6b8e7aaaaeaa82f3dfad5f2ad1f0e08f6afc365",
+                "matched_text": "ZPO",
+                "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/guidance/bmf-2025-12-02-country-groups",
             "document_row_sha256": "f9854b97a9fd8014e6b61db9dc4490465b13392c56bfc4ffe1a188e9764907ea",
             "row_count": 2,
@@ -6559,7 +6701,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "38ac42315b4e9554f873da880d09db1f81c7ad6e6637510bfea1239edda41680",
+            "findings_sha256": "c4fc821c2f7ada2e8ea32edd5f9e1ffbfd97d7d5cc19a806c4f931daaa91dc56",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6576,7 +6718,8 @@
                 "source_body_sha256": "03f3ab569e360259cfb8b5a773cb0808d66b47d9a248d31c445a778bd640e2c7",
                 "source_row_sha256": "5aa9bd716eedd2180ebba7fcff1fa838d19b6404806d588e8ef3e577b760a7b9",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -6815,7 +6958,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "075ccbca371080d954f8b49c8a24f1ecbfad5b2ee40c2737ab6fc95addd45826",
+            "findings_sha256": "153efa79135d08e4581b6fea5a7fd56e92d21a261f65c98762418a6e20c8726c",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -7298,7 +7441,8 @@
                 "source_body_sha256": "2e6bda7e7fa84cbf696959e70920cc0577c995b3c5aa8dfafde0feea70b3ed58",
                 "source_row_sha256": "b5719d71aa9c383824c260cb29b8faa3ab267ea0c2e83b21f862947d570a400f",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8473,7 +8617,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "87ab6272a42839ed4a1fb2edf8a0dde9a8520d745bdfe0a1a872a33a88ca0f21",
+            "findings_sha256": "0911ff2491e1765b9c7c94df1110f5b0625bfdab32cfcbe304dde34278291a00",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8614,7 +8758,8 @@
                 "source_body_sha256": "b6f70d08d2b61b6d790e7cf2ba6680f593e083f5110714ad7950bb40cb836785",
                 "source_row_sha256": "74d9b12511967b984ee54aefd6edcc12b2da932fb51e0a087c09026b41475518",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8725,7 +8870,7 @@
               "law_metadata_changed_by": 0,
               "law_metadata_fundstelle": 0
             },
-            "findings_sha256": "ebe87a4f925aee732bdc6bfc2d3fd2c45a8a78b565d649c9c5ead9fef1f06ca6",
+            "findings_sha256": "2dec3b28018e5cd0b4bae557961586d365a606c9af0f74a9e31c4f4bf21eed59",
             "findings": [
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -8855,7 +9000,8 @@
                 "source_body_sha256": "6cdd0886175c7aabe3fb9fb182ddbbe593d198eb3f662274e0d130e5bca5590b",
                 "source_row_sha256": "b8ce379ce1771dd8c0bbfeaa8f5c8d55bbc23a10ee015ed9844afc6d4155a40d",
                 "matched_text": "SGB IX",
-                "unresolved_identity": "law:sgb-9"
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
               },
               {
                 "mechanism": "explicit_cross_reference_body",
@@ -27690,6 +27836,266 @@
                 "source_citation_path": "de/statute/bkgg-1996",
                 "source_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236",
                 "raw_reference": "BGBl I 1995, 1250, 1378 (1996 I 714)"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/bthg",
+            "document_row_sha256": "219e21693bd998f7c44eb4eb65aa554569415016dde96d0f982c9400c5ba7fe9",
+            "row_count": 12,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 27,
+              "law_metadata_changed_by": 1,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "aabd7e02123825245221f03d7efca90b5e877c7aeadd2dae986d2f39c4daefe9",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Achten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-8"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/art-26",
+                "source_body_sha256": "01b34488dc9d9ad0eef887213a5c5d876c812eff29a64809b9488077945702b3",
+                "source_row_sha256": "5c4eae2b0c081932e7ae10c8be5ed389dd87a79da596304a27edbdba4697154a",
+                "matched_text": "Budgetverordnung",
+                "unresolved_identity": "named-instrument:budgetverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Bundesversorgungsgesetzes",
+                "unresolved_identity": "named-instrument:bundesversorgungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Elften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Ersten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-1"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Frühförderungsverordnung",
+                "unresolved_identity": "named-instrument:frühförderungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Fünften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/art-26",
+                "source_body_sha256": "01b34488dc9d9ad0eef887213a5c5d876c812eff29a64809b9488077945702b3",
+                "source_row_sha256": "5c4eae2b0c081932e7ae10c8be5ed389dd87a79da596304a27edbdba4697154a",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Neunten Buches Sozialgesetzbuch",
+                "unresolved_identity": "law:sgb-9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Neuntes Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "SGB IX",
+                "target_citation_path": "de/statute/sgb-9-2018",
+                "target_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Sechsten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Siebten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Umsatzsteuergesetzes",
+                "unresolved_identity": "named-instrument:umsatzsteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Werkstätten-Mitwirkungsverordnung",
+                "unresolved_identity": "named-instrument:werkstätten-mitwirkungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Zweiten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Zweiten Buches",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/art-25",
+                "source_body_sha256": "120279db479fbe87a5bddb1ce3c3dfb8ed01d060a6bdca6cce90a7ba10a27618",
+                "source_row_sha256": "35e7b4fed3d745c261d96c5a1557844b1a2acb1307552aec41db1be058a97b40",
+                "matched_text": "Zwölften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Zwölften Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/art-25",
+                "source_body_sha256": "120279db479fbe87a5bddb1ce3c3dfb8ed01d060a6bdca6cce90a7ba10a27618",
+                "source_row_sha256": "35e7b4fed3d745c261d96c5a1557844b1a2acb1307552aec41db1be058a97b40",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/bthg/inhaltsuebersicht",
+                "source_body_sha256": "2aa3dba0ce3472d50066a5afe943aa1b2af7b8ce49feab05def1d1c8fcf70871",
+                "source_row_sha256": "48eec6b11e276c3a3474842843f316994480c64f033f723ccf1b63b399b420f5",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": "de/statute/bthg",
+                "source_row_sha256": "219e21693bd998f7c44eb4eb65aa554569415016dde96d0f982c9400c5ba7fe9",
+                "raw_reference": "Zuletzt geändert durch Art. 8 G v. 2.6.2021 I 1387"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/statute/bthg",
+                "source_row_sha256": "219e21693bd998f7c44eb4eb65aa554569415016dde96d0f982c9400c5ba7fe9",
+                "raw_reference": "BGBl I 2016, 3234"
               }
             ]
           },
@@ -59890,6 +60296,1184 @@
             ]
           },
           {
+            "document_citation_path": "de/statute/sgb-9-2018",
+            "document_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+            "row_count": 295,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 128,
+              "law_metadata_changed_by": 1,
+              "law_metadata_fundstelle": 1
+            },
+            "findings_sha256": "e8f239779c73cc886c1423b001f310f5b2dffda6c598cfedbb9999ac71ad2c0a",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/150a",
+                "source_body_sha256": "ffb5a4b34dd566951ade6e7af9de2e60af08a6be3bab406a4fcb0fcbd67af483",
+                "source_row_sha256": "51772bc1eb59e5b3fb6067227379aed1e833b417175e39ee2e44797476033ca6",
+                "matched_text": "Asylbewerberleistungsgesetz",
+                "unresolved_identity": "named-instrument:asylbewerberleistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/100",
+                "source_body_sha256": "167dd16133ea83ce926c6ca5cc93b05d1ca99ce3e9f067e2265a8c001367d5f7",
+                "source_row_sha256": "f2522816be86bf3f473cc9ba3e6007777cc7aeda84159da163a1ed385c40d013",
+                "matched_text": "Asylbewerberleistungsgesetzes",
+                "unresolved_identity": "named-instrument:asylbewerberleistungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/150a",
+                "source_body_sha256": "ffb5a4b34dd566951ade6e7af9de2e60af08a6be3bab406a4fcb0fcbd67af483",
+                "source_row_sha256": "51772bc1eb59e5b3fb6067227379aed1e833b417175e39ee2e44797476033ca6",
+                "matched_text": "Asylbewerberleistungsgesetzes",
+                "unresolved_identity": "named-instrument:asylbewerberleistungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/inhaltsuebersicht",
+                "source_body_sha256": "eaad617efcb0574d1aa3aa8658a2e76d765bdae013dfa4c37e5c423eb4e37a7b",
+                "source_row_sha256": "f83bc30bd045e57088123310945f3084e0895839fd9586f95ee9873de715cfa7",
+                "matched_text": "Aufenthaltsgesetzes",
+                "unresolved_identity": "law:aufenthaltsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Behindertengleichstellungsgesetzes",
+                "unresolved_identity": "named-instrument:behindertengleichstellungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/61a",
+                "source_body_sha256": "21e932ac6c63e650028f2109dfb722714246ddcd9d5468260028fe611eb77c5f",
+                "source_row_sha256": "2c8cdc7d8f32fdba5d504865d67f30d5bdf1b562201f71bec6e361f34cb63425",
+                "matched_text": "Berufsbildungsgesetzes",
+                "unresolved_identity": "named-instrument:berufsbildungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/155",
+                "source_body_sha256": "370d5576da971f49a460d9f3ce37583d7b417ff976c79cf9385a857fb9d9a62f",
+                "source_row_sha256": "195d382c85b63d569242c9ed7607bfb4f7b4ffb0763048c2cdee276894c5a835",
+                "matched_text": "Berufsbildungsgesetzes",
+                "unresolved_identity": "named-instrument:berufsbildungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/170",
+                "source_body_sha256": "926c12d6ef5a984957ea74f61a006161fc57b78d8fdf385c9542b36cf47986df",
+                "source_row_sha256": "f8d681dca07f3235213b22a291d5717ef48ae483ed43b83c2778199d417c3746",
+                "matched_text": "Betriebsverfassungsgesetz",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/177",
+                "source_body_sha256": "0da6fa3e091965325b25799983e62a3cb2898193d2b46d6efca788abb9f7fc66",
+                "source_row_sha256": "5d611770acf6a5774f2c95e343dc0f24d830aa2e65d2252fbc85a96a70852e92",
+                "matched_text": "Betriebsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/52",
+                "source_body_sha256": "2be70bd5bf0a81f1ad52cacbefbfcf4c24081b02c914c153ea9c6718aad6a46f",
+                "source_row_sha256": "231fae6b56e7d78310a2715976796c007c35fe25a8d1c3fdf2a0502b9be02949",
+                "matched_text": "Betriebsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/213",
+                "source_body_sha256": "55d3073541eb4cbeac637255112ce617a2ba8fd47fd7c5272097d5f5c19170b9",
+                "source_row_sha256": "af4c17f4f0eff1399baa0eabf28abc3096a287ee5c81b1cba21f7bd1c6de6d3c",
+                "matched_text": "Betriebsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/178",
+                "source_body_sha256": "9da473ceb440c5d0b6bb2dc267660936de118241c9c26892586b5ade6514a2b6",
+                "source_row_sha256": "d7b4ac0423cf681a4cda0498bf07c1090feab3f322e447c5f152672a326383ab",
+                "matched_text": "Betriebsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/179",
+                "source_body_sha256": "a846fa8d16bb575b2dbcb4d2e8056af0c71e093a02035cdcb3a377d4dcc410da",
+                "source_row_sha256": "e994f9f80d5497768ebfcbfd34a013106e64fb385f915f20a28f3c8cfbcf9013",
+                "matched_text": "Betriebsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:betriebsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/226",
+                "source_body_sha256": "dcb1ca932dc05c2b7aac410845cc514b03990dec0cdbb5588c05b079e2570ce1",
+                "source_row_sha256": "3b0481561c938f01c6e7741dd644cb572fce0c533d7a50b785616df12057c78c",
+                "matched_text": "Blindenwarenvertriebsgesetzes",
+                "unresolved_identity": "named-instrument:blindenwarenvertriebsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/72",
+                "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+                "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+                "matched_text": "Bundeskindergeldgesetzes",
+                "target_citation_path": "de/statute/bkgg-1996",
+                "target_row_sha256": "e6e4cc60e6ef5ddb9b45e28c7841d92f186f972653f16d013e3eff5f1e692236"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/240",
+                "source_body_sha256": "91ae4fa42129ba27b0dbf4883c0f7aac22d831ce928c856870b50156155e7888",
+                "source_row_sha256": "475c6e8b1cc20175dab1608b6eb6afebbcfe0a1ca9576704a37998e51567f3b5",
+                "matched_text": "Bundespersonalvertretungsgesetz",
+                "unresolved_identity": "named-instrument:bundespersonalvertretungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/178",
+                "source_body_sha256": "9da473ceb440c5d0b6bb2dc267660936de118241c9c26892586b5ade6514a2b6",
+                "source_row_sha256": "d7b4ac0423cf681a4cda0498bf07c1090feab3f322e447c5f152672a326383ab",
+                "matched_text": "Bundespersonalvertretungsgesetzes",
+                "unresolved_identity": "named-instrument:bundespersonalvertretungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/73",
+                "source_body_sha256": "2396ff18bc7eb9e20087f1c302ee94df4b9ab7b90e97e300c9e0ef1d43d44621",
+                "source_row_sha256": "497483c0b1a9306c835a7d5a564b917d3c4e881f76313d78e696fde1f8f0570c",
+                "matched_text": "Bundesreisekostengesetzes",
+                "unresolved_identity": "named-instrument:bundesreisekostengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/149",
+                "source_body_sha256": "b2c7a2ca494b04373e748bd3cb642dc9f2251f7fa8ce0f0080b0d78210a986fc",
+                "source_row_sha256": "825766675ef13ddb8c63f43ed8a875471b7160e4ba75a0b33f01a2dcc1003d74",
+                "matched_text": "Bundessozialhilfegesetzes",
+                "unresolved_identity": "named-instrument:bundessozialhilfegesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/241",
+                "source_body_sha256": "734076f637f5ab6503d22bbe4073bba7e45364bd58675105bcc9b2a1673c534b",
+                "source_row_sha256": "18dd30ab7abe3afeab1a54423182206c448a16a23acb7882f145eccd49746fa9",
+                "matched_text": "Bundesversorgungsgesetzes",
+                "unresolved_identity": "named-instrument:bundesversorgungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/138",
+                "source_body_sha256": "ef3e02c46cd4e80c861ef470323102b17b48b760aec989470b23dc30c8cdb5d5",
+                "source_row_sha256": "42d4ea798c498617188605bf9568c1cdf9cc14509bf32b961d534222aa800c00",
+                "matched_text": "Bundesversorgungsgesetzes",
+                "unresolved_identity": "named-instrument:bundesversorgungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/124",
+                "source_body_sha256": "0d1844d01f88d859205167c017253d1898a88f3707f208c9d0fcbec010d4a25a",
+                "source_row_sha256": "a717998bd6155cbbcf7f6df739a1d4ae66f769c5a4505f90ac427323849b148b",
+                "matched_text": "Bundeszentralregistergesetzes",
+                "unresolved_identity": "named-instrument:bundeszentralregistergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/22",
+                "source_body_sha256": "183d9871ba61b5db88738ec47d3d06274bca53407db70390c6c4fb407f3e2ad3",
+                "source_row_sha256": "e1cccd151b0abc4166adbb424fee73c71b51b08be6197221a0cc90f01023ea23",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/174",
+                "source_body_sha256": "c39edef933039478091ebaef2df9b5fe0f0b0301fdbaa7124d074807eadf2234",
+                "source_row_sha256": "bebb0b6bc4c32b861ff1a6dcb59b458090b810e4b1fa32b5bbf829108175531b",
+                "matched_text": "Bürgerlichen Gesetzbuchs",
+                "unresolved_identity": "law:bgb"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/187",
+                "source_body_sha256": "1f213a5aa1f1a88ace3fcc7c786f2d36b48f414bb9a1598a6ca963a43e7eef1b",
+                "source_row_sha256": "15ee696d3b1bfffdb5c3f6081aca698329e67d1e333c7306a89d03970610b909",
+                "matched_text": "Dritten Buch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/156",
+                "source_body_sha256": "a602ea0815ebdc6d44376eb10304dc03d218064ed690e083f6f37575a7b216ee",
+                "source_row_sha256": "5aaa547eee2b1601fc254231a74e2a962bfac8a0f98c1e6b728a11776f27e355",
+                "matched_text": "Dritten Buch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/188",
+                "source_body_sha256": "e56f8681344296922f05879986a9ba8eceb0a8ebf1ba9b0d3bccc54c08452d31",
+                "source_row_sha256": "580655b6414e58d8611c47402658eec6e23bc1e8cee61ece02c847066974cd40",
+                "matched_text": "Dritten Buch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/187",
+                "source_body_sha256": "1f213a5aa1f1a88ace3fcc7c786f2d36b48f414bb9a1598a6ca963a43e7eef1b",
+                "source_row_sha256": "15ee696d3b1bfffdb5c3f6081aca698329e67d1e333c7306a89d03970610b909",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/215",
+                "source_body_sha256": "393ac5e8f39bc106c5c03e8383fbba07ce5e8eac411135d3ab2436cd84e60beb",
+                "source_row_sha256": "32154cab2f3299c2045b634f12a1a305cbf5f84ffe997fb0e68b2122f0b05963",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/14",
+                "source_body_sha256": "53da1917553b6a4292e9ed11e508c7c2657f12f25fd8428e47c7f8cc1c8ae3c7",
+                "source_row_sha256": "cb654d796f3fe5cd513e167269afd160822045e5d979861b0bf6f4b4f49c613f",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/65",
+                "source_body_sha256": "56c83e1648712501856f5e5cd89ce61cf53606d80ae7291d6de9ffd00ad4076a",
+                "source_row_sha256": "c9a6aca39d855ed7411dba34ebd15ac2186ebda8a65c46a767ebdc81ede69eff",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/71",
+                "source_body_sha256": "7849f59e90e6ff47fcf48d09d816d3b13db2eff4c3d18da173eaa8e7c2f15224",
+                "source_row_sha256": "2708ea7d573a6d7620d666887d8e0c36856b7a790341879c981938f8c0a0f497",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/135",
+                "source_body_sha256": "12f34f4c9c3eb679d7e324d906f7384bacd1b89a054916aa55ae73361c809ab9",
+                "source_row_sha256": "567934645a89960220972ace627590b49c2d82b409b0834719899f33e7a36708",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/66",
+                "source_body_sha256": "be9adb99c41af776861b2e13048aa6d34ec501e33c16d7ba6591f3cb626822a5",
+                "source_row_sha256": "e83f5b8fc444ea2f55f2959e002ff7b3b251fa26886d68b58cae401eb22cecd8",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/72",
+                "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+                "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/230",
+                "source_body_sha256": "ffdd155608d521556c598d06c6af448509d4c2590a1cd94086db38903576c721",
+                "source_row_sha256": "0cd99c9ac38a9d894147db4df40e432f7aa1c459b17439ed9c394b69bd1965a6",
+                "matched_text": "Eisenbahngesetzes",
+                "unresolved_identity": "named-instrument:eisenbahngesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/22",
+                "source_body_sha256": "183d9871ba61b5db88738ec47d3d06274bca53407db70390c6c4fb407f3e2ad3",
+                "source_row_sha256": "e1cccd151b0abc4166adbb424fee73c71b51b08be6197221a0cc90f01023ea23",
+                "matched_text": "Elften Buch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/117",
+                "source_body_sha256": "53bbc25514a43987c2fe801588466e93e9025adcce7f82599771c0fa435ef17b",
+                "source_row_sha256": "ee0156d163321f5e4182d969461bdebe5d754a53004f2aab587af4e21b272c65",
+                "matched_text": "Elften Buch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/12",
+                "source_body_sha256": "8f151b3a36f188152c30e37e5985d2a09db63790987b6d6b1c3229572ef509a9",
+                "source_row_sha256": "bb98e46f25b079868572cd9366aba0dd1ab0a4fe77684c44fe41c3276e30d559",
+                "matched_text": "Elften Buch",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/91",
+                "source_body_sha256": "0c7a03e74e39b035df7769621fe083cde68f09b4ed5f10ef5ff7c987bdce27ed",
+                "source_row_sha256": "46c1ac5fb78b700ba83cedae3679838bd002a57d9896e0833f97f5f797e7c8c5",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/22",
+                "source_body_sha256": "183d9871ba61b5db88738ec47d3d06274bca53407db70390c6c4fb407f3e2ad3",
+                "source_row_sha256": "e1cccd151b0abc4166adbb424fee73c71b51b08be6197221a0cc90f01023ea23",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/103",
+                "source_body_sha256": "6f424ea15ca7a9f789d4bd807363740c05541be545a680d046f2666088b3ba63",
+                "source_row_sha256": "9e575aeeb5e11da208765d9512e316ea86d005011d6c29f6a05e1336056fa5f5",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/9",
+                "source_body_sha256": "808d67abcfbfb10fa96583e7ce207537a4439af53d1607309af722b3b4e356f5",
+                "source_row_sha256": "a893d63b00709158d620a15ffaad44bcfdb834efe82f8bb588cbcb684a34e679",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/29",
+                "source_body_sha256": "fa2bbab3f610d5e1f86dbc202f9e43f0b6c3b5fd2d3a102fc82ae0659b178ba9",
+                "source_row_sha256": "af218fea6b51f356722b93a6f445e8accb509eb0d5b872ed2347041a383f2659",
+                "matched_text": "Elften Buches",
+                "target_citation_path": "de/statute/sgb-11",
+                "target_row_sha256": "b04b5101f4b8c5413738ae8c3b40a2dc27f86b1e5160e453960c7f00dd748aac"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/74",
+                "source_body_sha256": "14b1d09f218daf2cd0b52ee1351bcfc5779586f20bb3869805f2ac13631a81e8",
+                "source_row_sha256": "690919601d978c95114ca0b02615e5dc65d119dea95f965692d84749b11dd0dd",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/17",
+                "source_body_sha256": "16a07d55d72f032171d5a057144e1a98ee14b0f8171d7d62ee173a01c6ed94c1",
+                "source_row_sha256": "b8a486e551f3a2caefb402464bb9f60b7c76ba5a806b63aaa4e89025f93ad613",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/14",
+                "source_body_sha256": "53da1917553b6a4292e9ed11e508c7c2657f12f25fd8428e47c7f8cc1c8ae3c7",
+                "source_row_sha256": "cb654d796f3fe5cd513e167269afd160822045e5d979861b0bf6f4b4f49c613f",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/113",
+                "source_body_sha256": "552452bc4a73f9a0f690b8b9c5cc6087934972ce56da254e559cbbb8f5f9432a",
+                "source_row_sha256": "1a1c67be9d0444310a44de3b645b82819f60ebf1fc73d6a02f3438a0c1d07857",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/65",
+                "source_body_sha256": "56c83e1648712501856f5e5cd89ce61cf53606d80ae7291d6de9ffd00ad4076a",
+                "source_row_sha256": "c9a6aca39d855ed7411dba34ebd15ac2186ebda8a65c46a767ebdc81ede69eff",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/128",
+                "source_body_sha256": "651521a27a0852a2ae3a49ec16545271a3f22f497410a708feb0451506f41a19",
+                "source_row_sha256": "ee1f3024bb27b92229f3a3681cd9174e2dd90910286bf01fd1329c3f75712fcc",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/3",
+                "source_body_sha256": "95bd1bb29fafc276fc63bc02450a72fed5fec8e59b7f1ba573a5deb21f10255c",
+                "source_row_sha256": "06e4836c1c01bdee5f31e37948fd02a70e5ef72392e32b704b1f8f7e354c3cfa",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/110",
+                "source_body_sha256": "be0524466b939fdffe15d1828cb63ac22c8ca0821417c8cdf6f5365ebf7d9fb4",
+                "source_row_sha256": "734bbcc52c61578b61c266fb78f079215e1759dd41bca0a35be7f05a7b4c8ade",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/47a",
+                "source_body_sha256": "e9c221013c4dd9d99c2468236bb5e56ff1568c8a1cbfdb79ab305e77b1f643e9",
+                "source_row_sha256": "208bcf3b5a66415be012138b9b6097b5ae5ccf4ee9a84dc7b3f8b4c7a26ee990",
+                "matched_text": "Fünften Buches",
+                "target_citation_path": "de/statute/sgb-5",
+                "target_row_sha256": "73882c8162e6470717eb159a164ca77bfc0520db1ab2a0d457c2f449843a9426"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/178",
+                "source_body_sha256": "9da473ceb440c5d0b6bb2dc267660936de118241c9c26892586b5ade6514a2b6",
+                "source_row_sha256": "d7b4ac0423cf681a4cda0498bf07c1090feab3f322e447c5f152672a326383ab",
+                "matched_text": "Gerichtsverfassungsgesetzes",
+                "unresolved_identity": "named-instrument:gerichtsverfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Gesetzes vom 18. März 1975 (BGBl. I S. 705)",
+                "unresolved_identity": "bgbl-act:gesetzes vom 18. märz 1975 (bgbl. i s. 705)"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/238",
+                "source_body_sha256": "419a3609f7394e41ac088094844c8d2194730b30c0713310e49862e2a3a38ed2",
+                "source_row_sha256": "7379b1a8a60b368fbb0b5aa8cac2e12379f1a3679b69bc5e824262b88eedbc3d",
+                "matched_text": "Gesetzes über Ordnungswidrigkeiten",
+                "unresolved_identity": "law:owig"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/164",
+                "source_body_sha256": "12b79caa537d8c488814c14e61f6f171ed2d129c7816972c8b53f355d0454328",
+                "source_row_sha256": "42ff46393d86960553cfa8d6ed23507db015274372c95ed34cfe6f2b431424ae",
+                "matched_text": "Gleichbehandlungsgesetzes",
+                "unresolved_identity": "named-instrument:gleichbehandlungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/210",
+                "source_body_sha256": "96f29710286cf7d26903da7aa178f6c0df378ff9caa84b3cb464a22435ca1837",
+                "source_row_sha256": "c71840bd5e795b7dd380e16f723acbb0c7a2573d26409e9e3c7d2bef218ab4eb",
+                "matched_text": "Heimarbeitsgesetzes",
+                "unresolved_identity": "named-instrument:heimarbeitsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Kraftfahrzeugsteuergesetzes",
+                "unresolved_identity": "named-instrument:kraftfahrzeugsteuergesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Künstlersozialversicherungsgesetzes",
+                "unresolved_identity": "named-instrument:künstlersozialversicherungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/15",
+                "source_body_sha256": "4f5f782b020f368c7b33de9bf86bb4d27a562827806977968ceb1c111e7465b0",
+                "source_row_sha256": "cfd83176fc3a2d65fb16b41c4e3112b69e4d33ac58b66a6601f3f93a79d91c7b",
+                "matched_text": "Leistungsgesetz",
+                "unresolved_identity": "named-instrument:leistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/14",
+                "source_body_sha256": "53da1917553b6a4292e9ed11e508c7c2657f12f25fd8428e47c7f8cc1c8ae3c7",
+                "source_row_sha256": "cb654d796f3fe5cd513e167269afd160822045e5d979861b0bf6f4b4f49c613f",
+                "matched_text": "Leistungsgesetz",
+                "unresolved_identity": "named-instrument:leistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/7",
+                "source_body_sha256": "7b7edb7c437bb0aeaf2b59ee0d49daf1bcea2fea4f59e15145f02275318742f1",
+                "source_row_sha256": "b50c1e4443442d5000bd73f00168b0c5b20f56a4ca62ed55fcfc5e23f24baece",
+                "matched_text": "Leistungsgesetz",
+                "unresolved_identity": "named-instrument:leistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/16",
+                "source_body_sha256": "fc181f3ba17e670de24a19e0fb78b8e6a1ecf79a6fc538f754a0183211d42bb7",
+                "source_row_sha256": "8567b0340a5865e5f7d0aca2a8b6b739e747105a6e305f61e7abd8b1512cba78",
+                "matched_text": "Leistungsgesetz",
+                "unresolved_identity": "named-instrument:leistungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/68",
+                "source_body_sha256": "9d612fc264d39cf1f4455f393b667744220da5a91c6a13e9f5de96880f0ea423",
+                "source_row_sha256": "3d783c78f71b6b356a403574561479d876f916401fdcde0710c91af908edd948",
+                "matched_text": "Mindestlohngesetzes",
+                "unresolved_identity": "named-instrument:mindestlohngesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/233",
+                "source_body_sha256": "be43d6aa69ccc350c089f389c04a6eeafffba31e92c144dac16d2efa97ac2747",
+                "source_row_sha256": "f75a3c2676f5a568b54d70ee969d457f82e52129601fad1fdfb87551cc798f28",
+                "matched_text": "Personenbeförderungsgesetzes",
+                "unresolved_identity": "named-instrument:personenbeförderungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/230",
+                "source_body_sha256": "ffdd155608d521556c598d06c6af448509d4c2590a1cd94086db38903576c721",
+                "source_row_sha256": "0cd99c9ac38a9d894147db4df40e432f7aa1c459b17439ed9c394b69bd1965a6",
+                "matched_text": "Personenbeförderungsgesetzes",
+                "unresolved_identity": "named-instrument:personenbeförderungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/241",
+                "source_body_sha256": "734076f637f5ab6503d22bbe4073bba7e45364bd58675105bcc9b2a1673c534b",
+                "source_row_sha256": "18dd30ab7abe3afeab1a54423182206c448a16a23acb7882f145eccd49746fa9",
+                "matched_text": "Schwerbehindertengesetzes",
+                "unresolved_identity": "named-instrument:schwerbehindertengesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/173",
+                "source_body_sha256": "223f1517910dcc83e63743fb9a4248c452e6adfd431e88d655bf6a067b8356b8",
+                "source_row_sha256": "98a02a3093ae9d0afd793f8e9ee891993159e24395c42e17d3681bcf3af22137",
+                "matched_text": "Sechsten Buch",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/70",
+                "source_body_sha256": "4c2390286e72c9b24c53639d85d43ff7e8512cc4ddc8b71fb754b90a5dd86675",
+                "source_row_sha256": "4d93c8030428801a6e179e5e4f54bc3e9fc2cea0dfe6b3851112b45a701b56a3",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/14",
+                "source_body_sha256": "53da1917553b6a4292e9ed11e508c7c2657f12f25fd8428e47c7f8cc1c8ae3c7",
+                "source_row_sha256": "cb654d796f3fe5cd513e167269afd160822045e5d979861b0bf6f4b4f49c613f",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/65",
+                "source_body_sha256": "56c83e1648712501856f5e5cd89ce61cf53606d80ae7291d6de9ffd00ad4076a",
+                "source_row_sha256": "c9a6aca39d855ed7411dba34ebd15ac2186ebda8a65c46a767ebdc81ede69eff",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/103",
+                "source_body_sha256": "6f424ea15ca7a9f789d4bd807363740c05541be545a680d046f2666088b3ba63",
+                "source_row_sha256": "9e575aeeb5e11da208765d9512e316ea86d005011d6c29f6a05e1336056fa5f5",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/63",
+                "source_body_sha256": "9a07d1085de4bbce85f87d86583b0c6cb37ef9236fe854bbad7752365f546c61",
+                "source_row_sha256": "36030b976dd6dde3d7815055655f04ad1c0bdd82e46bedb3bbeb9078656168ac",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/58",
+                "source_body_sha256": "e39ac367cae0f6617cdaf816829a19d5cbdbfb44da9477f5d8920f3c2405471d",
+                "source_row_sha256": "cacfee7cf503eeee67d9e7e4f7bbf1e8adba74e31369d8e251ce2024a282c346",
+                "matched_text": "Sechsten Buches",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/74",
+                "source_body_sha256": "14b1d09f218daf2cd0b52ee1351bcfc5779586f20bb3869805f2ac13631a81e8",
+                "source_row_sha256": "690919601d978c95114ca0b02615e5dc65d119dea95f965692d84749b11dd0dd",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/61a",
+                "source_body_sha256": "21e932ac6c63e650028f2109dfb722714246ddcd9d5468260028fe611eb77c5f",
+                "source_row_sha256": "2c8cdc7d8f32fdba5d504865d67f30d5bdf1b562201f71bec6e361f34cb63425",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/75",
+                "source_body_sha256": "250b2e8c6447af15175f46a2c1cdd4e4b3f3351ac0431ddbb3a1671ba52d705a",
+                "source_row_sha256": "ff4514a1c4cb4c8d8de455052a0481c6055b620cfe11c71589f1b8305fdd565b",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/64",
+                "source_body_sha256": "4ed7e7b6c9291c9c519295743017b4b118d89a74b8eda11062ca048fddf148fb",
+                "source_row_sha256": "284bd3e7b3800fa2a78642effffd97cf5e9efe21c650c725b357d8d88c2c9228",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/6",
+                "source_body_sha256": "523b2aa2151ad0c0db110e73f963bafbcad812b1e6b429e13bcbd62a9b73ac96",
+                "source_row_sha256": "cbb70fe36279ffc376bb790778fe9d3188068ebf44cbca2d5966d9a8db4e8bbe",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/65",
+                "source_body_sha256": "56c83e1648712501856f5e5cd89ce61cf53606d80ae7291d6de9ffd00ad4076a",
+                "source_row_sha256": "c9a6aca39d855ed7411dba34ebd15ac2186ebda8a65c46a767ebdc81ede69eff",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/72",
+                "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+                "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+                "matched_text": "Siebten Buches",
+                "target_citation_path": "de/statute/sgb-7",
+                "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/66",
+                "source_body_sha256": "be9adb99c41af776861b2e13048aa6d34ec501e33c16d7ba6591f3cb626822a5",
+                "source_row_sha256": "e83f5b8fc444ea2f55f2959e002ff7b3b251fa26886d68b58cae401eb22cecd8",
+                "matched_text": "Soldatenentschädigungsgesetz",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/21",
+                "source_body_sha256": "cbb3960deedf7ab275fa3e362de396e36091851dd61f10ce6b5b9d9487d9086d",
+                "source_row_sha256": "7c43b3071e384036d6959021bccd89a3ec05b28538431b766fcea386fa29b8f4",
+                "matched_text": "Soldatenentschädigungsgesetz",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/18",
+                "source_body_sha256": "2156e56ddf46bf4faf915344b1488f2de30b7cd669f4a5d60d766e2c3b6c0c67",
+                "source_row_sha256": "a3f937b856c1206643ff523d97384c259b087b5c36b9fc144c2cfe55a02d0957",
+                "matched_text": "Soldatenentschädigungsgesetzes",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/65",
+                "source_body_sha256": "56c83e1648712501856f5e5cd89ce61cf53606d80ae7291d6de9ffd00ad4076a",
+                "source_row_sha256": "c9a6aca39d855ed7411dba34ebd15ac2186ebda8a65c46a767ebdc81ede69eff",
+                "matched_text": "Soldatenentschädigungsgesetzes",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/63",
+                "source_body_sha256": "9a07d1085de4bbce85f87d86583b0c6cb37ef9236fe854bbad7752365f546c61",
+                "source_row_sha256": "36030b976dd6dde3d7815055655f04ad1c0bdd82e46bedb3bbeb9078656168ac",
+                "matched_text": "Soldatenentschädigungsgesetzes",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/66",
+                "source_body_sha256": "be9adb99c41af776861b2e13048aa6d34ec501e33c16d7ba6591f3cb626822a5",
+                "source_row_sha256": "e83f5b8fc444ea2f55f2959e002ff7b3b251fa26886d68b58cae401eb22cecd8",
+                "matched_text": "Soldatenentschädigungsgesetzes",
+                "unresolved_identity": "named-instrument:soldatenentschädigungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Sozialgerichtsgesetzes",
+                "unresolved_identity": "named-instrument:sozialgerichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/201",
+                "source_body_sha256": "f2993e9c26dd12be1b45e3a0411e86ef54e203685c52021f32c0ce54e5a209bc",
+                "source_row_sha256": "cfd1f175a0c3de3650ffbb811caa572f6559a2f9335b445662fd63ef1a9a3cd5",
+                "matched_text": "Sozialgerichtsgesetzes",
+                "unresolved_identity": "named-instrument:sozialgerichtsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Verordnung (EG) Nr. 1370/2007",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1370/2007"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/233",
+                "source_body_sha256": "be43d6aa69ccc350c089f389c04a6eeafffba31e92c144dac16d2efa97ac2747",
+                "source_row_sha256": "f75a3c2676f5a568b54d70ee969d457f82e52129601fad1fdfb87551cc798f28",
+                "matched_text": "Verwaltungsverfahrensgesetz",
+                "unresolved_identity": "named-instrument:verwaltungsverfahrensgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/74",
+                "source_body_sha256": "14b1d09f218daf2cd0b52ee1351bcfc5779586f20bb3869805f2ac13631a81e8",
+                "source_row_sha256": "690919601d978c95114ca0b02615e5dc65d119dea95f965692d84749b11dd0dd",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/136",
+                "source_body_sha256": "5ec22bcac6257787f683ff1b220ec8c4ad8fb56ec12fe7df49afcb3d33b3d869",
+                "source_row_sha256": "ba3d69c45e44afd5a1e0cc5626f780f66fcfc5bc0114ffb1abf5500764ba3d80",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/139",
+                "source_body_sha256": "60d94ee831213092b9b9e5da3da42d459c576571018115f8433901ca98c1c6d7",
+                "source_row_sha256": "e77666e58201caa6d9523a7d9983c0a059efce690d48b13a34c2e44c17e35f24",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/160",
+                "source_body_sha256": "742b8fb5ff95ee526e6b877980dca6fb61d176f12b5d45bf2b5d742c143b8597",
+                "source_row_sha256": "d946f781295710e62d388a24b6ed879db07f5e9610ff24a0d0d7f611e500f017",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/67",
+                "source_body_sha256": "ba2645e36c92b6d2454e6d1c6f0e10d54ecf1b93237dd0600db266fb4dbb83f0",
+                "source_row_sha256": "69015f9d66ddadef8edfb81a1f7dda42aa7fc42d48aa89d6020dfca8ee589cd9",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/66",
+                "source_body_sha256": "be9adb99c41af776861b2e13048aa6d34ec501e33c16d7ba6591f3cb626822a5",
+                "source_row_sha256": "e83f5b8fc444ea2f55f2959e002ff7b3b251fa26886d68b58cae401eb22cecd8",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/72",
+                "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+                "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/60",
+                "source_body_sha256": "3ce36ab1943803b84653df23f0842b849d69295923e1c4230b91da585f47d33b",
+                "source_row_sha256": "c50139ad29e44100caaeebc61fa783d2c27208d0d68a01bf8be1a29682ddfe17",
+                "matched_text": "Werkstättenverordnung",
+                "unresolved_identity": "named-instrument:werkstättenverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/158",
+                "source_body_sha256": "94bbf6bda5606fe1d372603eaa95780bbe7f0526b9560e3a8ae32b61c25ad6f2",
+                "source_row_sha256": "ea0478471ba6cf02a24023777ecc9bdc775e676926c1d048f2bace1fdcc1a790",
+                "matched_text": "Werkstättenverordnung",
+                "unresolved_identity": "named-instrument:werkstättenverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/58",
+                "source_body_sha256": "e39ac367cae0f6617cdaf816829a19d5cbdbfb44da9477f5d8920f3c2405471d",
+                "source_row_sha256": "cacfee7cf503eeee67d9e7e4f7bbf1e8adba74e31369d8e251ce2024a282c346",
+                "matched_text": "Werkstättenverordnung",
+                "unresolved_identity": "named-instrument:werkstättenverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/19",
+                "source_body_sha256": "6c1bfdd22f6afaf0ce289dd4643d1eb2cd5bfad91216018fd31e8429a36f8128",
+                "source_row_sha256": "4267aa09469f27de689891576e283770785bb63a0d074ad124c64b298cf7bd7c",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/93",
+                "source_body_sha256": "a99b6dbce00223c8bf8652e701de0f502f378903028c2810d72f175f925b91a8",
+                "source_row_sha256": "52216c47b2e119d3d421ce06e4012da7a7589a6c18b5d4580e20e5a8b2efd581",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/11",
+                "source_body_sha256": "9f25ce149299bf3db9df5af7e0bade2d9dab2c510b3aa4a14be4d93dfb7c8cf4",
+                "source_row_sha256": "b5c37eec0a778c9df4b63326a7eab166316863e112fa0ed4f580e8bc37c420b4",
+                "matched_text": "Zweiten Buches",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/93",
+                "source_body_sha256": "a99b6dbce00223c8bf8652e701de0f502f378903028c2810d72f175f925b91a8",
+                "source_row_sha256": "52216c47b2e119d3d421ce06e4012da7a7589a6c18b5d4580e20e5a8b2efd581",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/144",
+                "source_body_sha256": "d406b4908131373cd1262180422a1da36e4e8ebdc64a0bb693999794de24b74d",
+                "source_row_sha256": "1031cdb84f9fd346a9f33c81e8c9e47deebdfe0caf7f36c42c1fd871f98808ee",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/138",
+                "source_body_sha256": "ef3e02c46cd4e80c861ef470323102b17b48b760aec989470b23dc30c8cdb5d5",
+                "source_row_sha256": "42d4ea798c498617188605bf9568c1cdf9cc14509bf32b961d534222aa800c00",
+                "matched_text": "Zwölften Buch",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/119",
+                "source_body_sha256": "020f3d11603d39830e86ac63c848a6711c5d872b15f5dcd7922c24d92efc6948",
+                "source_row_sha256": "f4cb4c967eab450f3ef9341edeec616c6bc2c673779f7f19fca78555b569f53d",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/77",
+                "source_body_sha256": "233b92ea341e253c678d8886451e05874f081e0cbbc1ff61846f0374191e9a6c",
+                "source_row_sha256": "1813d4f03e826a553785b5fdb40bc87bc4dd1dd360d9e467086cc8f51f5a117c",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/117",
+                "source_body_sha256": "53bbc25514a43987c2fe801588466e93e9025adcce7f82599771c0fa435ef17b",
+                "source_row_sha256": "ee0156d163321f5e4182d969461bdebe5d754a53004f2aab587af4e21b272c65",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/113",
+                "source_body_sha256": "552452bc4a73f9a0f690b8b9c5cc6087934972ce56da254e559cbbb8f5f9432a",
+                "source_row_sha256": "1a1c67be9d0444310a44de3b645b82819f60ebf1fc73d6a02f3438a0c1d07857",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/139",
+                "source_body_sha256": "60d94ee831213092b9b9e5da3da42d459c576571018115f8433901ca98c1c6d7",
+                "source_row_sha256": "e77666e58201caa6d9523a7d9983c0a059efce690d48b13a34c2e44c17e35f24",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/103",
+                "source_body_sha256": "6f424ea15ca7a9f789d4bd807363740c05541be545a680d046f2666088b3ba63",
+                "source_row_sha256": "9e575aeeb5e11da208765d9512e316ea86d005011d6c29f6a05e1336056fa5f5",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/241",
+                "source_body_sha256": "734076f637f5ab6503d22bbe4073bba7e45364bd58675105bcc9b2a1673c534b",
+                "source_row_sha256": "18dd30ab7abe3afeab1a54423182206c448a16a23acb7882f145eccd49746fa9",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/121",
+                "source_body_sha256": "7ba292b06e80905dfe3aa6842e92e0ebd79b75b19cefe92d3cda81402c22937f",
+                "source_row_sha256": "b86e7d07f682aa65e46984a29a56e40b33d39ae3da4107d6d053b95b6bb0662a",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/150",
+                "source_body_sha256": "9a229a4ea167ff0f9f91f01107d706fd2fb2e6fc95ab4827f48f017716986aad",
+                "source_row_sha256": "26e0198a25736ed538f9b9f49c317c2be5de42ddda8c9f41905afb805dd5cbfd",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/93",
+                "source_body_sha256": "a99b6dbce00223c8bf8652e701de0f502f378903028c2810d72f175f925b91a8",
+                "source_row_sha256": "52216c47b2e119d3d421ce06e4012da7a7589a6c18b5d4580e20e5a8b2efd581",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/98",
+                "source_body_sha256": "b3ec5623f27b5c6cecaf426fc9fdb8b38b476068eb6d159b89ddc333d22d8936",
+                "source_row_sha256": "97dc226106b41c83e31285cc2fd4b400e5d0957ea75128a0001e006c44089aa0",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/134",
+                "source_body_sha256": "b9df75ee2152abcdf9b9e61e0eaf172d0ad531de2d6bc85dcd5106e8a0a66cd3",
+                "source_row_sha256": "f858c6f0de4c400ce962c8e4c6d7e42dd0d91b0a3504a2704706c512f24f5e24",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/132",
+                "source_body_sha256": "c848035e55993996328ae18a6dc2f76a181fae444051c70143efbfab9c4b4433",
+                "source_row_sha256": "b0fffd126e08410db1ba5f48064394aa757dbca8fcf46a186b98948d1583ef5a",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/statute/sgb-9-2018/228",
+                "source_body_sha256": "ee546ffb7b868ad2ead2a32c92fa312a48f33c7808f680d469af2437d94fd3b7",
+                "source_row_sha256": "f7f3dee5cfb8a5b2e1494070fa7f9d5cd8e14cd0d33264a6bc037b204daeaadf",
+                "matched_text": "Zwölften Buches",
+                "target_citation_path": "de/statute/sgb-12",
+                "target_row_sha256": "ba01989302c4c8a2563140f39ee6d7f60a69bb21d74a7b4236b927e8675184ca"
+              },
+              {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": "de/statute/sgb-9-2018",
+                "source_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+                "raw_reference": "Zuletzt geändert durch Art. 2b G v. 24.7.2026 I Nr. 228"
+              },
+              {
+                "mechanism": "law_metadata_fundstelle",
+                "source_citation_path": "de/statute/sgb-9-2018",
+                "source_row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+                "raw_reference": "BGBl I 2016, 3234"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/statute/sgb-9-2018/2/absatz-1",
+            "document_row_sha256": "aac152a201e6678466e7ed69eaf420ed04a74927c3fdf9493d417d1faa12b4b4",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/statute/sgb-9-2018/fassung-2018-01-01/2",
+            "document_row_sha256": "751f12c959f1f78a99591c4cef6f629282edd3bb604bd086952ede4dca0b4a24",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/statute/sgb-9/fassung-2001-07-01/2",
+            "document_row_sha256": "719e3a7d405a8f09d163116a431638bfb1cd5343c222ab7ab8e93ce1a651b478",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
+            "document_citation_path": "de/statute/sgb-9/fassung-2001-07-01/2/absatz-1",
+            "document_row_sha256": "694af25705122ba727e938a13a09bfd9fd1c19c3aa070a9d8a150306e4548ffa",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 0,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "9d0f2143c61cfbb6c0cf0425ce8b447811a32d48ec37333ba8b3700218631b36",
+            "findings": []
+          },
+          {
             "document_citation_path": "de/statute/solzg-1995",
             "document_row_sha256": "a1810e7518da163448c060ebafded22274d5257c655f140d1c7bc37b86946c76",
             "row_count": 7,
@@ -61623,7 +63207,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "edd6532da7ded38a1389d7481ca6ff3543d47e14bfc5333653757cf0fd4374ef"
+        "receipt_sha256": "c311c51ab0faf08027a152e3ed8b506f0d148d85ba67e29da2983ecaed8ce1a2"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -61801,6 +63385,16 @@
           "source_row_sha256": "b32932fff0f8f054a72699ced95d49dc302657b016fa4e39bb86868bec76a105",
           "matched_text": "EStG § 62",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-1111e472b3e730333f32",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/sgb-9-2018/72",
+          "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+          "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+          "matched_text": "§ 66 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-111c2e5574197a8e8017",
@@ -62655,6 +64249,16 @@
           "source_row_sha256": "5ea15059af8d6b6226e329691387e11c9b788400b60d9ba27bf820b778286ae5",
           "matched_text": "§ 62 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
+          "id": "de-corpus-474abba87bf538be4568",
+          "program": "de/unterhaltsvorschuss",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/statute/sgb-9-2018/72",
+          "source_body_sha256": "e8666751357adc8d4824a8abb794cbd76fca9bf6e7658842825b01caf2cd0f48",
+          "source_row_sha256": "2039b87b418cd6e692fd2a82ddbe7030de61a1c3300fe916f88fd0805dcefec4",
+          "matched_text": "§ 66 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/66"
         },
         {
           "id": "de-corpus-488caa60151badf00b2c",
@@ -65023,7 +66627,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0"
+      "receipt_sha256": "e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -65039,10 +66643,10 @@
           "source_id": "bzst",
           "query": "Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025",
           "url": "https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "de8776e7fb31687ffecbaad7320e9929b2442ac4c839eb3ee51bedc748e8f046"
+          "receipt_sha256": "32d32e05c32f3bd0a12f383ee10649d19aaa992f7271123fa3fa2e041edc078e"
         },
         {
           "id": "de-subject-002",
@@ -65052,14 +66656,14 @@
           "source_id": "bzst",
           "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf;charset=UTF-8",
+          "content_type": "application/pdf",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "beaef43f54ccbc9df6ce08a5a1b26fa394a51214daf29d6f43a05432c2165dc1"
+          "receipt_sha256": "35c927ad38169610805c7e70c914ec3775a2e9042770060b1c7bdaf35a3c8281"
         },
         {
           "id": "de-subject-003",
@@ -65069,14 +66673,14 @@
           "source_id": "tacheles-mirror",
           "query": "DA-KG 2025 PDF mirror URL supplied by issue #502; provenance is the BZSt listing in de-subject-001",
           "url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf",
           "http_status": 200,
           "content_type": "application/pdf",
           "byte_count": 690720,
           "content_sha256": "33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd",
-          "receipt_sha256": "a3e286949d8562072843ee4f7252d96d20e4c58073b8a02c7314f4147839448a"
+          "receipt_sha256": "d801b1f113cd6262b822fb6b45e07eccab2d5be86ce3944526956f40ed48ee4e"
         },
         {
           "id": "de-subject-004",
@@ -65086,14 +66690,14 @@
           "source_id": "bmf",
           "query": "Kindergeld Familienleistungsausgleich § 31 EStG §§ 62 bis 78 EStG",
           "url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
-          "final_url": "https://validate.perfdrive.com/?ssa=550814b7-56ff-46f0-95b1-c96131d7c82d&ssb=77516238576&ssc=https%3A%2F%2Fwww.bundesfinanzministerium.de%2FWeb%2FDE%2FService%2FPublikationen%2FBMF_Schreiben%2Fbmf_schreiben.html&ssi=6602f7be-ca3f-41b6-9e71-db6ea151e0db&ssk=botmanager_support@radware.com&ssm=52631393832961876101485128636435&ssn=e20816064dd92631588b2c889cf4664b0a3e5bb91335-425e-4b40-9dd453&sso=bb213c26-67c3d8cfa163a1ff671b670a1970b8823ec139dc3ba10459&ssp=64685369071789081047178902260984442&ssq=46816698475497891922484754429273022367214&ssr=MTg3LjE0LjIzMi4xNTM=&sst=axiom-oracles-de-discovery/1&ssu=&ssv=&ssw=&ssx=eyJyZCI6ImJ1bmRlc2ZpbmFuem1pbmlzdGVyaXVtLmRlIiwiX191em1mIjoiN2Y5MDAwNWJiOTEzMzUtNDI1ZS00YjQwLTljMjYtNjdjM2Q4Y2ZhMTYzMS0xNzg5MDg0NzU0NDc3MC0wMDQ2YjBjODFhNWE5ZTkzMGI0MTAiLCJ1em14IjoiN2ZjMDAwMzk5OTBlMTgtM2Y1Ny00ZWUyLWI1ODAtYjc2OTQ2OTJhNTM1MS0xNzg5MDg0NzU0NDc3MC0wMDRjYWZmZmRhY2Q5OWQ5ZDk5MTAifQ==",
+          "final_url": "https://www.bundesfinanzministerium.de/Web/DE/Service/Publikationen/BMF_Schreiben/bmf_schreiben.html",
           "http_status": 200,
-          "content_type": "text/html; charset=UTF-8",
-          "byte_count": 15115,
-          "content_sha256": "b26f22dcc5dfece0a0899d5a059fc4e8a04b4277657188853a1f38870350ebbd",
-          "receipt_sha256": "32dace4740bc986196daf2fbbffc2510854144da0fc026062c5463c2e5873d4e"
+          "content_type": "text/html;charset=utf-8",
+          "byte_count": 214567,
+          "content_sha256": "0d77676d5886440658927baf600b36c94e6ca616f79c70b88049edfa8d764eb1",
+          "receipt_sha256": "78f9e53184d1e346b2e62b5b829673945597f2db4691be09d19e4178def0232d"
         },
         {
           "id": "de-subject-005",
@@ -65104,14 +66708,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeskindergeldgesetz BKGG",
           "url": "https://www.gesetze-im-internet.de/bkgg_1996/",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/bkgg_1996/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 10163,
           "content_sha256": "6ff8eb4600c10c88f097cc01c81aaf4b82874a1a9a019f44424555382af62d5b",
-          "receipt_sha256": "c5673fde69fcc8cf147240fa96a4d58e86a891d3751f2477e703522d2938e9da"
+          "receipt_sha256": "172313bbf69b8e3df961de439993d1d3fd775b24debcf83ffa5bfe3ca77e6d28"
         },
         {
           "id": "de-subject-006",
@@ -65121,14 +66725,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Bundeselterngeld- und Elternzeitgesetz BEEG Elternzeit Kindergeld",
           "url": "https://www.gesetze-im-internet.de/beeg/",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/beeg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 12174,
           "content_sha256": "6869d4fe0092c1f887b2197b41bc48c2ff0eba509e516f1f93b877cbba568fb6",
-          "receipt_sha256": "44e940400ee51b1c675cbbda48eac0d3724a074ceae171ded2338bdcb86d13be"
+          "receipt_sha256": "ae6e554a518f39ee6bad46ca1ce43f1c0646845eda0b71c4fcba1dd2528b9efe"
         },
         {
           "id": "de-subject-007",
@@ -65138,14 +66742,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Unterhaltsvorschussgesetz UhVorschG",
           "url": "https://www.gesetze-im-internet.de/uhvorschg/",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/uhvorschg/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 7086,
           "content_sha256": "ebcf59fe50b4f3a5add0e9a7301a5e5ab16b86f230447b91217d6ed0eac8a38a",
-          "receipt_sha256": "bee5f1ae387eaa469900cfe11bc19cd485906bae8093ec80bc73bdea28c5d70f"
+          "receipt_sha256": "06d9a6bc877db3068ee09c5c6f140508715c270ad5480820e5249d258efb340a"
         },
         {
           "id": "de-subject-008",
@@ -65155,10 +66759,10 @@
           "source_id": "bmfsfj",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes 2025",
           "url": "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/unterhaltsvorschuss/unterhaltsvorschuss-73558",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "unretrieved",
           "reason": "URLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1028)",
-          "receipt_sha256": "102391bc8a335a7f10d8b7d8bd767c40b878b72bdeecc409e3d04cf907a58c49"
+          "receipt_sha256": "18a2e7b6f1de056355a58bb6c70ca7dcc057be1423772a66fd7718b7de58b024"
         },
         {
           "id": "de-subject-009",
@@ -65168,14 +66772,14 @@
           "source_id": "behoerden-vwv",
           "query": "Richtlinien zur Durchführung des Unterhaltsvorschussgesetzes",
           "url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.verwaltungsvorschriften-im-internet.de/volltextsuche.html",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 4381,
           "content_sha256": "bce67417869c1f5b6cbbb9ef44953021287b170315ab94e1598253137dc47d78",
-          "receipt_sha256": "f56832994ea6ff7f8eff7fe82b62ab41e785d0fa7706bf26a437a26bc28450ba"
+          "receipt_sha256": "1a77052505b069e1edd40f9a60ca2ec2102b355376da18ddc8134d0e36244943"
         },
         {
           "id": "de-subject-010",
@@ -65185,14 +66789,14 @@
           "source_id": "bmas",
           "query": "Sozialversicherungs-Rechengrößenverordnung 2025",
           "url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Service/Gesetze-und-Gesetzesvorhaben/sozialversicherungs-rechengroessenverordnung-2025.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 534631,
           "content_sha256": "4dc8889845e16118b49d561735374673eb732a09fd131b9d5c7f63a1d3dd46b0",
-          "receipt_sha256": "7cf9f4179d85fb74105c146c9b1d90a5f0ac2749935b3cd1f0aa6821b110243b"
+          "receipt_sha256": "aeef2b167beb791d0087b803700789eaf913a5057c876fd18fe27865360fd470"
         },
         {
           "id": "de-subject-011",
@@ -65202,14 +66806,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung der Geringfügigkeitsgrenze nach § 8 Absatz 1a SGB IV 2025",
           "url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/SharedDocs/Downloads/DE/Arbeitsrecht/bekanntmachung-bundesanzeiger-geringfuegigkeitsgrenze-2022.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 516458,
           "content_sha256": "1e533769501975598b36c8a48dc24e9f3222dc5f488730d04d233fa6896824fb",
-          "receipt_sha256": "26d98a223b4f62be01f199555c68e6bd86d4b316ffbdd44e52e6a4ba4b6d5934"
+          "receipt_sha256": "c892b7ac2bc264e282a0981751b5f35f15be77d1210ccc09044901b28d81bdd0"
         },
         {
           "id": "de-subject-012",
@@ -65219,10 +66823,10 @@
           "source_id": "bmas",
           "query": "Beitragssatz allgemeine Rentenversicherung 2025 Weitergeltung",
           "url": "https://www.bmas.de/DE/Service/Service-Suche/suche.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "d4b3063f01c1d45931cfc82e7744f978c1a293eb728bcd899cb870afbed89894"
+          "receipt_sha256": "52a20fe8752dc95d9a4f58a872c9cdde1a4f1ec8349220853882a46dc05d8567"
         },
         {
           "id": "de-subject-013",
@@ -65232,14 +66836,14 @@
           "source_id": "bundesanzeiger",
           "query": "Bekanntmachung des durchschnittlichen Zusatzbeitragssatzes 2025",
           "url": "https://www.bundesanzeiger.de/pub/de/suche?0",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bundesanzeiger.de/pub/de/suche?0",
           "http_status": 200,
           "content_type": "text/html;charset=UTF-8",
           "byte_count": 49969,
           "content_sha256": "621812c67aaacc4f5daf5c5aec12b903104729bf2ded089635115a82c672f957",
-          "receipt_sha256": "6959065742f4b80e2a824a9aeb7055ad207456ef98a5719e118399070bdd9259"
+          "receipt_sha256": "3364c0dea21027d37a4b0d9034a3f4a837e3bca9ccec253189681d946c95e0d6"
         },
         {
           "id": "de-subject-014",
@@ -65249,14 +66853,14 @@
           "source_id": "bmas",
           "query": "Bekanntmachung des durchschnittlichen Gesamtsozialversicherungsbeitragssatzes und des Faktors F 2025 Übergangsbereich Midijob",
           "url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bmas.de/DE/Soziales/Sozialversicherung/Geringfuegige-Beschaeftigung/bekanntmachung-des-durchschnittlichen-gesamtsozialversicherungsbeitrages-und-des-faktors-f.html",
           "http_status": 200,
           "content_type": "text/html;charset=utf-8",
           "byte_count": 532905,
           "content_sha256": "dac1daae728d203a8f6a16847a9f129e9a6240ec527330754eb7c52bdc417517",
-          "receipt_sha256": "318dfe7c8a54576c38138060ccc4ded978042c395bf00cb658d6d1062fa2c0af"
+          "receipt_sha256": "7dbee80061d1d0d9791d92496c479ebadd79d8b206777f81f4d6a05bc566ef50"
         },
         {
           "id": "de-subject-015",
@@ -65266,10 +66870,10 @@
           "source_id": "gesetze-im-internet",
           "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
           "url": "https://www.gesetze-im-internet.de/bvv/",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "unretrieved",
           "reason": "HTTPError: 404 Not Found",
-          "receipt_sha256": "e1d4328d8cb17f67562b01e619b319ca2fa81eaaaabc5fe6fdae8f4b320d459a"
+          "receipt_sha256": "640a4f0aafd1de7239c9853f470109985dec23a73b00589e8d78ed2b984a889f"
         },
         {
           "id": "de-subject-016",
@@ -65279,14 +66883,14 @@
           "source_id": "gesetze-im-internet",
           "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
           "url": "https://www.gesetze-im-internet.de/rvo/",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.gesetze-im-internet.de/rvo/",
           "http_status": 200,
           "content_type": "text/html",
           "byte_count": 34966,
           "content_sha256": "e0a09f3218095f8d724a2a0589925baad51ad51c233db4c4197d5f02ed29e876",
-          "receipt_sha256": "d1fc602879c750055470c843ef5cd9b1cb4c56ce46d659ff9a83ebbf2a04b034"
+          "receipt_sha256": "4966692b1db38d56fb2eea9bbbc96968944191b70dcf7f64a3cc4823d6fdbc5e"
         },
         {
           "id": "de-subject-017",
@@ -65296,17 +66900,17 @@
           "source_id": "bzst",
           "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
           "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-          "captured_at": "2026-09-10T23:55:07Z",
+          "captured_at": "2026-09-11T21:11:17Z",
           "state": "retrieved",
           "final_url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
           "http_status": 200,
-          "content_type": "application/pdf",
+          "content_type": "application/pdf;charset=UTF-8",
           "byte_count": 1304209,
           "content_sha256": "29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c",
-          "receipt_sha256": "2dfcc77213dd117daa6355b5a108a1a5ab756996f0ad3f1b1011e235a0089b21"
+          "receipt_sha256": "e9379c4d7a0629499da36ad6d2b89b8986cfb3f781d2a0ad5c2bcd2ddd01a73e"
         }
       ],
-      "receipt_sha256": "af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2"
+      "receipt_sha256": "c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a"
     },
     "citation_scan": {
       "state": "not_yet_available",
@@ -66806,6 +68410,22 @@
           "fundstelle": "BGBl I 2003, 2954, 2955"
         },
         {
+          "id": "de-kg-instr-c7a1a1943b91b3d8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1111e472b3e730333f32"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-9-2018",
+          "row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)",
+          "body_sha256": "a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca",
+          "document_citation_path": "de/statute/sgb-9-2018",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_9_2018/",
+          "fundstelle": "BGBl I 2016, 3234"
+        },
+        {
           "id": "de-kg-instr-c80165befa9ab1c1",
           "status": "pending",
           "discovery_refs": [
@@ -67172,8 +68792,8 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "f01c480270f0250921dfb8c9e4984bb60c26fe560155797335de3036c2a3aee0",
-            "subject_matter_search": "af515a38cd0fd2ba304fd19f8c4b68daaa3a667921b8fbca1ef1eae6ce3342c2",
+            "corpus_release": "e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea",
+            "subject_matter_search": "c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
         }
@@ -67864,6 +69484,22 @@
           "fundstelle": "BGBl I 2003, 2954, 2955"
         },
         {
+          "id": "de-uhv-instr-c7a1a1943b91b3d8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-474abba87bf538be4568"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-9-2018",
+          "row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)",
+          "body_sha256": "a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca",
+          "document_citation_path": "de/statute/sgb-9-2018",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_9_2018/",
+          "fundstelle": "BGBl I 2016, 3234"
+        },
+        {
           "id": "de-uhv-instr-db7693cd9f018ff4",
           "status": "pending",
           "discovery_refs": [
@@ -67910,5 +69546,5 @@
       ]
     }
   ],
-  "receipt_sha256": "1fbc7a2f75c6e5a61c11348e84219cc4248419191311ed6f8c3b05d018d7fdac"
+  "receipt_sha256": "f714880fde5a88f69401b6aed05125e0863eb61311f518dd91da63de2a7a12df"
 }
