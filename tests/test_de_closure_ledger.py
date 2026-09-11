@@ -1621,6 +1621,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-dakg-S1.2",
         "de-kg-dakg-A25.1",
         "de-kg-dakg-A18.4",
+        "de-kg-dakg-A18.7",
         "de-kg-dakg-A17.2",
         "de-kg-dakg-A15.11",
         "de-kg-dakg-A19.5.3",
