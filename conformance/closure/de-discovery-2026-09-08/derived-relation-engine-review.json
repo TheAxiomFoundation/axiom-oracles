@@ -1,0 +1,54 @@
+{
+  "schema": "de-kindergeld.derived-relation-engine-review.v1",
+  "engine_pr": "https://github.com/TheAxiomFoundation/axiom-rules-engine/pull/177",
+  "engine_head": "3edeab416cf34f7c96305d764c6c7d90ec563635",
+  "status": "reviewed and pushed; exact-head CI pending; no country pin changed",
+  "reproductions": [
+    {
+      "test": "file_derived_relations_resolve_local_sources_before_execution",
+      "before_namespace_fix": "UnknownRelationDependency for local record_of_group in namespaced derived relation",
+      "before_input_catalog_fix": "InvalidDatasetInputReference for declaring-module predicate-only input",
+      "after": "passes chained module-local filters independently in actual fast/explain modes; wrong module and bare input identities rejected"
+    }
+  ],
+  "validation": {
+    "default_tests_passed": 308,
+    "schema_tests_passed": 323,
+    "format": "pass",
+    "whitespace": "pass",
+    "release_build": "pass"
+  },
+  "native_candidate_diagnostic": {
+    "scope": "Diagnostic only: execute unchanged rejected companion tests using native test adapter and explicitly selected local engine build. This is not protected validation, signing or acceptance.",
+    "engine_commit": "3edeab416cf34f7c96305d764c6c7d90ec563635",
+    "engine_binary_sha256": "fd407d7c4bd09b1bea7f04b31c66c90ee89633d34e1d9aa4a547beab67e56e01",
+    "rulespec_sha256": "d052574c8e7deba32c55ea869b839feaf53b9569a15d5915d5c9db6b424a04e7",
+    "tests_sha256": "ace66d30be792ed9844fbd373c3a82e31e1e299649130efb744dacb90893d6e7",
+    "issues": [
+      "Test case `matching_counterpart_alternative_conforms` execution failed: missing input `agreement_identifier` for entity `case-1-de:statutes/bgb/126/absatz-2/inhalt#relation.party_of_agreement-1` over 2025-01-01..2025-01-01",
+      "Test case `matching_counterpart_alternative_conforms` output `de:statutes/bgb/126/absatz-2/inhalt#contract_signature_arrangement_documentarily_conforms` missing from execution response.",
+      "Test case `counterpart_alternative_blocked_by_nonmatching_wording` execution failed: missing input `agreement_identifier` for entity `case-2-de:statutes/bgb/126/absatz-2/inhalt#relation.party_of_agreement-1` over 2025-01-01..2025-01-01",
+      "Test case `counterpart_alternative_blocked_by_nonmatching_wording` output `de:statutes/bgb/126/absatz-2/inhalt#contract_signature_arrangement_documentarily_conforms` missing from execution response.",
+      "Test case `counterpart_intended_for_signer_does_not_conform` output `de:statutes/bgb/126/absatz-2/inhalt#contract_documents` does not resolve to a derived rule, or parameter in statutes/bgb/126/absatz-2/inhalt.yaml.",
+      "Test case `counterpart_intended_for_signer_does_not_conform` mixes derived output entities (Agreement, Document, Party); put outputs for each entity in separate test cases.",
+      "Test case `common_deed_signature_arrangement_conforms` output `de:statutes/bgb/126/absatz-2/inhalt#contract_parties` does not resolve to a derived rule, or parameter in statutes/bgb/126/absatz-2/inhalt.yaml.",
+      "Test case `common_deed_signature_arrangement_conforms` mixes derived output entities (Agreement, Party); put outputs for each entity in separate test cases.",
+      "Test case `directed_matching_counterparts_conform` output `de:statutes/bgb/126/absatz-2/inhalt#contract_documents` does not resolve to a derived rule, or parameter in statutes/bgb/126/absatz-2/inhalt.yaml.",
+      "Test case `directed_matching_counterparts_conform` mixes derived output entities (Agreement, Document, Party); put outputs for each entity in separate test cases.",
+      "Test case `counterpart_with_different_wording_does_not_conform` output `de:statutes/bgb/126/absatz-2/inhalt#contract_documents` does not resolve to a derived rule, or parameter in statutes/bgb/126/absatz-2/inhalt.yaml.",
+      "Test case `counterpart_with_different_wording_does_not_conform` mixes derived output entities (Agreement, Document, Party); put outputs for each entity in separate test cases.",
+      "Test case `common_deed_signatures_by_each_party_conform` execution failed: missing input `agreement_identifier` for entity `case-7-de:statutes/bgb/126/absatz-2/inhalt#relation.party_of_agreement-1` over 2025-01-01..2025-01-01",
+      "Test case `common_deed_signatures_by_each_party_conform` output `de:statutes/bgb/126/absatz-2/inhalt#contract_signature_arrangement_documentarily_conforms` missing from execution response.",
+      "Test case `duplicated_signature_does_not_cover_missing_party` execution failed: missing input `agreement_identifier` for entity `case-8-de:statutes/bgb/126/absatz-2/inhalt#relation.party_of_agreement-1` over 2025-01-01..2025-01-01",
+      "Test case `duplicated_signature_does_not_cover_missing_party` output `de:statutes/bgb/126/absatz-2/inhalt#contract_signature_arrangement_documentarily_conforms` missing from execution response.",
+      "Test case `typed_name_does_not_satisfy_signature_mechanism` execution failed: missing input `agreement_identifier` for entity `case-9-de:statutes/bgb/126/absatz-2/inhalt#relation.party_of_agreement-1` over 2025-01-01..2025-01-01",
+      "Test case `typed_name_does_not_satisfy_signature_mechanism` output `de:statutes/bgb/126/absatz-2/inhalt#contract_signature_arrangement_documentarily_conforms` missing from execution response."
+    ]
+  },
+  "limitations": [
+    "Read-only compile and native companion adapter diagnostics of exact rejected bytes are not protected legal validation, application or signing.",
+    "The first diagnostic after rebuilding reused older compiled metadata and was correctly rejected by the artifact-integrity gate. Recompiling the same source with the new binary produced the recorded missing-current-entity-input failures. The gate was not weakened.",
+    "Current/related bare-input scope, signature-record ownership, intended-recipient party membership, mixed-entity test outputs and paired condition coverage still require native candidate repair.",
+    "No new encoded module or closure claim."
+  ]
+}
