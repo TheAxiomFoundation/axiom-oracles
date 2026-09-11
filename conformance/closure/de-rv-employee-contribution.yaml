@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f
+    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6f064ee6081f16440dc706ae09ac60652bb67570
-    release: de-rulespec-2026-07-21
-    release_content_sha256: b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574
+    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
+    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
+    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -42,12 +42,171 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl
+      sha256: 80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
+      sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl
+      sha256: 3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14
+      row_count: 16
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
+      sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl
+      sha256: 1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
+      sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
+      sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl
+      sha256: b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc
+      row_count: 162
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
+      sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
+      row_count: 6
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl
+      sha256: 847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl
+      sha256: 4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
+      sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl
+      sha256: 8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl
+      sha256: 807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
+      sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
+      row_count: 12
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl
+      sha256: 29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl
+      sha256: f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e
+      row_count: 44
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97
+      row_count: 9
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl
+      sha256: 5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl
+      sha256: 5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
+      sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl
+      sha256: 3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c
+      row_count: 16
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl
+      sha256: 6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl
+      sha256: 4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
+      sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
+      sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl
+      sha256: 3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68
+      row_count: 3136
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
+      row_count: 854
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
+      sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl
+      sha256: 656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510
+      row_count: 18
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl
+      sha256: 906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl
+      sha256: 9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
+      sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
+      row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl
+      sha256: 1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163
+      row_count: 746
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl
+      sha256: 738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl
+      sha256: e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40
+      row_count: 12
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl
+      sha256: 1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2
+      row_count: 32
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl
+      sha256: 40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl
+      sha256: e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0
+      row_count: 6
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
+      sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl
+      sha256: 87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl
+      sha256: 2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5
+      row_count: 46
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl
+      sha256: 65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1
+      row_count: 598
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl
+      sha256: 85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl
+      sha256: d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86
+      row_count: 307
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl
+      sha256: 9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -81,8 +240,8 @@ generated_facts:
     state: no_artifact
   - citation_path: de/regulation/svbezgrv-2025/4
     state: captured
-    ref: d83ba3db30e2f63376aacf822d116687589b8564
-    commit: d83ba3db30e2f63376aacf822d116687589b8564
+    ref: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
+    commit: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
     path: de/regulations/svbezgrv-2025/4.yaml
     sha256: 970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8
     module_id: de:regulations/svbezgrv-2025/4
@@ -115,16 +274,16 @@ generated_facts:
   dependency_enumeration:
     method: all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows
     scope: whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure
-    imports: captured per module; selected DE modules currently declare none
+    imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
+    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
     channel_receipts:
-      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
-      total: 15
+      total: 17
       unretrieved: 4
     candidate_count: 11
     candidates:
@@ -163,7 +322,7 @@ generated_facts:
     - id: de-rv-instr-45a23bb6aa1843b8
       status: pending
       discovery_refs:
-      - de-corpus-262a6432328a23e9d801
+      - de-corpus-a0448494fc9322624917
       identity_kind: corpus_citation
       citation_path: de/statute/estg
       row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee
@@ -378,7 +537,7 @@ computed:
     - id: de-rv-instr-45a23bb6aa1843b8
       status: pending
       discovery_refs:
-      - de-corpus-262a6432328a23e9d801
+      - de-corpus-a0448494fc9322624917
       identity_kind: corpus_citation
       citation_path: de/statute/estg
       row_sha256: a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee
@@ -470,6 +629,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 15 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

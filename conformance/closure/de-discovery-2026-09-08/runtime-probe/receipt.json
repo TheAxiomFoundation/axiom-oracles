@@ -1,0 +1,64 @@
+{
+  "engine_commit": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+  "binary_sha256": "5bc770639bc013bccb086dc2e113b2ef425a4713ed33bbe28a1b8662b6d9edff",
+  "receipts": [
+    {
+      "mode": "explain",
+      "request_sha256": "b7a42f7134d96e691d8a95812a5eac4c6a597c84c6259f2f0ce0e34b2f12d6b4",
+      "response_sha256": "0b7d63cd78af0c9b3c650052a3e42db701177cfd3a2317fb34ca7edcd07f38fc",
+      "candidate_count": 7,
+      "assertions": 14
+    },
+    {
+      "mode": "fast",
+      "request_sha256": "c424b631f2607f2fd9866c4a180af28a0d953f0843e8bb75b4f21673e25dcd42",
+      "response_sha256": "ed469adb61fe985ccffee8ac5c96f67585b986747d11254eec238fc2a93b9b07",
+      "candidate_count": 7,
+      "assertions": 14
+    }
+  ],
+  "expected": {
+    "a": {
+      "higher_payment_count": 1,
+      "equal_other_payment_count": 0
+    },
+    "b": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 0
+    },
+    "c": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 1
+    },
+    "d": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 1
+    },
+    "e": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 1
+    },
+    "f": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 1
+    },
+    "g": {
+      "higher_payment_count": 0,
+      "equal_other_payment_count": 0
+    }
+  },
+  "scope": "Synthetic runtime capability probe, not RuleSpec encoding or legal entitlement evidence. Complete same-child comparison rows are constructed mechanically from observed payment records. No claimant eligibility, family relationship, household priority, waiver, court designation, section 78 transition, missing-fact semantics or historical applicability is established.",
+  "missing_input_case": {
+    "request_sha256": "3f75641134e1b7fb92dd2bff34f5d76a82fa13505fa28ac209a530121c5fc846",
+    "response_sha256": "87534fba91027a7931db5906b64755e4b8e43b7287fc991585851e8bc1042b3f",
+    "exit_code": 1,
+    "expected_error": "missing input `other_payment` for entity `unequal:a:b` over 2025-06-01..2025-06-30"
+  },
+  "source_file_sha256": {
+    "src/formula.rs": "a4012ac508c6762781fd759abfbee3ed00e307732dd1cdc024c1616aab099dcb",
+    "src/engine.rs": "f2fb875c2758915e7a2ba0b5e959aef717693b3643199b4d51f6be61ddf1dcdd",
+    "src/bulk.rs": "a1227070899537b37e188078f9d7cd5f0488b043b40d9d3d1d47304d69c7036f",
+    "src/spec.rs": "5c27f6031d1ee88c21084c722c5ff4082cfe6cb9f310722aeb634ec5c962fab2",
+    "Cargo.lock": "56f01fb4b5118a479328fbffd55b93635ed11038de60bcdd206b88aad84d16cb"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "de-kindergeld.corpus-release-review.v1",
+  "release_verification": {
+    "release": "de-rulespec-2026-09-10-kindergeld-maternity",
+    "commit": "5a77472300eb240e303a6f52c1d45040d671e7a4",
+    "content_sha256": "57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042",
+    "selector_sha256": "46b58c751d3defeffdaef986ddb39443e5de45d292881e76ad4c7b38c89ab0c2",
+    "artifact_count": 355,
+    "all_artifact_hashes_match": true,
+    "release_object_sha256": "0a2157c2925092aca525dded6a9116d99771af280c291ef515b181cf0f91dbf0"
+  },
+  "publication_run": 34491213953,
+  "public_mirror": {
+    "url": "https://pub-a8952f8657fc49fda358146ac001366c.r2.dev/releases/de-rulespec-2026-09-10-kindergeld-maternity/57ea91a6e696d3f4bd918e8f1223db191096cdbe1c5fb41ebabb7bd6b775d042.json",
+    "mirror_run": 34491742281,
+    "byte_identical": true,
+    "sha256": "0a2157c2925092aca525dded6a9116d99771af280c291ef515b181cf0f91dbf0",
+    "bytes": 241087
+  },
+  "new_scopes": 4,
+  "new_rows": 56,
+  "scopes": 45,
+  "rows": 9264,
+  "signed_modules_unchanged": 10,
+  "graph_drift": [
+    {
+      "program": "de/kindergeld",
+      "old_count": 109,
+      "new_count": 111,
+      "added": [
+        {
+          "id": "de-kg-instr-2e123c165d3631db",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-a06e8371458c53b96b3f",
+            "de-corpus-a63bd12081bbcd155e0e"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30",
+          "row_sha256": "f955eba8a8a0f885beb4cecf507d3a04eee29aee41540847879a614a27cc8235",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind",
+          "document_citation_path": "de/guidance/bfh-iii-r-42-22-2024-01-30",
+          "title": "BFH, III R 42/22, 2024-01-30: Ursächlichkeit der Behinderung für die Unfähigkeit zum Selbstunterhalt bei einem in einem psychiatrischen Krankenhaus untergebrachten Kind"
+        },
+        {
+          "id": "de-kg-instr-30c321b1f99eca45",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1d0c6a5405f62dac77e0"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung",
+          "row_sha256": "69ccc78f4fed6b64530183787d9fb8a85817c17ef24bfeb4206ffcf393d47740",
+          "document_class": "statute",
+          "citation_label": "Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371",
+          "document_citation_path": "de/statute/bgbl-2025-i-371/pflege-befugniserweiterung-entbuerokratisierung",
+          "title": "Gesetz zur Befugniserweiterung und Entbürokratisierung in der Pflege, BGBl. 2025 I Nr. 371",
+          "date_document": "2025-12-22",
+          "document_type": "Änderungsgesetz"
+        }
+      ],
+      "removed": []
+    },
+    {
+      "program": "de/rv-employee-contribution",
+      "old_count": 11,
+      "new_count": 11,
+      "added": [],
+      "removed": []
+    },
+    {
+      "program": "de/unterhaltsvorschuss",
+      "old_count": 41,
+      "new_count": 41,
+      "added": [],
+      "removed": []
+    }
+  ],
+  "graph_sha256": "4b493fbae92d383d9eba6eb639cf05401941a32a0a84ef6ae1a192bedd1c22f1",
+  "review_scope": {
+    "muschg_3": "Both full official historical versions and the full three-page 2025 I59 amendment read; current capture is not blanket applicability evidence for2025.",
+    "act_2025_i371": "All52pages captured and checked against native extraction; legal review only of MuSchG Article13 and commencement Article14. Its new frontier identity remains pending.",
+    "bfh_iii_r_42_22": "Allfivepages, paragraphs1–32 read; both class and native corpus identities are bearing and unencoded. Exact BStBl II2025p16 membership remains unverified."
+  },
+  "closure_result": {
+    "pending_spine": 5,
+    "partial_spine": 1,
+    "pending_instruments": 272,
+    "instruments": 777,
+    "law_derived_inputs": 8,
+    "bearing_instruments_unencoded": 141,
+    "open_dependencies": 149,
+    "closed": false
+  },
+  "encoding_attempt": "No extra native generation dispatched; source capture is not signed RuleSpec coverage."
+}

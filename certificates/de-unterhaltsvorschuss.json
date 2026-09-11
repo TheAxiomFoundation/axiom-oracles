@@ -4,8 +4,8 @@
     "no comparison record has been declared",
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
-    "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
-    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+    "closed: instrument frontier incomplete \u2014 41 of 42 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
   ],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
@@ -17,7 +17,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
-          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "ref": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
         },
@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "76f3afec2b36ef2e4e6b9245536a42cbcb4465e75da64791a4b1e2a591848305"
+      "sha256": "9df0814a0c526b5b0410f81593d25270cdd630d59cadef5eee8b12addeaa7b13"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "211365f6f2e4d82ca3c4da6654301b21dab1aecf5ff9943476ac6bd3c8df20ea",
+      "sha256": "31a062fe5c090070999fb0580d83f6655b3c3524036ed29fb8f75fc9551fff52",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
+      "sha256": "f86ef479e9484c26dd68c92a49c217d1afe5089be2ca6293f3166a5099a7dff0"
     }
   ],
   "period": "2025",
@@ -93,8 +93,8 @@
     "closed": {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "blockers": [
-        "closed: instrument frontier incomplete \u2014 21 of 21 subordinate/bearing instruments pending disposition (oracles#491)",
-        "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+        "closed: instrument frontier incomplete \u2014 41 of 42 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open \u2014 10 open dependencies (0 law-derived inputs, 9 unclassified inputs, 1 bearing instruments) (CERTIFIED.md v3)"
       ],
       "boundaries": [],
       "boundary_frontier": {
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-07-21",
+      "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -274,11 +274,15 @@
           "state": "encoded"
         }
       ],
+      "declared_sources_closed": false,
+      "declared_sources_closed_claim_mode": "computed",
       "dependency_closure": {
         "closed": false,
-        "instruments_bearing_on_computed": [],
+        "instruments_bearing_on_computed": [
+          "de-uhv-instr-a5848a433a63d2cb"
+        ],
         "law_derived_inputs": [],
-        "open_dependency_count": 9,
+        "open_dependency_count": 10,
         "unclassified_inputs": [
           "child_allowances_under_sections_31_and_32_6_1_are_increased",
           "child_is_in_first_age_stage_under_section_1612a",
@@ -295,34 +299,54 @@
       "instrument_frontier": {
         "complete": false,
         "counts": {
-          "classified-with-reason": 0,
+          "classified-with-reason": 1,
           "encoded": 0,
           "excluded-with-reason": 0,
-          "pending": 21,
-          "total": 21
+          "pending": 41,
+          "total": 42
         },
-        "instrument_count": 21,
+        "instrument_count": 42,
         "pending": [
           "de-uhv-instr-11739679bb0a1df4",
+          "de-uhv-instr-11b2fee91a7250af",
+          "de-uhv-instr-13c9a46f75b99498",
           "de-uhv-instr-1808736a82828a59",
           "de-uhv-instr-1a53a8fa58131ff1",
+          "de-uhv-instr-1c560d43302dedf2",
           "de-uhv-instr-2079e2162cee1404",
           "de-uhv-instr-2a29967484296d20",
           "de-uhv-instr-2b0a8f983f861591",
+          "de-uhv-instr-2cd7e8e12c8d39c4",
           "de-uhv-instr-333ba26c32e038d3",
+          "de-uhv-instr-337d81a4694fca6a",
+          "de-uhv-instr-33c1190039335beb",
+          "de-uhv-instr-360df2059e09e33e",
+          "de-uhv-instr-3815239cc1f2caaf",
           "de-uhv-instr-3875634198c25414",
-          "de-uhv-instr-4e1f544ea66cccdf",
+          "de-uhv-instr-38f449529edd140f",
+          "de-uhv-instr-3ae0493a66058fb3",
+          "de-uhv-instr-3be04eb6d61b596b",
+          "de-uhv-instr-3f476358fccfdc69",
+          "de-uhv-instr-5c0851a954940f82",
           "de-uhv-instr-703d3b12aaab39f8",
           "de-uhv-instr-73cb585362978769",
+          "de-uhv-instr-75c3f434723fb3e9",
+          "de-uhv-instr-78841044a219e9b8",
           "de-uhv-instr-7aa5943b5f0a6e6c",
-          "de-uhv-instr-8939b62ab3b44a39",
+          "de-uhv-instr-7d7a5efb6250df56",
           "de-uhv-instr-906e7387d896596c",
+          "de-uhv-instr-9886b8cf5a4c26e8",
+          "de-uhv-instr-9a821bfac753742b",
+          "de-uhv-instr-a2bd2172735c10fa",
           "de-uhv-instr-a303758d3667d729",
           "de-uhv-instr-a66a4cb13aaf0599",
           "de-uhv-instr-a9efdae38748dd9f",
           "de-uhv-instr-b96e03076e143e8e",
+          "de-uhv-instr-bf9c57bd5c2a3d58",
           "de-uhv-instr-c795a7af57079afc",
+          "de-uhv-instr-c7a1a1943b91b3d8",
           "de-uhv-instr-db7693cd9f018ff4",
+          "de-uhv-instr-fbb51fe84fb002e1",
           "de-uhv-instr-guidance"
         ],
         "supplemental_count": null
@@ -344,7 +368,7 @@
       "root_nodes": [
         "de:statutes/uhvorschg/2#advance_maintenance_amount"
       ],
-      "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
       "signature_blockers": [
         "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
       ],
@@ -355,7 +379,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "subgraph_sha256": "1643ccde90c6ecfdbfd7130ed2bcd023440af43bf8f535f1d22b02d80fd076d0",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"

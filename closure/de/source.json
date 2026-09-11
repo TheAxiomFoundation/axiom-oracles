@@ -11,32 +11,562 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
-    "release": "de-rulespec-2026-07-21",
-    "release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
-    "release_selector_sha256": "106612aa6075a23fae4aae7fc80c39920cb6e0ff95e38694baa6191f8f3905f5",
+    "commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+    "release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+    "release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
+    "release_selector_sha256": "440bc1611dd3d2cde8e82fd3cee430180d216d7947d5d80c67bdedca6cf34c5b",
     "inventories": [
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
+        "sha256": "74e8dfa9aded09d34cad08c04249da5016ac478b0bace29562d11343e74ef21e",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-eea-parties.json",
+        "sha256": "21fe11fffb91908b23414dd8187f1050ee3edad287c3b31b7bf6ff1af0808efc",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.json",
+        "sha256": "ff2fd62b1257752348fa8ec3419d2ee2eeb149e9491e6ee2b06dd5e7ab4300bb",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.json",
+        "sha256": "4ee7704f4529a59b80d4c4087338d3ebaeecfc1f350ed6f4c2f9a0a967cbb178",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.json",
+        "sha256": "f9d0947eecd1ea1e9ba1307ff52144c36cdf366165a7f465a73b4a386607cf28",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-ristbv.json",
+        "sha256": "9babd54bdf9bb21617eee3e6ab5893b2783e65149f7cd258e432c9773b6e0cb0",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "d92f3f4c52b434dfe24a7acd8add10db4c757053dc6157a40d7d45356cf4b5b1",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.json",
+        "sha256": "0ff6f48069381b5e5c02392eceddd7495e450d4f0bb60f6f667fbf89d407504a",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.json",
+        "sha256": "024afaaf0b2f6d0865b29bc8c2606f228412d65eccb8801c693e3535a095e066",
+        "row_count": 162
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.json",
+        "sha256": "741158c6661fcc152978385ded67a9d927c9afaad99e460ec03ac98a0b9d7257",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.json",
+        "sha256": "f5937de472767d6a9a44757714c595c185aaab0d2519654191a22934d74d486d",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-09-de-kindergeld-dakg.json",
+        "sha256": "981339317da949cb7b3d958fcf29e2a2ff81ef8a4bb1a6a31b16daa0ca124c47",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-10-de-kindergeld-disability-case.json",
+        "sha256": "f053e5330c3ddf189a60b8b3b95eaa2461324239f0388de290cf51ef3a42249d",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.json",
+        "sha256": "3df1d54070aa79c3e137e34d1e324da0a00ebc6cff69ad75dbf436c8325d46b3",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.json",
+        "sha256": "352cd7e15b4e9fc43cfdcb386a1b9c33b49c7c94be831735c88147537928b28f",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-11-de-kindergeld-illness-precedents.json",
+        "sha256": "cb645cdb33c96563e9868759bc146eb76fdbfc4ddb5e092690231204a24ac077",
+        "row_count": 12
+      },
       {
         "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
         "row_count": 172
       },
       {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-arb.json",
+        "sha256": "b9e58ff44fa50d050a8f4680d9ea28e44ccabeb6ea0b4f5d54c9eaeba6f51df2",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-bilateral.json",
+        "sha256": "038860404e92952a4064d42413160b7a152f3d99aee28cacd7f49aed112da45f",
+        "row_count": 44
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-dependencies.json",
+        "sha256": "16d6428a20439fd1ab7885572a06f2bed83cf529c54e33703b2341ab1eb791e1",
+        "row_count": 9
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eea.json",
+        "sha256": "c3bd7372757fdbe1f25e7caf47b14e233688e94b5e9096a915c731f2937c2558",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-eu.json",
+        "sha256": "3b977d73c0702ed2e46684fb6695983d5f50d5b10474a2a36f686f2dbf3c8b58",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-08-de-kindergeld-withdrawal.json",
+        "sha256": "540056c017b466168bb39e4ec226113ecf07512621e3cc4dd5a8b3d7c4160240",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "6be92204b0dc064addeb7ef3e53be6e80e65fa78dd2a3c2bdc78be92db47d765",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-eu-articles.json",
+        "sha256": "9729eadd40744a601ab59b5301ac78969f50dca89254f9fba106ad2ed98a7691",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-marginal-employment.json",
+        "sha256": "829aa3c955f11856642bf71710a8201a40173d827c02f723218bb440f6afcb39",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.json",
+        "sha256": "37f2e8707ddec20f420fee594a5c69e6ce9fbe452f81a9459dc37a47adbe8e28",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-09-de-kindergeld-treaty-texts.json",
+        "sha256": "917dd8b4c99accc034736e3c5c1a3f4fbd283ccffac31768e08431f034521e02",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.json",
+        "sha256": "ba05d92d427205d675f45883b122eec18f665174150d9f17e24bc8e3ffc6074b",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.json",
+        "sha256": "f6a01566e2b0599a7d621f43e42e1485ad7c2f33062a639ae5ee603c6d58ac11",
+        "row_count": 6
+      },
+      {
         "path": "data/corpus/inventory/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "0a31685dd6d68051111646df421f7fe86b551e9166981acdead13a112b2fd974",
         "row_count": 3376
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-bgbl.json",
+        "sha256": "deb452cf32367d1558b3248c84c0136bddbb425a070e693a6dd1099ce2a17604",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-civil-dependencies.json",
+        "sha256": "dfe174ac522bf22e96937e05caec2a53edc37bd95b1060f36779ff5cde696d34",
+        "row_count": 3136
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-dependencies.json",
+        "sha256": "9894e4d836a873d7c44c57d82407395ffbfa5e9ad470dd51746229bfc7bf3f7e",
+        "row_count": 854
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-historical-sgb.json",
+        "sha256": "8f377ffd80ab33b6cd80c092f76ab0714ee14eecf4cc8ff1ab5559247144df76",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.json",
+        "sha256": "80df42142b65ba82f10629e5708f3cc56ab845a4addf4877e8fbf9ceb21d4a95",
+        "row_count": 18
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-context.json",
+        "sha256": "f16addeedc8098894e5959e842559657013c9c243e08715466ad0f3ec4dbb8a6",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-history.json",
+        "sha256": "ae7a93143e0abb6e59dbe04c2feb18ccb636f2cca420725770f577c7ab7b934c",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-08-de-kindergeld-parentage-transition.json",
+        "sha256": "6a3c0ab21d4487fc69adf4fb063af1829d7c9c1e0f54731ee53764e11361dc64",
+        "row_count": 535
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-service-history.json",
+        "sha256": "fd02fe2e8a1ab9eec16f108ff2a87f7c66605c9bfa37077b5b4ce426800ff4f7",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-adult-services.json",
+        "sha256": "7817354353f3b27ab0de07101445431dafb6ef8488ac1e19f4df69c971110094",
+        "row_count": 746
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-bgb-amendment.json",
+        "sha256": "7bee851dff8c8141f9554960f3148b1229a412acb4565b0ee720554923bd0eb9",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.json",
+        "sha256": "6b4a7dc1c3467ba664ce03e0833dc6337b44caa2e42a91eb00cfdf069442651a",
+        "row_count": 12
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.json",
+        "sha256": "8b82e6de16963b2d1767d8d0d267a0c7d9c74a3e3758732e11e6690fc5fbac0c",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-marginal-employment.json",
+        "sha256": "64a4ffef20e15c2d85d953757d3dd27e8546ae61e2a8a0af6870a3593738a676",
+        "row_count": 32
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.json",
+        "sha256": "2d453639cf033cbfe3f7977ef46f489ce13bcd36c4a98c3f1ddb9ba3b2238c54",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-09-de-kindergeld-treaty-texts.json",
+        "sha256": "690e9fd98b343628f7f77e0186ed74459346f4a120ae58b74495a62d60f5628f",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-generations-service.json",
+        "sha256": "4c1a103349b74d5ef4211274a54be1caec625318677f10ec212ae4873e3f17f2",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-amendments.json",
+        "sha256": "907a86a8f5c6ca3d9a63573c14eaa2f4f311204bf77defa9715dd784aaa20fb7",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity-history.json",
+        "sha256": "a837192044093fee9cf60e889d0c9eece4aab1f71257662c24c1595d855c9830",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-maternity.json",
+        "sha256": "956349d915454e9fd121e1ca9586a4ad236959d991e84f52d47481515340e865",
+        "row_count": 46
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-10-de-kindergeld-recipient-priority.json",
+        "sha256": "a3046e1be8b0e6af1e6a104b3f36e0d2c39fb3690537812fbbd8148c679a0ad6",
+        "row_count": 598
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition-history.json",
+        "sha256": "353dd48419738279b8b3bd160b9a02d7efe529abd2c3f7b4ddd1c519b6aab40a",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-definition.json",
+        "sha256": "a9c486cb8e3ed0be52aa2eeff924dfb752b623eea4c92de006a95c13e529b088",
+        "row_count": 307
+      },
+      {
+        "path": "data/corpus/inventory/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.json",
+        "sha256": "912cd40f3bdc97b93dfb8dba128f698a8af3c60891d7437dfabdaf3ced301be1",
+        "row_count": 4
       }
     ],
     "provision_sources": [
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl",
+        "sha256": "80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl",
+        "sha256": "8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+        "sha256": "3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl",
+        "sha256": "b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl",
+        "sha256": "1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl",
+        "sha256": "436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl",
+        "sha256": "9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl",
+        "sha256": "b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc",
+        "row_count": 162
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl",
+        "sha256": "7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl",
+        "sha256": "847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl",
+        "sha256": "4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl",
+        "sha256": "a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl",
+        "sha256": "8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl",
+        "sha256": "807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+        "sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+        "row_count": 12
+      },
       {
         "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
         "row_count": 172
       },
       {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl",
+        "sha256": "29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl",
+        "sha256": "f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e",
+        "row_count": 44
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl",
+        "sha256": "d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97",
+        "row_count": 9
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl",
+        "sha256": "5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl",
+        "sha256": "5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl",
+        "sha256": "22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl",
+        "sha256": "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
+        "row_count": 16
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+        "sha256": "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl",
+        "sha256": "6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+        "sha256": "f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl",
+        "sha256": "4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063",
+        "row_count": 8
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl",
+        "sha256": "559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6",
+        "row_count": 6
+      },
+      {
         "path": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
         "row_count": 3376
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl",
+        "sha256": "80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_count": 3136
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl",
+        "sha256": "a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac",
+        "row_count": 854
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl",
+        "sha256": "6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl",
+        "sha256": "656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510",
+        "row_count": 18
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
+        "sha256": "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl",
+        "sha256": "9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl",
+        "sha256": "c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059",
+        "row_count": 535
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl",
+        "sha256": "1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "sha256": "854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163",
+        "row_count": 746
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl",
+        "sha256": "738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl",
+        "sha256": "e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40",
+        "row_count": 12
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl",
+        "sha256": "1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+        "sha256": "5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2",
+        "row_count": 32
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl",
+        "sha256": "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl",
+        "sha256": "c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl",
+        "sha256": "e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl",
+        "sha256": "41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl",
+        "sha256": "87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl",
+        "sha256": "2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5",
+        "row_count": 46
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl",
+        "sha256": "65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1",
+        "row_count": 598
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl",
+        "sha256": "85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034",
+        "row_count": 4
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl",
+        "sha256": "d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86",
+        "row_count": 307
+      },
+      {
+        "path": "data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl",
+        "sha256": "9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015",
+        "row_count": 4
       }
     ],
     "rows": [
@@ -50,6 +580,75 @@
         "source_sha256": "eb946f4fbfb57efd114dc8870c1deead519a4bbc99f49e70111bae29f0f03199",
         "body_sha256": "4a58026075e618b8e288f2c07ec329604e365f57aa9b54be297bfb1eb9af0f7e",
         "body_length": 155
+      },
+      {
+        "citation_path": "de/regulation/eu-987-2009/article-59",
+        "record_id": "0ac2f793-788d-5743-8228-eff3d508fd38",
+        "line_number": 13,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl",
+        "provision_file_sha256": "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
+        "row_sha256": "8093500ea1669003a0324ccff6e1d8290c214144b909281d6fd76d258300e1aa",
+        "source_sha256": "dce99b8e45bf018261b54f344b8d1d9346c35e4443ab02a8bc83fd9652bd01b0",
+        "body_sha256": null,
+        "body_length": 0
+      },
+      {
+        "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+        "record_id": "7c3c658d-aaf4-595d-b43e-279b5ae54653",
+        "line_number": 14,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl",
+        "provision_file_sha256": "3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c",
+        "row_sha256": "61c8b71425ab6d52315f9f57bfa43c91c237779ca2acbbb55934b3b2832015db",
+        "source_sha256": "dce99b8e45bf018261b54f344b8d1d9346c35e4443ab02a8bc83fd9652bd01b0",
+        "body_sha256": "206dec7f84e0da10111fcb51531e167f263bd385a792ef148a7768fa411abbb5",
+        "body_length": 1011,
+        "parent_citation_path": "de/regulation/eu-987-2009/article-59"
+      },
+      {
+        "citation_path": "de/regulation/milov4",
+        "record_id": "e87261e0-537a-5fb8-b205-ac69482485c5",
+        "line_number": 159,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "10dc0b5e0cba3b534042b2b0003878ed003ff4e6835002b01ed1d5e3ddc7b6db",
+        "source_sha256": "488eabecbcd214aa6b3364cd922b90b34ec5003ad15f94bcd614991565c26f77",
+        "body_sha256": "5cb36bb89766372cee267d62c2c47ba1ab7280afc933b803abc36c477f8a883f",
+        "body_length": 157
+      },
+      {
+        "citation_path": "de/regulation/milov4/1",
+        "record_id": "de391ae8-1b1b-5618-8492-d618659b5cde",
+        "line_number": 160,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
+        "row_sha256": "d45c58b1cefeee3ebff346ce65163da09c31dfe5a23cef2a26e47305b01afdfd",
+        "source_sha256": "488eabecbcd214aa6b3364cd922b90b34ec5003ad15f94bcd614991565c26f77",
+        "body_sha256": "bd76f94563148e548fb4483c59670560724223d703b4739c86999686415da214",
+        "body_length": 135,
+        "parent_citation_path": "de/regulation/milov4"
+      },
+      {
+        "citation_path": "de/regulation/milov5",
+        "record_id": "21039da2-3d52-5d56-b6be-b9217bc968c0",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+        "provision_file_sha256": "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
+        "row_sha256": "78e94c75f6d48bffea527362980e40680c3d8a4e49ec073849c78e4b9c8cd3f8",
+        "source_sha256": "735578b3247c38f262f27cb762942e35d2adb98946419752efd40cc5be385b53",
+        "body_sha256": "c70c1078b8628692b018fb61dad3984eed9eee8d59569a9e2b2bf045979f4b56",
+        "body_length": 168
+      },
+      {
+        "citation_path": "de/regulation/milov5/1",
+        "record_id": "caee61f5-ab1c-5136-abc0-b715390788c0",
+        "line_number": 2,
+        "provision_file": "data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl",
+        "provision_file_sha256": "793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187",
+        "row_sha256": "c1fc56e27ad2f3d1a08a0431ffdac17620a9fce565190dda4aa8fba38b49cf3e",
+        "source_sha256": "735578b3247c38f262f27cb762942e35d2adb98946419752efd40cc5be385b53",
+        "body_sha256": "f665e0bea526da0c6c035c7df44475e0759642c25cd15d36b5d69e5af129f84e",
+        "body_length": 139,
+        "parent_citation_path": "de/regulation/milov5"
       },
       {
         "citation_path": "de/regulation/minuhv/1",
@@ -72,6 +671,113 @@
         "source_sha256": "59576e5f25abd46db802e39af1f035cca05021f90435af37e94e607d0fea25f4",
         "body_sha256": "711017bbdb17a7837a5f97ebcde33af76261ae59e28b57670abfbf968e0b0152",
         "body_length": 511
+      },
+      {
+        "citation_path": "de/statute/bfdg",
+        "record_id": "1a7dc15e-a89f-532f-80a1-8cafc97bdd66",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "provision_file_sha256": "854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163",
+        "row_sha256": "9793054c84e8418e432a7c935ccdb4627bad5388c2e123819baa0e261347f30c",
+        "source_sha256": "3e3d7b9d024b3371e1e490e8ab6c256d51e12d5950fc8451acfd7a4d1b057515",
+        "body_sha256": "9943b0ffb0b73afd650b096b8b6d0723d0855d89137882a2c561c0bd4a1c75a6",
+        "body_length": 410
+      },
+      {
+        "citation_path": "de/statute/bfdg/5",
+        "record_id": "f9b3f126-cbbe-5065-ae57-48614db96303",
+        "line_number": 16,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl",
+        "provision_file_sha256": "854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163",
+        "row_sha256": "8c8d209d0488cb66ba98c5fa8470d996cab8123c04c67b017aa036958d214c14",
+        "source_sha256": "3e3d7b9d024b3371e1e490e8ab6c256d51e12d5950fc8451acfd7a4d1b057515",
+        "body_sha256": "eef6e0dc2ef478dd2b29b8869e4d8e12eb6d1f601b3b1f054eef111cd387bf5b",
+        "body_length": 206,
+        "parent_citation_path": "de/statute/bfdg"
+      },
+      {
+        "citation_path": "de/statute/bgb",
+        "record_id": "06f8c2f9-3b77-54f4-906e-0598fa68769b",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "a61edc40f9d2ed7ba089f2f924d1ae59491f89e737fc4816f17985dff61549ee",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "80f8ea02d7d4e9a41016ec4eccbe4694c0c87c92298ba244e0536bdc784a2be3",
+        "body_length": 3212
+      },
+      {
+        "citation_path": "de/statute/bgb/126/absatz-1",
+        "record_id": "58803d9a-714f-5692-b5f2-9554dcd09abd",
+        "line_number": 3,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl",
+        "provision_file_sha256": "e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0",
+        "row_sha256": "1b7cb68209df933b29cda71c9219f41d6b008f50ab92e77cff64c5fdf1674fdd",
+        "source_sha256": "bd09c0b1fd1b847706c8f0a69971cee5ff80c6a8b01d71f408018a0ca1b3bf4f",
+        "body_sha256": null,
+        "body_length": 0
+      },
+      {
+        "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+        "record_id": "366edf50-27a9-556e-a391-7f136dfbcd4d",
+        "line_number": 4,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl",
+        "provision_file_sha256": "e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0",
+        "row_sha256": "598b92413ef6fca4712b2a54b513bf005a35cdd2771c41c2a9157f5081f38749",
+        "source_sha256": "bd09c0b1fd1b847706c8f0a69971cee5ff80c6a8b01d71f408018a0ca1b3bf4f",
+        "body_sha256": "28ff8e921b9384a922dbc2ed654e199ae40fc5b5226306ecb2581a8cef3dffb0",
+        "body_length": 201,
+        "parent_citation_path": "de/statute/bgb/126/absatz-1"
+      },
+      {
+        "citation_path": "de/statute/bgb/1591",
+        "record_id": "91f645ce-273b-5c2d-ab42-1daebebfcf17",
+        "line_number": 571,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "e3b36d26ff3903a9127b465572d32cf7351417b0c120d58af902c4b7b42366a5",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "d68b9cde00c3d0281babcd5265fb095b7dff16ab1f273c6f791066e352531699",
+        "body_length": 53,
+        "parent_citation_path": "de/statute/bgb"
+      },
+      {
+        "citation_path": "de/statute/bgb/187",
+        "record_id": "da2651a4-4cff-5064-9d83-2c5a5222082b",
+        "line_number": 854,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl",
+        "provision_file_sha256": "3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68",
+        "row_sha256": "e6a0f29c09f735e84e8f46d3ca0ce9e28f3061343c568d13eec7ee2904ccfd25",
+        "source_sha256": "d35dc6ea8187743648e28f0081d4cd4e650e3380d3f90c98b7e9692fb7e19086",
+        "body_sha256": "219010ff04683acddfa67bc918d459901fc00840e5ee1b9162842f05476572a7",
+        "body_length": 450,
+        "parent_citation_path": "de/statute/bgb"
+      },
+      {
+        "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+        "record_id": "85c5d9bd-61b3-5e56-8b37-0b3b9d43e532",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
+        "provision_file_sha256": "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
+        "row_sha256": "4d7f4c29c470f209e4206adcf2a7b64c90730213a536ac8ec825d36761d60fc4",
+        "source_sha256": "bd58391268f7d4103670967f86ab7642fe9bae34faf56ec36415b2dadc1e2c7b",
+        "body_sha256": null,
+        "body_length": 0,
+        "amendment_targets": [
+          "de/statute/bgb"
+        ]
+      },
+      {
+        "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
+        "record_id": "71aba030-0e3d-5a07-a6db-c62223430278",
+        "line_number": 2,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl",
+        "provision_file_sha256": "906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f",
+        "row_sha256": "fde0a391b657f035aa722a86ad6486a59eae7fbf70cb72d55dac8a7ababfb386",
+        "source_sha256": "bd58391268f7d4103670967f86ab7642fe9bae34faf56ec36415b2dadc1e2c7b",
+        "body_sha256": "27b263683d2f4957e22e3dcee071fe2a4370167667550e1f2f5ee101702f65ac",
+        "body_length": 7339,
+        "parent_citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract"
       },
       {
         "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
@@ -112,6 +818,40 @@
         "body_sha256": "c9e66fb5daf1c7fd3ef43f66aad21b2df33f915c465544fb47facd0d4f0a3a07",
         "body_length": 11875,
         "parent_citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz"
+      },
+      {
+        "citation_path": "de/statute/estg",
+        "record_id": "7b940950-61f7-59e7-869b-58ca54691963",
+        "line_number": 77,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "78f6436e1bcf2d5941d793b40606a2a494c0019734c5ab418ac09907bd081ca9",
+        "body_length": 672
+      },
+      {
+        "citation_path": "de/statute/estg/32/absatz-3",
+        "record_id": "4e5c8fa7-0ff2-513a-a5ce-3098a10cf598",
+        "line_number": 5,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl",
+        "provision_file_sha256": "e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40",
+        "row_sha256": "3f0b7e235fffa4e2bba6ebc85ae5ca894990c532897a928063c529b9504b9e7a",
+        "source_sha256": "e9480c773127a89216c2439b02534d56321c9174f28f1f4d591afa8b754a5445",
+        "body_sha256": null,
+        "body_length": 0
+      },
+      {
+        "citation_path": "de/statute/estg/32/absatz-3/document-1",
+        "record_id": "1b4640f7-108c-5077-8006-822c2be9e4a1",
+        "line_number": 6,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl",
+        "provision_file_sha256": "e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40",
+        "row_sha256": "4f88cce10f5a5080a84589724a69d5c6c76d9b648825ee556cb6dc0664249ebb",
+        "source_sha256": "e9480c773127a89216c2439b02534d56321c9174f28f1f4d591afa8b754a5445",
+        "body_sha256": "024328471bff999d0b5c974ba6c5092a96ec6bb38b420d3cbd110fcc1db11a1c",
+        "body_length": 190,
+        "parent_citation_path": "de/statute/estg/32/absatz-3"
       },
       {
         "citation_path": "de/statute/estg/62",
@@ -169,6 +909,41 @@
         "body_length": 461
       },
       {
+        "citation_path": "de/statute/estg/78",
+        "record_id": "72478e8f-eec5-5242-be1a-3a01b01ef16a",
+        "line_number": 280,
+        "provision_file": "data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
+        "provision_file_sha256": "e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31",
+        "row_sha256": "7222c478fd5600a17110541318adaf995de36f3e58f8fd2c32c2af45547e1f0b",
+        "source_sha256": "11935d71163aa89f5bbcbcfb913170640159a3970c28f04fe0d7fccb2c435fc4",
+        "body_sha256": "7105366cec1d12d8fb02bc1a87c7fd268517a0701b159e2134db5e0e7dc999a8",
+        "body_length": 700,
+        "parent_citation_path": "de/statute/estg"
+      },
+      {
+        "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a",
+        "record_id": "1f145815-8ad6-5411-b499-5c44fe2b9c51",
+        "line_number": 1,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl",
+        "provision_file_sha256": "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
+        "row_sha256": "4de99bd80f8174cdb39abe98d01f878a9c740ae99edd6a529a7e8ae7fd57f332",
+        "source_sha256": "886aef88aa54188995714b7b6e620a0f4ecd56dcd22985af7670c35f9e8996ab",
+        "body_sha256": null,
+        "body_length": 0
+      },
+      {
+        "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+        "record_id": "a9149dfb-35de-58a7-bbe7-80265c6ed95d",
+        "line_number": 2,
+        "provision_file": "data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl",
+        "provision_file_sha256": "40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c",
+        "row_sha256": "b6f3e9cdf90c4e17cc960c9553b5d48ae528e741d314c6846d04a30642abbed9",
+        "source_sha256": "886aef88aa54188995714b7b6e620a0f4ecd56dcd22985af7670c35f9e8996ab",
+        "body_sha256": "03d0e9d5277f6ee048798a2ca4bf61c1a9b853da0177150576c2cc09edbd9939",
+        "body_length": 598,
+        "parent_citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a"
+      },
+      {
         "citation_path": "de/statute/sgb-6/168",
         "record_id": "5d9e8fc7-3879-5e80-8656-2861b6d8d139",
         "line_number": 2772,
@@ -194,7 +969,7 @@
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-de",
-    "observed_main_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "observed_main_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
     "claim_mode": "attested",
     "modules": [
       {
@@ -205,13 +980,55 @@
         "reason": "No RuleSpec encoding exists, and the 2018 instrument alone does not establish that the 18.6 percent rate continued through 2025."
       },
       {
+        "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/regulations/eu-987-2009/article-59/document-1.yaml",
+          "sha256": "500f325df5d5b7cb4f4a59b3cd1b41dffdfb41f6696c45fe68ee82ea89339640",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+          "manifest_sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda"
+        }
+      },
+      {
+        "citation_path": "de/regulation/milov4/1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/regulations/milov4/1.yaml",
+          "sha256": "5c2a3c6fb50a7b4e46b085807d455a14be2d88dfd71191f6d4fe856b1b7245ec",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
+          "manifest_sha256": "0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04"
+        }
+      },
+      {
+        "citation_path": "de/regulation/milov5/1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/regulations/milov5/1.yaml",
+          "sha256": "6f2e281426c8471958b41a99b5ebc91212d8641041ed016257bd1f2d58b8b74e",
+          "manifest_path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
+          "manifest_sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462"
+        }
+      },
+      {
         "citation_path": "de/regulation/minuhv/1",
         "classification": "encoded",
         "signature_state": "signed",
         "claim_mode": "attested",
         "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/minuhv/1.yaml",
           "sha256": "c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
@@ -225,11 +1042,81 @@
         "claim_mode": "attested",
         "reason": "The signed 2025 pension contribution ceiling module and encoding manifest are present on the pinned RuleSpec main commit.",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/regulations/svbezgrv-2025/4.yaml",
           "sha256": "970fc3d0cf1aacd0fa1117db0078f5eb8feffd2cbbc7d6e440f59654c03c0ac8",
           "manifest_path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
           "manifest_sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
+        }
+      },
+      {
+        "citation_path": "de/statute/bfdg/5",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/bfdg/5.yaml",
+          "sha256": "8ba253fa78e604313092461338d0c369e3494734ca04c23f3b789d4c6550be99",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bfdg/5.json",
+          "manifest_sha256": "f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452"
+        }
+      },
+      {
+        "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/bgb/126/absatz-1/inhalt.yaml",
+          "sha256": "9901cf59bbfd874a433f8e8f32d2d14998b6a933183c5752de8e2677af97796d",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json",
+          "manifest_sha256": "3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5"
+        }
+      },
+      {
+        "citation_path": "de/statute/bgb/1591",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/bgb/1591.yaml",
+          "sha256": "bfa603fae7739f833c702fc3f710a03780417ae426a3507bb944eeaec7c07c6b",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+          "manifest_sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010"
+        }
+      },
+      {
+        "citation_path": "de/statute/bgb/187",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/bgb/187.yaml",
+          "sha256": "e277174af62d3710797c2f4e12ca71a6d0d8f0e8899381845f37f540e37a5c70",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+          "manifest_sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188"
+        }
+      },
+      {
+        "citation_path": "de/statute/estg/32/absatz-3/document-1",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/estg/32/absatz-3/document-1.yaml",
+          "sha256": "37d75f2c825c2288d9943dc066c2d8ff5f585c3c1fa415c80a098d050640744d",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+          "manifest_sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910"
         }
       },
       {
@@ -239,11 +1126,39 @@
         "claim_mode": "attested",
         "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
         "artifact": {
-          "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "path": "de/statutes/estg/66.yaml",
           "sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
           "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
           "manifest_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a"
+        }
+      },
+      {
+        "citation_path": "de/statute/estg/78",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/estg/78.yaml",
+          "sha256": "b05c35e42ec7128c7b220a8ec962383036229a8c25fc50cd58919773eb25eda5",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
+          "manifest_sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab"
+        }
+      },
+      {
+        "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+        "classification": "encoded",
+        "signature_state": "signed",
+        "claim_mode": "attested",
+        "reason": "SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
+        "artifact": {
+          "commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+          "path": "de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.yaml",
+          "sha256": "5306768441081fa65ea33cc75e23cb1f5eac281e26e592e697f986f341042c86",
+          "manifest_path": ".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
+          "manifest_sha256": "dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c"
         }
       },
       {
@@ -283,6 +1198,46 @@
         {
           "citation_path": "de/statute/estg/66",
           "role": "amount_parameter"
+        },
+        {
+          "citation_path": "de/statute/bgb/1591",
+          "role": "child_relationship_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/bgb/187",
+          "role": "date_counting_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/estg/78",
+          "role": "legacy_priority_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/estg/32/absatz-3/document-1",
+          "role": "child_age_prerequisite"
+        },
+        {
+          "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+          "role": "coordination_payment_continuity_prerequisite"
+        },
+        {
+          "citation_path": "de/regulation/milov4/1",
+          "role": "minimum_wage_prerequisite"
+        },
+        {
+          "citation_path": "de/regulation/milov5/1",
+          "role": "minimum_wage_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+          "role": "marginal_employment_threshold_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/bfdg/5",
+          "role": "overseas_service_recognition_preservation_prerequisite"
+        },
+        {
+          "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+          "role": "written_agreement_signature_prerequisite"
         }
       ],
       "evidence_roots": [
@@ -290,6 +1245,11 @@
           "citation_path": "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
           "resolution": "self_and_descendants",
           "reason": "SteFeG Article 1 number 4 supplies the 2025-effective 255 EUR amount that the current consolidated EStG text no longer displays."
+        },
+        {
+          "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+          "resolution": "self_and_descendants",
+          "reason": "Retained original KindRG PDF pages 1 and 26 supply the BGB 1591 definition introduction and Article 17 section 1 commencement on 1 July 1998. The disclosed excerpt does not claim complete-act encoding."
         }
       ],
       "boundaries": [

@@ -5,9 +5,9 @@
   },
   "closed": false,
   "closed_claim_mode": "computed",
-  "corpus_commit": "6f064ee6081f16440dc706ae09ac60652bb67570",
-  "corpus_release": "de-rulespec-2026-07-21",
-  "corpus_release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574",
+  "corpus_commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+  "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+  "corpus_release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
   "jurisdiction": "de",
   "pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -70,25 +70,37 @@
       "by_signature_state": {
         "not_applicable": 0,
         "pending": 0,
-        "signed": 1
+        "signed": 11
       },
       "by_status": {
-        "encoded": 1,
-        "evidence": 1,
+        "encoded": 11,
+        "evidence": 2,
         "excluded": 0,
         "open_dependency": 4,
         "pending": 0
       },
       "citation_paths": [
+        "de/regulation/eu-987-2009/article-59/document-1",
+        "de/regulation/milov4/1",
+        "de/regulation/milov5/1",
+        "de/statute/bfdg/5",
+        "de/statute/bgb/126/absatz-1/inhalt",
+        "de/statute/bgb/1591",
+        "de/statute/bgb/187",
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz",
         "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+        "de/statute/estg/32/absatz-3/document-1",
         "de/statute/estg/62",
         "de/statute/estg/63",
         "de/statute/estg/64",
         "de/statute/estg/65",
-        "de/statute/estg/66"
+        "de/statute/estg/66",
+        "de/statute/estg/78",
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt"
       ],
-      "citation_root_count": 6,
+      "citation_root_count": 17,
       "closed": false,
       "closed_claim_mode": "computed",
       "closed_requirements": [
@@ -103,6 +115,96 @@
           "classification": "encoded",
           "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
           "role": "amount_parameter",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/1591",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB 1591 record-based maternity prerequisite merged in PR #54 after source/excerpt, actual query-day, shared candidate-child test and repository CI checks. This does not compute the remaining qualifying-child or claimant-entitlement rules.",
+          "role": "child_relationship_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/187",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed BGB187 first-counted-day prerequisites merged in PR #59 after verbatim source, supported observation scope, six-row date-boundary tests and green repository CI. Three observable Date leaves supply the event, beginning-of-day and birth records; these helpers do not decide the applicable regime, calculate deadline ends or establish full legal ages.",
+          "role": "date_counting_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/estg/78",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Signed EStG78 record and receipt-month prerequisites, accepted only after verbatim source, complete companion fixtures, independent record cases and green repository CI. The reference-period and receipt-cutoff helpers do not establish the full preserved priority or same-child credit; the two explicit section64 dependencies and continuing residence, child qualification, territory and office-competence conditions remain unimplemented.",
+          "role": "legacy_priority_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/estg/32/absatz-3/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+          "role": "child_age_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/eu-987-2009/article-59/document-1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+          "role": "coordination_payment_continuity_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/milov4/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+          "role": "minimum_wage_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/regulation/milov5/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+          "role": "minimum_wage_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
+          "role": "marginal_employment_threshold_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bfdg/5",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.",
+          "role": "overseas_service_recognition_preservation_prerequisite",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/bgb/126/absatz-1/inhalt",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.",
+          "role": "written_agreement_signature_prerequisite",
           "signature_state": "signed",
           "state": "encoded"
         }
@@ -121,6 +223,20 @@
             "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1"
           ],
           "source_sha256": "0a679eafcaf3a658b84a5ef0a69992539fee7052cc80eca6fe2a04a9e56ddcf3"
+        },
+        {
+          "citation_path": "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+          "classification": "evidence",
+          "classification_claim_mode": "attested",
+          "content_sha256": "27b263683d2f4957e22e3dcee071fe2a4370167667550e1f2f5ee101702f65ac",
+          "reason": "Retained original KindRG PDF pages 1 and 26 supply the BGB 1591 definition introduction and Article 17 section 1 commencement on 1 July 1998. The disclosed excerpt does not claim complete-act encoding.",
+          "resolution": "self_and_descendants",
+          "resolution_claim_mode": "computed",
+          "resolved_citation_paths": [
+            "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+            "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract/document-1"
+          ],
+          "source_sha256": "bd58391268f7d4103670967f86ab7642fe9bae34faf56ec36415b2dadc1e2c7b"
         }
       ],
       "pending_citations": [],
@@ -132,7 +248,7 @@
       "signature_pending_citations": [],
       "spine_closed": true,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "f71795568853f918bde0f777a4ea6a1de2da3d9cf106fcd154337216e128c382",
+      "subgraph_sha256": "0f1f049627984e6a04d65ebe10507359c45aadb717fb2fe7a9857b43cc81d90e",
       "unresolved_sources": []
     },
     "de/rv-employee-contribution": {
@@ -216,7 +332,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "subgraph_sha256": "4481e7bdd3e6eae737fb9d1560f9e816563681318b9c211eb1e312688b22ce90",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"
       ]
@@ -299,7 +415,7 @@
       ],
       "spine_closed": false,
       "spine_closed_claim_mode": "computed",
-      "subgraph_sha256": "d43cfc199f6a1db6a4a78856f4783a9fdb5a7ef8a1c7a26cb29b7e0d7bdf08a9",
+      "subgraph_sha256": "1643ccde90c6ecfdbfd7130ed2bcd023440af43bf8f535f1d22b02d80fd076d0",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
       ]
@@ -313,7 +429,7 @@
     "protocol": "de-exact-citation-closure-v1",
     "sha256": "7ada24d1abd66080a562a16f4d8d7de851c4e7c91a7f8e1065d394f2f1beada0"
   },
-  "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+  "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
   "schema": "axiom_oracles.de_closure_summary.v1",
   "signature_pending_citations": [
     "de/regulation/bsv-2018/1",
@@ -322,7 +438,7 @@
   ],
   "source": {
     "artifact": "closure/de/source.json",
-    "sha256": "129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f"
+    "sha256": "3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740"
   },
   "spine_closed": false
 }

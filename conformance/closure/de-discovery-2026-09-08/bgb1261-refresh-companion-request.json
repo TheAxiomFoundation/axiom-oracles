@@ -1,0 +1,2726 @@
+{
+  "mode": "fast",
+  "dataset": {
+    "inputs": [
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_name_signature_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "authenticated_handmark_conforms",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "absent_signature_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "typed_name"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "typed_name_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handwritten_name_signature"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "absent_document_version_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 0
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_handmark_identity_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": false
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_observed_physical_method",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "text",
+          "value": "handmark"
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.signature_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.issued_notarial_authentication_is_present",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_issuer_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_document_version_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      },
+      {
+        "name": "de:statutes/bgb/126/absatz-1/inhalt#input.notarial_authentication_handmark_identifier",
+        "entity": "Document",
+        "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+        "interval": {
+          "start": "2025-01-01",
+          "end": "2025-01-01"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 2
+        }
+      }
+    ],
+    "relations": []
+  },
+  "queries": [
+    {
+      "entity_id": "handwritten_name_signature_conforms",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "authenticated_handmark_conforms",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "absent_signature_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "typed_name_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handwritten_signature_for_other_document_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "absent_document_version_identity_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_without_handmark_identity_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_without_notarial_authentication_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_with_other_authenticated_issuer_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_with_other_authenticated_document_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_with_other_authenticated_document_version_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    },
+    {
+      "entity_id": "handmark_with_other_authenticated_handmark_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": [
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms"
+      ]
+    }
+  ]
+}

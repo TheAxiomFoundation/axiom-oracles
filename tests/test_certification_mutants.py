@@ -43,15 +43,14 @@ def _load(name: str):
     return module
 
 
-#: The central gate's blocker lines for the committed all-pending kindergeld
-#: discovery ledger (18 spine rows / 463 candidate instruments (28 discovered + 420 DA-KG headings + 15 supplemental) / 4 law-derived
-#: + 4 unclassified leaves). Certificates and the DE census must both carry
-#: exactly these — they are derived, never typed, in the producers.
+#: Exact blockers derived from the committed Kindergeld ledger. Discovery is
+#: incomplete; the signed BGB1591 prerequisite does not close the eight
+#: law-derived inputs or the remaining bearing instruments.
 DE_KINDERGELD_CLOSURE_BLOCKERS = [
-    "closed: instrument frontier incomplete — 5 of 465 subordinate/bearing "
+    "closed: instrument frontier incomplete — 368 of 903 subordinate/bearing "
     "instruments pending disposition (oracles#491)",
-    "closed: dependency closure open — 126 open dependencies (8 law-derived "
-    "inputs, 0 unclassified inputs, 118 bearing instruments) (CERTIFIED.md v3)",
+    "closed: dependency closure open — 178 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 170 bearing instruments) (CERTIFIED.md v3)",
 ]
 
 
@@ -3825,6 +3824,31 @@ def test_de_closure_requires_stefeg_content_descendant_and_target():
         closure.build(missing_target)
 
 
+@pytest.mark.parametrize("mutation", ["missing_child", "wrong_target", "empty_body"])
+def test_de_closure_requires_kindrg_content_and_bgb_target(mutation):
+    """The added commencement evidence cannot resolve without its exact body/edge."""
+    closure = _load("de_closure")
+    source = copy.deepcopy(closure.load_source())
+    root_path = closure.KINDRG_CONTEXT_ROOT
+    child_path = f"{root_path}/document-1"
+    rows = source["corpus"]["rows"]
+    if mutation == "missing_child":
+        source["corpus"]["rows"] = [
+            row for row in rows if row["citation_path"] != child_path
+        ]
+        message = "KindRG evidence descendant denominator drifted"
+    elif mutation == "wrong_target":
+        root = next(row for row in rows if row["citation_path"] == root_path)
+        root["amendment_targets"] = ["de/statute/estg/66"]
+        message = "KindRG evidence does not target BGB"
+    else:
+        child = next(row for row in rows if row["citation_path"] == child_path)
+        child.update(body_length=0, body_sha256=None)
+        message = "KindRG evidence child has no content-bearing body"
+    with pytest.raises(closure.ClosureError, match=message):
+        closure.build(source)
+
+
 def test_de_closure_cannot_drop_kindergeld_boundary():
     """MUTANT: omit EStG 65 from the amount-subgraph boundary declaration."""
 
@@ -3902,10 +3926,15 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     # The v3 discovery ledger is consumed through the central gate: the
     # frontier and dependency blocks are DECLARED and open, not missing.
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["instrument_frontier"]["instrument_count"] == 465
+    assert closed["instrument_frontier"]["instrument_count"] == 903
     assert closed["dependency_closure"]["closed"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 126
+    assert closed["dependency_closure"]["open_dependency_count"] == 178
     assert closed["dependency_closure"]["unclassified_inputs"] == []
+    # Resolving all declared roots does not close the governing-act spine.
+    assert closed["declared_sources_closed"] is True
+    assert closed["provision_counts"]["pending"] == 5
+    assert closed["spine_closed"] is False
+    assert closed["spine_closed_claim_mode"] == "computed"
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0
@@ -5756,14 +5785,14 @@ def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
     assert closed["mode"] == "computed"
     assert closed["value"] is False
     assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
-    assert closed["instrument_frontier"]["instrument_count"] == 465
+    assert closed["instrument_frontier"]["instrument_count"] == 903
     assert closed["instrument_frontier"]["complete"] is False
-    assert closed["dependency_closure"]["open_dependency_count"] == 126
+    assert closed["dependency_closure"]["open_dependency_count"] == 178
     assert closed["dependency_closure"]["unclassified_inputs"] == []
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert closed["provision_counts"]["pending"] == 5
     # The exact-path summary still contributes its scope fields only.
-    assert closed["rulespec_commit"] == "d83ba3db30e2f63376aacf822d116687589b8564"
+    assert closed["rulespec_commit"] == "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
     assert closed["by_signature_state"] is not None
     claims = {row["claim"] for row in evidence}
     assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims
@@ -5858,3 +5887,22 @@ def test_de_census_and_certificate_carry_the_same_closure_blockers():
         )
         assert rows[program]["certificate_status"] == "pending"
         assert certificate["certified"]["value"] is False
+
+
+@pytest.mark.parametrize(
+    "pending, partial, expected",
+    [(0, 0, True), (1, 0, False), (0, 1, False)],
+)
+def test_partial_spine_is_not_reported_closed_by_certificate(monkeypatch, pending, partial, expected):
+    certify = _load("certify")
+    producer = SimpleNamespace(validate_artifact=lambda _document: SimpleNamespace(
+        closed=False,
+        pending_provisions=pending,
+        partially_encoded_provisions=partial,
+    ))
+    monkeypatch.setattr(certify, "_producer_module", lambda _name: producer)
+    result = certify._producer_closed_verdict(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"], []
+    )
+    assert result["spine_closed"] is expected
+    assert result["spine_closed_claim_mode"] == "computed"

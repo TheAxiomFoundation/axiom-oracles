@@ -130,7 +130,6 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return seed
 
 
-
 #: Suites whose reports the tests perturb to simulate a rerun.
 _PERTURBED_SUITES = (
     "nc-income-tax-liability",
@@ -169,6 +168,7 @@ def _grant_perturbation_headroom(seed: Path) -> None:
             row["unexplained_max"] = int(row.get("unexplained_max", 0)) + 1
     doc["ratchets"] = sorted(rows, key=lambda row: row["suite"])
     path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
+
 
 @pytest.fixture()
 def origin(seed_repo: Path, tmp_path: Path) -> Path:
@@ -393,13 +393,13 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
             f"{path} did not rebind to the refreshed DE report"
         )
     certificate = json.loads((verify / "certificates/de-kindergeld.json").read_text())
-    # The evidence legs are complete and computed, but the closure's
-    # subordinate-instrument frontier is undeclared: a refresh must rebind
-    # every artifact while keeping the honest certified=no.
-    assert certificate["blockers"] == [
-        'closed: instrument frontier incomplete — 5 of 465 subordinate/bearing instruments pending disposition (oracles#491)',
-        'closed: dependency closure open — 126 open dependencies (8 law-derived inputs, 0 unclassified inputs, 118 bearing instruments) (CERTIFIED.md v3)',
+    # A report timestamp refresh must preserve every existing closure blocker
+    # while rebinding the evidence hashes, regardless of frontier census growth.
+    expected_blockers = json.loads(before["certificates/de-kindergeld.json"])[
+        "blockers"
     ]
+    assert expected_blockers
+    assert certificate["blockers"] == expected_blockers
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 

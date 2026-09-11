@@ -17,7 +17,7 @@
     "citation_roots": [
       {
         "attestation": {
-          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "ref": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "repository": "TheAxiomFoundation/rulespec-de"
         },
         "citation_path": "de/regulation/bsv-2018/1",
@@ -30,7 +30,7 @@
       {
         "attestation": {
           "path": ".axiom/encoding-manifests/de/regulations/svbezgrv-2025/4.json",
-          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "ref": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
           "repository": "TheAxiomFoundation/rulespec-de",
           "sha256": "a46035cf77c7d2a9e15a6aeb64fee6b49c10991179f3a2388188cafd973dab32"
         },
@@ -67,20 +67,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "76f3afec2b36ef2e4e6b9245536a42cbcb4465e75da64791a4b1e2a591848305"
+      "sha256": "9df0814a0c526b5b0410f81593d25270cdd630d59cadef5eee8b12addeaa7b13"
     },
     {
       "artifact": "conformance/closure/de-rv-employee-contribution.yaml",
       "claim": "closed:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "808a91410ba12edb04591838f7780976114f18299ad9ea517d473b9ae99e7a27",
+      "sha256": "f2b004b59f7814eea4e236992bfe451b626e3f4ca207998a80d8e1e31c743f84",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/rv-employee-contribution",
       "mode": "computed",
-      "sha256": "47a9c3208da74783165ad23377db24585ab60ad52baed7d613131a5dc28a18df"
+      "sha256": "f86ef479e9484c26dd68c92a49c217d1afe5089be2ca6293f3166a5099a7dff0"
     }
   ],
   "period": "2025",
@@ -137,7 +137,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-07-21",
+      "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
       "declared_sources": [
         {
           "citation_path": "de/regulation/bsv-2018/1",
@@ -167,6 +167,8 @@
           "state": "encoded_pending_signature"
         }
       ],
+      "declared_sources_closed": false,
+      "declared_sources_closed_claim_mode": "computed",
       "dependency_closure": {
         "closed": false,
         "instruments_bearing_on_computed": [],
@@ -220,7 +222,7 @@
         "de:statutes/sgb-6/168#employee_pension_insurance_contribution_share",
         "de:regulations/svbezgrv-2025/4#general_pension_insurance_monthly_contribution_assessment_ceiling"
       ],
-      "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
       "signature_blockers": [
         "de/regulation/bsv-2018/1: signed RuleSpec artifact has not landed",
         "de/statute/sgb-6/168: signed RuleSpec artifact has not landed"
@@ -233,7 +235,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "feeffa1d27ebe9fe619e94c168ebf3c3c29fd11db4cd43e0faf48007f7915e5a",
+      "subgraph_sha256": "4481e7bdd3e6eae737fb9d1560f9e816563681318b9c211eb1e312688b22ce90",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/regulation/bsv-2018/1"

@@ -1304,6 +1304,17 @@ def _producer_closed_verdict(
             ledger_rulespec.get("commit") if isinstance(ledger_rulespec, dict) else None
         ),
         "provision_counts": computed.get("provision_counts"),
+        **(
+            {
+                "spine_closed": (
+                    summary.pending_provisions == 0
+                    and getattr(summary, "partially_encoded_provisions", 0) == 0
+                ),
+                "spine_closed_claim_mode": "computed",
+            }
+            if type(getattr(summary, "pending_provisions", None)) is int
+            else {}
+        ),
         "boundary_frontier": computed.get("boundary_frontier"),
         "instrument_frontier": _instrument_frontier_summary,
         "dependency_closure": _dependency_summary,
@@ -1499,6 +1510,13 @@ def _closed_verdict(
         # and signature fields; it can never supply the value or the gates.
         scoped, closure = _rederived_closure_scope(program, path_string, evidence)
         fields = _exact_path_fields(scoped, closure)
+        if "spine_closed" in produced:
+            # The declared subset may resolve while the governing-act ledger
+            # still contains pending provisions. Preserve those distinct facts.
+            fields["declared_sources_closed"] = fields.get("spine_closed")
+            fields["declared_sources_closed_claim_mode"] = fields.get(
+                "spine_closed_claim_mode"
+            )
         merged = {**fields, **produced}
         if merged.get("rulespec_commit") is None:
             merged["rulespec_commit"] = fields.get("rulespec_commit")

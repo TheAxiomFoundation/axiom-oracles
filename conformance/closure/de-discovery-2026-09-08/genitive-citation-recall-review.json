@@ -1,0 +1,214 @@
+{
+  "schema": "de-kindergeld.genitive-citation-recall-review.v1",
+  "corpus_commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+  "source_manifest_sha256": "9c0bef1fb7ed2b5e7240e4f5d078fb1672ba4e31ffe787f205faeba2b5e0cfe4",
+  "change": "Derive the -es genitive only for grounded single-word compound act titles ending in gesetz. Exact connected citation syntax is unchanged. No broad suffix wildcard or abbreviation expansion.",
+  "graph_drift": {
+    "before_sha256": "4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343",
+    "after_sha256": "81e2cc3eb8e86ee056c0d65cfec737083722fcc2153fada32c97ccc8212747fc",
+    "programs": [
+      {
+        "id": "de/kindergeld",
+        "before": 111,
+        "after": 114,
+        "added": [
+          {
+            "id": "de-kg-instr-2264ad62fc60eb93",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-88b4cf4edf941263ce32"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/statute/famfg",
+            "row_sha256": "050933fb3b55d12f526957c9594f997835a40138e4262ac9ef181f7bca6465ee",
+            "document_class": "statute",
+            "citation_label": "Gesetz über das Verfahren in Familiensachen und in den Angelegenheiten der freiwilligen Gerichtsbarkeit",
+            "body_sha256": "eb4e0257b47a4e95186060f314e29cde25026c80baa539cd15905adbd181ba62",
+            "document_citation_path": "de/statute/famfg",
+            "legal_authority_url": "https://www.gesetze-im-internet.de/famfg/",
+            "fundstelle": "BGBl I 2008, 2586, 2587"
+          },
+          {
+            "id": "de-kg-instr-5f245a7caa2b79e4",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-0e79544366eb745d84c0",
+              "de-corpus-4221634101ec67808d9a",
+              "de-corpus-a275cf6abdc465163a6f",
+              "de-corpus-eb02b2767d60eb65f481"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/regulation/kizdav",
+            "row_sha256": "55ba9e46328e3010a47dedde6546a452d3d5830b4f4e7d7889a204fb0d6f042d",
+            "document_class": "regulation",
+            "citation_label": "Verordnung zur Datenübermittlung zwischen den für das Kindergeld nach dem Einkommensteuergesetz und den für den Kinderzuschlag zuständigen Stellen",
+            "body_sha256": "84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b",
+            "document_citation_path": "de/regulation/kizdav",
+            "legal_authority_url": "https://www.gesetze-im-internet.de/kizdav/",
+            "fundstelle": "BGBl I 2023, Nr. 376"
+          },
+          {
+            "id": "de-kg-instr-b7704b22cefd934c",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-2e22980e6eccd990d59b"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/statute/estg/32/absatz-4",
+            "row_sha256": "31c99ccf67ecfa8f82fffe7b26102474e86e11639ee75a64cf9f51c6f33aa1d0",
+            "document_class": "statute",
+            "citation_label": "Einkommensteuergesetz § 32 Absatz 4",
+            "document_citation_path": "de/statute/estg/32/absatz-4",
+            "title": "Einkommensteuergesetz § 32 Absatz 4"
+          }
+        ],
+        "removed": []
+      },
+      {
+        "id": "de/rv-employee-contribution",
+        "before": 11,
+        "after": 11,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/unterhaltsvorschuss",
+        "before": 41,
+        "after": 40,
+        "added": [],
+        "removed": [
+          {
+            "id": "de-uhv-instr-c29a0cb26e4cbc1d",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-ec66057b34bdb760ed6c"
+            ],
+            "identity_kind": "unresolved_reference",
+            "raw_references": [
+              "Einkommensteuergesetzes"
+            ]
+          }
+        ]
+      }
+    ],
+    "index_before": {
+      "amendment_targets": 46,
+      "explicit_cross_reference_body": 6741,
+      "law_metadata_changed_by": 34,
+      "law_metadata_fundstelle": 42
+    },
+    "index_after": {
+      "amendment_targets": 46,
+      "explicit_cross_reference_body": 6745,
+      "law_metadata_changed_by": 34,
+      "law_metadata_fundstelle": 42
+    },
+    "famfg_evidence": [
+      {
+        "id": "de-corpus-88b4cf4edf941263ce32",
+        "program": "de/kindergeld",
+        "mechanism": "explicit_cross_reference_inbound",
+        "source_citation_path": "de/statute/famfg/231",
+        "source_body_sha256": "0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20",
+        "source_row_sha256": "08df145090abcbdab08330829fadd453c1fa3d39ee4f14f953ca92dc760e235b",
+        "matched_text": "§ 64 Abs. 2 Satz 3 des Einkommensteuergesetzes",
+        "resolved_citation_path": "de/statute/estg/64"
+      }
+    ]
+  },
+  "dispositions": [
+    {
+      "id": "de-kg-instr-2264ad62fc60eb93",
+      "status": "classified-with-reason",
+      "classification": "recipient_priority_condition",
+      "reason": "The graph now resolves the connected EStG64(2) sentence3 citation in the fully reviewed FamFG231(2), body SHA-256 0230033c7931f7c77aaab71db43b6e62358d082e906f573caee42e52928a1d20. The full FamFG40 effectiveness rule is independently identified by DA-KG A25.1(7), retained as supplemental018 with body SHA-256 5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3. These rules bear on recipient-priority procedure and when a selection takes effect. They remain unencoded; FamFG231 does not create claimant entitlement. The complete sections40 and231, not every FamFG provision, were reviewed. Their full texts and exact corpus commit are retained in recipient-priority-source-review.json. Historical applicability remains open.",
+      "bears_on_computed_surface": true,
+      "body_sha256": "eb4e0257b47a4e95186060f314e29cde25026c80baa539cd15905adbd181ba62"
+    },
+    {
+      "id": "de-kg-instr-b7704b22cefd934c",
+      "status": "classified-with-reason",
+      "classification": "entitlement_condition",
+      "reason": "This separately captured complete EStG32(4) document is now discovered through its connected BFDG5 reference. Its full body SHA-256 509eeb2d18357ff8e9f127cb216cb2e2f0ce4b362e5a08052c553870ce0211e2 matches adult-child-repair-review.json and remains unchanged in the current pinned release. It defines adult-child qualification, training and service routes, disability and second-training employment limits. Those routes bear on qualifying_child_count and remain unencoded. The signed age module and BFDG5 general preservation norms do not implement this full provision; discovering this document does not reopen an encoding attempt or claim complete coverage.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "de-kg-instr-5f245a7caa2b79e4",
+      "status": "excluded-with-reason",
+      "classification": "data_retrieval_regulation",
+      "reason": "All nine pinned KiZDAV rows, including the complete sections1–6, entrance and closing formulas and act header, read and hash-checked. Their ordered body-hash aggregate 0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a equals the existing supplemental016 receipt. Sections1–3 authorize and limit retrieval of existing Kindergeld records for Kinderzuschlag, sections4–5 govern notifications, privacy and audit duties, and section6 supplies commencement on1January2024. The EStG64/65/74 references specify retrieved data, not new entitlement, recipient-selection or amount rules. The existing exclusion of EStG68(5) and supplemental016 therefore applies to this newly discovered corpus identity as well. Full row texts and hash verification are retained in genitive-citation-recall-review.json.",
+      "bears_on_computed_surface": false,
+      "body_sha256": "84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b"
+    }
+  ],
+  "reviewed_kizdav_rows": [
+    {
+      "citation_path": "de/regulation/kizdav",
+      "body_sha256": "84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b",
+      "body": "Verordnung zur Datenübermittlung zwischen den für das Kindergeld nach dem Einkommensteuergesetz und den für den Kinderzuschlag zuständigen Stellen\nAusfertigungsdatum: 2023-12-15\nFundstelle: BGBl I 2023, Nr. 376\n(+++ Textnachweis ab: 1.1.2024 +++)"
+    },
+    {
+      "citation_path": "de/regulation/kizdav/1",
+      "body_sha256": "9deb2b2f66a3522faa27a15c95ec4a14aff5cd6a44f10c21a47eb2efcd12e72c",
+      "body": "Diese Verordnung gilt für den automatisierten Abruf von Daten durch die Stellen der Familienkasse der Bundesagentur für Arbeit, die für den Kinderzuschlag nach § 6a des Bundeskindergeldgesetzes zuständig sind (KiZ-Stellen). Daten nach Satz 1 sind Daten,\n1. die bei den für das Kindergeld nach dem X. Abschnitt des Einkommensteuergesetzes zuständigen Stellen der Familienkasse der Bundesagentur für Arbeit (KG-Stellen) gespeichert sind und\n2. die den für eine Kindergeldzahlung maßgebenden Sachverhalt betreffen."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/2",
+      "body_sha256": "c1a18f681d4fdd81b86e67a604ddb3e0f280743add15efe410a6a86ba62b8cae",
+      "body": "(1) Der automatisierte Abruf von Daten nach § 1 bedarf einer Abrufberechtigung. Eine Abrufberechtigung wird Personen erteilt, die als Beschäftigte der in § 1 genannten KiZ-Stellen tätig sind. Die Abrufberechtigung erteilt die KG-Stelle.\n(2) Personen nach Absatz 1 sind Amtsträger (§ 7 der Abgabenordnung) oder gleichgestellte Personen (§ 30 Absatz 3 Nummer 1 der Abgabenordnung), die über den Anspruch auf den Kinderzuschlag unter Verwendung personenbezogener Kindergelddaten zu entscheiden haben.\n(3) Abrufberechtigungen sind auf die Kindergelddaten zu beschränken, die zur Anspruchsprüfung und zur Bemessung des Kinderzuschlags erforderlich sind."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/3",
+      "body_sha256": "db616b241881d9b02acf60e35ff1c94c916e7d2730811a41b3eeb794be98d1ef",
+      "body": "(1) Beschäftigte, denen eine Abrufberechtigung nach § 2 Absatz 1 erteilt worden ist, haben für jeden Datenabruf folgende Angaben zu dem Kind oder zu der kindergeldberechtigten Person mitzuteilen:\n1. die Identifikationsnummer nach § 139b der Abgabenordnung und\n2. den Tag der Geburt.\n(2) Die KG-Stelle ergänzt den Datensatz nach Absatz 1 um die Daten, die für die KiZ-Stelle zur Anspruchsprüfung und Bemessung des Kinderzuschlags erforderlich sind. Der Datenabruf ist zu beschränken\n1. auf folgende Daten des Kindes:\na) die Identifikationsnummer nach § 139b der Abgabenordnung,\nb) die Vornamen und den Nachnamen sowie frühere Namen,\nc) den Tag der Geburt,\nd) das Geschlecht,\ne) die gegenwärtige oder die letzte bekannte Anschrift,\nf) die Vornamen und den oder die Nachnamen der Eltern,\ng) die Vornamen und den Nachnamen des Zahlungsempfängers des Kindergeldes sowie die Angabe, ob ein Anwendungsfall des § 74 Absatz 1 des Einkommensteuergesetzes vorliegt,\nh) den Zeitraum der Meldung als Arbeitsuchender, wenn die übrigen Voraussetzungen des § 32 Absatz 4 Satz 1 Nummer 1 des Einkommensteuergesetzes vorliegen;\n2. auf folgende Daten der Personen, denen Kindergeld zusteht oder ohne Berücksichtigung des § 64 des Einkommensteuergesetzes zustehen würde:\na) die Identifikationsnummer nach § 139b der Abgabenordnung,\nb) die Vornamen und den Nachnamen sowie frühere Namen,\nc) den Tag der Geburt,\nd) das Geschlecht,\ne) die gegenwärtige oder die letzte bekannte Anschrift,\nf) den Familienstand;\n3. auf folgende Daten zur Kindergeldfestsetzung:\na) den Tag der Antragstellung,\nb) den Tag des Bescheides der Kindergeldfestsetzung,\nc) den Tag des Bescheides der Aufhebung der Kindergeldfestsetzung,\nd) den Zeitraum der Kindergeldfestsetzung und den Zeitraum, für den die Kindergeldfestsetzung aufgehoben wurde,\ne) die IBAN, bei ausländischen Kreditinstituten auch den BIC, des Kontos, auf das das Kindergeld ausgezahlt wird,\nf) die Angabe, ob bei der Berechnung der Höhe des Kindergeldes Leistungen im Sinne des § 65 des Einkommensteuergesetzes oder Familienleistungen nach Artikel 3 Absatz 1 Buchstabe j in Verbindung mit Artikel 1 Buchstabe z der Verordnung (EG) Nr. 883/2004 des Europäischen Parlaments und des Rates vom 29. April 2004 zur Koordinierung der Systeme der sozialen Sicherheit (ABl. L 166 vom 30.4.2004, S. 1, L 200, S. 1, L 204, S. 30), die zuletzt durch die Verordnung (EU) 2019/1149 (ABI. L 186 vom 11.7.2019, S. 21) geändert worden ist, in der jeweils geltenden Fassung berücksichtigt wurden.\n(3) Die KG-Stelle setzt geeignete technische und organisatorische Maßnahmen um zum Schutz der personenbezogenen Daten und zum Nachweis, dass die Verarbeitung dieser Daten im Einklang mit der Verordnung (EU) 2016/679 des Europäischen Parlaments und des Rates vom 27. April 2016 zum Schutz natürlicher Personen bei der Verarbeitung personenbezogener Daten, zum freien Datenverkehr und zur Aufhebung der Richtlinie 95/46/EG (Datenschutz-Grundverordnung) (ABl. L 119 vom 4.5.2016, S. 1; L 314 vom 22.11.2016, S. 72; L 127 vom 23.5.2018, S. 2; L 74 vom 4.3.2021, S. 35) steht.\n(4) Es sind dem jeweiligen Stand der Technik gemäß der Richtlinien des Bundesamtes für Sicherheit in der Informationstechnik entsprechende technische und organisatorische Maßnahmen zur Sicherstellung von Datenschutz und Datensicherheit zu treffen, die insbesondere die Verfügbarkeit, die Vertraulichkeit und die Integrität der Daten sowie die Authentisierung der abrufenden Stelle gewährleisten. Bei der Nutzung allgemein zugänglicher Netze sind angemessene und wirksame Verschlüsselungsverfahren zu verwenden. Die KG-Stelle bestimmt das einzusetzende Verschlüsselungsverfahren, das dem jeweiligen Stand der Technik entsprechen muss."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/4",
+      "body_sha256": "9393fbdcf8e6477f6d97ef4b4d84bbc7f625bfc9f958a63a51bcc2de5f848ab4",
+      "body": "(1) Die am automatisierten Abrufverfahren beteiligte KG-Stelle teilt der KiZ-Stelle mit,\n1. wenn für ein Kind Kindergeld festgesetzt wird oder\n2. wenn für ein Kind die Kindergeldfestsetzung aufgehoben wird.\n(2) Die Mitteilung nach Absatz 1 enthält die Daten im Sinne des § 3 Absatz 2."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/5",
+      "body_sha256": "211a0e75748564550cf71bd88cc5fee73b2d94cf1f92268efe3d48680b2fa042",
+      "body": "Zur Wahrung des Steuergeheimnisses und zur Sicherstellung von Datenschutz und Datensicherheit beim Abrufverfahren sind § 2 Absatz 1 und die §§ 5 bis 8 der Steuerdaten-Abrufverordnung entsprechend anzuwenden."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/6",
+      "body_sha256": "04d783b934dd9f2c834bbc55c078edf9ec6f470410b462addc4b26f9041bd193",
+      "body": "Diese Verordnung tritt am 1. Januar 2024 in Kraft."
+    },
+    {
+      "citation_path": "de/regulation/kizdav/eingangsformel",
+      "body_sha256": "990485c07787bf1329308fdae7526ca519d847c0f92d60d29637b393e69161ad",
+      "body": "Auf Grund des § 68 Absatz 5 des Einkommensteuergesetzes, der durch Artikel 9 Nummer 8 Buchstabe b des Gesetzes vom 11. Juli 2019 (BGBl. I S. 1066) eingefügt worden ist, verordnet das Bundesministerium der Finanzen:"
+    },
+    {
+      "citation_path": "de/regulation/kizdav/schlussformel",
+      "body_sha256": "f14db442cd88fe7f0dc86b122a9fb18e3e0f9fcdfac74f2879621a7c595d5f37",
+      "body": "Der Bundesrat hat zugestimmt."
+    }
+  ],
+  "kizdav_body_hash_aggregate": "0dd828dbb8bab48e38b68994c71b11dec731c023863958bce7495dea3550fe4a",
+  "estg32_body_hash_verified": "509eeb2d18357ff8e9f127cb216cb2e2f0ce4b362e5a08052c553870ce0211e2",
+  "limitations": "No exhaustive discovery, full FamFG coverage, historical-applicability or signed-encoding claim. The removed UHV unresolved genitive title now matches the existing in-scope EStG document alias, so it no longer emits a separate unresolved identity. No human exclusion was used.",
+  "closure_result": {
+    "pending_spine": 5,
+    "partial_spine": 1,
+    "pending_instruments": 268,
+    "instruments": 781,
+    "law_derived_inputs": 8,
+    "bearing_instruments_unencoded": 148,
+    "open_dependencies": 156,
+    "closed": false
+  },
+  "validation": {
+    "native_checks": 6,
+    "ledger_heading_tests_passed": 165,
+    "focused_closure_certificate_tests_passed": 22,
+    "additional_kindergeld_certificate_tests_passed": 2,
+    "recipient_priority_body_hashes_verified": 13,
+    "kizdav_rows_verified": 9,
+    "ruff": "pass",
+    "diff_check": "pass"
+  }
+}

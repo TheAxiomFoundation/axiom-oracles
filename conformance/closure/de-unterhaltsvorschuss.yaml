@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 129824521076d0e3bdc63d7c49e29680df7639b4c83e8f559ddf1c333a49982f
+    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6f064ee6081f16440dc706ae09ac60652bb67570
-    release: de-rulespec-2026-07-21
-    release_content_sha256: b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574
+    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
+    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
+    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -40,12 +40,171 @@ generated_facts:
       descendants_by: parent_citation_path
       filename_filters: false
     provision_sources:
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-cjeu.jsonl
+      sha256: 80f92f8559a0f422b0d45b25af6aba2430de1650c03dd1722eab5f99cc803b29
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-eea-parties.jsonl
+      sha256: 8b2f92d88c2b7b2a87d1b7d3839c5c00c574899513bbcc206b4c04f22e806bff
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl
+      sha256: 3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14
+      row_count: 16
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-retained.jsonl
+      sha256: b1a49775e67be84de2b12bd2b355597f0c92086697f794a39b2c9c93c58d9d85
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-parentage-constitutional.jsonl
+      sha256: 1d2cbaea3ad02547e1432d6024efbbeed2d7bf17bd242fe14230082285b8ab39
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-ristbv.jsonl
+      sha256: 436fece03eb7134430846ed4eb689155f93976bac46e0d413c29f091bb346cac
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 1dcc002b1d05a29b124c50a7a52adc04b98fbe4f67752f5dca578b0f8dfee5e2
+      row_count: 4
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-allowance-explanation.jsonl
+      sha256: 9fa16911f8963b2f3bc97bb78495d84a4571a1a3b21b2e5a5ba8d54bad220e97
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl
+      sha256: b5e9cfce78c167174e742a2fb219cb42f60b361e3dab37433da97c96b2d0edbc
+      row_count: 162
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bmf-letter-context.jsonl
+      sha256: 7557a3800822439c310f3fcfca0c070ffdcb3259347d824e987d343a3261bf9b
+      row_count: 6
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-civil-partner-letter.jsonl
+      sha256: 847da9da0164b56d23efb1afc15fd6dd79da674ab404711b8e2fdb93e48db050
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-dakg.jsonl
+      sha256: 4c059ac35a77a5ab34cbf8a87d0f40679febf5307a04b486ca4ca47f10c2a19b
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-10-de-kindergeld-disability-case.jsonl
+      sha256: a8e5f98df7c31e5688de5da7689ebc87e99e37aa74e8c63fc5692f209eb04408
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-counterpart.jsonl
+      sha256: 8ff8b66b0ba5311f30e37884881f3db2ad8c9994715d31a4a660fa09a5568b06
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-bgh-form-predecessor.jsonl
+      sha256: 807957bd21a143bd71c38feebaa517c13861193fd0d242fc6b0604e60536699a
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
+      sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
+      row_count: 12
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-arb.jsonl
+      sha256: 29b5ec6c5e7f75349e3bcf8b15e752b9ab67163b70912f79f7270651a7eb60df
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-bilateral.jsonl
+      sha256: f7de60269f7a96e555a2720a7e28cdf3465edac3c526daaf886d42e5ec86739e
+      row_count: 44
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: d1b07e68f9d1590374f8c458e1515b3c5060fb63b29b816de6460197375a8b97
+      row_count: 9
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eea.jsonl
+      sha256: 5d8089d89a8e2403bd0612430add225790580f37eaeba8db7f69f6ed0ca7075b
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-eu.jsonl
+      sha256: 5e1d4de7f1e5ef4201f4f313a6fc977d5720760b95c3af3ec244cfcb43b64bf1
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-08-de-kindergeld-withdrawal.jsonl
+      sha256: 22ccceba91ddb360b530a0f7bf89d21f3edc6e41520c335d6bb8d7d64002b9c6
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 58c063a7000c1d22241e18e91aa91a12a5af2237b27d1ece04e917caf25b3914
+      row_count: 2
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-eu-articles.jsonl
+      sha256: 3bbcd456d26ce4c130bc43ff761f4c40e18edef4176208c04659c6825b7ad59c
+      row_count: 16
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 793b523070c28df192612934ce34bb0f270fc69aad11bb175c4279c7b17d8187
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-swiss-coordination.jsonl
+      sha256: 6826c7014ae59f2727b96bfe11bba0d0ade920d7b251b8be6a9bb29d78d84b2e
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: f1958634c2f77c09df09f66892a37946a76929da7dcef8b40f84a4d26cfed045
+      row_count: 4
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-earlier.jsonl
+      sha256: 4218b77f726b7cdbc100cb7911504ba8c12fd631ebe02e1a1897952c7ee0f063
+      row_count: 8
+    - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
+      sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
       row_count: 3376
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-bgbl.jsonl
+      sha256: 80e30533507e1479acebc62038163f87052cab82d208ffe3314ab65e82ada6de
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-civil-dependencies.jsonl
+      sha256: 3ec9ce938c85f9d8fd7b74e22b207a6621ea7b9eda19c69adedb2c873a4ccd68
+      row_count: 3136
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-dependencies.jsonl
+      sha256: a864c05c97085b3d601ff204ccdc20c4c845ec1e0469b7a237ff0b3719088bac
+      row_count: 854
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-historical-sgb.jsonl
+      sha256: 6cd843c3a51b602a754735b27a02dd838d58cd461db865cc4860d9cf22f7192a
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-2025-history.jsonl
+      sha256: 656c01d2a1010a937bee8bbcd689f9ed3e0f189089d8f1e864909f51ad0b5510
+      row_count: 18
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-context.jsonl
+      sha256: 906ddf936de0e23c6f1b80685272b0744b16cbcd1a26e1466a48dbf5647e767f
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-history.jsonl
+      sha256: 9e67248ae3d7a44cb7307e1a1a4c247796610faeb233a0238026e5ab27e5d6cf
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-08-de-kindergeld-parentage-transition.jsonl
+      sha256: c8bafa5f3805c99097ecea6c1f89ecf3f036ff560562776b35f3ab4229f06059
+      row_count: 535
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-service-history.jsonl
+      sha256: 1f527d8277373aedd79bbd6562662bd3a6b5d8ac68b3e14a0afd472985632235
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-adult-services.jsonl
+      sha256: 854e48ad2b3fe59439cfa25132eac2c949135520f3c68e86abf43c18746a9163
+      row_count: 746
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-bgb-amendment.jsonl
+      sha256: 738a96e0bc4fdb44806f60bf0a1a5fc74420c2b9714205555b70ef7664398dc6
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-estg32-paragraphs.jsonl
+      sha256: e142529c96493b97b968a23e8d7195d2b21ca1bfa924e82816ec0d4a00e3bd40
+      row_count: 12
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment-history.jsonl
+      sha256: 1c98710f91de6a03d65c49f1c60c97e8eb2795441514cb1e000ae14665fad91a
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-marginal-employment.jsonl
+      sha256: 5ef820d5f4a9d2b6741d00d9a6ebbc4042867a09e3da567443797eacc6a051f2
+      row_count: 32
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-sgbiv8-threshold-paragraph.jsonl
+      sha256: 40e39360da953cbe298ace3400974ed15ec4fcc40a9b973eeb1a5644ec86f64c
+      row_count: 2
+    - path: data/corpus/provisions/de/statute/2026-09-09-de-kindergeld-treaty-texts.jsonl
+      sha256: c1b0e259edab999e9cfa262eca2f039cf457617304e0af242b050209fa02f717
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-generations-service.jsonl
+      sha256: e01cf228e16f051022d8fa6974beebeed25c293dc20c9e0e4d0df96fe91a79c0
+      row_count: 6
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-amendments.jsonl
+      sha256: 41460445b250b330e79e0fb9f845e92b3eb6c84f6c270769c6cb63f12e0e895f
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity-history.jsonl
+      sha256: 87a1f5d775c07ae803034b22db96f7c315c8062ad0dcc8b432bf7fc86340a668
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-maternity.jsonl
+      sha256: 2f2b221d8db49d8f26b529fe92949f971d2d5baf9a852b3e22a0625f2e5a55c5
+      row_count: 46
+    - path: data/corpus/provisions/de/statute/2026-09-10-de-kindergeld-recipient-priority.jsonl
+      sha256: 65a97192adfb640e7b09c4c92453872d671e25186875a848a17280691a9366f1
+      row_count: 598
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition-history.jsonl
+      sha256: 85687c1ad7bac3b92cd141cb368d890d3ebede896ccb95f3aadc42e2e2917034
+      row_count: 4
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-definition.jsonl
+      sha256: d7c8040df1941272b50bf0c77060439116ff3797d0f301741d883b4e4a0b7d86
+      row_count: 307
+    - path: data/corpus/provisions/de/statute/2026-09-11-de-kindergeld-disability-paragraphs.jsonl
+      sha256: 9d1107deb3be6c91d0cbd7a75868aa2d4b22031f9c5bb434fd93c3152744b015
+      row_count: 4
   provision_spine:
   - ordinal: 1
     corpus_ordinal: 1
@@ -158,8 +317,8 @@ generated_facts:
   rulespec_modules:
   - citation_path: de/regulation/minuhv/1
     state: captured
-    ref: d83ba3db30e2f63376aacf822d116687589b8564
-    commit: d83ba3db30e2f63376aacf822d116687589b8564
+    ref: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
+    commit: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
     path: de/regulations/minuhv/1.yaml
     sha256: c3fbc5516f9ee8165602f13d76f039a39cc8431bca75b9347d2ec4798ff99ddc
     module_id: de:regulations/minuhv/1
@@ -167,8 +326,8 @@ generated_facts:
     declared_imports: []
   - citation_path: de/statute/estg/66
     state: captured
-    ref: d83ba3db30e2f63376aacf822d116687589b8564
-    commit: d83ba3db30e2f63376aacf822d116687589b8564
+    ref: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
+    commit: b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967
     path: de/statutes/estg/66.yaml
     sha256: 7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b
     module_id: de:statutes/estg/66
@@ -305,22 +464,23 @@ generated_facts:
   dependency_enumeration:
     method: all formula inputs in every exact declared-source RuleSpec module, plus source.json program boundary rows
     scope: whole declared modules, mirroring the DK v3 producer; not a claim of root-reachable import closure
-    imports: captured per module; selected DE modules currently declare none
+    imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 57882ebddda5ec85b6044f6871f5ba8270147b571b3aa608963cea781b7552f1
+    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
     channel_receipts:
-      corpus_release: 21823c8fd17dec68d3d9b246c4e763a4549ca55283d897833c18a269704c764c
-      subject_matter_search: bc43f91161318a6508a63c4b042f130e846c19c8e121374e7071bc74d6fa953e
+      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
-      total: 15
+      total: 17
       unretrieved: 4
-    candidate_count: 21
+    candidate_count: 42
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
+      - de-corpus-2ed7071551358508dae7
       - de-corpus-3969d462857249ee5505
       - de-corpus-4ee998583657193d78b4
       - de-subject-005
@@ -333,11 +493,33 @@ generated_facts:
       document_citation_path: de/statute/bkgg-1996
       legal_authority_url: https://www.gesetze-im-internet.de/bkgg_1996/
       fundstelle: BGBl I 1995, 1250, 1378 (1996 I 714)
+    - id: de-uhv-instr-11b2fee91a7250af
+      status: pending
+      discovery_refs:
+      - de-corpus-ff8e1ba3ff32fb1fbbed
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      row_sha256: f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606
+      document_class: guidance
+      citation_label: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+      document_citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      title: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+    - id: de-uhv-instr-13c9a46f75b99498
+      status: pending
+      discovery_refs:
+      - de-corpus-414d59a54d7295abbda5
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
+      row_sha256: 40555419d498300a595a02e0fc7e81270a47ef2d060b0b0a5bf37dde2f25377d
+      document_class: guidance
+      citation_label: 'BFH, III R 28/17, 2019-11-27: Kindergeld für behinderte Kinder; keine Berücksichtigung des Kindergelds als kindeseigene Mittel'
+      document_citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
+      title: 'BFH, III R 28/17, 2019-11-27: Kindergeld für behinderte Kinder; keine Berücksichtigung des Kindergelds als kindeseigene Mittel'
     - id: de-uhv-instr-1808736a82828a59
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
-      - de-corpus-54424a966f565cf32a11
+      - de-corpus-73c93179892edaf4ec5f
       - de-corpus-80ca528e0ed2cceb764a
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
@@ -356,6 +538,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Zivilprozessordnung
+    - id: de-uhv-instr-1c560d43302dedf2
+      status: pending
+      discovery_refs:
+      - de-corpus-1d6c5f8222688638d7d7
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
+      row_sha256: d71da6bdad6dde7194ea0f0a376b370e8b5cb577a85e2c1692fb538dde9be770
+      document_class: guidance
+      citation_label: 'BFH, III R 89/09, 2010-07-15: Abzweigung des Kindergeldes an den Jugendhilfeträger bei Unterbringung des volljährigen Kindes gegen den Willen des Kindergeldberechtigten in einer betreuten Wohnform'
+      document_citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
+      title: 'BFH, III R 89/09, 2010-07-15: Abzweigung des Kindergeldes an den Jugendhilfeträger bei Unterbringung des volljährigen Kindes gegen den Willen des Kindergeldberechtigten in einer betreuten Wohnform'
     - id: de-uhv-instr-2079e2162cee1404
       status: pending
       discovery_refs:
@@ -377,6 +570,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)
+    - id: de-uhv-instr-2cd7e8e12c8d39c4
+      status: pending
+      discovery_refs:
+      - de-corpus-2f30a304d010e2c39c1c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2026
+      row_sha256: 50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9
+      document_class: guidance
+      citation_label: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
+      document_citation_path: de/guidance/bzst-dakg-2026
+      title: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
     - id: de-uhv-instr-333ba26c32e038d3
       status: pending
       discovery_refs:
@@ -389,6 +593,50 @@ generated_facts:
       body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+    - id: de-uhv-instr-337d81a4694fca6a
+      status: pending
+      discovery_refs:
+      - de-corpus-41a5dc26b1a671ee3409
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
+      row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
+      document_class: guidance
+      citation_label: 'BFH, III R 50/20, 2021-04-14: Einspruchsgegenstand; Grenzen der Überprüfungsmöglichkeit im Einspruchsverfahren; einheitliche Erstausbildung'
+      document_citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
+      title: 'BFH, III R 50/20, 2021-04-14: Einspruchsgegenstand; Grenzen der Überprüfungsmöglichkeit im Einspruchsverfahren; einheitliche Erstausbildung'
+    - id: de-uhv-instr-33c1190039335beb
+      status: pending
+      discovery_refs:
+      - de-corpus-41fd3361fab9f3182830
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
+      row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
+      document_class: guidance
+      citation_label: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+      document_citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
+      title: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+    - id: de-uhv-instr-360df2059e09e33e
+      status: pending
+      discovery_refs:
+      - de-corpus-4c94aafc83495aa484db
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
+      row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
+      document_class: guidance
+      citation_label: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+      document_citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
+      title: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+    - id: de-uhv-instr-3815239cc1f2caaf
+      status: pending
+      discovery_refs:
+      - de-corpus-96e4e579404be563244b
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
+      row_sha256: 60050cc85d4effbe0effcd2faf7e0eea390be425f1ce8ce407c7dbabbf21550f
+      document_class: guidance
+      citation_label: 'BFH, III R 35/11, 2013-04-11: Kindergeldrechtliche Erfassung monatlich wiederkehrender Einkünfte und Bezüge im Rahmen der monatsbezogenen Vergleichsrechnung bei behinderten Kindern - Wegfall der Unfähigkeit zum Selbstunterhalt wegen kindergeldschädlicher Nachzahlung'
+      document_citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
+      title: 'BFH, III R 35/11, 2013-04-11: Kindergeldrechtliche Erfassung monatlich wiederkehrender Einkünfte und Bezüge im Rahmen der monatsbezogenen Vergleichsrechnung bei behinderten Kindern - Wegfall der Unfähigkeit zum Selbstunterhalt wegen kindergeldschädlicher Nachzahlung'
     - id: de-uhv-instr-3875634198c25414
       status: pending
       discovery_refs:
@@ -399,13 +647,64 @@ generated_facts:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
-    - id: de-uhv-instr-4e1f544ea66cccdf
+    - id: de-uhv-instr-38f449529edd140f
       status: pending
       discovery_refs:
-      - de-corpus-3472b2f7643e1b771a3a
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
+      - de-corpus-83a369013d285786dbf3
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
+    - id: de-uhv-instr-3ae0493a66058fb3
+      status: pending
+      discovery_refs:
+      - de-corpus-e7fbb7878cef3bf3a26b
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
+      row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
+      document_class: guidance
+      citation_label: 'BFH, V R 43/11, 2012-10-24: Monatsprinzip bei Kindergeldberechtigung bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+      document_citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
+      title: 'BFH, V R 43/11, 2012-10-24: Monatsprinzip bei Kindergeldberechtigung bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+    - id: de-uhv-instr-3be04eb6d61b596b
+      status: pending
+      discovery_refs:
+      - de-corpus-90dff6d83f72676f8088
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
+      row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
+      document_class: guidance
+      citation_label: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
+      document_citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
+      title: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
+    - id: de-uhv-instr-3f476358fccfdc69
+      status: pending
+      discovery_refs:
+      - de-corpus-424fdc775c116b3bb63c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
+      row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
+      document_class: guidance
+      citation_label: 'BFH, III R 44/08, 2010-04-28: Anspruch des Jugendhilfeträgers auf Erstattung von Kindergeld wegen Jugendhilfeleistungen - Bei mehreren Kindern des Kindergeldberechtigten Aufteilung des Gesamtkindergeldes nach Köpfen - Besonderheiten beim Abkommenskindergeld'
+      document_citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
+      title: 'BFH, III R 44/08, 2010-04-28: Anspruch des Jugendhilfeträgers auf Erstattung von Kindergeld wegen Jugendhilfeleistungen - Bei mehreren Kindern des Kindergeldberechtigten Aufteilung des Gesamtkindergeldes nach Köpfen - Besonderheiten beim Abkommenskindergeld'
+    - id: de-uhv-instr-5c0851a954940f82
+      status: pending
+      discovery_refs:
+      - de-corpus-f70f49fa4c281cc7de8c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
+      row_sha256: 89c8e695b486a39d05ed4f2bdee81c9d6233c89e5cf5599db7a20385632b3219
+      document_class: guidance
+      citation_label: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
+      document_citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
+      title: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -425,6 +724,30 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Achten Buch Sozialgesetzbuch
+    - id: de-uhv-instr-75c3f434723fb3e9
+      status: pending
+      discovery_refs:
+      - de-corpus-96e5539d74c4afdbd09c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
+      row_sha256: 74aaa6f4a3e136e4bdc9cb16ea3e1e3573141a500de9fe4b1115c0bffca26fe4
+      document_class: guidance
+      citation_label: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
+      document_citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
+      title: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
+    - id: de-uhv-instr-78841044a219e9b8
+      status: pending
+      discovery_refs:
+      - de-corpus-7aff018523d75266dd56
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
     - id: de-uhv-instr-7aa5943b5f0a6e6c
       status: pending
       discovery_refs:
@@ -435,13 +758,17 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
-    - id: de-uhv-instr-8939b62ab3b44a39
+    - id: de-uhv-instr-7d7a5efb6250df56
       status: pending
       discovery_refs:
-      - de-corpus-f83148ffc269677da9ed
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
+      - de-corpus-3a8e5242492cc3cf31de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/esth-2024-32
+      row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
+      document_class: guidance
+      citation_label: esth-2024-32
+      document_citation_path: de/guidance/esth-2024-32
+      title: esth-2024-32
     - id: de-uhv-instr-906e7387d896596c
       status: pending
       discovery_refs:
@@ -449,6 +776,39 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Zuletzt geändert durch Art. 1 V v. 15.11.2024 I Nr. 359
+    - id: de-uhv-instr-9886b8cf5a4c26e8
+      status: pending
+      discovery_refs:
+      - de-corpus-426f73e72879edc0eab6
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
+      row_sha256: eb678a1f9028e8651ba5b84faaf5861f0db9d7b40232d95ce11a4f7aa2f07820
+      document_class: guidance
+      citation_label: 'BFH, III R 5/17, 2018-03-14: Kindergeld bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+      document_citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
+      title: 'BFH, III R 5/17, 2018-03-14: Kindergeld bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+    - id: de-uhv-instr-9a821bfac753742b
+      status: pending
+      discovery_refs:
+      - de-corpus-74347a2806a5b2ae26de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
+      row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
+      document_class: guidance
+      citation_label: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+      document_citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
+      title: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+    - id: de-uhv-instr-a2bd2172735c10fa
+      status: pending
+      discovery_refs:
+      - de-corpus-2d58d909db5ed8d2dd4d
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
+      row_sha256: c87ec27296224ae8e478d8fbf978db5f3c793e5199319f59aac4694857e0b5f1
+      document_class: guidance
+      citation_label: 'BFH, III R 40/21, 2022-09-22: Kein Kindergeldanspruch während Ausbildung zum Facharzt'
+      document_citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
+      title: 'BFH, III R 40/21, 2022-09-22: Kein Kindergeldanspruch während Ausbildung zum Facharzt'
     - id: de-uhv-instr-a303758d3667d729
       status: pending
       discovery_refs:
@@ -456,6 +816,18 @@ generated_facts:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes über Ordnungswidrigkeiten
+    - id: de-uhv-instr-a5848a433a63d2cb
+      status: pending
+      discovery_refs:
+      - de-corpus-a4207c2fad0ba9ab6084
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bt-drs-20-12778/kindergeld-explanation
+      row_sha256: 1b58d02cb4691ca097f6ee478b5cab6b26eba77019f5a50f045119ba9e9b9a59
+      document_class: guidance
+      citation_label: BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)
+      document_citation_path: de/guidance/bt-drs-20-12778/kindergeld-explanation
+      title: BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)
+      document_type: legislative explanatory memorandum excerpt, not enacted law
     - id: de-uhv-instr-a66a4cb13aaf0599
       status: pending
       discovery_refs:
@@ -485,6 +857,17 @@ generated_facts:
       document_citation_path: de/statute/sgb-3
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_3/
       fundstelle: BGBl I 1997, 594, 595
+    - id: de-uhv-instr-bf9c57bd5c2a3d58
+      status: pending
+      discovery_refs:
+      - de-corpus-11985e2a667237a5adf2
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
+      row_sha256: 956ea1e231be86bcceec0e7a635a357ac4606787bdd73d4fd21f4ed8339bcf0d
+      document_class: guidance
+      citation_label: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
+      document_citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
+      title: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -501,6 +884,19 @@ generated_facts:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-uhv-instr-c7a1a1943b91b3d8
+      status: pending
+      discovery_refs:
+      - de-corpus-474abba87bf538be4568
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-9-2018
+      row_sha256: d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9
+      document_class: statute
+      citation_label: Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)
+      body_sha256: a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca
+      document_citation_path: de/statute/sgb-9-2018
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_9_2018/
+      fundstelle: BGBl I 2016, 3234
     - id: de-uhv-instr-db7693cd9f018ff4
       status: pending
       discovery_refs:
@@ -514,6 +910,17 @@ generated_facts:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-uhv-instr-fbb51fe84fb002e1
+      status: pending
+      discovery_refs:
+      - de-corpus-eedebb46c8ce3d3e9e51
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
+      row_sha256: 8e3398004ac3c18e14b2a7cf8b553ae565b808f1c60e3c010da8f67997ab0cf8
+      document_class: guidance
+      citation_label: 'BFH, III R 9/21, 2022-06-02: Erlöschen der Kindergeldansprüche infolge von Sozialleistungen und Erstattungsansprüchen des Jobcenters'
+      document_citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
+      title: 'BFH, III R 9/21, 2022-06-02: Erlöschen der Kindergeldansprüche infolge von Sozialleistungen und Erstattungsansprüchen des Jobcenters'
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:
@@ -558,7 +965,12 @@ generated_facts:
       uncertainty: whole declared modules are enumerated conservatively to mirror the DK producer; root-reachable cross-module bindings and transitive imports remain a stabilization-sprint question
 committed_decisions:
   provisions: []
-  instrument_dispositions: []
+  instrument_dispositions:
+  - id: de-uhv-instr-a5848a433a63d2cb
+    status: classified-with-reason
+    classification: legislative_explanation_of_kindergeld_adjustment
+    reason: Official BT-Drs.20/12778 title and page64 excerpt is receipted in corpus release de-rulespec-2026-09-09-kindergeld-allowance-context at 4dece7ae257ccdda46d9e5f4589834d8a397c1d3. The operative explanatory child de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1 has body SHA-256 9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a. It explains that both child allowances under EStG32(6)S1 form the proportional Kindergeld adjustment and that EStG66(1) continues to state the fixed amount. This bears on the unencoded EStG66(3) calculation and, indirectly, Kindergeld amounts used by UhVorschG2. It is a draft legislative memorandum, not enacted law; draft article numbering does not set final commencement or amounts. Final amounts and dates must bind BGBl2024I449. The container is enrolled through this exact child; capture alone does not encode the explanation. Await EStG32 allowance history and EStG66 proportional adjustment rules.
+    bears_on_computed_surface: true
   leaf_classifications: []
   supplemental_instruments: []
 computed:
@@ -794,40 +1206,61 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 21
+    instrument_count: 42
     counts:
-      total: 21
+      total: 42
       encoded: 0
-      classified-with-reason: 0
+      classified-with-reason: 1
       excluded-with-reason: 0
-      pending: 21
+      pending: 41
     pending:
     - de-uhv-instr-11739679bb0a1df4
+    - de-uhv-instr-11b2fee91a7250af
+    - de-uhv-instr-13c9a46f75b99498
     - de-uhv-instr-1808736a82828a59
     - de-uhv-instr-1a53a8fa58131ff1
+    - de-uhv-instr-1c560d43302dedf2
     - de-uhv-instr-2079e2162cee1404
     - de-uhv-instr-2a29967484296d20
     - de-uhv-instr-2b0a8f983f861591
+    - de-uhv-instr-2cd7e8e12c8d39c4
     - de-uhv-instr-333ba26c32e038d3
+    - de-uhv-instr-337d81a4694fca6a
+    - de-uhv-instr-33c1190039335beb
+    - de-uhv-instr-360df2059e09e33e
+    - de-uhv-instr-3815239cc1f2caaf
     - de-uhv-instr-3875634198c25414
-    - de-uhv-instr-4e1f544ea66cccdf
+    - de-uhv-instr-38f449529edd140f
+    - de-uhv-instr-3ae0493a66058fb3
+    - de-uhv-instr-3be04eb6d61b596b
+    - de-uhv-instr-3f476358fccfdc69
+    - de-uhv-instr-5c0851a954940f82
     - de-uhv-instr-703d3b12aaab39f8
     - de-uhv-instr-73cb585362978769
+    - de-uhv-instr-75c3f434723fb3e9
+    - de-uhv-instr-78841044a219e9b8
     - de-uhv-instr-7aa5943b5f0a6e6c
-    - de-uhv-instr-8939b62ab3b44a39
+    - de-uhv-instr-7d7a5efb6250df56
     - de-uhv-instr-906e7387d896596c
+    - de-uhv-instr-9886b8cf5a4c26e8
+    - de-uhv-instr-9a821bfac753742b
+    - de-uhv-instr-a2bd2172735c10fa
     - de-uhv-instr-a303758d3667d729
     - de-uhv-instr-a66a4cb13aaf0599
     - de-uhv-instr-a9efdae38748dd9f
     - de-uhv-instr-b96e03076e143e8e
+    - de-uhv-instr-bf9c57bd5c2a3d58
     - de-uhv-instr-c795a7af57079afc
+    - de-uhv-instr-c7a1a1943b91b3d8
     - de-uhv-instr-db7693cd9f018ff4
+    - de-uhv-instr-fbb51fe84fb002e1
     - de-uhv-instr-guidance
     complete: false
     ledger:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
       discovery_refs:
+      - de-corpus-2ed7071551358508dae7
       - de-corpus-3969d462857249ee5505
       - de-corpus-4ee998583657193d78b4
       - de-subject-005
@@ -840,11 +1273,33 @@ computed:
       document_citation_path: de/statute/bkgg-1996
       legal_authority_url: https://www.gesetze-im-internet.de/bkgg_1996/
       fundstelle: BGBl I 1995, 1250, 1378 (1996 I 714)
+    - id: de-uhv-instr-11b2fee91a7250af
+      status: pending
+      discovery_refs:
+      - de-corpus-ff8e1ba3ff32fb1fbbed
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      row_sha256: f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606
+      document_class: guidance
+      citation_label: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+      document_citation_path: de/guidance/bfh-iii-r-65-18-2019-11-27
+      title: 'BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung'
+    - id: de-uhv-instr-13c9a46f75b99498
+      status: pending
+      discovery_refs:
+      - de-corpus-414d59a54d7295abbda5
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
+      row_sha256: 40555419d498300a595a02e0fc7e81270a47ef2d060b0b0a5bf37dde2f25377d
+      document_class: guidance
+      citation_label: 'BFH, III R 28/17, 2019-11-27: Kindergeld für behinderte Kinder; keine Berücksichtigung des Kindergelds als kindeseigene Mittel'
+      document_citation_path: de/guidance/bfh-iii-r-28-17-2019-11-27
+      title: 'BFH, III R 28/17, 2019-11-27: Kindergeld für behinderte Kinder; keine Berücksichtigung des Kindergelds als kindeseigene Mittel'
     - id: de-uhv-instr-1808736a82828a59
       status: pending
       discovery_refs:
       - de-corpus-02c3e286a3632391d014
-      - de-corpus-54424a966f565cf32a11
+      - de-corpus-73c93179892edaf4ec5f
       - de-corpus-80ca528e0ed2cceb764a
       identity_kind: corpus_citation
       citation_path: de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz
@@ -863,6 +1318,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Zivilprozessordnung
+    - id: de-uhv-instr-1c560d43302dedf2
+      status: pending
+      discovery_refs:
+      - de-corpus-1d6c5f8222688638d7d7
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
+      row_sha256: d71da6bdad6dde7194ea0f0a376b370e8b5cb577a85e2c1692fb538dde9be770
+      document_class: guidance
+      citation_label: 'BFH, III R 89/09, 2010-07-15: Abzweigung des Kindergeldes an den Jugendhilfeträger bei Unterbringung des volljährigen Kindes gegen den Willen des Kindergeldberechtigten in einer betreuten Wohnform'
+      document_citation_path: de/guidance/bfh-iii-r-89-09-2010-07-15
+      title: 'BFH, III R 89/09, 2010-07-15: Abzweigung des Kindergeldes an den Jugendhilfeträger bei Unterbringung des volljährigen Kindes gegen den Willen des Kindergeldberechtigten in einer betreuten Wohnform'
     - id: de-uhv-instr-2079e2162cee1404
       status: pending
       discovery_refs:
@@ -884,6 +1350,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes vom 12. Dezember 2019 (BGBl. I S. 2451)
+    - id: de-uhv-instr-2cd7e8e12c8d39c4
+      status: pending
+      discovery_refs:
+      - de-corpus-2f30a304d010e2c39c1c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2026
+      row_sha256: 50d338b93e18ff8bb4e6ea7954bff9aaadb355572e0861726310ea83aeaafeb9
+      document_class: guidance
+      citation_label: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
+      document_citation_path: de/guidance/bzst-dakg-2026
+      title: Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz (DA-KG) — Stand 2026
     - id: de-uhv-instr-333ba26c32e038d3
       status: pending
       discovery_refs:
@@ -896,6 +1373,50 @@ computed:
       body_sha256: 8a1d49b7ea409e69fe345f2c324599cf4896b8cae7b57bdaf136c966e583a760
       document_citation_path: de/statute/estg
       legal_authority_url: https://www.gesetze-im-internet.de/estg/
+    - id: de-uhv-instr-337d81a4694fca6a
+      status: pending
+      discovery_refs:
+      - de-corpus-41a5dc26b1a671ee3409
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
+      row_sha256: c9254a982ebd8c8a940813953f227be2002c66c71c0733a636365365220c5cc5
+      document_class: guidance
+      citation_label: 'BFH, III R 50/20, 2021-04-14: Einspruchsgegenstand; Grenzen der Überprüfungsmöglichkeit im Einspruchsverfahren; einheitliche Erstausbildung'
+      document_citation_path: de/guidance/bfh-iii-r-50-20-2021-04-14
+      title: 'BFH, III R 50/20, 2021-04-14: Einspruchsgegenstand; Grenzen der Überprüfungsmöglichkeit im Einspruchsverfahren; einheitliche Erstausbildung'
+    - id: de-uhv-instr-33c1190039335beb
+      status: pending
+      discovery_refs:
+      - de-corpus-41fd3361fab9f3182830
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
+      row_sha256: 9b39a82524102d050f6fc3d2a496367b8fa40258e61ed96d3c7ddc369a137f0e
+      document_class: guidance
+      citation_label: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+      document_citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
+      title: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+    - id: de-uhv-instr-360df2059e09e33e
+      status: pending
+      discovery_refs:
+      - de-corpus-4c94aafc83495aa484db
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
+      row_sha256: 465d251226de51155ec51003694e109e5b1fe2e4dcc9c79b1050ceb4649078ac
+      document_class: guidance
+      citation_label: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+      document_citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
+      title: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+    - id: de-uhv-instr-3815239cc1f2caaf
+      status: pending
+      discovery_refs:
+      - de-corpus-96e4e579404be563244b
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
+      row_sha256: 60050cc85d4effbe0effcd2faf7e0eea390be425f1ce8ce407c7dbabbf21550f
+      document_class: guidance
+      citation_label: 'BFH, III R 35/11, 2013-04-11: Kindergeldrechtliche Erfassung monatlich wiederkehrender Einkünfte und Bezüge im Rahmen der monatsbezogenen Vergleichsrechnung bei behinderten Kindern - Wegfall der Unfähigkeit zum Selbstunterhalt wegen kindergeldschädlicher Nachzahlung'
+      document_citation_path: de/guidance/bfh-iii-r-35-11-2013-04-11
+      title: 'BFH, III R 35/11, 2013-04-11: Kindergeldrechtliche Erfassung monatlich wiederkehrender Einkünfte und Bezüge im Rahmen der monatsbezogenen Vergleichsrechnung bei behinderten Kindern - Wegfall der Unfähigkeit zum Selbstunterhalt wegen kindergeldschädlicher Nachzahlung'
     - id: de-uhv-instr-3875634198c25414
       status: pending
       discovery_refs:
@@ -906,13 +1427,64 @@ computed:
       raw_references:
       - Aufenthaltsgesetz
       - Aufenthaltsgesetzes
-    - id: de-uhv-instr-4e1f544ea66cccdf
+    - id: de-uhv-instr-38f449529edd140f
       status: pending
       discovery_refs:
-      - de-corpus-3472b2f7643e1b771a3a
-      identity_kind: unresolved_reference
-      raw_references:
-      - Abgabenordnung
+      - de-corpus-83a369013d285786dbf3
+      identity_kind: corpus_citation
+      citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz/document-1
+      row_sha256: 1a960fbf603b583f75ab244cdefbc884d6ca897786038ff2f8eb069cbf2bcb12
+      document_class: statute
+      citation_label: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156 1
+      body_sha256: 17a83adf2b9427f081a9d3a2761212e2c010b776124146ed5bbcae180746af28
+      document_citation_path: de/statute/bgbl-2026-i-156/altersvorsorgereformgesetz
+      title: Gesetz zur Reform der steuerlich geförderten privaten Altersvorsorge (Altersvorsorgereformgesetz), BGBl. 2026 I Nr. 156
+      date_document: '2026-05-26'
+      document_type: Änderungsgesetz (amendment act)
+    - id: de-uhv-instr-3ae0493a66058fb3
+      status: pending
+      discovery_refs:
+      - de-corpus-e7fbb7878cef3bf3a26b
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
+      row_sha256: 7870d0854dfb0859e1d4f0765a6928b816cc0038f30b987429538debd5c92129
+      document_class: guidance
+      citation_label: 'BFH, V R 43/11, 2012-10-24: Monatsprinzip bei Kindergeldberechtigung bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+      document_citation_path: de/guidance/bfh-v-r-43-11-2012-10-24
+      title: 'BFH, V R 43/11, 2012-10-24: Monatsprinzip bei Kindergeldberechtigung bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+    - id: de-uhv-instr-3be04eb6d61b596b
+      status: pending
+      discovery_refs:
+      - de-corpus-90dff6d83f72676f8088
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
+      row_sha256: 5ef5a7dc32d3521c9f61fb6fa6dac3fac2b5ae58b9418c198205db63603bc7c1
+      document_class: guidance
+      citation_label: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
+      document_citation_path: de/guidance/bfh-iii-r-71-10-2011-08-04
+      title: 'BFH, III R 71/10, 2011-08-04: Kindergeld: Zeitlicher Regelungsumfang eines erst nach erfolglos durchgeführtem Rechtsbehelfsverfahren bestandskräftig gewordenen Ablehnungsbescheides - Entscheidung über teilweise unzulässige Revision - Kostenentscheidung nach Verfahrensabschnitten'
+    - id: de-uhv-instr-3f476358fccfdc69
+      status: pending
+      discovery_refs:
+      - de-corpus-424fdc775c116b3bb63c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
+      row_sha256: f7e8b13ed88e75f42b66f4c1372840f284c83d69e544105ab88c6e7b4cfeb61a
+      document_class: guidance
+      citation_label: 'BFH, III R 44/08, 2010-04-28: Anspruch des Jugendhilfeträgers auf Erstattung von Kindergeld wegen Jugendhilfeleistungen - Bei mehreren Kindern des Kindergeldberechtigten Aufteilung des Gesamtkindergeldes nach Köpfen - Besonderheiten beim Abkommenskindergeld'
+      document_citation_path: de/guidance/bfh-iii-r-44-08-2010-04-28
+      title: 'BFH, III R 44/08, 2010-04-28: Anspruch des Jugendhilfeträgers auf Erstattung von Kindergeld wegen Jugendhilfeleistungen - Bei mehreren Kindern des Kindergeldberechtigten Aufteilung des Gesamtkindergeldes nach Köpfen - Besonderheiten beim Abkommenskindergeld'
+    - id: de-uhv-instr-5c0851a954940f82
+      status: pending
+      discovery_refs:
+      - de-corpus-f70f49fa4c281cc7de8c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
+      row_sha256: 89c8e695b486a39d05ed4f2bdee81c9d6233c89e5cf5599db7a20385632b3219
+      document_class: guidance
+      citation_label: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
+      document_citation_path: de/guidance/bfh-iii-r-63-11-2013-06-13
+      title: 'BFH, III R 63/11, 2013-06-13: Pflicht zur Prüfung eines ausländischen Anspruchs auf kindergeldähnliche Leistungen bei Anwendung des § 65 Abs. 1 Satz 1 Nr. 2 EStG - Ermittlungspflichten des FG im Rahmen dieser Prüfung - Keine ausschließende Sperrwirkung des Art. 13 Abs. 1 Satz 1 der VO Nr. 1408/71'
     - id: de-uhv-instr-703d3b12aaab39f8
       status: pending
       discovery_refs:
@@ -932,6 +1504,30 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Achten Buch Sozialgesetzbuch
+    - id: de-uhv-instr-75c3f434723fb3e9
+      status: pending
+      discovery_refs:
+      - de-corpus-96e5539d74c4afdbd09c
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
+      row_sha256: 74aaa6f4a3e136e4bdc9cb16ea3e1e3573141a500de9fe4b1115c0bffca26fe4
+      document_class: guidance
+      citation_label: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
+      document_citation_path: de/guidance/bfh-iii-r-40-19-2021-07-07
+      title: 'BFH, III R 40/19, 2021-07-07: Kindergeld; Zeitpunkt des Beginns und der Beendigung des Hochschulstudiums; Übergangszeit'
+    - id: de-uhv-instr-78841044a219e9b8
+      status: pending
+      discovery_refs:
+      - de-corpus-7aff018523d75266dd56
+      identity_kind: corpus_citation
+      citation_path: de/statute/ao-1977
+      row_sha256: 19026e90699dd81cf5ceb81fca0ffac8b4b63c7edc16d166abb93b6df95e69f7
+      document_class: statute
+      citation_label: Abgabenordnung
+      body_sha256: 867a2f6049d36b7c6286c8ec3358fb606d7f7582bebef5bbbeeb66ffc3992649
+      document_citation_path: de/statute/ao-1977
+      legal_authority_url: https://www.gesetze-im-internet.de/ao_1977/
+      fundstelle: BGBl I 1976, 613 (1977 I 269)
     - id: de-uhv-instr-7aa5943b5f0a6e6c
       status: pending
       discovery_refs:
@@ -942,13 +1538,17 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Bürgerlichen Gesetzbuchs
-    - id: de-uhv-instr-8939b62ab3b44a39
+    - id: de-uhv-instr-7d7a5efb6250df56
       status: pending
       discovery_refs:
-      - de-corpus-f83148ffc269677da9ed
-      identity_kind: unresolved_reference
-      raw_references:
-      - zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156
+      - de-corpus-3a8e5242492cc3cf31de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/esth-2024-32
+      row_sha256: 9caee05e3d54a9fd53ff85aa3672692b9c4d1aaf090cea492111fb8a026b5b3a
+      document_class: guidance
+      citation_label: esth-2024-32
+      document_citation_path: de/guidance/esth-2024-32
+      title: esth-2024-32
     - id: de-uhv-instr-906e7387d896596c
       status: pending
       discovery_refs:
@@ -956,6 +1556,39 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Zuletzt geändert durch Art. 1 V v. 15.11.2024 I Nr. 359
+    - id: de-uhv-instr-9886b8cf5a4c26e8
+      status: pending
+      discovery_refs:
+      - de-corpus-426f73e72879edc0eab6
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
+      row_sha256: eb678a1f9028e8651ba5b84faaf5861f0db9d7b40232d95ce11a4f7aa2f07820
+      document_class: guidance
+      citation_label: 'BFH, III R 5/17, 2018-03-14: Kindergeld bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+      document_citation_path: de/guidance/bfh-iii-r-5-17-2018-03-14
+      title: 'BFH, III R 5/17, 2018-03-14: Kindergeld bei unbeschränkter Steuerpflicht nach § 1 Abs. 3 EStG'
+    - id: de-uhv-instr-9a821bfac753742b
+      status: pending
+      discovery_refs:
+      - de-corpus-74347a2806a5b2ae26de
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
+      row_sha256: 51b338fc04a82c0dbdc2d259d1e066fd8cdc839f4a0ed7fecc958de65a1a9c8e
+      document_class: guidance
+      citation_label: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+      document_citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
+      title: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+    - id: de-uhv-instr-a2bd2172735c10fa
+      status: pending
+      discovery_refs:
+      - de-corpus-2d58d909db5ed8d2dd4d
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
+      row_sha256: c87ec27296224ae8e478d8fbf978db5f3c793e5199319f59aac4694857e0b5f1
+      document_class: guidance
+      citation_label: 'BFH, III R 40/21, 2022-09-22: Kein Kindergeldanspruch während Ausbildung zum Facharzt'
+      document_citation_path: de/guidance/bfh-iii-r-40-21-2022-09-22
+      title: 'BFH, III R 40/21, 2022-09-22: Kein Kindergeldanspruch während Ausbildung zum Facharzt'
     - id: de-uhv-instr-a303758d3667d729
       status: pending
       discovery_refs:
@@ -963,6 +1596,21 @@ computed:
       identity_kind: unresolved_reference
       raw_references:
       - Gesetzes über Ordnungswidrigkeiten
+    - id: de-uhv-instr-a5848a433a63d2cb
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-a4207c2fad0ba9ab6084
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bt-drs-20-12778/kindergeld-explanation
+      row_sha256: 1b58d02cb4691ca097f6ee478b5cab6b26eba77019f5a50f045119ba9e9b9a59
+      document_class: guidance
+      citation_label: BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)
+      document_citation_path: de/guidance/bt-drs-20-12778/kindergeld-explanation
+      title: BT-Drucksache 20/12778, 9. September 2024 — title and Kindergeld explanatory memorandum (retained PDF pages 1 and 64)
+      document_type: legislative explanatory memorandum excerpt, not enacted law
+      classification: legislative_explanation_of_kindergeld_adjustment
+      reason: Official BT-Drs.20/12778 title and page64 excerpt is receipted in corpus release de-rulespec-2026-09-09-kindergeld-allowance-context at 4dece7ae257ccdda46d9e5f4589834d8a397c1d3. The operative explanatory child de/guidance/bt-drs-20-12778/kindergeld-explanation/document-1 has body SHA-256 9b2464369b118c536e8a09a0ab66a4b3f6be27b2e0b2d8fd52b113f6cf71964a. It explains that both child allowances under EStG32(6)S1 form the proportional Kindergeld adjustment and that EStG66(1) continues to state the fixed amount. This bears on the unencoded EStG66(3) calculation and, indirectly, Kindergeld amounts used by UhVorschG2. It is a draft legislative memorandum, not enacted law; draft article numbering does not set final commencement or amounts. Final amounts and dates must bind BGBl2024I449. The container is enrolled through this exact child; capture alone does not encode the explanation. Await EStG32 allowance history and EStG66 proportional adjustment rules.
+      bears_on_computed_surface: true
     - id: de-uhv-instr-a66a4cb13aaf0599
       status: pending
       discovery_refs:
@@ -992,6 +1640,17 @@ computed:
       document_citation_path: de/statute/sgb-3
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_3/
       fundstelle: BGBl I 1997, 594, 595
+    - id: de-uhv-instr-bf9c57bd5c2a3d58
+      status: pending
+      discovery_refs:
+      - de-corpus-11985e2a667237a5adf2
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
+      row_sha256: 956ea1e231be86bcceec0e7a635a357ac4606787bdd73d4fd21f4ed8339bcf0d
+      document_class: guidance
+      citation_label: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
+      document_citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
+      title: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
     - id: de-uhv-instr-c795a7af57079afc
       status: pending
       discovery_refs:
@@ -1008,6 +1667,19 @@ computed:
       document_citation_path: de/statute/sgb-2
       legal_authority_url: https://www.gesetze-im-internet.de/sgb_2/
       fundstelle: BGBl I 2003, 2954, 2955
+    - id: de-uhv-instr-c7a1a1943b91b3d8
+      status: pending
+      discovery_refs:
+      - de-corpus-474abba87bf538be4568
+      identity_kind: corpus_citation
+      citation_path: de/statute/sgb-9-2018
+      row_sha256: d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9
+      document_class: statute
+      citation_label: Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)
+      body_sha256: a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca
+      document_citation_path: de/statute/sgb-9-2018
+      legal_authority_url: https://www.gesetze-im-internet.de/sgb_9_2018/
+      fundstelle: BGBl I 2016, 3234
     - id: de-uhv-instr-db7693cd9f018ff4
       status: pending
       discovery_refs:
@@ -1021,6 +1693,17 @@ computed:
       document_citation_path: de/statute/beeg
       legal_authority_url: https://www.gesetze-im-internet.de/beeg/
       fundstelle: BGBl I 2006, 2748
+    - id: de-uhv-instr-fbb51fe84fb002e1
+      status: pending
+      discovery_refs:
+      - de-corpus-eedebb46c8ce3d3e9e51
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
+      row_sha256: 8e3398004ac3c18e14b2a7cf8b553ae565b808f1c60e3c010da8f67997ab0cf8
+      document_class: guidance
+      citation_label: 'BFH, III R 9/21, 2022-06-02: Erlöschen der Kindergeldansprüche infolge von Sozialleistungen und Erstattungsansprüchen des Jobcenters'
+      document_citation_path: de/guidance/bfh-iii-r-9-21-2022-06-02
+      title: 'BFH, III R 9/21, 2022-06-02: Erlöschen der Kindergeldansprüche infolge von Sozialleistungen und Erstattungsansprüchen des Jobcenters'
     - id: de-uhv-instr-guidance
       status: pending
       discovery_refs:
@@ -1045,13 +1728,14 @@ computed:
     - month_is_on_or_after_first_qualifying_month
     - month_is_on_or_before_last_qualifying_month
     unclassified_input_count: 9
-    instruments_bearing_on_computed: []
-    instruments_bearing_on_computed_count: 0
-    open_dependency_count: 9
+    instruments_bearing_on_computed:
+    - de-uhv-instr-a5848a433a63d2cb
+    instruments_bearing_on_computed_count: 1
+    open_dependency_count: 10
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 21
+    bearing_candidate_instruments: 42
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2
@@ -1063,6 +1747,6 @@ computed:
     max_depth_estimate: maximum currently captured chain from a declared output root through its RuleSpec dependency modules to a typed frontier input; lower bound until pending instruments and leaves are dispositioned
     remaining_oracle_work: oracle_target minus complete oracle rows in the sha-bound current certificate work inventory
     remaining_executable_work: executable_target minus complete reproduction-contract rows in the sha-bound current certificate work inventory
-    uncertainty: 'instrument count and depth are lower bounds because 4 of 15 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
+    uncertainty: 'instrument count and depth are lower bounds because 4 of 17 subject-matter queries remain unretrieved and retrieved documents are captured but not yet parsed into frontier rows and corpus citation scan #611 is unavailable; work counts can increase when the claim surface is stabilized or pending candidates are reviewed'
   non_encoded_reasons_complete: true
   closed: false

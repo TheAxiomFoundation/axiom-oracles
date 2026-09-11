@@ -1,0 +1,16 @@
+{
+  "schema": "de-kindergeld.original-source-access.v1",
+  "identity": "BGH VIII ZR244/96, 1997-07-30",
+  "official_access_page": "https://www.bundesgerichtshof.de/DE/Entscheidungen/EntscheidungenBis1999/entscheidungenBis1999_node.html",
+  "snapshot_file": "bgh-before2000-official.html",
+  "snapshot_sha256": "209ce02387f8d634c4f6cf6ac463fa489908ce9a2d5d33deb3979341c244d7aa",
+  "observed_access_route": "BGH states decisions through1999 can be requested in writing from Entscheidungsversand and sent by post; fees0.50EUR/page up to50pages,0.15EUR/page thereafter; postal address required; submission accepts payment obligation.",
+  "original_retrieved": false,
+  "status": "pending_original",
+  "human_action_if_no_other_official_original_found": "Provide or obtain an official complete copy of BGH VIII ZR244/96 dated30July1997. A postal request requires an address and authorization to submit a paid request. No request has been sent.",
+  "scope_limitations": [
+    "This records an access route, not a claim that every alternate official archive has been exhausted.",
+    "Secondary reproductions were found but not ingested or used to encode the law.",
+    "The citing BGH2018 text is not the original1997 judgment."
+  ]
+}

@@ -43,6 +43,52 @@ EXPECTED_SPINE_COUNTS = {
 }
 EXPECTED_LEAVES = {
     "de/kindergeld": {
+        "document_identifier",
+        "document_version_identifier",
+        "issued_notarial_authentication_is_present",
+        "issuer_identifier",
+        "notarial_authentication_document_identifier",
+        "notarial_authentication_document_version_identifier",
+        "notarial_authentication_handmark_identifier",
+        "notarial_authentication_issuer_identifier",
+        "signature_document_identifier",
+        "signature_document_version_identifier",
+        "signature_handmark_identifier",
+        "signature_is_present",
+        "signature_issuer_identifier",
+        "signature_observed_physical_method",
+        "live_birth_register_entry_exists",
+        "recorded_live_birth_date",
+        "coordination_decision_record_exists",
+        "beginning_of_change_month_payment_record_exists",
+        "recorded_effective_transition_date",
+        "current_case_id",
+        "decision_case_id",
+        "payment_record_case_id",
+        "current_child_id",
+        "decision_child_id",
+        "payment_record_child_id",
+        "current_institution_id",
+        "current_institution_member_state_id",
+        "original_payer_at_start_of_change_month_institution_id",
+        "original_payer_at_start_of_change_month_member_state_id",
+        "affected_institution_id",
+        "affected_institution_member_state_id",
+        "decision_originating_member_state_id",
+        "decision_receiving_member_state_id",
+        "kindergeld_payment_record_exists",
+        "kindergeld_payment_record_reference_year",
+        "kindergeld_payment_record_reference_month",
+        "application_for_section_64_priority_received",
+        "application_receipt_date",
+        "event_or_intraday_timepoint_date",
+        "beginning_of_day_start_date",
+        "recorded_birth_date",
+        "birth_record_child_identifier",
+        "birth_record_delivery_date",
+        "birth_record_person_identifier",
+        "candidate_child_identifier",
+        "candidate_person_identifier",
         "child_allowances_under_sections_31_and_32_6_1_are_increased",
         "claimant_entitlement",
         "correspondingly_increased_kindergeld_amount",
@@ -66,8 +112,8 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 465, 8, 1, 0, 0),
-    "de/unterhaltsvorschuss": (12, 21, 0, 2, 2, 1),
+    "de/kindergeld": (18, 903, 8, 1, 0, 0),
+    "de/unterhaltsvorschuss": (12, 42, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
 
@@ -90,6 +136,130 @@ def _load_refresh_script():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+@pytest.mark.parametrize("body", [
+    "§ 5 BFDG",
+    "§ 5 Absatz 1 Satz 2 Nummer 3 Buchstabe a des BFDG",
+    "BFDG (§ 5)",
+    "BFDG, § 5 Absatz 1",
+    "§ 5\nBFDG",
+])
+def test_inbound_section_reference_requires_connected_citation(body: str) -> None:
+    refresh = _load_refresh_script()
+    assert refresh._explicit_section_reference(body, "5", "BFDG") is not None
+
+
+@pytest.mark.parametrize("body", [
+    "§ 5 Absatz 1 Nummer 11b versicherungspflichtig sind, durch Ableistung "
+    "eines Freiwilligendienstes nach dem Bundesfreiwilligendienstgesetz",
+    "Bundesfreiwilligendienstgesetz oder dem Jugendfreiwilligendienstegesetz "
+    "oder eines vergleichbaren anerkannten Freiwilligendienstes auch nach § 5 "
+    "Absatz 1 Nummer 1 versicherungspflichtig",
+    "§ 50 Bundesfreiwilligendienstgesetz",
+])
+def test_inbound_section_reference_does_not_join_separate_clauses(body: str) -> None:
+    refresh = _load_refresh_script()
+    assert refresh._explicit_section_reference(
+        body, "5", "Bundesfreiwilligendienstgesetz"
+    ) is None
+
+
+def test_inbound_section_reference_finds_later_genuine_citation() -> None:
+    refresh = _load_refresh_script()
+    body = "§ 5 gilt hier; BFDG ist erwähnt. Maßgeblich ist § 5 Absatz 1 BFDG."
+    match = refresh._explicit_section_reference(body, "5", "BFDG")
+    assert match is not None
+    assert match.group(0) == "§ 5 Absatz 1 BFDG"
+
+
+@pytest.mark.parametrize("exact_citation", [False, True])
+def test_inbound_proximity_retains_candidate_without_false_section_binding(
+    exact_citation: bool,
+) -> None:
+    refresh = _load_refresh_script()
+    target = "de/statute/bfdg/5"
+    source = "de/statute/sgb-5/226"
+    values = [
+        {"citation_path": "de/statute/bfdg", "citation_label": "BFDG"},
+        {"citation_path": target, "body": "A preservation norm."},
+        {"citation_path": "de/statute/sgb-5", "citation_label": "SGB V"},
+        {"citation_path": source, "body": "§ 5 Absatz 1 sind versichert; BFDG gilt daneben."},
+    ]
+    if exact_citation:
+        values[-1]["body"] += " Außerdem gilt § 5 BFDG."
+    rows = [refresh.CorpusRow(value, i + 1, "a" * 64, "b" * 64)
+            for i, value in enumerate(values)]
+    by_path = {row.path: row for row in rows}
+    documents = {path: by_path[path] for path in ("de/statute/bfdg", "de/statute/sgb-5")}
+    corpus = refresh.Corpus(rows, by_path, documents, {
+        "de/statute/bfdg": "de/statute/bfdg", target: "de/statute/bfdg",
+        "de/statute/sgb-5": "de/statute/sgb-5", source: "de/statute/sgb-5",
+    }, [], {})
+    evidence = {}
+    candidates = refresh._discover_corpus_program(
+        "de/kindergeld", {"declared_sources": [{"citation_path": target}]},
+        corpus, evidence,
+    )
+    assert "corpus:de/statute/sgb-5" in candidates
+    finding, = evidence.values()
+    if exact_citation:
+        assert finding["mechanism"] == "explicit_cross_reference_inbound"
+        assert finding["resolved_citation_path"] == target
+        assert finding["matched_text"] == "§ 5 BFDG"
+    else:
+        assert finding["mechanism"] == "unresolved_cross_reference_proximity"
+        assert finding["candidate_target_citation_path"] == target
+        assert "resolved_citation_path" not in finding
+
+
+@pytest.mark.parametrize("body,expected", [
+    ("§ 64 Abs. 2 Satz 3 des Einkommensteuergesetzes", "explicit_cross_reference_inbound"),
+    ("§ 64 Absatz 2 Satz 3 des Einkommensteuergesetzes", "explicit_cross_reference_inbound"),
+    ("§ 64 gilt hier; daneben gelten Regeln des Einkommensteuergesetzes.",
+     "unresolved_cross_reference_proximity"),
+    ("§ 640 des Einkommensteuergesetzes", None),
+    ("§ 64 des Einkommensteuergesetzesentwurfs", None),
+    ("§ 64 des anderen Einkommensteuergesetzes", "unresolved_cross_reference_proximity"),
+    ("§ 64 des EStGes", None),
+])
+def test_inbound_genitive_act_title_keeps_section_binding_strict(body, expected) -> None:
+    refresh = _load_refresh_script()
+    target = "de/statute/estg/64"
+    source = "de/statute/famfg/231"
+    values = [
+        {"citation_path": "de/statute/estg", "citation_label": "EStG",
+         "metadata": {"law_title": "Einkommensteuergesetz"}},
+        {"citation_path": target, "body": "One recipient per child."},
+        {"citation_path": "de/statute/famfg", "citation_label": "FamFG"},
+        {"citation_path": source, "body": body},
+    ]
+    rows = [refresh.CorpusRow(value, i + 1, "a" * 64, "b" * 64)
+            for i, value in enumerate(values)]
+    by_path = {row.path: row for row in rows}
+    documents = {path: by_path[path] for path in ("de/statute/estg", "de/statute/famfg")}
+    corpus = refresh.Corpus(rows, by_path, documents, {
+        "de/statute/estg": "de/statute/estg", target: "de/statute/estg",
+        "de/statute/famfg": "de/statute/famfg", source: "de/statute/famfg",
+    }, [], {})
+    evidence = {}
+    candidates = refresh._discover_corpus_program(
+        "de/kindergeld", {"declared_sources": [{"citation_path": target}]},
+        corpus, evidence,
+    )
+    if expected is None:
+        assert "corpus:de/statute/famfg" not in candidates
+        assert not evidence
+    else:
+        assert "corpus:de/statute/famfg" in candidates
+        finding, = evidence.values()
+        assert finding["mechanism"] == expected
+        if expected == "explicit_cross_reference_inbound":
+            assert finding["resolved_citation_path"] == target
+            assert finding["matched_text"] == body
+        else:
+            assert finding["candidate_target_citation_path"] == target
+            assert "resolved_citation_path" not in finding
 
 
 def _artifact_items(module) -> list[tuple[str, Path]]:
@@ -165,7 +335,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 3548
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 10213
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -203,6 +373,13 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
         f"de-kg-instr-{number:03d}" for number in range(1, 6)
     ]
     assert all(row["status"] == "pending" for row in kindergeld["seed_bindings"])
+    by_id = {row["id"]: row for row in kindergeld["instruments"]}
+    edition_2026 = by_id["de-kg-instr-dakg-2026"]
+    assert edition_2026["citation_path"] == "de/guidance/bzst-dakg-2026"
+    assert {"de-subject-002", "de-subject-017"} <= set(edition_2026["discovery_refs"])
+    assert "de-subject-003" not in edition_2026["discovery_refs"]
+    assert "de-subject-003" in by_id["de-kg-instr-001"]["discovery_refs"]
+    assert "de-subject-002" not in by_id["de-kg-instr-001"]["discovery_refs"]
 
 
 def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
@@ -210,16 +387,16 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=3548)
-    assert index["row_count"] == index["mapped_row_count"] == 3548
-    assert index["body_row_count"] == 3545
+    refresh._validate_global_extraction_index(index, scanned_row_count=10213)
+    assert index["row_count"] == index["mapped_row_count"] == 10213
+    assert index["body_row_count"] == 10003
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 25
+    assert index["act_count"] == len(index["acts"]) == 245
     assert index["mechanism_counts"] == {
-        "amendment_targets": 36,
-        "explicit_cross_reference_body": 2859,
-        "law_metadata_changed_by": 18,
-        "law_metadata_fundstelle": 23,
+        "amendment_targets": 46,
+        "explicit_cross_reference_body": 6987,
+        "law_metadata_changed_by": 36,
+        "law_metadata_fundstelle": 44,
     }
     assert all(
         fact.get("target_citation_path") != act["document_citation_path"]
@@ -334,6 +511,37 @@ def test_snapshot_check_is_committed_byte_only(
     ) == 0
 
 
+@pytest.mark.parametrize("mutation", [None, "source", "query_set", "attempt"])
+def test_reused_subject_receipts_preserve_observation_and_reject_drift(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str | None,
+) -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    if mutation in {"source", "query_set"}:
+        snapshot[mutation]["sha256"] = "0" * 64
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "attempt":
+        snapshot["channels"]["subject_matter_search"]["attempts"][0]["captured_at"] = "2099-01-01T00:00:00Z"
+    prior = tmp_path / "prior.json"
+    prior.write_text(json.dumps(snapshot))
+
+    def no_network(*_args, **_kwargs):
+        raise AssertionError("receipt reuse attempted a network observation")
+
+    monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
+    if mutation is not None:
+        with pytest.raises(refresh.CaptureError):
+            refresh._reused_subject_channel(prior, refresh.DEFAULT_SOURCE, refresh.DEFAULT_QUERY_SET)
+    else:
+        reused = refresh._reused_subject_channel(prior, refresh.DEFAULT_SOURCE, refresh.DEFAULT_QUERY_SET)
+        assert reused == snapshot["channels"]["subject_matter_search"]
+
+
+def test_reuse_and_offline_capture_are_mutually_exclusive() -> None:
+    refresh = _load_refresh_script()
+    assert refresh.main(["--offline", "--subject-snapshot", str(SNAPSHOT)]) == 2
+
+
 def test_corpus_root_resolution_precedence_and_missing_error(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -416,6 +624,7 @@ def test_committed_ledgers_are_valid_and_open(program: str) -> None:
     assert isinstance(document["computed"]["closed"], bool)
     assert document["computed"]["closed"] is False
     assert summary.closed is False
+    assert summary.partially_encoded_provisions == len(document["computed"]["partially_encoded"])
 
 
 @pytest.mark.parametrize("program", PROGRAMS)
@@ -500,8 +709,13 @@ def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
         # ledger and stay pending; the four module inputs carry committed
         # law_derived classifications and remain open dependencies below.
         assert set(boundary["pending"]) == KINDERGELD_LAW_DERIVED
-        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program]
-        assert len(dependency_inputs) == len(leaves)
+        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == KINDERGELD_LAW_DERIVED | {
+            "child_allowances_under_sections_31_and_32_6_1_are_increased",
+            "correspondingly_increased_kindergeld_amount",
+            "month_is_on_or_after_first_qualifying_month",
+            "month_is_on_or_before_last_qualifying_month",
+        }
+        assert len(dependency_inputs) == 8
         # Every leaf is typed, so the boundary is complete; the eight
         # law-derived leaves keep dependency closure (below) open.
         assert boundary["complete"] is True
@@ -729,6 +943,7 @@ def test_live_corpus_reverification_rejects_a_forged_spine_receipt(
         generated["leaf_frontier"],
         generated["instrument_graph"],
         generated["measurement_basis"],
+        document["committed_decisions"],
     )
     mutant = tmp_path / "live-corpus-spine.yaml"
     _write_document(mutant, document)
@@ -1359,23 +1574,66 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 17
-    # Only the four classes (members still to be enumerated by a discovery
-    # channel) remain pending; the 13 named documents are decided on
-    # captured text.
-    pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
-    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
-    assert all(row["text_sha256"] and row["text_source"] for row in supplemental if row["status"] != "pending")
-    from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
+    assert len(supplemental) == 135
+    # The four classes remain pending because enumeration is incomplete;
+    # citation seeds have their own frontier rows. Twenty-five named documents are
+    # decided on captured text; four earlier programme instruments await legal review.
+    # One hundred and two indirect or search-discovered authorities require original-source/bearing review.
+    pending_classes = {
+        "de-kg-suppl-007",
+        "de-kg-suppl-008",
+        "de-kg-suppl-009",
+        "de-kg-suppl-010",
+    }
+    pending_earlier_instruments = {
+        "de-kg-suppl-022",
+        "de-kg-suppl-023",
+        "de-kg-suppl-024",
+        "de-kg-suppl-025",
+    }
+    pending_indirect_authorities = {
+        f"de-kg-suppl-{number:03d}" for number in range(26, 136) if number not in (26, 28, 30, 31, 33, 34, 132, 133)
+    }
+    assert {
+        row["id"] for row in supplemental if row["status"] == "pending"
+    } == pending_classes | pending_earlier_instruments | pending_indirect_authorities
+    assert all(
+        row["text_sha256"] and row["text_source"]
+        for row in supplemental
+        if row["status"] != "pending"
+    )
+    from_o24 = [
+        row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"
+    ]
     assert len(from_o24) == 15
-    dispositions = {r["id"]: r for r in document["committed_decisions"]["instrument_dispositions"]}
+    dispositions = {
+        r["id"]: r for r in document["committed_decisions"]["instrument_dispositions"]
+    }
     for row in supplemental:
         # every enrolment binds the discovering read's section text
-        assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
-    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2"}
+        assert (
+            row["discovered_in_body_sha256"]
+            == dispositions[row["discovered_by"]]["body_sha256"]
+        )
+    assert {row["discovered_by"] for row in supplemental} == {
+        "de-kg-dakg-O2.4",
+        "de-kg-dakg-O4.5",
+        "de-kg-dakg-S1.2",
+        "de-kg-dakg-A25.1",
+        "de-kg-dakg-A18.4",
+        "de-kg-dakg-A18.7",
+        "de-kg-dakg-A17.2",
+        "de-kg-dakg-A15.11",
+        "de-kg-dakg-A19.5.3",
+    }
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 448 + 17
-    assert all(sid in frontier["pending"] for sid in pending_classes)
+    assert frontier["instrument_count"] == 539 + 135 + 229
+    assert all(
+        sid in frontier["pending"]
+        for sid in pending_classes
+        | pending_earlier_instruments
+        | pending_indirect_authorities
+    )
 
 
 def test_duplicate_supplemental_ids_are_rejected() -> None:
@@ -1390,3 +1648,375 @@ def test_duplicate_supplemental_ids_are_rejected() -> None:
         },
     )
     assert any("duplicate or colliding supplemental instrument id" in error for error in errors), errors
+
+
+def test_class_discovery_keeps_citation_evidence_separate_from_operative_text():
+    module = _load_script()
+    facts, rows = module._class_discovery_candidates("de/kindergeld", [])
+    assert facts["complete"] is False
+    assert len(rows) == 229
+    assert facts["counts"] == {
+        "de-kg-suppl-007": 16, "de-kg-suppl-008": 2,
+        "de-kg-suppl-009": 171, "de-kg-suppl-010": 40,
+    }
+    assert all(row["status"] == "pending" and "body_sha256" not in row for row in rows)
+    assert module._class_discovery_candidates("de/unterhaltsvorschuss", []) == (None, [])
+
+
+@pytest.mark.parametrize("mutation", ["source", "receipt", "excerpt", "duplicate", "escape", "count", "complete", "missing"])
+def test_class_discovery_rejects_unbound_or_incomplete_evidence(tmp_path, monkeypatch, mutation):
+    import hashlib
+    import shutil
+
+    module = _load_script()
+    source = module.CLASS_DISCOVERY_PATH.parent
+    target = tmp_path / "discovery"
+    shutil.copytree(source, target)
+    path = target / "snapshot.json"
+    payload = json.loads(path.read_text())
+    if mutation == "source":
+        (target / payload["sources"][0]["path"]).write_text("changed source")
+    elif mutation == "receipt":
+        payload["captured_at"] = "changed timestamp"
+    elif mutation == "excerpt":
+        payload["members"][0]["discovery_excerpt"] = "invented citation not in source"
+    elif mutation == "duplicate":
+        payload["members"].append(copy.deepcopy(payload["members"][0]))
+    elif mutation == "escape":
+        payload["sources"][0]["path"] = "../outside.txt"
+    elif mutation == "count":
+        payload["counts"]["de-kg-suppl-007"] = 0
+    elif mutation == "complete":
+        payload["complete"] = True
+    if mutation != "receipt":
+        payload["receipt_sha256"] = hashlib.sha256(json.dumps(
+            {k: v for k, v in payload.items() if k != "receipt_sha256"},
+            ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+        ).encode()).hexdigest()
+    path.write_text(json.dumps(payload))
+    if mutation == "missing":
+        path.unlink()
+    monkeypatch.setattr(module, "CLASS_DISCOVERY_PATH", path)
+    monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+    with pytest.raises(module._SourceError):
+        module._class_discovery_candidates("de/kindergeld", [])
+
+
+@pytest.mark.parametrize("missing_inventory", [False, True])
+def test_discovery_pairs_inventories_by_full_scope(tmp_path, monkeypatch, missing_inventory):
+    import hashlib
+
+    refresh = _load_refresh_script()
+    blobs = {}
+    source = {"corpus": {"commit": "1" * 40, "inventories": [], "provision_sources": []}}
+    artifacts = []
+    for version in ("2025-original", "2026-supplement"):
+        for kind, extension in (("inventory", "json"), ("provisions", "jsonl")):
+            if missing_inventory and kind == "inventory" and version == "2026-supplement":
+                continue
+            path = f"data/corpus/{kind}/de/statute/{version}.{extension}"
+            body = {"items": [{}]} if kind == "inventory" else {
+                "citation_path": f"de/statute/{version}", "document_class": "statute",
+                "body": "Official provision text", "level": 0,
+            }
+            raw = (json.dumps(body) + "\n").encode()
+            digest = hashlib.sha256(raw).hexdigest()
+            blobs[path] = raw
+            source["corpus"]["inventories" if kind == "inventory" else "provision_sources"].append({
+                "path": path, "sha256": digest, "row_count": 1,
+            })
+            artifacts.append({"path": path, "sha256": digest, "rows": 1})
+    monkeypatch.setattr(refresh, "_run", lambda *_args: b"")
+    monkeypatch.setattr(refresh, "_git_blob", lambda _root, _commit, path: blobs[path])
+    monkeypatch.setattr(refresh, "_release_object", lambda *_args: {"artifacts": artifacts})
+    if missing_inventory:
+        with pytest.raises(refresh.CaptureError, match="no matching inventory"):
+            refresh._load_corpus(tmp_path, source)
+    else:
+        corpus = refresh._load_corpus(tmp_path, source)
+        assert len(corpus.scans) == 2
+        for scan in corpus.scans:
+            assert Path(scan["inventory"]["path"]).stem == Path(scan["provisions"]["path"]).stem
+
+
+@pytest.mark.parametrize('mutation', ['none', 'date', 'number', 'ambiguous', 'preamble', 'split', 'unsupported'])
+def test_changed_by_resolution_requires_unique_dated_full_body(mutation):
+    refresh = _load_refresh_script()
+    path = 'de/statute/bgbl-2026-i-156/example'
+    document = refresh.CorpusRow({
+        'citation_path': path,
+        'citation_label': 'Beispielgesetz, BGBl. 2026 I Nr. 156',
+        'metadata': {'date_document': '2026-05-26'},
+    }, 1, '1' * 64, None)
+    body = refresh.CorpusRow({
+        'citation_path': path + '/document-1', 'body': 'Full official act',
+        'source_format': 'pdf', 'kind': 'document',
+        'metadata': {'block_count': 1, 'page_count': 24},
+    }, 2, '2' * 64, '3' * 64)
+    rows = [document, body]
+    documents = {path: document}
+    parents = {document.path: path, body.path: path}
+    reference = 'zuletzt geändert durch Art. 3 G v. 26.5.2026 I Nr. 156'
+    if mutation == 'date':
+        document.value['metadata']['date_document'] = '2026-05-25'
+    elif mutation == 'number':
+        document.value['citation_label'] = 'Beispielgesetz, BGBl. 2026 I Nr. 1560'
+    elif mutation == 'preamble':
+        body.value['source_format'] = 'gesetze-im-internet.de-juris-xml'
+    elif mutation == 'unsupported':
+        reference = 'zuletzt geändert durch ein Gesetz'
+    elif mutation in ('ambiguous', 'split'):
+        extra = copy.deepcopy(body)
+        extra.value['citation_path'] = path + '/document-2'
+        rows.append(extra)
+        parents[extra.path] = path
+        if mutation == 'ambiguous':
+            other = copy.deepcopy(document)
+            other.value['citation_path'] = path + '-other'
+            rows.append(other)
+            documents[other.path] = other
+            parents[other.path] = other.path
+            parents[extra.path] = other.path
+    corpus = refresh.Corpus(rows, {r.path: r for r in rows}, documents, parents, [], {})
+    result = refresh._resolved_changed_by_body(corpus, reference)
+    assert result == (body.path if mutation == 'none' else None)
+
+
+def test_query_period_boundaries_are_context_not_dependency_leaves() -> None:
+    module = _load_script()
+    rows = module._module_inputs(
+        {"rules": [{"name": "eligible", "versions": [{"formula":
+            "event_date >= period_start and event_date <= period_end and unresolved_legal_condition"
+        }]}]},
+        "de:statutes/example/1",
+    )
+    assert [row["name"] for row in rows] == ["event_date", "unresolved_legal_condition"]
+    assert all(row["read_by"] == ["eligible"] for row in rows)
+
+
+@pytest.mark.parametrize("function", ["date_add_days", "date_add_months", "date_add_years"])
+def test_calendar_calls_keep_arguments_and_bare_identifiers_in_frontier(function: str) -> None:
+    spec = importlib.util.spec_from_file_location("calendar_leaf_test", SCRIPT)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    document = {"rules": [{"name": "shifted", "versions": [{
+        "formula": f"{function} (record_date, legal_duration)"
+    }]}]}
+    assert {row["name"] for row in module._module_inputs(document, "de:test")} == {
+        "record_date", "legal_duration"
+    }
+    document["rules"][0]["versions"][0]["formula"] = f"{function} + unknown_function(record_date)"
+    assert {row["name"] for row in module._module_inputs(document, "de:test")} == {
+        function, "unknown_function", "record_date"
+    }
+
+
+@pytest.mark.parametrize("literal", [
+    '"Dezember"', "'Dezember'", '"quoted \\"month\\""',
+    "'quoted \\'month\\''", '"line\\nbreak"', '"back\\\\slash"',
+    '"date_add_days(fake_date, fake_duration)"', '""', "''",
+])
+def test_string_values_do_not_create_dependency_leaves(literal: str) -> None:
+    module = _load_script()
+    document = {"rules": [{"name": "matches", "versions": [{
+        "formula": f"recorded_month == {literal} and unresolved_legal_condition"
+    }]}]}
+    assert module._module_inputs(document, "de:test") == [
+        {"slot": "de:test#input.recorded_month", "name": "recorded_month",
+         "module": "de:test", "read_by": ["matches"]},
+        {"slot": "de:test#input.unresolved_legal_condition", "name": "unresolved_legal_condition",
+         "module": "de:test", "read_by": ["matches"]},
+    ]
+
+
+def _import_test_documents():
+    return {
+        "de:regulations/wage/1": {
+            "rules": [{"name": "hourly_wage", "versions": [{"formula": "12.82"}]}]
+        },
+        "de:statutes/threshold/1": {
+            "imports": ["de:regulations/wage/1#hourly_wage"],
+            "rules": [
+                {
+                    "name": "threshold",
+                    "versions": [{"formula": "ceil(hourly_wage * 130 / 3)"}],
+                }
+            ],
+        },
+    }
+
+
+def test_exact_declared_import_resolves_rule_without_an_external_wage_leaf():
+    module = _load_script()
+    inputs, bindings = module._resolve_declared_module_imports(_import_test_documents())
+    assert inputs == []
+    assert bindings["de:statutes/threshold/1"] == [
+        {
+            "target": "de:regulations/wage/1#hourly_wage",
+            "module_id": "de:regulations/wage/1",
+            "rules": ["hourly_wage"],
+        }
+    ]
+
+
+def test_import_resolution_retains_upstream_law_derived_and_observable_inputs():
+    module = _load_script()
+    documents = _import_test_documents()
+    documents["de:regulations/wage/1"]["rules"][0]["versions"][0]["formula"] = (
+        "unencoded_statutory_rate + recorded_payment"
+    )
+    inputs, _ = module._resolve_declared_module_imports(documents)
+    assert {row["slot"] for row in inputs} == {
+        "de:regulations/wage/1#input.unencoded_statutory_rate",
+        "de:regulations/wage/1#input.recorded_payment",
+    }
+
+
+@pytest.mark.parametrize("fragment", ["#hourly_wage", ""])
+def test_transitive_imports_resolve_only_through_declared_modules(fragment):
+    module = _load_script()
+    documents = _import_test_documents()
+    documents["de:statutes/relay/1"] = {
+        "imports": ["de:regulations/wage/1" + fragment],
+        "rules": [],
+    }
+    documents["de:statutes/threshold/1"]["imports"] = [
+        "de:statutes/relay/1#hourly_wage"
+    ]
+    inputs, _ = module._resolve_declared_module_imports(documents)
+    assert inputs == []
+    del documents["de:regulations/wage/1"]
+    with pytest.raises(module._SourceError, match="not declared"):
+        module._resolve_declared_module_imports(documents)
+
+
+@pytest.mark.parametrize(
+    "mutation, diagnostic",
+    [
+        ("missing_module", "not declared"),
+        ("unknown_rule", "exported rule"),
+        ("input_as_export", "exported rule"),
+        ("empty_fragment", "exported rule"),
+        ("cycle", "cyclic"),
+        ("shadow_input", "shadowed"),
+        ("shadow_rule", "shadowed"),
+        ("duplicate_import", "shadowed"),
+        ("malformed", "malformed"),
+    ],
+)
+def test_import_resolution_rejects_missing_cyclic_and_shadowed_bindings(
+    mutation, diagnostic
+):
+    module = _load_script()
+    documents = _import_test_documents()
+    consumer = documents["de:statutes/threshold/1"]
+    if mutation == "missing_module":
+        del documents["de:regulations/wage/1"]
+    elif mutation == "unknown_rule":
+        consumer["imports"] = ["de:regulations/wage/1#unknown"]
+    elif mutation == "input_as_export":
+        documents["de:regulations/wage/1"]["inputs"] = [{"name": "recorded_wage"}]
+        consumer["imports"] = ["de:regulations/wage/1#recorded_wage"]
+    elif mutation == "empty_fragment":
+        consumer["imports"] = ["de:regulations/wage/1#"]
+    elif mutation == "cycle":
+        documents["de:regulations/wage/1"]["imports"] = [
+            "de:statutes/threshold/1#threshold"
+        ]
+    elif mutation == "shadow_input":
+        consumer["inputs"] = [{"name": "hourly_wage"}]
+    elif mutation == "shadow_rule":
+        consumer["rules"].append(
+            {"name": "hourly_wage", "versions": [{"formula": "1"}]}
+        )
+    elif mutation == "duplicate_import":
+        consumer["imports"] *= 2
+    else:
+        consumer["imports"] = [{"target": "de:regulations/wage/1#hourly_wage"}]
+    with pytest.raises(module._SourceError, match=diagnostic):
+        module._resolve_declared_module_imports(documents)
+
+
+@pytest.mark.parametrize("tamper_imported_bytes", [False, True])
+def test_rulespec_facts_verify_imported_artifact_bytes_before_resolving_inputs(
+    tmp_path, monkeypatch, tamper_imported_bytes
+):
+    import hashlib
+
+    module = _load_script()
+    documents = _import_test_documents()
+    commit = "a" * 40
+    blobs = {}
+    source_modules = []
+    declared_sources = []
+    for module_id, document in documents.items():
+        path = module_id.replace("de:", "de/") + ".yaml"
+        citation = "de/test/" + path
+        raw = yaml.safe_dump(document).encode()
+        blobs[path] = raw
+        source_modules.append({
+            "citation_path": citation,
+            "artifact": {"commit": commit, "path": path,
+                         "sha256": hashlib.sha256(raw).hexdigest()},
+        })
+        declared_sources.append({"citation_path": citation})
+    if tamper_imported_bytes:
+        blobs["de/regulations/wage/1.yaml"] = b"rules: []\n"
+    source = {"rulespec": {"modules": source_modules},
+              "programs": {"de/test": {"declared_sources": declared_sources}}}
+    monkeypatch.setattr(module, "_git", lambda *args: (commit + "\n").encode())
+    monkeypatch.setattr(module, "_git_blob", lambda _root, _commit, path: blobs[path])
+    if tamper_imported_bytes:
+        with pytest.raises(module._SourceError, match="artifact hash mismatch"):
+            module._rulespec_facts(source, "de/test", tmp_path)
+    else:
+        modules, inputs = module._rulespec_facts(source, "de/test", tmp_path)
+        assert inputs == []
+        consumer = next(row for row in modules if row["module_id"] == "de:statutes/threshold/1")
+        assert consumer["resolved_imports"][0]["target"] == "de:regulations/wage/1#hourly_wage"
+        # The first real imported DE root must also survive the offline path.
+        assert module._committed_rulespec_facts(source, "de/test", modules) == modules
+        for mutation in ("missing", "wrong_export", "wrong_target", "extra_field"):
+            bad = copy.deepcopy(modules)
+            row = next(item for item in bad if item["module_id"] == "de:statutes/threshold/1")
+            if mutation == "missing":
+                row.pop("resolved_imports")
+            elif mutation == "wrong_export":
+                row["resolved_imports"][0]["rules"] = ["unrelated_rule"]
+            elif mutation == "wrong_target":
+                row["resolved_imports"][0]["module_id"] = "de:undeclared/1"
+            else:
+                row["resolved_imports"][0]["unbound"] = True
+            with pytest.raises(module._SourceError, match="committed RuleSpec import"):
+                module._committed_rulespec_facts(source, "de/test", bad)
+
+
+@pytest.mark.parametrize(
+    "status, expected_closed",
+    [("encoded", True), ("partially-encoded", False), ("pending", False)],
+)
+def test_partial_spine_cannot_close_after_other_frontiers_close(status, expected_closed):
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    result = module._computed(
+        spine=[{"citation_path": "de/statute/example/1"}],
+        leaves=[],
+        graph={
+            "candidates": [{"id": "fixture-instrument", "status": "encoded"}],
+            "subject_search_state": {"unretrieved": 0, "total": 1},
+        },
+        measurement_basis=document["generated_facts"]["measurement_basis"],
+        decisions={"provisions": [{
+            "citation_path": "de/statute/example/1",
+            "status": status,
+            "reason": "Fixture leaves an operative branch unencoded when partial.",
+        }]},
+    )
+    assert result["instrument_frontier"]["complete"] is True
+    assert result["dependency_closure"]["closed"] is True
+    assert result["closed"] is expected_closed
+    if status == "partially-encoded":
+        assert result["pending"] == []
+        assert result["partially_encoded"] == ["de/statute/example/1"]

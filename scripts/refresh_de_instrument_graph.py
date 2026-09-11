@@ -228,10 +228,15 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     provisions = corpus.get("provision_sources")
     if not isinstance(inventories, list) or not isinstance(provisions, list):
         raise CaptureError("source.json must pin inventory and provision files")
-    inventory_by_class: dict[str, dict[str, Any]] = {}
+    inventory_by_scope: dict[tuple[str, str, str], dict[str, Any]] = {}
     for pin in inventories:
         path = str(pin.get("path", ""))
-        document_class = path.split("/")[4] if len(path.split("/")) > 4 else ""
+        parts = path.split("/")
+        if len(parts) != 6 or parts[:3] != ["data", "corpus", "inventory"]:
+            raise CaptureError(f"invalid scoped inventory path: {path}")
+        scope = (parts[3], parts[4], Path(path).stem)
+        if scope in inventory_by_scope:
+            raise CaptureError(f"duplicate inventory scope: {scope}")
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"inventory hash mismatch at pinned commit: {path}")
@@ -244,7 +249,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         artifact = release_artifacts.get(path)
         if not artifact or artifact.get("sha256") != pin.get("sha256"):
             raise CaptureError(f"inventory is not bound by the release object: {path}")
-        inventory_by_class[document_class] = {
+        inventory_by_scope[scope] = {
             "path": path,
             "sha256": pin["sha256"],
             "row_count": len(items),
@@ -256,7 +261,12 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     for pin in provisions:
         path = str(pin.get("path", ""))
         parts = path.split("/")
+        if len(parts) != 6 or parts[:3] != ["data", "corpus", "provisions"]:
+            raise CaptureError(f"invalid scoped provision path: {path}")
         document_class = parts[4] if len(parts) > 4 else ""
+        scope = (parts[3], document_class, Path(path).stem)
+        if scope not in inventory_by_scope:
+            raise CaptureError(f"provision scope has no matching inventory: {scope}")
         raw = _git_blob(root, commit, path)
         if _sha(raw) != pin.get("sha256"):
             raise CaptureError(f"provision hash mismatch at pinned commit: {path}")
@@ -292,7 +302,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
         scans.append(
             {
                 "document_class": document_class,
-                "inventory": inventory_by_class[document_class],
+                "inventory": inventory_by_scope[scope],
                 "provisions": {
                     "path": path,
                     "sha256": pin["sha256"],
@@ -341,6 +351,15 @@ def _document_aliases(document: CorpusRow) -> list[str]:
     ):
         if isinstance(value, str) and len(value.strip()) >= 3:
             aliases.add(value.strip())
+    # German compound act titles take -es in connected genitive citations,
+    # e.g. FamFG § 231(2)'s "des Einkommensteuergesetzes". Restrict this
+    # expansion to a complete single-word title grounded in this document;
+    # abbreviations and titles containing other words need separate handling.
+    aliases.update(
+        alias + "es"
+        for alias in tuple(aliases)
+        if re.fullmatch(r"[A-ZÄÖÜ][a-zäöüß]*gesetz", alias)
+    )
     match = re.fullmatch(r"de/statute/sgb-(\d+)", document.path)
     if match:
         number = int(match.group(1))
@@ -372,6 +391,31 @@ def _alias_pattern(alias: str) -> str:
     """Match a legal-title alias as a token, never inside ``festgesetzt`` etc."""
 
     return rf"(?<![\w]){re.escape(alias)}(?![\w])"
+
+
+def _explicit_section_reference(body: str, section: str, alias: str) -> re.Match[str] | None:
+    """Require citation syntax between a section number and its act title.
+
+    Proximity alone joins unrelated clauses, for example SGB V § 226(6)'s
+    own § 5 reference and a later mention of the Bundesfreiwilligendienstgesetz.
+    This resolves exact section references, not every mention of an act.
+    """
+    subdivision = (
+        r"(?:(?:Absatz|Absätze|Abs\.|Satz|Sätze|S\.|Nummer|Nummern|Nr\.|"
+        r"Buchstabe|Buchstaben|Buchst\.|Halbsatz|Alternative)\s*"
+        r"[0-9]+[a-z]?|(?:Buchstabe|Buchstaben|Buchst\.)\s*[a-z])"
+    )
+    citation_tail = rf"(?:\s+{subdivision})*"
+    title = _alias_pattern(alias)
+    number = rf"§{{1,2}}\s*{re.escape(section)}\b"
+    before = re.compile(
+        rf"{number}{citation_tail}\s*(?:(?:des|der)\s+)?{title}",
+        flags=re.IGNORECASE,
+    )
+    after = re.compile(
+        rf"{title}\s*[,:(]?\s*{number}", flags=re.IGNORECASE,
+    )
+    return before.search(body) or after.search(body)
 
 
 _RAW_REFERENCE_RULES: tuple[tuple[str, str], ...] = (
@@ -967,6 +1011,54 @@ def _resolved_section(corpus: Corpus, document_path: str, section: str) -> str |
     return None
 
 
+def _resolved_changed_by_body(corpus: Corpus, reference: str) -> str | None:
+    """Resolve numbered BGBl references only with matching date and body evidence.
+
+    Preserve ambiguity and unsupported citation forms as pending raw references.
+    Matching the act does not disposition the cited article or its effective date.
+    """
+    match = re.fullmatch(
+        r"zuletzt geändert durch Art\.\s*\d+[a-z]?\s+G v\.\s*"
+        r"(\d{1,2})\.(\d{1,2})\.(\d{4})\s+(I|II)\s+Nr\.\s*(\d+)",
+        reference.strip(),
+    )
+    if not match:
+        return None
+    day, month, year, part, number = match.groups()
+    date = f"{year}-{int(month):02d}-{int(day):02d}"
+    identity = re.compile(rf"\bBGBl\.\s*{year}\s+{part}\s+Nr\.\s*{int(number)}\b")
+    matches = []
+    for path, document in corpus.documents.items():
+        metadata = document.value.get("metadata", {})
+        if not isinstance(metadata, dict) or metadata.get("date_document") != date:
+            continue
+        if not identity.search(str(document.value.get("citation_label", ""))):
+            continue
+        bodies = [
+            row.path for row in corpus.rows
+            if corpus.document_for_path.get(row.path) == path
+            and isinstance(row.value.get("body"), str) and row.value["body"].strip()
+        ]
+        # Only a single full-body capture can resolve an article without
+        # a separately captured article path. Never substitute a preamble.
+        captured = corpus.by_path[bodies[0]].value if len(bodies) == 1 else {}
+        capture_metadata = captured.get("metadata", {})
+        if not isinstance(capture_metadata, dict):
+            return None
+        if (
+            len(bodies) == 1
+            and captured.get("source_format") == "pdf"
+            and captured.get("kind") == "document"
+            and capture_metadata.get("block_count") == 1
+            and isinstance(capture_metadata.get("page_count"), int)
+            and capture_metadata["page_count"] > 0
+        ):
+            matches.append(bodies[0])
+        else:
+            return None
+    return matches[0] if len(matches) == 1 else None
+
+
 def _discover_corpus_program(
     program: str,
     source_program: Mapping[str, Any],
@@ -1002,8 +1094,8 @@ def _discover_corpus_program(
             evidence_id,
         )
 
-    # Fundstelle is an identity fact for each declared act; ``stand`` is an
-    # opaque changed_by analogue and therefore a pending candidate verbatim.
+    # Preserve changed-by references verbatim, resolving only uniquely
+    # identified numbered BGBl acts with a retained full body.
     for document_path in sorted(declared_documents):
         document = corpus.documents.get(document_path)
         if not document:
@@ -1026,16 +1118,17 @@ def _discover_corpus_program(
             )
         stand = law.get("stand")
         if isinstance(stand, str) and stand.strip():
-            add_raw(
-                f"stand:{document_path}:{stand.casefold()}",
-                stand,
-                {
-                    "mechanism": "law_metadata_changed_by",
-                    "source_citation_path": document_path,
-                    "source_row_sha256": document.raw_sha256,
-                    "raw_reference": stand,
-                },
-            )
+            payload = {
+                "mechanism": "law_metadata_changed_by",
+                "source_citation_path": document_path,
+                "source_row_sha256": document.raw_sha256,
+                "raw_reference": stand,
+            }
+            resolved = _resolved_changed_by_body(corpus, stand)
+            if resolved:
+                add_path(resolved, {**payload, "resolved_citation_path": resolved})
+            else:
+                add_raw(f"stand:{document_path}:{stand.casefold()}", stand, payload)
 
     aliases = {path: _document_aliases(row) for path, row in corpus.documents.items()}
 
@@ -1225,7 +1318,7 @@ def _discover_corpus_program(
                     },
                 )
 
-    # All 3,548 rows participate in the two inbound mechanisms.  Body matching
+    # Every pinned row participates in the inbound mechanisms. Body matching
     # is targeted to explicit act+section citations to configured roots; it is
     # not the future comprehensive citation scan tracked in corpus#611.
     exact_targets = sorted(scope | declared)
@@ -1262,17 +1355,9 @@ def _discover_corpus_program(
             if not target_row or not target_document or target == target_document:
                 continue
             section = target.rsplit("/", 1)[-1]
+            unresolved_match = None
             for alias in aliases[target_document]:
-                alias_re = _alias_pattern(alias)
-                before = re.compile(
-                    rf"§{{1,2}}\s*{re.escape(section)}\b[^§\n]{{0,140}}{alias_re}",
-                    flags=re.IGNORECASE,
-                )
-                after = re.compile(
-                    rf"{alias_re}[^§\n]{{0,140}}§{{1,2}}\s*{re.escape(section)}\b",
-                    flags=re.IGNORECASE,
-                )
-                reference_match = before.search(body) or after.search(body)
+                reference_match = _explicit_section_reference(body, section, alias)
                 if reference_match is not None:
                     source_candidate = corpus.document_for_path.get(row.path, row.path)
                     if source_candidate not in excluded:
@@ -1289,8 +1374,35 @@ def _discover_corpus_program(
                         )
                     break
                 else:
+                    # Preserve recall for citation forms not yet understood by
+                    # the exact matcher. Proximity is discovery evidence only:
+                    # it must not assert that this section belongs to this act.
+                    alias_re = _alias_pattern(alias)
+                    proximity = re.search(
+                        rf"§{{1,2}}\s*{re.escape(section)}\b[^§\n]{{0,140}}{alias_re}"
+                        rf"|{alias_re}[^§\n]{{0,140}}§{{1,2}}\s*{re.escape(section)}\b",
+                        body,
+                        flags=re.IGNORECASE,
+                    )
+                    if proximity is not None and unresolved_match is None:
+                        unresolved_match = proximity
                     continue
-                break
+            else:
+                if unresolved_match is not None:
+                    source_candidate = corpus.document_for_path.get(row.path, row.path)
+                    if source_candidate not in excluded:
+                        add_path(
+                            source_candidate,
+                            {
+                                "mechanism": "unresolved_cross_reference_proximity",
+                                "source_citation_path": row.path,
+                                "source_body_sha256": row.body_sha256,
+                                "source_row_sha256": row.raw_sha256,
+                                "matched_text": unresolved_match.group(0),
+                                "candidate_target_citation_path": target,
+                                "resolution": "unresolved_act_section_association",
+                            },
+                        )
     return candidates
 
 
@@ -1466,6 +1578,16 @@ def _render_candidates(program: str, candidates: Mapping[str, Candidate]) -> lis
     return rendered
 
 
+def _reused_subject_channel(
+    snapshot_path: str | Path, source_path: Path, query_set_path: Path,
+) -> dict[str, Any]:
+    prior_snapshot = json.loads(Path(snapshot_path).read_bytes())
+    # Preserve the original attempt timestamps, successes and failures. A
+    # refresh of corpus evidence is not a fresh network observation.
+    validate_snapshot(prior_snapshot, source_path=source_path, query_set_path=query_set_path)
+    return copy.deepcopy(prior_snapshot["channels"]["subject_matter_search"])
+
+
 def build_snapshot(
     query_set_path: str | Path,
     source_path: str | Path,
@@ -1473,12 +1595,17 @@ def build_snapshot(
     attempt_network: bool = True,
     *,
     timeout: float = DEFAULT_TIMEOUT,
+    subject_snapshot_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """Build one DE discovery snapshot from pinned corpus blobs and URL attempts."""
     query_path = Path(query_set_path).resolve()
     source_file = Path(source_path).resolve()
     source, source_raw = _read_json(source_file, SOURCE_SCHEMA)
     query_set, query_raw = _read_json(query_path, QUERY_SCHEMA)
+    reused_subject = (
+        _reused_subject_channel(subject_snapshot_path, source_file, query_path)
+        if subject_snapshot_path is not None else None
+    )
     if set(source.get("programs", {})) != set(PROGRAMS):
         raise CaptureError("source.json program set is not the preregistered DE candidate set")
     root = _resolve_corpus_root(corpus_root)
@@ -1512,7 +1639,10 @@ def build_snapshot(
             "evidence": sorted(evidence.values(), key=lambda row: row["id"]),
         }
     )
-    subject_channel = _subject_channel(query_set, attempt_network, timeout, captured_at)
+    if reused_subject is not None:
+        subject_channel = reused_subject
+    else:
+        subject_channel = _subject_channel(query_set, attempt_network, timeout, captured_at)
     query_by_id = {row["id"]: row for row in query_set["queries"]}
     for program in PROGRAMS:
         _merge_subject_candidates(
@@ -1790,6 +1920,10 @@ def main(argv: list[str] | None = None) -> int:
         help="validate committed snapshot bytes without corpus or network access",
     )
     parser.add_argument("--offline", action="store_true", help="capture explicit unretrieved attempts without network")
+    parser.add_argument(
+        "--subject-snapshot", type=Path,
+        help="reuse original subject-channel receipts from a validated snapshot with identical source and query bindings",
+    )
     parser.add_argument("--diff", action="store_true", help="capture, show semantic drift, and write nothing")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--query-set", type=Path, default=DEFAULT_QUERY_SET)
@@ -1809,12 +1943,15 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.timeout <= 0:
             raise CaptureError("--timeout must be positive")
+        if args.offline and args.subject_snapshot is not None:
+            raise CaptureError("--offline and --subject-snapshot are mutually exclusive")
         snapshot = build_snapshot(
             args.query_set,
             args.source,
             args.corpus_root,
             attempt_network=not args.offline,
             timeout=args.timeout,
+            subject_snapshot_path=args.subject_snapshot,
         )
         if args.diff:
             if not args.output.exists():
