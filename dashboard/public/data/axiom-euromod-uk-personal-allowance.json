@@ -360,7 +360,7 @@
       "axiom_rules_engine_sha": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-12T10:59:41Z",
+    "generated_at": "2026-09-12T15:44:35Z",
     "generated_by": "scripts/run_comparison.py::uk-personal-allowance-ukmod",
     "oracle": {
       "euromod_country": "UK",
