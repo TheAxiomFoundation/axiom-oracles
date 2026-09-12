@@ -417,7 +417,7 @@
       "axiom_rules_engine_sha": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-12T04:47:13Z",
+    "generated_at": "2026-09-12T10:59:47Z",
     "generated_by": "scripts/run_comparison.py::be-marital-quotient",
     "oracle": {
       "euromod_country": "BE",
