@@ -49,5 +49,12 @@
     "path": "sgbix2-paired-witness-diagnostic.json",
     "sha256": "118c7f09981e68ce7b6ca35e16376d17e8dc1c7b96c0832e37b9d3ef6ca99e30",
     "finding": "The unchanged validator recognizes eight one-input toggled witnesses, including the age-deviation and threatened-disability pairs, but assigns no witness to either German source clause. This localizes the failed gate to source-to-selector matching, not absence of all attempted pairs. Precise matching repair remains unresolved; no gate was weakened. The independent law-derived-input and temporal defects still reject the candidate."
+  },
+  "current_encoder_replay": {
+    "path": "sgbix2-witness-filter-diagnostic-2026-09-14.json",
+    "sha256": "3a22bf235a669526d5753891158ff1bbbe02e280fea51ea1c040b924d4ddc484",
+    "encoder_commit": "35e594e85a4f852eb87225d60461c6cff962105f",
+    "finding": "The unchanged current encoder reproduces the rejection on the original byte-bound candidate and tests. All eight witnesses fail both direct and composite source-condition relevance for both German clauses. The diagnostic records path, orientation and effect filters separately. No source, generated candidate, companion case, gate or signing policy was changed. The independent observable-evidence and calendar-duration defects remain unresolved.",
+    "relationship_to_missing_bgh_original": "None: this disability-definition repair can proceed independently of the pending BGH VIII ZR244/96 original. No paid request has been sent."
   }
 }
