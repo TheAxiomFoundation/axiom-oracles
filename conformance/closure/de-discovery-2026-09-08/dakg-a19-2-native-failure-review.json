@@ -45,7 +45,7 @@
   "technical_findings": [
     "Reproduced: source_states_explicit_computation treats the medical-proof sentence as arithmetic solely because of docket 62/99; replacing only the docket makes it false.",
     "Retained diagnostic truncates the onset clause at 25., omitting Lebensjahr and following required contents.",
-    "The final sol log rejects a proof excerpt which is an exact substring of its saved source.txt. Isolated replay is still required; this is not established as fabricated text.",
+    "The final sol proof rejection is reproduced by the token-boundary guard: its exact substring omits the glued sentence marker2; including the original marker passes. See dakg-a19-2-proof-boundary-replay.json. No proof-validator change is needed.",
     "The retained tests contain 49/50 comparisons, so a missing-50 diagnostic alone does not prove absence of a boundary test."
   ],
   "independent_review": "Independent review of immutable source and failure artifacts confirmed candidate defects and the docket arithmetic reproduction. Parser repairs do not establish legal acceptance.",

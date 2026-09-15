@@ -1,0 +1,16 @@
+{
+  "schema": "de-kindergeld-proof-boundary-replay.v1",
+  "native_run": 34924883403,
+  "source_body_sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+  "candidate_sha256": "bdcdf323f31a023a9c322d3f207ff0469f25fb0cc0254388eeeb30b489cff14f",
+  "validator_baseline_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+  "validator_file_sha256": "237e7c14d2d5eac209ebb87a2f0acaaa1858534051b86d1847e1fccc31d59d91",
+  "rule": "medical_documentary_route_present",
+  "atom_index": 0,
+  "excerpt_sha256": "856187a910d8a72b0c893d54c8a1c4b52947864d9d5efe0d9d644346b217827f",
+  "excerpt_is_exact_substring": true,
+  "unmodified_excerpt_accepted": false,
+  "excerpt_with_original_sentence_marker_accepted": true,
+  "immediate_source_prefix": "den entsprechenden Bescheid.\n2",
+  "conclusion": "The excerpt starts immediately after glued sentence marker2. The existing token-boundary guard rejects that start; retaining the original2 passes. The diagnostic is reproduced without changing the source resolver. No proof validator change or generated candidate edit is needed for this finding. This does not resolve other candidate defects."
+}
