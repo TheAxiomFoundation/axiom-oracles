@@ -72,7 +72,7 @@
     "tested_head": "fadf7361389ef3ba26ce3f8030b7e337f14ec17b"
   },
   "prepared_native_repair": {
-    "status": "dispatched_pending_native_result",
+    "status": "failed_native_validation",
     "review_finding": {
       "path": "sgbix2-second-attempt-review-finding.txt",
       "sha256": "2deb2fb0da367343798bd7d420a672c2600c7a33ba3c0b7d984ec2a9060972e7"
@@ -97,6 +97,9 @@
     "native_run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34917426587",
     "encoder_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
     "rulespec_commit": "ce205b75d6d998bb431de3715ae2a8b105b3a61b",
-    "dispatch_sha256": "51940356afa752b042237d351d846fb9b8790cedf3e083938977fb149dfc4136"
+    "dispatch_sha256": "51940356afa752b042237d351d846fb9b8790cedf3e083938977fb149dfc4136",
+    "failure_review": "sgbix2-second-native-failure-review.json",
+    "signatures": 0,
+    "next_step": "Check exact relation-binding capability and source-grounded evidence requirements; no unchanged retry."
   }
 }

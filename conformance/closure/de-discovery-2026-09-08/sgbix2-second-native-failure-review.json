@@ -1,0 +1,26 @@
+{
+  "workflow_run": 34917426587,
+  "workflow_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34917426587",
+  "conclusion": "failure",
+  "signatures": 0,
+  "coverage_effect": "none",
+  "artifact_sha256": "a31efcbe4f75387e4a0cdc2704e83bb67354be45918bbe51a024ed20021c24ca",
+  "candidate_files": {
+    "inhalt.test.yaml": "ffbb17994dd2c120ad9ce6d105638fdcfb4bedabb0bb0d196d8724c1047c8d71",
+    "inhalt.yaml": "521185c309f794e75852f23df475c9749ea009e4a0d1916cd27937792d134939"
+  },
+  "independent_review": {
+    "executable_candidate": [
+      "Nineteen Person/Month scalar flags do not establish observable evidence/subject/date associations.",
+      "Indefinite-duration flag directly supplies a statutory result.",
+      "Expected-impairment rule only wraps subtype and age-relative flags.",
+      "Four tests lack age and forecast blocking pairs; six-month comparison changes both dates."
+    ],
+    "final_model_response": [
+      "Raw sol response defers outputs with empty rules/tests; omitted repair_remove markers cause documented overlay to preserve prior rejected items.",
+      "Broad missing-standard deferrals do not identify exact captured dependencies.",
+      "No technical reproduction establishes the asserted relation-binding runtime limitation."
+    ],
+    "next_step": "Bounded relation-binding capability check and source research; no unchanged generation retry or gate relaxation justified."
+  }
+}
