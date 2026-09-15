@@ -56,5 +56,17 @@
     "encoder_commit": "35e594e85a4f852eb87225d60461c6cff962105f",
     "finding": "The unchanged current encoder reproduces the rejection on the original byte-bound candidate and tests. All eight witnesses fail both direct and composite source-condition relevance for both German clauses. The diagnostic records path, orientation and effect filters separately. No source, generated candidate, companion case, gate or signing policy was changed. The independent observable-evidence and calendar-duration defects remain unresolved.",
     "relationship_to_missing_bgh_original": "None: this disability-definition repair can proceed independently of the pending BGH VIII ZR244/96 original. No paid request has been sent."
+  },
+  "proposed_encoder_repair": {
+    "pull_request": "https://github.com/TheAxiomFoundation/axiom-encode/pull/1638",
+    "head": "8c803a66ec53b8f38b9d4a3d2523586842f50320",
+    "status": "draft_pending_independent_review_and_ci",
+    "replay": {
+      "path": "sgbix2-proposed-repair-replay-2026-09-14.json",
+      "sha256": "aed54f94d8a49e97df50391f480aa08057ee2034918473cb65e69f5d6ded6dbf"
+    },
+    "result": "The unchanged candidate has one accepted witness for the age-relative clause and none for the forecast clause. It remains rejected. No generation attempt, signature, application or module declaration follows from this diagnostic.",
+    "checks": "6452 source-completeness/matching tests pass. Matching baseline: four expected failures and11 rejection passes; repaired matcher:15pass. Ruff and compileall pass. Full-suite CI at this head is queued; earlier CI failed only the subsequently fixed version-bump guard.",
+    "remaining": "Forecast-condition/source-reference matching, actual observable medical evidence associations and dated calendar-duration calculation remain unresolved. The missing BGH original is independent of this repair."
   }
 }
