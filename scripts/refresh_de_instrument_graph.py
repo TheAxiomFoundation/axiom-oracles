@@ -1510,47 +1510,63 @@ def _merge_subject_candidates(
     corpus: Corpus,
     source_program: Mapping[str, Any],
 ) -> None:
-    url_documents: dict[str, str] = {}
+    # A single PDF URL can have several receipted source units. Never let
+    # dictionary order choose one, or move a shared seed to only one URL's hit.
+    url_documents: dict[str, set[str]] = {}
     for path, row in corpus.documents.items():
         metadata = row.value.get("metadata", {})
-        for key in ("legal_authority_url", "xml_source_url"):
-            value = metadata.get(key) if isinstance(metadata, dict) else None
+        values = [row.value.get("source_url")]
+        if isinstance(metadata, dict):
+            values.extend(metadata.get(key) for key in ("legal_authority_url", "xml_source_url"))
+        for value in values:
             if isinstance(value, str):
-                url_documents[value.rstrip("/")] = path
-        source_url = row.value.get("source_url")
-        if isinstance(source_url, str):
-            url_documents[source_url.rstrip("/")] = path
+                url_documents.setdefault(value.rstrip("/"), set()).add(path)
     declared = _declared_paths(source_program)
     declared_documents = {
         corpus.document_for_path.get(path, path) for path in declared
     }
-    for attempt in attempts:
-        if program not in attempt.get("programs", []):
-            continue
+    selected = [attempt for attempt in attempts if program in attempt.get("programs", [])]
+    seed_matches: dict[str, list[set[str]]] = {}
+    for attempt in selected:
         query = queries[str(attempt["id"])]
         seed = query.get("candidate_seed")
-        if isinstance(seed, str) and not seed.startswith(PROGRAM_PREFIX[program] + "-"):
+        if isinstance(seed, str) and seed.startswith(PROGRAM_PREFIX[program] + "-"):
+            seed_matches.setdefault(seed, []).append(
+                url_documents.get(str(query["url"]).rstrip("/"), set())
+            )
+    # Preserve existing unique corpus bindings (e.g. BKGG). A mixed or
+    # ambiguous group retains its subject seed and separate corpus candidates.
+    resolved_seeds = {}
+    for seed, matches in seed_matches.items():
+        combined = set().union(*matches)
+        if len(combined) == 1 and all(len(paths) == 1 for paths in matches):
+            resolved_seeds[seed] = next(iter(combined))
+    for attempt in selected:
+        query = queries[str(attempt["id"])]
+        seed = query.get("candidate_seed")
+        if not isinstance(seed, str) or not seed.startswith(PROGRAM_PREFIX[program] + "-"):
             seed = None
-        path = url_documents.get(str(query["url"]).rstrip("/"))
-        if path in declared or path in declared_documents:
+        paths = url_documents.get(str(query["url"]).rstrip("/"), set())
+        remaining = paths - declared - declared_documents
+        if paths and not remaining:
             continue
-        if path:
+        for path in sorted(remaining):
             identity = f"corpus:{path}"
             facts = {"identity_kind": "corpus_citation", **_row_fact(corpus.by_path[path], corpus)}
-        elif isinstance(seed, str):
+            candidate = candidates.setdefault(identity, Candidate(identity, facts))
+            candidate.refs.add(str(attempt["id"]))
+            if seed is not None and resolved_seeds.get(seed) == path:
+                candidate.seed_ids.add(seed)
+        if seed is not None and seed not in resolved_seeds:
             identity = f"subject-seed:{seed}"
             facts = {
                 "identity_kind": "subject_seed",
                 "raw_reference": query["query"],
                 "subject_urls": [query["url"]],
             }
-        else:
-            continue
-        candidate = candidates.setdefault(identity, Candidate(identity, facts))
-        candidate.refs.add(str(attempt["id"]))
-        if isinstance(seed, str):
+            candidate = candidates.setdefault(identity, Candidate(identity, facts))
+            candidate.refs.add(str(attempt["id"]))
             candidate.seed_ids.add(seed)
-        if identity.startswith("subject-seed:"):
             urls = set(candidate.facts.get("subject_urls", []))
             urls.add(query["url"])
             candidate.facts["subject_urls"] = sorted(urls)

@@ -2070,3 +2070,44 @@ def test_partial_spine_cannot_close_after_other_frontiers_close(status, expected
     if status == "partially-encoded":
         assert result["pending"] == []
         assert result["partially_encoded"] == ["de/statute/example/1"]
+
+
+@pytest.mark.parametrize("case", ["mixed", "ambiguous", "distinct", "unique", "declared"])
+def test_subject_seed_resolution_preserves_every_source_unit(case):
+    refresh = _load_refresh_script()
+    program = "de/kindergeld"
+    seed = "de-kg-instr-001"
+    paths = ["de/guidance/document-a"]
+    if case in {"ambiguous", "distinct"}:
+        paths.append("de/guidance/document-b")
+    rows = [refresh.CorpusRow({"citation_path": path, "source_url": "https://example.test/source.pdf"}, i, str(i) * 64, None) for i, path in enumerate(paths, 1)]
+    if case == "distinct":
+        rows[1].value["source_url"] = "https://example.test/other.pdf"
+    by_path = {row.path: row for row in rows}
+    corpus = refresh.Corpus(rows, by_path, by_path, {p: p for p in paths}, [], {})
+    queries = {"q1": {"id": "q1", "url": "https://example.test/source.pdf", "query": "Original document", "candidate_seed": seed}}
+    if case == "mixed":
+        queries["q0"] = {"id": "q0", "url": "https://example.test/listing", "query": "Original document", "candidate_seed": seed}
+    if case == "distinct":
+        queries["q2"] = {"id": "q2", "url": "https://example.test/other.pdf", "query": "Original document", "candidate_seed": seed}
+    attempts = [{"id": key, "programs": [program]} for key in queries]
+    source_program = {"declared_sources": [{"citation_path": paths[0]}]} if case == "declared" else {}
+    candidates = {}
+    refresh._merge_subject_candidates(program, candidates, attempts, queries, corpus, source_program)
+    rendered = refresh._render_candidates(program, candidates)
+    if case == "declared":
+        assert rendered == []
+    elif case == "unique":
+        assert len(rendered) == 1
+        assert rendered[0]["id"] == seed
+        assert rendered[0]["citation_path"] == paths[0]
+    else:
+        assert len(rendered) == len(paths) + 1
+        subject = next(row for row in rendered if row["id"] == seed)
+        assert subject["identity_kind"] == "subject_seed"
+        assert subject["discovery_refs"] == sorted(queries)
+        assert {row["citation_path"] for row in rendered if "citation_path" in row} == set(paths)
+        reversed_corpus = refresh.Corpus(list(reversed(rows)), by_path, dict(reversed(list(by_path.items()))), {p: p for p in paths}, [], {})
+        again = {}
+        refresh._merge_subject_candidates(program, again, attempts, queries, reversed_corpus, source_program)
+        assert refresh._render_candidates(program, again) == rendered
