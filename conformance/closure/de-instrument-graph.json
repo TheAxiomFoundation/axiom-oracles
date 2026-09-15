@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-15T03:14:41Z",
+  "generated_at": "2026-09-15T13:35:27Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "dae254694291306798396c66896265bdc5840cdd7dea1eefe83460733d7531fe"
+    "sha256": "615865bd5ddee8e785b2d6ee165645cbe6d594b864b2c4baa54a1d331f57ae6e"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-14-kindergeld-dakg2025-sections",
-      "commit": "6047f3acaeb056df101c7aeefdd1718523cfa494",
-      "release_content_sha256": "e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c",
+      "release": "de-rulespec-2026-09-15-kindergeld-dakg2025-preface",
+      "commit": "12a32e752191ca507669aa76f7b5a909c7e3efe6",
+      "release_content_sha256": "4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-14-kindergeld-dakg2025-sections/e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c.json",
-        "raw_sha256": "d3fa5ae29e7fe555d9a0b9084e7688c60045e88062057b961165d9ef627322c3",
-        "content_sha256": "e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c"
+        "path": "releases/de-rulespec-2026-09-15-kindergeld-dakg2025-preface/4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b.json",
+        "raw_sha256": "ff63f68c21b65d892c1cfd467b69d51df125e37ffcc355c2771d4a0fbf7c33d8",
+        "content_sha256": "4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b"
       },
       "scans": [
         {
@@ -254,6 +254,19 @@
             "path": "data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl",
             "sha256": "a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988",
             "row_count": 421
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.json",
+            "sha256": "fffa78c5eb4066b4664d3787ddf65ef10331ce72916632e90ac40cf2d30e0376",
+            "row_count": 2
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl",
+            "sha256": "b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e",
+            "row_count": 2
           }
         },
         {
@@ -777,23 +790,23 @@
           }
         }
       ],
-      "scanned_row_count": 10642,
+      "scanned_row_count": 10644,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 10642,
-        "body_row_count": 10427,
-        "mapped_row_count": 10642,
+        "row_count": 10644,
+        "body_row_count": 10428,
+        "mapped_row_count": 10644,
         "unmapped_row_count": 0,
-        "act_count": 250,
+        "act_count": 251,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 7280,
+          "explicit_cross_reference_body": 7281,
           "law_metadata_changed_by": 36,
           "law_metadata_fundstelle": 44
         },
-        "row_scan_sha256": "ead21e0e800de0f219bca943a079d827e081b0c091df8b3ad7ecde314848adb4",
-        "canonical_index_sha256": "0d9101318654e5db393d72587be90bd7a458289c3ae89b404a76acb8c1909209",
-        "per_act_sha256": "2d4dcbf112375206f96052a1dd04d41935ef867c1cab6c755432588afa594cf8",
+        "row_scan_sha256": "c9671abfb505e2b8eda63bc742db2f63498a38d92855f0f7081dbf6136bc21a5",
+        "canonical_index_sha256": "746dd47401db3e2d1f9f07d6561eeb6e66f81f029994c2363e9aff1bfaa8ad3c",
+        "per_act_sha256": "cc9b0c2ccfbe3a4c5da240b34b06a7f527819c5562ac18bfab4104ecdbe06cd6",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -9599,6 +9612,29 @@
                 "source_row_sha256": "024502992ca5676d4f554e163c646e7c61d18c3a3d69794a945f044c2b970e34",
                 "matched_text": "ZPO",
                 "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bzst-dakg-2025/preface",
+            "document_row_sha256": "49cf223710f67c62ee09d197aa0c007d1e329e9e57461c4d2e00417a0ea017a9",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 1,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "7f0aecdbd4765e2fb971e7aa3d8c51c3702c7133c686044d67164aebf47e47d1",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bzst-dakg-2025/preface/document-1",
+                "source_body_sha256": "042fc22ef219ce42a9658d8ce6503bcf845a4ad823fe00e145bd8332c820adb4",
+                "source_row_sha256": "e163d2ee157da66e97993feb538b371ef401eece92ac5c068da57868e65735f8",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
               }
             ]
           },
@@ -65900,7 +65936,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "23a69434a5ba85fd0ea700c8d5a4371c6f296f4846e188469efcdce5101bf801"
+        "receipt_sha256": "a8017bfed53f8424a11f4c5ac086396328692457275f40cfda8c8fa031ff9786"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -70733,7 +70769,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f"
+      "receipt_sha256": "0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -72127,6 +72163,20 @@
           "title": "BFH, III R 40/13, 2014-02-27: Kindergeldbescheinigung für einen nachrangig Berechtigten"
         },
         {
+          "id": "de-kg-instr-97de08e009b05c5a",
+          "status": "pending",
+          "discovery_refs": [
+            "de-subject-003"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bzst-dakg-2025/preface",
+          "row_sha256": "49cf223710f67c62ee09d197aa0c007d1e329e9e57461c4d2e00417a0ea017a9",
+          "document_class": "guidance",
+          "citation_label": "DA-KG Stand 2025 — Vorwort und zeitliche Anwendung",
+          "document_citation_path": "de/guidance/bzst-dakg-2025/preface",
+          "title": "DA-KG Stand 2025 — Vorwort und zeitliche Anwendung"
+        },
+        {
           "id": "de-kg-instr-9886b8cf5a4c26e8",
           "status": "pending",
           "discovery_refs": [
@@ -73057,7 +73107,7 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f",
+            "corpus_release": "0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99",
             "subject_matter_search": "c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
@@ -73833,5 +73883,5 @@
       ]
     }
   ],
-  "receipt_sha256": "9a377e25833b8f9035b21f0fbc1d5b08741efc3d36e37a69d3ebf2198f1f2d63"
+  "receipt_sha256": "3ebba84a7d748a87e12ec87b0eb7b68261a62b069f5411ab21ed9c1f6234b0ec"
 }

@@ -1,0 +1,190 @@
+{
+  "schema": "de-kindergeld-dakg-boundary-diagnostic-replay.v1",
+  "review_date": "2026-09-15",
+  "purpose": "Audit-only source-completeness replay; no native generation, candidate changes, signatures, acceptance, or closure.",
+  "encoder": {
+    "repository": "TheAxiomFoundation/axiom-encode",
+    "commit": "652775fc0f19338c0ffc35772993987a70dc1358",
+    "version": "0.2.1992",
+    "baseline_commit": "405a242bc8734b6f76df0f9108f1e1c80a00b5ba",
+    "source_file": {
+      "path": "encoder-de-boundary/src/axiom_encode/harness/source_completeness.py",
+      "sha256": "019d65ac8b6ff5a4eade23f12e8f67a3bf3a2fd205fb49e417c05420f33878bc",
+      "bytes": 1032983
+    }
+  },
+  "original_native_run_id": 34924883403,
+  "artifacts": {
+    "candidate": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.yaml",
+      "sha256": "0725a24d0559222c7da86c0a4b7b2479225c911a5b4b68348ffc7bcf7662edde",
+      "bytes": 15966
+    },
+    "companion_tests": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.test.yaml",
+      "sha256": "1a92c690f957ce9ce98197ba0236f29ba15eac0791aabf8605dcbb0919c5b5b3",
+      "bytes": 21616
+    },
+    "authoritative_source": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/_eval_workspaces/openai-gpt-5.6-sol/de-guidance-bzst-dakg-2025-a-19-2-document-1/workspace/source.txt",
+      "sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+      "bytes": 1700
+    }
+  },
+  "replay_method": {
+    "entrypoint": "axiom_encode.harness.source_completeness.analyze_complete_source_unit",
+    "numeric_profile": "de-DE",
+    "numeric_extractor": "extract_typed_numeric_inventory_occurrences_from_text",
+    "grounding_predicate": "numeric_value_is_grounded",
+    "named_scalar_extractor": "extract_named_scalar_occurrences",
+    "python": "3.13.3",
+    "witness_observation": "Read-only in-process wrapper around _branch_boundary_test_witnesses; case identities rendered as retained test names.",
+    "baseline_comparison": "Exact baseline bodies of _source_branch_direct_text and _formula_conjoined_bound restored in process for baseline replay; all other source-completeness code unchanged from baseline. No files altered."
+  },
+  "original_case_count": 28,
+  "original_witnesses": [
+    {
+      "branch_path": [
+        "1",
+        "1"
+      ],
+      "branch_label": "1.",
+      "boundary_value": 50.0,
+      "witnesses": [
+        {
+          "rule_name": "disability_degree_card_or_decision_proof_accepted",
+          "case_name": "degree_50_card_proves_disability"
+        },
+        {
+          "rule_name": "documentary_disability_proof_accepted",
+          "case_name": "degree_50_card_proves_disability"
+        }
+      ]
+    },
+    {
+      "branch_path": [
+        "1",
+        "2"
+      ],
+      "branch_label": "2.",
+      "boundary_value": 20.0,
+      "witnesses": [
+        {
+          "rule_name": "disability_degree_certificate_or_pension_proof_accepted",
+          "case_name": "degree_20_competent_certificate_proves_disability"
+        }
+      ]
+    },
+    {
+      "branch_path": [
+        "1",
+        "2"
+      ],
+      "branch_label": "2.",
+      "boundary_value": 50.0,
+      "witnesses": [
+        {
+          "rule_name": "disability_degree_certificate_or_pension_proof_accepted",
+          "case_name": "degree_50_certificate_exceeds_upper_boundary"
+        }
+      ]
+    }
+  ],
+  "removed_baseline_diagnostics": [
+    "[complete-source-unit:formula-output] Source-stated control Satz 1 in de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 1] has no principal derived/relation output (`derived` or `derived_relation`) and is not precisely deferred; parameter-only representation is invalid.",
+    "[complete-source-unit:tests] Companion tests do not exercise every source-stated boundary input; missing: Satz 1=50, Satz 1=50."
+  ],
+  "added_original_diagnostics": [],
+  "remaining_original_issues": [
+    "[complete-source-unit:structure] Source branch Satz 1 at de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 1] is neither encoded nor precisely deferred.",
+    "[complete-source-unit:structure] Source branch Satz 3 at de/guidance/bzst-dakg-2025/a-19-2/document-1(2) [Absatz 2, Satz 3] is neither encoded nor precisely deferred.",
+    "[complete-source-unit:formula-output] Source-stated control Satz 3 in de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] has no principal derived/relation output (`derived` or `derived_relation`) and is not precisely deferred; parameter-only representation is invalid.",
+    "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Nummer 2, Nummer b] [change]: `b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen entsprechenden Bescheid,`; de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] [change]: `3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes hervorgehen: − Vorliegen der Behinderung, − Beginn der Behinderung, soweit das Kind da ... und − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.`. The evaluator recognized 28 directional formula-toggle witnesses from 13 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+  ],
+  "remaining_issue_categories": [
+    {
+      "category": "structure",
+      "branch": "Absatz 1 Satz 1"
+    },
+    {
+      "category": "structure",
+      "branch": "Absatz 2 Satz 3"
+    },
+    {
+      "category": "formula-output",
+      "branch": "Absatz 1 Satz 3"
+    },
+    {
+      "category": "tests:paired-applicability",
+      "branch": "Absatz 1 Nummer 2 Buchstabe b and Absatz 1 Satz 3"
+    }
+  ],
+  "in_memory_negative_control": {
+    "mutation": "Remove only cases whose recorded_disability_degree input equals 19 or 20; retain original candidate/source and all other cases.",
+    "removed_case_names": [
+      "degree_20_competent_certificate_proves_disability",
+      "degree_19_certificate_does_not_prove_disability",
+      "degree_19_does_not_meet_certificate_or_pension_threshold",
+      "degree_20_with_competent_authority_certificate_is_accepted"
+    ],
+    "remaining_case_count": 24,
+    "witnesses": [
+      {
+        "branch_path": [
+          "1",
+          "1"
+        ],
+        "branch_label": "1.",
+        "boundary_value": 50.0,
+        "witnesses": [
+          {
+            "rule_name": "disability_degree_card_or_decision_proof_accepted",
+            "case_name": "degree_50_card_proves_disability"
+          },
+          {
+            "rule_name": "documentary_disability_proof_accepted",
+            "case_name": "degree_50_card_proves_disability"
+          }
+        ]
+      },
+      {
+        "branch_path": [
+          "1",
+          "2"
+        ],
+        "branch_label": "2.",
+        "boundary_value": 20.0,
+        "witnesses": []
+      },
+      {
+        "branch_path": [
+          "1",
+          "2"
+        ],
+        "branch_label": "2.",
+        "boundary_value": 50.0,
+        "witnesses": [
+          {
+            "rule_name": "disability_degree_certificate_or_pension_proof_accepted",
+            "case_name": "degree_50_certificate_exceeds_upper_boundary"
+          }
+        ]
+      }
+    ],
+    "issues": [
+      "[complete-source-unit:structure] Source branch Satz 1 at de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 1] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:structure] Source branch Satz 3 at de/guidance/bzst-dakg-2025/a-19-2/document-1(2) [Absatz 2, Satz 3] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:formula-output] Source-stated control Satz 3 in de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] has no principal derived/relation output (`derived` or `derived_relation`) and is not precisely deferred; parameter-only representation is invalid.",
+      "[complete-source-unit:tests] Companion tests do not exercise every source-stated boundary input; missing: 2.=20.",
+      "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Nummer 2, Nummer b] [change]: `b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen entsprechenden Bescheid,`; de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] [change]: `3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes hervorgehen: − Vorliegen der Behinderung, − Beginn der Behinderung, soweit das Kind da ... und − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.`. The evaluator recognized 26 directional formula-toggle witnesses from 12 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+    ],
+    "new_missing_boundary": "[complete-source-unit:tests] Companion tests do not exercise every source-stated boundary input; missing: 2.=20."
+  },
+  "limitations": [
+    "Source-completeness replay only; not a full validator pipeline, rules-engine runtime replay, native generation, or signature verification.",
+    "Existing candidate legal, evidence-association, proof-boundary and temporal defects are not repaired by these parser changes.",
+    "The 20 lower-bound repair is separate from the duplicate sentence-container repair; baseline did not inventory that lower bound because aber was absent from the connector grammar."
+  ],
+  "generated_artifacts_changed": false,
+  "certification_effect": "None; original and negative-control cases remain rejected."
+}

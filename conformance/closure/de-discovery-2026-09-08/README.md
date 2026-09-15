@@ -233,3 +233,29 @@ amount without further rounding. Independent source review found no conflict
 between these two stages. V 23.1 remains bearing and unencoded because its
 payment and recovery requirements are not implemented by the existing §66
 amount calculation.
+
+
+The retained A19.2 candidate was replayed against two additional validator repairs.
+`dakg-boundary-replay-2026-09-15.json` records removal of duplicate sentence-container
+obligations and recognition of the lower20 boundary in the German conjoined range;
+removing the actual19/20 cases reintroduces the missing-boundary failure.
+`dakg-guidance-routing-replay-2026-09-15.json` records the canonical policies-root
+mismatch: correcting it exposes two invalid deferrals and preserves all four other
+failures. These are diagnostic receipts, not accepted encodings. The real-code
+replay after the reviewed guidance fix reproduces the same six issues.
+
+
+The subsequent signed release `de-rulespec-2026-09-15-kindergeld-dakg2025-preface`
+adds the complete preface on page2. `dakg2025-preface-release-review.json` records
+native signature verification, public byte identity,59scopes and10644rows.
+`dakg2025-preface-corpus-crosswalk.json` rebinds the unchanged420heading rows to
+that release; the preceding release58crosswalk remains historical evidence.
+The new preface candidate stays a bearing temporal dependency, because the
+application rule is not encoded. Editorial coverage through2024 is not an
+eligibility cutoff or a universal commencement date.
+
+`in-kind-support-estimation-source-review.json` binds the full BFH III R24/12
+judgment and the2025A19.6 text retaining its optional SvEV valuation approach.
+Both discovery identities remain bearing and unencoded. The historical income
+ceiling and old statutory framework are not imported into2025; the judgment's
+rejection of presumed half-sharing for unmarried parents remains explicit.

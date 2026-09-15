@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: dae254694291306798396c66896265bdc5840cdd7dea1eefe83460733d7531fe
+    sha256: 615865bd5ddee8e785b2d6ee165645cbe6d594b864b2c4baa54a1d331f57ae6e
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6047f3acaeb056df101c7aeefdd1718523cfa494
-    release: de-rulespec-2026-09-14-kindergeld-dakg2025-sections
-    release_content_sha256: e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c
+    commit: 12a32e752191ca507669aa76f7b5a909c7e3efe6
+    release: de-rulespec-2026-09-15-kindergeld-dakg2025-preface
+    release_content_sha256: 4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -96,6 +96,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl
       sha256: a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988
       row_count: 421
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
+      sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -286,9 +289,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: ddc08457fa448233c7564d34c6f76c256214e2df55ffa46701e680e38dd656dc
+    snapshot_sha256: b458788576bd90f00bf5b4fd0181236717088240cc4fea407a5f63fd3e664f11
     channel_receipts:
-      corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
+      corpus_release: 0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:

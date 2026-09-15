@@ -43,12 +43,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: dae254694291306798396c66896265bdc5840cdd7dea1eefe83460733d7531fe
+    sha256: 615865bd5ddee8e785b2d6ee165645cbe6d594b864b2c4baa54a1d331f57ae6e
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 6047f3acaeb056df101c7aeefdd1718523cfa494
-    release: de-rulespec-2026-09-14-kindergeld-dakg2025-sections
-    release_content_sha256: e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c
+    commit: 12a32e752191ca507669aa76f7b5a909c7e3efe6
+    release: de-rulespec-2026-09-15-kindergeld-dakg2025-preface
+    release_content_sha256: 4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -110,6 +110,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl
       sha256: a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988
       row_count: 421
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
+      sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
+      row_count: 2
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -1211,15 +1214,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: ddc08457fa448233c7564d34c6f76c256214e2df55ffa46701e680e38dd656dc
+    snapshot_sha256: b458788576bd90f00bf5b4fd0181236717088240cc4fea407a5f63fd3e664f11
     channel_receipts:
-      corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
+      corpus_release: 0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 770
+    candidate_count: 771
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10037,6 +10040,17 @@ generated_facts:
       citation_label: 'BFH, III R 40/13, 2014-02-27: Kindergeldbescheinigung für einen nachrangig Berechtigten'
       document_citation_path: de/guidance/bfh-iii-r-40-13-2014-02-27
       title: 'BFH, III R 40/13, 2014-02-27: Kindergeldbescheinigung für einen nachrangig Berechtigten'
+    - id: de-kg-instr-97de08e009b05c5a
+      status: pending
+      discovery_refs:
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/preface
+      row_sha256: 49cf223710f67c62ee09d197aa0c007d1e329e9e57461c4d2e00417a0ea017a9
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — Vorwort und zeitliche Anwendung
+      document_citation_path: de/guidance/bzst-dakg-2025/preface
+      title: DA-KG Stand 2025 — Vorwort und zeitliche Anwendung
     - id: de-kg-instr-9886b8cf5a4c26e8
       status: pending
       discovery_refs:
@@ -10785,7 +10799,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 9e6bd34868c993182df2f761983221238e5cb3c5e99984d63e686705b192d576
+      sha256: 13b474739264e02858df91f2d792e64fd446a7711d416c5d1bd3ce20496a0a7b
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10834,7 +10848,7 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
+        corpus_release: 0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99
         subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
@@ -13547,6 +13561,12 @@ committed_decisions:
     reason: 'The complete four-page BFH III R49/18 judgment (12 November 2020, paragraphs1–18), corpus body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, was read with the complete retained DA-KG2025 A17.2 section, which expressly cites it. Paragraphs11–16 require the waiting-for-training route to be assessed separately from an inability to train caused by an illness whose end is not foreseeable; general future training intention alone does not establish that route. The disability route remains a separate statutory assessment, and the remand is not an automatic disability award. Paragraph16 disregards the later medical certificate because it contains no statement about the earlier disputed period; do not turn this into a blanket ban on retrospective medical evidence. The possible retroactivity of the training-intention declaration is expressly left open. Paragraphs14–15 discuss both historical SGBIX definitions and leave the general illness-duration boundary unresolved
       in that decision; use the separately reviewed III R41/19 and current A17.2 for the later prognosis formulation, not an invented elapsed-since-diagnosis cutoff. These source-defined conditions bear on qualifying_child_count and remain unencoded. Complete body and limitations: illness-prognosis-source-review.json. Exact BStBlII issue/page membership is not independently proved by this body receipt.'
     bears_on_computed_surface: true
+  - id: de-kg-discovery-067415d0d456a49f
+    status: classified-with-reason
+    classification: in_kind_support_estimation
+    reason: 'The complete four-page BFH III R24/12 judgment (11 April 2013, paragraphs1–26), body SHA-256 8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605, concerns the historical2006–2008 income-and-receipts regime. Paragraph24 expressly gives nonbinding remand guidance permitting SvEV values to estimate benefits in kind, subject to differing individual values. DA-KG2025 A19.6(1) sentence3, body SHA-256 3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998, expressly retains that option when individual evidence cannot be provided. This valuation option bears on disability-related means under EStG32(4), A19.4–A19.6 and qualifying_child_count; it remains unencoded. Do not import the historical7680EUR ceiling or former section32/70 framework into2025. Paragraphs18–22 reject presumed half-sharing for unmarried parents; the separate married/registered-partner rule in A19.6(2) does not extend it to unmarried couples. Both discovery identities must ultimately bind one
+      canonical judgment module; neither duplicate discovery nor the guidance citation supplies executable coverage. Full source binding and review: in-kind-support-estimation-source-review.json. Exact BStBlII issue/page verification remains separate.'
+    bears_on_computed_surface: true
   - id: de-kg-discovery-0a5820943b10e4f9
     status: classified-with-reason
     classification: adult_child_training_illness_prognosis
@@ -13962,6 +13982,11 @@ committed_decisions:
     reason: 'Complete original BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres 1, corpus body SHA-256 3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0, reviewed with full DA-KG 2025 A19.1–A19.4. The judgment requires the complete disability criteria both before the applicable age limit and in the claimed months. A congenital genetic defect or merely threatened disability is insufficient. Later diagnosis/evidence can establish earlier functional and participation impairment; certificate issuance date is not automatically onset. Inability to self-support may arise later, but participation impairment is part of disability and must meet the onset deadline. The statutory age25/pre-2007 age27 transition and period-specific SGBIX definition remain separate. The case was remanded for findings. Bearing rules remain unencoded. Complete bodies, historical/surface distinctions and exact
       cited-authority spans are retained in disability-onset-source-reviews.json. No exhaustive discovery, independently verified BStBlII membership or encoded/certified claim.'
     bears_on_computed_surface: true
+  - id: de-kg-instr-97de08e009b05c5a
+    status: classified-with-reason
+    classification: temporal_application_guidance
+    reason: The body-null root represents the operative child de/guidance/bzst-dakg-2025/preface/document-1, body SHA-256 042fc22ef219ce42a9658d8ce6503bcf845a4ad823fe00e145bd8332c820adb4, in corpus commit12a32e752191ca507669aa76f7b5a909c7e3efe6. Its third paragraph directs application of DA-KG2025 to cases not yet finally assessed, subject to express temporal restrictions. This bears on which guidance governs the eligibility and amount computation and is not shown duplicated by an encoded statute. The first paragraph describes application of relevant rules in force from01.01.2025; it does not establish issuance or automatic commencement for every restated rule. Selected authorities through31.12.2024 describe editorial coverage, not an eligibility cutoff. No other frontier row accounts for this newly normalized preface and no module encodes its application rule. Keep this temporal dependency open; do not apply the earlier navigation-container exclusion to its operative child.
+    bears_on_computed_surface: true
   - id: de-kg-instr-995400ec8f736a51
     status: excluded-with-reason
     body_sha256: 96106a6ca5a4a81da21e1522e43c2e633af31f8b1f88470b6715675750de2cca
@@ -14017,6 +14042,12 @@ committed_decisions:
     body_sha256: f37daa5888e8a6def5fb961668399954e8f21342c84c64cc1d8815d3a17e32d8
     classification: entitlement_condition
     reason: SGB III (act-level corpus row), cited by § 62 Abs. 2 Nr. 2 Buchst. b and Nr. 3 EStG — a study, recognition or job-search title or a humanitarian title qualifies only while the holder is employed, on parental leave or takes 'laufende Geldleistungen nach dem Dritten Buch Sozialgesetzbuch' — and by § 65 Satz 3 EStG, whose exception to the EU-official exclusion requires a 'Versicherungspflichtverhältnis zur Bundesagentur für Arbeit nach § 24 des Dritten Buches Sozialgesetzbuch' or insurance freedom 'nach § 28 Absatz 1 Nummer 1'. § 68 Abs. 7 adds a data-retrieval citation. The SGB III benefit and insurance concepts are therefore conditions of claimant_entitlement (A 4.3.4) and of substitute_child_benefit_exclusion (A 28.3 Abs. 4). Bears on both law-derived inputs (open dependencies); open until §§ 62, 65 EStG are encoded with those SGB III terms bound to them.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-c2c05925823952b6
+    status: classified-with-reason
+    classification: in_kind_support_estimation
+    reason: 'The complete four-page BFH III R24/12 judgment (11 April 2013, paragraphs1–26), body SHA-256 8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605, concerns the historical2006–2008 income-and-receipts regime. Paragraph24 expressly gives nonbinding remand guidance permitting SvEV values to estimate benefits in kind, subject to differing individual values. DA-KG2025 A19.6(1) sentence3, body SHA-256 3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998, expressly retains that option when individual evidence cannot be provided. This valuation option bears on disability-related means under EStG32(4), A19.4–A19.6 and qualifying_child_count; it remains unencoded. Do not import the historical7680EUR ceiling or former section32/70 framework into2025. Paragraphs18–22 reject presumed half-sharing for unmarried parents; the separate married/registered-partner rule in A19.6(2) does not extend it to unmarried couples. Both discovery identities must ultimately bind one
+      canonical judgment module; neither duplicate discovery nor the guidance citation supplies executable coverage. Full source binding and review: in-kind-support-estimation-source-review.json. Exact BStBlII issue/page verification remains separate.'
     bears_on_computed_surface: true
   - id: de-kg-instr-c3642f7b68a0f9a8
     status: classified-with-reason
@@ -16197,18 +16228,17 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 905
+    instrument_count: 906
     counts:
-      total: 905
+      total: 906
       encoded: 2
-      classified-with-reason: 186
+      classified-with-reason: 189
       excluded-with-reason: 349
-      pending: 368
+      pending: 366
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
     - de-kg-discovery-05b9e1f2aa436208
-    - de-kg-discovery-067415d0d456a49f
     - de-kg-discovery-073ce2d05cd37be4
     - de-kg-discovery-09f5f9534b6b1d86
     - de-kg-discovery-0a6eec2d664292e0
@@ -16446,7 +16476,6 @@ computed:
     - de-kg-instr-ba85f6a53f1f2f11
     - de-kg-instr-be153b8c767c4ac5
     - de-kg-instr-bf9c57bd5c2a3d58
-    - de-kg-instr-c2c05925823952b6
     - de-kg-instr-c80165befa9ab1c1
     - de-kg-instr-ccf56f3091f029e7
     - de-kg-instr-dakg-2026
@@ -23774,7 +23803,7 @@ computed:
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 09.06.1999, VI R 33/98 und VI R 143/98, BStBl II S. 701
     - id: de-kg-discovery-067415d0d456a49f
-      status: pending
+      status: classified-with-reason
       identity_kind: class_member
       identity: BFH vom 11.04.2013, III R 24/12, BStBl II S. 866
       discovery_refs:
@@ -23782,6 +23811,10 @@ computed:
       discovery_source_path: conformance/closure/de-discovery-2026-09-08/da-kg-2025.txt
       discovery_source_sha256: 916842e9aa24e2fadec2b016f138e6f0bb3f8dfd6c77c3d6a7ff8fd2a1f7b9fd
       discovery_excerpt: BFH vom 11.04.2013, III R 24/12, BStBl II S. 866
+      classification: in_kind_support_estimation
+      reason: 'The complete four-page BFH III R24/12 judgment (11 April 2013, paragraphs1–26), body SHA-256 8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605, concerns the historical2006–2008 income-and-receipts regime. Paragraph24 expressly gives nonbinding remand guidance permitting SvEV values to estimate benefits in kind, subject to differing individual values. DA-KG2025 A19.6(1) sentence3, body SHA-256 3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998, expressly retains that option when individual evidence cannot be provided. This valuation option bears on disability-related means under EStG32(4), A19.4–A19.6 and qualifying_child_count; it remains unencoded. Do not import the historical7680EUR ceiling or former section32/70 framework into2025. Paragraphs18–22 reject presumed half-sharing for unmarried parents; the separate married/registered-partner rule in A19.6(2) does not extend it to unmarried couples. Both discovery identities must ultimately bind
+        one canonical judgment module; neither duplicate discovery nor the guidance citation supplies executable coverage. Full source binding and review: in-kind-support-estimation-source-review.json. Exact BStBlII issue/page verification remains separate.'
+      bears_on_computed_surface: true
     - id: de-kg-discovery-073ce2d05cd37be4
       status: pending
       identity_kind: class_member
@@ -26933,6 +26966,20 @@ computed:
       citation_label: 'BFH, III R 40/13, 2014-02-27: Kindergeldbescheinigung für einen nachrangig Berechtigten'
       document_citation_path: de/guidance/bfh-iii-r-40-13-2014-02-27
       title: 'BFH, III R 40/13, 2014-02-27: Kindergeldbescheinigung für einen nachrangig Berechtigten'
+    - id: de-kg-instr-97de08e009b05c5a
+      status: classified-with-reason
+      discovery_refs:
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/preface
+      row_sha256: 49cf223710f67c62ee09d197aa0c007d1e329e9e57461c4d2e00417a0ea017a9
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — Vorwort und zeitliche Anwendung
+      document_citation_path: de/guidance/bzst-dakg-2025/preface
+      title: DA-KG Stand 2025 — Vorwort und zeitliche Anwendung
+      classification: temporal_application_guidance
+      reason: The body-null root represents the operative child de/guidance/bzst-dakg-2025/preface/document-1, body SHA-256 042fc22ef219ce42a9658d8ce6503bcf845a4ad823fe00e145bd8332c820adb4, in corpus commit12a32e752191ca507669aa76f7b5a909c7e3efe6. Its third paragraph directs application of DA-KG2025 to cases not yet finally assessed, subject to express temporal restrictions. This bears on which guidance governs the eligibility and amount computation and is not shown duplicated by an encoded statute. The first paragraph describes application of relevant rules in force from01.01.2025; it does not establish issuance or automatic commencement for every restated rule. Selected authorities through31.12.2024 describe editorial coverage, not an eligibility cutoff. No other frontier row accounts for this newly normalized preface and no module encodes its application rule. Keep this temporal dependency open; do not apply the earlier navigation-container exclusion to its operative child.
+      bears_on_computed_surface: true
     - id: de-kg-instr-9886b8cf5a4c26e8
       status: pending
       discovery_refs:
@@ -27382,7 +27429,7 @@ computed:
       document_citation_path: de/guidance/bfh-iii-r-10-17-2018-02-22
       title: 'BFH, III R 10/17, 2018-02-22: Kindergeld, Nachweis der Behandlung nach § 1 Abs. 3 EStG, Differenzkindergeld bei ausschließlich durch den Wohnort ausgelöstem Kindergeldanspruch'
     - id: de-kg-instr-c2c05925823952b6
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-corpus-457837bc6d7e82107003
       - de-corpus-786be9224348f88b6a31
@@ -27393,6 +27440,10 @@ computed:
       citation_label: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
       document_citation_path: de/guidance/bfh-iii-r-24-12-2013-04-11
       title: 'BFH, III R 24/12, 2013-04-11: Kindergeldanspruch für ein Kind, das mit dem anderen Elternteil seines nichtehelichen Kindes in einem gemeinsamen Haushalt lebt'
+      classification: in_kind_support_estimation
+      reason: 'The complete four-page BFH III R24/12 judgment (11 April 2013, paragraphs1–26), body SHA-256 8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605, concerns the historical2006–2008 income-and-receipts regime. Paragraph24 expressly gives nonbinding remand guidance permitting SvEV values to estimate benefits in kind, subject to differing individual values. DA-KG2025 A19.6(1) sentence3, body SHA-256 3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998, expressly retains that option when individual evidence cannot be provided. This valuation option bears on disability-related means under EStG32(4), A19.4–A19.6 and qualifying_child_count; it remains unencoded. Do not import the historical7680EUR ceiling or former section32/70 framework into2025. Paragraphs18–22 reject presumed half-sharing for unmarried parents; the separate married/registered-partner rule in A19.6(2) does not extend it to unmarried couples. Both discovery identities must ultimately bind
+        one canonical judgment module; neither duplicate discovery nor the guidance citation supplies executable coverage. Full source binding and review: in-kind-support-estimation-source-review.json. Exact BStBlII issue/page verification remains separate.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-c3642f7b68a0f9a8
       status: classified-with-reason
       discovery_refs:
@@ -29351,6 +29402,7 @@ computed:
     - de-kg-dakg-V14.3
     - de-kg-dakg-V23.1
     - de-kg-discovery-00aab547379e68f7
+    - de-kg-discovery-067415d0d456a49f
     - de-kg-discovery-0a5820943b10e4f9
     - de-kg-discovery-175a2b2bae32af40
     - de-kg-discovery-20d4058656e75e8c
@@ -29393,11 +29445,13 @@ computed:
     - de-kg-instr-7b88fe63abf1deb1
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-8d943b84c0c798b3
+    - de-kg-instr-97de08e009b05c5a
     - de-kg-instr-9dfa8fc6d1681fbb
     - de-kg-instr-a5848a433a63d2cb
     - de-kg-instr-ad3045c5a5d2f5bd
     - de-kg-instr-b7704b22cefd934c
     - de-kg-instr-b96e03076e143e8e
+    - de-kg-instr-c2c05925823952b6
     - de-kg-instr-c3642f7b68a0f9a8
     - de-kg-instr-c7a1a1943b91b3d8
     - de-kg-instr-ce168756ed1a28cb
@@ -29426,12 +29480,12 @@ computed:
     - de-kg-suppl-034
     - de-kg-suppl-132
     - de-kg-suppl-133
-    instruments_bearing_on_computed_count: 170
-    open_dependency_count: 178
+    instruments_bearing_on_computed_count: 173
+    open_dependency_count: 181
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 905
+    bearing_candidate_instruments: 906
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
