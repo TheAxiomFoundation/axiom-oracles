@@ -112,7 +112,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 906, 8, 1, 0, 0),
+    "de/kindergeld": (18, 935, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 43, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }

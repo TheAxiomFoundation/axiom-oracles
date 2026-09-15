@@ -70,20 +70,20 @@
       "artifact": "conformance/de-certificate-census.json",
       "claim": "certificate candidate census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "99d59408b6bbad6db15893d261ca623a39521e711f536ddb66e348ae00abef29"
+      "sha256": "f0b94967491aaffce5f93d241b8f0d19ba96891853a47f5fda00076c5782a13c"
     },
     {
       "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
       "claim": "closed:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "043dec50bfdc69382ae0f45e6a3e778a6f97839ed9b81f2354d966ca6b8e39cb",
+      "sha256": "d5323cbd5afad6215fc0a32ebd0349574755052800fab17be6c27a481a9e7a67",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "closure/de/summary.json",
       "claim": "closure census:de/unterhaltsvorschuss",
       "mode": "computed",
-      "sha256": "e6b259d60960753ecfbf424e48ed5a030826add652fb800f4f550bce0f63028c"
+      "sha256": "a37fd7a9ba41e46172fd4f69bb1bdeeb506d5b20889ba27a32b4e254c17e5b36"
     }
   ],
   "period": "2025",
@@ -244,7 +244,7 @@
       ],
       "citation_root_count": 3,
       "closed_claim_mode": "computed",
-      "corpus_release": "de-rulespec-2026-09-15-kindergeld-dakg2025-preface",
+      "corpus_release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
       "declared_sources": [
         {
           "citation_path": "de/regulation/minuhv/1",
@@ -380,7 +380,7 @@
       "spine_closed_claim_mode": "computed",
       "status": "computed_open",
       "subgraph_node_count": null,
-      "subgraph_sha256": "ececb80a4ecdf8e282538d5b878e42100d4db9c6b40c74774999fc415e3d4b34",
+      "subgraph_sha256": "c2a45603f453e183a5b8a09db02303057d4cb0f92b8d992dba30c52de8e15493",
       "universe_mode": "attested",
       "unresolved_sources": [
         "de/statute/uhvorschg/2"
