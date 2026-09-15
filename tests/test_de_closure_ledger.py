@@ -335,7 +335,7 @@ def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
     refresh = _load_refresh_script()
     snapshot = json.loads(SNAPSHOT.read_bytes())
     refresh.validate_snapshot(snapshot)
-    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 10644
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 10654
     subject = snapshot["channels"]["subject_matter_search"]
     row_states = {row["state"] for row in subject["attempts"]}
     # The channel aggregate must be derived from its rows, never pinned:
@@ -387,14 +387,14 @@ def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
     snapshot = json.loads(SNAPSHOT.read_bytes())
     index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
 
-    refresh._validate_global_extraction_index(index, scanned_row_count=10644)
-    assert index["row_count"] == index["mapped_row_count"] == 10644
-    assert index["body_row_count"] == 10428
+    refresh._validate_global_extraction_index(index, scanned_row_count=10654)
+    assert index["row_count"] == index["mapped_row_count"] == 10654
+    assert index["body_row_count"] == 10433
     assert index["unmapped_row_count"] == 0
-    assert index["act_count"] == len(index["acts"]) == 251
+    assert index["act_count"] == len(index["acts"]) == 256
     assert index["mechanism_counts"] == {
         "amendment_targets": 46,
-        "explicit_cross_reference_body": 7281,
+        "explicit_cross_reference_body": 7315,
         "law_metadata_changed_by": 36,
         "law_metadata_fundstelle": 44,
     }
@@ -1624,11 +1624,10 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
     module = _load_script()
     document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
     supplemental = document["committed_decisions"]["supplemental_instruments"]
-    assert len(supplemental) == 135
+    assert len(supplemental) == 159
     # The four classes remain pending because enumeration is incomplete;
-    # citation seeds have their own frontier rows. Twenty-five named documents are
-    # decided on captured text; four earlier programme instruments await legal review.
-    # One hundred and two indirect or search-discovered authorities require original-source/bearing review.
+    # citation seeds and subsequently discovered authorities have their own rows.
+    # Captured text and a bearing disposition do not establish executable coverage.
     pending_classes = {
         "de-kg-suppl-007",
         "de-kg-suppl-008",
