@@ -1,0 +1,181 @@
+{
+  "mode": "explain",
+  "program": {
+    "derived": [
+      {
+        "name": "record_identifiers_match",
+        "entity": "CandidateChildPair",
+        "dtype": "judgment",
+        "semantics": "judgment",
+        "unit": null,
+        "expr": {
+          "kind": "comparison",
+          "left": {
+            "kind": "input",
+            "name": "candidate_person_identifier"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "input",
+            "name": "delivery_person_identifier"
+          }
+        }
+      }
+    ]
+  },
+  "dataset": {
+    "inputs": [
+      {
+        "name": "candidate_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-a:child-1",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      },
+      {
+        "name": "delivery_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-a:child-1",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      },
+      {
+        "name": "candidate_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-a:child-2",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      },
+      {
+        "name": "delivery_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-a:child-2",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      },
+      {
+        "name": "candidate_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-b:child-1",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-b"
+        }
+      },
+      {
+        "name": "delivery_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-b:child-1",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      },
+      {
+        "name": "candidate_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-b:child-2",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-b"
+        }
+      },
+      {
+        "name": "delivery_person_identifier",
+        "entity": "CandidateChildPair",
+        "entity_id": "person-b:child-2",
+        "interval": {
+          "start": "2025-06-01",
+          "end": "2025-06-30"
+        },
+        "value": {
+          "kind": "text",
+          "value": "person-a"
+        }
+      }
+    ],
+    "relations": []
+  },
+  "queries": [
+    {
+      "entity_id": "person-a:child-1",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "record_identifiers_match"
+      ]
+    },
+    {
+      "entity_id": "person-a:child-2",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "record_identifiers_match"
+      ]
+    },
+    {
+      "entity_id": "person-b:child-1",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "record_identifiers_match"
+      ]
+    },
+    {
+      "entity_id": "person-b:child-2",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": [
+        "record_identifiers_match"
+      ]
+    }
+  ]
+}

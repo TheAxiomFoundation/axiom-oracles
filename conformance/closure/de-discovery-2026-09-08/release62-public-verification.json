@@ -1,0 +1,11 @@
+{
+  "release": "de-rulespec-2026-09-15-kindergeld-eu-priority-references",
+  "commit": "aad094d00e42b2766b12393e662473bda81411b0",
+  "content_sha256": "af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464",
+  "selector_sha256": "5a77c1280d36dad176a1d1be2c58995407e3106a51b1f9e829aac9425a1b5e73",
+  "object_sha256": "87793fd7dfb5f6c2db86912c4d6d5503d250e45574ff81998747418c4cb6658d",
+  "native_signature_verified": true,
+  "publish_run": 35011738439,
+  "public_byte_identity_verified": true,
+  "mirror_run": 35012680458
+}

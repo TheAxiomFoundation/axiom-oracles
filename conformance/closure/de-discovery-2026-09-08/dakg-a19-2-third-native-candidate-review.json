@@ -1,0 +1,66 @@
+{
+  "schema": "de-kindergeld.dakg-a19-2-third-native-candidate-review.v1",
+  "as_of": "2026-09-15T18:52:55.736774+00:00",
+  "native_run": 35008499776,
+  "native_run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/35008499776",
+  "encoder_commit": "549458579b0b1868fc84ce3494bb150d89061b7c",
+  "encoder_version": "0.2.1998",
+  "rulespec_commit": "af9ea8d2202fbba680ee444e6a14b7b28e261489",
+  "corpus_commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
+  "rules_engine_commit": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "source_sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+  "candidate_sha256": "de85c16b157dee0f1b1f27b0ee4afd88e44a8341dc4fa81ab75da34ed3ef78cf",
+  "tests_sha256": "0a29d92ac69462e87411876bd9631686176ee7abb1d77a8028e2e0ee8f2f43e7",
+  "native_status": "apply_blocked_validation",
+  "internal_attempts": 4,
+  "signatures": 0,
+  "applied": false,
+  "encoding_pr_created": false,
+  "tests_count": 22,
+  "issues": [
+    "policies/bzst-dakg-2025/a-19-2/document-1.yaml: ci: [complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Nummer 2, Nummer b] [change]: `b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen entsprechenden Bescheid,`; de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] [change]: `3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes hervorgehen: − Vorliegen der Behinderung, − Beginn der Behinderung, soweit das Kind da ... und − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.`. The evaluator recognized 22 directional formula-toggle witnesses from 11 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+  ],
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "status": "three substantive findings remain",
+    "findings": [
+      {
+        "kind": "same_document_restriction",
+        "line": 153,
+        "reason": "The20–49pension route requires determined degree recorded in the same pension document; source permits determineddegree and corresponding pensiondecision without this same-document restriction."
+      },
+      {
+        "kind": "one_sided_proof_interval",
+        "line": 197,
+        "reason": "Both endpoints must be recorded, preventing independently observed one-sided limited intervals without fabricated dates."
+      },
+      {
+        "kind": "unestablished_identity",
+        "line": 308,
+        "reason": "Unrestricted identifier equality allows two empty identifiers to match; missing or ambiguous linkage not distinguished."
+      }
+    ],
+    "missing_tests": [
+      "wrong-child and unknownidentity",
+      "multipledocuments",
+      "onesidedproofinterval",
+      "periodendboundary",
+      "caregrades3and5",
+      "leapdayageboundary"
+    ]
+  },
+  "improvements": [
+    "Explicit ChildDocumentpair and identifier equality replace unlinked currentchildBoolean",
+    "Proofperiod comparisons derived from observedDates",
+    "Leapcorrected ageattainment date"
+  ],
+  "checker_diagnosis": {
+    "reproduced": true,
+    "recognized_directional_witnesses": 22,
+    "distinct_case_pairs": 11,
+    "pension": "Recognized selectors disability_is_stated_basis_for_pension_or_payment and document_is_pension_or_ongoing_payment_decision fail source-relevance routing despite pension paired cases; exact names differ from previous replay. This diagnostic does not establish legal correctness.",
+    "medical_age": "No same-period pair differing only in childbirthdate exists in22tests. Missing requested ageboundary witness is substantive test omission, regardless of matcher naming support.",
+    "replay_artifact": "dakg-a19-2-third-witness-replay.json"
+  },
+  "next_step": "Retain explicit A19.2dependency. Normalattemptbudget now exhausted; no automatic retry or override. Repair legalmodel and testdesign before any separately authorized future attempt; corpus/discovery work continues."
+}

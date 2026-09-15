@@ -1,0 +1,139 @@
+{
+  "pr": 97,
+  "head": "bfd124bbd6dcd29a18da120f6a035f2bb0678933",
+  "module_sha256": "9901cf59bbfd874a433f8e8f32d2d14998b6a933183c5752de8e2677af97796d",
+  "accepted_module_bytes_identical": false,
+  "input_contract_identical": true,
+  "rules_proofs_versions_formulas_identical": true,
+  "all_original_companion_cases_preserved": false,
+  "changed_companion_case_names": [
+    "handmark_without_authentication_does_not_conform",
+    "authentication_for_other_handmark_does_not_conform",
+    "authentication_by_other_issuer_does_not_conform",
+    "authentication_for_other_document_version_does_not_conform",
+    "authentication_for_unrelated_document_does_not_conform",
+    "blank_handmark_identity_does_not_conform",
+    "blank_issuer_identity_does_not_conform",
+    "blank_document_identity_does_not_conform"
+  ],
+  "source_summary_changed": true,
+  "scope_note": "The generated summary now contains the statute text only. The identical executable mechanism remains documentary conformance, not statutory applicability or whole-contract validity;2025 is the observation boundary, not commencement. These scope limits remain in the consumer review and documentation.",
+  "companion_case_count": 14,
+  "all_current_companion_cases_pass": true,
+  "current_companion_request_sha256": "272a1638665398550e6d05ab2aa494c8e2fd25646334f24347a665ce6784ebf2",
+  "current_companion_response_sha256": "ed3b34313f29f26ae0df698544ecba076469e05bee22f5b7eef930c5e1a4e034",
+  "all_declared_inputs_supplied": true,
+  "original_twenty_case_replay_passes": true,
+  "source_attestation_matches_release50": true,
+  "applied_file_hashes_match": true,
+  "source_sha256": "28ff8e921b9384a922dbc2ed654e199ae40fc5b5226306ecb2581a8cef3dffb0",
+  "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+  "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+  "encoder_commit": "b041b6b5a0e39f2c05c93669f354f8a54e9a84c3",
+  "engine_commit": "f6b0d15246a7db1403836628576f11e0d334348c",
+  "request_sha256": "f191dd96a3730517b27ccf7b4543c120c83f7b6e6e19eaf50d7f121fb9e24909",
+  "response_sha256": "1250396ebca0cd887b62ef2148d682c2270f335fec84b0d2eb3c89233bb3a201",
+  "native_artifact_checksums_verified": 12,
+  "native_tracked_patch_matches_exact_pr_diff": true,
+  "native_generated_guard_passed": true,
+  "consumer_declared_rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+  "repository_merge_verification": {
+    "headRefOid": "10d3c60766033609508de0626d5869913b3bac9e",
+    "mergeCommit": {
+      "oid": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
+    },
+    "state": "MERGED",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-10T23:46:37Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/TheAxiomFoundation/rulespec-de/actions/runs/34543628474/job/103091450574",
+        "name": "validate / shards",
+        "startedAt": "2026-09-10T23:46:32Z",
+        "status": "COMPLETED",
+        "workflowName": "Repository Checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-10T23:53:42Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/TheAxiomFoundation/rulespec-de/actions/runs/34543628474/job/103091483503",
+        "name": "validate / validate (de)",
+        "startedAt": "2026-09-10T23:46:39Z",
+        "status": "COMPLETED",
+        "workflowName": "Repository Checks"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-09-10T23:53:49Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/TheAxiomFoundation/rulespec-de/actions/runs/34543628474/job/103092997664",
+        "name": "validate / validate",
+        "startedAt": "2026-09-10T23:53:45Z",
+        "status": "COMPLETED",
+        "workflowName": "Repository Checks"
+      }
+    ]
+  },
+  "request_path": "conformance/closure/de-discovery-2026-09-08/bgb1261-original-replay-request.json",
+  "response_path": "conformance/closure/de-discovery-2026-09-08/bgb1261-original-replay-response.json",
+  "current_companion_request_path": "conformance/closure/de-discovery-2026-09-08/bgb1261-refresh-companion-request.json",
+  "current_companion_response_path": "conformance/closure/de-discovery-2026-09-08/bgb1261-refresh-companion-response.json",
+  "engine_binary_sha256": "c8f140c60fecc2950c7ef2f9723f55684f5c25eeea06ef7d643613efcf57dcd0",
+  "reproduction": {
+    "rulespec_commit": "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967",
+    "compile_argv": [
+      "axiom-rules-engine",
+      "compile",
+      "--program",
+      "RULESPEC_ROOT/de/statutes/bgb/126/absatz-1/inhalt.yaml",
+      "--rulespec-root",
+      "RULESPEC_ROOT",
+      "--output",
+      "artifact.json"
+    ],
+    "replay_argv": [
+      "axiom-rules-engine",
+      "run-compiled",
+      "--artifact",
+      "artifact.json"
+    ],
+    "stdin_request_paths": [
+      "conformance/closure/de-discovery-2026-09-08/bgb1261-original-replay-request.json",
+      "conformance/closure/de-discovery-2026-09-08/bgb1261-refresh-companion-request.json"
+    ],
+    "stdout_expected_paths": [
+      "conformance/closure/de-discovery-2026-09-08/bgb1261-original-replay-response.json",
+      "conformance/closure/de-discovery-2026-09-08/bgb1261-refresh-companion-response.json"
+    ],
+    "notes": "Use the pinned engine commit/binary and a clean checkout of the recorded RuleSpec commit. Compile once, then replay each request separately through stdin and compare stdout bytes with its recorded response."
+  },
+  "declared_module_graph_drift": {
+    "before_sha256": "823c1ff2e0b27581b835479735ba50c79c02b5658dd4982bb3a80ac48682be4a",
+    "after_sha256": "6371f9ff6fb68695a44fc4651ef13e92904c394b38997f77e1eae35ddea145f5",
+    "programs": [
+      {
+        "id": "de/kindergeld",
+        "before": 118,
+        "after": 118,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/rv-employee-contribution",
+        "before": 11,
+        "after": 11,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/unterhaltsvorschuss",
+        "before": 41,
+        "after": 41,
+        "added": [],
+        "removed": []
+      }
+    ]
+  }
+}

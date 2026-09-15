@@ -68,9 +68,9 @@
         "de/kindergeld"
       ],
       "source_id": "bzst",
-      "query": "Candidate BZSt-hosted PDF endpoint recorded during query preregistration; edition and listing linkage remain unverified until retrieval",
+      "query": "Previously unverified BZSt PDF endpoint. Direct retrieval on 2026-09-09 verified that this legacy filename serves DA-KG Stand 2026, PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c, receipted at de/guidance/bzst-dakg-2026/document-1. It shares the 2026 identity with de-subject-017; the separately receipted DA-KG 2025 mirror remains de-subject-003.",
       "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
-      "candidate_seed": "de-kg-instr-001"
+      "candidate_seed": "de-kg-instr-dakg-2026"
     },
     {
       "id": "de-subject-003",
@@ -198,6 +198,26 @@
       "query": "Beitragsverfahrensverordnung Beschäftigte 2025",
       "url": "https://www.gesetze-im-internet.de/bvv/",
       "candidate_seed": "de-rv-instr-bvv"
+    },
+    {
+      "id": "de-subject-016",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "gesetze-im-internet",
+      "query": "Historical Reichsversicherungsordnung (RVO), §§ 583, 584(1) sentence2, 585, 579(1) sentence2 and 609(3), as applicable immediately before1January1997. Discovered through paragraph3 of the receipted de/statute/sgb-7/fassung-2015-07-01/217/inhalt, UTF-8 body SHA2564d7bf35999e27eb810e7a864de68a1e0edfd54bbda3778746994842847b79158, which EStG65 references as a benefit comparator. The official current RVO index establishes identity only; the historical operative wording remains uncaptured.",
+      "url": "https://www.gesetze-im-internet.de/rvo/",
+      "candidate_seed": "de-kg-instr-rvo-1996"
+    },
+    {
+      "id": "de-subject-017",
+      "programs": [
+        "de/kindergeld"
+      ],
+      "source_id": "bzst",
+      "query": "Direct PDF retrieval on 2026-09-09 returned DA-KG Stand 2026 (173 pages), not the historic edition implied by the endpoint filename. Retained PDF SHA256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c. Preface refers to rules since 2026-01-01 and to non-final cases subject to explicit temporal restrictions. Separate edition requires text-bound applicability review for the 2025 program; do not replace the receipted DA-KG 2025 text.",
+      "url": "https://www.bzst.de/SharedDocs/Downloads/DE/Kindergeldberechtigte/da_kg_2024_randstrichfassung.pdf?__blob=publicationFile&v=2",
+      "candidate_seed": "de-kg-instr-dakg-2026"
     }
   ]
 }

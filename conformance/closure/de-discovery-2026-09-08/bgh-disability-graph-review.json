@@ -1,0 +1,61 @@
+{
+  "before_sha256": "6371f9ff6fb68695a44fc4651ef13e92904c394b38997f77e1eae35ddea145f5",
+  "after_sha256": "c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6",
+  "programs": [
+    {
+      "id": "de/kindergeld",
+      "before_count": 118,
+      "after_count": 119,
+      "added": [
+        {
+          "id": "de-kg-instr-c7a1a1943b91b3d8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1111e472b3e730333f32"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-9-2018",
+          "row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)",
+          "body_sha256": "a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca",
+          "document_citation_path": "de/statute/sgb-9-2018",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_9_2018/",
+          "fundstelle": "BGBl I 2016, 3234"
+        }
+      ],
+      "removed": []
+    },
+    {
+      "id": "de/rv-employee-contribution",
+      "before_count": 11,
+      "after_count": 11,
+      "added": [],
+      "removed": []
+    },
+    {
+      "id": "de/unterhaltsvorschuss",
+      "before_count": 41,
+      "after_count": 42,
+      "added": [
+        {
+          "id": "de-uhv-instr-c7a1a1943b91b3d8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-474abba87bf538be4568"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/statute/sgb-9-2018",
+          "row_sha256": "d96685b9c4a2d60199775c0f44ae6bab0d55c98210ced062fa3ca0596ed661e9",
+          "document_class": "statute",
+          "citation_label": "Sozialgesetzbuch Neuntes Buch – Rehabilitation und Teilhabe von Menschen mit Behinderungen – (Artikel 1 des Gesetzes v. 23. Dezember 2016, BGBl. I S. 3234)",
+          "body_sha256": "a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca",
+          "document_citation_path": "de/statute/sgb-9-2018",
+          "legal_authority_url": "https://www.gesetze-im-internet.de/sgb_9_2018/",
+          "fundstelle": "BGBl I 2016, 3234"
+        }
+      ],
+      "removed": []
+    }
+  ]
+}

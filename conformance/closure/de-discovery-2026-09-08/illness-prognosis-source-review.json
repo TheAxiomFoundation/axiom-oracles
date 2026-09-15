@@ -1,0 +1,453 @@
+{
+  "schema": "de-kindergeld.illness-prognosis-source-review.v1",
+  "status": "source-bound review; bearing condition remains unencoded",
+  "corpus_commit": "4779d3deb7db854bdb6e702abc523dee8d95fb31",
+  "release": "de-rulespec-2026-09-10-kindergeld-generations-service",
+  "release_content_sha256": "4a647d949a6f2a650d873ad45672f783bc0d013b7ecbc107d77c955221fec982",
+  "reviewed_full_decision": {
+    "citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+    "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202110023?type=1646225765",
+    "body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+    "body": "Urteil vom 12. November 2020, III R 49/18 Kindergeldrechtliche Berücksichtigung eines Kindes, das wegen einer Erkrankung keine Berufsausbildung beginnen kann ECLI:DE:BFH:2020:U.121120.IIIR49.18.0 BFH III. Senat EStG § 32 Abs 4 S 1 Nr 2 Buchst c, EStG § 32 Abs 4 S 1 Nr 3, SGB 9 § 2 Abs 1, EStG VZ 2016 , EStG VZ 2017 vorgehend FG Hamburg, 30. Juli 2018, Az: 6 K 192/17 Leitsätze Ein Kind unter 25 Jahren, das wegen einer Erkrankung keine Berufsausbildung beginnen kann, ist nur dann als ausbildungsplatzsuchendes Kind nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG zu berücksichtigen, wenn das Ende der Erkrankung absehbar ist. Ist dieses nicht absehbar, reicht der Wille des Kindes, sich nach dem Ende der Erkrankung um einen Ausbildungsplatz zu bemühen, nicht aus. In solchen Fällen ist zu prüfen, ob eine Berücksichtigung als behindertes Kind nach § 32 Abs. 4 Satz 1 Nr. 3 EStG möglich ist. Tenor Auf die Revision der Beklagten wird das Urteil des Finanzgerichts Hamburg vom 31.07.2018 - 6 K 192/17 aufgehoben. Die Sache wird an das Finanzgericht Hamburg zur anderweitigen Verhandlung und Entscheidung zurückverwiesen. Diesem wird die Entscheidung über die Kosten des Verfahrens übertragen. Tatbestand I. Streitig ist der Anspruch auf Kindergeld für den Zeitraum September 2016 bis Mai 2017. 1 Der Kläger und Revisionsbeklagte (Kläger) ist der Vater des im Jahr 1997 geborenen Sohnes P. P brach in der 11. Klasse die Schule ab, nachdem er bereits seit Jahren Drogen genommen hatte. Seit Frühjahr 2015 befand sich P in einer ambulanten Therapie. Von August 2015 bis Juli 2016 war er bei zwei Arbeitgebern mit Minijobs beschäftigt. Vom August 2016 bis zum September 2016 wurde eine stationäre Therapie durchgeführt, anschließend eine ambulante. Im Juni 2017 absolvierte P ein Praktikum bei einer Tischlerei. 2 Im Juli 2017 beantragte der Kläger Kindergeld für P. Er legte der Beklagten und Revisionsklägerin (Familienkasse) Arbeitsunfähigkeitsbescheinigungen für P vor, ebenso einen ärztlichen Nachweis vom 26.06.2017, aus dem hervorgeht, dass P seit September 2016 erkrankt und das Ende der Erkrankung nicht absehbar war. P gab außerdem am 26.06.2017 auf einem Vordruck an, dass er sich zum nächstmöglichen Termin um einen Ausbildungspatz bewerben werde. In einer weiteren Bescheinigung vom 12.07.2017 gab der behandelnde Arzt an, dass das \"Ende\" der Erkrankung oder Arbeitsunfähigkeit nicht sicher vorausgesagt werden könne und dass er zunächst den 31.12.2017 annehme. 3 Die Familienkasse lehnte durch Bescheid vom 31.07.2017 die Gewährung von Kindergeld für den Zeitraum August 2015 bis Mai 2017 ab. Für die Zeit danach gewährte sie Kindergeld, weil P erklärt habe, dass er nach Beendigung der Erkrankung eine Ausbildung anstreben werde und weil die Erkrankung lt. ärztlichem Attest vom 12.07.2017 zum 31.12.2017 beendet sein werde. Der gegen die Ablehnung der Kindergeldfestsetzung gerichtete Rechtsbehelf hatte keinen Erfolg (Einspruchsentscheidung vom 29.09.2017). 4 Seite 1 von 4\n\nEntscheidungsgründe II. Das Finanzgericht (FG) befragte im anschließenden Klageverfahren den behandelnden Arzt, ob für den Fall, dass keine Ausbildungsfähigkeit des P bestanden habe, absehbar gewesen sei, wann P wieder ausbildungsfähig sein werde. Der Arzt teilte schriftlich mit, dass dies damals noch nicht absehbar gewesen sei. Der behandelnde Psychologe antwortete auf die gleiche Frage, dass sich bei einer schweren Störung keine Zeiteinschätzung abgeben lasse und dass Ausbildungsbemühungen im fraglichen Zeitraum negativ einzuschätzen gewesen seien. Das FG gab der Klage, mit welcher der Kläger Kindergeld für den Zeitraum September 2016 bis Mai 2017 begehrte, nach einer Beweisaufnahme statt (Urteil vom 31.07.2018 - 6 K 192/17, Finanz-Rundschau 2018, 1012). Es war der Ansicht, P sei als Kind, das eine Berufsausbildung mangels Ausbildungsplatzes nicht habe beginnen können, zu berücksichtigen (§ 32 Abs. 4 Satz 1 Nr. 2 Buchst. c des Einkommensteuergesetzes ‑‑EStG‑‑). Für ein Kind, das bereits einen Ausbildungsplatz habe, jedoch wegen einer Erkrankung seine Ausbildung nicht fortsetzen könne, sei Kindergeld zu gewähren. Nichts anderes könne gelten, wenn eine Ausbildung wegen einer Erkrankung nicht begonnen oder gesucht werden könne. Durch entsprechende Bescheinigungen und aufgrund der Beweisaufnahme sei nachgewiesen, dass P im Streitzeitraum aufgrund seiner psychischen Erkrankung nicht dazu in der Lage gewesen sei, sich um eine Ausbildung zu bemühen oder eine Ausbildung zu beginnen. Entgegen der Ansicht der Familienkasse habe die Erklärung des P, wonach dieser geplant habe, sich nach seiner Genesung zum nächstmöglichen Ausbildungsbeginn zu bewerben, nicht schon früher vorgelegt werden müssen. 5 Zur Begründung der Revision trägt die Familienkasse vor, bei der Unterbrechung der Ausbildung infolge einer Krankheit behalte das Kind seinen Status als berücksichtigungsfähiges Kind bei. Sei jedoch nicht absehbar, dass das Kind in näherer Zukunft seine Ausbildung wieder aufnehmen könne, ähnele die Konstellation eher der eines behinderten Kindes. Es wäre eine ungerechtfertigte Ungleichbehandlung, wenn für ein Kind, das wegen einer Behinderung von vornherein keine Ausbildung aufnehmen könne, nur unter den engen Voraussetzungen des § 32 Abs. 4 Satz 1 Nr. 3 EStG Kindergeld zu gewähren sei, während für ein Kind, bei dem die Behinderung/Erkrankung erst während der Ausbildung eintrete, ohne weiteres Kindergeld bis zur Altersgrenze gewährt werde. Auch entfalte die von P am 26.06.2017 abgegebene Erklärung über seine Ausbildungswilligkeit keine Rückwirkung für die davorliegende Zeit. 6 Die Familienkasse beantragt, das angefochtene Urteil aufzuheben und die Klage abzuweisen. 7 Der Kläger beantragt, die Revision zurückzuweisen. 8 Er meint, das FG habe zu Recht die Anwendbarkeit des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG bejaht. Der ausbildungswillige P sei wegen seiner Erkrankung objektiv gehindert gewesen, sich um einen Ausbildungsplatz zu bemühen. In einem derartigen Fall könnten keine Bewerbungen verlangt werden, auch sei keine Erklärung notwendig, sich unmittelbar nach der Genesung um einen Ausbildungsplatz bemühen zu wollen. 9 Die Revision ist begründet. Sie führt zur Aufhebung des angefochtenen Urteils und zur Zurückverweisung der Streitsache an das FG zur anderweitigen Verhandlung und Entscheidung (§ 126 Abs. 3 Satz 1 Nr. 2 der Finanzgerichtsordnung ‑‑FGO‑‑). Das FG war zu Unrecht der Ansicht, für P sei Kindergeld zu gewähren, weil er einen Ausbildungsplatz gesucht habe. 10 1. Kindergeld wird nach § 62 Abs. 1 Satz 1, § 63 Abs. 1 Satz 1 Nr. 1 i.V.m. § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG für ein Kind gewährt, das das 18., aber noch nicht das 25. Lebensjahr vollendet hat und das eine Berufsausbildung mangels Ausbildungsplatzes nicht beginnen oder fortsetzen kann. 11 a) Kinder, die einen Ausbildungsplatz suchen, sollen mit denen, die bereits einen Ausbildungsplatz gefunden haben, gleichgestellt werden. Dies setzt voraus, dass der Beginn der Ausbildung nicht an anderen Umständen als dem Mangel eines Ausbildungsplatzes scheitert (Senatsurteile vom 07.04.2011 - III R 24/08, BFHE 233, 44, BStBl II 2012, 210, sowie vom 13.06.2013 - III R 58/12, BFHE 242, 118, BStBl II 2014, 834). Dabei ist zwar grundsätzlich jeder Ausbildungswunsch des Kindes zu berücksichtigen; seine Verwirklichung darf jedoch nicht an den persönlichen Verhältnissen des Kindes scheitern (Urteil des Bundesfinanzhofs ‑‑BFH‑‑ vom 15.07.2003 - VIII R 71/99, BFH/NV 2004, 473). Das Kind muss die Ausbildungsstelle im Falle des Erfolgs seiner Bemühungen antreten können (BFH- 12 Seite 2 von 4\n\nUrteil vom 15.07.2003 - VIII R 79/99, BFHE 203, 94, BStBl II 2003, 843; Senatsurteile vom 27.09.2012 - III R 70/11, BFHE 239, 116, BStBl II 2013, 544, sowie vom 18.01.2018 - III R 16/17, BFHE 260, 481, BStBl II 2018, 402). b) In der Person des Kindes liegende Gründe, welche der Aufnahme einer Berufsausbildung entgegenstehen, liegen z.B. vor, wenn ein Kind nicht die Voraussetzungen für den angestrebten Studiengang erfüllt (BFH-Urteil in BFH/NV 2004, 473) oder wenn ausländerrechtliche Gründe einer Berufsausbildung entgegenstehen (Senatsurteil in BFHE 233, 44, BStBl II 2012, 210). Ein Kind ist auch dann nicht zu berücksichtigen, wenn es eine Ausbildung wegen Übergewichts nicht antreten könnte (BFH-Beschluss vom 08.11.1999 - VI B 322/98, BFH/NV 2000, 432). Für den Bezug von Kindergeld ist es ausnahmsweise unschädlich, wenn das Kind wegen der Schutzfristen nach dem Mutterschutzgesetz (MuSchG) an der Aufnahme einer Berufsausbildung gehindert ist (Senatsurteil in BFHE 242, 118, BStBl II 2014, 834). 13 c) Fälle, in denen ein Kind aus Gesundheitsgründen dauerhaft gehindert ist, eine Berufsausbildung oder Erwerbstätigkeit aufzunehmen und deshalb unterhaltsberechtigt ist, werden durch § 32 Abs. 4 Satz 1 Nr. 3 EStG gesetzlich typisiert. Hiernach ist ein Kind zu berücksichtigen, das wegen körperlicher, geistiger oder seelischer Behinderung außerstande ist, sich selbst zu unterhalten, sofern die Behinderung vor Vollendung des 25. Lebensjahres eingetreten ist. Der Begriff der Behinderung orientiert sich an § 2 Abs. 1 Satz 1 des Neunten Buchs Sozialgesetzbuch ‑‑SGB IX‑‑ (Senatsurteil vom 19.01.2017 - III R 44/14, BFH/NV 2017, 735, m.w.N.). Nach der derzeitigen Definition des § 2 Abs. 1 Satz 1 SGB IX i.d.F. des Bundesteilhabegesetzes vom 23.12.2016 (BGBl I 2016, 3234) sind Menschen behindert, die körperliche, seelische, geistige oder Sinnesbeeinträchtigungen haben, die sie in Wechselwirkung mit einstellungs- und umweltbedingten Barrieren an der gleichberechtigten Teilhabe an der Gesellschaft mit hoher Wahrscheinlichkeit länger als sechs Monate hindern können. Nach der vorherigen Definition des § 2 Abs. 1 Satz 1 SGB IX ist ein Mensch behindert, wenn seine körperliche Funktion, geistige Fähigkeit oder seelische Gesundheit mit hoher Wahrscheinlichkeit länger als sechs Monate von dem für das Lebensalter typischen Zustand abweicht und daher seine Teilhabe am Leben in der Gesellschaft beeinträchtigt ist. Nach beiden Fassungen ist somit Voraussetzung für die Annahme einer Behinderung, dass eine Beeinträchtigung mit hoher Wahrscheinlichkeit länger als sechs Monate andauert. Ist das Ende einer der in § 2 Abs. 1 SGB IX aufgezählten Beeinträchtigungen, die ein Kind daran hindert, sich um eine Berufsausbildung zu bemühen, nicht absehbar, so sind in der Regel die Voraussetzungen einer Behinderung in zeitlicher Hinsicht erfüllt. 14 d) Entgegen der Rechtsauffassung des FG reicht in Fällen, in denen ein Kind aus Krankheitsgründen gehindert ist, einen Ausbildungsplatz zu suchen oder in denen derartige Bemühungen angesichts der Erkrankung sinnlos wären, die allgemeine Ausbildungswilligkeit, die auf eine in der Zukunft zu beginnende Berufsausbildung gerichtet ist, nicht aus. Vielmehr muss das Ende der Erkrankung absehbar sein. Dementsprechend hat der Senat in der Entscheidung zur Unterbrechung der Ausbildungsplatzsuche im Urteil in BFHE 242, 118, BStBl II 2014, 834 auf die regelmäßig auf 14 Wochen beschränkten Fristen nach dem MuSchG hingewiesen; die Frage, ab welcher Zeitdauer die Erkrankung eines Kindes dessen Berücksichtigung nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG ausschließt, hat er offengelassen. 15 2. Im Streitfall war die Zeit bis zur Aufnahme einer künftigen Berufsausbildung keine Frage von Wochen oder Monaten. Denn sowohl der behandelnde Arzt als auch der behandelnde Psychologe gaben im finanzgerichtlichen Verfahren an, dass die Ausbildungsfähigkeit des P nicht absehbar gewesen sei. Die ärztliche Bescheinigung vom 12.07.2017, die die Familienkasse dahingehend verstanden hat, dass die Erkrankung des P voraussichtlich bis zum 31.12.2017 beendet sein werde, muss schon deshalb außer Betracht bleiben, weil sie erst nach dem Streitzeitraum ausgestellt wurde und keine Aussage zu der davor liegenden Zeit trifft. Noch in der ärztlichen Bescheinigung vom 26.06.2017 war angegeben, dass das Ende der Erkrankung nicht absehbar sei. Somit war im Streitzeitraum auch nicht der Beginn einer Berufsausbildung des P absehbar. Eine Berücksichtigung nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG scheidet damit aus. Ob eine Berücksichtigung auch daran scheitert, dass ‑‑wie die Familienkasse meint‑‑ die auf Vordruck abgegebene Erklärung vom 26.06.2017 des P über seine Absicht, sich unmittelbar nach dem Ende der Erkrankung um eine Berufsausbildung bemühen zu wollen, nicht auf den Streitzeitraum zurückwirkt, kann daher offenbleiben (vgl. A 17.2 Abs. 1 Satz 4 der Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz Stand 2020 vom 27.08.2020, BStBl I 2020, 703). 16 3. Die Streitsache ist nicht spruchreif und geht an das FG zurück, das zu prüfen haben wird, ob P als behindertes Kind nach § 32 Abs. 4 Satz 1 Nr. 3 EStG zu berücksichtigen ist. 17 4. Die Übertragung der Kostenentscheidung auf das FG beruht auf § 143 Abs. 2 FGO. 18 Seite 3 von 4\n\nQuelle: www.bundesfinanzhof.de Seite 4 von 4"
+  },
+  "reviewed_full_guidance": {
+    "id": "de-kg-dakg-A17.2",
+    "body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+    "reviewed_full_section": "A 17.2      Erkrankung und Mutterschaft\n(1) 1Eine Berücksichtigung ist nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG auch möglich, wenn das\nKind infolge einer vorübergehenden Erkrankung daran gehindert ist, sich um eine Berufsausbildung zu\nbemühen, sie zu beginnen oder fortzusetzen. 2Von einer vorübergehenden Erkrankung ist auszugehen,\nwenn sie im Hinblick auf die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden\nFunktionsbeeinträchtigung mit hoher Wahrscheinlichkeit regelmäßig nicht länger als sechs Monate\nwährt (BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465). 3Die Erkrankung und das\nvoraussichtliche Ende der Erkrankung sind durch eine Bescheinigung des behandelnden Arztes\nnachzuweisen. 4Ist nach den ärztlichen Feststellungen das voraussichtliche Ende der Erkrankung nicht\nabsehbar oder währt die Erkrankung bzw. die von ihr ausgehende Beeinträchtigung länger als sechs\nMonate, reicht der Wille des Kindes, sich nach dem Ende der Erkrankung um einen Ausbildungsplatz\nzu bemühen, nicht aus. 5In diesem Fall ist zu prüfen, ob das Kind wegen einer Behinderung nach § 32\nAbs. 4 Satz 1 Nr. 3 EStG berücksichtigt werden kann (vgl. BFH vom 12.11.2020, III R 49/18,\nBStBl II 2021 S. 390). 6Wurde das Kind nicht bereits vor der Erkrankung nach § 32 Abs. 4 Satz 1 Nr. 2\nBuchst. c EStG berücksichtigt, muss es seinen Willen glaubhaft machen, sich unmittelbar nach Wegfall\nder Hinderungsgründe um eine Berufsausbildung zu bemühen, sie zu beginnen oder fortzusetzen. 7Die\nGlaubhaftmachung kann z. B. durch eine schriftliche Erklärung erfolgen (vgl. V 6.1 Abs. 1 Satz 8) oder\ndurch den Nachweis, dass sich das Kind an eine Ausbildungseinrichtung oder die Arbeitsvermittlung\nder Agentur für Arbeit mit dem Ziel gewandt hat, eine Ausbildung nach dem Ende der Erkrankung\naufzunehmen (BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465). 8Bemüht sich das Kind nach\nWegfall des Hinderungsgrundes nicht unmittelbar um eine Berufsausbildung, beginnt diese oder setzt\nsie fort, ist die Festsetzung ab dem Monat, der dem Monat folgt, in dem die Hinderungsgründe wegfallen,\nnach § 70 Abs. 2 Satz 1 EStG aufzuheben. 9Für die Bearbeitung und Nachweisführung stehen die\nVordrucke KG 9a und KG 9b zur Verfügung.\n(2) 1Ein Kind, das sich wegen eines Beschäftigungsverbots nach §§ 3, 13 Abs. 1 Nr. 3 oder\n16 MuSchG nicht um eine Berufsausbildung bemüht, sie beginnt oder fortsetzt, kann nach § 32 Abs. 4\nSatz 1 Nr. 2 Buchst. c EStG berücksichtigt werden. 2Das Gleiche gilt, wenn sich das Kind wegen\nunzulässiger Tätigkeiten und Arbeitsbedingungen nach §§ 11, 12 MuSchG nicht um den\nAusbildungsplatz bewerben kann. 3Die Schwangerschaft und der voraussichtliche Tag der Entbindung\nsind durch ein ärztliches Zeugnis oder das Zeugnis einer Hebamme oder eines Entbindungshelfers\n                                                       49\n\fnachzuweisen. 4Ein Beschäftigungsverbot nach § 16 MuSchG ist durch ärztliches Zeugnis zu\nbestätigen. 5Kann sich das Kind wegen unzulässiger Tätigkeit nach §§ 11, 12 MuSchG nicht um einen\nAusbildungsplatz bewerben, ist dies vom Kind oder vom Berechtigten glaubhaft zu machen. 6Satz 1 und\n2 gelten unabhängig davon, ob das Kind die Bemühungen um einen Ausbildungsplatz nach dem Ende\ndes Beschäftigungsverbots nach §§ 3, 13 Abs. 1 Nr. 3 oder 16 MuSchG fortsetzt (BFH vom 13.06.2013,\nIII R 58/12, BStBl II 2014 S. 834). 7Ein Kind ohne Ausbildungsplatz kann nicht berücksichtigt werden,\nwenn es sich wegen Kindesbetreuung, beispielsweise Elternzeit nach §§ 15 bis 21 BEEG, nicht um\neinen Ausbildungsplatz bemüht."
+  },
+  "disposition": {
+    "id": "de-kg-discovery-00aab547379e68f7",
+    "status": "classified-with-reason",
+    "classification": "adult_child_illness_prognosis",
+    "reason": "The complete four-page BFH III R49/18 judgment (12 November 2020, paragraphs1–18), corpus body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, was read with the complete retained DA-KG2025 A17.2 section, which expressly cites it. Paragraphs11–16 require the waiting-for-training route to be assessed separately from an inability to train caused by an illness whose end is not foreseeable; general future training intention alone does not establish that route. The disability route remains a separate statutory assessment, and the remand is not an automatic disability award. Paragraph16 disregards the later medical certificate because it contains no statement about the earlier disputed period; do not turn this into a blanket ban on retrospective medical evidence. The possible retroactivity of the training-intention declaration is expressly left open. Paragraphs14–15 discuss both historical SGBIX definitions and leave the general illness-duration boundary unresolved in that decision; use the separately reviewed III R41/19 and current A17.2 for the later prognosis formulation, not an invented elapsed-since-diagnosis cutoff. These source-defined conditions bear on qualifying_child_count and remain unencoded. Complete body and limitations: illness-prognosis-source-review.json. Exact BStBlII issue/page membership is not independently proved by this body receipt.",
+    "bears_on_computed_surface": true
+  },
+  "limitations": [
+    "No automatic refusal of every waiting, training or disability ground. No inference that unknown prognosis establishes all elements of statutory disability.",
+    "The later certificate in this case had no retrospective statement. Neither every later-issued medical record nor every retrospective training-intention declaration is rejected by this judgment. The latter issue was left open.",
+    "The judgment discusses both versions of SGBIX2(1). The current consumer must bind applicable definitions and the later III R41/19 prognosis rule rather than blindly applying the historical six-month wording.",
+    "No exact BStBlII issue/page receipt or exhaustive discovery claim. No encoding or certified claim.",
+    "III R43/20 paragraph28 preserves the possibility of earlier months qualifying under an initially supported temporary prognosis. A later prolonged recovery does not mechanically rewrite every earlier month.",
+    "Nine earlier cited precedents are newly enrolled pending. Their own texts and historical application are not claimed reviewed, and the four discovery classes remain open.",
+    "Six original PDFs are now fully captured and receipt-bound to the published 50-scope release. Their complete legal review is not implied by the capture; all nine indirect illness/training precedent identities remain pending.",
+    "Fresh capture adds four pending Kindergeld corpus identities and one UHV identity for already named recovered cases; there are no removals. Independent discovery-channel rows remain explicit. No graph addition is silently dispositioned as non-bearing."
+  ],
+  "additional_reviewed_full_decisions": [
+    {
+      "citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202210068?type=1646225765",
+      "body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+      "body": "Urteil vom 15. Dezember 2021, III R 43/20 Kindergeld für ein langfristig erkranktes Kind bei fortbestehendem Ausbildungsverhältnis ECLI:DE:BFH:2021:U.151221.IIIR43.20.0 BFH III. Senat EStG § 32 Abs 4 S 1 Nr 2 Buchst a, EStG § 32 Abs 4 S 1 Nr 3, SGB 9 2018 § 2 Abs 1 S 1, EStG VZ 2018 , EStG VZ 2019 vorgehend FG Münster, 30. Juni 2020, Az: 11 K 1832/19 Kg Leitsätze 1. Eine kindergeldrechtliche Berücksichtigung wegen Berufsausbildung scheidet aus, wenn Ausbildungsmaßnahmen im Rahmen des fortbestehenden Ausbildungsverhältnisses wegen einer nicht vorübergehenden Erkrankung unterbleiben. In Betracht kommt dann eine Berücksichtigung wegen Behinderung (§ 32 Abs. 4 Satz 1 Nr. 3 EStG). 2. Eine Krankheit ist nicht vorübergehend, wenn mit hoher Wahrscheinlichkeit eine länger als sechs Monate dauernde Beeinträchtigung zu erwarten ist (vgl. § 2 Abs. 1 Satz 1 SGB IX). Tenor Auf die Revision der Beklagten wird das Urteil des Finanzgerichts Münster vom 01.07.2020 - 11 K 1832/19 Kg aufgehoben. Die Sache wird an das Finanzgericht Münster zur anderweitigen Verhandlung und Entscheidung zurückverwiesen. Diesem wird die Entscheidung über die Kosten des Verfahrens übertragen. Tatbestand I. Streitig ist, ob die Klägerin und Revisionsbeklagte (Klägerin) für den Zeitraum von Oktober 2018 bis Mai 2019 Anspruch auf Kindergeld für ihren Sohn hat. 1 Die Klägerin bezog fortlaufend Kindergeld für ihren im Februar 1999 geborenen Sohn (S), der am 01.08.2015 eine Ausbildung zum Zweiradmechatroniker begonnen hatte, die nach dem Berufsausbildungsvertrag zum 31.01.2019 enden sollte. 2 S erlitt im September 2018 während seiner Arbeit einen schweren Unfall mit Schädelbasisbruch und Schädel-Hirn- Trauma und befand sich deshalb vom ...09.2018 bis zum ...11.2018 in stationärer Behandlung. In dem Bericht des Klinikums vom ...11.2018 wird darüber ausgeführt: \"[...] Hinsichtlich der beruflichen Teilhabe erscheint eine Rückkehr in den bisher ausgeübten Beruf bzw. die Berufsausbildung trotz der noch deutlich bestehenden neuropsychologischen Defizite möglich. Eine neuropsychologische Behandlung der bestehenden Defizite ist dringend und unbedingt indiziert. Diese sollte die Rückkehr in den häuslichen wie beruflichen Alltag begleiten, die Wiedereingliederung bzw. das Anforderungsprofil des Alltags steuern und das Kind in der Umsetzung störungsspezifischer Kompensationsstrategien unterstützen. [...]\" 3 Nach der Entlassung aus dem Krankenhaus durchlief S einen sog. Reha-Plan. Mit Schreiben vom ...02.2019 bestätigte die Berufsgenossenschaft, dass das anhängige Heilverfahren das Ziel der Wiedererlangung der 4 Seite 1 von 4\n\nEntscheidungsgründe II. Arbeitsfähigkeit als Zweiradmechatroniker in Ausbildung verfolge und der persönliche Reha-Plan am ...03.2019 fortgeschrieben werde. Am ...07.2019, also etwa sechs Wochen nach dem Ende des Streitzeitraums, erhielt S eine Aufnahmezusage zur beruflichen Eingliederung und nahm in der Zeit vom ...09.2019 bis zum ...09.2019 an einer Arbeitserprobung teil. In dem Bericht über die Arbeitserprobung heißt es: \"[...] (S) ist mit guter Motivation in die Arbeitserprobung gestartet. [...] Er möchte seine Ausbildung [...] erfolgreich beenden. [...] Der Genesungsprozess (körperlich wie kognitiv) ist nach dem Unfall 2018 derzeit noch nicht abgeschlossen. Die medizinische Rehabilitation ist für die weitere berufliche Förderung sehr wichtig und notwendig.\" Ab dem ...02.2020 ‑‑der Unfall lag da bereits 17 Monate zurück‑‑ nahm S an einer weiteren berufsvorbereitenden Maßnahme teil. 5 Das Ausbildungsverhältnis bestand über den Monat Mai 2019 ‑‑dem letzten Monat des Streitzeitraums‑‑ hinaus fort. 6 Mit Bescheid vom 04.12.2018 hob die Beklagte und Revisionsklägerin (Familienkasse) die Kindergeldfestsetzung gemäß § 70 Abs. 2 des Einkommensteuergesetzes (EStG) ab Januar 2019 auf, da S nach ihren Unterlagen seine Berufsausbildung im Dezember 2018 beende. 7 Mit Schreiben vom 17.12.2018 und vom 18.01.2019 berichtete die Klägerin über den Unfall, den S erlitten hatte, und übersandte dessen Erklärung, dass er beabsichtige, die durch die Erkrankung unterbrochene Ausbildung zum nächstmöglichen Zeitpunkt fortzusetzen, sowie die Bescheinigung der Chefärztin des Klinikums vom ...01.2019, in der angekreuzt ist, dass das Ende der Erkrankung nicht absehbar sei. 8 Die Familienkasse lehnte mit Bescheid vom 06.02.2019 die Festsetzung von Kindergeld ab Januar 2019 ab. Zur Begründung führte sie aus, dass S aufgrund der Erkrankung in absehbarer Zeit nicht aktiv an der bisherigen Ausbildung teilnehmen könne. Mangels eines ärztlichen Nachweises über das absehbare Ende der Erkrankung könne er nicht berücksichtigt werden. Die Erkrankung selbst begründe keinen Anspruch auf Kindergeld. 9 Nachdem die Klägerin Einspruch eingelegt hatte, hob die Familienkasse die Kindergeldfestsetzung nach vorheriger Anhörung der Klägerin gemäß § 70 Abs. 2 EStG für Oktober bis Dezember 2018 auf und forderte das überzahlte Kindergeld in Höhe von insgesamt 582 € gemäß § 37 Abs. 2 der Abgabenordnung zurück. Die Klägerin legte auch gegen diesen Bescheid am 14.03.2019 Einspruch ein. 10 Die Einsprüche gegen den Aufhebungs- und Rückforderungsbescheid (Zeitraum Oktober bis Dezember 2018) und gegen den Ablehnungsbescheid (Zeitraum ab Januar 2019) wies die Familienkasse mit Einspruchsentscheidungen vom 23.05.2019 und 29.05.2019 als unbegründet zurück. 11 Die Klage hatte Erfolg. Das Finanzgericht (FG) entschied, S sei im Streitzeitraum nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG zu berücksichtigen. Er habe sich weiterhin im ‑‑aufgrund des Unfalls verlängerten‑‑ Ausbildungsverhältnis befunden, sei weiterhin ausbildungswillig gewesen und wegen der Erkrankung nur zeitweise außerstande gewesen, die Ausbildung durchzuführen. Sein Wille, die Ausbildung baldmöglichst fortzusetzen, sei in mehrfacher Hinsicht belegt. 12 Die Familienkasse rügt die unzutreffende Auslegung des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG. 13 Die Familienkasse beantragt, das FG-Urteil aufzuheben und die Klage abzuweisen. 14 Die Klägerin beantragt, die Revision zurückzuweisen. 15 Die Revision ist begründet. Sie führt zur Aufhebung des angefochtenen Urteils und zur Zurückverweisung der Streitsache an das FG zur anderweitigen Verhandlung und Entscheidung (§ 126 Abs. 3 Satz 1 Nr. 2 der 16 Seite 2 von 4\n\nFinanzgerichtsordnung ‑‑FGO‑‑). Das FG war zu Unrecht der Ansicht, für S sei Kindergeld zu gewähren, weil er sich in Ausbildung befunden habe. 1. Nach § 62 Abs. 1 Satz 1, § 63 Abs. 1 Satz 1 Nr. 1 i.V.m. § 32 Abs. 4 Satz 1 EStG wird Kindergeld für ein Kind gewährt, welches das 18., aber noch nicht das 25. Lebensjahr vollendet hat, wenn es für einen Beruf ausgebildet wird (§ 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG) oder wegen einer vor Vollendung des 25. Lebensjahres eingetretenen körperlichen, geistigen oder seelischen Behinderung außerstande ist, sich selbst zu unterhalten (§ 32 Abs. 4 Satz 1 Nr. 3 EStG). 17 2. Das FG hat zu Unrecht angenommen, dass S im Streitzeitraum i.S. des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG für einen Beruf ausgebildet wurde. 18 a) In Berufsausbildung i.S. des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG befindet sich, wer sein Berufsziel noch nicht erreicht hat, sich aber ernsthaft und nachhaltig darauf vorbereitet. Dieser Vorbereitung dienen alle Maßnahmen, bei denen Kenntnisse, Fähigkeiten und Erfahrungen erworben werden, die als Grundlagen für die Ausübung des angestrebten Berufs geeignet sind (z.B. Senatsurteil vom 27.11.2019 - III R 65/18, BFH/NV 2020, 765, Rz 9). 19 Dabei werden Ausbildungsmaßnahmen zwar einerseits durch eine Einschreibung an einer Schule oder Hochschule oder einen Ausbildungsvertrag mit einem Ausbildungsbetrieb indiziert. Andererseits genügt aber das formale Bestehen eines Ausbildungsverhältnisses nicht, wenn es an ernsthaften und nachhaltigen Ausbildungsmaßnahmen fehlt (z.B. Senatsurteile in BFH/NV 2020, 765, Rz 10, und vom 18.01.2018 - III R 16/17, BFHE 260, 481, BStBl II 2018, 402, Rz 11). Soweit Anhaltspunkte dafür bestehen, dass das Kind seinem gewählten Ausbildungsgang nicht ernsthaft und hinreichend nachgeht, befindet es sich nicht in Berufsausbildung (Senatsurteile vom 03.07.2014 - III R 52/13, BFHE 246, 427, BStBl II 2015, 152, Rz 32, und vom 08.09.2016 - III R 27/15, BFHE 255, 202, BStBl II 2017, 278, Rz 22). 20 b) Das FG ist zutreffend davon ausgegangen, dass eine Ausnahme von diesem Grundsatz für den Fall zugelassen wurde, dass die Ausbildung infolge einer Erkrankung oder wegen der Schutzfristen vor und nach der Entbindung unterbrochen wird (Urteil des Bundesfinanzhofs ‑‑BFH‑‑ vom 15.07.2003 - VIII R 47/02, BFHE 203, 106, BStBl II 2003, 848, unter II.1.c; Senatsurteil vom 13.06.2013 - III R 58/12, BFHE 242, 118, BStBl II 2014, 834). Gleiches hat der BFH für den Fall angenommen, dass das Kind während eines Ausbildungsverhältnisses in Untersuchungshaft genommen oder wegen eines laufenden Strafverfahrens im Ausland mit einem Ausreiseverbot belegt wird (Senatsurteil vom 20.07.2006 - III R 69/04, BFH/NV 2006, 2067, unter II.1.c). Vorausgesetzt wurde insoweit jedoch, dass das Kind einen Ausbildungsplatz hat und ausbildungswillig ist (BFH-Urteil in BFHE 203, 106, BStBl II 2003, 848, unter II.1.c; BFH-Urteil in BFH/NV 2006, 2067, unter II.1.c). 21 Diese Voraussetzungen sind im Streitfall erfüllt, da der Ausbildungsvertrag fortbestand und S weiterhin ausbildungswillig war. 22 c) Die Unterbrechung der Ausbildungsmaßnahmen im Rahmen des fortbestehenden Ausbildungsverhältnisses steht der Berücksichtigung aber ‑‑wie auch die weitere Berücksichtigung eines ausbildungswilligen, sich aber vorübergehend nicht um einen Ausbildungsplatz bemühenden Kindes nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG (Senatsurteil vom 31.08.2021 - III R 41/19, Neue Juristische Wochenschrift ‑‑NJW‑‑ 2022, 718)‑‑ nur dann nicht entgegen, wenn die Erkrankung vorübergehend ist. Eine krankheitsbedingte Unterbrechung der Ausbildung ist insoweit nicht anders zu behandeln als eine krankheitsbedingte Unterbrechung der Suche nach einem Ausbildungsplatz; dies hatte der Senat für mutterschutzbedingte Unterbrechungen der Ausbildung oder der Ausbildungsplatzsuche bereits im Urteil in BFHE 242, 118, BStBl II 2014, 834 (Rz 13) entschieden. 23 aa) Das Erfordernis einer nur vorübergehenden Krankheit ergibt sich aus der Notwendigkeit, die von § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG erfassten Fälle von den unter § 32 Abs. 4 Satz 1 Nr. 3 EStG fallenden Fällen abzugrenzen. Letztere Bestimmung erfordert zum einen eine körperliche, geistige oder seelische Behinderung, die nach der maßgeblichen Legaldefinition des § 2 Abs. 1 Satz 1 des Neunten Buches Sozialgesetzbuch (SGB IX) eine mit hoher Wahrscheinlichkeit länger als sechs Monate dauernde Beeinträchtigung voraussetzt (Senatsurteil vom 12.11.2020 - III R 49/18, BFHE 271, 229, Rz 14). Zweck dieses Kriteriums ist es, vorübergehende Gesundheitsstörungen aus dem Behinderungsbegriff auszuschließen und damit nur Beeinträchtigungen eines bestimmten Schweregrades zu erfassen (Senatsurteil vom 27.11.2019 - III R 44/17, BFHE 267, 337, BStBl II 2020, 558, Rz 26). 24 Zum anderen werden behinderte Kinder nach § 32 Abs. 4 Satz 1 Nr. 3 EStG nur dann berücksichtigt, wenn sie 25 Seite 3 von 4\n\nQuelle: www.bundesfinanzhof.de behinderungsbedingt außerstande sind, sich selbst zu unterhalten, was eine Prüfung des Bedarfs des Kindes und der diesem zur Verfügung stehenden Mittel erfordert. Bei nicht nur vorübergehenden Erkrankungen des Kindes darf eine typische Unterhaltssituation, die zu seiner steuerlichen Berücksichtigung führt, nicht allein aufgrund der Erkrankung angenommen werden, sondern erfordert darüber hinaus die Feststellung eines konkreten Unterhaltsbedarfs. Diese Wertung des Gesetzgebers würde umgangen, wenn längerfristig erkrankte Kinder nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a oder c EStG ohne eine Bedarfsprüfung berücksichtigt würden. Gerade bei längerfristig erkrankten Kindern ist es nicht ausgeschlossen, dass Sozialleistungen in Anspruch genommen werden, die einen Unterhaltsbedarf entfallen lassen. bb) Unterbleiben Ausbildungsmaßnahmen wegen einer Erkrankung, so darf die gesundheitliche Beeinträchtigung daher ‑‑ebenso wie bei einer krankheitsbedingten Unterbrechung der Bemühungen um einen Ausbildungsplatz (Senatsurteil in NJW 2022, 718)‑‑ regelmäßig nicht mit hoher Wahrscheinlichkeit länger als sechs Monate andauern, wenn das Kind weiter wegen seiner Ausbildung gemäß § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG berücksichtigt werden soll. Dabei ist ‑‑um den Gleichlauf mit der Feststellung einer Behinderung zu gewährleisten‑‑ nicht die (rückblickend) seit Beginn der Erkrankung oder die seit ihrer erstmaligen ärztlichen Diagnose tatsächlich verstrichene Zeit, sondern die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden Funktionsbeeinträchtigung maßgebend (BFH-Urteil vom 18.06.2015 - VI R 31/14, BFHE 251, 147, BStBl II 2016, 40, Rz 22; Senatsurteil in BFHE 267, 337, BStBl II 2020, 558, Rz 26). Zur Beurteilung dieser Frage ist ggf. eine Prognose zur weiteren Entwicklung der Funktionsbeeinträchtigung zu stellen (Senatsurteil vom 19.01.2017 - III R 44/14, BFH/NV 2017, 735, Rz 18). 26 3. Der Rechtsstreit ist nicht entscheidungsreif und geht an das FG zurück. 27 a) Das FG hat nicht festgestellt, ob eine sechs Monate übersteigende Erkrankungsdauer bereits in den ersten Monaten des Streitzeitraums ‑‑vor der chefärztlichen Bescheinigung des nicht absehbaren Heilungstermins am ...01.2019‑‑ mit hoher Wahrscheinlichkeit erwartet wurde. Falls zunächst eine schnellere Genesung als möglich erschien, könnte S angesichts des fortbestehenden Ausbildungsverhältnisses bis dahin weiter nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG berücksichtigt werden. 28 b) Für den Zeitraum, in dem eine Berücksichtigung wegen Ausbildung aufgrund des dann (mit hoher Wahrscheinlichkeit) erwarteten ‑‑und eingetretenen‑‑ langwierigen Heilungsprozesses nicht in Betracht kommt, ist im zweiten Rechtsgang zu prüfen, in welchen Monaten S behinderungsbedingt außerstande war, sich selbst zu unterhalten und deshalb nach § 32 Abs. 4 Satz 1 Nr. 3 EStG zu berücksichtigen ist. 29 4. Die Übertragung der Kostenentscheidung auf das FG beruht auf § 143 Abs. 2 FGO. 30 Seite 4 von 4"
+    }
+  ],
+  "additional_reviewed_full_guidance": [
+    {
+      "id": "de-kg-dakg-A15.11",
+      "body_sha256": "c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c",
+      "reviewed_full_section": "A 15.11 Unterbrechung der Ausbildung infolge Erkrankung oder Mutterschaft\n(1) 1Eine anspruchsschädliche Unterbrechung der Ausbildung liegt nicht vor, solange während einer\nErkrankung die rechtliche Bindung zur Ausbildungsstätte bzw. zum Ausbilder fortbesteht und die\nDurchführung der Ausbildungsmaßnahmen wegen einer vorübergehenden Erkrankung unterbleibt\n(BFH vom 15.12.2021, III R 43/20, BStBl II 2022 S. 472). 2Von einer vorübergehenden Erkrankung ist\nauszugehen, wenn sie im Hinblick auf die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden\nFunktionsbeeinträchtigung mit hoher Wahrscheinlichkeit regelmäßig nicht länger als sechs Monate\nwährt (BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465). 3Die Erkrankung und das\nvoraussichtliche Ende der Erkrankung sind durch eine Bescheinigung des behandelnden Arztes\nnachzuweisen. 4Ist nach den ärztlichen Feststellungen das voraussichtliche Ende der Erkrankung nicht\nabsehbar oder währt die Erkrankung bzw. die von ihr ausgehende Beeinträchtigung länger als sechs\nMonate, ist zu prüfen, ob das Kind wegen einer Behinderung nach § 32 Abs. 4 Satz 1 Nr. 3 EStG\nberücksichtigt werden kann. 5Von einer ärztlichen Bescheinigung über das voraussichtliche Ende der\nErkrankung kann abgesehen werden, wenn das Kind zwischenzeitlich die Ausbildung wieder\naufgenommen oder eine neue Ausbildung begonnen hat. 6Für die Bearbeitung und Nachweisführung\nstehen die Vordrucke KG 9a und KG 9b zur Verfügung.\n(2) 1Ein Studierender ist während einer Unterbrechung seines Studiums zu berücksichtigen, wenn er\nwegen Erkrankung beurlaubt oder von der Belegpflicht befreit ist und dies der Familienkasse unter\nVorlage einer ärztlichen Bescheinigung nachgewiesen wird; vgl. Abs. 1 Satz 2. 2Die Berücksichtigung\nerfolgt für das betreffende Studiensemester einschließlich der Semesterferien, in dem der Studierende\ndurch Krankheit gehindert ist, seinem Studium nachzugehen. 3Dies gilt auch, wenn die Erkrankung vor\nAblauf des Semesters endet, das Studium aber erst im darauf folgenden Semester fortgesetzt wird.\n(3) 1Das Vorliegen eines Beschäftigungsverbots nach §§ 3, 13 Abs. 1 Nr. 3 oder 16 MuSchG ist für\nden Anspruch unschädlich. 2Das Gleiche gilt, wenn das Kind wegen unzulässiger Tätigkeiten und\nArbeitsbedingungen nach §§ 11, 12 MuSchG die Ausbildung unterbricht. 3Die Schwangerschaft und der\nvoraussichtliche Tag der Entbindung sind durch ein ärztliches Zeugnis oder das Zeugnis einer\nHebamme oder eines Entbindungshelfers nachzuweisen. 4Ein Beschäftigungsverbot nach\n§ 16 MuSchG ist durch ärztliches Zeugnis zu bestätigen. 5Die Unterbrechung der Ausbildung wegen\nunzulässiger Tätigkeit nach §§ 11, 12 MuSchG ist durch eine Bescheinigung des Ausbildungsbetriebes\n\n                                                  46\n\fbzw. des Ausbilders nachzuweisen. 6Unterbrechungszeiten wegen Kindesbetreuung, beispielsweise\nwegen Elternzeit gem. §§ 15 bis 21 BEEG, sind dagegen nicht zu berücksichtigen (BFH vom\n15.07.2003, VIII R 47/02, BStBl II S. 848). 7Eine Studierende ist für die Dauer des Semesters zu\nberücksichtigen, in dem die Entbindung zu erwarten ist, längstens bis zum Ablauf des Monats, in dem\ndie Schutzfrist des § 3 Abs. 2 MuSchG endet. 8Wird das Studium jedoch in dem darauf folgenden\nSemester fortgesetzt, ist die Studierende auch darüber hinaus bis zum Semesterbeginn zu\nberücksichtigen."
+    }
+  ],
+  "additional_dispositions": [
+    {
+      "id": "de-kg-discovery-0a5820943b10e4f9",
+      "status": "classified-with-reason",
+      "classification": "adult_child_training_illness_prognosis",
+      "reason": "The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "de-kg-instr-6cf659dd66fd5e85",
+      "status": "classified-with-reason",
+      "classification": "adult_child_training_illness_prognosis",
+      "reason": "The complete four-page BFH III R43/20 judgment (15 December 2021, paragraphs1–30), body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, was read with the complete DA-KG2025 A15.11 section that expressly cites it. Paragraphs19–26 distinguish actual serious training, a continuing training agreement and intention, and interruption for a temporary illness. Continued enrolment/contract and intention do not by themselves establish training consideration during a non-temporary illness. Paragraph26 expressly uses the expected duration of functional impairment, not elapsed time since onset or first diagnosis. Paragraph28 requires assessment of the earlier months before a later long-term prognosis; the later course does not automatically invalidate an earlier supported temporary prognosis. Paragraph29 requires the separate month-specific disability/need/resources assessment; remand is not an automatic award. These rules bear on qualifying_child_count and remain unencoded. Full text, guidance and limitations: illness-prognosis-source-review.json. Body capture is not independent proof of exact BStBlII issue/page membership.",
+      "bears_on_computed_surface": true
+    }
+  ],
+  "new_pending_indirect_precedents": [
+    {
+      "id": "de-kg-suppl-026",
+      "identity": "BFH III R 24/08, 2011-04-07, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 24/08",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 24/08 dated 2011-04-07 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-027",
+      "identity": "BFH VIII R 71/99, 2003-07-15, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH VIII R 71/99",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VIII R 71/99 dated 2003-07-15 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-028",
+      "identity": "BFH III R 70/11, 2012-09-27, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 70/11",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-029",
+      "identity": "BFH VI B 322/98, 1999-11-08, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH VI B 322/98",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH VI B 322/98 dated 1999-11-08 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-030",
+      "identity": "BFH III R 44/14, 2017-01-19, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 44/14",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 44/14 dated 2017-01-19 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-031",
+      "identity": "BFH III R 65/18, 2019-11-27, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 65/18",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A15.11",
+      "discovered_in_body_sha256": "c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 65/18 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-032",
+      "identity": "BFH III R 69/04, 2006-07-20, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 69/04",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A15.11",
+      "discovered_in_body_sha256": "c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 69/04 dated 2006-07-20 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-033",
+      "identity": "BFH III R 44/17, 2019-11-27, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH III R 44/17",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A15.11",
+      "discovered_in_body_sha256": "c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH III R 44/17 dated 2019-11-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-034",
+      "identity": "BFH VI R 31/14, 2015-06-18, indirectly cited in the illness/training precedent review",
+      "title_short": "BFH VI R 31/14",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A15.11",
+      "discovered_in_body_sha256": "c0367878de936027e337612408545eee2309498dd08309cfed3da2825c53943c",
+      "provenance": "Indirect reading discovery: the complete de-kg-dakg-A15.11 section cites the fully reviewed judgment de/guidance/bfh-iii-r-43-20-2021-12-15/document-1, body SHA-256 7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90, which in turn cites BFH VI R 31/14 dated 2015-06-18 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone.",
+      "status": "pending"
+    }
+  ],
+  "indirect_discovery_citation_spans": [
+    {
+      "id": "de-kg-suppl-026",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+      "referring_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+      "citation_excerpt": "t voraus, dass der Beginn der Ausbildung nicht an anderen Umständen als dem Mangel eines Ausbildungsplatzes scheitert (Senatsurteile vom 07.04.2011 - III R 24/08, BFHE 233, 44, BStBl II 2012, 210, sowie vom 13.06.2013 - III R 58/12, BFHE 242, 118, BStBl II 2014, 834). Dabei ist zwar grundsätzlich jeder Ausbildungswunsch des Kindes zu berücksichtigen; seine Ve",
+      "excerpt_sha256": "467f5bf15a548aab4cd44a8b6fe264111256725dcede22a149db15ea6d4e036f"
+    },
+    {
+      "id": "de-kg-suppl-027",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+      "referring_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+      "citation_excerpt": "; seine Verwirklichung darf jedoch nicht an den persönlichen Verhältnissen des Kindes scheitern (Urteil des Bundesfinanzhofs ‑‑BFH‑‑ vom 15.07.2003 - VIII R 71/99, BFH/NV 2004, 473). Das Kind muss die Ausbildungsstelle im Falle des Erfolgs seiner Bemühungen antreten können (BFH- 12 Seite 2 von 4\n\nUrteil vom 15.07.2003 - VIII R 79/99, BFHE 203, 94, BStBl II 200",
+      "excerpt_sha256": "9ab7cccbf4012c7e328b416d45f108f7a98ed79acc5aaa987de32e26393f60c9"
+    },
+    {
+      "id": "de-kg-suppl-028",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+      "referring_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+      "citation_excerpt": "hungen antreten können (BFH- 12 Seite 2 von 4\n\nUrteil vom 15.07.2003 - VIII R 79/99, BFHE 203, 94, BStBl II 2003, 843; Senatsurteile vom 27.09.2012 - III R 70/11, BFHE 239, 116, BStBl II 2013, 544, sowie vom 18.01.2018 - III R 16/17, BFHE 260, 481, BStBl II 2018, 402). b) In der Person des Kindes liegende Gründe, welche der Aufnahme einer Berufsausbildung ent",
+      "excerpt_sha256": "2a808c3cfcf7a9a4fc09a835724d15627fd3d3ea6001fa1733d4f535d4437641"
+    },
+    {
+      "id": "de-kg-suppl-029",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+      "referring_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+      "citation_excerpt": "0). Ein Kind ist auch dann nicht zu berücksichtigen, wenn es eine Ausbildung wegen Übergewichts nicht antreten könnte (BFH-Beschluss vom 08.11.1999 - VI B 322/98, BFH/NV 2000, 432). Für den Bezug von Kindergeld ist es ausnahmsweise unschädlich, wenn das Kind wegen der Schutzfristen nach dem Mutterschutzgesetz (MuSchG) an der Aufnahme einer Berufsausbildung ge",
+      "excerpt_sha256": "d11c7e73c49f02f67f8cd25439323af9ea5e49f42d198b38e316f2d10c055e10"
+    },
+    {
+      "id": "de-kg-suppl-030",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-49-18-2020-11-12/document-1",
+      "referring_body_sha256": "55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405",
+      "citation_excerpt": "en ist. Der Begriff der Behinderung orientiert sich an § 2 Abs. 1 Satz 1 des Neunten Buchs Sozialgesetzbuch ‑‑SGB IX‑‑ (Senatsurteil vom 19.01.2017 - III R 44/14, BFH/NV 2017, 735, m.w.N.). Nach der derzeitigen Definition des § 2 Abs. 1 Satz 1 SGB IX i.d.F. des Bundesteilhabegesetzes vom 23.12.2016 (BGBl I 2016, 3234) sind Menschen behindert, die körperliche,",
+      "excerpt_sha256": "dfa7a95a51a2ecb93df1f493f023f69335f2937e2751df4cf63e2de200a8cdc5"
+    },
+    {
+      "id": "de-kg-suppl-031",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+      "referring_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+      "citation_excerpt": "keiten und Erfahrungen erworben werden, die als Grundlagen für die Ausübung des angestrebten Berufs geeignet sind (z.B. Senatsurteil vom 27.11.2019 - III R 65/18, BFH/NV 2020, 765, Rz 9). 19 Dabei werden Ausbildungsmaßnahmen zwar einerseits durch eine Einschreibung an einer Schule oder Hochschule oder einen Ausbildungsvertrag mit einem Ausbildungsbetrieb indi",
+      "excerpt_sha256": "55d4e49302fc78388c80d0c87e5a5f9c67428f3ace354d391231e01383fd384b"
+    },
+    {
+      "id": "de-kg-suppl-032",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+      "referring_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+      "citation_excerpt": " Untersuchungshaft genommen oder wegen eines laufenden Strafverfahrens im Ausland mit einem Ausreiseverbot belegt wird (Senatsurteil vom 20.07.2006 - III R 69/04, BFH/NV 2006, 2067, unter II.1.c). Vorausgesetzt wurde insoweit jedoch, dass das Kind einen Ausbildungsplatz hat und ausbildungswillig ist (BFH-Urteil in BFHE 203, 106, BStBl II 2003, 848, unter II.1",
+      "excerpt_sha256": "cd1a32e3a71a0c849ea13884f389b1b39b649f6e75060663cb74f5d140b7a9a7"
+    },
+    {
+      "id": "de-kg-suppl-033",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+      "referring_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+      "citation_excerpt": "aus dem Behinderungsbegriff auszuschließen und damit nur Beeinträchtigungen eines bestimmten Schweregrades zu erfassen (Senatsurteil vom 27.11.2019 - III R 44/17, BFHE 267, 337, BStBl II 2020, 558, Rz 26). 24 Zum anderen werden behinderte Kinder nach § 32 Abs. 4 Satz 1 Nr. 3 EStG nur dann berücksichtigt, wenn sie 25 Seite 3 von 4\n\nQuelle: www.bundesfinanzhof.",
+      "excerpt_sha256": "0e2f73a81f63a565d5ef2ce7cd791cf954079ed382c9c23e7fbe1a0f1fb22c18"
+    },
+    {
+      "id": "de-kg-suppl-034",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-43-20-2021-12-15/document-1",
+      "referring_body_sha256": "7ddd45853e8a8282bc8a5b1936250df510f01ee3786051fda70fde1bfe560d90",
+      "citation_excerpt": "richene Zeit, sondern die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden Funktionsbeeinträchtigung maßgebend (BFH-Urteil vom 18.06.2015 - VI R 31/14, BFHE 251, 147, BStBl II 2016, 40, Rz 22; Senatsurteil in BFHE 267, 337, BStBl II 2020, 558, Rz 26). Zur Beurteilung dieser Frage ist ggf. eine Prognose zur weiteren Entwicklung der Funktionsbeeinträ",
+      "excerpt_sha256": "198b8b3dc8158b914230b241504eedea879462a070071adf79164a609a03f1a0"
+    }
+  ],
+  "published_original_source_receipts": [
+    {
+      "id": "de-kg-suppl-026",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 2,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "4553d0dd0355fc25d50577dd3901376e7fa21b2e075259ff586ebb597dd12ba1",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-iii-r-24-08-2011-04-07.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201110135?type=1646225765",
+      "source_sha256": "6439d45600fb8f471153ddd9b0e819ad42edde10a788e56a43af124a5415dad5",
+      "pages": 5,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    },
+    {
+      "id": "de-kg-suppl-028",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 4,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-iii-r-70-11-2012-09-27.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201210269?type=1646225765",
+      "source_sha256": "1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d",
+      "pages": 5,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    },
+    {
+      "id": "de-kg-suppl-030",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-44-14-2017-01-19/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 6,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "cd869f6d0bcee58147a767f4a2851c7c8391d78350da8819dffdd813ce51d65b",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-iii-r-44-14-2017-01-19.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201750080?type=1646225765",
+      "source_sha256": "e7d59f4e58eb9fca91a441f9e81f6d3eb45865f404f2d344a4588689bccec444",
+      "pages": 5,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    },
+    {
+      "id": "de-kg-suppl-031",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 8,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "ed50105e7d147c2022f5bfba7d0656fc8ffca7e4ba15d265934fa04c5d5c669d",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-iii-r-65-18-2019-11-27.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202050112?type=1646225765",
+      "source_sha256": "fbb28287ccbc9feb7f504e22f6bc7592b50084c1e9b5c7849794479a7ffb8060",
+      "pages": 3,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    },
+    {
+      "id": "de-kg-suppl-033",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 10,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "3bbde9a437f83594738a6577e5531e632cc05bfa886a52a54973413af43ea5b0",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-iii-r-44-17-2019-11-27.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE202010130?type=1646225765",
+      "source_sha256": "ea39ab05e23d041900c8721a54469b1f27cb2e6c1146ff9f3f693536bccfd92f",
+      "pages": 6,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    },
+    {
+      "id": "de-kg-suppl-034",
+      "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+      "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+      "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+      "corpus_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18/document-1",
+      "provision_source": "data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl",
+      "line": 12,
+      "provision_file_sha256": "1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee",
+      "body_sha256": "6dcc459c19c986357f59d254359f2e0acb76069d93d0a4c75012a03a7ccb0bd2",
+      "source_path": "data/corpus/sources/de/guidance/2026-09-11-de-kindergeld-illness-precedents/official-documents/bfh-vi-r-31-14-2015-06-18.pdf",
+      "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201510296?type=1646225765",
+      "source_sha256": "e5c347c4968b7a4903bfc7e27d9ed6bddeb3ab92d0a9f7edea0e6ca3a16c7649",
+      "pages": 5,
+      "original_source_captured": true,
+      "complete_legal_review": false
+    }
+  ],
+  "published_release_graph_drift": {
+    "before_sha256": "9077324716dcc3627b13c34a6d8c7fbc970fef64f6106d9e18df802295663ed0",
+    "after_sha256": "cb8efb80cbb4e328391436bec71c048a56437ff1374f72d1609360a2522f9e89",
+    "programs": [
+      {
+        "id": "de/kindergeld",
+        "before": 114,
+        "after": 118,
+        "added": [
+          {
+            "id": "de-kg-instr-11b2fee91a7250af",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-0fcbcb7664fe9d27d1ab",
+              "de-corpus-7b4314f7be6ab8bf0b8f"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+            "row_sha256": "f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606",
+            "document_class": "guidance",
+            "citation_label": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung",
+            "document_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+            "title": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung"
+          },
+          {
+            "id": "de-kg-instr-29a6a70e18440300",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-d114ab925636568ac2f1"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18",
+            "row_sha256": "69d00bf5ab8228281a6f500985e5758e64eeda3e22576e009b61eb5746a1cd40",
+            "document_class": "guidance",
+            "citation_label": "BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe",
+            "document_citation_path": "de/guidance/bfh-vi-r-31-14-2015-06-18",
+            "title": "BFH, VI R 31/14, 2015-06-18: Außergewöhnliche Belastungen bei Unterbringung einer Jugendlichen in einer Einrichtung der Jugendhilfe"
+          },
+          {
+            "id": "de-kg-instr-8d943b84c0c798b3",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-2c23960b9c4604f17fb3",
+              "de-corpus-afbef9e671489df19b64"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27",
+            "row_sha256": "48b7fcdc77188c1fc088076af3d43bba8f59a35615a79324eb02c8fc9a3e052d",
+            "document_class": "guidance",
+            "citation_label": "BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres",
+            "document_citation_path": "de/guidance/bfh-iii-r-44-17-2019-11-27",
+            "title": "BFH, III R 44/17, 2019-11-27: Kindergeld für ein volljähriges behindertes Kind; Feststellung eines Gendefektes nach Vollendung des 27. Lebensjahres"
+          },
+          {
+            "id": "de-kg-instr-df39c3eca6f41704",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-f4513c4dc19bdbef458e"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07",
+            "row_sha256": "d26683155904c4b3209e6ea551e3ec474a36df00f74e2019c0737e07f53763d3",
+            "document_class": "guidance",
+            "citation_label": "BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse",
+            "document_citation_path": "de/guidance/bfh-iii-r-24-08-2011-04-07",
+            "title": "BFH, III R 24/08, 2011-04-07: Meldung als Arbeitsuchender; ausländerrechtliche Hindernisse"
+          }
+        ],
+        "removed": []
+      },
+      {
+        "id": "de/rv-employee-contribution",
+        "before": 11,
+        "after": 11,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/unterhaltsvorschuss",
+        "before": 40,
+        "after": 41,
+        "added": [
+          {
+            "id": "de-uhv-instr-11b2fee91a7250af",
+            "status": "pending",
+            "discovery_refs": [
+              "de-corpus-ff8e1ba3ff32fb1fbbed"
+            ],
+            "identity_kind": "corpus_citation",
+            "citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+            "row_sha256": "f8f0206d0ab30c15d8dac29c1cef44444fa0445d5425f8d6772e91f8179ca606",
+            "document_class": "guidance",
+            "citation_label": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung",
+            "document_citation_path": "de/guidance/bfh-iii-r-65-18-2019-11-27",
+            "title": "BFH, III R 65/18, 2019-11-27: Berufsausbildung bei Nichtantritt zur letztmaligen Prüfung"
+          }
+        ],
+        "removed": []
+      }
+    ],
+    "global_index": {
+      "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
+      "row_count": 9894,
+      "body_row_count": 9697,
+      "mapped_row_count": 9894,
+      "unmapped_row_count": 0,
+      "act_count": 237,
+      "mechanism_counts": {
+        "amendment_targets": 46,
+        "explicit_cross_reference_body": 6827,
+        "law_metadata_changed_by": 34,
+        "law_metadata_fundstelle": 42
+      },
+      "row_scan_sha256": "0a84412af60d83517738d055d71e042611934fc289ac838d18deaa6a2ca2c6b2",
+      "canonical_index_sha256": "9c5bf6decb80db7a43e4dcd9d8ea10c81e5dafc422c77423417dc16e6689a86b",
+      "per_act_sha256": "8db803e9f38c5e174935f9a2b12e9cd7d0bcf8e430e335b7ec0b178fe66240ff",
+      "method": {
+        "row_participation": "one canonical row receipt for every pinned statute and regulation row, including rows with zero findings",
+        "law_metadata": "Fundstelle and stand values read from law_metadata on every row; values remain verbatim corpus facts",
+        "body_references": "every string body scanned; counts are canonical unique source-row/matched-text/target facts from corpus-grounded cross-act aliases, versioned known-reference patterns, and an unmatched specific compound-law/regulation fallback retained verbatim; the committed nonspecific-term stoplist does not assert generic classes as instruments",
+        "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
+        "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
+      },
+      "receipt_sha256": "edd6532da7ded38a1389d7481ca6ff3543d47e14bfc5333653757cf0fd4374ef"
+    }
+  }
+}

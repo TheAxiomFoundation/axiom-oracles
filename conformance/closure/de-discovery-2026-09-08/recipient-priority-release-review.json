@@ -1,0 +1,69 @@
+{
+  "schema": "de-kindergeld.corpus-release-review.v1",
+  "release_verification": {
+    "release": "de-rulespec-2026-09-10-kindergeld-recipient-priority",
+    "commit": "eb2c46117b2cf2a396a48a41be409fe1e5ecc696",
+    "content_sha256": "4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4",
+    "selector_sha256": "334b1e1edb7826341da11a4069f801e4dedab795734aae1607aa38e338dbbe9b",
+    "artifact_count": 360,
+    "all_artifact_hashes_match": true,
+    "release_object_sha256": "b808f0b3f014664446039f48e3c56bdabcc32f5999c8aacc241cafccde45014e"
+  },
+  "publication_run": 34496812231,
+  "public_mirror": {
+    "url": "https://pub-a8952f8657fc49fda358146ac001366c.r2.dev/releases/de-rulespec-2026-09-10-kindergeld-recipient-priority/4955b95d2aa253b3ac7e68dc2312b894cda08887142469de62ce5a3dc854c9d4.json",
+    "mirror_run": 34497354631,
+    "byte_identical": true,
+    "sha256": "b808f0b3f014664446039f48e3c56bdabcc32f5999c8aacc241cafccde45014e",
+    "bytes": 244849
+  },
+  "new_scopes": 1,
+  "new_rows": 598,
+  "scopes": 46,
+  "rows": 9862,
+  "signed_modules_unchanged": 10,
+  "graph_drift": [
+    {
+      "program": "de/kindergeld",
+      "old_count": 111,
+      "new_count": 111,
+      "added": [],
+      "removed": []
+    },
+    {
+      "program": "de/rv-employee-contribution",
+      "old_count": 11,
+      "new_count": 11,
+      "added": [],
+      "removed": []
+    },
+    {
+      "program": "de/unterhaltsvorschuss",
+      "old_count": 41,
+      "new_count": 41,
+      "added": [],
+      "removed": []
+    }
+  ],
+  "graph_sha256": "4f0ce5321101a545cfea0dad2ec6e21b630a37d7e9c880a72bd6246e54e9e343",
+  "reading_discovery": {
+    "id": "de-kg-suppl-018",
+    "discovered_by": "de-kg-dakg-A25.1",
+    "source_citation": "de/statute/famfg/40",
+    "body_sha256": "5f86b62a3f8346b7223d5ce6852bd2dff410ec586e59efc5a46186179c3264c3",
+    "status": "bearing and unencoded",
+    "reason": "The fresh graph does not project FamFG; the existing text-bound supplemental mechanism enrolls the section40 dependency from the complete A25.1 read."
+  },
+  "review_scope": "Complete current FamFG captured; only the full section40 and act header legally reviewed here. Historical applicability and decision-class-specific application remain open. No claim that all598 rows are reviewed or encoded.",
+  "closure_result": {
+    "pending_spine": 5,
+    "partial_spine": 1,
+    "pending_instruments": 268,
+    "instruments": 778,
+    "law_derived_inputs": 8,
+    "bearing_instruments_unencoded": 146,
+    "open_dependencies": 154,
+    "closed": false
+  },
+  "encoding_attempt": "No extra native generation dispatched; source capture is not signed RuleSpec coverage."
+}

@@ -1,0 +1,389 @@
+{
+  "metadata": {
+    "requested_mode": "fast",
+    "actual_mode": "fast",
+    "fallback_reason": null
+  },
+  "results": [
+    {
+      "entity_id": "handwritten_name_signature_conforms",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "authenticated_handmark_conforms",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "absent_signature_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "typed_name_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "handwritten_signature_by_other_issuer_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "handwritten_signature_for_other_document_version_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "handmark_without_authentication_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "authentication_for_other_handmark_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "authentication_by_other_issuer_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "authentication_for_other_document_version_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "authentication_for_unrelated_document_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "blank_handmark_identity_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "blank_issuer_identity_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "blank_document_identity_does_not_conform",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "missing_version_identifiers",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "wrong_signature_document",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "missing_authentication_issuer",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "missing_authentication_version",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "missing_signature_document",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    },
+    {
+      "entity_id": "unknown_physical_method",
+      "period": {
+        "period_kind": "custom",
+        "name": "day",
+        "start": "2025-01-01",
+        "end": "2025-01-01"
+      },
+      "outputs": {
+        "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms": {
+          "kind": "judgment",
+          "name": "issuer_signature_mechanism_documentarily_conforms",
+          "id": "de:statutes/bgb/126/absatz-1/inhalt#issuer_signature_mechanism_documentarily_conforms",
+          "unit": null,
+          "outcome": "not_holds"
+        }
+      },
+      "trace": {}
+    }
+  ]
+}

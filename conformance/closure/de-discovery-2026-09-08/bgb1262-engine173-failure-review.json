@@ -1,0 +1,47 @@
+{
+  "schema": "de-kindergeld.rejected-native-encoding-review.v1",
+  "run_id": 34546817838,
+  "run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34546817838",
+  "status": "failed; unsigned; not encoded",
+  "artifact_id": 10179513397,
+  "artifact_sha256": "5720a71a6c249b20a97c228fb640a7ba1d7a8ceeb1750f2f287934f0d78b1d2a",
+  "files": [
+    {
+      "path": "./generated/target/final-rejected-candidate/statutes/bgb/126/absatz-2/inhalt.test.yaml",
+      "sha256": "ace66d30be792ed9844fbd373c3a82e31e1e299649130efb744dacb90893d6e7",
+      "bytes": 26246
+    },
+    {
+      "path": "./generated/target/final-rejected-candidate/statutes/bgb/126/absatz-2/inhalt.yaml",
+      "sha256": "d052574c8e7deba32c55ea869b839feaf53b9569a15d5915d5c9db6b424a04e7",
+      "bytes": 7957
+    },
+    {
+      "path": "./generated/target/final-rejected-candidate/issues.json",
+      "sha256": "8e052950be0f2acd67346245d33482a86b1a21065cc8fd9ce2c8b927e6f54d06",
+      "bytes": 1446
+    }
+  ],
+  "native_issues": {
+    "attempt_count": 4,
+    "citation": "de/statute/bgb/126/absatz-2/inhalt",
+    "encoder_version": "0.2.1973",
+    "issues": [
+      "statutes/bgb/126/absatz-2/inhalt.yaml: compile: Axiom rules engine compile failed: unknown relation dependency `party_of_agreement` referenced from relation `de:statutes/bgb/126/absatz-2/inhalt#relation.contract_parties`",
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: Axiom rules engine compile failed: unknown relation dependency `party_of_agreement` referenced from relation `de:statutes/bgb/126/absatz-2/inhalt#relation.contract_parties`",
+      "statutes/bgb/126/absatz-2/inhalt.yaml: ci: [complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/bgb/126/absatz-2/inhalt(2) [Absatz 2] [change]: `Werden \u00fcber den Vertrag mehrere gleichlautende Urkunden aufgenommen, so gen\u00fcgt es, wenn jede Partei die f\u00fcr die andere Partei bestimmte Urkunde unterzeichnet.`."
+    ],
+    "path": "statutes/bgb/126/absatz-2/inhalt.yaml",
+    "rulespec_sha256": "d052574c8e7deba32c55ea869b839feaf53b9569a15d5915d5c9db6b424a04e7",
+    "schema": "axiom-encode/failed-encode-candidate/v1",
+    "tests_sha256": "ace66d30be792ed9844fbd373c3a82e31e1e299649130efb744dacb90893d6e7"
+  },
+  "review_findings": [
+    "The final candidate now contains rules, imports and tests rather than a deferred output. This is not an accepted encoding.",
+    "Native compilation reports an unknown short source relation under a canonical derived relation. Suspected compiler ordering problem requires an independent technical reproducer before a repair.",
+    "The imported signature judgment is Document-scoped, while the candidate directly calls it in Party-scoped judgments without an explicit signature-document relation. The observed party signature fields are not bound to the imported document/version/issuer fields. A positive signature on another record must not validate every party.",
+    "Counterpart recipient differs from signer but is not proved to be another actual party to this agreement. Missing actual party coverage and external recipients require blocking tests.",
+    "The proposed positive counterpart and common-deed fixtures include only one actual party; the multi-party positive fixture supplies only one imported signature record. These fixtures do not establish full party/signature coverage.",
+    "Native paired-condition coverage also failed. No generated candidate was edited, applied or signed locally; no unchanged retry is authorized by this review."
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "principal_rules": [
+    "impairment_present",
+    "disability",
+    "disability_threatened",
+    "specified_impairment_present",
+    "barrier_type_present",
+    "forecasted_hindrance_lasts_longer_than_six_months"
+  ],
+  "principal_rule_paths": {
+    "impairment_present": [
+      [
+        "1"
+      ]
+    ],
+    "disability": [
+      [
+        "1"
+      ]
+    ],
+    "disability_threatened": [
+      [
+        "1"
+      ]
+    ],
+    "specified_impairment_present": [
+      [
+        "1"
+      ]
+    ],
+    "barrier_type_present": [
+      [
+        "1"
+      ]
+    ],
+    "forecasted_hindrance_lasts_longer_than_six_months": [
+      [
+        "1"
+      ]
+    ]
+  },
+  "toggled_witnesses": [
+    {
+      "rule_name": "disability",
+      "selector_name": "impairment_present",
+      "active_value": false,
+      "blocks": true,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "disability",
+      "selector_name": "impairment_present",
+      "active_value": true,
+      "blocks": false,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "disability_threatened",
+      "selector_name": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+      "active_value": false,
+      "blocks": true,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "disability_threatened",
+      "selector_name": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+      "active_value": true,
+      "blocks": false,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "disability_threatened",
+      "selector_name": "clinical_assessment_forecasts_sensory_impairment",
+      "active_value": false,
+      "blocks": true,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "disability_threatened",
+      "selector_name": "clinical_assessment_forecasts_sensory_impairment",
+      "active_value": true,
+      "blocks": false,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "impairment_present",
+      "selector_name": "body_or_health_condition_deviates_from_age_typical_condition",
+      "active_value": false,
+      "blocks": true,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    },
+    {
+      "rule_name": "impairment_present",
+      "selector_name": "body_or_health_condition_deviates_from_age_typical_condition",
+      "active_value": true,
+      "blocks": false,
+      "boolean_effect": true,
+      "zeroes": false,
+      "numeric_transition": null,
+      "relational_transitions": []
+    }
+  ],
+  "branch_witnesses": [
+    {
+      "text": "Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.",
+      "path": [
+        "1"
+      ],
+      "witnesses": []
+    },
+    {
+      "text": "Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.",
+      "path": [
+        "1"
+      ],
+      "witnesses": []
+    }
+  ],
+  "issues": [
+    "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.`; de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.`."
+  ],
+  "diagnostic_scope": "Read-only instrumentation returned the original completeness result unchanged; no validator or candidate edit."
+}

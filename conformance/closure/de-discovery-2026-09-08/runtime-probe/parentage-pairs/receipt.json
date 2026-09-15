@@ -1,0 +1,17 @@
+{
+  "kind": "synthetic-runtime-probe-not-legal-encoding",
+  "engine_commit": "05eac9d2f89dabe5c6673176260762cef3a58f47",
+  "engine_binary_sha256": "5bc770639bc013bccb086dc2e113b2ef425a4713ed33bbe28a1b8662b6d9edff",
+  "file_sha256": {
+    "explain-request.json": "35e111b007fc2c6f633b7cf61bccd268a51063e73eef41d6171794f71907f6b8",
+    "explain-response.json": "32aca5877f8e526cd98d797b13651ffe8828b2f69440d15249e50954ceee01d1",
+    "fast-request.json": "3cec7fa3be0f1be66313ff76e12158cac84df0e6be71f80c741630a9b101f964",
+    "fast-response.json": "66410e943ecd561b08e7421df5ebeb8dd0a0a59a828044b91637847e03ac4704"
+  },
+  "expected": {
+    "person-a:child-1": "holds",
+    "person-a:child-2": "holds",
+    "person-b:child-1": "not_holds",
+    "person-b:child-2": "not_holds"
+  }
+}

@@ -1,0 +1,698 @@
+{
+  "schema": "de-kindergeld.dakg-a19-2-second-witness-filter-diagnostic.v1",
+  "citation_path": "de/guidance/bzst-dakg-2025/a-19-2/document-1",
+  "source_sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+  "candidate_sha256": "ceda60401795dc3a125e93b71082f62cb2a75fd6f238e85a154b599ab1810d38",
+  "tests_sha256": "ef29c5c4b7a27791bdc3ce820ba76acb3fc547f777c18a6a06e3ddc3b3556173",
+  "encoder_commit": "631c25eb5de64af334d5613800ef86080246ec39",
+  "encoder_worktree_dirty": false,
+  "claim_scope": "Source-completeness checker replay only; no native validation approval, signature, legal disposition or closure credit.",
+  "encoder_source_file_sha256": "36d630e1af94a10afeed62ebad6e730e0dda02951c9fdcd364fb86ac0baf8d9d",
+  "native_run": 34982600198,
+  "branches": [
+    {
+      "source_text": "b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten\noder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen\nentsprechenden Bescheid,",
+      "condition_text": "wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten\noder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen\nentsprechenden Bescheid,",
+      "effect_requirement": "change",
+      "accepted_witness_count": 2,
+      "witness_filters": [
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "document_is_accepted_disability_proof",
+          "selector": "lower_degree_disability_proof_route",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "lower": false,
+            "degree": false,
+            "disability": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "document_is_accepted_disability_proof",
+          "selector": "lower_degree_disability_proof_route",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "lower": false,
+            "degree": false,
+            "disability": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "lower_degree_disability_proof_route",
+          "selector": "disability_based_payment_decision_proof_route",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "disability": false,
+            "based": false,
+            "payment": false,
+            "decision": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "lower_degree_disability_proof_route",
+          "selector": "disability_based_payment_decision_proof_route",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "disability": false,
+            "based": false,
+            "payment": false,
+            "decision": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_existence_of_disability",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "existence": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_existence_of_disability",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "existence": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "subject_child_recorded_birth_date",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "subject": false,
+            "child": false,
+            "recorded": false,
+            "birth": false,
+            "date": false
+          }
+        }
+      ]
+    },
+    {
+      "source_text": "3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes\nhervorgehen:\n− Vorliegen der Behinderung,\n− Beginn der Behinderung, soweit das Kind das 25. Lebensjahr vollendet hat, und\n− Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.",
+      "condition_text": "soweit das Kind das 25. Lebensjahr vollendet hat",
+      "effect_requirement": "change",
+      "accepted_witness_count": 1,
+      "witness_filters": [
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "disability_based_payment_decision_proof_route",
+          "selector": "pension_or_ongoing_payment_is_stated_as_due_because_of_disability",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "pension": false,
+            "ongoing": false,
+            "payment": false,
+            "stated": false,
+            "because": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "document_is_accepted_disability_proof",
+          "selector": "lower_degree_disability_proof_route",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "lower": false,
+            "degree": false,
+            "disability": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "document_is_accepted_disability_proof",
+          "selector": "lower_degree_disability_proof_route",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "lower": false,
+            "degree": false,
+            "disability": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "lower_degree_disability_proof_route",
+          "selector": "disability_based_payment_decision_proof_route",
+          "active_value": false,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "disability": false,
+            "based": false,
+            "payment": false,
+            "decision": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "lower_degree_disability_proof_route",
+          "selector": "disability_based_payment_decision_proof_route",
+          "active_value": true,
+          "path_matches": false,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "disability": false,
+            "based": false,
+            "payment": false,
+            "decision": false,
+            "proof": false,
+            "route": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_disability_onset",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "disability": false,
+            "onset": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_effects_on_gainful_capacity",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "effects": false,
+            "gainful": false,
+            "capacity": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_existence_of_disability",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "existence": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "medical_document_states_existence_of_disability",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "medical": false,
+            "document": false,
+            "states": false,
+            "existence": false,
+            "disability": false
+          }
+        },
+        {
+          "rule": "medical_document_content_sufficient_on_evaluated_day",
+          "selector": "subject_child_recorded_birth_date",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "subject": false,
+            "child": false,
+            "recorded": false,
+            "birth": false,
+            "date": false
+          }
+        }
+      ]
+    }
+  ],
+  "recognized_witness_count": 19,
+  "issues": []
+}

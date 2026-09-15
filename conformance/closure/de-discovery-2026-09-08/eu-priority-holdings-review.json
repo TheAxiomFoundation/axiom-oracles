@@ -1,0 +1,126 @@
+{
+  "schema": "de-kindergeld-eu-priority-holdings-review.v1",
+  "status": "independently reviewed; applied to committed decisions; generated state produced separately",
+  "source_path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.jsonl",
+  "source_file_sha256": "f5db3cbd0a173a36d38555970ba4c332803706a2fcd3aabb8c9d6cf744f10a6e",
+  "reading_notes_sha256": "989d57ecc36a5e140efe10fd5c5ca40834b8bd32df351b7ac45aa7e306e4090e",
+  "reviews": [
+    {
+      "root_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15",
+      "citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "supplemental_id": "de-kg-suppl-160",
+      "status": "classified-with-reason",
+      "classification": "eu_family_benefit_definition_current_adoption",
+      "bears_on_computed_surface": true,
+      "reason": "Current Trapkowski paragraph26 adopts Offermanns paragraph41 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. This supports family-benefit scope in883Article1(z)/3(1)(j), not the historical operative inclusion of Austrian maintenanceadvances, which current1(z) expressly excludes. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency.",
+      "current_adoption": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "2004 in deren Geltungsbereich fällt. 26 Im Übrigen ist unstreitig, dass die im Ausgangsverfahren in Rede stehende Leistung, die die Kosten für den Unterhalt von Kindern verringern soll, unter den Begriff „Familienleistung“ im Sinne der Verordnung Nr. 883/2004 fällt (vgl. Urteile Offermanns, C‑85/99, EU:C:2001:166, Rn. 41, und Lachheb, C‑177/12, EU:C:2013:689, Rn. 35). 27 Zudem geht hinsichtlich des Begriffs „Familienangehöriger“ aus Art. 1 Buchst. i Nr. 1 Ziff. i der Verordnung Nr. 883/2004 herv",
+        "excerpt_sha256": "94092ed044f9b5b1b137588d29373c87c011d2e19734e7787e1f8377956afd40"
+      },
+      "generated_candidate_id": null,
+      "frontier_binding": "existing supplemental identity; native corpus graph did not select a separate candidate"
+    },
+    {
+      "root_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24",
+      "citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "supplemental_id": "de-kg-suppl-161",
+      "status": "classified-with-reason",
+      "classification": "eu_family_benefit_definition_current_adoption",
+      "bears_on_computed_surface": true,
+      "reason": "Current Trapkowski paragraph26 adopts Lachheb paragraph35 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. Historical Luxembourgbonus amounts and1408/71noncumulation are not currentGerman parameters; secondquestion unanswered. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency.",
+      "current_adoption": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "en ist unstreitig, dass die im Ausgangsverfahren in Rede stehende Leistung, die die Kosten für den Unterhalt von Kindern verringern soll, unter den Begriff „Familienleistung“ im Sinne der Verordnung Nr. 883/2004 fällt (vgl. Urteile Offermanns, C‑85/99, EU:C:2001:166, Rn. 41, und Lachheb, C‑177/12, EU:C:2013:689, Rn. 35). 27 Zudem geht hinsichtlich des Begriffs „Familienangehöriger“ aus Art. 1 Buchst. i Nr. 1 Ziff. i der Verordnung Nr. 883/2004 hervor, dass darunter „jede Person, die in den Recht",
+        "excerpt_sha256": "34aa5116d868b60b12d5427c055387804a5069d145833c429c369f09f197b413"
+      },
+      "generated_candidate_id": null,
+      "frontier_binding": "existing supplemental identity; native corpus graph did not select a separate candidate"
+    },
+    {
+      "root_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26",
+      "citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+      "body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+      "supplemental_id": "de-kg-suppl-162",
+      "status": "classified-with-reason",
+      "classification": "eu_national_family_member_definition_current_adoption",
+      "bears_on_computed_surface": true,
+      "reason": "Current Trapkowski paragraph31 cites Slanina paragraph27 for national-law family-member determination under the applicable coordination definition. Preserve national-law membership and applicable correction; do not infer actualmaintenancepaid from obligation or fabricate commonhousehold. Historical Austrianbenefit and1408/71priorityresult are not directly2025rules. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency.",
+      "current_adoption": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "hörige von Herrn Trapkowski im Sinne des deutschen Rechts anzusehen. 31 Es ist indessen nicht Sache des Gerichtshofs, eine solche Feststellung, die auf das nationale Recht in der Auslegung durch das nationale Gericht gestützt ist, in Frage zu stellen (vgl. in diesem Sinne Urteil Slanina, C‑363/08, EU:C:2009:732, Rn. 27). 32 Zur Anwendbarkeit der Prioritätsregeln, die in Art. 68 Abs. 1 der Verordnung Nr. 883/2004 für den Fall des Zusammentreffens von Ansprüchen vorgesehen sind, ist darauf hinzuwe",
+        "excerpt_sha256": "fe27e7b4532cb4d6527a813590311731bf820a3fd48ce07b1e05a63a49bb222d"
+      },
+      "generated_candidate_id": null,
+      "frontier_binding": "existing supplemental identity; native corpus graph did not select a separate candidate"
+    },
+    {
+      "root_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14",
+      "citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "supplemental_id": "de-kg-suppl-163",
+      "status": "classified-with-reason",
+      "classification": "eu_actual_competing_entitlement_current_adoption",
+      "bears_on_computed_surface": true,
+      "reason": "Current Trapkowski paragraph32 adopts Schwemmer paragraph52: potentialforeignpayment alone does not establish overlapping entitlements for883Article68. Actual legalentitlement and currentArticle60/applicationforwardingconditions must be derived. Do not generalize historical574/72nonapplicationexception to every currentunpaidforeignbenefit. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency.",
+      "current_adoption": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "ine solche Kumulierung vorliegt, nicht genügt, dass Leistungen in dem Mitgliedstaat, in dem das betreffende Kind wohnt, geschuldet werden und zugleich in einem anderen Mitgliedstaat, in dem ein Elternteil dieses Kindes arbeitet, lediglich potenziell gezahlt werden können (Urteil Schwemmer, C‑16/09, EU:C:2010:605, Rn. 52 und die dort angeführte Rechtsprechung). 33 Folglich finden diese Prioritätsregeln angesichts dessen, dass die Mutter des im Ausgangsverfahren in Rede stehenden Kindes in Polen k",
+        "excerpt_sha256": "c4fe4c2b02172c68caf533e114511add81d57bcd1b55b33b673bfcfd548411c6"
+      },
+      "generated_candidate_id": "de-kg-instr-85a6c84fc59a4411",
+      "frontier_binding": "corpus candidate and existing supplemental identity"
+    },
+    {
+      "root_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10",
+      "citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+      "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+      "supplemental_id": "de-kg-suppl-164",
+      "status": "classified-with-reason",
+      "classification": "eu_family_context_and_application_current_adoption",
+      "bears_on_computed_surface": true,
+      "reason": "Current Trapkowski paragraph49 adopts joinedHoever/Zachow paragraph37 family-context principle for applicationbyotherparent under987Article60(1)sentence3. Whether benefits actuallygranted depends familyconditions; applicationdoesnottransfernationalrecipientpriority. This is not directcurrentBErzGG/79/7eligibility. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency.",
+      "current_adoption": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "etzungen für die Gewährung von Familienleistungen für ein Kind erfüllt sind und diese Leistungen tatsächlich gewährt werden, ohne Bedeutung, welcher Elternteil nach nationalem Recht als diejenige Person gilt, die den Anspruch auf diese Leistungen hat (vgl. in diesem Sinne Urteil Hoever und Zachow, C‑245/94 und C‑312/94, EU:C:1996:379, Rn. 37). 50 Nach alledem ist Art. 60 Abs. 1 Satz 3 der Verordnung Nr. 987/2009 dahin auszulegen, dass danach nicht verlangt wird, dass der Anspruch auf Familienlei",
+        "excerpt_sha256": "c8778059b43e992fcaf2402e2032e6a0d5ef0b179da4c1e8224b9d1567150fff"
+      },
+      "generated_candidate_id": null,
+      "frontier_binding": "existing supplemental identity; native corpus graph did not select a separate candidate"
+    }
+  ],
+  "retained_pending": [
+    {
+      "id": "de-kg-suppl-165",
+      "identity": "Dodl/Oberhollenzer",
+      "reason": "Complete historical1408/71/574/72judgment read; actual competingentitlement condition and insurancepersonal scope retained innotes. Directcurrentregimeadoption/applicability requires furtherreview; merecitationin2014referencepartyargument notfinalholding."
+    },
+    {
+      "id": "de-kg-suppl-166",
+      "identity": "Weide",
+      "reason": "Complete historical1408/71/574/72judgment read; provisionalpayment noted and current987Article6/60comparison captured. Currentbearing vs whollysuperseded disposition requires furtherreview; remainpending."
+    }
+  ],
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "No actionable findings in five current-adopted bearing dispositions and exact source hashes/spans. Seven complete texts read by root; independent review was targeted substantive review, not a second full reading. Thirty-eight reference spans verified; discovery classes remain open."
+  },
+  "verified_release": {
+    "release": "de-rulespec-2026-09-15-kindergeld-eu-priority-references",
+    "commit": "aad094d00e42b2766b12393e662473bda81411b0",
+    "content_sha256": "af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464",
+    "selector_sha256": "5a77c1280d36dad176a1d1be2c58995407e3106a51b1f9e829aac9425a1b5e73",
+    "object_sha256": "87793fd7dfb5f6c2db86912c4d6d5503d250e45574ff81998747418c4cb6658d",
+    "native_signature_verified": true,
+    "publish_run": 35011738439,
+    "public_byte_identity_verified": true,
+    "mirror_run": 35012680458
+  }
+}

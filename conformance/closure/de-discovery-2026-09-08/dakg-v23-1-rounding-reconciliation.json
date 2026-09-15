@@ -1,0 +1,29 @@
+{
+  "schema": "de-kindergeld-dakg-rounding-reconciliation.v1",
+  "source": {
+    "citation_path": "de/guidance/bzst-dakg-2025/numbered-sections/v-23-1",
+    "body_sha256": "9db3811666af52fbe8d4b2c6685da1188518afc3b05a8f5d78797fbf9f4207c9",
+    "corpus_commit": "6047f3acaeb056df101c7aeefdd1718523cfa494",
+    "excerpt": "3Das festgesetzte Kindergeld ist ungerundet auszuzahlen."
+  },
+  "existing_module": {
+    "path": "de/statutes/estg/66.yaml",
+    "rulespec_commit": "ceb2bfd9cdc8ad423f3a7da48839ee6bbc5f9156",
+    "file_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+    "source_body_sha256": "2ac3c9ff2d11aa23e6850d0a8e81abd612034582a571c036627c8b689293871e"
+  },
+  "reconciliation": [
+    "EStG66(3) rounds the amount when the statutory proportional-increase mechanism computes it. Its word dabei binds rounding to that mechanism.",
+    "DA-KG V23.1(1) sentence3 concerns payment of the amount already assessed. The assessed amount must pass through payment without a further rounding operation.",
+    "kindergeld_before_whole_euro_rounding is an intermediate proportional-increase calculation, not the assessed amount to be paid under V23.1. The existing monthly255/259 parameter and increase calculation do not encode a payment-of-assessed-amount rule.",
+    "A later EU differential or assessed amount with cents must not be passed through the proportional-increase rounding rule merely because payment is due. This is a composition constraint; no differential module is accepted by this review."
+  ],
+  "row_disposition": "Retain bearing and unencoded. Paragraph1 also regulates notice/due date, monthly payment, prohibited advances/capitalization and continuity/diversion. Paragraphs2–5 add recovery demand, debtor, deadlines, set-off, late charges, reminders and enforcement rules. The entire row cannot be dismissed as a restatement of EStG66.",
+  "required_follow_up": [
+    "Compose statutory rate calculation separately from payment of an issued assessment.",
+    "Native tests must retain an assessed amount containing cents at payment and still round a genuine statutory proportional increase under66(3).",
+    "Resolve the cited AO provisions and V33.4 diversion condition for the remaining procedural rules."
+  ],
+  "generated_artifacts_changed": false,
+  "certification_effect": "None; no status encoded or closed is asserted."
+}

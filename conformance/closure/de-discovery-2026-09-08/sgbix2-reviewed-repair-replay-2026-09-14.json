@@ -1,0 +1,296 @@
+{
+  "schema": "de-kindergeld.sgbix2-witness-filter-diagnostic.v1",
+  "citation_path": "de/statute/sgb-9-2018/2/absatz-1/inhalt",
+  "source_sha256": "ca98fd427cc197ff85e96b8b6882fe04bed8fcf1caed0fa8cab6aaf53d4d7c4d",
+  "candidate_sha256": "212f0ad1cba952e43177ed0513074427d7d898a89aed4209b63d392ac6a21673",
+  "tests_sha256": "80e2105b338982287c6c625471ecb7d5b7670cc59c8504546f8a3865dc9aba90",
+  "encoder_commit": "0d2528868358e88eff2dd37b4f623603e574c134",
+  "encoder_source_file_sha256": "f2c40960c77ba83ef0e7520702a62c7972b8739132cb668cdfdce566944675f2",
+  "native_run": 34647449032,
+  "branches": [
+    {
+      "source_text": "Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.",
+      "condition_text": "wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.",
+      "effect_requirement": "change",
+      "accepted_witness_count": 1,
+      "witness_filters": [
+        {
+          "rule": "disability",
+          "selector": "impairment_present",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "impairment": false,
+            "present": false
+          }
+        },
+        {
+          "rule": "disability",
+          "selector": "impairment_present",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "impairment": false,
+            "present": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "atypical": false,
+            "body": false,
+            "health": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "atypical": false,
+            "body": false,
+            "health": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_sensory_impairment",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "sensory": false,
+            "impairment": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_sensory_impairment",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "sensory": false,
+            "impairment": false
+          }
+        },
+        {
+          "rule": "impairment_present",
+          "selector": "body_or_health_condition_deviates_from_age_typical_condition",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "body": false,
+            "health": false,
+            "deviates": false,
+            "from": false,
+            "typical": false
+          }
+        },
+        {
+          "rule": "impairment_present",
+          "selector": "body_or_health_condition_deviates_from_age_typical_condition",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": true,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "body": false,
+            "health": false,
+            "deviates": false,
+            "from": false,
+            "typical": false
+          }
+        }
+      ]
+    },
+    {
+      "source_text": "Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.",
+      "condition_text": "wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.",
+      "effect_requirement": "change",
+      "accepted_witness_count": 0,
+      "witness_filters": [
+        {
+          "rule": "disability",
+          "selector": "impairment_present",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "impairment": false,
+            "present": false
+          }
+        },
+        {
+          "rule": "disability",
+          "selector": "impairment_present",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "impairment": false,
+            "present": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "atypical": false,
+            "body": false,
+            "health": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_age_atypical_body_or_health_condition",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "atypical": false,
+            "body": false,
+            "health": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_sensory_impairment",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "sensory": false,
+            "impairment": false
+          }
+        },
+        {
+          "rule": "disability_threatened",
+          "selector": "clinical_assessment_forecasts_sensory_impairment",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "clinical": false,
+            "assessment": false,
+            "forecasts": false,
+            "sensory": false,
+            "impairment": false
+          }
+        },
+        {
+          "rule": "impairment_present",
+          "selector": "body_or_health_condition_deviates_from_age_typical_condition",
+          "active_value": false,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "body": false,
+            "health": false,
+            "deviates": false,
+            "from": false,
+            "typical": false
+          }
+        },
+        {
+          "rule": "impairment_present",
+          "selector": "body_or_health_condition_deviates_from_age_typical_condition",
+          "active_value": true,
+          "path_matches": true,
+          "expected_active_value": true,
+          "direct_relevance": false,
+          "composite_relevance": false,
+          "effect_matches": true,
+          "token_matches": {
+            "body": false,
+            "health": false,
+            "deviates": false,
+            "from": false,
+            "typical": false
+          }
+        }
+      ]
+    }
+  ],
+  "recognized_witness_count": 8,
+  "issues": [
+    "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.`. The evaluator recognized 8 directional formula-toggle witnesses from 3 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+  ]
+}

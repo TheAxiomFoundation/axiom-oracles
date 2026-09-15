@@ -1,0 +1,53 @@
+{
+  "schema": "de-kindergeld-native-failure-review.v1",
+  "citation_path": "de/guidance/bzst-dakg-2025/a-19-2/document-1",
+  "source_body_sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+  "run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34924883403",
+  "artifact_id": 10379357214,
+  "artifact_name": "targeted-reencode-failure-34924883403-1",
+  "result": "failure",
+  "signed_modules": 0,
+  "applied_modules": 0,
+  "generation_budget": "Normal budget; no override or unchanged retry.",
+  "retained_local_evidence": {
+    "dakg-a19-2-native-dispatch.json": {
+      "sha256": "40abae1956f3e4dd4f9b92b61f8ec662eecd0ab2fa1211f01c078ea058c24140",
+      "bytes": 6307
+    },
+    "dakg-a19-2-native-failure.log": {
+      "sha256": "7a4e4bfa06fa012c45cf13e7bbcb23035f7d3ae854a75bd0d93a88bf217120d6",
+      "bytes": 162648
+    },
+    "dakg-a19-2-failure-artifacts/targeted-reencode-failure.tar": {
+      "sha256": "1d8194317c09d388d877c27db6d5110cdb56eba79afeeaea6805bd2a2193041d",
+      "bytes": 634880
+    },
+    "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.yaml": {
+      "sha256": "0725a24d0559222c7da86c0a4b7b2479225c911a5b4b68348ffc7bcf7662edde",
+      "bytes": 15966
+    },
+    "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.test.yaml": {
+      "sha256": "1a92c690f957ce9ce98197ba0236f29ba15eac0791aabf8605dcbb0919c5b5b3",
+      "bytes": 21616
+    },
+    "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/issues.json": {
+      "sha256": "a2437b6411722b99ab9fcdcf664fa2612f0a7e1379b49671d0f3dd1a4d6e2d9a",
+      "bytes": 3966
+    }
+  },
+  "candidate_findings": [
+    "Thirteen Person/Month scalars do not establish document identities, child associations or dated evidence.",
+    "The period predicate accepts absence of a limitation without requiring an accepted proof document.",
+    "Medical-route required contents and conditional onset information remain deferred.",
+    "Court docket numbers 62/99 and publication page 738 became executable parameters.",
+    "All 28 tests use September 2026 and rules begin 0001-01-01; source-bound applicability to the 2025 task is not established."
+  ],
+  "technical_findings": [
+    "Reproduced: source_states_explicit_computation treats the medical-proof sentence as arithmetic solely because of docket 62/99; replacing only the docket makes it false.",
+    "Retained diagnostic truncates the onset clause at 25., omitting Lebensjahr and following required contents.",
+    "The final sol proof rejection is reproduced by the token-boundary guard: its exact substring omits the glued sentence marker2; including the original marker passes. See dakg-a19-2-proof-boundary-replay.json. No proof-validator change is needed.",
+    "The retained tests contain 49/50 comparisons, so a missing-50 diagnostic alone does not prove absence of a boundary test."
+  ],
+  "independent_review": "Independent review of immutable source and failure artifacts confirmed candidate defects and the docket arithmetic reproduction. Parser repairs do not establish legal acceptance.",
+  "closure_effect": "None. A19.2 remains unencoded and no bearing disposition changes."
+}

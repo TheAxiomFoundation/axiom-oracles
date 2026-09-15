@@ -1,0 +1,31 @@
+{
+  "engine_commit": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "scope": "Technical capability only; no legal RuleSpec candidate generated or accepted.",
+  "source_files": {
+    "docs/rulespec-format.md": "63dcbe4051ab563c221f40d5e9f7d0b767ba230d41d00ba594f3f1248ead37ee",
+    "tests/relation_scalar_context.rs": "3547c927e72f1e9ff6e85a5c69165292cf2bd1953ae08ddf3cffaa6458221ba1",
+    "tests/fixtures/execution/relation-scalar-context.json": "a4cde19a9cbd428c0bc7fcbb6258892936f4b16098e6c8b8ff1f2967edd84568",
+    "tests/rulespec.rs": "e759f580a33be7c56652984174920d0978a4a445227dc263ad28282f06b9b65c"
+  },
+  "checks": [
+    {
+      "command": "cargo test --locked --test relation_scalar_context",
+      "passed": 2,
+      "scope": "Correlated scalar predicates preserve current and related entity contexts in Fast and Explain execution. Conditional scalar operands requested in Fast mode use the documented Explain fallback; the test verifies that fallback and equal results."
+    },
+    {
+      "command": "cargo test --locked --test rulespec count_where",
+      "passed": 2,
+      "filtered_out": 93,
+      "scope": "count_where accepts related derived judgments and imported relation/predicate composition."
+    }
+  ],
+  "conclusion": "The pinned engine supports record associations and derived predicates evaluated on related entities. A generic claim that relation aggregators cannot bind findings to an assessment is not established. These tests do not prove every proposed evidence model or all nested correlations are expressible.",
+  "remaining_work": [
+    "Specify an evidence model grounded in the exact applicable source and test its actual formulas and associations.",
+    "Do not impose an unsupported requirement that every medical finding share a single assessment.",
+    "Resolve qualitative and temporal legal interpretation from captured sources; runtime tests do not supply legal standards."
+  ],
+  "encoding_budget_effect": "None; no native generation attempt dispatched.",
+  "independent_review": "Source hashes, exact engine commit and four passing tests independently verified. Clarified conditional-operand Fast-to-Explain fallback; no substantive capability overclaim."
+}

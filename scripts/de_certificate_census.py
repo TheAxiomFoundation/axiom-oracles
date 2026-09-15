@@ -32,17 +32,29 @@ LEDGER_DIR = REPO_ROOT / "conformance" / "closure"
 if str(REPO_ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
 import closure_gate  # noqa: E402
+
 EXECUTABLE_MANIFEST_PATH = (
     REPO_ROOT / "conformance" / "executable" / "de-kindergeld-manifest.json"
 )
 SCHEMA = "axiom_oracles.certificate_candidate_census.v1"
 RULESPEC_REPOSITORY = "TheAxiomFoundation/rulespec-de"
-RULESPEC_MAIN_COMMIT = "d83ba3db30e2f63376aacf822d116687589b8564"
+RULESPEC_MAIN_COMMIT = "b1a72d0fa2fd8238708bdfc8fe5fd282a5f8e967"
 
 _CITATION_PATH = re.compile(r"^de/(?:statute|regulation)/[a-z0-9-]+/.+$")
 
 EXPECTED_ROOT_SETS = {
     "de/kindergeld": {
+        "de/statute/bgb/126/absatz-1/inhalt",
+        "de/statute/bfdg/5",
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+        "de/regulation/milov5/1",
+        "de/regulation/milov4/1",
+        "de/regulation/eu-987-2009/article-59/document-1",
+        "de/statute/estg/32/absatz-3/document-1",
+        "de/statute/estg/78",
+        "de/statute/bgb/187",
+        "de/statute/bgb/1591",
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
         "de/statute/estg/66",
         "de/statute/estg/62",
         "de/statute/estg/63",
@@ -63,7 +75,36 @@ EXPECTED_ROOT_SETS = {
 }
 EXPECTED_ROOT_SHAPES = {
     "de/kindergeld": {
+        "de/statute/bgb/126/absatz-1/inhalt": ("written_agreement_signature_prerequisite", "encoded", {"signed"}),
+        "de/statute/bfdg/5": ("overseas_service_recognition_preservation_prerequisite", "encoded", {"signed"}),
+        "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": (
+            "marginal_employment_threshold_prerequisite", "encoded", {"signed"}
+        ),
+        "de/regulation/milov5/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
+        "de/regulation/milov4/1": ("minimum_wage_prerequisite", "encoded", {"signed"}),
+        "de/regulation/eu-987-2009/article-59/document-1": (
+            "coordination_payment_continuity_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
+        "de/statute/estg/32/absatz-3/document-1": (
+            "child_age_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
+        "de/statute/estg/78": ("legacy_priority_prerequisite", "encoded", {"signed"}),
         "de/statute/estg/66": ("governing", "encoded", {"pending", "signed"}),
+        "de/statute/bgb/187": ("date_counting_prerequisite", "encoded", {"signed"}),
+        "de/statute/bgb/1591": (
+            "child_relationship_prerequisite",
+            "encoded",
+            {"signed"},
+        ),
+        "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract": (
+            "evidence_root",
+            "evidence",
+            {"not_applicable"},
+        ),
         **{
             f"de/statute/estg/{section}": (
                 "boundary_input",
@@ -94,6 +135,66 @@ EXPECTED_ROOT_SHAPES = {
     },
 }
 ATTESTED_SIGNED_ROOTS = {
+    'de/statute/bgb/126/absatz-1/inhalt': {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": '.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
+        "sha256": '3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5',
+    },
+    'de/statute/bfdg/5': {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": '.axiom/encoding-manifests/de/statutes/bfdg/5.json',
+        "sha256": 'f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452',
+    },
+    "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
+        "sha256": "dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c",
+    },
+    "de/regulation/milov5/1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/milov5/1.json",
+        "sha256": "7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462",
+    },
+    "de/regulation/milov4/1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/milov4/1.json",
+        "sha256": "0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04",
+    },
+    "de/regulation/eu-987-2009/article-59/document-1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+        "sha256": "de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda",
+    },
+    "de/statute/estg/32/absatz-3/document-1": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+        "sha256": "fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910",
+    },
+    "de/statute/estg/78": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/estg/78.json",
+        "sha256": "ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab",
+    },
+    "de/statute/bgb/187": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/bgb/187.json",
+        "sha256": "96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188",
+    },
+    "de/statute/bgb/1591": {
+        "repository": RULESPEC_REPOSITORY,
+        "ref": RULESPEC_MAIN_COMMIT,
+        "path": ".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+        "sha256": "aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010",
+    },
     "de/regulation/svbezgrv-2025/4": {
         "repository": RULESPEC_REPOSITORY,
         "ref": RULESPEC_MAIN_COMMIT,
@@ -148,6 +249,115 @@ PROGRAM_DECLARATIONS = {
         "view": {"kind": "subgraph", "scope": "amount"},
         "root_nodes": ["de:statutes/estg/66#monthly_kindergeld_per_child"],
         "declared_roots": [
+            _root(
+                'de/statute/bgb/126/absatz-1/inhalt',
+                role="written_agreement_signature_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path='.axiom/encoding-manifests/de/statutes/bgb/126/absatz-1/inhalt.json',
+                source_sha256='3226e33ccb532bb62c38b1b041c85ef0c119070d79c11592abd89ad575ff75b5',
+                reason='Complete BGB126(1) documentary issuer-signature mechanism: handwritten name signature or issued notarial authentication of the matching handmark, with recorded issuer/document/version associations. One Judgment rule and fourteen actually used observable inputs; fourteen complete companion cases and six additional pinned-engine counterexamples pass. Positive surrogate identifiers represent exact observed record identities; zero represents absent/unidentified associations. The key convention is technical, not a statutory numerical threshold. Full-paragraph proof and body hash are bound to the corpus. This consequent mechanism does not determine which law imposes written form, whole-contract validity, substitutes under paragraphs2–5, or Kindergeld service eligibility. The2025 observation boundary is not statutory commencement. SGBVII2(1a), BGB126(2), DA-KGA18.7 and BFHIII R68/11 remain open.',
+            ),
+            _root(
+                'de/statute/bfdg/5',
+                role="overseas_service_recognition_preservation_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path='.axiom/encoding-manifests/de/statutes/bfdg/5.json',
+                source_sha256='f5f8dcd817b90b8b71cc15fb22140f8474301a8d8c00769d3b160a7fafb94452',
+                reason='Complete BFDG section 5 preservation norms for existing recognitions and new-recognition powers under ZDG section 14b(3), covering providers, projects and deployment plans. Six unconditional Judgment rules, zero inputs and no deferrals, each carrying the full source sentence as proof. Supported observation starts in2025; this is not a commencement claim. These norms do not establish individual recognition validity, qualifying service or Kindergeld eligibility. DA-KG A18.5 and the underlying service/recognition criteria remain open.',
+            ),
+            _root(
+                "de/statute/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt",
+                role="marginal_employment_threshold_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/sgb-4/fassung-2024-03-01/8/absatz-1a/inhalt.json",
+                source_sha256="dac97b83b293fa7faa9d95a8ba772489f48903b5a5151a5a474532336210621c",
+                reason="SGB IV section 8(1a) historical monthly marginal-employment earnings threshold, calculated from the signed MiLoV4 hourly minimum wage multiplied by 130, divided by three and rounded upward to whole euros. The captured calculation window is March 2024 through December 2025; employment classification and child eligibility remain unencoded.",
+            ),
+            _root(
+                "de/regulation/milov5/1",
+                role="minimum_wage_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/milov5/1.json",
+                source_sha256="7fab9cab60de7ae4928e7a44048089c621c6f87c2b9ecccc4858a7ba9c6db462",
+                reason="Complete MiLoV5 section 1 hourly minimum-wage parameter: EUR 13.90 from 2026 and EUR 14.60 from 2027, with zero inputs and exact corpus proof atoms. It has no 2025 version and does not replace the historical MiLoV4 rate in the 2025 certificate. Threshold and child eligibility composition remain unencoded.",
+            ),
+            _root(
+                "de/regulation/milov4/1",
+                role="minimum_wage_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/milov4/1.json",
+                source_sha256="0cf398904ddeb4c72206512831189cd0b003391d370801d5f78f09ec971c7d04",
+                reason="Complete MiLoV4 section1 hourly minimum-wage parameter: EUR12.41 from2024 and EUR12.82 from2025, with zero inputs and exact corpus proof atoms. This is the historical upstream wage for SGBIV8(1a); marginal-employment threshold and child eligibility remain unencoded. MiLoV5 supersedes the national rate from2026.",
+            ),
+            _root(
+                "de/statute/estg/32/absatz-3/document-1",
+                role="child_age_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/estg/32/absatz-3/document-1.json",
+                source_sha256="fa2ac010ecc40b851778bf33c7c51af1737e03ce57cddb66a754c8c2b1049910",
+                reason="Complete EStG32(3) birth/month/age criterion from two observable birth-register facts, age18parameter and BGB187/188calendar proofs. Other child criteria, relationships, adult-child routes and count remain unencoded; not full EStG32/63 entitlement.",
+            ),
+            _root(
+                "de/regulation/eu-987-2009/article-59/document-1",
+                role="coordination_payment_continuity_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/regulations/eu-987-2009/article-59/document-1.json",
+                source_sha256="de48394fe795c50ce321032bc639ae3c0fb0d64f8cb2df6190467f4113e34dda",
+                reason="Complete Article59 change-month continuation, notice duty and first-successor-month takeover from identified issued coordination and original payment records. National entitlement, EU personal/material scope, Article68priority/differential and treaty overrides remain unencoded. Calendar helpers only apply with their respective original-payer or successor applicability judgments.",
+            ),
+            _root(
+                "de/statute/estg/78",
+                role="legacy_priority_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/estg/78.json",
+                source_sha256="ab9a0da76574674a25bba872dd5a70e530d556b7f807c72264120bbd5f98c4ab",
+                reason=(
+                    "Signed payment-record and receipt-date helpers only; "
+                    "full transition recipient priority and same-child credit "
+                    "remain unencoded, so the section 78 spine stays pending"
+                ),
+            ),
+            _root(
+                "de/statute/bgb/187",
+                role="date_counting_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/bgb/187.json",
+                source_sha256="96c48bdeb30cbfa654c326226763f58c8b188fc16ef829c19b43080735025188",
+                reason=(
+                    "Signed BGB section 187 first-included-day rules from event, "
+                    "beginning-of-day and birth dates; regime selection, deadline "
+                    "ends and complete legal ages remain open"
+                ),
+            ),
+            _root(
+                "de/statute/bgb/1591",
+                role="child_relationship_prerequisite",
+                classification="encoded",
+                signature_state="signed",
+                source_path=".axiom/encoding-manifests/de/statutes/bgb/1591.json",
+                source_sha256="aa22f567dd497f3702673b4e02f5244e1439d864ba4457c94f99a31f75b33010",
+                reason=(
+                    "Signed BGB section 1591 module establishes birth-based maternity "
+                    "from an identified complete birth record at the query day; "
+                    "the section 32/63 child-eligibility composition remains open"
+                ),
+            ),
+            _root(
+                "de/statute/bgbl-1997-i-2942/kindschaftsrechtsreformgesetz/parentage-commencement-extract",
+                role="evidence_root",
+                classification="evidence",
+                signature_state="not_applicable",
+                reason="KindRG original pages 1 and 26 bind the maternity text and its 1 July 1998 commencement",
+            ),
             _root(
                 "de/statute/estg/66",
                 role="governing",
@@ -596,9 +806,9 @@ def build(declarations: dict | None = None) -> dict:
             # must never call this certificate ready while the certificate
             # itself computes certified=no, and it carries the gate's own
             # blocker lines so the two cannot disagree.
-            blockers = list(executable.get("blockers") or []) + _ledger_closure_blockers(
-                program
-            )
+            blockers = list(
+                executable.get("blockers") or []
+            ) + _ledger_closure_blockers(program)
         elif program == "de/rv-employee-contribution":
             blockers = [
                 "no comparison record has been declared",

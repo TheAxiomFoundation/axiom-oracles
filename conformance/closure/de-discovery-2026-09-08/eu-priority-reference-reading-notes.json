@@ -1,0 +1,341 @@
+{
+  "as_of": "2026-09-15T18:45:13.285382+00:00",
+  "status": "root complete-text reading notes; not independently reviewed legal disposition, not applied",
+  "reviews": [
+    {
+      "citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "read_scope": "complete 51-paragraph judgment including operative part",
+      "tentative_bearing": "definition subset adopted by C-378/14 paragraph26",
+      "note": "Offermanns paragraph41 explains family-expense equalization as a public contribution to family budget reducing child-maintenance costs; paragraph27 uses purpose and granting conditions, paragraph28 statutory entitlement versus discretionary personal-need evaluation. Its operative inclusion of Austrian maintenance advances arose under Regulation1408/71, not current883/2004. The pinned883/2004 Article1(z) expressly excludes maintenance advances. Do not transpose Offermanns operative advance-inclusion into currentArticle1(z), or treat historical Austrian UVG amounts/nationality conditions as current German rates/eligibility. The general-definition passage is used in the retained Trapkowski judgment; the historical operative outcome and current definition must be distinguished.",
+      "current_comparison_source": {
+        "citation_path": "de/regulation/eu-883-2004/article-1-z/document-1",
+        "body_sha256": "538b0a0f5e08782f64d1f26e597c6a20cbceac50f16c64743ee0dee6800f60f5"
+      }
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "read_scope": "complete 41-paragraph judgment including operative part",
+      "tentative_bearing": "family-benefit classification principles; current-law transposition requires text-bound comparison",
+      "note": "Paragraph15 expressly applies former1408/71 and574/72 to historical dispute despite successor regulations applying since1May2010. Paragraphs28–38 classify Luxembourg child bonus from purpose and granting conditions, not domestic tax label, financing method or legal technique; statutory non-discretionary grant and enumerated risk matter. Fixed automatic bonus supporting child maintenance is a family benefit under historical1408/71. This does not make every tax concession a family benefit. Domestic historic922.50/76.88 rates are not German current parameters. Question2 on discrimination/non-cumulation is expressly unanswered, so do not promote referring-court reasoning or recited historic coordination provisions into an operative current priority rule."
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+      "body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+      "read_scope": "complete39-paragraph judgment and both operative holdings",
+      "tentative_bearing": "divorced-family treatment and actual competing entitlement; historical1408/71 coordination, later Trapkowski adopts family-context principle",
+      "note": "Paragraphs23–29 condition result on child within personal scope: national-law family membership first, then applicable household/maintenance correction, with national court verification; nonpayment of maintenance obligation does not by itself erase family membership. Divorce alone does not exclude family situations. Paragraph31 family benefits depend on family situation, not isolated claimant. First operative holding retains emigrating inactive divorced parent benefit subject to child family-member condition even if former spouse could claim. Second holding suspends only where residence-state work ACTUALLY creates competing family-benefit entitlement, and only up to that state amount. Do not replace actual legal entitlement with employment or residence Boolean alone. Austrian FLAG provisions and former1408/71 are not direct currentGerman or883/2004 rules; scope comparison still needed."
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "read_scope": "complete60-paragraph judgment, operative part and published headnote; paragraphs24–30 read separately after tool truncation",
+      "tentative_bearing": "historical non-application anti-cumulation conditions; current application fiction must be independently reconciled",
+      "note": "The operative ruling rejects reduction of residence-based German benefit for foreign employment-state benefits unpaid because no required application was filed. Paragraph46 excludes1408/71Art76 because residence-state benefit was not employment-based; paragraphs49–57 reject importing Art76(2) non-application fiction into574/72Art10 by analogy. Actual formal/material entitlement is required, not merely potential foreign benefit; motive for not applying irrelevant. This is NOT a universal current883/2004/987/2009 exemption whenever money unpaid: Article60 whole-family/application rules and later Trapkowski require separate binding. Household/child personal scope includes divorced families and worker parent connection; claimant need not herself satisfy special historic German worker definition. Historical154/109.75/44.25 amounts and social-insurance definitions must not replace2025 rules. Court did not decide647/2005 equivalence underSwiss agreement because relevant text identical. Do not treat Familienkasse or FG rejected analogy as operative law."
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+      "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+      "read_scope": "complete46-paragraph joined judgment, three operative holdings and published headnotes",
+      "tentative_bearing": "family-benefit purpose and family-context principles adopted by later judgments; historical parenting benefit distinct",
+      "note": "Paragraphs17–27 statutory objective non-discretionary childrearing payment meets1408/71family-benefit definition despite parenting-work compensation and income interaction. Not simply every fixed payment. Paragraphs29–38 worker spouse supports cross-border claim; own-versus-derived rights distinction generally does not govern family benefits, with worker-only unemployment provisions expressly distinguished. Paragraph37 requires family situation consideration; does not let any parent ignore national recipient-priority law. Article73 prevents residence/work condition that blocks abroad spouse benefit otherwise available upon remaining in payingstate. Third operative holding excludes this particular parenting benefit from79/7scope because no direct effective protection against enumerated risks; not blanket exemption from equality law.1612/68question expressly unanswered. Historic BErzGG15hours and workerdefinitions are not2025SGBIV orBEEGrules."
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+      "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+      "read_scope": "complete65-paragraph judgment, operative part and published headnotes in two contiguous chunks",
+      "tentative_bearing": "whole-family competing-entitlement and personal-scope interpretation, subject to successor regime comparison",
+      "note": "First holding:1408/71worker status depends on insurance against at least one specified risk within identified system, not employment contract alone; paused employment does not itself end status, actual insurance membership during relevant periods requires verification. Do not encode any paid or unpaid leave as automatically insured. Second holding:574/72Art10 governs residence-based competing claims, not1408/71Art76. Residence-state employment by custodian, spouse or cohabiting partner can reverse priority even if different parent is direct benefit claimant. Paragraph62 still requires one parent actually entitled. Paragraph63 is critical: if neither parent qualifies for residence-state payment (income limit/fulltimework), no anti-cumulation, onlyArt73. Do not treat household employment as sufficient absent legal entitlement or conflate worker and payee identities. Historical Austrian14600 limit, GermanBErzGG and oldworkerdefinitions are not2025parameters. The source header identifies AdvocateGeneral opinion separately; current body is judgment, not captured opinion."
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+      "body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+      "read_scope": "complete35-paragraph judgment, operative part and published headnote",
+      "tentative_bearing": "custodian employment and family-level priority; provisional-payment procedural rule needs successor comparison",
+      "note": "Applies historical574/72Art10(1)(b)(i), not1408/71Art76, to competing residence-based parentingbenefit. Residence-state spouse employment reverses priority independently of identity of direct national recipient; actual entitlement to samekindbenefits/samefamilymember/sameperiod remains premise. Paused employee remains insured under relevant socialinsurance branch, not automatically from contract. Paragraph27 separately requires residenceinstitution receiving application to pay provisional benefit pending competence dispute under574/72Art114; do not omit as merely litigation history or import directly into current987/2009 without its corresponding source. Nationalcourts rejected competence views in history not governingpriority. Judgment does not confer currentGermanBErzGG entitlement or alterKindergeldamounts. Source header identifies separate AdvocateGeneral opinion; opinionfulltext not in thisbody."
+    }
+  ],
+  "new_references_pending_enrollment": [
+    {
+      "identity": "CJEU 35/77 Beerens, 29 November 1977",
+      "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "excerpt": "res, dass das Unterhaltsvorschussgesetz nicht in den Geltungsbereich dieser Verordnung fällt (vgl. insbesondere Urteil vom 29. November 1977 in der Rechtssache 35/77, Beerens, Slg. 1977, 2249, Randnr. 9). 27 Der Gerichtshof hat, wie die österreichische Regierung und die Kommission vortragen, wiederholt entschieden, dass die Frage, ob eine Leistung in den Geltungsbereich de",
+      "excerpt_sha256": "150400a2106b002907106ce14bcc610ee6e5214818aa375a66f7934160ac3884",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-78/91 Hughes, 16 July 1992",
+      "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "excerpt": "genden Merkmalen, insbesondere ihrem Zweck und den Voraussetzungen ihrer Gewährung, beantwortet (vgl. insbesondere Urteile vom 16. Juli 1992 in der Rechtssache C-78/91, Hughes, Slg. 1992, I-4839, Randnr. 14, und vom 10. Oktober 1996 in den Rechtssachen C-245/94 und C-312/94, Hoever und Zachow, Slg. 1996, I-4895, Randnr. 17). 28 Nach ständiger Rechtsprechung ist eine Leistung",
+      "excerpt_sha256": "771f227bfae0484b6595d8de51f3b0a9e7e93f58617fbb32fb8447fef924cfbf",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 249/83 Hoeckx, 27 March 1985",
+      "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "excerpt": " eines der in Artikel 4 Absatz 1 der Verordnung Nr. 1408/71 ausdrücklich aufgezählten Risiken bezieht (vgl. hierzu Urteile vom 27. März 1985 in der Rechtssache 249/83, Hoeckx, Slg. 1985, 973, Randnrn. 12 bis 14, und Hughes, Randnr. 15). 29 Der Unterhaltsvorschuss nach dem Unterhaltsvorschussgesetz erfuellt unstreitig die erste dieser Voraussetzungen. Es ist somit zu prüfen,",
+      "excerpt_sha256": "3a3415dc4b227b31fc663498064077648c532114ee4f6949395a3effa1d05d76",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 39/76 Mouthaan, 15 December 1976",
+      "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "excerpt": "da der Unterhaltsschuldner sie zurückzahlen müsse; gegebenenfalls würden sie zwangsweise eingetrieben. Nach dem Urteil vom 15. Dezember 1976 in der Rechtssache 39/76 (Mouthaan, Slg. 1976, 1901, Randnrn. 18 ff.) falle eine Leistung, die eine zivilrechtliche Verpflichtung ersetze, nicht unter Artikel 4 Absatz 1 Buchstabe h der Verordnung Nr. 1408/71. Würdigung durch den Geri",
+      "excerpt_sha256": "1807ae9dc663c85a24afdc470b7f6e3925dae5a3afcc8177e578c4725c0459e1",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 104/84 Kromhout, 4 July 1985",
+      "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+      "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+      "excerpt": "hmer mit Familienlasten dadurch sozial zu unterstützen, dass sich die Allgemeinheit an diesen Lasten beteiligt (vgl. Urteil vom 4. Juli 1985 in der Rechtssache 104/84, Kromhout, Slg. 1985, 2205, Randnr. 14). 39 Der Gerichtshof hat daher entschieden, dass ein Erziehungsgeld, das es einem Elternteil ermöglichen soll, sich in der ersten Lebensphase eines Kindes dessen Erziehun",
+      "excerpt_sha256": "18388a922be2da694375f653ad14766ea5c753fd7bbbcd23c00a349e34ef6912",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-228/07 Petersen, 11 September 2008",
+      "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "excerpt": "tandsmerkmale für die Einstufung der Leistungen anzusehen sind (vgl. Urteil vom 11. September 2008, Petersen, C-228/07, Slg. 2008, I-6989 , Randnr. 21 und die dort angeführte Rechtsprechung). Dass eine Leistung dem nationalen Steuerrecht zuzurechnen ist, ist folglich für die Beurteilung ihrer wesentlichen Merkmale nicht entschei",
+      "excerpt_sha256": "ba19dba3bc17594cf001a3100c83e87f3fcf96cca25ee7371582425fbddf0dd2",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-503/09 Stewart, 21 July 2011",
+      "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "excerpt": "ordnung Nr. 1408/71 ausdrücklich aufgezählten Risiken bezieht (vgl. u. a. Urteil vom 21. Juli 2011, Stewart, C-503/09, Slg. 2011, I-6497 , Randnr. 32 und die dort angeführte Rechtsprechung). 31 Wie die CNPF und die Kommission geltend machen, wird die Leistung, um die es im Ausgangsverfahren geht, bei Unterhaltsberechtigung eines",
+      "excerpt_sha256": "d95454d9cb00563fbf4dee15180c1ab137daa6eaa65441464b3de332862703ca",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-406/04 De Cuyper, 18 July 2006",
+      "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "excerpt": "t ist das von der jeweiligen Leistung gedeckte Risiko zu berücksichtigen (Urteil vom 18. Juli 2006, De Cuyper, C-406/04, Slg. 2006, I-6947 , Randnr. 27). 34 Nach Art. 1 Buchst. u Ziff. i der Verordnung Nr. 1408/71 bezeichnet der Begriff „Familienleistungen“„alle Sach- oder Geldleistungen, die zum Ausgleich von Familienlasten … b",
+      "excerpt_sha256": "798818d2b25ca5c2663da30c844637594da2e4ea1fd3a806b4c81927774a8e86",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013",
+      "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "excerpt": "teile vom 4. Juli 1985, Kromhout, 104/84, Slg. 1985, 2205 , Randnr. 14, und vom 19. September 2013, Hliddal und Bornand, C‑216/12 und C‑217/12, Randnr. 54 und die dort angeführte Rechtsprechung). 35 Der Ausdruck „Ausgleich von Familienlasten“ in Art. 1 Buchst. u Ziff. i der Verordnung Nr. 1408/71 ist dahin auszulegen, dass er u.",
+      "excerpt_sha256": "f7148e339607d9395674ff5209fce08236b36274459c76bb846c2c947a869012",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-333/00 Maaheimo, 7 November 2002",
+      "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+      "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+      "excerpt": "für den Unterhalt von Kindern verringert (Urteile Offermanns, Randnr. 41, und vom 7. November 2002, Maaheimo, C-333/00, Slg. 2002, I-10087 , Randnr. 25). 36 Im Ausgangsverfahren ist festzustellen, wie die CNPF und die Kommission hervorheben und wie sich aus den beim Gerichtshof eingereichten Akten ergibt, dass der Kinderbonus, d",
+      "excerpt_sha256": "24788e1b680839af2245f819c9eb5fbf7d97244fe149cbc38224395d80191d5e",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-255/99 Humer, 5 February 2002",
+      "referring_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+      "body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+      "excerpt": "nd Zachow, C‑245/94 und C‑312/94, Slg. 1996, I‑4895, Randnr. 32, und vom 5. Februar 2002, Humer, C‑255/99, Slg. 2002, I‑1205, Randnr. 39). 23. Auch wenn das vorlegende Gericht den Gerichtshof hierzu nicht befragt hat, ist darauf hinzuweisen, dass der Anspruch auf – entweder an Frau Slanina oder an ihren frühe",
+      "excerpt_sha256": "b9cda13ac003ebec5217092fd99861ac70f0729a47129874c691800783054cff",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-352/06 Bosmann",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "zu gelten (vgl. zu den in § 62 EStG vorgesehenen Leistungen auch Urteil vom 20. Mai 2008, Bosmann, C‑352/06, Slg. 2008, I‑3827, Randnrn. 10 und 27). 34 Hinsichtlich des persönlichen Anwendungsbereichs der Verordnung Nr. 1408/71 ergibt sich zwar aus der Rechtsprechung des Gerichtshofs, dass die Definition in Art. 1 Buch",
+      "excerpt_sha256": "47882d546e6df35bda4c02f486a1f42cd580e1e7124ab72f129f2ae4feb5037e",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑194/96 Kulzer",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "leistungen gemäß Titel III Kapitel 7 dieser Verordnung ist (vgl. Urteil vom 5. März 1998, Kulzer, C‑194/96, Slg. 1998, I‑895, Randnr. 35), so dass nur Personen, die – im Unterschied zu Frau Schwemmer – in einem der in Anhang I Teil I Abschnitt D der Verordnung Nr. 1408/71 genannten Systeme pflichtversichert sind, als „",
+      "excerpt_sha256": "8df261891bad0b77386159132ffe88e1ac4faf62ed371997a13d0232da5bb501",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "rordnung angesehen werden können (vgl. in diesem Sinne u. a. Urteile vom 30. Januar 1997, Stöber und Piosa Pereira, C‑4/95 und C‑5/95, Slg. 1997, I‑511, Randnrn. 29 bis 36, vom 12. Juni 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Ran",
+      "excerpt_sha256": "157140cb84eed5f9ebc13a98b1bd0216a396ba5d180ede2e9da6af567f391aff",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑266/95 Merino García",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "iosa Pereira, C‑4/95 und C‑5/95, Slg. 1997, I‑511, Randnrn. 29 bis 36, vom 12. Juni 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn ",
+      "excerpt_sha256": "d50eeddb2b10ce5ee63545f0de70ce7fa2e1ff1212b07a43e5aab0f3630b9b0e",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑85/96 Martínez Sala",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "i 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn man davon ausgeht, dass eine Person in einer Lage wie Frau Schwemmer für die Zweck",
+      "excerpt_sha256": "8e223e6ee7ad34de9c8bc65024b577a83d2dba52f7cf7f18eab20f60c71a1585",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑262/96 Sürül",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "98, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn man davon ausgeht, dass eine Person in einer Lage wie Frau Schwemmer für die Zwecke der Gewährung von Familienleistungen gemäß Titel III Kapitel 7 der Verordnung Nr. 14",
+      "excerpt_sha256": "cdb9785fecf03c18600291997033d17a089127a6da10e45388d9cb3c6c533727",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 149/82 Robards",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "ionen vom Anwendungsbereich der Verordnung auszunehmen (vgl. Urteile vom 3. Februar 1983, Robards, 149/82, Slg. 1983, 171, Randnr. 15, Kulzer, Randnr. 32, vom 5. Februar 2002, Humer, C‑255/99, Slg. 2002, I‑1205, Randnr. 42, und vom 26. November 2009, Slanina, C‑363/08, noch nicht in der amtlichen Sammlung veröffentlich",
+      "excerpt_sha256": "25177e55bd8f5274962fe884335660e41a31025dc477b8cbd921467221088299",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 302/84 Ten Holder",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "erordnung Nr. 1408/71 zum Ausdruck (vgl. in diesem Sinne u. a. Urteile vom 12. Juni 1986, Ten Holder, 302/84, Slg. 1986, 1821, Randnrn. 19 und 20, sowie Bosmann, Randnr. 16). 41 In Bezug auf Familienleistungen bestimmt Art. 73 der Verordnung Nr. 1408/71, dass ein Erwerbstätiger, der den Rechtsvorschriften eines Mitglie",
+      "excerpt_sha256": "9a5578e2616b9200dfb0fd8032c9e15c528ddefc0d0e4d94338d2b9b975e7349",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑117/89 Kracht",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": " wenn ihre Familie ihnen nicht in diesen Staat gefolgt ist (vgl. Urteil vom 4. Juli 1990, Kracht, C‑117/89, Slg. 1990, I‑2781, Randnr. 15), und insbesondere verhindern, dass ein Mitgliedstaat die Gewährung oder die Höhe von Familienleistungen davon abhängig machen kann, dass die Familienangehörigen des Erwerbstätigen i",
+      "excerpt_sha256": "1826d7b3273ba4d06ad40bc0566e2beb81b0f970b8c1c98c49b97ca147e384a6",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑119/91 McMenamin",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "ch vorgeht, so dass dieser ruht (vgl. in diesem Sinne u. a. Urteile vom 9. Dezember 1992, McMenamin, C‑119/91, Slg. 1992, I‑6393, Randnrn. 17 und 18, sowie Weide, Randnr. 28). 49 Obwohl Art. 10 der Verordnung Nr. 574/72 keine Art. 76 Abs. 2 der Verordnung Nr. 1408/71 entsprechende Bestimmung enthält, macht die Familien",
+      "excerpt_sha256": "7c0c952bf197be74bef5fe415ec95a7de6613c790cf4d6d2dd1af49ad13a755d",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 134/77 Ragazzoni",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "einer früheren Fassung von Art. 76 der Verordnung Nr. 1408/71 Urteile vom 20. April 1978, Ragazzoni, 134/77, Slg. 1978, 963, Randnrn. 8 bis 11, vom 13. November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In d",
+      "excerpt_sha256": "e9521f50005fddee9654e0224905e80f0b13e947346a33253fcbc39a1306bde2",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 191/83 Salzano",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": " April 1978, Ragazzoni, 134/77, Slg. 1978, 963, Randnrn. 8 bis 11, vom 13. November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In diesem Zusammenhang ist zu beachten, dass der Gerichtshof in diesen Urteilen f",
+      "excerpt_sha256": "cb63ddbc89907afa0dc85c1325b9919f7c292ebaac0944c157380daae743cbfa",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 153/84 Ferraioli",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": ". November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In diesem Zusammenhang ist zu beachten, dass der Gerichtshof in diesen Urteilen für die Beantwortung der Fragen in den betreffenden Verfahren für unerhebl",
+      "excerpt_sha256": "b2d8fc8ddf00f4eae8148dd48831713b2c6a5b43fc3e38649568a85bec2ea4f1",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 100/78 Rossi",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "Recht eines Mitgliedstaats gewährt werden (vgl. in diesem Sinne Urteile vom 6. März 1979, Rossi, 100/78, Slg. 1979, 831, Randnr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Ra",
+      "excerpt_sha256": "5830b7d7305c72bce30b7079944e04325ac916bc1f9a03dd07bada21d6723074",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 733/79 Laterza",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "e Urteile vom 6. März 1979, Rossi, 100/78, Slg. 1979, 831, Randnr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es dies",
+      "excerpt_sha256": "e206e3c0991b5aee8816d625c5f8febe0623c30d248aeb25e9b030615e59894c",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 807/79 Gravina",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "nr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es diesen Zielen widerspräche, eine Antikumulierungsvorschrift wie Art",
+      "excerpt_sha256": "baae050701f35124d825949ac962c3df99bd53828b1ddf1d4f2f6b6736f71aff",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 320/82 D’Amario",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": " 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es diesen Zielen widerspräche, eine Antikumulierungsvorschrift wie Art. 10 der Verordnung Nr. 574/72 so auszulegen, dass tatsächlich nur e",
+      "excerpt_sha256": "2bf1b12263ee30a7b3d21f4b04c1cc577fecb19d627fc0601fe0a571d03fc9bc",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 104/80 Beeck",
+      "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+      "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+      "excerpt": "h genommen (vgl. entsprechend u. a. Urteile Rossi, Randnrn. 14 ff., vom 19. Februar 1981, Beeck, 104/80, Slg. 1981, 503, Randnr. 12, und Kromhout, Randnr. 21). 59 Nach alledem ist auf die Vorlagefragen zu antworten, dass Art. 76 der Verordnung Nr. 1408/71 und Art. 10 der Verordnung Nr. 574/72 dahin auszulegen sind, das",
+      "excerpt_sha256": "41204fe310d0e888f95234121bb2e272a518ed22903a91277a143bf41537ad06",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU 40/76 Kermaschek",
+      "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+      "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+      "excerpt": "ie französische Regierung sowie die Kommission auf die durch das Urteil vom 23. November 1976 in der Rechtssache 40/76 (Kermaschek, Slg. 1976, 1669, Randnr. 7) eingeleitete Rechtsprechung verwiesen, wonach Familienangehörigen eines Arbeitnehmers nur abgeleitete Rechte zustehen, die sie als Familienangehörige eines Arbe",
+      "excerpt_sha256": "2884bc49f240eb79a323b20ab2b1ba2fe9e79e864784046b67ec1e949a586e78",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-308/93 Cabanis-Issarte",
+      "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+      "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+      "excerpt": "Nr. 1408/71 das Urteil Hughes, a. a. O.). 32 Allerdings wurde im Urteil vom 30. April 1996 in der Rechtssache C-308/93 (Cabanis-Issarte, noch nicht in der amtlichen Sammlung veröffentlicht, Randnr. 34) die Tragweite des Urteils Kermaschek auf die Sachverhalte beschränkt, in denen sich ein Familienangehöriger eines Arbe",
+      "excerpt_sha256": "f9bd4c4f52095ee55f544a25b0c36682030f4b4b539a221c5484a09cb36685a9",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-321/93 Imbernon Martínez",
+      "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+      "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+      "excerpt": "d, von seinem Recht auf Freizuegigkeit Gebrauch zu machen (vgl. Urteil vom 5. Oktober 1995 in der Rechtssache C-321/93, Imbernon Martínez, Slg. 1995, I-2821, Randnr. 21). 35 Wäre aber, wie im Ausgangsrechtsstreit, die Gewährung des Erziehungsgelds ° das eine Familienleistung ist ° an die Voraussetzung gebunden, daß der",
+      "excerpt_sha256": "6d698a595b0be883ff250c1208b53eb75dde6b3c05a33e7dfb885bf8763872ae",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑2/89 Kits van Heijningen",
+      "referring_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+      "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+      "excerpt": "nen Risiken unter den dort genannten Voraussetzungen versichert ist (Urteile vom 3. Mai 1990 in der Rechtssache C‑2/89, Kits van Heijningen, Slg. 1990, I‑1755, Randnr. 9, und vom 11. Juni 1998 in der Rechtssache C‑275/96, Kuusijärvi, Slg. 1998, I‑3419, Randnr. 20). 30 Eine Person besitzt somit die Arbeitnehmereigenscha",
+      "excerpt_sha256": "d100fdc185a97c0f7b7878a2b8c79296d032dc3c290f8182d52f1c370d82d478",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C‑275/96 Kuusijärvi",
+      "referring_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+      "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+      "excerpt": "chtssache C‑2/89, Kits van Heijningen, Slg. 1990, I‑1755, Randnr. 9, und vom 11. Juni 1998 in der Rechtssache C‑275/96, Kuusijärvi, Slg. 1998, I‑3419, Randnr. 20). 30 Eine Person besitzt somit die Arbeitnehmereigenschaft im Sinne der Verordnung Nr. 1408/71, wenn sie auch nur gegen ein einziges Risiko im Rahmen eines de",
+      "excerpt_sha256": "f16be9a021d9f0f7cff1c060e6bdd06b5a1dc6cb21bace7a1039edc7486a7407",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    },
+    {
+      "identity": "CJEU C-60/03 Wolff & Muller, 12 October 2004",
+      "referring_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+      "body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+      "excerpt": "Vorlagefragen nicht angeführt sind (vgl. insbesondere Urteil vom 12. Oktober 2004 in der Rechtssache C‑60/03, Wolff & Muller, Slg. 2004, I-0000, Randnr. 24). 26 Unter diesen Umständen sind bei der Prüfung der vorliegenden Rechtssache die Antikumulierungsregeln des Artikels 10 der Verordnung Nr. 574/72 zu berü",
+      "excerpt_sha256": "e002508f0b05b49a0b9ae5dfc369741a4ef5eade24381aae170b90bc8dbd40cc",
+      "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+    }
+  ]
+}

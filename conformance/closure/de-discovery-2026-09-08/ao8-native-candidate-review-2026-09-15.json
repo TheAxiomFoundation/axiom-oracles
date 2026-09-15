@@ -1,0 +1,50 @@
+{
+  "schema": "axiom.de-kindergeld.source-review/v1",
+  "scope": "Read-only review of the immutable AO section 8 final rejected candidate; no encoding or current release repin",
+  "native_run": 34335087833,
+  "native_metadata": {
+    "path": "ao8-native-failure-unpacked/metadata.json",
+    "sha256": "a9c8e6f5178a9dbf01d8e70af9da75c266b2da66df5f9ccdfb019ff545a8e764",
+    "bytes": 6318
+  },
+  "native_source": {
+    "path": "ao8-native-failure-unpacked/generated/target/_eval_workspaces/openai-gpt-5.6-sol/de-statute-ao-1977-8/workspace/source.txt",
+    "sha256": "922d50050668e24084e212bb14f7c67d49c4ce8f77fb322d7248a3fd556c2c1e",
+    "bytes": 157
+  },
+  "source_body": "Einen Wohnsitz hat jemand dort, wo er eine Wohnung unter Umständen innehat, die darauf schließen lassen, dass er die Wohnung beibehalten und benutzen wird.",
+  "candidate": {
+    "path": "ao8-native-failure-unpacked/generated/target/final-rejected-candidate/statutes/ao-1977/8.yaml",
+    "sha256": "8df624769699fbe16a0837f60cb765a4025e7d9bb713a17c8a8fa32efe6b9d59",
+    "bytes": 3616
+  },
+  "reported_issues": [
+    "statutes/ao-1977/8.yaml: ci: [complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (source unit) (`<source-unit>`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+  ],
+  "findings": [
+    {
+      "kind": "law_derived_leaf",
+      "candidate_input": "objective_arrangements_show_dwelling_will_be_retained_and_used",
+      "reason": "This Boolean directly supplies the source conclusion from circumstances that the dwelling will be retained and used. The candidate contains no rule deriving that inference from independently existing observations."
+    },
+    {
+      "kind": "unproven_override",
+      "candidate_input": "issued_residence_determination_for_person_at_dwelling",
+      "reason": "An issued decision may be an observable act, but this unlinked Boolean makes every other condition unnecessary through an OR branch. The candidate has no issued record identity, issuer, operative period or source-bound rule establishing the legal effect of that decision for the evaluated person and dwelling."
+    },
+    {
+      "kind": "imprecise_deferral",
+      "reason": "The native validator rejects the deferred output because it fails to identify an exact missing dependency or source-stated runtime/input capability. Its assertion that the runtime lacks a dated fact is not evidence of a runtime limitation; an observation can be modeled. Fixing prose alone would not repair the substantive legal-oracle leaf."
+    },
+    {
+      "kind": "unestablished_temporal_scope",
+      "reason": "The sole version starts 0001-01-01. The captured modern row and 2025 interpretation do not establish that commencement. A new candidate must preserve the source period and distinguish capture date from legal operation."
+    }
+  ],
+  "limitations": [
+    "This review does not establish complete AEAO section 8 coverage or dispose any of its cited precedents.",
+    "No new source-completeness replay or acceptance is claimed.",
+    "No further native run has been dispatched. A materially different model of actual observations and exact unresolved dependencies is needed before spending the remaining ordinary attempt.",
+    "No Kindergeld spine provision, law-derived leaf or bearing instrument is closed."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "de-kindergeld-corpus-release-review.v1",
+  "corpus": {
+    "repository": "TheAxiomFoundation/axiom-corpus",
+    "release": "de-rulespec-2026-09-14-kindergeld-dakg2025-sections",
+    "commit": "6047f3acaeb056df101c7aeefdd1718523cfa494",
+    "content_sha256": "e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c",
+    "selector_sha256": "3b4f1f9fc163a1ab6e80d9e46f4a286ca406660c34e05339f4557d42454e0f05",
+    "signed_object_sha256": "d3fa5ae29e7fe555d9a0b9084e7688c60045e88062057b961165d9ef627322c3"
+  },
+  "publication_run": 34923151391,
+  "public_mirror_run": 34923633338,
+  "native_release_signature_verified": true,
+  "scope_count": 58,
+  "provision_row_count": 10642,
+  "artifact_count": 425,
+  "additive_pin_review": "All prior inventory/provision pins, 33 existing row bindings and 11 module declarations unchanged. Independent review found no actionable findings.",
+  "crosswalk": {
+    "path": "conformance/closure/de-discovery-2026-09-08/dakg2025-corpus-crosswalk.json",
+    "sha256": "f148ba418b608529e71dcdfb21d0c3f67f4f70b04d9dc2d296a16f228d110bef",
+    "frontier_row_count": 420
+  },
+  "historical_subject_receipts": {
+    "prior_consumer_commit": "20d74fb4b85b7e319236a3e60aaa50d8087a3bc0",
+    "snapshot_path": "conformance/closure/de-instrument-graph.json",
+    "method": "Native refresh --subject-snapshot with --subject-source-ref verifies exact original committed snapshot bytes and its old source binding, unchanged current query and non-corpus source fields; regenerates corpus discovery from new release. No new network observation is asserted."
+  },
+  "encoding_status": "A19.2 native run34924883403 failed after four internal candidates; zero signed or applied modules. Independent failure review is recorded in dakg-a19-2-native-failure-review.json. No unchanged retry or budget override.",
+  "source_transport": "DA-KG Stand 2025 original BZSt-authored PDF retained by Tacheles, SHA256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd. Government authorship, non-government mirror transport disclosed. Original legacy government URL now serves Stand2026.",
+  "public_mirror_status": "success; canonical/public bytes verified identical by workflow",
+  "discovery_identity_review": "Native first refresh failed closed on duplicate seed de-kg-instr-001 before writing. Reviewed producer32b11903d retains all corpus source units sharing a URL and preserves a separate subject seed unless every seeded query resolves uniquely to one document. Five focused identity/order/exclusion tests pass; dispositions remain pending.",
+  "native_discovery_replay": "Succeeded; prior subject_matter_search object preserved exactly; heading producer reproduced all420rows byte-identically; graph adds2KGnavigationcontainers and1UHVcandidate, removesnone."
+}

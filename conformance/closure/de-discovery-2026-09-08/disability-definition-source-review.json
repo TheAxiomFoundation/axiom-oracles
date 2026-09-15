@@ -1,0 +1,62 @@
+{
+  "schema": "de-kindergeld.disability-definition-capture.v1",
+  "base_release_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+  "new_rows": 311,
+  "new_scopes": 2,
+  "reviewed_normative_rows": [
+    {
+      "citation_path": "de/statute/sgb-9-2018/2",
+      "body_sha256": "eef5e8fabc429e5d830b9c1a1e4a76678875b4fad16cd227dcab7aa228d6cf0a",
+      "body": "(1) Menschen mit Behinderungen sind Menschen, die körperliche, seelische, geistige oder Sinnesbeeinträchtigungen haben, die sie in Wechselwirkung mit einstellungs- und umweltbedingten Barrieren an der gleichberechtigten Teilhabe an der Gesellschaft mit hoher Wahrscheinlichkeit länger als sechs Monate hindern können. Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht. Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.\n(2) Menschen sind im Sinne des Teils 3 schwerbehindert, wenn bei ihnen ein Grad der Behinderung von wenigstens 50 vorliegt und sie ihren Wohnsitz, ihren gewöhnlichen Aufenthalt oder ihre Beschäftigung auf einem Arbeitsplatz im Sinne des § 156 rechtmäßig im Geltungsbereich dieses Gesetzbuches haben.\n(3) Schwerbehinderten Menschen gleichgestellt werden sollen Menschen mit Behinderungen mit einem Grad der Behinderung von weniger als 50, aber wenigstens 30, bei denen die übrigen Voraussetzungen des Absatzes 2 vorliegen, wenn sie infolge ihrer Behinderung ohne die Gleichstellung einen geeigneten Arbeitsplatz im Sinne des § 156 nicht erlangen oder nicht behalten können (gleichgestellte behinderte Menschen).",
+      "source_url": "https://www.gesetze-im-internet.de/sgb_9_2018/xml.zip",
+      "expression_date": "2026-09-11"
+    },
+    {
+      "citation_path": "de/statute/bthg/art-26",
+      "body_sha256": "01b34488dc9d9ad0eef887213a5c5d876c812eff29a64809b9488077945702b3",
+      "body": "(1) Dieses Gesetz tritt vorbehaltlich der Absätze 2 bis 4 am 1. Januar 2018 in Kraft.Gleichzeitig treten das Neunte Buch Sozialgesetzbuch – Rehabilitation und Teilhabe behinderter Menschen – (Artikel 1 des Gesetzes vom 19. Juni 2001, BGBl. I S. 1046, 1047), das zuletzt durch Artikel 2 dieses Gesetzes geändert worden ist, und die Budgetverordnung vom 27. Mai 2004 (BGBl. I S. 1055) außer Kraft.\n(2) Die Artikel 2, 7 Nummer 4a, die Artikel 18, 22 und 25 Absatz 2 treten am Tag nach der Verkündung in Kraft.\n(3) Die Artikel 11 und 16 treten am 1. Januar 2017 in Kraft.\n(4) Am 1. Januar 2020 treten in Kraft\n1. in Artikel 1 Teil 2 die Kapitel 1 bis 7 sowie 9 bis 11 mit Ausnahme von § 94 Absatz 1,\n2. Artikel 6 Nummer 2 Buchstabe b und Nummer 13a,\n3. Artikel 9,\n4. Artikel 10 Nummer 3,\n5. die Artikel 13, 15 und 20.Gleichzeitig tritt die Eingliederungshilfe-Verordnung in der Fassung der Bekanntmachung vom 1. Februar 1975 (BGBl. I S. 433), die zuletzt durch Artikel 21 dieses Gesetzes geändert worden ist, außer Kraft.\n(5) Artikel 25a tritt am 1. Januar 2023 in Kraft, wenn bis zu diesem Zeitpunkt das Bundesgesetz nach Artikel 25a § 99 Absatz 7 verkündet wurde. Das Bundesministerium für Arbeit und Soziales kann den Wortlaut von § 99 des Neunten Buches Sozialgesetzbuch in der vom 1. Januar 2023 an geltenden Fassung im Bundesgesetzblatt bekannt machen.",
+      "source_url": "https://www.gesetze-im-internet.de/bthg/xml.zip",
+      "expression_date": "2026-09-11"
+    },
+    {
+      "citation_path": "de/statute/sgb-9/fassung-2001-07-01/2/inhalt",
+      "body_sha256": "c1a7275bd7b70ff551b65a1fe10ee633ff68d5e6f6a698edc1ff68cc26c1746e",
+      "body": "(1) Menschen sind behindert, wenn ihre körperliche Funktion, geistige Fähigkeit oder seelische Gesundheit mit hoher Wahrscheinlichkeit länger als sechs Monate von dem für das Lebensalter typischen Zustand abweichen und daher ihre Teilhabe am Leben in der Gesellschaft beeinträchtigt ist. Sie sind von Behinderung bedroht, wenn die Beeinträchtigung zu erwarten ist. (2) Menschen sind im Sinne des Teils 2 schwerbehindert, wenn bei ihnen ein Grad der Behinderung von wenigstens 50 vorliegt und sie ihren Wohnsitz, ihren gewöhnlichen Aufenthalt oder ihre Beschäftigung auf einem Arbeitsplatz im Sinne des § 73 rechtmäßig im Geltungsbereich dieses Gesetzbuches haben. (3) Schwerbehinderten Menschen gleichgestellt werden sollen behinderte Menschen mit einem Grad der Behinderung von weniger als 50, aber wenigstens 30, bei denen die übrigen Voraussetzungen des Absatzes 2 vorliegen, wenn sie infolge ihrer Behinderung ohne die Gleichstellung einen geeigneten Arbeitsplatz im Sinne des § 73 nicht erlangen oder nicht behalten können (gleichgestellte behinderte Menschen).",
+      "source_url": "https://rvrecht.deutsche-rentenversicherung.de/SharedDocs/rvRecht/05_Normen_und_Vertraege/01_Sozialgesetzbuch/09_SGB_IX/pp_0001_25/0002/0002_2001_07_01.html",
+      "expression_date": "2001-07-01"
+    },
+    {
+      "citation_path": "de/statute/sgb-9-2018/fassung-2018-01-01/2/inhalt",
+      "body_sha256": "40f79c070ab7f45bfecfafd12e78e8dd2d44249f8b471cca2607d0df3d45bd8c",
+      "body": "(1) Menschen mit Behinderungen sind Menschen, die körperliche, seelische, geistige oder Sinnesbeeinträchtigungen haben, die sie in Wechselwirkung mit einstellungs- und umweltbedingten Barrieren an der gleichberechtigten Teilhabe an der Gesellschaft mit hoher Wahrscheinlichkeit länger als sechs Monate hindern können. Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht. Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist. (2) Menschen sind im Sinne des Teils 3 schwerbehindert, wenn bei ihnen ein Grad der Behinderung von wenigstens 50 vorliegt und sie ihren Wohnsitz, ihren gewöhnlichen Aufenthalt oder ihre Beschäftigung auf einem Arbeitsplatz im Sinne des § 156 rechtmäßig im Geltungsbereich dieses Gesetzbuches haben. (3) Schwerbehinderten Menschen gleichgestellt werden sollen Menschen mit Behinderungen mit einem Grad der Behinderung von weniger als 50, aber wenigstens 30, bei denen die übrigen Voraussetzungen des Absatzes 2 vorliegen, wenn sie infolge ihrer Behinderung ohne die Gleichstellung einen geeigneten Arbeitsplatz im Sinne des § 156 nicht erlangen oder nicht behalten können (gleichgestellte behinderte Menschen).",
+      "source_url": "https://rvrecht.deutsche-rentenversicherung.de/SharedDocs/rvRecht/05_Normen_und_Vertraege/01_Sozialgesetzbuch/09_SGB_IX/pp_0001_25/0002/0002_2018_01_01.html",
+      "expression_date": "2018-01-01"
+    }
+  ],
+  "findings": [
+    "The DRV dated2018 definition and current GII section2 are text-identical after whitespace normalization.",
+    "The earlier definition states the prior age-relative/function and participation formulation; the2018 definition expressly includes sensory impairments and interaction with attitudinal/environmental barriers.",
+    "Expected duration greater than six months is part of the definition, not a test that requires six months already elapsed.",
+    "Paragraph2 severe-disability criteria and paragraph3 equal-treatment criteria are separate from paragraph1 disability. Do not substitute GdB50 for every Kindergeld disability determination.",
+    "The BTHG current consolidation retains Article26 commencement but externalizes multiple executed amending articles. This capture is not the complete original2016 amending act.",
+    "All earlier9894 corpus rows and50 release scopes are preserved. The311 new rows contain current act snapshots and two dated section2 versions.",
+    "No RuleSpec was generated or signed. Historical applicability and composed EStG32(4) rules remain open."
+  ],
+  "corpus_receipt": {
+    "release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+    "commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+    "content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
+    "selector_sha256": "440bc1611dd3d2cde8e82fd3cee430180d216d7947d5d80c67bdedca6cf34c5b",
+    "artifact_count": 411,
+    "all_artifact_hashes_match": true,
+    "release_object_sha256": "522d100bb62ac32ab95895c696cf8ca27b3e1b108c60593c423a0c594df0b422"
+  },
+  "consumer_disposition": {
+    "id": "de-kg-instr-c7a1a1943b91b3d8",
+    "status": "classified-with-reason",
+    "classification": "disability_definition_condition",
+    "bears_on_computed_surface": true,
+    "reason": "The current SGBIX act is bearing through its complete §2 disability definition, read from de/statute/sgb-9-2018/2 (bodySHA256 eef5e8fabc429e5d830b9c1a1e4a76678875b4fad16cd227dcab7aa228d6cf0a) and the separately captured official2018 version, preserved in verified corpus release de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor at 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2. The ordinary paragraph1 definition must be distinguished from threatened disability and the severe-disability/equal-treatment rules in paragraphs2and3. It is an upstream requirement for the EStG32(4) disability route and qualifying_child_count. The complete reviewed definition and historical/source limitations are retained in disability-definition-source-review.json; this is not a claim that all307 captured provisions were legally reviewed. Native paragraph1 run34647449032 failed and was unsigned; its source-to-selector test mismatch, precomputed duration and unresolved observable-evidence boundary are retained in sgbix2-native-failure-review.json. The definition and other bearing SGBIX dependencies remain unencoded; no medical score, GdB50 shortcut or case-supplied disability verdict closes them.",
+    "body_sha256": "a6942c9463087b8b630282e9d063eeeea6ca9b9fa35bf25bae1e851501929aca"
+  }
+}

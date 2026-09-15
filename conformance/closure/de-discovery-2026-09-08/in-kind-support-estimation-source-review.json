@@ -1,0 +1,33 @@
+{
+  "schema": "de-kindergeld-in-kind-support-source-review.v1",
+  "corpus_commit": "12a32e752191ca507669aa76f7b5a909c7e3efe6",
+  "sources": [
+    {
+      "path": "data/corpus/provisions/de/guidance/2026-09-09-de-kindergeld-bfh-decisions.jsonl",
+      "citation_path": "de/guidance/bfh-iii-r-24-12-2013-04-11/document-1",
+      "body_sha256": "8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605"
+    },
+    {
+      "path": "data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl",
+      "citation_path": "de/guidance/bzst-dakg-2025/numbered-sections/a-19-6",
+      "body_sha256": "3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998"
+    }
+  ],
+  "frontier_ids": [
+    "de-kg-discovery-067415d0d456a49f",
+    "de-kg-instr-c2c05925823952b6"
+  ],
+  "decision": {
+    "id": "de-kg-discovery-067415d0d456a49f",
+    "status": "classified-with-reason",
+    "classification": "in_kind_support_estimation",
+    "reason": "The complete four-page BFH III R24/12 judgment (11 April 2013, paragraphs1–26), body SHA-256 8f914fd2ee4844996197b164ae9f9b1f90f7989bad146c75aa18a1c116fdb605, concerns the historical2006–2008 income-and-receipts regime. Paragraph24 expressly gives nonbinding remand guidance permitting SvEV values to estimate benefits in kind, subject to differing individual values. DA-KG2025 A19.6(1) sentence3, body SHA-256 3a37dc324efe185099d379748b01ab401ccbe15cfaa0a5b60c37c39183eb8998, expressly retains that option when individual evidence cannot be provided. This valuation option bears on disability-related means under EStG32(4), A19.4–A19.6 and qualifying_child_count; it remains unencoded. Do not import the historical7680EUR ceiling or former section32/70 framework into2025. Paragraphs18–22 reject presumed half-sharing for unmarried parents; the separate married/registered-partner rule in A19.6(2) does not extend it to unmarried couples. Both discovery identities must ultimately bind one canonical judgment module; neither duplicate discovery nor the guidance citation supplies executable coverage. Full source binding and review: in-kind-support-estimation-source-review.json. Exact BStBlII issue/page verification remains separate.",
+    "bears_on_computed_surface": true
+  },
+  "independent_review": "Complete judgment and retained2025guidance reviewed; no actionable findings. Current bearing rests on the permissive valuation option, with historical regime and unmarried-parent distinctions preserved.",
+  "not_claimed": [
+    "signed encoding",
+    "exact BStBlII issue/page independently verified",
+    "dependency closure"
+  ]
+}

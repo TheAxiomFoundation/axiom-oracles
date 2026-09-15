@@ -1,0 +1,415 @@
+{
+  "metadata": {
+    "requested_mode": "explain",
+    "actual_mode": "explain",
+    "fallback_reason": null
+  },
+  "results": [
+    {
+      "entity_id": "a",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "b",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "c",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "d",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "e",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "f",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 1
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    },
+    {
+      "entity_id": "g",
+      "period": {
+        "period_kind": "month",
+        "start": "2025-06-01",
+        "end": "2025-06-30"
+      },
+      "outputs": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          }
+        }
+      },
+      "trace": {
+        "equal_other_payment_count": {
+          "kind": "scalar",
+          "name": "equal_other_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_equal"
+          ]
+        },
+        "higher_payment_count": {
+          "kind": "scalar",
+          "name": "higher_payment_count",
+          "dtype": "integer",
+          "unit": null,
+          "value": {
+            "kind": "integer",
+            "value": 0
+          },
+          "dependencies": [
+            "other_payment_is_higher"
+          ]
+        }
+      }
+    }
+  ]
+}

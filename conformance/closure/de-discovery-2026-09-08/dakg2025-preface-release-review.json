@@ -1,0 +1,36 @@
+{
+  "release": "de-rulespec-2026-09-15-kindergeld-dakg2025-preface",
+  "content_sha256": "4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b",
+  "commit": "12a32e752191ca507669aa76f7b5a909c7e3efe6",
+  "selector_sha256": "dce4dbdd45da7d287888e7a438d417e9873187320f659dc8f58ea806c143c732",
+  "object_sha256": "ff63f68c21b65d892c1cfd467b69d51df125e37ffcc355c2771d4a0fbf7c33d8",
+  "publish_run": 34929677697,
+  "mirror_run": 34975696325,
+  "native_signature_verified": true,
+  "public_byte_identity_verified": true,
+  "public_fetch": "curl successful; urllib request returned HTTP403 without altering release bytes",
+  "schema": "de-kindergeld-dakg-preface-release-review.v1",
+  "scope_count": 59,
+  "provision_row_count": 10644,
+  "artifact_count": 429,
+  "additive_pin_review": "All prior58 inventory/provision pins,33 exact row bindings and11 module declarations preserved by verified repin helper; no new accepted legal module.",
+  "crosswalk": {
+    "path": "conformance/closure/de-discovery-2026-09-08/dakg2025-preface-corpus-crosswalk.json",
+    "sha256": "ed7f3e70581328fc86abb8b2dca34809364c91d7f9c0ea750a359f5115c5037f",
+    "frontier_row_count": 420
+  },
+  "historical_subject_receipts": {
+    "prior_consumer_commit": "372eb7544d0e8c86848839e3297864023744449c",
+    "snapshot_path": "conformance/closure/de-instrument-graph.json",
+    "method": "Native producer validated exact historical snapshot and unchanged query/non-corpus pins; regenerated corpus discovery. Subject channel is byte-identical as a parsed object."
+  },
+  "discovery_delta": {
+    "kindergeld_new_candidates": [
+      "de-kg-instr-97de08e009b05c5a"
+    ],
+    "removed_candidates": [],
+    "other_program_changes": []
+  },
+  "preface_disposition": "Reviewed bearing, unencoded temporal application rule in the operative preface child; body-null root is not excluded as navigation.",
+  "encoding_status": "No new native encode dispatched. PriorA19.2failure remains rejected; diagnostic replay receipts preserve its failures."
+}

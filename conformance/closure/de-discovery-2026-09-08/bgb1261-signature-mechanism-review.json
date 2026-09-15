@@ -1,0 +1,130 @@
+{
+  "pr": 93,
+  "head": "ff86afa07b4599e43e93fd0768b22b6a55deb346",
+  "module_sha256": "eddd00d7ac369c39641b3c82061a1e04369174184dc3ab08bab3b1e6044296e8",
+  "source_sha256": "28ff8e921b9384a922dbc2ed654e199ae40fc5b5226306ecb2581a8cef3dffb0",
+  "engine_commit": "f6b0d15246a7db1403836628576f11e0d334348c",
+  "engine_binary_sha256": "c8f140c60fecc2950c7ef2f9723f55684f5c25eeea06ef7d643613efcf57dcd0",
+  "companion_cases": 14,
+  "additional_record_integrity_cases": 6,
+  "all_results_match": true,
+  "all_declared_inputs_supplied": true,
+  "source_and_manifest_applied_hashes_match": true,
+  "formula_proof_equals_complete_paragraph": true,
+  "request_sha256": "f191dd96a3730517b27ccf7b4543c120c83f7b6e6e19eaf50d7f121fb9e24909",
+  "response_sha256": "1250396ebca0cd887b62ef2148d682c2270f335fec84b0d2eb3c89233bb3a201",
+  "data_boundary": "Identifiers are positive surrogate keys for exact observed documents, versions, issuers and handmarks; zero represents an absent/unidentified association. They are technical record identities, not legally assigned numeric thresholds. The module tests documentary mechanism conformance, not statutory applicability or contract validity.",
+  "native_artifact_checksum_file_count": 12,
+  "all_three_native_archive_files_equal_pr_head": true,
+  "consumer_declared_rulespec_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+  "observable_leaf_classifications": [
+    {
+      "input": "document_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the retained document being assessed. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "document_version_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the particular retained version of that document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "issued_notarial_authentication_is_present",
+      "leaf_kind": "world_fact",
+      "reason": "Existence of the retained issued notarial authentication record. Its named signer, document, version and handmark are separately observed and compared by the rule; mere record presence does not prove an unrelated authentication. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "issuer_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the document issuer stated in the retained document. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "notarial_authentication_document_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the document identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "notarial_authentication_document_version_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the document version identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "notarial_authentication_handmark_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the particular handmark identified by that issued authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "notarial_authentication_issuer_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the signer named in the issued notarial authentication record. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_document_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the physical document carrying the observed signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_document_version_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the retained document version carrying that signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_handmark_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the particular observed handmark, where that physical method was used. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_is_present",
+      "leaf_kind": "world_fact",
+      "reason": "Observed presence of a signature on the retained document version. This does not supply a judgment of legal form or signature validity. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_issuer_identifier",
+      "leaf_kind": "world_fact",
+      "reason": "Identity of the person observed to have made the signature. Represented by a stable positive surrogate key for the exact observed identity, with zero for absent/unidentified evidence. Surrogates preserve identity across the matching record fields; the caller does not choose a legal-status code. This is a technical representation convention, not a statutory numerical threshold. The rule derives the required association matches and rejects missing identities. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    },
+    {
+      "input": "signature_observed_physical_method",
+      "leaf_kind": "world_fact",
+      "reason": "Observed physical act/method of signature, including a handwritten name, handmark or other method. The module compares the method and the actual signer/document associations; this fact supplies no statutory-applicability or whole-form verdict. Observable evidence for the limited BGB126(1) documentary signature mechanism only; statutory writing applicability, whole-contract validity, other writing substitutes and Kindergeld eligibility remain separate legal computations."
+    }
+  ],
+  "generated_artifacts_unchanged_after_native_signing": true,
+  "repository_merge_verification": {
+    "pr": 93,
+    "exact_checked_head": "28c7e731b0f5fa5ba90737343cef4a4cb93ea3cd",
+    "merge_commit": "019619f0422766eab2e30b73d465c5309f0b5b47",
+    "ci_run": 34539559771,
+    "required_checks_passed": true,
+    "encoder_pin_pr": 94,
+    "encoder_pin_merge": "a12c89685d35351e39260f543d98bc5f7e3caf8f",
+    "generated_files_unchanged_from_native_artifact": true
+  },
+  "declared_module_graph_drift": {
+    "before_sha256": "cb8efb80cbb4e328391436bec71c048a56437ff1374f72d1609360a2522f9e89",
+    "after_sha256": "823c1ff2e0b27581b835479735ba50c79c02b5658dd4982bb3a80ac48682be4a",
+    "programs": [
+      {
+        "id": "de/kindergeld",
+        "before": 118,
+        "after": 118,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/rv-employee-contribution",
+        "before": 11,
+        "after": 11,
+        "added": [],
+        "removed": []
+      },
+      {
+        "id": "de/unterhaltsvorschuss",
+        "before": 41,
+        "after": 41,
+        "added": [],
+        "removed": []
+      }
+    ]
+  }
+}

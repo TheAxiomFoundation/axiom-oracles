@@ -1,0 +1,169 @@
+{
+  "schema": "de-kindergeld-cross-border-priority-holdings-review.v1",
+  "status": "independently reviewed; applied to committed decisions; generated state produced separately",
+  "source_commit": "fd729da754ed0cd916d018d7f335abec82227fde",
+  "source_path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-cross-border-priority.jsonl",
+  "source_file_sha256": "a0a7109500370522c6d459db918bf8368233ab483264d408f54b1ec884333f20",
+  "release_requirement": "Apply only after release60 signature/publication verification and native graph refresh binds these exact rows. Resolve new corpus candidate IDs through the generated citation paths, not guessed IDs.",
+  "reviews": [
+    {
+      "citation_path": "de/guidance/bfh-iii-r-17-13-2016-02-04/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-17-13-2016-02-04",
+      "supplemental_id": "de-kg-suppl-144",
+      "body_sha256": "ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c",
+      "paragraphs_reviewed": "complete document; operative reasons 13–22",
+      "page_count": 4,
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The complete judgment gives the child-household parent in Poland priority through the EU whole-family residence fiction and EStG 64(2) sentence 1. It does not fabricate a common household for separated parents. The absence of a foreign-parent application does not transfer priority to the German applicant. Paragraph 21 conditions that result on the underlying entitlement requirements being met in the German claimant. The other national requirements remain necessary; the case does not create a universal foreign-parent entitlement. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review.",
+      "generated_candidate_id": "de-kg-instr-9072ef90385a4162"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-r-8-13-2016-03-10/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-8-13-2016-03-10",
+      "supplemental_id": "de-kg-suppl-145",
+      "body_sha256": "bdc345b530f5e976d2639433525096459029cb4b684887a07172db7e546822a8",
+      "paragraphs_reviewed": "complete document; operative reasons 12–31",
+      "page_count": 4,
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The complete judgment applies the whole-family fiction to the divorced parent with the child in Poland. Paragraphs 23–25 use Article 1(i)(1)(i), not the fallback in Article 1(i)(2), to identify participants by national entitlement, including divorced parents. Article 60 is reached through Article 67 whether or not an Article 68 benefit conflict exists. Paragraphs 27–30 preserve the foreign-parent requirements and actual household facts; the other parent's application can be considered for the priority parent without transferring entitlement. Historic Polish and German payment figures are case facts, not current rate parameters. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review.",
+      "generated_candidate_id": "de-kg-instr-f868703b396ae2d9"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-r-11-13-2016-07-07/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-11-13-2016-07-07",
+      "supplemental_id": "de-kg-suppl-146",
+      "body_sha256": "b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d",
+      "paragraphs_reviewed": "complete document; operative reasons 9–24",
+      "page_count": 3,
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The complete judgment remands because the Belgian-resident mother's remaining national entitlement requirements were not established. Article 60 fictions domestic residence, but does not remove EStG 62(2) conditions for a parent not entitled to free movement. The recognized refugee father falls within Article 2(1) through Article 1(g); this is not a rule that every third-country national automatically qualifies. Paragraphs 21–23 preserve the actual separate-household facts and the irrelevance of the other parent's missing German application to recipient priority. No unconditional award to the mother or current rate follows from this remand. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review.",
+      "generated_candidate_id": "de-kg-instr-52a6abafd6d4cb1b"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-r-10-13-2016-08-04/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-10-13-2016-08-04",
+      "supplemental_id": "de-kg-suppl-147",
+      "body_sha256": "742a16710dcf9f395e6dba9ee329fd6f442d973ffc4697f5d4cb55feb09be09e",
+      "paragraphs_reviewed": "complete document; operative reasons 11–27",
+      "page_count": 3,
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The complete judgment remands for actual household and other entitlement findings. Paragraph 24 requires consideration of a real common household in Germany and/or Hungary: EStG 64(2) sentences 2–4 may then govern recipient determination. The residence fiction alone neither establishes nor disproves that household. Paragraph 26 makes maintenance-rent priority under EStG 64(3) inapplicable while the child belongs to an entitled person's household. Paragraphs 20–23 preserve application and remaining-national-condition limits. Paragraph 25 concerns the temporal scope of the contested decision, not a new monthly entitlement test. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review.",
+      "generated_candidate_id": "de-kg-instr-662c98546099ad1a"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-r-14-13-2016-04-13/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-14-13-2016-04-13",
+      "supplemental_id": "de-kg-suppl-148",
+      "body_sha256": "b81c3df1bf59a5b138378ee7637a470f669533bd59237750a7bc6fca66bad99e",
+      "paragraphs_reviewed": "complete document; operative reasons 9–27",
+      "page_count": 4,
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The complete judgment applies whole-family residence fiction and household priority despite a concurrent Bulgarian family benefit. State-level Article 68 coordination does not select the German-resident parent as the personal recipient. Paragraphs 20–24 include separated parents among participants, preserve other national conditions and do not turn separated households into a common household. Paragraphs 25–26 require consideration of the German applicant's application for the priority mother, without transferring priority because she did not apply. Historical foreign payments and differential amounts are case facts, not current rates. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review.",
+      "generated_candidate_id": "de-kg-instr-908157db69bc61be"
+    }
+  ],
+  "new_pending_references": [
+    {
+      "id": "de-kg-suppl-149",
+      "identity": "EuGH, C-378/14 (Trapkowski), 22 October 2015",
+      "title_short": "EuGH, C-378/14 (Trapkowski), 22 October 2015",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-17-13-2016-02-04/document-1",
+        "body_sha256": "ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c",
+        "excerpt": "eutschland, sondern dem im EU-Ausland lebenden Elternteil zusteht (EuGH-Urteil vom 22. Oktober 2015 C-378/14, EU:C:2015:720, DStRE 2015, 1501). Kann wegen der ‑‑nicht nur räumlichen‑‑ Trennung der Eltern nicht fingiert werden, dass diese in Deutschland in einem gemein",
+        "excerpt_sha256": "b529029acd53e0798ff5db514b75d111fa646f5951f1473d60234ec96c00d940"
+      }
+    },
+    {
+      "id": "de-kg-suppl-150",
+      "identity": "BFH reference order, III R 17/13, 8 May 2014",
+      "title_short": "BFH reference order, III R 17/13, 8 May 2014",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-17-13-2016-02-04/document-1",
+        "body_sha256": "ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c",
+        "excerpt": "heidung des FG wendet sich die Familienkasse mit ihrer Revision. Der Senat setzte mit Beschluss vom 8. Mai 2014 III R 17/13 (BFHE 245, 522, BStBl II 2015, 329) das Revisionsverfahren gemäß § 121 i.V.m. § 74 der Finanzgerichtsordnung (FGO) aus und legte dem Gerichtshof der Europäisch",
+        "excerpt_sha256": "3246b456fcf6da5c17d141564538d9779f8c627d293e44796c497a39252f6a06"
+      }
+    },
+    {
+      "id": "de-kg-suppl-151",
+      "identity": "BFH, III R 68/13, 28 April 2016",
+      "title_short": "BFH, III R 68/13, 28 April 2016",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-11-13-2016-07-07/document-1, body SHA-256 b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-11-13-2016-07-07/document-1",
+        "body_sha256": "b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d",
+        "excerpt": "ss an die Senatsurteile vom 4. Februar 2016 III R 17/13, BFHE 253, 134, BStBl II 2016, 612, und vom 28. April 2016 III R 68/13, BFH/NV 2016, 1514) . 2. Für eine (vorrangige) Anspruchsberechtigung eines nicht freizügigkeitsberechtigten Elternteils müssen die Voraussetzungen i.S. des § 6",
+        "excerpt_sha256": "86ea2bc8f83c8e79cbceb420c8b68f8ee74e41c9b8c6074ccad149ffa8ab2cd5"
+      }
+    },
+    {
+      "id": "de-kg-suppl-152",
+      "identity": "BFH, III B 127/14, 27 April 2015",
+      "title_short": "BFH, III B 127/14, 27 April 2015",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-10-13-2016-08-04/document-1, body SHA-256 742a16710dcf9f395e6dba9ee329fd6f442d973ffc4697f5d4cb55feb09be09e. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-10-13-2016-08-04/document-1",
+        "body_sha256": "742a16710dcf9f395e6dba9ee329fd6f442d973ffc4697f5d4cb55feb09be09e",
+        "excerpt": "ussetzungen des Begriffs des Freizügigkeitsberechtigten verweist der Senat auf seinen Beschluss vom 27. April 2015 III B 127/14 (BFHE 249, 519, BStBl II 2015, 901). 23 b) Ein vorrangiger Anspruch des Klägers könnte sich aber aus § 64 Abs. 2 Sätze 2 bis 4 EStG ergeben. Dies würde jedoch ",
+        "excerpt_sha256": "572dbe42c9000f6255f64757b72258e4a6a2bb265e26f69593ec92ffc60372de"
+      }
+    }
+  ],
+  "already_enumerated_reference": {
+    "identity": "BFH III R71/10, 4 August 2011",
+    "ids": [
+      "de-kg-discovery-ca1314db19ffa550",
+      "de-kg-instr-3be04eb6d61b596b"
+    ],
+    "disposition": "unchanged; no duplicate supplemental added"
+  },
+  "limits": [
+    "All five authorities remain bearing/unencoded. No current fixed amount is derived from historic case facts.",
+    "Four newly cited authorities must enter the frontier as pending, not be treated as reviewed originals.",
+    "No signed module, law-derived leaf closure or certified claim follows."
+  ],
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "no actionable findings; five full bodies and four indirect references verified"
+  },
+  "verified_release": {
+    "release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
+    "commit": "519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57",
+    "content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8",
+    "selector_sha256": "f06d72f9b19d4a76f8d7cfe7a8492272262d5eab3cd70ec97f0967588cd4408d",
+    "object_sha256": "60fb40c98cbe1d5602f31d22439bef28a924e104d3fabd442c5ee1c1a1333092",
+    "native_signature_verified": true,
+    "publish_run": 34993222252,
+    "public_byte_identity_verified": true,
+    "mirror_run": 34993950606
+  }
+}

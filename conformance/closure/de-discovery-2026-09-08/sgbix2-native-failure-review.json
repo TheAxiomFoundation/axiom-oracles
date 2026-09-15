@@ -1,0 +1,105 @@
+{
+  "schema": "de-kindergeld.sgbix2-native-failure-review.v1",
+  "run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34647449032",
+  "citation_path": "de/statute/sgb-9-2018/2/absatz-1/inhalt",
+  "source_body_sha256": "ca98fd427cc197ff85e96b8b6882fe04bed8fcf1caed0fa8cab6aaf53d4d7c4d",
+  "corpus_commit": "3551d366ec6fa276acc193276abafdfbdbf122ca",
+  "rulespec_commit": "6efa64965b935c7c32a5b093bc718f316e8df47b",
+  "engine_commit": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+  "encoder_commit": "b041b6b5a0e39f2c05c93669f354f8a54e9a84c3",
+  "native_result": {
+    "attempt_count": 4,
+    "citation": "de/statute/sgb-9-2018/2/absatz-1/inhalt",
+    "encoder_version": "0.2.1973",
+    "issues": [
+      "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml: ci: [complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Eine Beeinträchtigung nach Satz 1 liegt vor, wenn der Körper- und Gesundheitszustand von dem für das Lebensalter typischen Zustand abweicht.`; de/statute/sgb-9-2018/2/absatz-1/inhalt(1) [Absatz 1] [change]: `Menschen sind von Behinderung bedroht, wenn eine Beeinträchtigung nach Satz 1 zu erwarten ist.`."
+    ],
+    "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml",
+    "rulespec_sha256": "212f0ad1cba952e43177ed0513074427d7d898a89aed4209b63d392ac6a21673",
+    "schema": "axiom-encode/failed-encode-candidate/v1",
+    "tests_sha256": "80e2105b338982287c6c625471ecb7d5b7670cc59c8504546f8a3865dc9aba90"
+  },
+  "evidence": [
+    {
+      "path": "issues.json",
+      "bytes": 1160,
+      "sha256": "ac775831775d27805069575ce9f649523a05d8977939eb89d0ba070cb2a7042c"
+    },
+    {
+      "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.yaml",
+      "bytes": 7562,
+      "sha256": "212f0ad1cba952e43177ed0513074427d7d898a89aed4209b63d392ac6a21673"
+    },
+    {
+      "path": "statutes/sgb-9-2018/2/absatz-1/inhalt.test.yaml",
+      "bytes": 19529,
+      "sha256": "80e2105b338982287c6c625471ecb7d5b7670cc59c8504546f8a3865dc9aba90"
+    }
+  ],
+  "findings": [
+    "Four internal candidates failed the paired positive/blocking source-condition test gate. The final candidate is unsigned and was not applied.",
+    "The candidate accepts forecasted_hindrance_calendar_month_count as a precomputed Decimal and compares it with6. It does not derive the calendar interval from dated forecast evidence as requested. A decimal month convention is unspecified.",
+    "Bare body_or_health_condition_deviates_from_age_typical_condition and impairment_interacts_with_barriers_to_hinder_equal_participation inputs reproduce constituent legal standards without a documented observable-record derivation or explanation of independently existing medical observations. The requested leaf boundary was not established.",
+    "The sixteen-input scalar model contains no actual assessment, subject, observation, issuance or prognosis date associations. Its Boolean forecast labels cannot by themselves prove which person or period a real finding describes.",
+    "The permanent-hindrance branch avoids a finite end date, but this does not cure the broader evidence and duration-boundary defects.",
+    "Fixing only the missing companion pairs would not make this candidate acceptable. A repair needs an observable evidence model and exact temporal rules, or an explicit unresolved qualitative-definition dependency; no renamed legal-status inputs."
+  ],
+  "disposition": "No module or manifest declared. No spine or legal dependency closed. Do not replay unchanged or weaken tests; native standard budget remains in force.",
+  "paired_witness_diagnostic": {
+    "path": "sgbix2-paired-witness-diagnostic.json",
+    "sha256": "118c7f09981e68ce7b6ca35e16376d17e8dc1c7b96c0832e37b9d3ef6ca99e30",
+    "finding": "The unchanged validator recognizes eight one-input toggled witnesses, including the age-deviation and threatened-disability pairs, but assigns no witness to either German source clause. This localizes the failed gate to source-to-selector matching, not absence of all attempted pairs. Precise matching repair remains unresolved; no gate was weakened. The independent law-derived-input and temporal defects still reject the candidate."
+  },
+  "current_encoder_replay": {
+    "path": "sgbix2-witness-filter-diagnostic-2026-09-14.json",
+    "sha256": "3a22bf235a669526d5753891158ff1bbbe02e280fea51ea1c040b924d4ddc484",
+    "encoder_commit": "35e594e85a4f852eb87225d60461c6cff962105f",
+    "finding": "The unchanged current encoder reproduces the rejection on the original byte-bound candidate and tests. All eight witnesses fail both direct and composite source-condition relevance for both German clauses. The diagnostic records path, orientation and effect filters separately. No source, generated candidate, companion case, gate or signing policy was changed. The independent observable-evidence and calendar-duration defects remain unresolved.",
+    "relationship_to_missing_bgh_original": "None: this disability-definition repair can proceed independently of the pending BGH VIII ZR244/96 original. No paid request has been sent."
+  },
+  "proposed_encoder_repair": {
+    "pull_request": "https://github.com/TheAxiomFoundation/axiom-encode/pull/1638",
+    "head": "0d2528868358e88eff2dd37b4f623603e574c134",
+    "status": "merged_after_review_and_ci",
+    "replay": {
+      "path": "sgbix2-reviewed-repair-replay-2026-09-14.json",
+      "sha256": "2e1a2998f058c77f1e2aa24b3634b98cf8fb7fbfdd7a3308c3cc7ab814e4ec2b"
+    },
+    "result": "The unchanged candidate has one accepted witness for the age-relative clause and none for the forecast clause. It remains rejected. No generation attempt, signature, application or module declaration follows from this diagnostic.",
+    "checks": "Full CI at the follow-up head:14946 passed,94 skipped; lint and both platform signing checks passed. Independent source-matching and version-fixture reviews have no residual actionable findings. The replay remains bound to0d252, whose matcher bytes are unchanged in the tested follow-up.",
+    "remaining": "The complete expected-impairment predicate now has bounded bilingual matching; the rejected candidate still uses subtype and clinical flags and gains no forecast witness. Native generation must establish observable medical evidence associations and dated calendar-duration calculation. The missing BGH original is independent.",
+    "merged_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "tested_head": "fadf7361389ef3ba26ce3f8030b7e337f14ec17b"
+  },
+  "prepared_native_repair": {
+    "status": "failed_native_validation",
+    "review_finding": {
+      "path": "sgbix2-second-attempt-review-finding.txt",
+      "sha256": "2deb2fb0da367343798bd7d420a672c2600c7a33ba3c0b7d984ec2a9060972e7"
+    },
+    "prior_failed_run": 34647449032,
+    "budget": "Normal remaining citation budget; no override",
+    "readiness_review": "Independent review identified indefinite-duration and source-cross-reference ambiguities. Both were clarified; re-review found no actionable findings. This approves repair instructions, not a future legal candidate.",
+    "required_before_dispatch": [],
+    "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+    "corpus_commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+    "rulespec_corpus_pin_merge": "144c8344d34f69a5bd4bfd082baf9b96ea7adc1f",
+    "encoder_followup": {
+      "head": "fadf7361389ef3ba26ce3f8030b7e337f14ec17b",
+      "change": "Exact runtime-version expectations only; matcher source unchanged from the reviewed replay",
+      "review": "No actionable findings; all assertions retained",
+      "checks": "Full CI passes:14946 tests,94 skipped; lint and both signing checks pass."
+    },
+    "coverage_effect": "None; the rejected candidate remains unsigned and unencoded.",
+    "encoder_merge": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "mode": "Fresh generation with reviewed prior-failure findings; no failed-artifact replay",
+    "replay_constraint": "The protected extractor requires exact corpus_ref and a replacement target. The old new-source attempt has corpus_ref3551d366ec6fa276acc193276abafdfbdbf122ca and no replacement path; release55 uses4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2. Omit repair_run_id and replacement path; preserve the same citation and normal budget.",
+    "native_run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34917426587",
+    "encoder_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "rulespec_commit": "ce205b75d6d998bb431de3715ae2a8b105b3a61b",
+    "dispatch_sha256": "51940356afa752b042237d351d846fb9b8790cedf3e083938977fb149dfc4136",
+    "failure_review": "sgbix2-second-native-failure-review.json",
+    "signatures": 0,
+    "next_step": "Check exact relation-binding capability and source-grounded evidence requirements; no unchanged retry."
+  }
+}

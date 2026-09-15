@@ -1,0 +1,317 @@
+{
+  "schema": "de-kindergeld.service-search-source-review.v1",
+  "status": "source-reviewed; bearing rules remain unencoded",
+  "corpus_commit": "279e27503c00ce1fab35809d069c076d3abad362",
+  "release": "de-rulespec-2026-09-11-kindergeld-illness-precedents",
+  "release_content_sha256": "1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c",
+  "reviewed_full_decision": {
+    "citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+    "source_url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201210269?type=1646225765",
+    "body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+    "body": "Urteil vom 27. September 2012, III R 70/11 Berücksichtigung eines Zivildienstleistenden als Ausbildungsplatz suchendes Kind - Richtigstellung der Kostenentscheidung des FG - Kostenentscheidung bei Revisionseinlegung durch beide Beteiligten BFH III. Senat EStG § 32 Abs 4 S 1 Nr 2 Buchst c, EStG § 32 Abs 4 S 2, EStG § 32 Abs 5 S 1 Nr 1, FGO § 136 Abs 1 vorgehend Sächsisches Finanzgericht , 27. September 2011, Az: 8 K 558/08 (Kg) Leitsätze Der Berücksichtigungstatbestand nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG wird nicht allein deshalb ausgeschlossen, weil das Kind während seiner Bemühungen um einen Ausbildungsplatz den gesetzlichen Zivildienst ableistet. Tatbestand A. Die Klägerin, Revisionsklägerin und Revisionsbeklagte (Klägerin) ist die Mutter ihres im April 1988 geborenen Sohnes (S). S beendete seine Schulausbildung im Juli 2007. In der Zeit vom 2. Januar bis 30. September 2008 leistete er den gesetzlichen Zivildienst. Hierfür erhielt er einen Sold in Höhe von 4.599,72 € und ein Entlassungsgeld in Höhe von 690,24 €. Spätestens im März 2008 bewarb sich S um einen Studienplatz. Im Juni 2008 bestand er die hierfür vorgeschriebene Aufnahmeprüfung. Im Oktober 2008 nahm er sein Studium auf. 2 Die Beklagte, Revisionsbeklagte und Revisionsklägerin (Familienkasse) hob die Kindergeldfestsetzung für S ab August 2007 auf und forderte gewährtes Kindergeld in Höhe von 616 € zurück. Ab Oktober 2008 bezog die Klägerin wieder Kindergeld. Die Familienkasse wies den gegen den Aufhebungsbescheid eingelegten Rechtsbehelf mit Einspruchsentscheidung vom 17. März 2008 als unbegründet zurück. 3 Die hiergegen erhobene Klage war für den Monat März 2008 erfolgreich, für den Zeitraum von August 2007 bis Februar 2008 hingegen erfolglos. Zur Begründung führte das Finanzgericht (FG) im Wesentlichen aus, der Klage sei für den Monat März 2008 stattzugeben, weil sich S spätestens in diesem Monat um einen Studienplatz beworben habe. Einer Berücksichtigung des S als Ausbildungsplatz suchendes Kind nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c des Einkommensteuergesetzes in der für den Streitzeitraum maßgeblichen Fassung (EStG) stehe nicht entgegen, dass er sein Studium aus studienorganisatorischen Gründen erst im Oktober 2008 habe aufnehmen können. Unerheblich sei auch der Umstand, dass S ab Januar 2008 Zivildienst geleistet habe. Die Ableistung des Zivildienstes führe nicht dazu, dass ein an sich erfüllter Berücksichtigungstatbestand wieder ausgeschlossen werde. Schließlich liege das von S während seiner Dienstzeit erhaltene Entgelt unter dem maßgeblichen Jahresgrenzbetrag. Für den Zeitraum August 2007 bis Februar 2008 scheide hingegen eine Berücksichtigung des S aus. Insbesondere greife § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b EStG nicht ein, weil die Übergangszeit zwischen Beendigung der Schulausbildung und Beginn des Zivildienstes mehr als vier Monate betragen habe. 4 Das FG legte die Kosten des Verfahrens der Klägerin zu 6/7 und der Familienkasse zu 1/7 auf. 5 Gegen das Urteil haben beide Beteiligten Revision eingelegt. 6 Die Klägerin rügt eine fehlerhafte Anwendung des materiellen Rechts, soweit das FG den S wegen Überschreitens der Viermonatsfrist in dem Zeitraum von August 2007 bis Februar 2008 nicht als Kind berücksichtigt habe. Nicht beeinflussbare Verzögerungen bei der Einberufung zum Zivildienst dürften sich im Rahmen des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b EStG nicht zu Lasten des Kindergeldberechtigten auswirken. Abgesehen davon müsse das Kind bei einem schuldlosen Überschreiten der Viermonatsfrist jedenfalls nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG berücksichtigt werden. 7 Seite 1 von 5\n\nEntscheidungsgründe B. Die Revisionen sind unbegründet und daher zurückzuweisen (§ 126 Abs. 2 FGO). Das FG hat zu Recht entschieden, dass der Klägerin für den Streitzeitraum (August 2007 bis März 2008) ein Kindergeldanspruch (nur) für den Monat März 2008 zusteht. Die Klägerin beantragt sinngemäß, das angefochtene Urteil, den Aufhebungsbescheid und die hierzu ergangene Einspruchsentscheidung insoweit aufzuheben, als die Kindergeldfestsetzung für den Zeitraum von August 2007 bis Februar 2008 aufgehoben wurde. 8 Die Familienkasse rügt mit ihrer Revision eine unzutreffende Auslegung des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG durch das FG, soweit es S ab März 2008 als Ausbildungsplatz suchendes Kind berücksichtigt habe. Hierdurch habe es gegen die gesetzgeberische Wertung verstoßen, nach der während eines Wehr- oder Zivildienstes mangels typischer Unterhaltssituation kein Anspruch auf Kindergeld bestehe. Etwas anderes ergebe sich auch nicht aus dem Urteil des Bundesfinanzhofs (BFH) vom 14. Mai 2002 VIII R 61/01 (BFHE 199, 210, BStBl II 2002, 807), nach dem sich ein Kind während des Zivildienstes in einer Berufsausbildung i.S. des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG befinden könne. Bei dieser Entscheidung sei maßgeblich gewesen, dass den Eltern wegen der Berufsausbildung des Kindes tatsächlich ein zusätzlicher Aufwand entstanden sei. Solche besonderen Umstände seien im Streitfall nicht gegeben. 9 Die Familienkasse beantragt sinngemäß, das angefochtene Urteil insoweit aufzuheben, als es den Aufhebungsbescheid und die hierzu ergangene Einspruchsentscheidung für den Monat März 2008 aufhebt. 10 Die Beteiligten beantragen im Übrigen, die Revision des jeweils anderen zurückzuweisen. 11 I. Das FG hat das Klagebegehren der Klägerin zutreffend dahingehend ausgelegt, dass sie mit ihrer Klage die Aufhebung des Aufhebungsbescheids für den Zeitraum von August 2007 bis März 2008 begehrt. 13 Nach der Rechtsprechung des Senats kann das FG den Anspruch auf Kindergeld grundsätzlich nur in dem zeitlichen Umfang in zulässiger Weise zum Gegenstand einer Inhaltskontrolle machen, in dem die Familienkasse den Kindergeldanspruch geregelt hat. Im Falle eines zulässigen, in der Sache aber unbegründeten Einspruchs gegen einen Aufhebungsbescheid ist der Familienkasse längstens eine Regelung bis zum Ende des Monats der Bekanntgabe der Einspruchsentscheidung möglich. Würde ein Kläger mit seiner Klage über diesen Zeitraum hinaus Kindergeld begehren, wäre sie insoweit unzulässig (Senatsurteil vom 22. Dezember 2011 III R 41/07, BFHE 236, 144, BStBl II 2012, 681). Es entspricht daher der recht verstandenen Interessenlage der Klägerin, dass sie mit ihrer Klage ‑‑zumal sie im finanzgerichtlichen Verfahren nicht ausdrücklich etwas Abweichendes beantragt hat‑‑ die Aufhebung des Aufhebungsbescheids für den Zeitraum von August 2007 bis März 2008 erreichen will. 14 II. Revision der Klägerin 15 Das FG hat S für den Zeitraum von August 2007 bis Februar 2008 zu Recht nicht als Kind gemäß § 62 Abs. 1, § 63 Abs. 1 Satz 2 i.V.m. § 32 Abs. 4 Satz 1 EStG berücksichtigt. 16 1. S kann während des genannten Zeitraums nicht nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG als Ausbildungsplatz suchendes Kind berücksichtigt werden. 17 Nach dieser Vorschrift wird ein Kind berücksichtigt, das ‑‑wie S im Streitfall‑‑ das 18., aber noch nicht das 25. Lebensjahr vollendet hat, wenn es eine Berufsausbildung mangels Ausbildungsplatzes nicht beginnen oder fortsetzen kann. Nach der ständigen Rechtsprechung des BFH ist hierfür erforderlich, dass ein Ausbildungsplatz fehlt und sich das Kind ernsthaft um einen solchen bemüht (Senatsurteil vom 26. November 2009 III R 84/07, BFH/NV 2010, 853; Schmidt/Loschelder, EStG, 31. Aufl., § 32 Rz 31 f.). Nach den Feststellungen des FG hat sich S spätestens im Monat März 2008 um einen Studienplatz beworben. Diese von der Klägerin nicht mit einer zulässigen und begründeten Verfahrensrüge angegriffene Feststellung ist für den Senat bindend (s. § 118 Abs. 2 FGO). Danach hat sich S zwar jedenfalls im Monat März 2008, nicht aber zu einem früheren Zeitpunkt um einen Studienplatz beworben. 18 2. Ebenso scheidet eine Berücksichtigung des S in der Zeit von August 2007 bis Dezember 2007 gemäß § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b EStG als ein Kind in einer Übergangszeit aus. 19 Seite 2 von 5\n\na) Nach dieser Vorschrift wird ein Kind, das das 18., aber noch nicht das 25. Lebensjahr vollendet hat, berücksichtigt, wenn es sich in einer Übergangszeit von höchstens vier Monaten befindet, die zwischen zwei Ausbildungsabschnitten oder zwischen einem Ausbildungsabschnitt und der Ableistung des gesetzlichen Wehr- oder Zivildienstes, einer vom Wehr- oder Zivildienst befreienden Tätigkeit als Entwicklungshelfer oder als Dienstleistender im Ausland nach § 14b des Zivildienstgesetzes oder der Ableistung eines freiwilligen Dienstes i.S. des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. d EStG liegt. 20 Im Streitfall hat S die Übergangszeit von vier Monaten zwischen Schulabschluss und Beginn des gesetzlichen Zivildienstes überschritten. Es liegt eine Übergangszeit ‑‑beginnend mit dem Monat August 2007 und endend mit dem Monat Dezember 2007‑‑ von fünf Monaten vor (zur Berechnung der Viermonatsfrist s. BFH-Urteil vom 15. Juli 2003 VIII R 105/01, BFHE 203, 102, BStBl II 2003, 847). Nach dem klaren Wortlaut der Vorschrift kommt bei einem Überschreiten der Übergangszeit eine Begünstigung auch nicht für die ersten vier Monate in Betracht (Senatsurteil in BFHE 236, 144, BStBl II 2012, 681, m.w.N.). 21 b) Ein Kindergeldanspruch lässt sich für die fünfmonatige Übergangszeit auch nicht auf eine analoge Anwendung des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b oder c EStG stützen. Nach gefestigter Rechtsprechung des Senats ist die gesetzliche Ausgestaltung der Tatbestände in § 32 Abs. 4 Satz 1 EStG, wonach ein Kind, das nach Beendigung der Schulzeit ‑‑unabhängig davon, ob absehbar oder nicht‑‑ länger als vier Monate auf den Beginn des Pflichtdienstes (gesetzlicher Wehr- oder Zivildienst) wartet, während dieser Übergangszeit nicht berücksichtigt wird, weder lückenhaft noch verstößt sie gegen das Grundgesetz. Zur Begründung wird auf die jüngsten Senatsurteile vom 22. Dezember 2011 III R 5/07 (BFHE 236, 137, BStBl 2012, 678) und in BFHE 236, 144, BStBl II 2012, 681, vom 9. Februar 2012 III R 68/10 (BFHE 236, 421, BStBl II 2012, 686) und vom 24. Mai 2012 III R 25/09 (BFH/NV 2012, 1437) verwiesen, mit welchen die bisherige Rechtsprechung bestätigt wurde. 22 3. Schließlich kann S für die Monate Januar und Februar 2008 auch nicht nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG berücksichtigt werden. Nach dieser Vorschrift wird ein Kind, das das 18., aber noch nicht das 25. Lebensjahr vollendet hat, berücksichtigt, wenn es für einen Beruf ausgebildet wird. Durch die Rechtsprechung des BFH ist bereits geklärt, dass der Zivildienst grundsätzlich keine Berufsausbildung darstellt (s. dazu BFH-Urteil vom 16. März 2004 VIII R 86/02, BFH/NV 2004, 1242). 23 III. Revision der Familienkasse 24 Das FG hat zu Recht für den Monat März 2008 einen Kindergeldanspruch gemäß § 62 Abs. 1, § 63 Abs. 1 Satz 2 i.V.m. § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG bejaht. 25 1. Die Berücksichtigung eines Kindes gemäß § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG setzt ‑‑wie bereits ausgeführt (s. B.II.1.)‑‑ voraus, dass ein Ausbildungsplatz fehlt und sich das Kind ernsthaft um einen solchen bemüht (Senatsurteil in BFH/NV 2010, 853). Dabei ist im Grundsatz jeder Ausbildungswunsch des Kindes zu berücksichtigen. Ein ernsthaftes Bemühen erfordert aber zudem, dass der Ausbildungsplatz im Erfolgsfall angetreten werden kann. Die Voraussetzungen des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG liegen demnach nicht vor, wenn das Kind ‑‑die Verfügbarkeit des Ausbildungsplatzes unterstellt‑‑ diesen ohnehin nicht antreten könnte, weil es die objektiven Anforderungen dafür nicht erfüllt oder es aus anderen Gründen am Antritt gehindert wäre (z.B. BFH-Urteil vom 15. Juli 2003 VIII R 79/99, BFHE 203, 94, BStBl II 2003, 843). Zudem liegt ein ernsthaftes Bemühen in Fällen, in denen eine Ausbildung ‑‑wie z.B. ein Studium‑‑ nur zu bestimmten Zeitpunkten begonnen werden kann, nur dann vor, wenn sich das Kind für den nächstmöglichen Ausbildungsbeginn bewirbt (Senatsurteil in BFH/NV 2010, 853). Im Übrigen ist § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG nicht nur dann erfüllt, wenn das Kind noch keinen Ausbildungsplatz gefunden hat, sondern auch dann, wenn ihm ein Ausbildungsplatz bereits zugesagt wurde, es diesen aber aus schul-, studien- oder betriebsorganisatorischen Gründen erst zu einem späteren Zeitpunkt antreten kann (Senatsurteil vom 17. Juni 2010 III R 34/09, BFHE 230, 61, BStBl II 2010, 982, m.w.N.). Danach ist ein Kind, dem der begehrte Studienplatz aufgrund ernsthafter Bemühungen bereits zur Verfügung steht, auch während der Wartezeit bis zum Semesterbeginn zu berücksichtigen. 26 2. Sind die vorstehend aufgezeigten Voraussetzungen gegeben, wird der Tatbestand des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG nicht dadurch ausgeschlossen, dass das Kind daneben den gesetzlichen Zivildienst ableistet. 27 a) Der BFH hat zuletzt in seinen Entscheidungen zur Berücksichtigung von Kindern während einer Vollzeiterwerbstätigkeit ausgeführt, dass eine typische Unterhaltssituation kein ungeschriebenes Tatbestandsmerkmal der einzelnen Berücksichtigungstatbestände ist. Ob ein Kind wegen eigener Einkünfte typischerweise nicht auf Unterhaltsleistungen der Eltern angewiesen und deshalb nicht als Kind zu berücksichtigen 28 Seite 3 von 5\n\nist, ist nach der gesetzlichen Regelung nicht bei der Prüfung der Tatbestandsvoraussetzungen des § 32 Abs. 4 Satz 1 Nr. 1 und 2 EStG zu ermitteln, sondern erst auf einer zweiten Stufe bei der Prüfung nach § 32 Abs. 4 Satz 2 EStG, ob die Einkünfte und Bezüge des Kindes den maßgebenden Grenzbetrag überschreiten (z.B. Senatsurteile in BFHE 230, 61, BStBl II 2010, 982; vom 7. April 2011 III R 50/10, BFH/NV 2011, 1329). b) Dabei ist es nach dem Gesetzeswortlaut und der Gesetzessystematik unerheblich, aus welchen Gründen bei den Eltern keine typische Unterhaltssituation gegeben ist. Danach kann weder eine Vollzeiterwerbstätigkeit noch die Ableistung eines gesetzlichen Pflichtdienstes den Berücksichtigungstatbestand nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG ausschließen. Abweichendes lässt sich insbesondere weder aus dem Umstand, dass der Zivildienst nicht in den Katalog der Berücksichtigungstatbestände (§ 32 Abs. 4 Satz 1 EStG) aufgenommen wurde, noch aus der Vorschrift des § 32 Abs. 5 Satz 1 Nr. 1 EStG ableiten, nach der Kinder, die den gesetzlichen Grundwehrdienst oder den Zivildienst leisten, u.a. in den Fällen des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG (Berufsausbildung) über die maßgebliche Altersgrenze hinaus für einen der Dauer dieser Dienste entsprechenden Zeitraum berücksichtigt werden (sog. Verlängerungstatbestand). Zwar beruhen beide Regelungen auf der typisierenden Annahme des Gesetzgebers, dass Eltern von Kindern, die den gesetzlichen Grundwehrdienst oder den Zivildienst leisten, wirtschaftlich nicht belastet sind und deshalb ‑‑mangels typischer Unterhaltssituation‑‑ auch keinen Anspruch auf Kindergeld haben (BFH-Urteil in BFHE 199, 210, BStBl II 2002, 807; s. auch Senatsurteil in BFHE 236, 144, BStBl 2012, 681). Hieraus ergibt sich jedoch nicht, dass die Berücksichtigung eines Kindes für Zeiten des Zivildienstes auch dann ausgeschlossen ist, wenn es sich ‑‑neben dem Zivildienst‑‑ ernsthaft um einen Ausbildungsplatz bemüht. Auch in diesem Fall ist ‑‑wie beim Zusammentreffen ernsthafter Ausbildungsplatzbemühungen mit einer Vollzeiterwerbstätigkeit‑‑ die Unterhaltsbedürftigkeit des Kindes und damit die wirtschaftliche Belastung der Eltern nicht durch eine einschränkende Auslegung des Berücksichtigungstatbestandes, sondern ‑‑entsprechend der gesetzlichen Regelungskonzeption‑‑ durch die Höhe der Einkünfte und Bezüge des Kindes typisierend zu bestimmen. Demnach können Kinder, die den gesetzlichen Zivildienst ableisten, nicht nur als Kinder in Berufsausbildung (§ 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG; so bereits BFH-Urteil in BFHE 199, 210, BStBl II 2002, 807), sondern auch als Ausbildungsplatz suchende Kinder (§ 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG) berücksichtigt werden. 29 3. Das FG hat die vorstehend dargestellten Grundsätze zutreffend auf den Streitfall angewendet. 30 S hat sich nach den den Senat bindenden Feststellungen im Monat März 2008 um die Aufnahme des Studiums im Oktober 2008 beworben (s. dazu bereits B.II.1.). Mangels abweichender Anhaltspunkte ist davon auszugehen, dass es sich hierbei um den nächstmöglichen Studienbeginn gehandelt hat. Im Übrigen ist S die Aufnahme des Studiums zu diesem Zeitpunkt auch nicht wegen der Ableistung des Zivildienstes unmöglich gewesen; sein Zivildienst endete vor dem Semesterbeginn. Dass sich S während seines Zivildienstes beworben hat, ist ‑‑wie ausgeführt (B.III.2.)‑‑ unschädlich. 31 Danach war S für den Monat März 2008 infolge seiner Bewerbung gemäß § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG zu berücksichtigen. 32 4. Schließlich haben die Einkünfte und Bezüge des S nach den den Senat bindenden Feststellungen des FG (s. § 118 Abs. 2 FGO) den maßgeblichen anteiligen Jahresgrenzbetrag (§ 32 Abs. 4 Sätze 2 ff. EStG) nicht überschritten. 33 IV. Die Entscheidung des FG über die Verfahrenskosten ist unrichtig und deshalb unabhängig vom Ausgang des Revisionsverfahrens von dem erkennenden Senat richtig zu stellen (BFH-Urteil vom 13. September 1989 I R 76/84, juris, m.w.N.). 34 Die Kostenverteilung ergibt sich nach dem Maße des Obsiegens bzw. Unterliegens, somit danach, in welchem Umfang der Klageantrag erfolgreich ist. Es ist auf den Unterschied zwischen der begehrten und der erreichten Änderung des angefochtenen Verwaltungsaktes abzustellen (Gräber/Ratschow, Finanzgerichtsordnung, 7. Aufl., § 136 Rz 1; Schwarz in Hübschmann/Hepp/ Spitaler, § 136 FGO Rz 6). Das FG hat die Verfahrenskosten der Klägerin zu 6/7 und der Familienkasse zu 1/7 auferlegt (§ 136 Abs. 1 FGO). Die Klägerin hat jedoch mit ihrer Klage Kindergeld für acht (August 2007 bis März 2008), nicht für sieben Monate begehrt. Danach hat die Kosten des finanzgerichtlichen Verfahrens die Klägerin zu 7/8 und die Familienkasse zu 1/8 zu tragen. 35 Hinsichtlich der Kosten des Revisionsverfahrens gilt Folgendes: Legen ‑‑wie hier‑‑ beide Beteiligten Revision ein, ist die Kostenentscheidung nach dem Grundsatz der einheitlichen Kostenverteilung nach Quoten der Gesamtkosten (§ 136 Abs. 1 Satz 1 FGO) zu treffen (z.B. Senatsurteil vom 7. November 2000 III R 79/97, BFHE 193, 536, BStBl II 2001, 702). 36 Seite 4 von 5\n\nQuelle: www.bundesfinanzhof.de Danach trägt die Klägerin die Kosten zu 7/8 und die Familienkasse zu 1/8. 37 Seite 5 von 5"
+  },
+  "reviewed_full_guidance": [
+    {
+      "id": "de-kg-dakg-A16",
+      "body_sha256": "c752f5aff6159c8504ba68846295daddd4a42a122d495d2c87b307ef20f09d66",
+      "reviewed_full_section": "A 16       Volljährige Kinder in einer Übergangszeit\n(1) 1Nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b EStG besteht für ein Kind, das das 18., aber noch nicht\n\ndas 25. Lebensjahr vollendet hat, Anspruch auf Kindergeld, wenn es sich in einer Übergangszeit von\nhöchstens vier Monaten befindet, die zwischen zwei Ausbildungsabschnitten oder zwischen einem\nAusbildungsabschnitt und der Ableistung\n    − des freiwilligen Wehrdienstes nach § 58b SG (für Anspruchszeiträume ab 1.1.2015) oder\n    − eines geregelten Freiwilligendienstes i. S. d. § 32 Abs. 4 Satz 1 Nr. 2 Buchst. d EStG (vgl. A 18)\nliegt. 2Kinder sind auch in Übergangszeiten von höchstens vier Monaten zwischen dem Abschluss der\nAusbildung und dem Beginn eines der in Satz 1 genannten Dienste und Tätigkeiten zu berücksichtigen\n(vgl. BFH vom 25.01.2007, III R 23/06, BStBl II 2008 S. 664). 3Die Übergangszeit beginnt am Ende des\nunmittelbar vorangegangenen Ausbildungsabschnittes oder Dienstes, auch wenn das Kind zu diesem\nZeitpunkt das 18. Lebensjahr noch nicht vollendet hat (BFH vom 16.04.2015, III R 54/13, BStBl II 2016\nS. 25). 4Die Übergangszeit von höchstens vier Monaten ist nicht taggenau zu berechnen, sondern\numfasst vier volle Kalendermonate (BFH vom 15.07.2003, VIII R 105/01, BStBl II S. 847). 5Endet z. B.\nein Ausbildungsabschnitt im Juli, muss der nächste spätestens im Dezember beginnen.\n(2) 1Übergangszeiten ergeben sich als vom Kind nicht zu vermeidende Zwangspausen, z. B. durch\nRechtsvorschriften über den Ausbildungsverlauf, aus den festen Einstellungsterminen der\nAusbildungsbetriebe oder den Einstellungsgewohnheiten staatlicher Ausbildungsinstitutionen. 2Eine\nÜbergangszeit im Sinne einer solchen Zwangspause kann auch in Betracht kommen, wenn das Kind\nden vorangegangenen Ausbildungsplatz – ggf. aus von ihm zu vertretenden Gründen – verloren oder\ndie Ausbildung abgebrochen hat. 3Als Ausbildungsabschnitt gilt jeder Zeitraum, der nach § 32 Abs. 4\nSatz 1 Nr. 2 Buchst. a EStG zu berücksichtigen ist.\n(3) 1Eine Berücksichtigung des Kindes während der Übergangszeit hat zu erfolgen, wenn es entweder\nbereits einen Ausbildungsplatz hat oder sich um einen Platz im nachfolgenden Ausbildungsabschnitt\nbeworben hat, der tatsächlich innerhalb des zeitlichen Rahmens des § 32 Abs. 4 Satz 1 Nr. 2\nBuchst. b EStG beginnt. 2Eine Übergangszeit i. S. d. § 32 Abs. 4 Satz 1 Nr. 2 Buchst. b EStG kann nicht\ndadurch begründet werden, dass sich ein Kind um eine Ausbildung bemüht und diese erst nach der\nÜbergangszeit beginnt (BFH vom 07.07.2021, III R 40/19, BStBl II S. 864). 3Gleichermaßen ist zu\nverfahren, wenn der Berechtigte bei Beendigung der Ausbildung des Kindes an einer\nallgemeinbildenden Schule oder in einem sonstigen Ausbildungsabschnitt glaubhaft erklärt, dass sich\ndas Kind um einen solchen Ausbildungsplatz sobald wie möglich bewerben wird, und die Familienkasse\nunter Würdigung aller Umstände zu der Überzeugung gelangt, dass die Fortsetzung der Ausbildung zu\ndem angegebenen Zeitpunkt wahrscheinlich ist. 4Entsprechend ist bei Übergangszeiten zwischen\neinem Ausbildungsabschnitt und einem Dienst bzw. einer Tätigkeit i. S. d. Abs. 1 Satz 1 zu verfahren.\n(4) Eine Übergangszeit liegt nicht vor, wenn das Kind sich nach einem Ausbildungsabschnitt oder\neinem Dienst bzw. einer Tätigkeit i. S. d. Abs. 1 Satz 1 wegen Kindesbetreuung nicht um einen\nAnschlussausbildungsplatz bemüht.\n(5) 1Ist der Familienkasse bis zum Ende der Übergangszeit nicht nachgewiesen worden, dass das Kind\nfür einen Beruf ausgebildet oder einen Dienst bzw. eine Tätigkeit i. S. d. Abs. 1 Satz 1 aufnehmen wird,\nist die Festsetzung ab dem Monat, der dem Monat folgt, in dem der Ausbildungsabschnitt endete, nach\n§ 70 Abs. 2 Satz 1 EStG aufzuheben. 2Kann eine Ausbildung nicht aufgenommen werden, so kommt\nggf. eine Berücksichtigung als ausbildungsplatzsuchendes Kind in Frage (vgl. A 17).\n\n\n\n\n                                                  47"
+    },
+    {
+      "id": "de-kg-dakg-A17.1",
+      "body_sha256": "06ad2f187287958a0e5eda9212d5ed07122afff1f13bcf308517fd4201a4f8e9",
+      "reviewed_full_section": "A 17.1      Allgemeines\n(1) 1Nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG ist ein Kind, das das 18., aber noch nicht das 25.\nLebensjahr vollendet hat, zu berücksichtigen, wenn es eine Berufsausbildung – im Inland oder\nAusland – mangels Ausbildungsplatz nicht beginnen oder fortsetzen kann. 2Der angestrebte\nAusbildungsplatz muss nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a EStG zu berücksichtigen sein. 3Ein\nMangel eines Ausbildungsplatzes liegt sowohl in Fällen vor, in denen das Kind noch keinen\nAusbildungsplatz gefunden hat, als auch dann, wenn ihm ein solcher bereits zugesagt wurde, es diesen\naber aus schul-, studien- oder betriebsorganisatorischen Gründen erst zu einem späteren Zeitpunkt\nantreten kann (BFH vom 15.07.2003, VIII R 77/00, BStBl II S. 845). 4Kein Mangel eines Ausbildungs-\nplatzes liegt dagegen vor, wenn das Kind die objektiven Anforderungen an den angestrebten\nAusbildungsplatz nicht erfüllt oder wenn es im Falle des Bereitstehens eines Ausbildungsplatzes aus\nanderen Gründen am Antritt gehindert wäre, z. B. wenn es im Ausland arbeitsvertraglich gebunden ist\n(BFH vom 15.07.2003, VIII R 79/99, BStBl II S. 843). 5Hat das Kind noch keinen Ausbildungsplatz\ngefunden, hängt die Berücksichtigung davon ab, dass es ihm trotz ernsthafter Bemühungen nicht\ngelungen ist, seine Berufsausbildung zu beginnen oder fortzusetzen. 6Die Suche nach einem\nAusbildungsplatz muss also bisher erfolglos verlaufen sein oder der nächste Ausbildungsabschnitt einer\nmehrstufigen Ausbildung kann mangels Ausbildungsplatz nicht begonnen werden. 7Beispiele für eine\nüblicherweise noch nicht abgeschlossene Berufsausbildung sind die Beendigung der Schulausbildung\nund die Ablegung des ersten Staatsexamens, wenn das zweite Staatsexamen für die Berufsausübung\nangestrebt wird. 8Grundsätzlich ist jeder Ausbildungswunsch des Kindes anzuerkennen. 9Die\nBewerbung muss für den nächstmöglichen Ausbildungsbeginn erfolgen. 10Kann eine Bewerbung nicht\nabgegeben werden, z. B. für Studierwillige, weil das Verfahren bei der SfH noch nicht eröffnet ist, genügt\nzunächst eine schriftliche Erklärung des Kindes (vgl. V 6.1 Abs. 1 Satz 8), sich so bald wie möglich\nbewerben zu wollen.\n(2) 1Der Berechtigte muss der Familienkasse die ernsthaften Bemühungen des Kindes um einen\nAusbildungsplatz zum nächstmöglichen Beginn durch geeignete Unterlagen nachweisen oder\nzumindest glaubhaft machen. 2Eine Ausbildung wird nicht zum nächstmöglichen Zeitpunkt angestrebt,\nwenn das Kind aus von ihm zu vertretenden Gründen, z. B. wegen einer Erwerbstätigkeit oder der\nAbleistung eines freiwilligen Wehrdienstes, die Ausbildung erst zu einem späteren Zeitpunkt beginnen\nmöchte. 3Ist eine Bewerbung erfolglos geblieben, sind für den anschließenden Zeitraum übliche und\nzumutbare Bemühungen nachzuweisen. 4Als Nachweis kommen insbesondere folgende Unterlagen in\nBetracht:\n    − schriftliche Bewerbungen unmittelbar an Ausbildungsstellen sowie deren Zwischennachricht\n        oder Ablehnung,\n    − die schriftliche Bewerbung bei der SfH,\n    − die schriftliche Bewerbung für den freiwilligen Wehrdienst,\n    − die schriftliche Zusage einer Ausbildungsstelle,\n    − die Bescheinigung über die Registrierung als Bewerber für einen Ausbildungsplatz oder für eine\n        Bildungsmaßnahme bei einer Agentur für Arbeit oder bei einem anderen zuständigen\n        Leistungsträger (Jobcenter; hierfür steht der Vordruck KG 11a zur Verfügung); in Zweifelsfällen\n        ist die tatsächliche Bewerbereigenschaft, ggf. nach Rücksprache mit der zuständigen Agentur\n        für Arbeit bzw. dem zuständigen Leistungsträger, festzustellen (vgl. BFH vom 18.06.2015,\n        VI R 10/14, BStBl II S. 940),\n    − die Bescheinigung über die Registrierung als Ratsuchender bei der Agentur für Arbeit,\n    − die von der Agentur für Arbeit für den Rentenversicherungsträger erstellte Bescheinigung über\n        Anrechnungszeiten der Ausbildungssuche i. S. d. § 58 Abs. 1 Satz 1 Nr. 3a SGB VI.\n(3) 1Das Kind kann für den Zeitraum berücksichtigt werden, in dem es auf einen Ausbildungsplatz\nwartet (BFH vom 07.08.1992, III R 20/92, BStBl II 1993 S. 103). 2Die Wartezeit beginnt beispielsweise\nmit der Beendigung der Schulausbildung, einer (ersten) Ausbildung oder eines Ausbildungsabschnitts.\n3Nimmt das Kind ernsthafte Bemühungen erst nach Ablauf des Folgemonats nach Wegfall eines\n\nanderen Berücksichtigungstatbestandes i. S. d. § 32 Abs. 4 Satz 1 Nr. 2 EStG auf, ist es ab dem Monat\nder ersten Bewerbung oder Registrierung zu berücksichtigen; Abs. 1 Satz 9 bleibt unberührt.\n   Beispiel 1\n   Das Kind legt die Abiturprüfung im April eines Jahres ab (offizielles Schuljahresende in diesem Land).\n   Unmittelbar nach Ablegung der Abiturprüfung beabsichtigt das Kind, im Oktober des Jahres ein Studium zu\n   beginnen, und bewirbt sich im Juli (Eröffnung des Verfahrens bei der SfH) um einen Studienplatz. Im September\n                                                       48\n\f   erhält das Kind jedoch die Absage der SfH. Das Kind möchte sich zum Sommersemester des nächsten Jahres\n   erneut um einen Studienplatz bewerben.\n   Das Kind kann wie folgt berücksichtigt werden:\n        bis einschließlich April als Kind, das für einen Beruf ausgebildet wird (§ 32 Abs. 4 Satz 1 Nr. 2\n           Buchst. a EStG),\n        ab Mai durchgängig als Kind ohne Ausbildungsplatz (§ 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG), von Mai\n           bis September, weil es nach dem Schulabschluss die Ausbildung aufgrund des Vergabeverfahrens der\n           SfH zunächst nicht fortsetzen konnte, und für den Zeitraum ab Oktober aufgrund der Absage der SfH\n           und des weiter bestehenden Ausbildungswunsches. Abs. 1 Satz 9 und 10 und Abs. 2 Satz 3 sind zu\n           beachten.\n   Beispiel 2\n   Das Kind legt die Abiturprüfung im April eines Jahres ab (offizielles Schuljahresende in diesem Land). Das Kind\n   möchte sich zunächst orientieren und beabsichtigt, danach eine Berufsausbildung zu beginnen. Im August\n   bewirbt sich das Kind schriftlich zum nächstmöglichen Zeitpunkt um einen Ausbildungsplatz, erhält im Januar\n   des nachfolgenden Jahres eine schriftliche Zusage und nimmt im August die Ausbildung auf.\n   Das Kind kann nur in folgenden Zeiträumen berücksichtigt werden:\n        bis einschließlich April als Kind, das für einen Beruf ausgebildet wird (§ 32 Abs. 4 Satz 1 Nr. 2\n           Buchst. a EStG),\n          von August bis Juli des nachfolgenden Jahres als Kind ohne Ausbildungsplatz (§ 32 Abs. 4 Satz 1 Nr. 2\n           Buchst. c EStG),\n          ab August des nachfolgenden Jahres als Kind, das für einen Beruf ausgebildet wird (§ 32 Abs. 4 Satz 1\n           Nr. 2 Buchst. a EStG).\n(4) 1Das Vorliegen der Anspruchsvoraussetzungen des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG ist\nhalbjährlich zu prüfen. 2Dies gilt nicht für Fälle, in denen dem Kind ein Ausbildungsplatz bereits zugesagt\nwurde, es diesen aber aus schul-, studien- oder betriebsorganisatorischen Gründen erst zu einem\nspäteren Zeitpunkt antreten kann, und für Fälle nach Abs. 1 Satz 10. 3In diesen Fällen kann die Prüfung\nder Anspruchsvoraussetzungen mit der Prüfung nach A 15.10 Abs. 13 verbunden werden. 4O 2.10\nAbs. 2 und 3 ist zu beachten."
+    },
+    {
+      "id": "de-kg-dakg-A17.2",
+      "body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "reviewed_full_section": "A 17.2      Erkrankung und Mutterschaft\n(1) 1Eine Berücksichtigung ist nach § 32 Abs. 4 Satz 1 Nr. 2 Buchst. c EStG auch möglich, wenn das\nKind infolge einer vorübergehenden Erkrankung daran gehindert ist, sich um eine Berufsausbildung zu\nbemühen, sie zu beginnen oder fortzusetzen. 2Von einer vorübergehenden Erkrankung ist auszugehen,\nwenn sie im Hinblick auf die ihrer Art nach zu erwartende Dauer der von ihr ausgehenden\nFunktionsbeeinträchtigung mit hoher Wahrscheinlichkeit regelmäßig nicht länger als sechs Monate\nwährt (BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465). 3Die Erkrankung und das\nvoraussichtliche Ende der Erkrankung sind durch eine Bescheinigung des behandelnden Arztes\nnachzuweisen. 4Ist nach den ärztlichen Feststellungen das voraussichtliche Ende der Erkrankung nicht\nabsehbar oder währt die Erkrankung bzw. die von ihr ausgehende Beeinträchtigung länger als sechs\nMonate, reicht der Wille des Kindes, sich nach dem Ende der Erkrankung um einen Ausbildungsplatz\nzu bemühen, nicht aus. 5In diesem Fall ist zu prüfen, ob das Kind wegen einer Behinderung nach § 32\nAbs. 4 Satz 1 Nr. 3 EStG berücksichtigt werden kann (vgl. BFH vom 12.11.2020, III R 49/18,\nBStBl II 2021 S. 390). 6Wurde das Kind nicht bereits vor der Erkrankung nach § 32 Abs. 4 Satz 1 Nr. 2\nBuchst. c EStG berücksichtigt, muss es seinen Willen glaubhaft machen, sich unmittelbar nach Wegfall\nder Hinderungsgründe um eine Berufsausbildung zu bemühen, sie zu beginnen oder fortzusetzen. 7Die\nGlaubhaftmachung kann z. B. durch eine schriftliche Erklärung erfolgen (vgl. V 6.1 Abs. 1 Satz 8) oder\ndurch den Nachweis, dass sich das Kind an eine Ausbildungseinrichtung oder die Arbeitsvermittlung\nder Agentur für Arbeit mit dem Ziel gewandt hat, eine Ausbildung nach dem Ende der Erkrankung\naufzunehmen (BFH vom 31.08.2021, III R 41/19, BStBl II 2022 S. 465). 8Bemüht sich das Kind nach\nWegfall des Hinderungsgrundes nicht unmittelbar um eine Berufsausbildung, beginnt diese oder setzt\nsie fort, ist die Festsetzung ab dem Monat, der dem Monat folgt, in dem die Hinderungsgründe wegfallen,\nnach § 70 Abs. 2 Satz 1 EStG aufzuheben. 9Für die Bearbeitung und Nachweisführung stehen die\nVordrucke KG 9a und KG 9b zur Verfügung.\n(2) 1Ein Kind, das sich wegen eines Beschäftigungsverbots nach §§ 3, 13 Abs. 1 Nr. 3 oder\n16 MuSchG nicht um eine Berufsausbildung bemüht, sie beginnt oder fortsetzt, kann nach § 32 Abs. 4\nSatz 1 Nr. 2 Buchst. c EStG berücksichtigt werden. 2Das Gleiche gilt, wenn sich das Kind wegen\nunzulässiger Tätigkeiten und Arbeitsbedingungen nach §§ 11, 12 MuSchG nicht um den\nAusbildungsplatz bewerben kann. 3Die Schwangerschaft und der voraussichtliche Tag der Entbindung\nsind durch ein ärztliches Zeugnis oder das Zeugnis einer Hebamme oder eines Entbindungshelfers\n                                                       49\n\fnachzuweisen. 4Ein Beschäftigungsverbot nach § 16 MuSchG ist durch ärztliches Zeugnis zu\nbestätigen. 5Kann sich das Kind wegen unzulässiger Tätigkeit nach §§ 11, 12 MuSchG nicht um einen\nAusbildungsplatz bewerben, ist dies vom Kind oder vom Berechtigten glaubhaft zu machen. 6Satz 1 und\n2 gelten unabhängig davon, ob das Kind die Bemühungen um einen Ausbildungsplatz nach dem Ende\ndes Beschäftigungsverbots nach §§ 3, 13 Abs. 1 Nr. 3 oder 16 MuSchG fortsetzt (BFH vom 13.06.2013,\nIII R 58/12, BStBl II 2014 S. 834). 7Ein Kind ohne Ausbildungsplatz kann nicht berücksichtigt werden,\nwenn es sich wegen Kindesbetreuung, beispielsweise Elternzeit nach §§ 15 bis 21 BEEG, nicht um\neinen Ausbildungsplatz bemüht."
+    }
+  ],
+  "findings": [
+    "The complete five-page decision concerns August 2007 to March 2008. The allowed month was March 2008, when the proven application was made. The court did not adjudicate all later waiting months in this action; paragraphs 13–14 explain the challenged administrative decision and appeal-notification month boundary.",
+    "Paragraphs 18 and 26 require a missing training place, serious efforts and application for the next possible start. An allocated place with an institutionally delayed start also satisfies the shortage route. Observable applications, admissions, intake dates and service end dates must support the derived criteria; a caller-supplied serious_search or legally_available flag is not a closed leaf.",
+    "Paragraphs 26–32 distinguish availability at the next possible start from a blanket requirement to be free of service on the application date. The service ended before the next semester began. Concurrent compulsory civil service alone did not defeat the otherwise satisfied search route. This does not grant eligibility where service prevents the next available start, or declare all compulsory or voluntary service to be training.",
+    "Paragraphs 20–22 reject transition eligibility for all five intervening months, including the first four, and reject an analogy based on unavoidable call-up delay. A separate proven search route can apply independently. DA-KG 2025 A16 retains the four-full-calendar-month method but names current service categories; the old compulsory-service list is not transplanted into 2025.",
+    "Paragraphs 28–29 and 33 apply the historical income-and-receipts limit in the disputed period. Neither that old limit nor the case-specific pay, discharge payment or partial annual calculation is a 2025 parameter. Current second-training employment restrictions require separate statutory derivation; the old statement about full-time work is not a universal current exemption.",
+    "DA-KG 2025 A17.1 distinguishes a genuinely unavailable next intake from choosing a later start because of work or voluntary military service. A17.2 temporary-illness and maternity exceptions remain separate. This case supplies no blanket denial for all illness-related inability to start.",
+    "Paragraphs 34–37 concern litigation costs and do not provide a qualifying-child-count formula. Their cited authorities remain pending original-source and surface review. Publication citations to other cases do not independently establish this case or every cited case as a verified member of the BStBl II discovery class."
+  ],
+  "disposition": {
+    "id": "de-kg-suppl-028",
+    "identity": "BFH III R 70/11, 2012-09-27, indirectly cited in the illness/training precedent review",
+    "title_short": "BFH III R 70/11",
+    "relation": "bears_on",
+    "discovered_by": "de-kg-dakg-A17.2",
+    "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+    "provenance": "Indirect reading discovery: the complete de-kg-dakg-A17.2 section cites the fully reviewed judgment de/guidance/bfh-iii-r-49-18-2020-11-12/document-1, body SHA-256 55de8bf7b3660510395679422452f7b0d28fe2503be28f51c99a8e890bbe9405, which in turn cites BFH III R 70/11 dated 2012-09-27 when explaining the training/illness/disability conditions. This does not assert that the DA-KG section itself names the earlier case. The exact referring body and citation excerpt/hash are retained in illness-prognosis-source-review.json. This identity was absent from the committed frontier before this review. The earlier case’s own full source review, historical application and bearing disposition remain pending. BFH/NV references are not represented as verified BStBlII membership. No exclusion or encoded rule is inferred from the citation alone. Original source now receipted in published release de-rulespec-2026-09-11-kindergeld-illness-precedents, content SHA-256 1a8434379a899f4224e4201441fd94f2bbffb22636b73f4ab1c9d4bf3e84ea4c, corpus commit 279e27503c00ce1fab35809d069c076d3abad362: de/guidance/bfh-iii-r-70-11-2012-09-27/document-1, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, original PDF SHA-256 1612ae48208c19941b2b0af29af0db033121e3aa28dc1f7626315238567e7f9d. Exact file/line and source receipt are in illness-prognosis-source-review.json. Capture is complete; original-source legal and historical/bearing review remains pending.",
+    "status": "classified-with-reason",
+    "classification": "adult_child_training_search_during_service",
+    "reason": "Complete BFH III R 70/11 (27 September 2012), five pages, body SHA-256 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f, reviewed with full DA-KG 2025 A16, A17.1 and A17.2. Serious efforts for the next possible training start, institutionally delayed admissions, and availability at that start bear on EStG32(4) qualifying_child_count. Concurrent civil service alone did not exclude the March 2008 application where service ended before the next semester. The five-month transition did not qualify even for its first four months; the search route was independently available. Historical income limits and compulsory-service categories are not current 2025 parameters; current second-training employment restrictions remain separately required. These bearing rules remain unencoded. Procedural time scope, costs, historical distinctions and exact citation spans are recorded in service-search-source-review.json. No blanket eligibility from service, universal illness exclusion, or independently verified BStBlII membership is asserted.",
+    "bears_on_computed_surface": true,
+    "text_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+    "text_source": "Complete corpus row de/guidance/bfh-iii-r-70-11-2012-09-27/document-1 at 279e27503c00ce1fab35809d069c076d3abad362; full source retained in service-search-source-review.json."
+  },
+  "new_pending_indirect_precedents": [
+    {
+      "id": "de-kg-suppl-076",
+      "identity": "BFH VIII R 61/01, 2002-05-14, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH VIII R 61/01",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 61/01 dated 2002-05-14; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-077",
+      "identity": "BFH III R 41/07, 2011-12-22, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 41/07",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 41/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-078",
+      "identity": "BFH III R 84/07, 2009-11-26, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 84/07",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 84/07 dated 2009-11-26; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-079",
+      "identity": "BFH III R 5/07, 2011-12-22, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 5/07",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 5/07 dated 2011-12-22; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-080",
+      "identity": "BFH III R 68/10, 2012-02-09, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 68/10",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 68/10 dated 2012-02-09; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-081",
+      "identity": "BFH III R 25/09, 2012-05-24, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 25/09",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 25/09 dated 2012-05-24; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-082",
+      "identity": "BFH VIII R 86/02, 2004-03-16, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH VIII R 86/02",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH VIII R 86/02 dated 2004-03-16; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-083",
+      "identity": "BFH III R 34/09, 2010-06-17, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 34/09",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 34/09 dated 2010-06-17; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-084",
+      "identity": "BFH III R 50/10, 2011-04-07, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 50/10",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 50/10 dated 2011-04-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-085",
+      "identity": "BFH I R 76/84, 1989-09-13, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH I R 76/84",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH I R 76/84 dated 1989-09-13; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "de-kg-suppl-086",
+      "identity": "BFH III R 79/97, 2000-11-07, indirectly cited in the training-search-during-service review",
+      "title_short": "BFH III R 79/97",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A17.2",
+      "discovered_in_body_sha256": "31d1e0cf488ced088d1993220042760bd54a765d00e0dbe02481026f9e790962",
+      "provenance": "Indirect chain: DA-KG A17.2 cites III R49/18, which cites III R70/11. The complete reviewed III R70/11 corpus body 47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f cites BFH III R 79/97 dated 2000-11-07; exact span retained in service-search-source-review.json. This is not a direct DA-KG citation or an independent original-source capture. The original, historical/current applicability, computed-surface bearing and publication membership remain pending. Some authorities concern litigation time scope or costs. A citation does not supply encoded coverage or justify a non-bearing exclusion.",
+      "status": "pending"
+    }
+  ],
+  "existing_precedent_identities": [
+    {
+      "docket": "VIII R 105/01",
+      "existing_ids": [
+        "de-kg-discovery-72d51e3daaea5eea"
+      ]
+    },
+    {
+      "docket": "VIII R 79/99",
+      "existing_ids": [
+        "de-kg-discovery-402c4be6d4ba5e86"
+      ]
+    }
+  ],
+  "indirect_discovery_citation_spans": [
+    {
+      "ids": [
+        "de-kg-suppl-076"
+      ],
+      "docket": "VIII R 61/01",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "scher Unterhaltssituation kein Anspruch auf Kindergeld bestehe. Etwas anderes ergebe sich auch nicht aus dem Urteil des Bundesfinanzhofs (BFH) vom 14. Mai 2002 VIII R 61/01 (BFHE 199, 210, BStBl II 2002, 807), nach dem sich ein Kind während des Zivildienstes in einer Berufsausbildung i.S. des § 32 Abs. 4 Satz 1 Nr. 2 Buchst. a ESt",
+      "excerpt_sha256": "091110917727d7c4663152aea79c8e085970b974b7ce2365e486162cfcdb5981"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-077"
+      ],
+      "docket": "III R 41/07",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "ng möglich. Würde ein Kläger mit seiner Klage über diesen Zeitraum hinaus Kindergeld begehren, wäre sie insoweit unzulässig (Senatsurteil vom 22. Dezember 2011 III R 41/07, BFHE 236, 144, BStBl II 2012, 681). Es entspricht daher der recht verstandenen Interessenlage der Klägerin, dass sie mit ihrer Klage ‑‑zumal sie im finanzgeri",
+      "excerpt_sha256": "da3b424832711319fb6aa4f9199c8a99e3f20d98f512bbbcaafde4053dd7de43"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-078"
+      ],
+      "docket": "III R 84/07",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "chung des BFH ist hierfür erforderlich, dass ein Ausbildungsplatz fehlt und sich das Kind ernsthaft um einen solchen bemüht (Senatsurteil vom 26. November 2009 III R 84/07, BFH/NV 2010, 853; Schmidt/Loschelder, EStG, 31. Aufl., § 32 Rz 31 f.). Nach den Feststellungen des FG hat sich S spätestens im Monat März 2008 um einen Studie",
+      "excerpt_sha256": "20142a3bcc641e128fbc5f3232fa46109e3f9bc8e2cee526389ff2a695f89ec2"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-72d51e3daaea5eea"
+      ],
+      "docket": "VIII R 105/01",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "end mit dem Monat August 2007 und endend mit dem Monat Dezember 2007‑‑ von fünf Monaten vor (zur Berechnung der Viermonatsfrist s. BFH-Urteil vom 15. Juli 2003 VIII R 105/01, BFHE 203, 102, BStBl II 2003, 847). Nach dem klaren Wortlaut der Vorschrift kommt bei einem Überschreiten der Übergangszeit eine Begünstigung auch nicht für d",
+      "excerpt_sha256": "ee59c47e0fc8d4e24421723ebda37dfc11a6d254deac2571161ee261c6b260a4"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-079"
+      ],
+      "docket": "III R 5/07",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "t nicht berücksichtigt wird, weder lückenhaft noch verstößt sie gegen das Grundgesetz. Zur Begründung wird auf die jüngsten Senatsurteile vom 22. Dezember 2011 III R 5/07 (BFHE 236, 137, BStBl 2012, 678) und in BFHE 236, 144, BStBl II 2012, 681, vom 9. Februar 2012 III R 68/10 (BFHE 236, 421, BStBl II 2012, 686) und vom 24. Mai ",
+      "excerpt_sha256": "bea3a79117d8d84c49e8425ca0a320cd34bafe1e5c478adb922b2d6cb9021408"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-080"
+      ],
+      "docket": "III R 68/10",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": " auf die jüngsten Senatsurteile vom 22. Dezember 2011 III R 5/07 (BFHE 236, 137, BStBl 2012, 678) und in BFHE 236, 144, BStBl II 2012, 681, vom 9. Februar 2012 III R 68/10 (BFHE 236, 421, BStBl II 2012, 686) und vom 24. Mai 2012 III R 25/09 (BFH/NV 2012, 1437) verwiesen, mit welchen die bisherige Rechtsprechung bestätigt wurde. 2",
+      "excerpt_sha256": "bc3f9df168cac44007000feb6ccbd95092d808714f23e7d22800e20bbfa989b9"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-081"
+      ],
+      "docket": "III R 25/09",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "E 236, 137, BStBl 2012, 678) und in BFHE 236, 144, BStBl II 2012, 681, vom 9. Februar 2012 III R 68/10 (BFHE 236, 421, BStBl II 2012, 686) und vom 24. Mai 2012 III R 25/09 (BFH/NV 2012, 1437) verwiesen, mit welchen die bisherige Rechtsprechung bestätigt wurde. 22 3. Schließlich kann S für die Monate Januar und Februar 2008 auch n",
+      "excerpt_sha256": "2838ebebab1c4f6ac44679db424fb1e1f169f14ade90fcb2c506f630fdbc4e0c"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-082"
+      ],
+      "docket": "VIII R 86/02",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "Durch die Rechtsprechung des BFH ist bereits geklärt, dass der Zivildienst grundsätzlich keine Berufsausbildung darstellt (s. dazu BFH-Urteil vom 16. März 2004 VIII R 86/02, BFH/NV 2004, 1242). 23 III. Revision der Familienkasse 24 Das FG hat zu Recht für den Monat März 2008 einen Kindergeldanspruch gemäß § 62 Abs. 1, § 63 Abs. 1 ",
+      "excerpt_sha256": "69e5f84171df22651dbbc89354f84e44ec6ed6715d6bf5d56d5a005958ba7f8b"
+    },
+    {
+      "ids": [
+        "de-kg-discovery-402c4be6d4ba5e86"
+      ],
+      "docket": "VIII R 79/99",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "reten könnte, weil es die objektiven Anforderungen dafür nicht erfüllt oder es aus anderen Gründen am Antritt gehindert wäre (z.B. BFH-Urteil vom 15. Juli 2003 VIII R 79/99, BFHE 203, 94, BStBl II 2003, 843). Zudem liegt ein ernsthaftes Bemühen in Fällen, in denen eine Ausbildung ‑‑wie z.B. ein Studium‑‑ nur zu bestimmten Zeitpunk",
+      "excerpt_sha256": "7c28320d3187389aeb70831d7a3085cde2be09a274e7daa5d9b8bfa94abcb5a8"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-083"
+      ],
+      "docket": "III R 34/09",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "urde, es diesen aber aus schul-, studien- oder betriebsorganisatorischen Gründen erst zu einem späteren Zeitpunkt antreten kann (Senatsurteil vom 17. Juni 2010 III R 34/09, BFHE 230, 61, BStBl II 2010, 982, m.w.N.). Danach ist ein Kind, dem der begehrte Studienplatz aufgrund ernsthafter Bemühungen bereits zur Verfügung steht, auc",
+      "excerpt_sha256": "c28103bfaaebf225ce4bb125eea89f815d03fc0048b437f4fa13f23e60e5f705"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-084"
+      ],
+      "docket": "III R 50/10",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "tG, ob die Einkünfte und Bezüge des Kindes den maßgebenden Grenzbetrag überschreiten (z.B. Senatsurteile in BFHE 230, 61, BStBl II 2010, 982; vom 7. April 2011 III R 50/10, BFH/NV 2011, 1329). b) Dabei ist es nach dem Gesetzeswortlaut und der Gesetzessystematik unerheblich, aus welchen Gründen bei den Eltern keine typische Unterh",
+      "excerpt_sha256": "779469fee6d1e4415aa04e5de1f82a982548d9199011784c9e65c412c6865953"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-085"
+      ],
+      "docket": "I R 76/84",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "kosten ist unrichtig und deshalb unabhängig vom Ausgang des Revisionsverfahrens von dem erkennenden Senat richtig zu stellen (BFH-Urteil vom 13. September 1989 I R 76/84, juris, m.w.N.). 34 Die Kostenverteilung ergibt sich nach dem Maße des Obsiegens bzw. Unterliegens, somit danach, in welchem Umfang der Klageantrag erfolgreich",
+      "excerpt_sha256": "3609002fc141ad220a59b204adc44e1d815577c7e3a2b86c6b47fddc54cc5f75"
+    },
+    {
+      "ids": [
+        "de-kg-suppl-086"
+      ],
+      "docket": "III R 79/97",
+      "referring_corpus_citation_path": "de/guidance/bfh-iii-r-70-11-2012-09-27/document-1",
+      "referring_body_sha256": "47dca765a46cf2cc223472276896589d6644b7167e552d6ab41a69003a13385f",
+      "citation_excerpt": "nach dem Grundsatz der einheitlichen Kostenverteilung nach Quoten der Gesamtkosten (§ 136 Abs. 1 Satz 1 FGO) zu treffen (z.B. Senatsurteil vom 7. November 2000 III R 79/97, BFHE 193, 536, BStBl II 2001, 702). 36 Seite 4 von 5\n\nQuelle: www.bundesfinanzhof.de Danach trägt die Klägerin die Kosten zu 7/8 und die Familienkasse zu 1/8.",
+      "excerpt_sha256": "f9ea851aec950e333b610f1ecf0c47464bcaaa52cdbf0f84c47437145768f050"
+    }
+  ],
+  "limitations": [
+    "No new RuleSpec module or encoded claim.",
+    "Original cited texts and publication issues require capture and review.",
+    "No exhaustive discovery or certification claim."
+  ]
+}

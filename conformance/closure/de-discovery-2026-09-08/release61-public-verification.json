@@ -1,0 +1,11 @@
+{
+  "release": "de-rulespec-2026-09-15-kindergeld-priority-followup",
+  "commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
+  "content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b",
+  "selector_sha256": "baf9752c319b3ee08becd2bd3e2f2156902b444007b578ba9d840903db85e34f",
+  "object_sha256": "36572c82eae17e12552bde84364d1bbfc500f0368fc67ac5dee98c8814fcc4a7",
+  "native_signature_verified": true,
+  "publish_run": 35004705355,
+  "public_byte_identity_verified": true,
+  "mirror_run": 35006038764
+}
