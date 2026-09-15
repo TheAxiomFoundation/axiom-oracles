@@ -59,14 +59,14 @@
   },
   "proposed_encoder_repair": {
     "pull_request": "https://github.com/TheAxiomFoundation/axiom-encode/pull/1638",
-    "head": "8c803a66ec53b8f38b9d4a3d2523586842f50320",
-    "status": "draft_pending_independent_review_and_ci",
+    "head": "0d2528868358e88eff2dd37b4f623603e574c134",
+    "status": "independent_review_complete_ci_pending",
     "replay": {
-      "path": "sgbix2-proposed-repair-replay-2026-09-14.json",
-      "sha256": "aed54f94d8a49e97df50391f480aa08057ee2034918473cb65e69f5d6ded6dbf"
+      "path": "sgbix2-reviewed-repair-replay-2026-09-14.json",
+      "sha256": "2e1a2998f058c77f1e2aa24b3634b98cf8fb7fbfdd7a3308c3cc7ab814e4ec2b"
     },
     "result": "The unchanged candidate has one accepted witness for the age-relative clause and none for the forecast clause. It remains rejected. No generation attempt, signature, application or module declaration follows from this diagnostic.",
-    "checks": "6452 source-completeness/matching tests pass. Matching baseline: four expected failures and11 rejection passes; repaired matcher:15pass. Ruff and compileall pass. Full-suite CI at this head is queued; earlier CI failed only the subsequently fixed version-bump guard.",
-    "remaining": "Forecast-condition/source-reference matching, actual observable medical evidence associations and dated calendar-duration calculation remain unresolved. The missing BGH original is independent of this repair."
+    "checks": "6476 source-completeness, matcher and version-guard tests pass; Ruff and compileall pass. Independent review found and verified the repair of a compound-selector scope flaw; re-review has no actionable findings and independently passed38 matcher tests. Exact-head full CI and signing checks remain pending.",
+    "remaining": "The complete expected-impairment predicate now has bounded bilingual matching; the rejected candidate still uses subtype and clinical flags and gains no forecast witness. Native generation must establish observable medical evidence associations and dated calendar-duration calculation. The missing BGH original is independent."
   }
 }

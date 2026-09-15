@@ -107,13 +107,12 @@ pending lane is labeled certified.
 ## Certified is an honest no (2026-08-20 ruling)
 
 `closed` is false under the central completeness requirement (CERTIFIED.md
-v3, per Max's 2026-08-20 ruling): a closure claim must disposition every
-subordinate instrument the official registry links to the act, and a
-law-derived quantity can never be a case-supplied leaf. The DE closure
-declares neither block, and the certify gate for the DE path fails both
-requirements unconditionally — nothing written into the rederived closure
-summary can flip them; the real ledger must land through the central
-producer gate.
+v3, per Max's 2026-08-20 ruling). The DE ledger now declares both the
+instrument frontier and the law-derived input frontier. Its producer computes
+closure from those committed decisions and source-bound facts; the central
+certificate gate consumes that result. The remaining pending provisions,
+pending instruments and open law-derived dependencies keep the result false.
+No certificate flag is set by hand.
 
 ## Verifying on a non-Linux host (oracles#498)
 
