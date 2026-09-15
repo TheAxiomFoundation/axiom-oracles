@@ -916,7 +916,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-15T12:08:05Z",
+    "generated_at": "2026-09-15T17:10:21Z",
     "generated_by": "scripts/run_comparison.py::us-tariff",
     "reemitted_report": true,
     "rulespecs": [
