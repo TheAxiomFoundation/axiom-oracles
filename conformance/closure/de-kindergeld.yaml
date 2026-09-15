@@ -43,12 +43,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: ef058eaa4d8eb8992271c7bb0f6dcbd7e1ae7cb3122965e383864585cc296c4d
+    sha256: 08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57
-    release: de-rulespec-2026-09-15-kindergeld-cross-border-priority
-    release_content_sha256: f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8
+    commit: 392c71f906eaeec8af62d899d2fe81f1cc309ed8
+    release: de-rulespec-2026-09-15-kindergeld-priority-followup
+    release_content_sha256: b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -116,6 +116,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
       sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl
+      sha256: ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed
+      row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -1217,15 +1220,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 52196ef92ef097f87f088a46a81cc39e206d392348578533b1d36b092aea9ec4
+    snapshot_sha256: c8606bc6d44238067ea37656361fd7a3e9515f104bcf3f5c15f359786c81b08d
     channel_receipts:
-      corpus_release: f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580
+      corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 776
+    candidate_count: 780
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -9528,6 +9531,19 @@ generated_facts:
       citation_label: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
       document_citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       title: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+    - id: de-kg-instr-3428a43dd063b4a8
+      status: pending
+      discovery_refs:
+      - de-corpus-1414c45788e1debe7a71
+      - de-corpus-69d1b48199724e69d81a
+      - de-corpus-966d6eb3f3b53256f51e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-68-13-2016-04-28
+      row_sha256: 3a0101a6043e2ab4d0fd006e2871a8902784ad14101e180d0506e327d7320a4a
+      document_class: guidance
+      citation_label: 'BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils'
+      document_citation_path: de/guidance/bfh-iii-r-68-13-2016-04-28
+      title: 'BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils'
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
@@ -9542,6 +9558,17 @@ generated_facts:
       citation_label: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
       document_citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       title: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+    - id: de-kg-instr-36778f33cfc16c04
+      status: pending
+      discovery_refs:
+      - de-corpus-e1513162c1f4df14839a
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-b-127-14-2015-04-27
+      row_sha256: f9b4c31c7fdcb7bd45119a0e777ecf9228234d457cb4652d6fb3125bbea7f393
+      document_class: guidance
+      citation_label: 'BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung'
+      document_citation_path: de/guidance/bfh-iii-b-127-14-2015-04-27
+      title: 'BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung'
     - id: de-kg-instr-3815239cc1f2caaf
       status: pending
       discovery_refs:
@@ -9726,6 +9753,19 @@ generated_facts:
       citation_label: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
       document_citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       title: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
+    - id: de-kg-instr-56902655e1475c0c
+      status: pending
+      discovery_refs:
+      - de-corpus-05e4a5df764d7188291c
+      - de-corpus-3ee05b06f6f680bbd96e
+      - de-corpus-c3e97775b345a7c5ac07
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-17-13-2014-05-08
+      row_sha256: 90a6f15105c6d7d0a3000e5a4ac92cb51203741c45e0579036499defa2c1034a
+      document_class: guidance
+      citation_label: 'BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder'
+      document_citation_path: de/guidance/bfh-iii-r-17-13-2014-05-08
+      title: 'BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder'
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
@@ -10020,6 +10060,17 @@ generated_facts:
       citation_label: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
       document_citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       title: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
+    - id: de-kg-instr-86411429cdb16a89
+      status: pending
+      discovery_refs:
+      - de-corpus-9a7bcd4ee4525b6db197
+      identity_kind: corpus_citation
+      citation_path: de/guidance/cjeu-c-378-14-2015-10-22
+      row_sha256: 145badb6477152fa31ae2e47ebf165b9adbfaef010bc13411e7d0416909fc826
+      document_class: guidance
+      citation_label: 'EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung'
+      document_citation_path: de/guidance/cjeu-c-378-14-2015-10-22
+      title: 'EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung'
     - id: de-kg-instr-87d3e50373adabc2
       status: pending
       discovery_refs:
@@ -10867,7 +10918,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 8bf61b3563d5a6c35b2d0cbcc9a030b3e7d5adeddad1905018e302094b03ff93
+      sha256: 748859ddde640d443993382bed9e535daec8e2643bf957f7d72b8786b9082d50
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10916,7 +10967,7 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580
+        corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
         subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
@@ -13930,6 +13981,18 @@ committed_decisions:
     reason: The complete official BGBl. 2026 I No. 198 publication is dated 2 July 2026 and published 9 July 2026. Article 2 inserts BGB §1684(5)–(6), protective child-contact orders and electronic location monitoring. Article 10(2) commences this amendment on 1 July 2027. Article 10(1) commences only its enumerated enabling, procedural and registry amendments on the day after publication, 10 July 2026. No provision commences in or retrospectively changes 2025. The remaining articles concern protection orders, family-court procedure, enforcement, court fees, weapons-register access and evaluation. Excluded solely for the fixed 2025 program period; this does not exclude assessment of child-contact orders or household circumstances in later-period child-benefit rules. The metadata reference is resolved by the captured act, not by assuming the citation is non-bearing because unreadable. The raw reference names Article2 G v.2.7.2026 I Nr.198; the captured official heading corroborates the same
       date and publication number. Exact complete corpus body de/statute/bgbl-2026-i-198/gewaltschutz-aufenthaltsueberwachung/document-1, SHA256 c7b55043fece34e270985f3142cc8aaa7cb49ce806d331afdc2592a30d7e5410, retained in verified release de-rulespec-2026-09-09-kindergeld-bfh-decisions at 4a225368e171b193d02590e7dd1866792174c705 (content SHA25685b7b52590f5b6922402a0cb48f7ebf427635b816a98aa89ecdc9b353e76895e). The automatic projection retains a raw identity because optional date_document metadata is absent; this is explicit text-bound identity corroboration, not a claim of automatic resolution.
     bears_on_computed_surface: false
+  - id: de-kg-instr-3428a43dd063b4a8
+    status: classified-with-reason
+    classification: eu_whole_family_and_personal_recipient_priority
+    reason: The judgment applies Article 67 of Regulation 883/2004 and Article 60(1) of Regulation 987/2009 to the parent actually living with the children in Spain. Sections 62–64 EStG and Article 1(i)(1)(i) determine entitlement and participants, including unmarried or formerly married parents; the Article 1(i)(2) fallback does not control. Article 60 applies through Article 67 regardless of whether an Article 68 conflict also exists. Other national entitlement conditions remain necessary. The fiction relocates actual family residence and does not create a common household. The German father’s application is considered for the priority mother and does not transfer entitlement because she did not apply. The historical monthly amounts are case facts, not current parameters. This remains bearing and unencoded. Exact BStBl II membership is not independently established by this review. Complete text de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, body SHA-256 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa,
+      release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    bears_on_computed_surface: true
+  - id: de-kg-instr-36778f33cfc16c04
+    status: classified-with-reason
+    classification: eu_free_movement_formal_loss_determination
+    reason: 'Although the operative order lifts a procedural stay, its reasons determine the application of EStG 62(1) versus 62(2): missing employment permission under historical SGB III 284 alone does not remove an EU national’s free-movement status. Paragraphs 13–17 require the competent immigration authority’s formal determination under FreizügG/EU 5 and 6 before the described transition to AufenthG, preserving the distinction between worker access restrictions and citizenship-based movement. This is not a universal entitlement independent of remaining national conditions, nor an authority for Familienkassen to make that loss determination themselves. The historical Polish transitional regime is not a current transition parameter; paragraph 11 itself contains both 30 November and 30 April 2011, so no endpoint is silently chosen from this text. The substantive free-movement dependency remains bearing and unencoded despite the procedural disposition. Exact BStBl II membership is not independently
+      established by this review. Complete text de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-3841260753e31d86
     status: classified-with-reason
     body_sha256: c11d89ee6b4d2dfd607f4fccb1ed272c72035aae7b7b7d5e58b7d50324dc7a03
@@ -13978,6 +14041,12 @@ committed_decisions:
     reason: The complete judgment remands because the Belgian-resident mother's remaining national entitlement requirements were not established. Article 60 fictions domestic residence, but does not remove EStG 62(2) conditions for a parent not entitled to free movement. The recognized refugee father falls within Article 2(1) through Article 1(g); this is not a rule that every third-country national automatically qualifies. Paragraphs 21–23 preserve the actual separate-household facts and the irrelevance of the other parent's missing German application to recipient priority. No unconditional award to the mother or current rate follows from this remand. This instrument remains bearing and unencoded; it cannot be classified around as procedure or as a restatement. Exact BStBl II issue membership is not verified by this review. Complete text de/guidance/bfh-iii-r-11-13-2016-07-07/document-1, body SHA-256 b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d, release de-rulespec-2026-09-15-kindergeld-cross-border-priority
       at 519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57. See cross-border-priority-holdings-review.json.
     bears_on_computed_surface: true
+  - id: de-kg-instr-56902655e1475c0c
+    status: classified-with-reason
+    classification: preliminary_reference_questions_resolved_by_later_judgments
+    reason: This instrument suspends the pending revision and asks three preliminary questions about the whole-family fiction, the distinction between substantive entitlement and application, and a conditional waiting period. Its competing interpretations, reported lower-court reasoning and party submissions are not an operative final rule awarding entitlement. The subsequent CJEU C-378/14 judgment resolves the first two questions and declines to answer the third; BFH III R17/13 of 4 February 2016 applies that answer. Those distinct final instruments remain bearing and unencoded in this ledger. No additional current computable Kindergeld rule is supplied by the reference order beyond statutory restatement and questions resolved by those retained instruments; in particular the four-year limitation discussion is not an enacted waiting period or transfer rule. Exclusion is confined to this preliminary-reference identity, not its final judgments. Exact BStBl II membership is not independently
+      established by this review. Complete text de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    bears_on_computed_surface: false
   - id: de-kg-instr-5f245a7caa2b79e4
     status: excluded-with-reason
     body_sha256: 84600338fdfcf3ebb76c59d4dabd0f42c6d7982299c397ad622bb7b6dc4d6b6b
@@ -14074,6 +14143,12 @@ committed_decisions:
     reason: This corpus parent identifies the same complete decision as discovery member de-kg-discovery-17bc04f83ae1dc83. Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete
       corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad, retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
     bears_on_computed_surface: false
+  - id: de-kg-instr-86411429cdb16a89
+    status: classified-with-reason
+    classification: eu_whole_family_fiction_and_application_entitlement_distinction
+    reason: Articles 67 of Regulation 883/2004 and 60(1) of Regulation 987/2009 require consideration of the whole family as residing under the competent state’s legislation. Article 1(i)(1)(i) refers participants to national entitlement rules, including separated or divorced parents. The competent national institution determines entitlement after all remaining national conditions are met. Article 68 priority does not apply where the other state provides no entitlement, while Article 60 can still apply through Article 67. Considering another parent’s application does not transfer substantive entitlement merely because the foreign-resident priority parent did not apply. Paragraph 51 declines the third question after the negative answer to the second; no waiting period is prescribed. Both operative holdings remain bearing and unencoded. It is not a universal foreign-parent award or an independent current rate rule. Exact BStBl II membership is not independently established by this review.
+      Complete text de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    bears_on_computed_surface: true
   - id: de-kg-instr-87d3e50373adabc2
     status: classified-with-reason
     classification: entitlement_condition
@@ -15757,7 +15832,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
-    status: pending
+    status: classified-with-reason
+    classification: eu_whole_family_fiction_and_application_entitlement_distinction
+    reason: Articles 67 of Regulation 883/2004 and 60(1) of Regulation 987/2009 require consideration of the whole family as residing under the competent state’s legislation. Article 1(i)(1)(i) refers participants to national entitlement rules, including separated or divorced parents. The competent national institution determines entitlement after all remaining national conditions are met. Article 68 priority does not apply where the other state provides no entitlement, while Article 60 can still apply through Article 67. Considering another parent’s application does not transfer substantive entitlement merely because the foreign-resident priority parent did not apply. Paragraph 51 declines the third question after the negative answer to the second; no waiting period is prescribed. Both operative holdings remain bearing and unencoded. It is not a universal foreign-parent award or an independent current rate rule. Exact BStBl II membership is not independently established by this review.
+      Complete text de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    text_source: Receipted corpus de/guidance/cjeu-c-378-14-2015-10-22/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+    text_sha256: 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16
+    bears_on_computed_surface: true
   - id: de-kg-suppl-150
     identity: BFH reference order, III R 17/13, 8 May 2014
     title_short: BFH reference order, III R 17/13, 8 May 2014
@@ -15765,7 +15846,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
-    status: pending
+    status: classified-with-reason
+    classification: preliminary_reference_questions_resolved_by_later_judgments
+    reason: This instrument suspends the pending revision and asks three preliminary questions about the whole-family fiction, the distinction between substantive entitlement and application, and a conditional waiting period. Its competing interpretations, reported lower-court reasoning and party submissions are not an operative final rule awarding entitlement. The subsequent CJEU C-378/14 judgment resolves the first two questions and declines to answer the third; BFH III R17/13 of 4 February 2016 applies that answer. Those distinct final instruments remain bearing and unencoded in this ledger. No additional current computable Kindergeld rule is supplied by the reference order beyond statutory restatement and questions resolved by those retained instruments; in particular the four-year limitation discussion is not an enacted waiting period or transfer rule. Exclusion is confined to this preliminary-reference identity, not its final judgments. Exact BStBl II membership is not independently
+      established by this review. Complete text de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    text_source: Receipted corpus de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+    text_sha256: bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993
+    bears_on_computed_surface: false
   - id: de-kg-suppl-151
     identity: BFH, III R 68/13, 28 April 2016
     title_short: BFH, III R 68/13, 28 April 2016
@@ -15773,7 +15860,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-11-13-2016-07-07/document-1, body SHA-256 b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
-    status: pending
+    status: classified-with-reason
+    classification: eu_whole_family_and_personal_recipient_priority
+    reason: The judgment applies Article 67 of Regulation 883/2004 and Article 60(1) of Regulation 987/2009 to the parent actually living with the children in Spain. Sections 62–64 EStG and Article 1(i)(1)(i) determine entitlement and participants, including unmarried or formerly married parents; the Article 1(i)(2) fallback does not control. Article 60 applies through Article 67 regardless of whether an Article 68 conflict also exists. Other national entitlement conditions remain necessary. The fiction relocates actual family residence and does not create a common household. The German father’s application is considered for the priority mother and does not transfer entitlement because she did not apply. The historical monthly amounts are case facts, not current parameters. This remains bearing and unencoded. Exact BStBl II membership is not independently established by this review. Complete text de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, body SHA-256 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa,
+      release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+    text_source: Receipted corpus de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+    text_sha256: 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa
+    bears_on_computed_surface: true
   - id: de-kg-suppl-152
     identity: BFH, III B 127/14, 27 April 2015
     title_short: BFH, III B 127/14, 27 April 2015
@@ -15781,7 +15874,13 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-10-13-2016-08-04/document-1, body SHA-256 742a16710dcf9f395e6dba9ee329fd6f442d973ffc4697f5d4cb55feb09be09e. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
-    status: pending
+    status: classified-with-reason
+    classification: eu_free_movement_formal_loss_determination
+    reason: 'Although the operative order lifts a procedural stay, its reasons determine the application of EStG 62(1) versus 62(2): missing employment permission under historical SGB III 284 alone does not remove an EU national’s free-movement status. Paragraphs 13–17 require the competent immigration authority’s formal determination under FreizügG/EU 5 and 6 before the described transition to AufenthG, preserving the distinction between worker access restrictions and citizenship-based movement. This is not a universal entitlement independent of remaining national conditions, nor an authority for Familienkassen to make that loss determination themselves. The historical Polish transitional regime is not a current transition parameter; paragraph 11 itself contains both 30 November and 30 April 2011, so no endpoint is silently chosen from this text. The substantive free-movement dependency remains bearing and unencoded despite the procedural disposition. Exact BStBl II membership is not independently
+      established by this review. Complete text de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.'
+    text_source: Receipted corpus de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+    text_sha256: fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca
+    bears_on_computed_surface: true
   - id: de-kg-suppl-153
     identity: BFH, III R 16/13, 08.09.2016
     title_short: 'Kindergeld: Anspruchsberechtigung bei grenzüberschreitenden Sachverhalten - Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 28.04.2016 III R 68/13'
@@ -15837,6 +15936,182 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Search-discovered official PDF https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201650285?type=1646225765 identifies III R50/12 on its first page; PDF SHA-256 836dde220aeb4354e09253965afcac0288b88f8c50c0baf48ca32d86224d20a1. This is distinct from III R40/12 (STRE201650286). Original body and current bearing are not fully reviewed; pending. See additional-cross-border-priority-members.json.
+    status: pending
+  - id: de-kg-suppl-160
+    identity: CJEU C-85/99, Offermanns, EU:C:2001:166
+    title_short: CJEU C-85/99, Offermanns, EU:C:2001:166
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-161
+    identity: CJEU C-177/12, Lachheb, EU:C:2013:689
+    title_short: CJEU C-177/12, Lachheb, EU:C:2013:689
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-162
+    identity: CJEU C-363/08, Slanina, EU:C:2009:732
+    title_short: CJEU C-363/08, Slanina, EU:C:2009:732
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-163
+    identity: CJEU C-16/09, Schwemmer, EU:C:2010:605
+    title_short: CJEU C-16/09, Schwemmer, EU:C:2010:605
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-164
+    identity: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
+    title_short: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-165
+    identity: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
+    title_short: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-166
+    identity: CJEU C-153/03, Weide, 7 July 2005
+    title_short: CJEU C-153/03, Weide, 7 July 2005
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-167
+    identity: BFH VIII B 50/06, 28 March 2007
+    title_short: BFH VIII B 50/06, 28 March 2007
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-168
+    identity: BFH VI B 119/09, 3 February 2010
+    title_short: BFH VI B 119/09, 3 February 2010
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-169
+    identity: BFH III B 145/05, 21 December 2005
+    title_short: BFH III B 145/05, 21 December 2005
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-170
+    identity: LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010
+    title_short: LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-171
+    identity: Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010
+    title_short: Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-172
+    identity: LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010
+    title_short: LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-173
+    identity: BSG B 4 AS 54/12 R, 30 January 2013
+    title_short: BSG B 4 AS 54/12 R, 30 January 2013
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-174
+    identity: FG Münster 14 K 4342/11 Kg, 22 February 2013
+    title_short: FG Münster 14 K 4342/11 Kg, 22 February 2013
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-175
+    identity: FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011
+    title_short: FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-176
+    identity: BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-177
+    identity: BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-178
+    identity: BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-179
+    identity: BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-180
+    identity: BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-181
+    identity: BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    title_short: BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
     status: pending
 computed:
   ledger:
@@ -16576,13 +16851,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 935
+    instrument_count: 961
     counts:
-      total: 935
+      total: 961
       encoded: 2
-      classified-with-reason: 204
+      classified-with-reason: 212
       excluded-with-reason: 349
-      pending: 380
+      pending: 398
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -16953,10 +17228,6 @@ computed:
     - de-kg-suppl-141
     - de-kg-suppl-142
     - de-kg-suppl-143
-    - de-kg-suppl-149
-    - de-kg-suppl-150
-    - de-kg-suppl-151
-    - de-kg-suppl-152
     - de-kg-suppl-153
     - de-kg-suppl-154
     - de-kg-suppl-155
@@ -16964,6 +17235,28 @@ computed:
     - de-kg-suppl-157
     - de-kg-suppl-158
     - de-kg-suppl-159
+    - de-kg-suppl-160
+    - de-kg-suppl-161
+    - de-kg-suppl-162
+    - de-kg-suppl-163
+    - de-kg-suppl-164
+    - de-kg-suppl-165
+    - de-kg-suppl-166
+    - de-kg-suppl-167
+    - de-kg-suppl-168
+    - de-kg-suppl-169
+    - de-kg-suppl-170
+    - de-kg-suppl-171
+    - de-kg-suppl-172
+    - de-kg-suppl-173
+    - de-kg-suppl-174
+    - de-kg-suppl-175
+    - de-kg-suppl-176
+    - de-kg-suppl-177
+    - de-kg-suppl-178
+    - de-kg-suppl-179
+    - de-kg-suppl-180
+    - de-kg-suppl-181
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -26743,6 +27036,23 @@ computed:
       citation_label: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
       document_citation_path: de/guidance/bfh-iii-r-16-08-2010-08-26
       title: 'BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren'
+    - id: de-kg-instr-3428a43dd063b4a8
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-1414c45788e1debe7a71
+      - de-corpus-69d1b48199724e69d81a
+      - de-corpus-966d6eb3f3b53256f51e
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-68-13-2016-04-28
+      row_sha256: 3a0101a6043e2ab4d0fd006e2871a8902784ad14101e180d0506e327d7320a4a
+      document_class: guidance
+      citation_label: 'BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils'
+      document_citation_path: de/guidance/bfh-iii-r-68-13-2016-04-28
+      title: 'BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils'
+      classification: eu_whole_family_and_personal_recipient_priority
+      reason: The judgment applies Article 67 of Regulation 883/2004 and Article 60(1) of Regulation 987/2009 to the parent actually living with the children in Spain. Sections 62–64 EStG and Article 1(i)(1)(i) determine entitlement and participants, including unmarried or formerly married parents; the Article 1(i)(2) fallback does not control. Article 60 applies through Article 67 regardless of whether an Article 68 conflict also exists. Other national entitlement conditions remain necessary. The fiction relocates actual family residence and does not create a common household. The German father’s application is considered for the priority mother and does not transfer entitlement because she did not apply. The historical monthly amounts are case facts, not current parameters. This remains bearing and unencoded. Exact BStBl II membership is not independently established by this review. Complete text de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, body SHA-256 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa,
+        release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: true
     - id: de-kg-instr-360df2059e09e33e
       status: pending
       discovery_refs:
@@ -26757,6 +27067,21 @@ computed:
       citation_label: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
       document_citation_path: de/guidance/bfh-iii-r-11-21-2023-06-21
       title: 'BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind'
+    - id: de-kg-instr-36778f33cfc16c04
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-e1513162c1f4df14839a
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-b-127-14-2015-04-27
+      row_sha256: f9b4c31c7fdcb7bd45119a0e777ecf9228234d457cb4652d6fb3125bbea7f393
+      document_class: guidance
+      citation_label: 'BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung'
+      document_citation_path: de/guidance/bfh-iii-b-127-14-2015-04-27
+      title: 'BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung'
+      classification: eu_free_movement_formal_loss_determination
+      reason: 'Although the operative order lifts a procedural stay, its reasons determine the application of EStG 62(1) versus 62(2): missing employment permission under historical SGB III 284 alone does not remove an EU national’s free-movement status. Paragraphs 13–17 require the competent immigration authority’s formal determination under FreizügG/EU 5 and 6 before the described transition to AufenthG, preserving the distinction between worker access restrictions and citizenship-based movement. This is not a universal entitlement independent of remaining national conditions, nor an authority for Familienkassen to make that loss determination themselves. The historical Polish transitional regime is not a current transition parameter; paragraph 11 itself contains both 30 November and 30 April 2011, so no endpoint is silently chosen from this text. The substantive free-movement dependency remains bearing and unencoded despite the procedural disposition. Exact BStBl II membership is not
+        independently established by this review. Complete text de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-3815239cc1f2caaf
       status: pending
       discovery_refs:
@@ -26970,6 +27295,23 @@ computed:
       citation_label: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
       document_citation_path: de/guidance/bfh-iii-r-13-21-2022-10-20
       title: 'BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes'
+    - id: de-kg-instr-56902655e1475c0c
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-05e4a5df764d7188291c
+      - de-corpus-3ee05b06f6f680bbd96e
+      - de-corpus-c3e97775b345a7c5ac07
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bfh-iii-r-17-13-2014-05-08
+      row_sha256: 90a6f15105c6d7d0a3000e5a4ac92cb51203741c45e0579036499defa2c1034a
+      document_class: guidance
+      citation_label: 'BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder'
+      document_citation_path: de/guidance/bfh-iii-r-17-13-2014-05-08
+      title: 'BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder'
+      classification: preliminary_reference_questions_resolved_by_later_judgments
+      reason: This instrument suspends the pending revision and asks three preliminary questions about the whole-family fiction, the distinction between substantive entitlement and application, and a conditional waiting period. Its competing interpretations, reported lower-court reasoning and party submissions are not an operative final rule awarding entitlement. The subsequent CJEU C-378/14 judgment resolves the first two questions and declines to answer the third; BFH III R17/13 of 4 February 2016 applies that answer. Those distinct final instruments remain bearing and unencoded in this ledger. No additional current computable Kindergeld rule is supplied by the reference order beyond statutory restatement and questions resolved by those retained instruments; in particular the four-year limitation discussion is not an enacted waiting period or transfer rule. Exclusion is confined to this preliminary-reference identity, not its final judgments. Exact BStBl II membership is not independently
+        established by this review. Complete text de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: false
     - id: de-kg-instr-5c0851a954940f82
       status: pending
       discovery_refs:
@@ -27321,6 +27663,21 @@ computed:
       citation_label: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
       document_citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       title: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
+    - id: de-kg-instr-86411429cdb16a89
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-9a7bcd4ee4525b6db197
+      identity_kind: corpus_citation
+      citation_path: de/guidance/cjeu-c-378-14-2015-10-22
+      row_sha256: 145badb6477152fa31ae2e47ebf165b9adbfaef010bc13411e7d0416909fc826
+      document_class: guidance
+      citation_label: 'EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung'
+      document_citation_path: de/guidance/cjeu-c-378-14-2015-10-22
+      title: 'EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung'
+      classification: eu_whole_family_fiction_and_application_entitlement_distinction
+      reason: Articles 67 of Regulation 883/2004 and 60(1) of Regulation 987/2009 require consideration of the whole family as residing under the competent state’s legislation. Article 1(i)(1)(i) refers participants to national entitlement rules, including separated or divorced parents. The competent national institution determines entitlement after all remaining national conditions are met. Article 68 priority does not apply where the other state provides no entitlement, while Article 60 can still apply through Article 67. Considering another parent’s application does not transfer substantive entitlement merely because the foreign-resident priority parent did not apply. Paragraph 51 declines the third question after the negative answer to the second; no waiting period is prescribed. Both operative holdings remain bearing and unencoded. It is not a universal foreign-parent award or an independent current rate rule. Exact BStBl II membership is not independently established by this review.
+        Complete text de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: true
     - id: de-kg-instr-87d3e50373adabc2
       status: classified-with-reason
       discovery_refs:
@@ -29919,7 +30276,7 @@ computed:
       text_source: Receipted corpus de/guidance/bfh-iii-r-14-13-2016-04-13/document-1, de-rulespec-2026-09-15-kindergeld-cross-border-priority at 519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57; content SHA-256 f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8.
       text_sha256: b81c3df1bf59a5b138378ee7637a470f669533bd59237750a7bc6fca66bad99e
     - id: de-kg-suppl-149
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -29928,8 +30285,14 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
+      classification: eu_whole_family_fiction_and_application_entitlement_distinction
+      reason: Articles 67 of Regulation 883/2004 and 60(1) of Regulation 987/2009 require consideration of the whole family as residing under the competent state’s legislation. Article 1(i)(1)(i) refers participants to national entitlement rules, including separated or divorced parents. The competent national institution determines entitlement after all remaining national conditions are met. Article 68 priority does not apply where the other state provides no entitlement, while Article 60 can still apply through Article 67. Considering another parent’s application does not transfer substantive entitlement merely because the foreign-resident priority parent did not apply. Paragraph 51 declines the third question after the negative answer to the second; no waiting period is prescribed. Both operative holdings remain bearing and unencoded. It is not a universal foreign-parent award or an independent current rate rule. Exact BStBl II membership is not independently established by this review.
+        Complete text de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-378-14-2015-10-22/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+      text_sha256: 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16
     - id: de-kg-suppl-150
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -29938,8 +30301,14 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-17-13-2016-02-04/document-1, body SHA-256 ec55e359425ad55604d4c64a5970c502493816aca9feded066b1fcd72ecca21c. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
+      classification: preliminary_reference_questions_resolved_by_later_judgments
+      reason: This instrument suspends the pending revision and asks three preliminary questions about the whole-family fiction, the distinction between substantive entitlement and application, and a conditional waiting period. Its competing interpretations, reported lower-court reasoning and party submissions are not an operative final rule awarding entitlement. The subsequent CJEU C-378/14 judgment resolves the first two questions and declines to answer the third; BFH III R17/13 of 4 February 2016 applies that answer. Those distinct final instruments remain bearing and unencoded in this ledger. No additional current computable Kindergeld rule is supplied by the reference order beyond statutory restatement and questions resolved by those retained instruments; in particular the four-year limitation discussion is not an enacted waiting period or transfer rule. Exclusion is confined to this preliminary-reference identity, not its final judgments. Exact BStBl II membership is not independently
+        established by this review. Complete text de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: false
+      text_source: Receipted corpus de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+      text_sha256: bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993
     - id: de-kg-suppl-151
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -29948,8 +30317,14 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-11-13-2016-07-07/document-1, body SHA-256 b993a3583dd7a5f14dc15e487001e2db4327f32714dfc2b134faebe915bc828d. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
+      classification: eu_whole_family_and_personal_recipient_priority
+      reason: The judgment applies Article 67 of Regulation 883/2004 and Article 60(1) of Regulation 987/2009 to the parent actually living with the children in Spain. Sections 62–64 EStG and Article 1(i)(1)(i) determine entitlement and participants, including unmarried or formerly married parents; the Article 1(i)(2) fallback does not control. Article 60 applies through Article 67 regardless of whether an Article 68 conflict also exists. Other national entitlement conditions remain necessary. The fiction relocates actual family residence and does not create a common household. The German father’s application is considered for the priority mother and does not transfer entitlement because she did not apply. The historical monthly amounts are case facts, not current parameters. This remains bearing and unencoded. Exact BStBl II membership is not independently established by this review. Complete text de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, body SHA-256 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa,
+        release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/bfh-iii-r-68-13-2016-04-28/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+      text_sha256: 7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa
     - id: de-kg-suppl-152
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -29958,6 +30333,12 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery from DA-KG V2 through III R31/15 and de/guidance/bfh-iii-r-10-13-2016-08-04/document-1, body SHA-256 742a16710dcf9f395e6dba9ee329fd6f442d973ffc4697f5d4cb55feb09be09e. Exact span recorded in cross-border-priority-holdings-review.json. The original instrument and its bearing remain pending; a reference order is distinct from the later judgment with the same docket.
+      classification: eu_free_movement_formal_loss_determination
+      reason: 'Although the operative order lifts a procedural stay, its reasons determine the application of EStG 62(1) versus 62(2): missing employment permission under historical SGB III 284 alone does not remove an EU national’s free-movement status. Paragraphs 13–17 require the competent immigration authority’s formal determination under FreizügG/EU 5 and 6 before the described transition to AufenthG, preserving the distinction between worker access restrictions and citizenship-based movement. This is not a universal entitlement independent of remaining national conditions, nor an authority for Familienkassen to make that loss determination themselves. The historical Polish transitional regime is not a current transition parameter; paragraph 11 itself contains both 30 November and 30 April 2011, so no endpoint is silently chosen from this text. The substantive free-movement dependency remains bearing and unencoded despite the procedural disposition. Exact BStBl II membership is not
+        independently established by this review. Complete text de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca, release de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8. See priority-followup-holdings-review.json.'
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, de-rulespec-2026-09-15-kindergeld-priority-followup at 392c71f906eaeec8af62d899d2fe81f1cc309ed8; content SHA-256 b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.
+      text_sha256: fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca
     - id: de-kg-suppl-153
       status: pending
       discovery_refs:
@@ -30028,6 +30409,226 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Search-discovered official PDF https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201650285?type=1646225765 identifies III R50/12 on its first page; PDF SHA-256 836dde220aeb4354e09253965afcac0288b88f8c50c0baf48ca32d86224d20a1. This is distinct from III R40/12 (STRE201650286). Original body and current bearing are not fully reviewed; pending. See additional-cross-border-priority-members.json.
+    - id: de-kg-suppl-160
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-85/99, Offermanns, EU:C:2001:166
+      title_short: CJEU C-85/99, Offermanns, EU:C:2001:166
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-161
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-177/12, Lachheb, EU:C:2013:689
+      title_short: CJEU C-177/12, Lachheb, EU:C:2013:689
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-162
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-363/08, Slanina, EU:C:2009:732
+      title_short: CJEU C-363/08, Slanina, EU:C:2009:732
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-163
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-16/09, Schwemmer, EU:C:2010:605
+      title_short: CJEU C-16/09, Schwemmer, EU:C:2010:605
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-164
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
+      title_short: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-165
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
+      title_short: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-166
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-153/03, Weide, 7 July 2005
+      title_short: CJEU C-153/03, Weide, 7 July 2005
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-167
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BFH VIII B 50/06, 28 March 2007
+      title_short: BFH VIII B 50/06, 28 March 2007
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-168
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BFH VI B 119/09, 3 February 2010
+      title_short: BFH VI B 119/09, 3 February 2010
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-169
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BFH III B 145/05, 21 December 2005
+      title_short: BFH III B 145/05, 21 December 2005
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-170
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010
+      title_short: LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-171
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010
+      title_short: Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-172
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010
+      title_short: LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-173
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BSG B 4 AS 54/12 R, 30 January 2013
+      title_short: BSG B 4 AS 54/12 R, 30 January 2013
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-174
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: FG Münster 14 K 4342/11 Kg, 22 February 2013
+      title_short: FG Münster 14 K 4342/11 Kg, 22 February 2013
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-175
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011
+      title_short: FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-176
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-177
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-178
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-179
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-180
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-181
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      title_short: BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -30168,6 +30769,8 @@ computed:
     - de-kg-instr-29a6a70e18440300
     - de-kg-instr-2e123c165d3631db
     - de-kg-instr-32a81be6d35e33be
+    - de-kg-instr-3428a43dd063b4a8
+    - de-kg-instr-36778f33cfc16c04
     - de-kg-instr-3841260753e31d86
     - de-kg-instr-3875634198c25414
     - de-kg-instr-43b69c0fdc7079aa
@@ -30182,6 +30785,7 @@ computed:
     - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
+    - de-kg-instr-86411429cdb16a89
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-8d943b84c0c798b3
     - de-kg-instr-9072ef90385a4162
@@ -30227,12 +30831,15 @@ computed:
     - de-kg-suppl-146
     - de-kg-suppl-147
     - de-kg-suppl-148
-    instruments_bearing_on_computed_count: 185
-    open_dependency_count: 193
+    - de-kg-suppl-149
+    - de-kg-suppl-151
+    - de-kg-suppl-152
+    instruments_bearing_on_computed_count: 191
+    open_dependency_count: 199
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 935
+    bearing_candidate_instruments: 961
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

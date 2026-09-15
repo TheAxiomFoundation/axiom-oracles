@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: ef058eaa4d8eb8992271c7bb0f6dcbd7e1ae7cb3122965e383864585cc296c4d
+    sha256: 08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57
-    release: de-rulespec-2026-09-15-kindergeld-cross-border-priority
-    release_content_sha256: f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8
+    commit: 392c71f906eaeec8af62d899d2fe81f1cc309ed8
+    release: de-rulespec-2026-09-15-kindergeld-priority-followup
+    release_content_sha256: b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -100,6 +100,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
       sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl
+      sha256: ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed
+      row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -482,9 +485,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: 52196ef92ef097f87f088a46a81cc39e206d392348578533b1d36b092aea9ec4
+    snapshot_sha256: c8606bc6d44238067ea37656361fd7a3e9515f104bcf3f5c15f359786c81b08d
     channel_receipts:
-      corpus_release: f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580
+      corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:

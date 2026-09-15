@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-15T16:24:35Z",
+  "generated_at": "2026-09-15T18:19:34Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "ef058eaa4d8eb8992271c7bb0f6dcbd7e1ae7cb3122965e383864585cc296c4d"
+    "sha256": "08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
-      "commit": "519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57",
-      "release_content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8",
+      "release": "de-rulespec-2026-09-15-kindergeld-priority-followup",
+      "commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
+      "release_content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-15-kindergeld-cross-border-priority/f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8.json",
-        "raw_sha256": "60fb40c98cbe1d5602f31d22439bef28a924e104d3fabd442c5ee1c1a1333092",
-        "content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8"
+        "path": "releases/de-rulespec-2026-09-15-kindergeld-priority-followup/b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.json",
+        "raw_sha256": "36572c82eae17e12552bde84364d1bbfc500f0368fc67ac5dee98c8814fcc4a7",
+        "content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b"
       },
       "scans": [
         {
@@ -280,6 +280,19 @@
             "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl",
             "sha256": "b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e",
             "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-priority-followup.json",
+            "sha256": "a2a0ffc6203dedb1f0bceeb8748c134f8841830dde32d689f68437fd33e45282",
+            "row_count": 8
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl",
+            "sha256": "ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed",
+            "row_count": 8
           }
         },
         {
@@ -803,23 +816,23 @@
           }
         }
       ],
-      "scanned_row_count": 10654,
+      "scanned_row_count": 10662,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 10654,
-        "body_row_count": 10433,
-        "mapped_row_count": 10654,
+        "row_count": 10662,
+        "body_row_count": 10437,
+        "mapped_row_count": 10662,
         "unmapped_row_count": 0,
-        "act_count": 256,
+        "act_count": 260,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 7315,
+          "explicit_cross_reference_body": 7346,
           "law_metadata_changed_by": 36,
           "law_metadata_fundstelle": 44
         },
-        "row_scan_sha256": "00f85caedcb55e8d8bf61627d63268ac3b5b98224f4064da15dc7a3d2a4618cc",
-        "canonical_index_sha256": "2e8c94b4e2be35b3136cb74515d93932dc4d2fac658b6119c4bcbcfa57a2683e",
-        "per_act_sha256": "ec7df09b062fefffb8205e4619c935c09a53c879535ad96950e5bb1e89ce2418",
+        "row_scan_sha256": "282b148c00b7355a8aca4f3169a404cd97e973d6dd77ac5132a46f0aec873880",
+        "canonical_index_sha256": "61419d052ce60891b6c3288ca2fb26784bd0fa1d7e2fc7371560b577352ff367",
+        "per_act_sha256": "8b0d8cf20b81e53eac490cee386e31edc8c0d478ff1fbb1e21b0d2a27fa38036",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -966,6 +979,124 @@
                 "source_row_sha256": "8e3a76241aa46c169bb85a133a168a0b5b76e574df8f72ca1360b27dddd8daaf",
                 "matched_text": "ZPO",
                 "unresolved_identity": "law:zpo"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27",
+            "document_row_sha256": "f9b4c31c7fdcb7bd45119a0e777ecf9228234d457cb4652d6fb3125bbea7f393",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 12,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "cf680e4592f745c0f1b8660d686f702c5fac067eff600057ea039947cc40e563",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Arbeitsförderungs-Reformgesetz",
+                "unresolved_identity": "named-instrument:arbeitsförderungs-reformgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "AufenthG",
+                "target_citation_path": "de/statute/aufenthg-2004",
+                "target_row_sha256": "213b438dafa8fc994cec04f4f8a841159228ba8f37ab6325937d86e960bf772b"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Aufenthaltsgesetz",
+                "unresolved_identity": "law:aufenthaltsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Dritten Buches Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Dritten Buches",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "FreizügG/EU",
+                "target_citation_path": "de/statute/freiz-gg-eu-2004",
+                "target_row_sha256": "9340ab6e9a4fb89c889edaa1d5f29f603e821142a92802bb1f9c2da9fb92f132"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Freizügigkeitsgesetz/EU",
+                "unresolved_identity": "law:freizuegigkeitsgesetz-eu"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "SGB 3",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "SGB III",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+                "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+                "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+                "matched_text": "Zuwanderungsgesetz",
+                "unresolved_identity": "named-instrument:zuwanderungsgesetz"
               }
             ]
           },
@@ -1927,6 +2058,72 @@
                 "matched_text": "Einkommensteuergesetzes",
                 "target_citation_path": "de/statute/estg",
                 "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08",
+            "document_row_sha256": "90a6f15105c6d7d0a3000e5a4ac92cb51203741c45e0579036499defa2c1034a",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 6,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "1b012e87a416d8ace2297e5669eb5eafb7cd961f14b92fb36cb2f83696f83139",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "Verordnung (EG) Nr. 883/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 883/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "Verordnung (EG) Nr. 987/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "Zweiten Buch Sozialgesetzbuch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+                "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+                "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+                "matched_text": "Zweiten Buch",
+                "target_citation_path": "de/statute/sgb-2",
+                "target_row_sha256": "f0f8f59a466124245b04c5720c2db10049b80536e2f0ccda1f0ff554ea0fab09"
               }
             ]
           },
@@ -5429,6 +5626,78 @@
                 "matched_text": "Siebten Buches",
                 "target_citation_path": "de/statute/sgb-7",
                 "target_row_sha256": "b1509b72344d7649b1f1f49c11f8287b9ab4ad6a64efecf74b74d836d982a79f"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28",
+            "document_row_sha256": "3a0101a6043e2ab4d0fd006e2871a8902784ad14101e180d0506e327d7320a4a",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 7,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "1996df0d3d699f052346b6cdcd1cbfc39c17f0528870a43b45ecd4e8e140cdea",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Durchführungsverordnung",
+                "unresolved_identity": "named-instrument:durchführungsverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Grundverordnung",
+                "unresolved_identity": "named-instrument:grundverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Verordnung (EG) Nr. 883/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 883/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Verordnung (EG) Nr. 987/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+                "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+                "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+                "matched_text": "Zivilprozessordnung",
+                "unresolved_identity": "law:zpo"
               }
             ]
           },
@@ -10839,6 +11108,70 @@
                 "source_row_sha256": "ace996b203e96ac1599eb101bf7561b0d3d3b42d4a2bf74ec28f5173e5ea107b",
                 "matched_text": "Verordnung (EU) Nr. 492/2011",
                 "unresolved_identity": "eu-regulation:verordnung (eu) nr. 492/2011"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22",
+            "document_row_sha256": "145badb6477152fa31ae2e47ebf165b9adbfaef010bc13411e7d0416909fc826",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 6,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "81b07071b80542ff407fe073ae5383d977ccc72ced9f1b27a798412b390c3727",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "Grundverordnung",
+                "unresolved_identity": "named-instrument:grundverordnung"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "Verordnung (EG) Nr. 883/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 883/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "Verordnung (EG) Nr. 987/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+                "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+                "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+                "matched_text": "Verordnung (EU) Nr. 465/2012",
+                "unresolved_identity": "eu-regulation:verordnung (eu) nr. 465/2012"
               }
             ]
           },
@@ -66306,7 +66639,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "d328015166518b06dba4dac960216f2fd4183f61132a757e937db6c2699dfd6d"
+        "receipt_sha256": "0279b031e6304ec00b0b05d02ad7a3dcde256e516093eae59b0bffe0a97ffdb7"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -66366,6 +66699,16 @@
           "source_row_sha256": "09e12f339cbe9b77a987cb71d7b0af14de8255eb4147abd882a5dd40a191e618",
           "matched_text": "Zweiten Buch",
           "resolved_citation_path": "de/statute/sgb-2"
+        },
+        {
+          "id": "de-corpus-05e4a5df764d7188291c",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+          "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+          "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+          "matched_text": "§ 63 Abs. 1 Satz 3 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-068aa5cde19bd9dad943",
@@ -66613,6 +66956,16 @@
           "source_row_sha256": "b5ae3653bdb0492ab7026ff56b12eb5b4378f07761493f199a2ba7ff39584821",
           "matched_text": "§ 63 Abs. 1 Satz 6 EStG",
           "resolved_citation_path": "de/statute/estg/63"
+        },
+        {
+          "id": "de-corpus-1414c45788e1debe7a71",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+          "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+          "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+          "matched_text": "§ 64 Abs. 2 Satz 1 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-14b0a2d16e9edd9c2700",
@@ -67618,6 +67971,16 @@
           "resolution": "unresolved_act_section_association"
         },
         {
+          "id": "de-corpus-3ee05b06f6f680bbd96e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+          "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+          "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+          "matched_text": "§ 64 Abs. 2 Satz 1 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/64"
+        },
+        {
           "id": "de-corpus-3f363851250f8aeb2e00",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -68520,6 +68883,16 @@
           "source_row_sha256": "40c08a8e98c70cc21542366cfb5ee6f14e62be938af2d1b6698ad915ff7ec54d",
           "matched_text": "§ 75 EStG",
           "resolved_citation_path": "de/statute/estg/75"
+        },
+        {
+          "id": "de-corpus-69d1b48199724e69d81a",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+          "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+          "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+          "matched_text": "§ 63 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-6a355a65fe62b9597c79",
@@ -69496,6 +69869,16 @@
           "resolved_citation_path": "de/statute/estg/65"
         },
         {
+          "id": "de-corpus-966d6eb3f3b53256f51e",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+          "source_body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+          "source_row_sha256": "cf20ae4f7078f96c1c1c667d0324f8dcce87350a08346b26083e32419dc887c8",
+          "matched_text": "§ 62 Abs. 1 Nr. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-9672c95dab6b6ae002e8",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -69611,6 +69994,16 @@
           "source_row_sha256": "23d2e62a742eacea3fcc435d74542f83bbc645997d2b8141590e1cbaa6ed5d59",
           "matched_text": "§ 66 Abs. 2 EStG",
           "resolved_citation_path": "de/statute/estg/66"
+        },
+        {
+          "id": "de-corpus-9a7bcd4ee4525b6db197",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+          "source_body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+          "source_row_sha256": "e1cd0dbed005857cf03c7cbfbea464b2f6be4b9fdc8e053a2ae9a744df0d7b00",
+          "matched_text": "§ 64 Abs. 2 EStG",
+          "resolved_citation_path": "de/statute/estg/64"
         },
         {
           "id": "de-corpus-9ad1847e4442dd534b54",
@@ -70316,6 +70709,16 @@
           "resolved_citation_path": "de/statute/estg/39e"
         },
         {
+          "id": "de-corpus-c3e97775b345a7c5ac07",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+          "source_body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+          "source_row_sha256": "0104b7a37021792e40b5ec4a8cfe795b052b13bbbb5ff77c129657d003082ab4",
+          "matched_text": "§ 62 Abs. 1 Nr. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-c4e3a6da397441261331",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -70824,6 +71227,16 @@
           "resolution": "unresolved_act_section_association"
         },
         {
+          "id": "de-corpus-e1513162c1f4df14839a",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+          "source_body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+          "source_row_sha256": "b9e4a49f98180bd83dde59b59dbb07ab4f30d918f989af561d6d26baa1f1e00e",
+          "matched_text": "§ 62 Abs. 2 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/62"
+        },
+        {
           "id": "de-corpus-e228398daf16a834c194",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -71289,7 +71702,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580"
+      "receipt_sha256": "db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -72041,6 +72454,22 @@
           "title": "BFH, III R 16/08, 2010-08-26: Abzweigungsentscheidung bei nachträglicher Erfüllung der Unterhaltspflicht - Überprüfung einer Ermessensentscheidung im Einspruchsverfahren"
         },
         {
+          "id": "de-kg-instr-3428a43dd063b4a8",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-1414c45788e1debe7a71",
+            "de-corpus-69d1b48199724e69d81a",
+            "de-corpus-966d6eb3f3b53256f51e"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28",
+          "row_sha256": "3a0101a6043e2ab4d0fd006e2871a8902784ad14101e180d0506e327d7320a4a",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils",
+          "document_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28",
+          "title": "BFH, III R 68/13, 2016-04-28: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils"
+        },
+        {
           "id": "de-kg-instr-360df2059e09e33e",
           "status": "pending",
           "discovery_refs": [
@@ -72056,6 +72485,20 @@
           "citation_label": "BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind",
           "document_citation_path": "de/guidance/bfh-iii-r-11-21-2023-06-21",
           "title": "BFH, III R 11/21, 2023-06-21: Kindergeld für ein in Australien studierendes Kind"
+        },
+        {
+          "id": "de-kg-instr-36778f33cfc16c04",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-e1513162c1f4df14839a"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27",
+          "row_sha256": "f9b4c31c7fdcb7bd45119a0e777ecf9228234d457cb4652d6fb3125bbea7f393",
+          "document_class": "guidance",
+          "citation_label": "BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung",
+          "document_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27",
+          "title": "BFH, III B 127/14, 2015-04-27: Kindergeldberechtigung von Unionsbürgern unter Geltung der Übergangsbestimmungen zum EU-Beitritt - Genehmigungspflicht nach § 284 SGB III bei Aufnahme einer Beschäftigung"
         },
         {
           "id": "de-kg-instr-3815239cc1f2caaf",
@@ -72287,6 +72730,22 @@
           "citation_label": "BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes",
           "document_citation_path": "de/guidance/bfh-iii-r-13-21-2022-10-20",
           "title": "BFH, III R 13/21, 2022-10-20: Kindergeldanspruch für ein volljähriges behindertes Kind; Pflegegeld; Unterhaltsanspruch gegenüber dem Ehegatten des behinderten Kindes"
+        },
+        {
+          "id": "de-kg-instr-56902655e1475c0c",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-05e4a5df764d7188291c",
+            "de-corpus-3ee05b06f6f680bbd96e",
+            "de-corpus-c3e97775b345a7c5ac07"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08",
+          "row_sha256": "90a6f15105c6d7d0a3000e5a4ac92cb51203741c45e0579036499defa2c1034a",
+          "document_class": "guidance",
+          "citation_label": "BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder",
+          "document_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08",
+          "title": "BFH, III R 17/13, 2014-05-08: EuGH-Vorlage zur VO Nr. 883/2004 und zur VO Nr. 987/2009 - Anspruch auf Kindergeld für im EU-Ausland beim getrennt lebenden Ehegatten wohnende Kinder"
         },
         {
           "id": "de-kg-instr-5c0851a954940f82",
@@ -72651,6 +73110,20 @@
           "citation_label": "BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes",
           "document_citation_path": "de/guidance/bfh-iii-r-52-09-2010-04-28",
           "title": "BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes"
+        },
+        {
+          "id": "de-kg-instr-86411429cdb16a89",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-9a7bcd4ee4525b6db197"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22",
+          "row_sha256": "145badb6477152fa31ae2e47ebf165b9adbfaef010bc13411e7d0416909fc826",
+          "document_class": "guidance",
+          "citation_label": "EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung",
+          "document_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22",
+          "title": "EuGH, C-378/14, 22.10.2015, Trapkowski: grenzüberschreitende Familienleistungen und persönliche Anspruchsberechtigung"
         },
         {
           "id": "de-kg-instr-87d3e50373adabc2",
@@ -73707,7 +74180,7 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580",
+            "corpus_release": "db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab",
             "subject_matter_search": "c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
@@ -74483,5 +74956,5 @@
       ]
     }
   ],
-  "receipt_sha256": "61e0be11fadf6ec8388b327afb1a0c34d40180a9f3b97ed65e9b264170f8edf3"
+  "receipt_sha256": "da256f62735377c5a2e2320893e2e911812d4310b664c27a5a2b3e8abeadbd1e"
 }

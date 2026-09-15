@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57",
-    "release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
-    "release_content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8",
-    "release_selector_sha256": "f06d72f9b19d4a76f8d7cfe7a8492272262d5eab3cd70ec97f0967588cd4408d",
+    "commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
+    "release": "de-rulespec-2026-09-15-kindergeld-priority-followup",
+    "release_content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b",
+    "release_selector_sha256": "baf9752c319b3ee08becd2bd3e2f2156902b444007b578ba9d840903db85e34f",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -115,6 +115,11 @@
         "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.json",
         "sha256": "fffa78c5eb4066b4664d3787ddf65ef10331ce72916632e90ac40cf2d30e0376",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-priority-followup.json",
+        "sha256": "a2a0ffc6203dedb1f0bceeb8748c134f8841830dde32d689f68437fd33e45282",
+        "row_count": 8
       },
       {
         "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
@@ -417,6 +422,11 @@
         "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl",
         "sha256": "b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e",
         "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl",
+        "sha256": "ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed",
+        "row_count": 8
       },
       {
         "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",

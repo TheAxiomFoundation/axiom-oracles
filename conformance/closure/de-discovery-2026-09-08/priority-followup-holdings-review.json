@@ -1,0 +1,428 @@
+{
+  "schema": "de-kindergeld-priority-followup-holdings-review.v1",
+  "status": "independently reviewed; applied to committed decisions; generated state produced separately",
+  "source_commit": "9153520aa296d3868edf2a390f1b1a1f20eeca1f",
+  "source_path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl",
+  "source_file_sha256": "ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed",
+  "release_requirement": "Apply only after release61 signature/publication verification and native graph refresh binds these exact rows; use generated citation paths to resolve candidate IDs.",
+  "reviews": [
+    {
+      "citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-68-13-2016-04-28",
+      "supplemental_id": "de-kg-suppl-151",
+      "body_sha256": "7e942894fd203bbcd0aa91f4d4345ccaa27c2c66c77ad21f429745b3a7759daa",
+      "paragraphs_reviewed": "complete four-page judgment; paragraphs 10–28",
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_and_personal_recipient_priority",
+      "bears_on_computed_surface": true,
+      "reason": "The judgment applies Article 67 of Regulation 883/2004 and Article 60(1) of Regulation 987/2009 to the parent actually living with the children in Spain. Sections 62–64 EStG and Article 1(i)(1)(i) determine entitlement and participants, including unmarried or formerly married parents; the Article 1(i)(2) fallback does not control. Article 60 applies through Article 67 regardless of whether an Article 68 conflict also exists. Other national entitlement conditions remain necessary. The fiction relocates actual family residence and does not create a common household. The German father’s application is considered for the priority mother and does not transfer entitlement because she did not apply. The historical monthly amounts are case facts, not current parameters. This remains bearing and unencoded. Exact BStBl II membership is not independently established by this review.",
+      "generated_candidate_id": "de-kg-instr-3428a43dd063b4a8"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27",
+      "supplemental_id": "de-kg-suppl-152",
+      "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+      "paragraphs_reviewed": "complete three-page order; paragraphs 9–19",
+      "status": "classified-with-reason",
+      "classification": "eu_free_movement_formal_loss_determination",
+      "bears_on_computed_surface": true,
+      "reason": "Although the operative order lifts a procedural stay, its reasons determine the application of EStG 62(1) versus 62(2): missing employment permission under historical SGB III 284 alone does not remove an EU national’s free-movement status. Paragraphs 13–17 require the competent immigration authority’s formal determination under FreizügG/EU 5 and 6 before the described transition to AufenthG, preserving the distinction between worker access restrictions and citizenship-based movement. This is not a universal entitlement independent of remaining national conditions, nor an authority for Familienkassen to make that loss determination themselves. The historical Polish transitional regime is not a current transition parameter; paragraph 11 itself contains both 30 November and 30 April 2011, so no endpoint is silently chosen from this text. The substantive free-movement dependency remains bearing and unencoded despite the procedural disposition. Exact BStBl II membership is not independently established by this review.",
+      "generated_candidate_id": "de-kg-instr-36778f33cfc16c04"
+    },
+    {
+      "citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+      "root_citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08",
+      "supplemental_id": "de-kg-suppl-150",
+      "body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+      "paragraphs_reviewed": "complete six-page reference; questions 1–3 and paragraphs 9–29",
+      "status": "classified-with-reason",
+      "classification": "preliminary_reference_questions_resolved_by_later_judgments",
+      "bears_on_computed_surface": false,
+      "reason": "This instrument suspends the pending revision and asks three preliminary questions about the whole-family fiction, the distinction between substantive entitlement and application, and a conditional waiting period. Its competing interpretations, reported lower-court reasoning and party submissions are not an operative final rule awarding entitlement. The subsequent CJEU C-378/14 judgment resolves the first two questions and declines to answer the third; BFH III R17/13 of 4 February 2016 applies that answer. Those distinct final instruments remain bearing and unencoded in this ledger. No additional current computable Kindergeld rule is supplied by the reference order beyond statutory restatement and questions resolved by those retained instruments; in particular the four-year limitation discussion is not an enacted waiting period or transfer rule. Exclusion is confined to this preliminary-reference identity, not its final judgments. Exact BStBl II membership is not independently established by this review.",
+      "generated_candidate_id": "de-kg-instr-56902655e1475c0c"
+    },
+    {
+      "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+      "root_citation_path": "de/guidance/cjeu-c-378-14-2015-10-22",
+      "supplemental_id": "de-kg-suppl-149",
+      "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+      "paragraphs_reviewed": "complete German judgment; paragraphs 26–52 and both operative holdings",
+      "status": "classified-with-reason",
+      "classification": "eu_whole_family_fiction_and_application_entitlement_distinction",
+      "bears_on_computed_surface": true,
+      "reason": "Articles 67 of Regulation 883/2004 and 60(1) of Regulation 987/2009 require consideration of the whole family as residing under the competent state’s legislation. Article 1(i)(1)(i) refers participants to national entitlement rules, including separated or divorced parents. The competent national institution determines entitlement after all remaining national conditions are met. Article 68 priority does not apply where the other state provides no entitlement, while Article 60 can still apply through Article 67. Considering another parent’s application does not transfer substantive entitlement merely because the foreign-resident priority parent did not apply. Paragraph 51 declines the third question after the negative answer to the second; no waiting period is prescribed. Both operative holdings remain bearing and unencoded. It is not a universal foreign-parent award or an independent current rate rule. Exact BStBl II membership is not independently established by this review.",
+      "generated_candidate_id": "de-kg-instr-86411429cdb16a89"
+    }
+  ],
+  "new_pending_references": [
+    {
+      "id": "de-kg-suppl-160",
+      "identity": "CJEU C-85/99, Offermanns, EU:C:2001:166",
+      "title_short": "CJEU C-85/99, Offermanns, EU:C:2001:166",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "ngsverfahren in Rede stehende Leistung, die die Kosten für den Unterhalt von Kindern verringern soll, unter den Begriff „Familienleistung“ im Sinne der Verordnung Nr. 883/2004 fällt (vgl. Urteile Offermanns, C‑85/99, EU:C:2001:166, Rn. 41, und Lachheb, C‑177/12, EU:C:2013:689, Rn. 35). 27 Zudem geht hinsichtlich des Begriffs „Familienangehöriger“ aus Art. 1 Buchst. i Nr. 1 Ziff. i der Verordnung Nr. 883/2004 hervor, dass darunter „jede Person, die in den Rechtsvorschriften, nach d",
+        "excerpt_sha256": "1841cb56232a4053d49e018788b7445d25a76487f84270199095a81b9fe291ab"
+      }
+    },
+    {
+      "id": "de-kg-suppl-161",
+      "identity": "CJEU C-177/12, Lachheb, EU:C:2013:689",
+      "title_short": "CJEU C-177/12, Lachheb, EU:C:2013:689",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "ie Kosten für den Unterhalt von Kindern verringern soll, unter den Begriff „Familienleistung“ im Sinne der Verordnung Nr. 883/2004 fällt (vgl. Urteile Offermanns, C‑85/99, EU:C:2001:166, Rn. 41, und Lachheb, C‑177/12, EU:C:2013:689, Rn. 35). 27 Zudem geht hinsichtlich des Begriffs „Familienangehöriger“ aus Art. 1 Buchst. i Nr. 1 Ziff. i der Verordnung Nr. 883/2004 hervor, dass darunter „jede Person, die in den Rechtsvorschriften, nach denen die Leistungen gewährt werden, als Famili",
+        "excerpt_sha256": "f45ac2c6c0fcdc0d472717a625655cf6db7d9fc13ca9bb3a12fe4223b123eaa4"
+      }
+    },
+    {
+      "id": "de-kg-suppl-162",
+      "identity": "CJEU C-363/08, Slanina, EU:C:2009:732",
+      "title_short": "CJEU C-363/08, Slanina, EU:C:2009:732",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "dessen nicht Sache des Gerichtshofs, eine solche Feststellung, die auf das nationale Recht in der Auslegung durch das nationale Gericht gestützt ist, in Frage zu stellen (vgl. in diesem Sinne Urteil Slanina, C‑363/08, EU:C:2009:732, Rn. 27). 32 Zur Anwendbarkeit der Prioritätsregeln, die in Art. 68 Abs. 1 der Verordnung Nr. 883/2004 für den Fall des Zusammentreffens von Ansprüchen vorgesehen sind, ist darauf hinzuweisen, dass es nach ständiger Rechtsprechung des Gerichtshofs für di",
+        "excerpt_sha256": "a1ff6bb3e12ac955337c101f34d306d1dad4e9a8c2bc5f9893a3131290f36277"
+      }
+    },
+    {
+      "id": "de-kg-suppl-163",
+      "identity": "CJEU C-16/09, Schwemmer, EU:C:2010:605",
+      "title_short": "CJEU C-16/09, Schwemmer, EU:C:2010:605",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": ", in dem das betreffende Kind wohnt, geschuldet werden und zugleich in einem anderen Mitgliedstaat, in dem ein Elternteil dieses Kindes arbeitet, lediglich potenziell gezahlt werden können (Urteil Schwemmer, C‑16/09, EU:C:2010:605, Rn. 52 und die dort angeführte Rechtsprechung). 33 Folglich finden diese Prioritätsregeln angesichts dessen, dass die Mutter des im Ausgangsverfahren in Rede stehenden Kindes in Polen keinen Anspruch auf Familienleistungen hatte, im Ausgangsverfahren ke",
+        "excerpt_sha256": "4643b7b5edefa103d921c578680885a353eae6d81306c39bb6d1e9189b4b55d6"
+      }
+    },
+    {
+      "id": "de-kg-suppl-164",
+      "identity": "CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379",
+      "title_short": "CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/cjeu-c-378-14-2015-10-22/document-1",
+        "body_sha256": "299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16",
+        "excerpt": "ungen tatsächlich gewährt werden, ohne Bedeutung, welcher Elternteil nach nationalem Recht als diejenige Person gilt, die den Anspruch auf diese Leistungen hat (vgl. in diesem Sinne Urteil Hoever und Zachow, C‑245/94 und C‑312/94, EU:C:1996:379, Rn. 37). 50 Nach alledem ist Art. 60 Abs. 1 Satz 3 der Verordnung Nr. 987/2009 dahin auszulegen, dass danach nicht verlangt wird, dass der Anspruch auf Familienleistungen, die für ein Kind gewährt werden, dem Elternteil des Kindes, der in d",
+        "excerpt_sha256": "b5211e86ec67feef82a45bd04d0f88b08a20aec529fe99b92fa28d3171c0146c"
+      }
+    },
+    {
+      "id": "de-kg-suppl-165",
+      "identity": "CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005",
+      "title_short": "CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+        "body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+        "excerpt": "uf Erziehungsgeld daran gescheitert, dass keiner der Ehegatten sämtliche Anspruchsvoraussetzungen in seiner Person erfüllt habe. In der Entscheidung in der Rechtssache Dodl und Oberhollenzer vom 7. Juni 2005 C-543/03 (Slg. 2005, I-5049, Rdnr. 61 und 62) habe der 5 Seite 2 von 6\n\nEntscheidungsgründe II. EuGH hervorgehoben, dass der Umstand, dass der Vater eines Kindes nicht die nach den deutschen Rechtsvorschriften vorgesehenen Anspruchsvoraussetzungen erfüllte, für die Anwendung de",
+        "excerpt_sha256": "9eab3bced6de88be96e0d917d8292bdd169ddd789cca6149763dead03b0a303d"
+      }
+    },
+    {
+      "id": "de-kg-suppl-166",
+      "identity": "CJEU C-153/03, Weide, 7 July 2005",
+      "title_short": "CJEU C-153/03, Weide, 7 July 2005",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+        "body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+        "excerpt": "s genüge, dass der Anspruch auf Leistungen in diesem Staat für einen Elternteil, hier die Mutter, erworben werde. Unter Berufung auf diese Entscheidung habe der EuGH in der Rechtssache Weide vom 7. Juli 2005 C-153/03 (Slg. 2005, I-6017, Rdnr. 32 f.) entschieden, dass eine in Luxemburg vorgesehene Erziehungszulage auch dann bis zur Höhe des im Wohnmitgliedstaat (Deutschland) vorgesehenen Erziehungsgelds ausgesetzt werde, wenn dieses dem zum Bezug der luxemburgischen Erziehungszulage",
+        "excerpt_sha256": "77f0dd95b2282a141e9c50875629972dba45eaf9d83f9b94dd9fa78b73a70189"
+      }
+    },
+    {
+      "id": "de-kg-suppl-167",
+      "identity": "BFH VIII B 50/06, 28 March 2007",
+      "title_short": "BFH VIII B 50/06, 28 March 2007",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "eres berechtigtes Interesse an einer Entscheidung über die Verfassungsmäßigkeit der umstrittenen gesetzlichen Regelung trotz des beim BVerfG anhängigen Verfahrens hat (vgl. z.B. BFH-Beschluss vom 28. März 2007 VIII B 50/06, BFH/NV 2007, 1337). Weitere Voraussetzung für eine AdV ist u.a., dass die Sachverhalte hinsichtlich der verfassungsrechtlichen Streitfrage im Wesentlichen gleich gelagert sind (vgl. z.B. BFH- Beschluss vom 3. Februar 2010 VI B 119/09, BFH/NV 2010, 923). 7 2. Nach dies",
+        "excerpt_sha256": "8ca346764461932acba0f251ac7839814bd2ea73c5c103b6a6693053ebef5433"
+      }
+    },
+    {
+      "id": "de-kg-suppl-168",
+      "identity": "BFH VI B 119/09, 3 February 2010",
+      "title_short": "BFH VI B 119/09, 3 February 2010",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": " 1337). Weitere Voraussetzung für eine AdV ist u.a., dass die Sachverhalte hinsichtlich der verfassungsrechtlichen Streitfrage im Wesentlichen gleich gelagert sind (vgl. z.B. BFH- Beschluss vom 3. Februar 2010 VI B 119/09, BFH/NV 2010, 923). 7 2. Nach diesen Maßstäben ist der Beschluss des FG aufzuheben. 8 a) Bei den beim BVerfG anhängigen Verfahren (Vorlagebeschlüsse des FG Niedersachsen vom 19. August 2014 und 21. August 2014 2 BvL 9-14/14, teilweise abgedruckt in Entscheidungen der F",
+        "excerpt_sha256": "853f6d336244cbae146ec2e149429ca95a1a9fd2a2c966df12cff7dea8e95208"
+      }
+    },
+    {
+      "id": "de-kg-suppl-169",
+      "identity": "BFH III B 145/05, 21 December 2005",
+      "title_short": "BFH III B 145/05, 21 December 2005",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": " diesem unselbständigen Nebenverfahren nicht zu treffen; über die Kosten des Beschwerdeverfahrens ist im Rahmen der Entscheidung über die Hauptsache zu befinden (vgl. z.B. Senatsbeschluss vom 21. Dezember 2005 III B 145/05, BFH/NV 2006, 1103, unter II.3., m.w.N.). 20 Page 3 of 3",
+        "excerpt_sha256": "519980d6400f936228eb72ef22b45b1dc7a67029448a347235af90036f1bf026"
+      }
+    },
+    {
+      "id": "de-kg-suppl-170",
+      "identity": "LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010",
+      "title_short": "LSG Nordrhein-Westfalen L 1 AL 158/10 B ER, 2 July 2010",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "nat dahinstehen, ob im vorliegenden Fall eine Genehmigung nach § 284 SGB III überhaupt erforderlich war (vgl. hierzu Beschluss des Landessozialgerichts ‑‑LSG‑‑ für das Land Nordrhein-Westfalen vom 2. Juli 2010 L 1 AL 158/10 B ER, Breithaupt 2010, 1085). 10 aa) Für polnische Staatsangehörige war die Freizügigkeit bis zum 30. November 2011 zwar eingeschränkt. Gemäß Nr. 2.1 des Anhangs XII der Akte über die Bedingungen des Beitritts der Tschechischen Republik, der Republik Estland, der Republik Z",
+        "excerpt_sha256": "d0ad3c2f01a07dd623c1524ff31a44311c0dc009637a2af5138bff64c83025d3"
+      }
+    },
+    {
+      "id": "de-kg-suppl-171",
+      "identity": "Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010",
+      "title_short": "Bayerisches LSG L 16 AS 767/10 B ER, 22 December 2010",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "en der 13 Page 2 of 3\n\nQuelle: www.bundesfinanzhof.de beigetretenen mittel- und osteuropäischen Staaten, unabhängig vom Zweck seiner Inanspruchnahme zusteht (Beschluss des Bayerischen LSG vom 22. Dezember 2010 L 16 AS 767/10 B ER, Rz 44, nicht veröffentlicht ‑‑n.v.‑‑). Dieses Aufenthaltsrecht der Unionsbürger entfällt ‑‑verbunden mit einer Ausreisepflicht nach § 7 FreizügG/EU‑‑, sobald die Ausländerbehörde nach §§ 5, 6 FreizügG/EU festgestellt hat, dass das Recht auf Einreise und Aufenthalt nac",
+        "excerpt_sha256": "2e0f20cc7b92533cef9e062600255289e8d8243a88f61a007bd2668960e53ae7"
+      }
+    },
+    {
+      "id": "de-kg-suppl-172",
+      "identity": "LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010",
+      "title_short": "LSG Berlin-Brandenburg L 34 AS 1001/10 B ER, 29 November 2010",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "rmliche Feststellung obliegt allein den Ausländerbehörden und den Verwaltungsgerichten und damit weder den Familienkassen noch den Finanzgerichten (vgl. LSG Berlin- Brandenburg, Beschluss vom 29. November 2010 L 34 AS 1001/10 B ER, Rz 40, n.v.). Erst nach einer entsprechenden Feststellung findet das Aufenthaltsgesetz Anwendung (§ 11 Abs. 2 FreizügG/EU) mit der Folge, dass der Unionsbürger einen Aufenthaltstitel nach dem Aufenthaltsgesetz benötigt, will er sich weiterhin legal in Deutschland aufh",
+        "excerpt_sha256": "c988dd6653aa5b2642b07e99fda78725581cee5002d0465214263bb1d12d63b7"
+      }
+    },
+    {
+      "id": "de-kg-suppl-173",
+      "identity": "BSG B 4 AS 54/12 R, 30 January 2013",
+      "title_short": "BSG B 4 AS 54/12 R, 30 January 2013",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "estimmungen nur die Arbeitnehmerfreizügigkeit (Art. 45 AEUV, vormals Art. 39 EG) und damit nicht die grundsätzliche Freizügigkeit der neuen Unionsbürger ein (Urteil des Bundessozialgerichts vom 30. Januar 2013 B 4 AS 54/12 R, BSGE 113, 60, Sozialrecht 4-4200 § 7 Nr. 34, Rz 21; LSG Berlin-Brandenburg, Beschluss vom 29. November 2010 L 34 AS 1001/10 B ER, Rz 40, n.v.; Westphal/Stoppa, Die EU-Osterweiterung und das Ausländerrecht, Informationsbrief Ausländerrecht 2004, 133, 139). 17 Die Einsc",
+        "excerpt_sha256": "cae5a88fb9da0f3e199ad8c161b5de718621dd7bca34c5bf0c358eecc92d2c77"
+      }
+    },
+    {
+      "id": "de-kg-suppl-174",
+      "identity": "FG Münster 14 K 4342/11 Kg, 22 February 2013",
+      "title_short": "FG Münster 14 K 4342/11 Kg, 22 February 2013",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "berechtigten Unionsbürger, der bei Vorliegen der Voraussetzungen des § 62 Abs. 1 EStG dem Grunde nach kindergeldberechtigt ist. 9 b) Entgegen der Ansicht des FG (so auch FG Münster, Urteil vom 22. Februar 2013 14 K 4342/11 Kg, EFG 2013, 803) bewirkt die fehlende Genehmigung der Bundesagentur gemäß § 284 SGB III nicht, dass der Kläger als nicht freizügigkeitsberechtigter Ausländer gemäß § 62 Abs. 2 EStG anzusehen ist. Dabei lässt der Senat dahinstehen, ob im vorliegenden Fall eine Genehmigun",
+        "excerpt_sha256": "49cae9db4fe5532264678c6cced376fc74812e46eb99e552ade35ae4796d4203"
+      }
+    },
+    {
+      "id": "de-kg-suppl-175",
+      "identity": "FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011",
+      "title_short": "FG Rheinland-Pfalz 2 K 2248/10, 23 March 2011",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-r-17-13-2014-05-08/document-1, body SHA-256 bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-r-17-13-2014-05-08/document-1",
+        "body_sha256": "bb9553866d13229bdb72cba15c8175ddb2d6e8101cdadb6d016dc7e5983b8993",
+        "excerpt": " die Funktion habe, dem Familienangehörigen einer im Inland (Deutschland) lebenden Person einen eigenen Anspruch auf Kindergeld nach deutschem Recht einzuräumen (Urteil des FG Rheinland-Pfalz vom 23. März 2011 2 K 2248/10, Entscheidungen der Finanzgerichte 2011, 1323). 21 aa) Da die geschiedene Ehefrau als Familienangehörige anzusehen ist, muss ‑‑bei Anwendbarkeit des Art. 67 der VO Nr. 883/2004‑‑ unterstellt werden, dass alle beteiligten Personen in Deutschland wohnen (Art. 60 Abs. 1 S",
+        "excerpt_sha256": "25d0411cd17e5023f1b159bec0e67ed2953481a237ecae28d811c6a92139f03a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-176",
+      "identity": "BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 9/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-177",
+      "identity": "BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 10/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-178",
+      "identity": "BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 11/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-179",
+      "identity": "BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 12/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-180",
+      "identity": "BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 13/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    },
+    {
+      "id": "de-kg-suppl-181",
+      "identity": "BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "title_short": "BVerfG proceeding 2 BvL 14/14, referenced as pending in BFH III B 127/14 of 27 April 2015; deciding instrument not yet identified",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.",
+      "status": "pending",
+      "audit_source": {
+        "citation_path": "de/guidance/bfh-iii-b-127-14-2015-04-27/document-1",
+        "body_sha256": "fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca",
+        "excerpt": "es Beschlusses des Finanzgerichts (FG) vom 7. Oktober 2014, mit dem dieses das Klageverfahren (6 K 2642/12) bis zum Ergehen einer Entscheidung in den beim Bundesverfassungsgericht (BVerfG) anhängigen Verfahren 2 BvL 9-14/14 gemäß § 74 der Finanzgerichtsordnung (FGO) ausgesetzt hat. 1 Der Kläger und Beschwerdeführer (Kläger), ein polnischer Staatsangehöriger, war in den Jahren 2007 bis 2011 für eine polnische Baufirma als Arbeitnehmer in der Bundesrepublik Deutschland (Deutschland) beschäf",
+        "excerpt_sha256": "d778de4bdebd86d8672b883534570ad86df1bffa38491f73db3398273e5c891a"
+      }
+    }
+  ],
+  "discovery_scope": "22 newly identified decision/proceeding references, not an exhaustive subject-search or BStBl census. The joined Hoever/Zachow judgment is one instrument; six separately numbered constitutional proceedings remain individually pending. No future/present disposition inferred from the 2015 report.",
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "no actionable findings; four full bodies and 22 indirect references verified"
+  },
+  "verified_release": {
+    "release": "de-rulespec-2026-09-15-kindergeld-priority-followup",
+    "commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
+    "content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b",
+    "selector_sha256": "baf9752c319b3ee08becd2bd3e2f2156902b444007b578ba9d840903db85e34f",
+    "object_sha256": "36572c82eae17e12552bde84364d1bbfc500f0368fc67ac5dee98c8814fcc4a7",
+    "native_signature_verified": true,
+    "publish_run": 35004705355,
+    "public_byte_identity_verified": true,
+    "mirror_run": 35006038764
+  }
+}
