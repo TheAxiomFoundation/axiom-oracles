@@ -9412,7 +9412,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-uk-worker-pit.json",
-      "report_sha256": "43e3fec8b17f6d4fa790e961efe42e8ad36fbc93b1498988475df1f4fd2c8877",
+      "report_sha256": "60cffd01bbb6348cf7d5a5a0acb9dc4e2bf8bdb4b4151c57ae8237558e5155d5",
       "varied_fields": 1,
       "verdict_concepts": {}
     },
