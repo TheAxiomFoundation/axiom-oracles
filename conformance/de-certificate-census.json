@@ -3,7 +3,7 @@
   "closure_declarations": {
     "artifact": "closure/de/source.json",
     "claim_mode": "computed",
-    "sha256": "ef058eaa4d8eb8992271c7bb0f6dcbd7e1ae7cb3122965e383864585cc296c4d"
+    "sha256": "08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6"
   },
   "executable_observation": {
     "claim_mode": "computed",
@@ -16,8 +16,8 @@
   "programs": {
     "de/kindergeld": {
       "blockers": [
-        "closed: instrument frontier incomplete — 380 of 935 subordinate/bearing instruments pending disposition (oracles#491)",
-        "closed: dependency closure open — 193 open dependencies (8 law-derived inputs, 0 unclassified inputs, 185 bearing instruments) (CERTIFIED.md v3)"
+        "closed: instrument frontier incomplete — 398 of 961 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 199 open dependencies (8 law-derived inputs, 0 unclassified inputs, 191 bearing instruments) (CERTIFIED.md v3)"
       ],
       "certificate_path": "certificates/de-kindergeld.json",
       "certificate_status": "pending",
