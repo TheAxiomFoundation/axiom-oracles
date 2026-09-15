@@ -220,3 +220,9 @@ changes no bearing disposition or executable coverage. Existing 2025 search
 observations are preserved from consumer commit `20d74fb4b85b7e319236a3e60aaa50d8087a3bc0`
 through the reviewed native historical-receipt option. The new corpus scan
 is regenerated; the live legacy government PDF endpoint now returns 2026.
+
+The first native A 19.2 run failed with no signed or applied module.
+`dakg-a19-2-native-failure-review.json` binds the retained failure artifacts
+and separates evidence-model defects from parser findings. The docket-number
+arithmetic false positive is reproducible; fixing it alone cannot make the
+candidate acceptable. A 19.2 remains unencoded.

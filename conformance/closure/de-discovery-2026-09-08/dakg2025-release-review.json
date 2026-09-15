@@ -25,7 +25,7 @@
     "snapshot_path": "conformance/closure/de-instrument-graph.json",
     "method": "Native refresh --subject-snapshot with --subject-source-ref verifies exact original committed snapshot bytes and its old source binding, unchanged current query and non-corpus source fields; regenerates corpus discovery from new release. No new network observation is asserted."
   },
-  "encoding_status": "A19.2 native run34924883403 dispatched under normal budget and passed budget gate; exact production-signing gate approved under existing authorization. No signed module yet.",
+  "encoding_status": "A19.2 native run34924883403 failed after four internal candidates; zero signed or applied modules. Independent failure review is recorded in dakg-a19-2-native-failure-review.json. No unchanged retry or budget override.",
   "source_transport": "DA-KG Stand 2025 original BZSt-authored PDF retained by Tacheles, SHA256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd. Government authorship, non-government mirror transport disclosed. Original legacy government URL now serves Stand2026.",
   "public_mirror_status": "success; canonical/public bytes verified identical by workflow",
   "discovery_identity_review": "Native first refresh failed closed on duplicate seed de-kg-instr-001 before writing. Reviewed producer32b11903d retains all corpus source units sharing a URL and preserves a separate subject seed unless every seeded query resolves uniquely to one document. Five focused identity/order/exclusion tests pass; dispositions remain pending.",
