@@ -112,7 +112,7 @@ EXPECTED_LEAVES = {
     "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
 }
 EXPECTED_MEASURED = {
-    "de/kindergeld": (18, 905, 8, 1, 0, 0),
+    "de/kindergeld": (18, 906, 8, 1, 0, 0),
     "de/unterhaltsvorschuss": (12, 43, 0, 2, 2, 1),
     "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
 }
@@ -1677,7 +1677,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-dakg-A19.5.3",
     }
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 541 + 135 + 229
+    assert frontier["instrument_count"] == 542 + 135 + 229
     assert all(
         sid in frontier["pending"]
         for sid in pending_classes
